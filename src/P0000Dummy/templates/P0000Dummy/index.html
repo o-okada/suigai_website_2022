@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>{% block title %}ダミーメニュー画面{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {# <div><a href="{% url 'P0000Dummy:index' %}">url 'P0000Dummy:index'</a></div> #}
+    {# <div><a href="{% url 'P0100Login:index' %}">url 'P0100Login:index'</a></div> #}
+    {# <div><a href="{% url 'P0200ExcelDownload:index' %}">url 'P0200ExcelDownload:index'</a></div> #}
+    {# <div><a href="{% url 'P0300ExcelUpload:index' %}">url 'P0300ExcelUpload:index'</a></div> #}
+    {# <div><a href="{% url 'P0400OnlineDisplay:index' %}">url 'P0400OnlineDisplay:index'</a></div> #}
+    {# <div><a href="{% url 'P0500OnlineUpdate:index' %}">url 'P0500OnlineUpdate:index'</a></div> #}
+    {# <div><a href="{% url 'P9100AdminCheck:index' %}">url 'P9100AdminCheck:index'</a></div> #}
+    {# <div><a href="{% url 'P9200AdminHistory:index' %}">url 'P9200AdminHistory:index'</a></div> #}
+    {# <div><a href="{% url 'P9300AdminLock:index' %}">url 'P9300AdminLock:index'</a></div> #}
+
+    <div>共通機能・共通アプリ</div>
+    <div><a href="{% url 'P0000Dummy:index' %}">P0000 ダミーメニュー画面</a></div>
+    <div><a href="{% url 'P0100Login:index' %}">P0100 ログイン画面</a></div>
+    <br><br>
+    <div>EXCEL機能・EXCELアプリ</div>
+    <div><a href="{% url 'P0200ExcelDownload:index' %}">P0200 EXCELアップロード方式EXCELダウンロード画面</a></div>
+    <div><a href="{% url 'P0300ExcelUpload:index' %}">P0300 EXCELアップロード方式EXCELアップロード画面</a></div>
+    <br><br>
+    <div>オンライン機能・オンライン機能アプリ</div>
+    <div><a href="{% url 'P0400OnlineDisplay:index' %}">P0400 オンライン編集方式オンライン参照画面</a></div>
+    <div><a href="{% url 'P0500OnlineUpdate:index' %}">P0500 オンライン編集方式オンライン編集画面</a></div>
+    <br><br>
+    <div>管理機能・管理アプリ</div>
+    <div><a href="{% url 'P9100AdminCheck:index' %}">P9100 承認・集計・配布画面</a></div>
+    <div><a href="{% url 'P9200AdminHistory:index' %}">P9200 承認・集計・配布履歴画面</a></div>
+    <div><a href="{% url 'P9300AdminLock:index' %}">P9300 ロック画面</a></div>
+    <br><br>
+</body>
+</html>
+

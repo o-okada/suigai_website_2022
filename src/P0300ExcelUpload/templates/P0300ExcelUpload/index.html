@@ -1,0 +1,72 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>{% block title %}EXCELアップロード方式EXCELアップロード画面{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    {# bootstrap_css #}
+    {# bootstrap_javascript #}
+</head>
+<body>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    {% block content %}
+    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+        <h3>EXCELアップロード画面</h3>
+    </div>
+    <!--<form method="POST" enctype="multipart/form-data">-->
+    <!--    <div class="container mb-3">-->
+    <!--        <div class="row">-->
+    <!--            <label class="col-form-label">（注意）EXCELアップロードボタンをクリックして、EXCELファイルをサーバにアップロードすると、承認・集計・配布処理が終了するまで次のアップロードができません。</label>-->
+    <!--            <label class="col-form-label">１．参照ボタンをクリックして、アップロードするEXCELファイルを指定して下さい。</label>-->
+    <!--            <div class="input-group">-->
+    <!--                <input class="form-control" type="text" value="text">-->
+    <!--                <button class="btn btn-primary" type="button">参照</button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    <div class="container mb-3">-->
+    <!--        <div class="row">-->
+    <!--            <label class="col-form-label">２．EXCELアップロードボタンをクリックすると、EXCELファイルをサーバにアップロードします。</label>-->
+    <!--        </div>-->
+    <!--        <div class="text-center">-->
+    <!--            <button class="btn btn-primary" type="button">EXCELアップロード</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</form>-->
+    
+    <!--<form method="POST" enctype="multipart/form-data">-->
+    <!--    {% csrf_token %}-->
+    <!--    {{ form.as_p }}-->
+    <!--    <button type="submit">アップロード</button>-->
+    <!--</form>-->
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {#{{ form.as_p }}#}
+        <div class="container mb-3">
+            <div class="row">
+                <label class="col-form-label">（注意）EXCELアップロードボタンをクリックして、EXCELファイルをサーバにアップロードすると、承認・集計・配布処理が終了するまで次のアップロードができません。</label>
+                <label class="col-form-label">１．参照ボタンをクリックして、アップロードするEXCELファイルを指定して下さい。</label>
+                <div class="input-group">
+                    <input class="form-control" type="file" name="file" required id="id_file">
+                </div>
+            </div>
+        </div>
+        <div class="container mb-3">
+            <div class="row">
+                <label class="col-form-label">２．EXCELアップロードボタンをクリックすると、EXCELファイルをサーバにアップロードします。</label>
+                <button class="btn btn-primary" type="submit">アップロード</button>
+            </div>
+        </div>
+    </form>
+    {% endblock %}
+    {#<a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>#}
+</body>
+</html>
+

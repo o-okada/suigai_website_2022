@@ -1,0 +1,161 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>{% block title %}オンライン編集方式オンライン編集画面{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    {# bootstrap_css #}
+    {# bootstrap_javascript #}
+</head>
+<body>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    {% block content %}
+    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+        <h3>調査票、集計結果編集</h3>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <div class="row mb-3">
+            <div class="input-group">
+                <select class="form-select">
+                    <option value="">区分選択</option>
+                    <option value="">調査票</option>
+                    <option value="">集計結果</option>
+                </select>
+                <button class="btn btn-primary" type="button">区分選択</button>
+            </div>
+        </div>
+    </div>
+        
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-borderless">
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <select class="form-select">
+                            <option value="">都道府県選択</option>
+                            <option value=""></option>
+                        </select>
+                        <button class="btn btn-primary" type="button">都道府県選択</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <select class="form-select">
+                            <option value="">市区町村選択</option>
+                            <option value=""></option>
+                        </select>
+                        <button class="btn btn-primary" type="button">市区町村選択</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <select class="form-select">
+                            <option value="">種別選択</option>
+                            <option value=""></option>
+                        </select>
+                        <button class="btn btn-primary" type="button">種別選択</button>
+                    </div>
+                </td>
+            </tr>    
+        </table>
+    </div>
+    
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button">編集</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" type="button">削除</button>
+                    </td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button">編集</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" type="button">削除</button>
+                    </td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button">編集</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" type="button">削除</button>
+                    </td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <button class="btn btn-primary" type="button">表示エリアに反映</button>
+    </div>
+
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">観測所名称</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+</body>
+</html>
+

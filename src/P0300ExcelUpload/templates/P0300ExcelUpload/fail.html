@@ -1,0 +1,137 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>{% block title %}EXCELアップロード方式チェック結果画面{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    {% block content %}
+    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+        <h3>チェック結果画面</h3>
+    </div>
+    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+        {#<a href="{% url 'P0300ExcelUpload:download_ippan_chosa_result' %}">チェック結果をダウンロードする。</a>#}
+        <a href="/P0300ExcelUpload/download_ippan_chosa_result/{{ excel_id }}/">チェック結果をダウンロードする。</a>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>行</td>
+                    <td>列</td>
+                    <td>エラーコード</td>
+                    <td>チェック</td>
+                    <td>エラーメッセージ</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for check_require in check_require_list %}
+                <tr>
+                    <td>{{ check_require.0 }}</td> 
+                    <td>{{ check_require.1 }}</td>
+                    <td>{{ check_require.3 }}</td>
+                    <td>{{ check_require.4 }}</td>
+                    <td>{{ check_require.5 }}<br>{{ check_require.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_format in check_format_list %}
+                <tr>
+                    <td>{{ check_format.0 }}</td> 
+                    <td>{{ check_format.1 }}</td>
+                    <td>{{ check_format.3 }}</td>
+                    <td>{{ check_format.4 }}</td>
+                    <td>{{ check_format.5 }}<br>{{ check_format.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_range in check_range_list %}
+                <tr>
+                    <td>{{ check_range.0 }}</td> 
+                    <td>{{ check_range.1 }}</td>
+                    <td>{{ check_range.3 }}</td>
+                    <td>{{ check_range.4 }}</td>
+                    <td>{{ check_range.5 }}<br>{{ check_range.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_correlate in check_correlate_list %}
+                <tr>
+                    <td>{{ check_correlate.0 }}</td> 
+                    <td>{{ check_correlate.1 }}</td>
+                    <td>{{ check_correlate.3 }}</td>
+                    <td>{{ check_correlate.4 }}</td>
+                    <td>{{ check_correlate.5 }}<br>{{ check_correlate.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_compare in check_compare_list %}
+                <tr>
+                    <td>{{ check_compare.0 }}</td> 
+                    <td>{{ check_compare.1 }}</td>
+                    <td>{{ check_compare.3 }}</td>
+                    <td>{{ check_compare.4 }}</td>
+                    <td>{{ check_compare.5 }}<br>{{ check_compare.6 }}</td>
+                </tr>
+                {% endfor %}
+
+                {% for check_require in check_require_grid %}
+                <tr>
+                    <td>{{ check_require.0 }}</td> 
+                    <td>{{ check_require.1 }}</td>
+                    <td>{{ check_require.3 }}</td>
+                    <td>{{ check_require.4 }}</td>
+                    <td>{{ check_require.5 }}<br>{{ check_require.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_format in check_format_grid %}
+                <tr>
+                    <td>{{ check_format.0 }}</td> 
+                    <td>{{ check_format.1 }}</td>
+                    <td>{{ check_format.3 }}</td>
+                    <td>{{ check_format.4 }}</td>
+                    <td>{{ check_format.5 }}<br>{{ check_format.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_range in check_range_grid %}
+                <tr>
+                    <td>{{ check_range.0 }}</td> 
+                    <td>{{ check_range.1 }}</td>
+                    <td>{{ check_range.3 }}</td>
+                    <td>{{ check_range.4 }}</td>
+                    <td>{{ check_range.5 }}<br>{{ check_range.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_correlate in check_correlate_grid %}
+                <tr>
+                    <td>{{ check_correlate.0 }}</td> 
+                    <td>{{ check_correlate.1 }}</td>
+                    <td>{{ check_correlate.3 }}</td>
+                    <td>{{ check_correlate.4 }}</td>
+                    <td>{{ check_correlate.5 }}<br>{{ check_correlate.6 }}</td>
+                </tr>
+                {% endfor %}
+                {% for check_compare in check_compare_grid %}
+                <tr>
+                    <td>{{ check_compare.0 }}</td> 
+                    <td>{{ check_compare.1 }}</td>
+                    <td>{{ check_compare.3 }}</td>
+                    <td>{{ check_compare.4 }}</td>
+                    <td>{{ check_compare.5 }}<br>{{ check_compare.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+    {#<a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>#}
+</body>
+</html>
+

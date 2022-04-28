@@ -1,0 +1,494 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>{% block title %}EXCELアップロード方式EXCELダウンロード画面{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    {% block content %}
+    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+        <h3>EXCELダウンロード画面</h3>
+    </div>
+    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
+        <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
+        <button class="btn btn-primary" type="button">全エリア・全拠点選択</button>
+    </div>
+    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>都道府県</th>
+                    {% for ken in ken_list %}
+                    <th>
+                        <div class="text-center"><label class="form-check-label">{{ ken.KEN_NAME }}</label></div>
+                        <div class="text-center"><button class="btn btn-primary" type="button" id="button{{ ken.ken_code }}" name="submit_button1">全選択</button></div>
+                        {#<button id="button{{ forloop.counter }}" class="btn btn-link" type="button" name="submit_button1">全選択</button><br><br>#}
+                        {# bootstrap_button id=ken.ken_code button_type="button" content="全選択" size="sm" #}
+                    </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>市区町村</td>                
+                    <td nowrap>
+                        {% for city01 in city_list01 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city01.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city02 in city_list02 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city02.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city03 in city_list03 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city03.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city04 in city_list04 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city04.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city05 in city_list05 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city05.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city06 in city_list06 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city06.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city07 in city_list07 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city07.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city08 in city_list08 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city08.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city09 in city_list09 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city09.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city10 in city_list10 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city10.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city11 in city_list11 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city11.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city12 in city_list12 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city12.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city13 in city_list13 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city13.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city14 in city_list14 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city14.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city15 in city_list15 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city15.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city16 in city_list16 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city16.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city17 in city_list17 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city17.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city18 in city_list18 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city18.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city19 in city_list19 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city19.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city20 in city_list20 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city20.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city21 in city_list21 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city21.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city22 in city_list22 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city22.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city23 in city_list23 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city23.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city24 in city_list24 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city24.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city25 in city_list25 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city25.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city26 in city_list26 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city26.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city27 in city_list27 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city27.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city28 in city_list28 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city28.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city29 in city_list29 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city29.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city30 in city_list30 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city30.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city31 in city_list31 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city31.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city32 in city_list32 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city32.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city33 in city_list33 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city33.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city34 in city_list34 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city34.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city35 in city_list35 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city35.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city36 in city_list36 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city36.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city37 in city_list37 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city37.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city38 in city_list38 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city38.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city39 in city_list39 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city39.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city40 in city_list40 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city40.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city41 in city_list41 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city41.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city42 in city_list42 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city42.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city43 in city_list43 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city43.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city44 in city_list44 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city44.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city45 in city_list45 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city45.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city46 in city_list46 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city46.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                    <td nowrap>
+                        {% for city47 in city_list47 %}
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city47.CITY_NAME }}</label></div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <label class="form-check-label">帳票の種類を選択してください。</label>
+    </div>    
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <select class="form-select" id="form_select_1" name="form_select_1">
+            {#<option value="1">調査員調査票</option>#}
+            {#<option value="2">一般資産調査票</option>#}
+            <option value="1">建物区分</option>
+            <option value="2">都道府県</option>
+            <option value="3">市区町村</option>
+            <option value="4">水害発生地点工種（河川海岸区分）</option>
+            <option value="5">水系（水系・沿岸）</option>
+            <option value="6">水系種別（水系・沿岸種別）</option>
+            <option value="7">河川（河川・海岸）</option>
+            <option value="8">河川種別（河川・海岸種別）</option>
+
+            <option value="9">水害原因</option>
+            <option value="10">地上地下区分</option>
+            <option value="11">地下空間の利用形態</option>
+            <option value="12">浸水土砂区分</option>
+            <option value="13">地盤勾配区分</option>
+            <option value="14">産業分類</option>
+            <option value="15">県別家屋評価額</option>
+            <option value="16">家屋被害率</option>
+            <option value="17">家庭用品自動車以外被害率</option>
+            <option value="18">家庭用品自動車被害率</option>
+            <option value="19">家庭応急対策費</option>
+            <option value="20">産業分類別資産額</option>
+            <option value="21">事業所被害率</option>
+            <option value="22">事業所営業停止損失</option>
+            <option value="23">農漁家被害率</option>
+            <option value="24">異常気象</option>
+            <option value="25">区域</option>
+            
+            <option value="2601">一般資産調査票（調査員用）</option>
+            <option value="2602">一般資産調査票（市区町村用）</option>
+            <option value="2603">一般資産調査票（都道府県用）</option>
+            
+            <option value="27">復旧事業工種</option>
+            <option value="28">公共土木調査票</option>
+            <option value="29">公益事業調査票</option>
+        </select>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <label class="form-check-label">編集ロックの有無を選択してボタンをクリックしてください。</label>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-borderless">
+            <tr>
+                <td>
+                    <label class="form-check-label">他のユーザとの編集の競合を避けるために編集ロック状態でEXCELファイルをダウンロードします。</label>
+                </td>
+                <td>
+                    {#<a class="btn btn-primary" href="{% url 'P0200ExcelDownload:download_file' %}">編集ロック有りでダウンロード</a>#}
+                    {% bootstrap_button id="button1" button_type="button" content="編集ロック有りでダウンロード" %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="form-check-label">参照用にEXCELファイルをダウンロードする場合はこちらをクリックしてください。</label>
+                </td>
+                <td>
+                    {#<a class="btn btn-primary" href="{% url 'P0200ExcelDownload:download_file' %}">編集ロック無しでダウンロード</a>#}
+                    {% bootstrap_button id="button2" button_type="button" content="編集ロック無しでダウンロード" %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+    var button1 = document.getElementById("button1")
+    var button2 = document.getElementById("button2")
+    var form_select_1 = document.getElementById("form_select_1")
+    button1.addEventListener("click", function(event) {
+        if (form_select_1.value == 1) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_building' %}";
+        } else if (form_select_1.value == 2) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ken' %}";
+        } else if (form_select_1.value == 3) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_city' %}";
+        } else if (form_select_1.value == 4) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen_kaigan' %}";
+        } else if (form_select_1.value == 5) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_suikei' %}";
+        } else if (form_select_1.value == 6) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_suikei_type' %}";
+        } else if (form_select_1.value == 7) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen' %}";
+        } else if (form_select_1.value == 8) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen_type' %}";
+        } else if (form_select_1.value == 9) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_cause' %}";
+        } else if (form_select_1.value == 10) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_underground' %}";
+        } else if (form_select_1.value == 11) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_usage' %}";
+        } else if (form_select_1.value == 12) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_flood_sediment' %}";
+        } else if (form_select_1.value == 13) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_gradient' %}";
+        } else if (form_select_1.value == 14) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_industry' %}";
+        } else if (form_select_1.value == 15) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_asset' %}";
+        } else if (form_select_1.value == 16) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_damage' %}";
+        } else if (form_select_1.value == 17) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_household_damage' %}";
+        } else if (form_select_1.value == 18) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_car_damage' %}";
+        } else if (form_select_1.value == 19) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_cost' %}";
+        } else if (form_select_1.value == 20) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_asset' %}";
+        } else if (form_select_1.value == 21) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_damage' %}";
+        } else if (form_select_1.value == 22) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_cost' %}";
+        } else if (form_select_1.value == 23) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_farmer_fisher_damage' %}";
+        } else if (form_select_1.value == 24) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_weather' %}";
+        } else if (form_select_1.value == 25) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_area' %}";
+        } else if (form_select_1.value == 2601) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_chosa' %}";
+        } else if (form_select_1.value == 2602) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_city' %}";
+        } else if (form_select_1.value == 2603) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_ken' %}";
+        } else if (form_select_1.value == 27) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_restoration' %}";
+        } else if (form_select_1.value == 28) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kokyo' %}";
+        } else if (form_select_1.value == 29) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_koeki' %}";
+        } else {
+            window.location.href = "{% url 'P0200ExcelDownload:download_building' %}";
+        }
+    });
+    button2.addEventListener("click", function(event) {
+        if (form_select_1.value == 1) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_building' %}";
+        } else if (form_select_1.value == 2) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ken' %}";
+        } else if (form_select_1.value == 3) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_city' %}";
+        } else if (form_select_1.value == 4) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen_kaigan' %}";
+        } else if (form_select_1.value == 5) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_suikei' %}";
+        } else if (form_select_1.value == 6) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_suikei_type' %}";
+        } else if (form_select_1.value == 7) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen' %}";
+        } else if (form_select_1.value == 8) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kasen_type' %}";
+        } else if (form_select_1.value == 9) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_cause' %}";
+        } else if (form_select_1.value == 10) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_underground' %}";
+        } else if (form_select_1.value == 11) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_usage' %}";
+        } else if (form_select_1.value == 12) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_flood_sediment' %}";
+        } else if (form_select_1.value == 13) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_gradient' %}";
+        } else if (form_select_1.value == 14) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_industry' %}";
+        } else if (form_select_1.value == 15) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_asset' %}";
+        } else if (form_select_1.value == 16) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_damage' %}";
+        } else if (form_select_1.value == 17) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_household_damage' %}";
+        } else if (form_select_1.value == 18) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_car_damage' %}";
+        } else if (form_select_1.value == 19) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_house_cost' %}";
+        } else if (form_select_1.value == 20) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_asset' %}";
+        } else if (form_select_1.value == 21) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_damage' %}";
+        } else if (form_select_1.value == 22) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_office_cost' %}";
+        } else if (form_select_1.value == 23) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_farmer_fisher_damage' %}";
+        } else if (form_select_1.value == 24) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_weather' %}";
+        } else if (form_select_1.value == 25) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_area' %}";
+        } else if (form_select_1.value == 2601) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_chosa' %}";
+        } else if (form_select_1.value == 2602) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_city' %}";
+        } else if (form_select_1.value == 2603) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_ippan_ken' %}";
+        } else if (form_select_1.value == 27) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_restoration' %}";
+        } else if (form_select_1.value == 28) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_kokyo' %}";
+        } else if (form_select_1.value == 29) {
+            window.location.href = "{% url 'P0200ExcelDownload:download_koeki' %}";
+        } else {
+            window.location.href = "{% url 'P0200ExcelDownload:download_building' %}";
+        }
+    });
+    </script>
+    {% endblock %}
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+</body>
+</html>
+
