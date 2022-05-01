@@ -30,7 +30,7 @@ class KEN(models.Model):
         db_table = 'p0000common_ken'
     
     def __str__(self):
-        return '<KEN: ' + self.KEN_CODE + ', ' + self.KEN_NAME + '>'
+        return '<KEN: ' + self.ken_code + ', ' + self.ken_name + '>'
 
 ### 03: 市区町村
 class CITY(models.Model):
