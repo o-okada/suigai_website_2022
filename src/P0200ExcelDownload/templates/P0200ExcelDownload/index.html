@@ -30,7 +30,7 @@
                     <th>都道府県</th>
                     {% for ken in ken_list %}
                     <th>
-                        <div class="text-center"><label class="form-check-label">{{ ken.KEN_NAME }}</label></div>
+                        <div class="text-center"><label class="form-check-label">{{ ken.ken_name }}</label></div>
                         <div class="text-center"><button class="btn btn-primary" type="button" id="button{{ ken.ken_code }}" name="submit_button1">全選択</button></div>
                         {#<button id="button{{ forloop.counter }}" class="btn btn-link" type="button" name="submit_button1">全選択</button><br><br>#}
                         {# bootstrap_button id=ken.ken_code button_type="button" content="全選択" size="sm" #}
@@ -43,237 +43,237 @@
                     <td>市区町村</td>                
                     <td nowrap>
                         {% for city01 in city_list01 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city01.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city01.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city02 in city_list02 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city02.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city02.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city03 in city_list03 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city03.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city03.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city04 in city_list04 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city04.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city04.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city05 in city_list05 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city05.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city05.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city06 in city_list06 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city06.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city06.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city07 in city_list07 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city07.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city07.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city08 in city_list08 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city08.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city08.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city09 in city_list09 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city09.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city09.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city10 in city_list10 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city10.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city10.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city11 in city_list11 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city11.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city11.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city12 in city_list12 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city12.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city12.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city13 in city_list13 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city13.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city13.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city14 in city_list14 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city14.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city14.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city15 in city_list15 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city15.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city15.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city16 in city_list16 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city16.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city16.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city17 in city_list17 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city17.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city17.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city18 in city_list18 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city18.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city18.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city19 in city_list19 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city19.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city19.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city20 in city_list20 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city20.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city20.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city21 in city_list21 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city21.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city21.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city22 in city_list22 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city22.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city22.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city23 in city_list23 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city23.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city23.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city24 in city_list24 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city24.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city24.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city25 in city_list25 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city25.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city25.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city26 in city_list26 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city26.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city26.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city27 in city_list27 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city27.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city27.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city28 in city_list28 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city28.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city28.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city29 in city_list29 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city29.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city29.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city30 in city_list30 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city30.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city30.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city31 in city_list31 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city31.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city31.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city32 in city_list32 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city32.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city32.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city33 in city_list33 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city33.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city33.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city34 in city_list34 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city34.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city34.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city35 in city_list35 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city35.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city35.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city36 in city_list36 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city36.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city36.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city37 in city_list37 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city37.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city37.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city38 in city_list38 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city38.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city38.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city39 in city_list39 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city39.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city39.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city40 in city_list40 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city40.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city40.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city41 in city_list41 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city41.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city41.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city42 in city_list42 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city42.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city42.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city43 in city_list43 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city43.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city43.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city44 in city_list44 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city44.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city44.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city45 in city_list45 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city45.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city45.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city46 in city_list46 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city46.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city46.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city47 in city_list47 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city47.CITY_NAME }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city47.city_name }}</label></div>
                         {% endfor %}
                     </td>
                 </tr>

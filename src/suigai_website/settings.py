@@ -29,17 +29,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     ### Common Applications
+    'P0000Common.apps.P0000CommonConfig',
     'P0000Dummy.apps.P0000DummyConfig',
     'P0100Login.apps.P0100LoginConfig',
+    
     ### Excel Applications
     'P0200ExcelDownload.apps.P0200ExcelDownloadConfig',
     'P0300ExcelUpload.apps.P0300ExcelUploadConfig',
+    
     ### Online Applications
     'P0400OnlineDisplay.apps.P0400OnlineDisplayConfig',
     'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
+    
     ### Area Applications
     'P0600AreaCreate.apps.P0600AreaCreateConfig',
+    
     ### Admin Applications
     'P9100AdminCheck.apps.P9100AdminCheckConfig',
     'P9200AdminHistory.apps.P9200AdminHistoryConfig',
@@ -85,10 +91,20 @@ WSGI_APPLICATION = 'suigai_website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+### DATABASES = {
+###     'default': {
+###         'ENGINE': 'django.db.backends.sqlite3',
+###         'NAME': BASE_DIR / 'db.sqlite3',
+###     }
+### }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
