@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     ### See https://office54.net/python/django/django-bootstratp5-css
     'django_bootstrap5',
-    'file_upload', ### 2022/04/22 Add
+    ### 'file_upload',
 ]
 
 MIDDLEWARE = [

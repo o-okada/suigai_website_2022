@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.template import loader
 from django.views import generic
 
+from django.views.generic.base import TemplateView
+
 import openpyxl
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.writer.excel import save_virtual_workbook
@@ -71,10 +73,64 @@ from P0000Common.models import KOKYO                   ### 28: 公共土木調�
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 
 ###############################################################################
-### 
+### index 関数
 ###############################################################################
 def index(request):
+    print('index(request): ', flush=True)
+    ken_list = KEN.objects.order_by('ken_code')[:]
     template = loader.get_template('P0400OnlineDisplay/index.html')
-    context = {}
-    ### return HttpResponse("Hello, world. You're at the P0400OnlineDisplay index")
+    context = {
+        'ken_list': ken_list,
+    }
     return HttpResponse(template.render(context, request))
+
+###############################################################################
+### ken 関数
+###############################################################################
+def ken(request, ken_code):
+    print('ken(request, ken_code): ', ken_code, flush=True)
+    ken_list = KEN.objects.order_by('ken_code')[:]
+    city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
+    template = loader.get_template('P0400OnlineDisplay/index.html')
+    context = {
+        'ken_list': ken_list,
+        'city_list': city_list,
+        'ken_code': ken_code,
+    }
+    return HttpResponse(template.render(context, request))
+
+###############################################################################
+### city 関数
+###############################################################################
+def city(request, ken_code, city_code):    
+    print('city(request, ken_code, city_code): ', ken_code, city_code, flush=True)
+    ken_list = KEN.objects.order_by('ken_code')[:]
+    city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
+    template = loader.get_template('P0400OnlineDisplay/index.html')
+    context = {
+        'ken_list': ken_list,
+        'city_list': city_list,
+        'ken_code': ken_code,
+        'city_code': city_code,
+    }
+    return HttpResponse(template.render(context, request))
+
+###############################################################################
+### category 関数
+###############################################################################
+def category(request, ken_code, city_code, category_code):
+    print('category(request, ken_code, city_code, category_code): ', ken_code, city_code, category_code, flush=True)
+    ken_list = KEN.objects.order_by('ken_code')[:]
+    city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
+    ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+    template = loader.get_template('P0400OnlineDisplay/index.html')
+    context = {
+        'ken_list': ken_list,
+        'city_list': city_list,
+        'ippan_list': ippan_list,
+        'ken_code': ken_code,
+        'city_code': city_code,
+        'category_code': category_code,
+    }
+    return HttpResponse(template.render(context, request))
+    

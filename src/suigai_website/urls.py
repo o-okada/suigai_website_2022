@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
-import file_upload.views as file_upload ### 2022/04/22 Add
+### import file_upload.views as file_upload ### 2022/04/22 Add
 
 urlpatterns = [
     ### Common Applications
@@ -20,6 +20,6 @@ urlpatterns = [
     path('P9300AdminLock/', include('P9300AdminLock.urls')),
     
     path('admin/', admin.site.urls),
-    path('success/url/', file_upload.success), ### 2022/04/22 Add
-    path('file_upload/', include('file_upload.urls')), ### 2022/04/22 Add
+    ### path('success/url/', file_upload.success), ### 2022/04/22 Add
+    ### path('file_upload/', include('file_upload.urls')), ### 2022/04/22 Add
 ]

@@ -16,146 +16,503 @@
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
     {% block content %}
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+    <div class="text-center mb-3"><!-- mb-3 下側のマージンを3 -->
         <h3>調査票、集計結果、マスタデータ参照</h3>
     </div>
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <div class="row mb-3">
-            <div class="input-group">
-                <select class="form-select">
-                    <option value="">区分選択</option>
-                    <option value="">調査票</option>
-                    <option value="">集計結果</option>
-                    <option value="">マスタデータ</option>
-                </select>
-                <button class="btn btn-primary" type="button">区分選択</button>
-            </div>
-        </div>
-    </div>
-        
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-borderless">
             <tr>
                 <td>
                     <div class="input-group">
-                        <select class="form-select">
+                        <select class="form-select" id="form_select_ken" name="form_select_ken">
                             <option value="">都道府県選択</option>
-                            <option value=""></option>
+                            {% for ken in ken_list %}
+                            {% if ken.ken_code == ken_code %}
+                            <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
+                            {% else %}
+                            <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
+                            {% endif %}
+                            {% endfor %}
                         </select>
-                        <button class="btn btn-primary" type="button">都道府県選択</button>
+                        <button class="btn btn-primary" type="button" id="button1">都道府県選択</button>
                     </div>
                 </td>
                 <td>
                     <div class="input-group">
-                        <select class="form-select">
+                        <select class="form-select" id="form_select_city" name="form_select_city">
                             <option value="">市区町村選択</option>
-                            <option value=""></option>
+                            {% for city in city_list %}
+                            {% if city.city_code == city_code %}
+                            <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
+                            {% else %}
+                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                            {% endif %}
+                            {% endfor %}
                         </select>
-                        <button class="btn btn-primary" type="button">市区町村選択</button>
+                        <button class="btn btn-primary" type="button" id="button2">市区町村選択</button>
                     </div>
                 </td>
                 <td>
                     <div class="input-group">
-                        <select class="form-select">
-                            <option value="">種別選択</option>
-                            <option value=""></option>
+                        <select class="form-select" id="form_select_category" name="form_select_category">
+                            {% if category_code == "1" %}
+                            <option value="1" selected>種別選択</option>
+                            {% else %}
+                            <option value="1">種別選択</option>
+                            {% endif %}
+                            {% if category_code == "2" %}
+                            <option value="2" selected>一般資産調査票（調査員用）</option>
+                            {% else %}
+                            <option value="2">一般資産調査票（調査員用）</option>
+                            {% endif %}
+                            {% if category_code == "3" %}
+                            <option value="3" selected>一般資産調査票（市区町村用）</option>
+                            {% else %}
+                            <option value="3">一般資産調査票（市区町村用）</option>
+                            {% endif %}
+                            {% if category_code == "4" %}
+                            <option value="4" selected>一般資産調査票（都道府県用）</option>
+                            {% else %}
+                            <option value="4">一般資産調査票（都道府県用）</option>
+                            {% endif %}
+                            {% if category_code == "5" %}
+                            <option value="5" selected>復旧事業工種</option>
+                            {% else %}
+                            <option value="5">復旧事業工種</option>
+                            {% endif %}
+                            {% if category_code == "6" %}
+                            <option value="6" selected>公共土木調査票</option>
+                            {% else %}
+                            <option value="6">公共土木調査票</option>
+                            {% endif %}
+                            {% if category_code == "7" %}
+                            <option value="7" selected>公益事業調査票</option>
+                            {% else %}
+                            <option value="7">公益事業調査票</option>
+                            {% endif %}
+                            {% if category_code == "8" %}
+                            <option value="8" selected>チェック結果</option>
+                            {% else %}
+                            <option value="8">チェック結果</option>
+                            {% endif %}
+                            {% if category_code == "9" %}
+                            <option value="9" selected>集計結果</option>
+                            {% else %}
+                            <option value="9">集計結果</option>
+                            {% endif %}
+                            {% if category_code == "10" %}
+                            <option value="10" selected>建物区分</option>
+                            {% else %}
+                            <option value="10">建物区分</option>
+                            {% endif %}
+                            {% if category_code == "11" %}
+                            <option value="11" selected>都道府県</option>
+                            {% else %}
+                            <option value="11">都道府県</option>
+                            {% endif %}
+                            {% if category_code == "12" %}
+                            <option value="12" selected>市区町村</option>
+                            {% else %}
+                            <option value="12">市区町村</option>
+                            {% endif %}
+                            {% if category_code == "13" %}
+                            <option value="13" selected>水害発生地点工種（河川海岸区分）</option>
+                            {% else %}
+                            <option value="13">水害発生地点工種（河川海岸区分）</option>
+                            {% endif %}
+                            {% if category_code == "14" %}
+                            <option value="14" selected>水系（水系・沿岸）</option>
+                            {% else %}
+                            <option value="14">水系（水系・沿岸）</option>
+                            {% endif %}
+                            {% if category_code == "15" %}
+                            <option value="15" selected>水系種別（水系・沿岸種別）</option>
+                            {% else %}
+                            <option value="15">水系種別（水系・沿岸種別）</option>
+                            {% endif %}
+                            {% if category_code == "16" %}
+                            <option value="16" selected>河川（河川・海岸）</option>
+                            {% else %}
+                            <option value="16">河川（河川・海岸）</option>
+                            {% endif %}
+                            {% if category_code == "17" %}
+                            <option value="17" selected>河川種別（河川・海岸種別）</option>
+                            {% else %}
+                            <option value="17">河川種別（河川・海岸種別）</option>
+                            {% endif %}
+                            {% if category_code == "18" %}
+                            <option value="18" selected>水害原因</option>
+                            {% else %}
+                            <option value="18">水害原因</option>
+                            {% endif %}
+                            {% if category_code == "19" %}
+                            <option value="19" selected>地上地下区分</option>
+                            {% else %}
+                            <option value="19">地上地下区分</option>
+                            {% endif %}
+                            {% if category_code == "20" %}
+                            <option value="20" selected>地下空間の利用形態</option>
+                            {% else %}
+                            <option value="20">地下空間の利用形態</option>
+                            {% endif %}
+                            {% if category_code == "21" %}
+                            <option value="21" selected>浸水土砂区分</option>
+                            {% else %}
+                            <option value="21">浸水土砂区分</option>
+                            {% endif %}
+                            {% if category_code == "22" %}
+                            <option value="22" selected>地盤勾配区分</option>
+                            {% else %}
+                            <option value="22">地盤勾配区分</option>
+                            {% endif %}
+                            {% if category_code == "23" %}
+                            <option value="23" selected>産業分類</option>
+                            {% else %}
+                            <option value="23">産業分類</option>
+                            {% endif %}
+                            {% if category_code == "24" %}
+                            <option value="24" selected>県別家屋評価額</option>
+                            {% else %}
+                            <option value="24">県別家屋評価額</option>
+                            {% endif %}
+                            {% if category_code == "25" %}
+                            <option value="25" selected>家屋被害率</option>
+                            {% else %}
+                            <option value="25">家屋被害率</option>
+                            {% endif %}
+                            {% if category_code == "26" %}
+                            <option value="26" selected>家庭用品自動車以外被害率</option>
+                            {% else %}
+                            <option value="26">家庭用品自動車以外被害率</option>
+                            {% endif %}
+                            {% if category_code == "27" %}
+                            <option value="27" selected>家庭用品自動車被害率</option>
+                            {% else %}
+                            <option value="27">家庭用品自動車被害率</option>
+                            {% endif %}
+                            {% if category_code == "28" %}
+                            <option value="28" selected>家庭応急対策費</option>
+                            {% else %}
+                            <option value="28">家庭応急対策費</option>
+                            {% endif %}
+                            {% if category_code == "29" %}
+                            <option value="29" selected>産業分類別資産額</option>
+                            {% else %}
+                            <option value="29">産業分類別資産額</option>
+                            {% endif %}
+                            {% if category_code == "30" %}
+                            <option value="30" selected>事業所被害率</option>
+                            {% else %}
+                            <option value="30">事業所被害率</option>
+                            {% endif %}
+                            {% if category_code == "31" %}
+                            <option value="31" selected>事業所営業停止損失</option>
+                            {% else %}
+                            <option value="31">事業所営業停止損失</option>
+                            {% endif %}
+                            {% if category_code == "32" %}
+                            <option value="32" selected>農漁家被害率</option>
+                            {% else %}
+                            <option value="32">農漁家被害率</option>
+                            {% endif %}
+                            {% if category_code == "33" %}
+                            <option value="33" selected>異常気象</option>
+                            {% else %}
+                            <option value="33">異常気象</option>
+                            {% endif %}
+                            {% if category_code == "34" %}
+                            <option value="34" selected>区域</option>
+                            {% else %}
+                            <option value="34">区域</option>
+                            {% endif %}
                         </select>
-                        <button class="btn btn-primary" type="button">種別選択</button>
+                        <button class="btn btn-primary" type="button" id="button3">種別選択</button>
                     </div>
                 </td>
             </tr>    
         </table>
     </div>
     
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <table class="table table-bordered">
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">一般資産調査票ID</th>
+                    <th class="text-center">一般資産調査票名</th>
+                    <th class="text-center">建物区分コード</th>
+                    <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">地盤勾配区分コード</th>
+                    <th class="text-center">産業分類コード</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">市区町村コード</th>
+                    <th class="text-center">異常気象ID</th>
+                    <th class="text-center">区域ID</th>
+                    <th class="text-center">水害原因_1_コード</th>
+                    <th class="text-center">水害原因_2_コード</th>
+                    <th class="text-center">水害原因_3_コード</th>
+                    <th class="text-center">水系コード</th>
+                    <th class="text-center">河川コード</th>
+                    <th class="text-center">河川海岸コード</th>
+                    <th class="text-center">地上地下区分コード</th>
+                    <th class="text-center">地下空間の利用形態コード</th>
+                    <th class="text-center">被害建物棟数_床下</th>
+                    <th class="text-center">被害建物棟数_01から49cm</th>
+                    <th class="text-center">被害建物棟数_50から99cm</th>
+                    <th class="text-center">被害建物棟数_100cm以上</th>
+                    <th class="text-center">被害建物棟数_半壊</th>
+                    <th class="text-center">被害建物棟数_全壊</th>
+                    <th class="text-center">延床面積</th>
+                    <th class="text-center">被災世帯数</th>
+                    <th class="text-center">被災事業所数</th>
+                    <th class="text-center">延床面積_床下</th>
+                    <th class="text-center">延床面積_01から49cm</th>
+                    <th class="text-center">延床面積_50から99cm</th>
+                    <th class="text-center">延床面積_100cm以上</th>
+                    <th class="text-center">延床面積_半壊</th>
+                    <th class="text-center">延床面積_全壊</th>
+                    <th class="text-center">被災世帯数_床下</th>
+                    <th class="text-center">被災世帯数_01から49cm</th>
+                    <th class="text-center">被災世帯数_50から99cm</th>
+                    <th class="text-center">被災世帯数_100cm以上</th>
+                    <th class="text-center">被災世帯数_半壊</th>
+                    <th class="text-center">被災世帯数_全壊</th>
+                    <th class="text-center">被災事業所数_床下</th>
+                    <th class="text-center">被災事業所数_01から49cm</th>
+                    <th class="text-center">被災事業所数_50から99cm</th>
+                    <th class="text-center">被災事業所数_100cm以上</th>
+                    <th class="text-center">被災事業所数_半壊</th>
+                    <th class="text-center">被災事業所数_全壊</th>
+                    <th class="text-center">被災従業者数_床下</th>
+                    <th class="text-center">被災従業者数_01から49cm</th>
+                    <th class="text-center">被災従業者数_50から99cm</th>
+                    <th class="text-center">被災従業者数_100cm以上</th>
+                    <th class="text-center">被災従業者数_全壊</th>
+                    <th class="text-center">農漁家戸数_床下</th>
+                    <th class="text-center">農漁家戸数_01から49cm</th>
+                    <th class="text-center">農漁家戸数_50から99cm</th>
+                    <th class="text-center">農漁家戸数_100cm以上</th>
+                    <th class="text-center">農漁家戸数_全壊</th>
                 </tr>
             </thead>
             <tbody>
+                {% for ippan in ippan_list %}
                 <tr>
                     <td>
-                        <button class="btn btn-primary" type="button">編集</button>
+                        <button class="btn btn-primary" type="button" id="button4">編集</button>
                     </td>
                     <td>
-                        <button class="btn btn-primary" type="button">削除</button>
+                        <button class="btn btn-primary" type="button" id="button5">削除</button>
                     </td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
+                    <td>{{ ippan.ippan_id }}</td>
+                    <td>{{ ippan.ippan_name }}</td>
+                    <td>{{ ippan.building_code }}</td>
+                    <td>{{ ippan.flood_sediment_code }}</td>
+                    <td>{{ ippan.gradient_code }}</td>
+                    <td>{{ ippan.industry_code }}</td>
+                    <td>{{ ippan.ken_code }}</td>
+                    <td>{{ ippan.city_code }}</td>
+                    <td>{{ ippan.weather_id }}</td>
+                    <td>{{ ippan.area_id }}</td>
+                    <td>{{ ippan.cause_1_code }}</td>
+                    <td>{{ ippan.cause_2_code }}</td>
+                    <td>{{ ippan.cause_3_code }}</td>
+                    <td>{{ ippan.suikei_code }}</td>
+                    <td>{{ ippan.kasen_code }}</td>
+                    <td>{{ ippan.kasen_kaigan_code }}</td>
+                    <td>{{ ippan.underground_code }}</td>
+                    <td>{{ ippan.usage_code }}</td>
+                    <td>{{ ippan.building_lv00 }}</td>
+                    <td>{{ ippan.building_lv01_49 }}</td>
+                    <td>{{ ippan.building_lv50_99 }}</td>
+                    <td>{{ ippan.building_lv100 }}</td>
+                    <td>{{ ippan.building_half }}</td>
+                    <td>{{ ippan.building_full }}</td>
+                    <td>{{ ippan.floor_area }}</td>
+                    <td>{{ ippan.family }}</td>
+                    <td>{{ ippan.office }}</td>
+                    <td>{{ ippan.floor_area_lv00 }}</td>
+                    <td>{{ ippan.floor_area_lv01_49 }}</td>
+                    <td>{{ ippan.floor_area_lv50_99 }}</td>
+                    <td>{{ ippan.floor_area_lv100 }}</td>
+                    <td>{{ ippan.floor_area_half }}</td>
+                    <td>{{ ippan.floor_area_full }}</td>
+                    <td>{{ ippan.family_lv00 }}</td>
+                    <td>{{ ippan.family_lv01_49 }}</td>
+                    <td>{{ ippan.family_lv50_99 }}</td>
+                    <td>{{ ippan.family_lv100 }}</td>
+                    <td>{{ ippan.family_half }}</td>
+                    <td>{{ ippan.family_full }}</td>
+                    <td>{{ ippan.office_lv00 }}</td>
+                    <td>{{ ippan.office_lv01_49 }}</td>
+                    <td>{{ ippan.office_lv50_99 }}</td>
+                    <td>{{ ippan.office_lv100 }}</td>
+                    <td>{{ ippan.office_half }}</td>
+                    <td>{{ ippan.office_full }}</td>
+                    <td>{{ ippan.employee_lv00 }}</td>
+                    <td>{{ ippan.employee_lv01_49 }}</td>
+                    <td>{{ ippan.employee_lv50_99 }}</td>
+                    <td>{{ ippan.employee_lv100 }}</td>
+                    <td>{{ ippan.employee_full }}</td>
+                    <td>{{ ippan.farmer_fisher_lv00 }}</td>
+                    <td>{{ ippan.farmer_fisher_lv01_49 }}</td>
+                    <td>{{ ippan.farmer_fisher_lv50_99 }}</td>
+                    <td>{{ ippan.farmer_fisher_lv100 }}</td>
+                    <td>{{ ippan.farmer_fisher_full }}</td>
                 </tr>
-                <tr>
-                    <td>
-                        <button class="btn btn-primary" type="button">編集</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" type="button">削除</button>
-                    </td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class="btn btn-primary" type="button">編集</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" type="button">削除</button>
-                    </td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
     
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <button class="btn btn-primary" type="button">表示エリアに反映</button>
+    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
+        <button class="btn btn-primary" type="button" id="button6">表示エリアに反映</button>
     </div>
 
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <table class="table table-bordered">
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
-                    <th class="text-center">観測所名称</th>
+                    <th class="text-center">一般資産調査票ID</th>
+                    <th class="text-center">一般資産調査票名</th>
+                    <th class="text-center">建物区分コード</th>
+                    <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">地盤勾配区分コード</th>
+                    <th class="text-center">産業分類コード</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">市区町村コード</th>
+                    <th class="text-center">異常気象ID</th>
+                    <th class="text-center">区域ID</th>
+                    <th class="text-center">水害原因_1_コード</th>
+                    <th class="text-center">水害原因_2_コード</th>
+                    <th class="text-center">水害原因_3_コード</th>
+                    <th class="text-center">水系コード</th>
+                    <th class="text-center">河川コード</th>
+                    <th class="text-center">河川海岸コード</th>
+                    <th class="text-center">地上地下区分コード</th>
+                    <th class="text-center">地下空間の利用形態コード</th>
+                    <th class="text-center">被害建物棟数_床下</th>
+                    <th class="text-center">被害建物棟数_01から49cm</th>
+                    <th class="text-center">被害建物棟数_50から99cm</th>
+                    <th class="text-center">被害建物棟数_100cm以上</th>
+                    <th class="text-center">被害建物棟数_半壊</th>
+                    <th class="text-center">被害建物棟数_全壊</th>
+                    <th class="text-center">延床面積</th>
+                    <th class="text-center">被災世帯数</th>
+                    <th class="text-center">被災事業所数</th>
+                    <th class="text-center">延床面積_床下</th>
+                    <th class="text-center">延床面積_01から49cm</th>
+                    <th class="text-center">延床面積_50から99cm</th>
+                    <th class="text-center">延床面積_100cm以上</th>
+                    <th class="text-center">延床面積_半壊</th>
+                    <th class="text-center">延床面積_全壊</th>
+                    <th class="text-center">被災世帯数_床下</th>
+                    <th class="text-center">被災世帯数_01から49cm</th>
+                    <th class="text-center">被災世帯数_50から99cm</th>
+                    <th class="text-center">被災世帯数_100cm以上</th>
+                    <th class="text-center">被災世帯数_半壊</th>
+                    <th class="text-center">被災世帯数_全壊</th>
+                    <th class="text-center">被災事業所数_床下</th>
+                    <th class="text-center">被災事業所数_01から49cm</th>
+                    <th class="text-center">被災事業所数_50から99cm</th>
+                    <th class="text-center">被災事業所数_100cm以上</th>
+                    <th class="text-center">被災事業所数_半壊</th>
+                    <th class="text-center">被災事業所数_全壊</th>
+                    <th class="text-center">被災従業者数_床下</th>
+                    <th class="text-center">被災従業者数_01から49cm</th>
+                    <th class="text-center">被災従業者数_50から99cm</th>
+                    <th class="text-center">被災従業者数_100cm以上</th>
+                    <th class="text-center">被災従業者数_全壊</th>
+                    <th class="text-center">農漁家戸数_床下</th>
+                    <th class="text-center">農漁家戸数_01から49cm</th>
+                    <th class="text-center">農漁家戸数_50から99cm</th>
+                    <th class="text-center">農漁家戸数_100cm以上</th>
+                    <th class="text-center">農漁家戸数_全壊</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
-                    <td><input class="form-control" type="text" value="観測所名称"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_id }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_name }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.flood_sediment_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.gradient_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.industry_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ken_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.city_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.weather_id }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.area_id }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_1_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_2_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_3_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.suikei_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_kaigan_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.underground_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.usage_code }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_half }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_full }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_half }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_full }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_half }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_full }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_half }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_full }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_full }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv00 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv01_49 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv50_99 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv100 }}"></td>
+                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_full }}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <script>
+    var button1 = document.getElementById("button1") <!--県選択ボタン-->
+    var button2 = document.getElementById("button2") <!--市区町村選択ボタン-->
+    var button3 = document.getElementById("button3") <!--種別選択ボタン-->
+    
+    button1.addEventListener("click", function(event) {
+        if (form_select_ken.value >= 1) {
+            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/ken/"
+        }
+    });
+    button2.addEventListener("click", function(event) {
+        if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
+            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/" + form_select_city.value + "/city/"
+        }
+    });
+    button3.addEventListener("click", function(event) {
+        if (form_select_ken.value >= 1 && form_select_city.value >= 1 && form_select_category.value >= 1) {
+            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/" + form_select_city.value + "/" + form_select_category.value + "/category/"
+        }
+    });
+    </script>
     {% endblock %}
 </body>
 </html>
