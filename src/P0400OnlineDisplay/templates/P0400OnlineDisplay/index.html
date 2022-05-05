@@ -233,12 +233,14 @@
         </table>
     </div>
     
+    {% if category_code == "1" %}{# 種別選択 #}
+    {% endif %}
+    
+    {% if category_code == "2" %}{# 一般資産調査票（調査員用） #}
     <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center"></th>
-                    <th class="text-center"></th>
                     <th class="text-center">一般資産調査票ID</th>
                     <th class="text-center">一般資産調査票名</th>
                     <th class="text-center">建物区分コード</th>
@@ -299,12 +301,6 @@
             <tbody>
                 {% for ippan in ippan_list %}
                 <tr>
-                    <td>
-                        <button class="btn btn-primary" type="button" id="button4">編集</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" type="button" id="button5">削除</button>
-                    </td>
                     <td>{{ ippan.ippan_id }}</td>
                     <td>{{ ippan.ippan_name }}</td>
                     <td>{{ ippan.building_code }}</td>
@@ -365,133 +361,807 @@
             </tbody>
         </table>
     </div>
+    {% endif %}
     
-    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
-        <button class="btn btn-primary" type="button" id="button6">表示エリアに反映</button>
-    </div>
-
+    {% if category_code == "3" %}{# 一般資産調査票（市区町村用） #}
+    {% endif %}
+    
+    {% if category_code == "4" %}{# 一般資産調査票（都道府県用） #}
+    {% endif %}
+    
+    {% if category_code == "5" %}{# 復旧事業工種 #}
+    {% endif %}
+    
+    {% if category_code == "6" %}{# 公共土木調査票 #}
+    {% endif %}
+    
+    {% if category_code == "7" %}{# 公益事業調査票 #}
+    {% endif %}
+    
+    {% if category_code == "8" %}{# チェック結果 #}
+    {% endif %}
+    
+    {% if category_code == "9" %}{# 集計結果 #}
+    {% endif %}
+    
+    {% if category_code == "10" %}{# 建物区分 #}
     <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
-        <table class="table table-bordered text-nowrap">
+        <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">一般資産調査票ID</th>
-                    <th class="text-center">一般資産調査票名</th>
                     <th class="text-center">建物区分コード</th>
-                    <th class="text-center">浸水土砂区分コード</th>
-                    <th class="text-center">地盤勾配区分コード</th>
-                    <th class="text-center">産業分類コード</th>
-                    <th class="text-center">都道府県コード</th>
-                    <th class="text-center">市区町村コード</th>
-                    <th class="text-center">異常気象ID</th>
-                    <th class="text-center">区域ID</th>
-                    <th class="text-center">水害原因_1_コード</th>
-                    <th class="text-center">水害原因_2_コード</th>
-                    <th class="text-center">水害原因_3_コード</th>
-                    <th class="text-center">水系コード</th>
-                    <th class="text-center">河川コード</th>
-                    <th class="text-center">河川海岸コード</th>
-                    <th class="text-center">地上地下区分コード</th>
-                    <th class="text-center">地下空間の利用形態コード</th>
-                    <th class="text-center">被害建物棟数_床下</th>
-                    <th class="text-center">被害建物棟数_01から49cm</th>
-                    <th class="text-center">被害建物棟数_50から99cm</th>
-                    <th class="text-center">被害建物棟数_100cm以上</th>
-                    <th class="text-center">被害建物棟数_半壊</th>
-                    <th class="text-center">被害建物棟数_全壊</th>
-                    <th class="text-center">延床面積</th>
-                    <th class="text-center">被災世帯数</th>
-                    <th class="text-center">被災事業所数</th>
-                    <th class="text-center">延床面積_床下</th>
-                    <th class="text-center">延床面積_01から49cm</th>
-                    <th class="text-center">延床面積_50から99cm</th>
-                    <th class="text-center">延床面積_100cm以上</th>
-                    <th class="text-center">延床面積_半壊</th>
-                    <th class="text-center">延床面積_全壊</th>
-                    <th class="text-center">被災世帯数_床下</th>
-                    <th class="text-center">被災世帯数_01から49cm</th>
-                    <th class="text-center">被災世帯数_50から99cm</th>
-                    <th class="text-center">被災世帯数_100cm以上</th>
-                    <th class="text-center">被災世帯数_半壊</th>
-                    <th class="text-center">被災世帯数_全壊</th>
-                    <th class="text-center">被災事業所数_床下</th>
-                    <th class="text-center">被災事業所数_01から49cm</th>
-                    <th class="text-center">被災事業所数_50から99cm</th>
-                    <th class="text-center">被災事業所数_100cm以上</th>
-                    <th class="text-center">被災事業所数_半壊</th>
-                    <th class="text-center">被災事業所数_全壊</th>
-                    <th class="text-center">被災従業者数_床下</th>
-                    <th class="text-center">被災従業者数_01から49cm</th>
-                    <th class="text-center">被災従業者数_50から99cm</th>
-                    <th class="text-center">被災従業者数_100cm以上</th>
-                    <th class="text-center">被災従業者数_全壊</th>
-                    <th class="text-center">農漁家戸数_床下</th>
-                    <th class="text-center">農漁家戸数_01から49cm</th>
-                    <th class="text-center">農漁家戸数_50から99cm</th>
-                    <th class="text-center">農漁家戸数_100cm以上</th>
-                    <th class="text-center">農漁家戸数_全壊</th>
+                    <th class="text-center">建物区分名</th>
                 </tr>
             </thead>
             <tbody>
+                {% for building in building_list %}
                 <tr>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_name }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.flood_sediment_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.gradient_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.industry_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ken_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.city_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.weather_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.area_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_1_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_2_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_3_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.suikei_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_kaigan_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.underground_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.usage_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_full }}"></td>
+                    <td>{{ building.building_code }}</td>
+                    <td>{{ building.building_name }}</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
+    {% endif %}
+    
+    {% if category_code == "11" %}{# 都道府県 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ken in ken_list %}
+                <tr>
+                    <td>{{ ken.ken_code }}</td>
+                    <td>{{ ken.ken_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "12" %}{# 市区町村 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">市区町村コード</th>
+                    <th class="text-center">市区町村名</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">市区町村人口</th>
+                    <th class="text-center">市区町村面積</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for city in city_list %}
+                <tr>
+                    <td>{{ city.city_code }}</td>
+                    <td>{{ city.city_name }}</td>
+                    <td>{{ city.ken_code }}</td>
+                    <td>{{ city.city_population }}</td>
+                    <td>{{ city.city_area }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "13" %}{# 水害発生地点工種（河川海岸区分） #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">河川海岸区分コード</th>
+                    <th class="text-center">河川海岸区分名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kasen_kaigan in kasen_kaigan_list %}
+                <tr>
+                    <td>{{ kasen_kaigan.kasen_kaigan_code }}</td>
+                    <td>{{ kasen_kaigan.kasen_kaigan_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "14" %}{# 水系（水系・沿岸） #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">水系コード</th>
+                    <th class="text-center">水系名</th>
+                    <th class="text-center">水系種別コード</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suikei in suikei_list %}
+                <tr>
+                    <td>{{ suikei.suikei_code }}</td>
+                    <td>{{ suikei.suikei_name }}</td>
+                    <td>{{ suikei.suikei_type_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "15" %}{# 水系種別（水系・沿岸種別） #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">水系種別コード</th>
+                    <th class="text-center">水系種別名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suikei_type in suikei_type_list %}
+                <tr>
+                    <td>{{ suikei_type.suikei_type_code }}</td>
+                    <td>{{ suikei_type.suikei_type_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "16" %}{# 河川（河川・海岸） #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">河川コード</th>
+                    <th class="text-center">河川名</th>
+                    <th class="text-center">河川種別コード</th>
+                    <th class="text-center">水系コード</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kasen in kasen_list %}
+                <tr>
+                    <td>{{ kasen.kasen_code }}</td>
+                    <td>{{ kasen.kasen_name }}</td>
+                    <td>{{ kasen.kasen_type_code }}</td>
+                    <td>{{ kasen.suikei_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "17" %}{# 河川種別（河川・海岸種別） #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">河川種別コード</th>
+                    <th class="text-center">河川種別名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kasen_type in kasen_type_list %}
+                <tr>
+                    <td>{{ kasen_type.kasen_type_code }}</td>
+                    <td>{{ kasen_type.kasen_type_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "18" %}{# 水害原因 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">水害原因コード</th>
+                    <th class="text-center">水害原因名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cause in cause_list %}
+                <tr>
+                    <td>{{ cause.cause_code }}</td>
+                    <td>{{ cause.cause_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "19" %}{# 地上地下区分 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">地上地下区分コード</th>
+                    <th class="text-center">地上地下区分名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for underground in underground_list %}
+                <tr>
+                    <td>{{ underground.underground_code }}</td>
+                    <td>{{ underground.underground_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "20" %}{# 地下空間の利用形態 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">地下空間の利用形態コード</th>
+                    <th class="text-center">地下空間の利用形態名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usage in usage_list %}
+                <tr>
+                    <td>{{ usage.usage_code }}</td>
+                    <td>{{ usage.usage_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "21" %}{# 浸水土砂区分 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flood_sediment in flood_sediment_list %}
+                <tr>
+                    <td>{{ flood_sediment.flood_sediment_code }}</td>
+                    <td>{{ flood_sediment.flood_sediment_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "22" %}{# 地盤勾配区分 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">地盤勾配区分コード</th>
+                    <th class="text-center">地盤勾配区分名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gradient in gradient_list %}
+                <tr>
+                    <td>{{ gradient.gradient_code }}</td>
+                    <td>{{ gradient.gradient_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "23" %}{# 産業分類 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">産業分類コード</th>
+                    <th class="text-center">産業分類名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for industry in industry_list %}
+                <tr>
+                    <td>{{ industry.industry_code }}</td>
+                    <td>{{ industry.industry_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "24" %}{# 県別家屋評価額 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">県別家屋被害コード</th>
+                    <th class="text-center">県コード</th>
+                    <th class="text-center">県別家屋被害対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+                    <th class="text-center">県別家屋評価額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for house_asset in house_asset_list %}
+                <tr>
+                    <td>{{ house_asset.house_asset_code }}</td>
+                    <td>{{ house_asset.ken_code }}</td>
+                    <td>{{ house_asset.house_asset_year }}</td>
+                    <td>{{ house_asset.begin_date }}</td>
+                    <td>{{ house_asset.end_date }}</td>
+                    <td>{{ house_asset.house_asset }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "25" %}{# 家屋被害率 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">家屋被害率コード</th>
+                    <th class="text-center">家屋被害率対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center">被害率_浸水_勾配1_床下</th>
+                    <th class="text-center">被害率_浸水_勾配1_0から50cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配1_50から100cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配1_100から200cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配1_200から300cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配1_300cm以上</th>
+
+                    <th class="text-center">被害率_浸水_勾配2_床下</th>
+                    <th class="text-center">被害率_浸水_勾配2_0から50cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配2_50から100cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配2_100から200cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配2_200から300cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配2_300cm以上</th>
+
+                    <th class="text-center">被害率_浸水_勾配3_床下</th>
+                    <th class="text-center">被害率_浸水_勾配3_0から50cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配3_50から100cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配3_100から200cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配3_200から300cm未満</th>
+                    <th class="text-center">被害率_浸水_勾配3_300cm以上</th>
+
+                    <th class="text-center">被害率_土砂_勾配1_床下</th>
+                    <th class="text-center">被害率_土砂_勾配1_0から50cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配1_50から100cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配1_100から200cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配1_200から300cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配1_300cm以上</th>
+
+                    <th class="text-center">被害率_土砂_勾配2_床下</th>
+                    <th class="text-center">被害率_土砂_勾配2_0から50cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配2_50から100cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配2_100から200cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配2_200から300cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配2_300cm以上</th>
+
+                    <th class="text-center">被害率_土砂_勾配3_床下</th>
+                    <th class="text-center">被害率_土砂_勾配3_0から50cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配3_50から100cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配3_100から200cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配3_200から300cm未満</th>
+                    <th class="text-center">被害率_土砂_勾配3_300cm以上</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for house_damage in house_damage_list %}
+                <tr>
+                    <td>{{ house_damage.house_damage_code }}</td>
+                    <td>{{ house_damage.house_damage_year }}</td>
+                    <td>{{ house_damage.begin_date }}</td>
+                    <td>{{ house_damage.end_date }}</td>
+                    
+                    <td>{{ house_damage.fl_gr1_lv00 }}</td>
+                    <td>{{ house_damage.fl_gr1_lv00_50 }}</td>
+                    <td>{{ house_damage.fl_gr1_lv50_100 }}</td>
+                    <td>{{ house_damage.fl_gr1_lv100_200 }}</td>
+                    <td>{{ house_damage.fl_gr1_lv200_300 }}</td>
+                    <td>{{ house_damage.fl_gr1_lv300 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv00 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv00_50 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv50_100 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv100_200 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv200_300 }}</td>
+                    <td>{{ house_damage.fl_gr2_lv300 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv00 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv00_50 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv50_100 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv100_200 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv200_300 }}</td>
+                    <td>{{ house_damage.fl_gr3_lv300 }}</td>
+                    
+                    <td>{{ house_damage.sd_gr1_lv00 }}</td>
+                    <td>{{ house_damage.sd_gr1_lv00_50 }}</td>
+                    <td>{{ house_damage.sd_gr1_lv50_100 }}</td>
+                    <td>{{ house_damage.sd_gr1_lv100_200 }}</td>
+                    <td>{{ house_damage.sd_gr1_lv200_300 }}</td>
+                    <td>{{ house_damage.sd_gr1_lv300 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv00 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv00_50 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv50_100 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv100_200 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv200_300 }}</td>
+                    <td>{{ house_damage.sd_gr2_lv300 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv00 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv00_50 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv50_100 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv100_200 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv200_300 }}</td>
+                    <td>{{ house_damage.sd_gr3_lv300 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "26" %}{# 家庭用品自動車以外被害率 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">家庭用品自動車以外被害率コード</th>
+                    <th class="text-center">家庭用品自動車以外被害率対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center">被害率_浸水_床下</th>
+                    <th class="text-center">被害率_浸水_0から50cm未満</th>
+                    <th class="text-center">被害率_浸水_50から100cm未満</th>
+                    <th class="text-center">被害率_浸水_100から200cm未満</th>
+                    <th class="text-center">被害率_浸水_200から300cm未満</th>
+                    <th class="text-center">被害率_浸水_300cm以上</th>
+                    
+                    <th class="text-center">被害率_土砂_床下</th>
+                    <th class="text-center">被害率_土砂_0から50cm未満</th>
+                    <th class="text-center">被害率_土砂_50から100cm未満</th>
+                    <th class="text-center">被害率_土砂_100から200cm未満</th>
+                    <th class="text-center">被害率_土砂_200から300cm未満</th>
+                    <th class="text-center">被害率_土砂_300cm以上</th>
+                    <th class="text-center">家庭用品自動車以外所有額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for household_damage in household_damage_list %}
+                <tr>
+                    <td>{{ household_damage.household_damage_code }}</td>
+                    <td>{{ household_damage.household_damage_year }}</td>
+                    <td>{{ household_damage.begin_date }}</td>
+                    <td>{{ household_damage.end_date }}</td>
+                    
+                    <td>{{ household_damage.fl_lv00 }}</td>
+                    <td>{{ household_damage.fl_lv00_50 }}</td>
+                    <td>{{ household_damage.fl_lv50_100 }}</td>
+                    <td>{{ household_damage.fl_lv100_200 }}</td>
+                    <td>{{ household_damage.fl_lv200_300 }}</td>
+                    <td>{{ household_damage.fl_lv300 }}</td>
+                    
+                    <td>{{ household_damage.sd_lv00 }}</td>
+                    <td>{{ household_damage.sd_lv00_50 }}</td>
+                    <td>{{ household_damage.sd_lv50_100 }}</td>
+                    <td>{{ household_damage.sd_lv100_200 }}</td>
+                    <td>{{ household_damage.sd_lv200_300 }}</td>
+                    <td>{{ household_damage.sd_lv300 }}</td>
+                    <td>{{ household_damage.household_asset }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "27" %}{# 家庭用品自動車被害率 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">自動車被害率コード</th>
+                    <th class="text-center">自動車被害率対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center">被害率_浸水_床下</th>
+                    <th class="text-center">被害率_浸水_0から50cm未満</th>
+                    <th class="text-center">被害率_浸水_50から100cm未満</th>
+                    <th class="text-center">被害率_浸水_100から200cm未満</th>
+                    <th class="text-center">被害率_浸水_200から300cm未満</th>
+                    <th class="text-center">被害率_浸水_300cm以上</th>
+                    
+                    <th class="text-center">家庭用品自動車所有額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car_damage in car_damage_list %}
+                <tr>
+                    <td>{{ car_damage.car_damage_code }}</td>
+                    <td>{{ car_damage.car_damage_year }}</td>
+                    <td>{{ car_damage.begin_date }}</td>
+                    <td>{{ car_damage.end_date }}</td>
+                    
+                    <td>{{ car_damage.fl_lv00 }}</td>
+                    <td>{{ car_damage.fl_lv00_50 }}</td>
+                    <td>{{ car_damage.fl_lv50_100 }}</td>
+                    <td>{{ car_damage.fl_lv100_200 }}</td>
+                    <td>{{ car_damage.fl_lv200_300 }}</td>
+                    <td>{{ car_damage.fl_lv300 }}</td>
+                    
+                    <td>{{ car_damage.car_asset }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "28" %}{# 家庭応急対策費 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">家庭応急対策費コード</th>
+                    <th class="text-center">家庭応急対策費対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center">代替活動費_床下</th>
+                    <th class="text-center">代替活動費_0から50cm未満</th>
+                    <th class="text-center">代替活動費_50から100cm未満</th>
+                    <th class="text-center">代替活動費_100から200cm未満</th>
+                    <th class="text-center">代替活動費_200から300cm未満</th>
+                    <th class="text-center">代替活動費_300cm以上</th>
+                    
+                    <th class="text-center">清掃費_床下vvv</th>
+                    <th class="text-center">清掃費_0から50cm未満</th>
+                    <th class="text-center">清掃費_50から100cm未満</th>
+                    <th class="text-center">清掃費_100から200cm未満</th>
+                    <th class="text-center">清掃費_200から300cm未満</th>
+                    <th class="text-center">清掃費_300cm以上</th>
+                    
+                    <th class="text-center">清掃労働単価</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for house_cost in house_cost_list %}
+                <tr>
+                    <td>{{ house_cost.house_cost_code }}</td>
+                    <td>{{ house_cost.house_cost_year }}</td>
+                    <td>{{ house_cost.begin_date }}</td>
+                    <td>{{ house_cost.end_date }}</td>
+                    
+                    <td>{{ house_cost.alt_lv00 }}</td>
+                    <td>{{ house_cost.alt_lv00_50 }}</td>
+                    <td>{{ house_cost.alt_lv50_100 }}</td>
+                    <td>{{ house_cost.alt_lv100_200 }}</td>
+                    <td>{{ house_cost.alt_lv200_300 }}</td>
+                    <td>{{ house_cost.alt_lv300 }}</td>
+
+                    <td>{{ house_cost.clean_lv00 }}</td>
+                    <td>{{ house_cost.clean_lv00_50 }}</td>
+                    <td>{{ house_cost.clean_lv50_100 }}</td>
+                    <td>{{ house_cost.clean_lv100_200 }}</td>
+                    <td>{{ house_cost.clean_lv200_300 }}</td>
+                    <td>{{ house_cost.clean_lv300 }}</td>
+                    
+                    <td>{{ house_cost.house_cost }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "29" %}{# 産業分類別資産額 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">産業分類別資産額コード</th>
+                    <th class="text-center">産業分類コード</th>
+                    <th class="text-center">産業分類別資産額対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center">償却資産額</th>
+                    <th class="text-center">在庫資産額</th>
+                    <th class="text-center">付加価値額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for office_asset in office_asset_list %}
+                <tr>
+                    <td>{{ office_asset.office_asset_code }}</td>
+                    <td>{{ office_asset.industry_code }}</td>
+                    <td>{{ office_asset.office_asset_year }}</td>
+                    <td>{{ office_asset.begin_date }}</td>
+                    <td>{{ office_asset.end_date }}</td>
+                    
+                    <td>{{ office_asset.depreciable_asset }}</td>
+                    <td>{{ office_asset.inventory_asset }}</td>
+                    <td>{{ office_asset.value_added }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "30" %}{# 事業所被害率 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">産業分類別資産額コード</th>
+                    <th class="text-center">産業分類別資産額対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for office_damage in office_damage_list %}
+                <tr>
+                    <td>{{ office_damage.office_damage_code }}</td>
+                    <td>{{ office_damage.office_damage_year }}</td>
+                    <td>{{ office_damage.begin_date }}</td>
+                    <td>{{ office_damage.end_date }}</td>
+                    
+                    <td>{{ office_damage.dep_fl_lv00 }}</td>
+                    <td>{{ office_damage.dep_fl_lv00_50 }}</td>
+                    <td>{{ office_damage.dep_fl_lv50_100 }}</td>
+                    <td>{{ office_damage.dep_fl_lv100_200 }}</td>
+                    <td>{{ office_damage.dep_fl_lv200_300 }}</td>
+                    <td>{{ office_damage.dep_fl_lv300 }}</td>
+
+                    <td>{{ office_damage.dep_sd_lv00 }}</td>
+                    <td>{{ office_damage.dep_sd_lv00_50 }}</td>
+                    <td>{{ office_damage.dep_sd_lv50_100 }}</td>
+                    <td>{{ office_damage.dep_sd_lv100_200 }}</td>
+                    <td>{{ office_damage.dep_sd_lv200_300 }}</td>
+                    <td>{{ office_damage.dep_sd_lv300 }}</td>
+
+                    <td>{{ office_damage.inv_fl_lv00 }}</td>
+                    <td>{{ office_damage.inv_fl_lv00_50 }}</td>
+                    <td>{{ office_damage.inv_fl_lv50_100 }}</td>
+                    <td>{{ office_damage.inv_fl_lv100_200 }}</td>
+                    <td>{{ office_damage.inv_fl_lv200_300 }}</td>
+                    <td>{{ office_damage.inv_fl_lv300 }}</td>
+
+                    <td>{{ office_damage.inv_sd_lv00 }}</td>
+                    <td>{{ office_damage.inv_sd_lv00_50 }}</td>
+                    <td>{{ office_damage.inv_sd_lv50_100 }}</td>
+                    <td>{{ office_damage.inv_sd_lv100_200 }}</td>
+                    <td>{{ office_damage.inv_sd_lv200_300 }}</td>
+                    <td>{{ office_damage.inv_sd_lv300 }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "31" %}{# 事業所営業停止損失 #}
+    {% endif %}
+    
+    {% if category_code == "32" %}{# 農漁家被害率 #}
+    {% endif %}
+    
+    {% if category_code == "33" %}{# 異常気象 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">異常気象ID</th>
+                    <th class="text-center">異常気象名</th>
+                    <th class="text-center">異常気象対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for weather in weather_list %}
+                <tr>
+                    <td>{{ weather.weather_id }}</td>
+                    <td>{{ weather.weather_name }}</td>
+                    <td>{{ weather.weather_year }}</td>
+                    <td>{{ weather.begin_date }}</td>
+                    <td>{{ weather.end_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if category_code == "34" %}{# 区域 #}
+    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">区域ID</th>
+                    <th class="text-center">区域名</th>
+                    <th class="text-center">区域対象年</th>
+                    <th class="text-center">開始日</th>
+                    <th class="text-center">終了日</th>
+                    <th class="text-center">農地面積</th>
+                    <th class="text-center">地下面積</th>
+                    <th class="text-center">農作物被害額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for area in area_list %}
+                <tr>
+                    <td>{{ area.area_id }}</td>
+                    <td>{{ area.area_name }}</td>
+                    <td>{{ area.area_year }}</td>
+                    <td>{{ area.begin_date }}</td>
+                    <td>{{ area.end_date }}</td>
+                    <td>{{ area.agri_area }}</td>
+                    <td>{{ area.underground_area }}</td>
+                    <td>{{ area.crop_damage }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
     <script>
     var button1 = document.getElementById("button1") <!--県選択ボタン-->
     var button2 = document.getElementById("button2") <!--市区町村選択ボタン-->

@@ -122,15 +122,133 @@ def category(request, ken_code, city_code, category_code):
     print('category(request, ken_code, city_code, category_code): ', ken_code, city_code, category_code, flush=True)
     ken_list = KEN.objects.order_by('ken_code')[:]
     city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
-    ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+    
+    building_list = []
+    ### ken_list = []
+    ### city_list = []
+    kasen_kaigan_list = []
+    suikei_list = []
+    suikei_type_list = []
+    kasen_list = []
+    kasen_type_list = []
+    cause_list = []
+    underground_list = []
+    usage_list = []
+    flood_sediment_list = []
+    gradient_list = []
+    industry_list = []
+    house_asset_list = []
+    house_damage_list = []
+    household_damage_list = []
+    car_damage_list = []
+    house_cost_list = []
+    office_asset_list = []
+    office_damage_list = []
+    farmer_fisher_damage_list = []
+    weather_list = []
+    area_list = []
+    ippan_list = []
+    
+    if category_code == "1":
+        pass
+    elif category_code == "2":
+        ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+    elif category_code == "3":
+        pass
+    elif category_code == "4":
+        pass
+    elif category_code == "5":
+        pass
+    elif category_code == "6":
+        pass
+    elif category_code == "7":
+        pass
+    elif category_code == "8":
+        pass
+    elif category_code == "9":
+        pass
+    elif category_code == "10":
+        building_list = BUILDING.objects.order_by('building_code')[:]
+    elif category_code == "11":
+        pass
+    elif category_code == "12":
+        pass
+    elif category_code == "13":
+        kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
+    elif category_code == "14":
+        suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
+    elif category_code == "15":
+        suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
+    elif category_code == "16":
+        kasen_list = KASEN.objects.order_by('kasen_code')[:]
+    elif category_code == "17":
+        kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
+    elif category_code == "18":
+        cause_list = CAUSE.objects.order_by('cause_code')[:]
+    elif category_code == "19":
+        underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
+    elif category_code == "20":
+        usage_list = USAGE.objects.order_by('usage_code')[:]
+    elif category_code == "21":
+        flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
+    elif category_code == "22":
+        gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
+    elif category_code == "23":
+        industry_list = INDUSTRY.objects.order_by('industry_code')[:]
+    elif category_code == "24":
+        house_asset_list = HOUSE_ASSET.objects.order_by('house_asset_code')[:]
+    elif category_code == "25":
+        house_damage_list = HOUSE_DAMAGE.objects.order_by('house_damage_code')[:]
+    elif category_code == "26":
+        household_damage_list = HOUSEHOLD_DAMAGE.objects.order_by('household_damage_code')[:]
+    elif category_code == "27":
+        car_damage_list = CAR_DAMAGE.objects.order_by('car_damage_code')[:]
+    elif category_code == "28":
+        house_cost_list = HOUSE_COST.objects.order_by('house_cost_code')[:]
+    elif category_code == "29":
+        office_asset_list = OFFICE_ASSET.objects.order_by('office_asset_code')[:]
+    elif category_code == "30":
+        office_damage_list = OFFICE_DAMAGE.objects.order_by('office_damage_code')[:]
+    elif category_code == "31":
+        office_cost_list = OFFICE_COST.objects.order_by('office_cost_code')[:]
+    elif category_code == "32":
+        farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.order_by('farmer_fisher_damage_code')[:]
+    elif category_code == "33":
+        weather_list = WEATHER.objects.order_by('weather_id')[:]
+    elif category_code == "34":
+        area_list = AREA.objects.order_by('area_id')[:]
+    else:
+        pass
     template = loader.get_template('P0400OnlineDisplay/index.html')
     context = {
-        'ken_list': ken_list,
-        'city_list': city_list,
-        'ippan_list': ippan_list,
         'ken_code': ken_code,
         'city_code': city_code,
         'category_code': category_code,
+        'building_list': building_list,
+        'ken_list': ken_list,
+        'city_list': city_list,
+        'kasen_kaigan_list': kasen_kaigan_list,
+        'suikei_list': suikei_list,
+        'suikei_type_list': suikei_type_list,
+        'kasen_list': kasen_list,
+        'kasen_type_list': kasen_type_list,
+        'cause_list': cause_list,
+        'underground_list': underground_list,
+        'usage_list': usage_list,
+        'flood_sediment_list': flood_sediment_list,
+        'gradient_list': gradient_list,
+        'industry_list': industry_list,
+        'house_asset_list': house_asset_list,
+        'house_damage_list': house_damage_list,
+        'household_damage_list': household_damage_list,
+        'car_damage_list': car_damage_list,
+        'house_cost_list': house_cost_list,
+        'office_asset_list': office_asset_list,
+        'office_damage_list': office_damage_list,
+        'farmer_fisher_damage_list': farmer_fisher_damage_list,
+        'weather_list': weather_list,
+        'area_list': area_list,
+        'ippan_list': ippan_list,
     }
     return HttpResponse(template.render(context, request))
     
