@@ -19,40 +19,12 @@
     <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
         <h3>EXCELアップロード画面</h3>
     </div>
-    <!--<form method="POST" enctype="multipart/form-data">-->
-    <!--    <div class="container mb-3">-->
-    <!--        <div class="row">-->
-    <!--            <label class="col-form-label">（注意）EXCELアップロードボタンをクリックして、EXCELファイルをサーバにアップロードすると、承認・集計・配布処理が終了するまで次のアップロードができません。</label>-->
-    <!--            <label class="col-form-label">１．参照ボタンをクリックして、アップロードするEXCELファイルを指定して下さい。</label>-->
-    <!--            <div class="input-group">-->
-    <!--                <input class="form-control" type="text" value="text">-->
-    <!--                <button class="btn btn-primary" type="button">参照</button>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    <div class="container mb-3">-->
-    <!--        <div class="row">-->
-    <!--            <label class="col-form-label">２．EXCELアップロードボタンをクリックすると、EXCELファイルをサーバにアップロードします。</label>-->
-    <!--        </div>-->
-    <!--        <div class="text-center">-->
-    <!--            <button class="btn btn-primary" type="button">EXCELアップロード</button>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</form>-->
-    
-    <!--<form method="POST" enctype="multipart/form-data">-->
-    <!--    {% csrf_token %}-->
-    <!--    {{ form.as_p }}-->
-    <!--    <button type="submit">アップロード</button>-->
-    <!--</form>-->
-    
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {#{{ form.as_p }}#}
         <div class="container mb-3">
             <div class="row">
-                <label class="col-form-label">（注意）EXCELアップロードボタンをクリックして、EXCELファイルをサーバにアップロードすると、承認・集計・配布処理が終了するまで次のアップロードができません。</label>
-                <label class="col-form-label">１．参照ボタンをクリックして、アップロードするEXCELファイルを指定して下さい。</label>
+                <label class="col-form-label">１．ファイルを選択ボタンをクリックして、アップロードするEXCELファイルを選択してください。</label>
                 <div class="input-group">
                     <input class="form-control" type="file" name="file" required id="id_file">
                 </div>
@@ -60,8 +32,16 @@
         </div>
         <div class="container mb-3">
             <div class="row">
-                <label class="col-form-label">２．EXCELアップロードボタンをクリックすると、EXCELファイルをサーバにアップロードします。</label>
-                <button class="btn btn-primary" type="submit">アップロード</button>
+                <label class="col-form-label">２．アップロードボタンをクリックしてください。EXCELファイルがサーバにアップロードされます。</label>
+                <!--<button class="btn btn-primary" type="submit">アップロード</button>-->
+            </div>
+        </div>
+        <div class="container text-center mb-3">
+            <button class="btn btn-primary" type="submit">アップロード</button>
+        </div>
+        <div class="container mb-3">
+            <div class="row">
+                <label class="col-form-label">※　EXCELファイルがサーバにアップロードされると、承認・集計・配布処理が終了するまで次のアップロードができなくなります。</label>
             </div>
         </div>
     </form>
