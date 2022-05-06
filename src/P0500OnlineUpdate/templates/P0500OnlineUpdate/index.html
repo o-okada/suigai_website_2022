@@ -235,7 +235,7 @@
     
     <!-- 編集用表示エリア -->
     <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
-        <button class="btn btn-primary" type="button" id="button6">表示エリアに反映</button>
+        <button class="btn btn-primary" type="button" id="button_update_display_area">表示エリアに反映</button>
     </div>
     <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-bordered text-nowrap">
@@ -360,6 +360,7 @@
         </table>
     </div>
     <script>
+    <!-- 都道府県、市区町村、種別選択エリア -->
     var button1 = document.getElementById("button1") <!--県選択ボタン-->
     var button2 = document.getElementById("button2") <!--市区町村選択ボタン-->
     var button3 = document.getElementById("button3") <!--種別選択ボタン-->
@@ -380,6 +381,8 @@
         }
     });
     
+    <!-- 参照用一覧表示エリア -->
+    <!-- 編集用表示エリア -->
     var input_ippan_id = document.getElementById("input_ippan_id")
     var input_ippan_name = document.getElementById("input_ippan_name")
     var input_building_code = document.getElementById("input_building_code")
@@ -673,6 +676,10 @@
         set_value({{ forloop.counter0 }});
     });
     {% endfor %}
+    
+    document.getElementById("button_update_display_area").addEventListener("click", function(event) {
+    
+    });
     
     </script>
     {% endblock %}
