@@ -19,6 +19,8 @@
     <div class="text-center mb-3"><!-- mb-3 下側のマージンを3 -->
         <h3>調査票、集計結果、マスタデータ編集</h3>
     </div>
+    
+    <!-- 都道府県、市区町村、種別選択エリア -->
     <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-borderless">
             <tr>
@@ -97,6 +99,7 @@
         </table>
     </div>
     
+    <!-- 参照用一覧表示エリア -->
     <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -164,10 +167,10 @@
                 {% for ippan in ippan_list %}
                 <tr>
                     <td>
-                        <button class="btn btn-primary" type="button" id="button4">編集</button>
+                        <button class="btn btn-primary" type="button" id="button_edit{{ ippan.ippan_id }}" name="button_edit{{ ippan.ippan_id }}">編集</button>
                     </td>
                     <td>
-                        <button class="btn btn-primary" type="button" id="button5">削除</button>
+                        <button class="btn btn-primary" type="button" id="button_delete{{ ippan.ippan_id }}" name="button_delete{{ ippan.ippan_id }}">削除</button>
                     </td>
                     <td>{{ ippan.ippan_id }}</td>
                     <td>{{ ippan.ippan_name }}</td>
@@ -230,10 +233,10 @@
         </table>
     </div>
     
+    <!-- 編集用表示エリア -->
     <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
         <button class="btn btn-primary" type="button" id="button6">表示エリアに反映</button>
     </div>
-
     <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-bordered text-nowrap">
             <thead>
@@ -297,61 +300,61 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ippan_name }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.flood_sediment_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.gradient_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.industry_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.ken_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.city_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.weather_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.area_id }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_1_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_2_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.cause_3_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.suikei_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.kasen_kaigan_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.underground_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.usage_code }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.building_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.floor_area_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.family_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_half }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.office_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.employee_full }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv00 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv01_49 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv50_99 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_lv100 }}"></td>
-                    <td><input class="form-control" type="text" value="{{ ippan_list.0.farmer_fisher_full }}"></td>
+                    <td><input class="form-control" type="text" value="" id="input_ippan_id" name="input_ippan_id"></td>
+                    <td><input class="form-control" type="text" value="" id="input_ippan_name" name="input_ippan_name"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_code" name="input_building_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_flood_sediment_code" name="input_flood_sediment_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_gradient_code" name="input_gradient_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_industry_code" name="input_industry_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_ken_code" name="input_ken_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_city_code" name="input_city_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_weather_id" name="input_weather_id"></td>
+                    <td><input class="form-control" type="text" value="" id="input_area_id" name="input_area_id"></td>
+                    <td><input class="form-control" type="text" value="" id="input_cause_1_code" name="input_cause_1_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_cause_2_code" name="input_cause_2_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_cause_3_code" name="input_cause_3_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_suikei_code" name="input_suikei_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_kasen_code" name="input_kasen_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_kasen_kaigan_code" name="input_kasen_kaigan_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_underground_code" name="input_underground_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_usage_code" name="input_usage_code"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_lv00" name="input_building_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_lv01_49" name="input_building_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_lv50_99" name="input_building_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_lv100" name="input_building_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_half" name="input_building_half"></td>
+                    <td><input class="form-control" type="text" value="" id="input_building_full" name="input_building_full"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area" name="input_floor_area"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family" name="input_family"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office" name="input_office"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_lv00" name="input_floor_area_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_lv01_49" name="input_floor_area_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_lv50_99" name="input_floor_area_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_lv100" name="input_floor_area_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_half" name="input_floor_area_half"></td>
+                    <td><input class="form-control" type="text" value="" id="input_floor_area_full" name="input_floor_area_full"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_lv00" name="input_family_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_lv01_49" name="input_family_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_lv50_99" name="input_family_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_lv100" name="input_family_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_half" name="input_family_half"></td>
+                    <td><input class="form-control" type="text" value="" id="input_family_full" name="input_family_full"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_lv00" name="input_office_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_lv01_49" name="input_office_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_lv50_99" name="input_office_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_lv100" name="input_office_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_half" name="input_office_half"></td>
+                    <td><input class="form-control" type="text" value="" id="input_office_full" name="input_office_full"></td>
+                    <td><input class="form-control" type="text" value="" id="input_employee_lv00" name="input_employee_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_employee_lv01_49" name="input_employee_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_employee_lv50_99" name="input_employee_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_employee_lv100" name="input_employee_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_employee_full" name="input_employee_full"></td>
+                    <td><input class="form-control" type="text" value="" id="input_farmer_fisher_lv00" name="input_farmer_fisher_lv00"></td>
+                    <td><input class="form-control" type="text" value="" id="input_farmer_fisher_lv01_49" name="input_farmer_fisher_lv01_49"></td>
+                    <td><input class="form-control" type="text" value="" id="input_farmer_fisher_lv50_99" name="input_farmer_fisher_lv50_99"></td>
+                    <td><input class="form-control" type="text" value="" id="input_farmer_fisher_lv100" name="input_farmer_fisher_lv100"></td>
+                    <td><input class="form-control" type="text" value="" id="input_farmer_fisher_full" name="input_farmer_fisher_full"></td>
                 </tr>
             </tbody>
         </table>
@@ -376,6 +379,301 @@
             window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/" + form_select_city.value + "/" + form_select_category.value + "/category/"
         }
     });
+    
+    var input_ippan_id = document.getElementById("input_ippan_id")
+    var input_ippan_name = document.getElementById("input_ippan_name")
+    var input_building_code = document.getElementById("input_building_code")
+    var input_flood_sediment_code = document.getElementById("input_flood_sediment_code")
+    var input_gradient_code = document.getElementById("input_gradient_code")
+    var input_industry_code = document.getElementById("input_industry_code")
+    var input_ken_code = document.getElementById("input_ken_code")
+    var input_city_code = document.getElementById("input_city_code")
+    var input_weather_id = document.getElementById("input_weather_id")
+    var input_area_id = document.getElementById("input_area_id")
+    var input_cause_1_code = document.getElementById("input_cause_1_code")
+    var input_cause_2_code = document.getElementById("input_cause_2_code")
+    var input_cause_3_code = document.getElementById("input_cause_3_code")
+    var input_suikei_code = document.getElementById("input_suikei_code")
+    var input_kasen_code = document.getElementById("input_kasen_code")
+    var input_kasen_kaigan_code = document.getElementById("input_kasen_kaigan_code")
+    var input_underground_code = document.getElementById("input_underground_code")
+    var input_usage_code = document.getElementById("input_usage_code")
+    var input_building_lv00 = document.getElementById("input_building_lv00")
+    var input_building_lv01_49 = document.getElementById("input_building_lv01_49")
+    var input_building_lv50_99 = document.getElementById("input_building_lv50_99")
+    var input_building_lv100 = document.getElementById("input_building_lv100")
+    var input_building_half = document.getElementById("input_building_half")
+    var input_building_full = document.getElementById("input_building_full")
+    var input_floor_area = document.getElementById("input_floor_area")
+    var input_family = document.getElementById("input_family")
+    var input_office = document.getElementById("input_office")
+    var input_floor_area_lv00 = document.getElementById("input_floor_area_lv00")
+    var input_floor_area_lv01_49 = document.getElementById("input_floor_area_lv01_49")
+    var input_floor_area_lv50_99 = document.getElementById("input_floor_area_lv50_99")
+    var input_floor_area_lv100 = document.getElementById("input_floor_area_lv100")
+    var input_floor_area_half = document.getElementById("input_floor_area_half")
+    var input_floor_area_full = document.getElementById("input_floor_area_full")
+    var input_family_lv00 = document.getElementById("input_family_lv00")
+    var input_family_lv01_49 = document.getElementById("input_family_lv01_49")
+    var input_family_lv50_99 = document.getElementById("input_family_lv50_99")
+    var input_family_lv100 = document.getElementById("input_family_lv100")
+    var input_family_half = document.getElementById("input_family_half")
+    var input_family_full = document.getElementById("input_family_full")
+    var input_office_lv00 = document.getElementById("input_office_lv00")
+    var input_office_lv01_49 = document.getElementById("input_office_lv01_49")
+    var input_office_lv50_99 = document.getElementById("input_office_lv50_99")
+    var input_office_lv100 = document.getElementById("input_office_lv100")
+    var input_office_half = document.getElementById("input_office_half")
+    var input_office_full = document.getElementById("input_office_full")
+    var input_employee_lv00 = document.getElementById("input_employee_lv00")
+    var input_employee_lv01_49 = document.getElementById("input_employee_lv01_49")
+    var input_employee_lv50_99 = document.getElementById("input_employee_lv50_99")
+    var input_employee_lv100 = document.getElementById("input_employee_lv100")
+    var input_employee_full = document.getElementById("input_employee_full")
+    var input_farmer_fisher_lv00 = document.getElementById("input_farmer_fisher_lv00")
+    var input_farmer_fisher_lv01_49 = document.getElementById("input_farmer_fisher_lv01_49")
+    var input_farmer_fisher_lv50_99 = document.getElementById("input_farmer_fisher_lv50_99")
+    var input_farmer_fisher_lv100 = document.getElementById("input_farmer_fisher_lv100")
+    var input_farmer_fisher_full = document.getElementById("input_farmer_fisher_full")
+
+    var ippan_id_list = [];
+    var ippan_name_list = [];
+    var building_code_list = [];
+    var flood_sediment_code_list = [];
+    var gradient_code_list = [];
+    var industry_code_list = [];
+    var ken_code_list = [];
+    var city_code_list = [];
+    var weather_id_list = [];
+    var area_id_list = [];
+    var cause_1_code_list = [];
+    var cause_2_code_list = [];
+    var cause_3_code_list = [];
+    var suikei_code_list = [];
+    var kasen_code_list = [];
+    var kasen_kaigan_code_list = [];
+    var underground_code_list = [];
+    var usage_code_list = [];
+    var building_lv00_list = [];
+    var building_lv01_49_list = [];
+    var building_lv50_99_list = [];
+    var building_lv100_list = [];
+    var building_half_list = [];
+    var building_full_list = [];
+    var floor_area_list = [];
+    var family_list = [];
+    var office_list = [];
+    var floor_area_lv00_list = [];
+    var floor_area_lv01_49_list = [];
+    var floor_area_lv50_99_list = [];
+    var floor_area_lv100_list = [];
+    var floor_area_half_list = [];
+    var floor_area_full_list = [];
+    var family_lv00_list = [];
+    var family_lv01_49_list = [];
+    var family_lv50_99_list = [];
+    var family_lv100_list = [];
+    var family_half_list = [];
+    var family_full_list = [];
+    var office_lv00_list = [];
+    var office_lv01_49_list = [];
+    var office_lv50_99_list = [];
+    var office_lv100_list = [];
+    var office_half_list = [];
+    var office_full_list = [];
+    var employee_lv00_list = [];
+    var employee_lv01_49_list = [];
+    var employee_lv50_99_list = [];
+    var employee_lv100_list = [];
+    var employee_full_list = [];
+    var farmer_fisher_lv00_list = [];
+    var farmer_fisher_lv01_49_list = [];
+    var farmer_fisher_lv50_99_list = [];
+    var farmer_fisher_lv100_list = [];
+    var farmer_fisher_full_list = [];
+    
+    {% for ippan in ippan_list %}
+    ippan_id_list.push("{{ ippan.ippan_id }}");
+    ippan_name_list.push("{{ ippan.ippan_name }}");
+    building_code_list.push("{{ ippan.building_code }}");
+    flood_sediment_code_list.push("{{ ippan.flood_sediment_code }}");
+    gradient_code_list.push("{{ ippan.gradient_code }}");
+    industry_code_list.push("{{ ippan.industry_code }}");
+    ken_code_list.push("{{ ippan.ken_code }}");
+    city_code_list.push("{{ ippan.city_code }}");
+    weather_id_list.push("{{ ippan.weather_id }}");
+    area_id_list.push("{{ ippan.area_id }}");
+    cause_1_code_list.push("{{ ippan.cause_1_code }}");
+    cause_2_code_list.push("{{ ippan.cause_2_code }}");
+    cause_3_code_list.push("{{ ippan.cause_3_code }}");
+    suikei_code_list.push("{{ ippan.suikei_code }}");
+    kasen_code_list.push("{{ ippan.kasen_code }}");
+    kasen_kaigan_code_list.push("{{ ippan.kasen_kaigan_code }}");
+    underground_code_list.push("{{ ippan.underground_code }}");
+    usage_code_list.push("{{ ippan.usage_code }}");
+    building_lv00_list.push("{{ ippan.building_lv00 }}");
+    building_lv01_49_list.push("{{ ippan.building_lv01_49 }}");
+    building_lv50_99_list.push("{{ ippan.building_lv50_99 }}");
+    building_lv100_list.push("{{ ippan.building_lv100 }}");
+    building_half_list.push("{{ ippan.building_half }}");
+    building_full_list.push("{{ ippan.building_full }}");
+    floor_area_list.push("{{ ippan.floor_area }}");
+    family_list.push("{{ ippan.family }}");
+    office_list.push("{{ ippan.office }}");
+    floor_area_lv00_list.push("{{ ippan.floor_area_lv00 }}");
+    floor_area_lv01_49_list.push("{{ ippan.floor_area_lv01_49 }}");
+    floor_area_lv50_99_list.push("{{ ippan.floor_area_lv50_99 }}");
+    floor_area_lv100_list.push("{{ ippan.floor_area_lv100 }}");
+    floor_area_half_list.push("{{ ippan.floor_area_half }}");
+    floor_area_full_list.push("{{ ippan.floor_area_full }}");
+    family_lv00_list.push("{{ ippan.family_lv00 }}");
+    family_lv01_49_list.push("{{ ippan.family_lv01_49 }}");
+    family_lv50_99_list.push("{{ ippan.family_lv50_99 }}");
+    family_lv100_list.push("{{ ippan.family_lv100 }}");
+    family_half_list.push("{{ ippan.family_half }}");
+    family_full_list.push("{{ ippan.family_full }}");
+    office_lv00_list.push("{{ ippan.office_lv00 }}");
+    office_lv01_49_list.push("{{ ippan.office_lv01_49 }}");
+    office_lv50_99_list.push("{{ ippan.office_lv50_99 }}");
+    office_lv100_list.push("{{ ippan.office_lv100 }}");
+    office_half_list.push("{{ ippan.office_half }}");
+    office_full_list.push("{{ ippan.office_full }}");
+    employee_lv00_list.push("{{ ippan.employee_lv00 }}");
+    employee_lv01_49_list.push("{{ ippan.employee_lv01_49 }}");
+    employee_lv50_99_list.push("{{ ippan.employee_lv50_99 }}");
+    employee_lv100_list.push("{{ ippan.employee_lv100 }}");
+    employee_full_list.push("{{ ippan.employee_full }}");
+    farmer_fisher_lv00_list.push("{{ ippan.farmer_fisher_lv00 }}");
+    farmer_fisher_lv01_49_list.push("{{ ippan.farmer_fisher_lv01_49 }}");
+    farmer_fisher_lv50_99_list.push("{{ ippan.farmer_fisher_lv50_99 }}");
+    farmer_fisher_lv100_list.push("{{ ippan.farmer_fisher_lv100 }}");
+    farmer_fisher_full_list.push("{{ ippan.farmer_fisher_full }}");
+    {% endfor %}
+    
+    function set_value(for_loop_counter0) {
+        input_ippan_id.value = ippan_id_list[for_loop_counter0];
+        input_ippan_name.value = ippan_name_list[for_loop_counter0];
+        input_building_code.value = building_code_list[for_loop_counter0];
+        input_flood_sediment_code.value = flood_sediment_code_list[for_loop_counter0];
+        input_gradient_code.value = gradient_code_list[for_loop_counter0];
+        input_industry_code.value = industry_code_list[for_loop_counter0];
+        input_ken_code.value = ken_code_list[for_loop_counter0];
+        input_city_code.value = city_code_list[for_loop_counter0];
+        input_weather_id.value = weather_id_list[for_loop_counter0];
+        input_area_id.value = area_id_list[for_loop_counter0];
+        input_cause_1_code.value = cause_1_code_list[for_loop_counter0];
+        input_cause_2_code.value = cause_2_code_list[for_loop_counter0];
+        input_cause_3_code.value = cause_3_code_list[for_loop_counter0];
+        input_suikei_code.value = suikei_code_list[for_loop_counter0];
+        input_kasen_code.value = kasen_code_list[for_loop_counter0];
+        input_kasen_kaigan_code.value = kasen_kaigan_code_list[for_loop_counter0];
+        input_underground_code.value = underground_code_list[for_loop_counter0];
+        input_usage_code.value = usage_code_list[for_loop_counter0];
+        input_building_lv00.value = building_lv00_list[for_loop_counter0];
+        input_building_lv01_49.value = building_lv01_49_list[for_loop_counter0];
+        input_building_lv50_99.value = building_lv50_99_list[for_loop_counter0];
+        input_building_lv100.value = building_lv100_list[for_loop_counter0];
+        input_building_half.value = building_half_list[for_loop_counter0];
+        input_building_full.value = building_full_list[for_loop_counter0];
+        input_floor_area.value = floor_area_list[for_loop_counter0];
+        input_family.value = family_list[for_loop_counter0];
+        input_office.value = office_list[for_loop_counter0];
+        input_floor_area_lv00.value = floor_area_lv00_list[for_loop_counter0];
+        input_floor_area_lv01_49.value = floor_area_lv01_49_list[for_loop_counter0];
+        input_floor_area_lv50_99.value = floor_area_lv50_99_list[for_loop_counter0];
+        input_floor_area_lv100.value = floor_area_lv100_list[for_loop_counter0];
+        input_floor_area_half.value = floor_area_half_list[for_loop_counter0];
+        input_floor_area_full.value = floor_area_full_list[for_loop_counter0];
+        input_family_lv00.value = family_lv00_list[for_loop_counter0];
+        input_family_lv01_49.value = family_lv01_49_list[for_loop_counter0];
+        input_family_lv50_99.value = family_lv50_99_list[for_loop_counter0];
+        input_family_lv100.value = family_lv100_list[for_loop_counter0];
+        input_family_half.value = family_half_list[for_loop_counter0];
+        input_family_full.value = family_full_list[for_loop_counter0];
+        input_office_lv00.value = office_lv00_list[for_loop_counter0];
+        input_office_lv01_49.value = office_lv01_49_list[for_loop_counter0];
+        input_office_lv50_99.value = office_lv50_99_list[for_loop_counter0];
+        input_office_lv100.value = office_lv100_list[for_loop_counter0];
+        input_office_half.value = office_half_list[for_loop_counter0];
+        input_office_full.value = office_full_list[for_loop_counter0];
+        input_employee_lv00.value = employee_lv00_list[for_loop_counter0];
+        input_employee_lv01_49.value = employee_lv01_49_list[for_loop_counter0];
+        input_employee_lv50_99.value = employee_lv50_99_list[for_loop_counter0];
+        input_employee_lv100.value = employee_lv100_list[for_loop_counter0];
+        input_employee_full.value = employee_full_list[for_loop_counter0];
+        input_farmer_fisher_lv00.value = farmer_fisher_lv00_list[for_loop_counter0];
+        input_farmer_fisher_lv01_49.value = farmer_fisher_lv01_49_list[for_loop_counter0];
+        input_farmer_fisher_lv50_99.value = farmer_fisher_lv50_99_list[for_loop_counter0];
+        input_farmer_fisher_lv100.value = farmer_fisher_lv100_list[for_loop_counter0];
+        input_farmer_fisher_full.value = farmer_fisher_full_list[for_loop_counter0];
+    }
+    
+    /*{% for ippan in ippan_list %}
+    document.getElementById("button_edit{{ ippan.ippan_id }}").addEventListener("click", function(event) {
+        input_ippan_id.value = ippan_id_list[{{ forloop.counter0 }}];
+        input_ippan_name.value = ippan_name_list[{{ forloop.counter0 }}];
+        input_building_code.value = building_code_list[{{ forloop.counter0 }}];
+        input_flood_sediment_code.value = flood_sediment_code_list[{{ forloop.counter0 }}];
+        input_gradient_code.value = gradient_code_list[{{ forloop.counter0 }}];
+        input_industry_code.value = industry_code_list[{{ forloop.counter0 }}];
+        input_ken_code.value = ken_code_list[{{ forloop.counter0 }}];
+        input_city_code.value = city_code_list[{{ forloop.counter0 }}];
+        input_weather_id.value = weather_id_list[{{ forloop.counter0 }}];
+        input_area_id.value = area_id_list[{{ forloop.counter0 }}];
+        input_cause_1_code.value = cause_1_code_list[{{ forloop.counter0 }}];
+        input_cause_2_code.value = cause_2_code_list[{{ forloop.counter0 }}];
+        input_cause_3_code.value = cause_3_code_list[{{ forloop.counter0 }}];
+        input_suikei_code.value = suikei_code_list[{{ forloop.counter0 }}];
+        input_kasen_code.value = kasen_code_list[{{ forloop.counter0 }}];
+        input_kasen_kaigan_code.value = kasen_kaigan_code_list[{{ forloop.counter0 }}];
+        input_underground_code.value = underground_code_list[{{ forloop.counter0 }}];
+        input_usage_code.value = usage_code_list[{{ forloop.counter0 }}];
+        input_building_lv00.value = building_lv00_list[{{ forloop.counter0 }}];
+        input_building_lv01_49.value = building_lv01_49_list[{{ forloop.counter0 }}];
+        input_building_lv50_99.value = building_lv50_99_list[{{ forloop.counter0 }}];
+        input_building_lv100.value = building_lv100_list[{{ forloop.counter0 }}];
+        input_building_half.value = building_half_list[{{ forloop.counter0 }}];
+        input_building_full.value = building_full_list[{{ forloop.counter0 }}];
+        input_floor_area.value = floor_area_list[{{ forloop.counter0 }}];
+        input_family.value = family_list[{{ forloop.counter0 }}];
+        input_office.value = office_list[{{ forloop.counter0 }}];
+        input_floor_area_lv00.value = floor_area_lv00_list[{{ forloop.counter0 }}];
+        input_floor_area_lv01_49.value = floor_area_lv01_49_list[{{ forloop.counter0 }}];
+        input_floor_area_lv50_99.value = floor_area_lv50_99_list[{{ forloop.counter0 }}];
+        input_floor_area_lv100.value = floor_area_lv100_list[{{ forloop.counter0 }}];
+        input_floor_area_half.value = floor_area_half_list[{{ forloop.counter0 }}];
+        input_floor_area_full.value = floor_area_full_list[{{ forloop.counter0 }}];
+        input_family_lv00.value = family_lv00_list[{{ forloop.counter0 }}];
+        input_family_lv01_49.value = family_lv01_49_list[{{ forloop.counter0 }}];
+        input_family_lv50_99.value = family_lv50_99_list[{{ forloop.counter0 }}];
+        input_family_lv100.value = family_lv100_list[{{ forloop.counter0 }}];
+        input_family_half.value = family_half_list[{{ forloop.counter0 }}];
+        input_family_full.value = family_full_list[{{ forloop.counter0 }}];
+        input_office_lv00.value = office_lv00_list[{{ forloop.counter0 }}];
+        input_office_lv01_49.value = office_lv01_49_list[{{ forloop.counter0 }}];
+        input_office_lv50_99.value = office_lv50_99_list[{{ forloop.counter0 }}];
+        input_office_lv100.value = office_lv100_list[{{ forloop.counter0 }}];
+        input_office_half.value = office_half_list[{{ forloop.counter0 }}];
+        input_office_full.value = office_full_list[{{ forloop.counter0 }}];
+        input_employee_lv00.value = employee_lv00_list[{{ forloop.counter0 }}];
+        input_employee_lv01_49.value = employee_lv01_49_list[{{ forloop.counter0 }}];
+        input_employee_lv50_99.value = employee_lv50_99_list[{{ forloop.counter0 }}];
+        input_employee_lv100.value = employee_lv100_list[{{ forloop.counter0 }}];
+        input_employee_full.value = employee_full_list[{{ forloop.counter0 }}];
+        input_farmer_fisher_lv00.value = farmer_fisher_lv00_list[{{ forloop.counter0 }}];
+        input_farmer_fisher_lv01_49.value = farmer_fisher_lv01_49_list[{{ forloop.counter0 }}];
+        input_farmer_fisher_lv50_99.value = farmer_fisher_lv50_99_list[{{ forloop.counter0 }}];
+        input_farmer_fisher_lv100.value = farmer_fisher_lv100_list[{{ forloop.counter0 }}];
+        input_farmer_fisher_full.value = farmer_fisher_full_list[{{ forloop.counter0 }}];
+    });
+    {% endfor %}*/
+
+    {% for ippan in ippan_list %}
+    document.getElementById("button_edit{{ ippan.ippan_id }}").addEventListener("click", function(event) {
+        set_value({{ forloop.counter0 }});
+    });
+    {% endfor %}
+    
     </script>
     {% endblock %}
 </body>
