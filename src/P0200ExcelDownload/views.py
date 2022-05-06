@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.http import Http404
 from django.http import HttpResponseRedirect
@@ -72,6 +74,8 @@ from P0000Common.models import RESTORATION             ### 27: 復旧事業工�
 from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 
+from P0000Common.common_function import print_log
+
 ### Imaginary function to handle an uploaded file.
 ### from somewhere import handle_uploaded_file
 ### class IndexView(generic.TemplateView):
@@ -91,106 +95,131 @@ from P0000Common.models import KOEKI                   ### 29: 公益事業調�
 ### index 関数
 ###############################################################################
 def index(request):
-    ken_list = KEN.objects.order_by('ken_code')[:]
-    city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
-    city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
-    city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
-    city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
-    city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
-    city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
-    city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
-    city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
-    city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
-    city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
-    city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
-    city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
-    city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
-    city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
-    city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
-    city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
-    city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
-    city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
-    city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
-    city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
-    city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
-    city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
-    city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
-    city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
-    city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
-    city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
-    city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
-    city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
-    city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
-    city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
-    city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
-    city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
-    city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
-    city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
-    city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
-    city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
-    city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
-    city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
-    city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
-    city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
-    city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
-    city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
-    city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
-    city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
-    city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
-    city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
-    city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
-    template = loader.get_template('P0200ExcelDownload/index.html')
-    context = {
-        'ken_list': ken_list,
-        'city_list01': city_list01,
-        'city_list02': city_list02,
-        'city_list03': city_list03,
-        'city_list04': city_list04,
-        'city_list05': city_list05,
-        'city_list06': city_list06,
-        'city_list07': city_list07,
-        'city_list08': city_list08,
-        'city_list09': city_list09,
-        'city_list10': city_list10,
-        'city_list11': city_list11,
-        'city_list12': city_list12,
-        'city_list13': city_list13,
-        'city_list14': city_list14,
-        'city_list15': city_list15,
-        'city_list16': city_list16,
-        'city_list17': city_list17,
-        'city_list18': city_list18,
-        'city_list19': city_list19,
-        'city_list20': city_list20,
-        'city_list21': city_list21,
-        'city_list22': city_list22,
-        'city_list23': city_list23,
-        'city_list24': city_list24,
-        'city_list25': city_list25,
-        'city_list26': city_list26,
-        'city_list27': city_list27,
-        'city_list28': city_list28,
-        'city_list29': city_list29,
-        'city_list30': city_list30,
-        'city_list31': city_list31,
-        'city_list32': city_list32,
-        'city_list33': city_list33,
-        'city_list34': city_list34,
-        'city_list35': city_list35,
-        'city_list36': city_list36,
-        'city_list37': city_list37,
-        'city_list38': city_list38,
-        'city_list39': city_list39,
-        'city_list40': city_list40,
-        'city_list41': city_list41,
-        'city_list42': city_list42,
-        'city_list43': city_list43,
-        'city_list44': city_list44,
-        'city_list45': city_list45,
-        'city_list46': city_list46,
-        'city_list47': city_list47,
-    }
-    return HttpResponse(template.render(context, request))
+    try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.index()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.index()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        ken_list = KEN.objects.order_by('ken_code')[:]
+        city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
+        city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
+        city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
+        city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
+        city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
+        city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
+        city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
+        city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
+        city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
+        city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
+        city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
+        city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
+        city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
+        city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
+        city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
+        city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
+        city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
+        city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
+        city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
+        city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
+        city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
+        city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
+        city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
+        city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
+        city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
+        city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
+        city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
+        city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
+        city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
+        city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
+        city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
+        city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
+        city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
+        city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
+        city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
+        city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
+        city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
+        city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
+        city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
+        city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
+        city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
+        city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
+        city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
+        city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
+        city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
+        city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
+        city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        template = loader.get_template('P0200ExcelDownload/index.html')
+        context = {
+            'ken_list': ken_list,
+            'city_list01': city_list01,
+            'city_list02': city_list02,
+            'city_list03': city_list03,
+            'city_list04': city_list04,
+            'city_list05': city_list05,
+            'city_list06': city_list06,
+            'city_list07': city_list07,
+            'city_list08': city_list08,
+            'city_list09': city_list09,
+            'city_list10': city_list10,
+            'city_list11': city_list11,
+            'city_list12': city_list12,
+            'city_list13': city_list13,
+            'city_list14': city_list14,
+            'city_list15': city_list15,
+            'city_list16': city_list16,
+            'city_list17': city_list17,
+            'city_list18': city_list18,
+            'city_list19': city_list19,
+            'city_list20': city_list20,
+            'city_list21': city_list21,
+            'city_list22': city_list22,
+            'city_list23': city_list23,
+            'city_list24': city_list24,
+            'city_list25': city_list25,
+            'city_list26': city_list26,
+            'city_list27': city_list27,
+            'city_list28': city_list28,
+            'city_list29': city_list29,
+            'city_list30': city_list30,
+            'city_list31': city_list31,
+            'city_list32': city_list32,
+            'city_list33': city_list33,
+            'city_list34': city_list34,
+            'city_list35': city_list35,
+            'city_list36': city_list36,
+            'city_list37': city_list37,
+            'city_list38': city_list38,
+            'city_list39': city_list39,
+            'city_list40': city_list40,
+            'city_list41': city_list41,
+            'city_list42': city_list42,
+            'city_list43': city_list43,
+            'city_list44': city_list44,
+            'city_list45': city_list45,
+            'city_list46': city_list46,
+            'city_list47': city_list47,
+        }
+        print_log('[INFO] P0200ExcelDownload.index()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+    
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.index()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.index()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ### def upload_file(request):
 ###     if request.method == 'POST':
@@ -273,13 +302,30 @@ def index(request):
 ###############################################################################
 def download_building(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_building()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_building()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         building_list = BUILDING.objects.order_by('building_code')[:]
+        
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/building.xlsx'
         file_path_to_save = 'static/building2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '建物区分'
         ws.cell(row=1, column=1).value = '建物区分コード'
         ws.cell(row=1, column=2).value = '建物区分名'
         
@@ -296,11 +342,21 @@ def download_building(request):
         # ws.add_data_validation(dv)
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_building()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="building.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_building().")
-    return response
+        ### raise Http404("[ERROR] download_building().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_building()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_building()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_ken関数
@@ -308,13 +364,30 @@ def download_building(request):
 ###############################################################################
 def download_ken(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ken()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ken()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         ken_list = KEN.objects.order_by('ken_code')[:]
+        
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/ken.xlsx'
         file_path_to_save = 'static/ken2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '都道府県'
         ws.cell(row=1, column=1).value = '都道府県コード'
         ws.cell(row=1, column=2).value = '都道府県名'
         
@@ -324,11 +397,21 @@ def download_ken(request):
                 ws.cell(row=i+2, column=2).value = ken.ken_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_ken()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ken.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_ken().")
-    return response
+        ### raise Http404("[ERROR] download_ken().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ken()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ken()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_city関数
@@ -336,13 +419,30 @@ def download_ken(request):
 ###############################################################################
 def download_city(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_city()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_city()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         city_list = CITY.objects.order_by('city_code')[:]
+        
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/city.xlsx'
         file_path_to_save = 'static/city2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '市区町村'
         ws.cell(row=1, column=1).value = '市区町村コード'
         ws.cell(row=1, column=2).value = '市区町村名'
         ws.cell(row=1, column=3).value = '都道府県コード'
@@ -358,11 +458,21 @@ def download_city(request):
                 ws.cell(row=i+2, column=5).value = city.city_area
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_city()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="city.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_city().")
-    return response
+        ### raise Http404("[ERROR] download_city().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_city()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_city()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_kasen_kaigan関数
@@ -370,14 +480,30 @@ def download_city(request):
 ###############################################################################
 def download_kasen_kaigan(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/kasen_kaigan.xlsx'
         file_path_to_save = 'static/kasen_kaigan2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '河川海岸区分'
         ws.cell(row=1, column=1).value = '河川海岸区分コード'
         ws.cell(row=1, column=2).value = '河川海岸区分名'
         
@@ -387,11 +513,21 @@ def download_kasen_kaigan(request):
                 ws.cell(row=i+2, column=2).value = kasen_kaigan.kasen_kaigan_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_kaigan.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_kasen_kaigan().")
-    return response
+        ### raise Http404("[ERROR] download_kasen_kaigan().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen_kaigan()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen_kaigan()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_suikei関数
@@ -399,14 +535,30 @@ def download_kasen_kaigan(request):
 ###############################################################################
 def download_suikei(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_suikei()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_suikei()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/suikei.xlsx'
         file_path_to_save = 'static/suikei2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '水系'
         ws.cell(row=1, column=1).value = '水系コード'
         ws.cell(row=1, column=2).value = '水系名'
         ws.cell(row=1, column=3).value = '水系種別コード'
@@ -418,11 +570,21 @@ def download_suikei(request):
                 ws.cell(row=i+2, column=3).value = suikei.suikei_type_code
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_suikei()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_suikei().")
-    return response
+        ### raise Http404("[ERROR] download_suikei().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_suikei()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_suikei()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_suikei_type関数
@@ -430,14 +592,30 @@ def download_suikei(request):
 ###############################################################################
 def download_suikei_type(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/suikei_type.xlsx'
         file_path_to_save = 'static/suikei_type2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '水系種別'
         ws.cell(row=1, column=1).value = '水系種別コード'
         ws.cell(row=1, column=2).value = '水系種別名'
         
@@ -447,11 +625,21 @@ def download_suikei_type(request):
                 ws.cell(row=i+2, column=2).value = suikei_type.suikei_type_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei_type.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_suikei_type().")
-    return response
+        ### raise Http404("[ERROR] download_suikei_type().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_suikei_type()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_suikei_type()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_kasen関数
@@ -459,14 +647,30 @@ def download_suikei_type(request):
 ###############################################################################
 def download_kasen(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         kasen_list = KASEN.objects.order_by('kasen_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/kasen.xlsx'
         file_path_to_save = 'static/kasen2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '河川'
         ws.cell(row=1, column=1).value = '河川コード'
         ws.cell(row=1, column=2).value = '河川名'
         ws.cell(row=1, column=3).value = '河川種別コード'
@@ -480,11 +684,21 @@ def download_kasen(request):
                 ws.cell(row=i+2, column=4).value = kasen.suikei_code
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_kasen()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_kasen().")
-    return response
+        ### raise Http404("[ERROR] download_kasen().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_kasen_type関数
@@ -492,14 +706,30 @@ def download_kasen(request):
 ###############################################################################
 def download_kasen_type(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/kasen_type.xlsx'
         file_path_to_save = 'static/kasen_type2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '河川種別'
         ws.cell(row=1, column=1).value = '河川種別コード'
         ws.cell(row=1, column=2).value = '河川種別名'
         
@@ -509,11 +739,21 @@ def download_kasen_type(request):
                 ws.cell(row=i+2, column=2).value = kasen_type.kasen_type_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_type.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_kasen_type().")
-    return response
+        ### raise Http404("[ERROR] download_kasen_type().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen_type()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kasen_type()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_cause関数
@@ -521,14 +761,30 @@ def download_kasen_type(request):
 ###############################################################################
 def download_cause(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_cause()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_cause()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         cause_list = CAUSE.objects.order_by('cause_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/cause.xlsx'
         file_path_to_save = 'static/cause2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '水害原因'
         ws.cell(row=1, column=1).value = '水害原因コード'
         ws.cell(row=1, column=2).value = '水害原因名'
         
@@ -538,11 +794,21 @@ def download_cause(request):
                 ws.cell(row=i+2, column=2).value = cause.cause_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_cause()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="cause.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_cause().")
-    return response
+        ### raise Http404("[ERROR] download_cause().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_cause()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_cause()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_underground関数
@@ -550,14 +816,30 @@ def download_cause(request):
 ###############################################################################
 def download_underground(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_underground()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_underground()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/underground.xlsx'
         file_path_to_save = 'static/underground2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '地上地下区分'
         ws.cell(row=1, column=1).value = '地上地下区分コード'
         ws.cell(row=1, column=2).value = '地上地下区分名'
         
@@ -567,11 +849,21 @@ def download_underground(request):
                 ws.cell(row=i+2, column=2).value = underground.underground_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_underground()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="underground.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_underground().")
-    return response
+        ### raise Http404("[ERROR] download_underground().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_underground()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_underground()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_usage関数
@@ -579,14 +871,30 @@ def download_underground(request):
 ###############################################################################
 def download_usage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_usage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_usage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         usage_list = USAGE.objects.order_by('usage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/usage.xlsx'
         file_path_to_save = 'static/usage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '地下空間の利用形態'
         ws.cell(row=1, column=1).value = '地下空間の利用形態コード'
         ws.cell(row=1, column=2).value = '地下空間の利用形態名'
         
@@ -596,11 +904,21 @@ def download_usage(request):
                 ws.cell(row=i+2, column=2).value = usage.usage_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_usage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="usage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_usage().")
-    return response
+        ### raise Http404("[ERROR] download_usage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_usage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_usage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_flood_sediment関数
@@ -608,14 +926,30 @@ def download_usage(request):
 ###############################################################################
 def download_flood_sediment(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/flood_sediment.xlsx'
         file_path_to_save = 'static/flood_sediment2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '浸水土砂区分'
         ws.cell(row=1, column=1).value = '浸水土砂区分コード'
         ws.cell(row=1, column=2).value = '浸水土砂区分名'
         
@@ -625,11 +959,21 @@ def download_flood_sediment(request):
                 ws.cell(row=i+2, column=2).value = flood_sediment.flood_sediment_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="flood_sediment.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_flood_sediment().")
-    return response
+        ### raise Http404("[ERROR] download_usage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_flood_sediment()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_flood_sediment()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_gradient関数
@@ -637,14 +981,30 @@ def download_flood_sediment(request):
 ###############################################################################
 def download_gradient(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_gradient()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_gradient()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/gradient.xlsx'
         file_path_to_save = 'static/gradient2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '地盤勾配区分'
         ws.cell(row=1, column=1).value = '地盤勾配区分コード'
         ws.cell(row=1, column=2).value = '地盤勾配区分名'
         
@@ -654,11 +1014,21 @@ def download_gradient(request):
                 ws.cell(row=i+2, column=2).value = gradient.gradient_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_gradient()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="gradient.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_gradient().")
-    return response
+        ### raise Http404("[ERROR] download_gradient().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_gradient()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_gradient()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_industry関数
@@ -666,14 +1036,30 @@ def download_gradient(request):
 ###############################################################################
 def download_industry(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_industry()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_industry()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         industry_list = INDUSTRY.objects.order_by('industry_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/industry.xlsx'
         file_path_to_save = 'static/industry2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '産業分類'
         ws.cell(row=1, column=1).value = '産業分類コード'
         ws.cell(row=1, column=2).value = '産業分類名'
         
@@ -683,11 +1069,21 @@ def download_industry(request):
                 ws.cell(row=i+2, column=2).value = industry.industry_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_industry()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="industry.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_industry().")
-    return response
+        ### raise Http404("[ERROR] download_industry().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_industry()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_industry()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### 一般資産
@@ -701,14 +1097,30 @@ def download_industry(request):
 ###############################################################################
 def download_house_asset(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         house_asset_list = HOUSE_ASSET.objects.order_by('house_asset_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/house_asset.xlsx'
         file_path_to_save = 'static/house_asset2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '県別家屋被害'
         ws.cell(row=1, column=1).value = '県別家屋被害コード'
         ws.cell(row=1, column=2).value = '県コード'
         ws.cell(row=1, column=3).value = '県別家屋被害対象年'
@@ -726,11 +1138,21 @@ def download_house_asset(request):
                 ws.cell(row=i+2, column=6).value = house_asset.house_asset
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_asset.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_house_asset().")
-    return response
+        ### raise Http404("[ERROR] download_house_asset().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_asset()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_asset()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_house_damage関数
@@ -738,14 +1160,30 @@ def download_house_asset(request):
 ###############################################################################
 def download_house_damage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         house_damage_list = HOUSE_DAMAGE.objects.order_by('house_damage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/house_damage.xlsx'
         file_path_to_save = 'static/house_damage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '家屋被害率'
         ws.cell(row=1, column=1).value = '家屋被害率コード'
         ws.cell(row=1, column=2).value = '家屋被害率対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -843,11 +1281,21 @@ def download_house_damage(request):
                 ws.cell(row=i+2, column=40).value = house_damage.sd_gr3_lv300
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_damage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_house_damage().")
-    return response
+        ### raise Http404("[ERROR] download_house_damage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_damage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_damage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_household_damage関数
@@ -855,14 +1303,30 @@ def download_house_damage(request):
 ###############################################################################
 def download_household_damage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         household_damage_list = HOUSEHOLD_DAMAGE.objects.order_by('household_damage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/household_damage.xlsx'
         file_path_to_save = 'static/household_damage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '家庭用品自動車以外被害率'
         ws.cell(row=1, column=1).value = '家庭用品自動車以外被害率コード'
         ws.cell(row=1, column=2).value = '家庭用品自動車以外被害率対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -908,11 +1372,21 @@ def download_household_damage(request):
                 ws.cell(row=i+2, column=17).value = household_damage.household_asset
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="household_damage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_household_damage().")
-    return response
+        ### raise Http404("[ERROR] download_household_damage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_household_damage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_household_damage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_car_damage関数
@@ -920,14 +1394,30 @@ def download_household_damage(request):
 ###############################################################################
 def download_car_damage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         car_damage_list = CAR_DAMAGE.objects.order_by('car_damage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/car_damage.xlsx'
         file_path_to_save = 'static/car_damage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '自動車被害率'
         ws.cell(row=1, column=1).value = '自動車被害率コード'
         ws.cell(row=1, column=2).value = '自動車被害率対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -959,11 +1449,21 @@ def download_car_damage(request):
                 ws.cell(row=i+2, column=11).value = car_damage.car_asset
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="car_damage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_car_damage().")
-    return response
+        ### raise Http404("[ERROR] download_car_damage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_car_damage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_car_damage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_house_cost関数
@@ -971,14 +1471,30 @@ def download_car_damage(request):
 ###############################################################################
 def download_house_cost(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         house_cost_list = HOUSE_COST.objects.order_by('house_cost_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/house_cost.xlsx'
         file_path_to_save = 'static/house_cost2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '家庭応急対策費'
         ws.cell(row=1, column=1).value = '家庭応急対策費コード'
         ws.cell(row=1, column=2).value = '家庭応急対策費対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -1024,11 +1540,21 @@ def download_house_cost(request):
                 ws.cell(row=i+2, column=17).value = house_cost.house_cost
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_cost.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_house_cost().")
-    return response
+        ### raise Http404("[ERROR] download_house_cost().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_cost()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_house_cost()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_office_asset関数
@@ -1036,14 +1562,30 @@ def download_house_cost(request):
 ###############################################################################
 def download_office_asset(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         office_asset_list = OFFICE_ASSET.objects.order_by('office_asset_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/office_asset.xlsx'
         file_path_to_save = 'static/office_asset2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '産業分類別資産額'
         ws.cell(row=1, column=1).value = '産業分類別資産額コード'
         ws.cell(row=1, column=2).value = '産業分類コード'
         ws.cell(row=1, column=3).value = '産業分類別資産額対象年'
@@ -1067,11 +1609,21 @@ def download_office_asset(request):
                 ws.cell(row=i+2, column=8).value = office_asset.value_added
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_asset.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_office_asset().")
-    return response
+        ### raise Http404("[ERROR] download_office_asset().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_asset()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_asset()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_office_damage関数
@@ -1079,14 +1631,30 @@ def download_office_asset(request):
 ###############################################################################
 def download_office_damage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         office_damage_list = OFFICE_DAMAGE.objects.order_by('office_damage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/office_damage.xlsx'
         file_path_to_save = 'static/office_damage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '事業所被害率'
         ws.cell(row=1, column=1).value = '事業所被害率コード'
         ws.cell(row=1, column=2).value = '事業所被害率対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -1156,11 +1724,21 @@ def download_office_damage(request):
                 ws.cell(row=i+2, column=28).value = office_damage.inv_sd_lv300
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_damage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_office_damage().")
-    return response
+        ### raise Http404("[ERROR] download_office_damage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_damage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_damage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_office_cost関数
@@ -1168,14 +1746,30 @@ def download_office_damage(request):
 ###############################################################################
 def download_office_cost(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         office_cost_list = OFFICE_COST.objects.order_by('office_cost_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/office_cost.xlsx'
         file_path_to_save = 'static/office_cost2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '事業所営業損失'
         ws.cell(row=1, column=1).value = '事業所営業損失コード'
         ws.cell(row=1, column=2).value = '事業所営業損失対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -1217,11 +1811,21 @@ def download_office_cost(request):
                 ws.cell(row=i+2, column=16).value = office_cost.stagnate_lv300
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_cost.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_office_cost().")
-    return response
+        ### raise Http404("[ERROR] download_office_cost().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_cost()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_office_cost()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_farmer_fisher_damage関数
@@ -1229,14 +1833,30 @@ def download_office_cost(request):
 ###############################################################################
 def download_farmer_fisher_damage(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.order_by('farmer_fisher_damage_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/farmer_fisher_damage.xlsx'
         file_path_to_save = 'static/farmer_fisher_damage2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '農漁家被害率'
         ws.cell(row=1, column=1).value = '農漁家被害率コード'
         ws.cell(row=1, column=2).value = '農漁家被害率対象年'
         ws.cell(row=1, column=3).value = '開始日'
@@ -1312,11 +1932,21 @@ def download_farmer_fisher_damage(request):
                 ws.cell(row=i+2, column=30).value = farmer_fisher_damage.inventory_asset
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="farmer_fisher_damage.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_farmer_fisher_damage().")
-    return response
+        ### raise Http404("[ERROR] download_farmer_fisher_damage().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_farmer_fisher_damage()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_farmer_fisher_damage()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### 一般資産
@@ -1330,14 +1960,30 @@ def download_farmer_fisher_damage(request):
 ###############################################################################
 def download_weather(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_weather()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_weather()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         weather_list = WEATHER.objects.order_by('weather_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/weather.xlsx'
         file_path_to_save = 'static/weather2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '異常気象'
         ws.cell(row=1, column=1).value = '異常気象ID'
         ws.cell(row=1, column=2).value = '異常気象名'
         ws.cell(row=1, column=3).value = '異常気象対象年'
@@ -1353,11 +1999,21 @@ def download_weather(request):
                 ws.cell(row=i+2, column=5).value = weather.end_date
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_weather()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="weather.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_weather().")
-    return response
+        ### raise Http404("[ERROR] download_weather().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_weather()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_weather()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_area関数
@@ -1365,14 +2021,30 @@ def download_weather(request):
 ###############################################################################
 def download_area(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_area()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_area()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         area_list = AREA.objects.order_by('area_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/area.xlsx'
         file_path_to_save = 'static/area2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '区域'
         ws.cell(row=1, column=1).value = '区域ID'
         ws.cell(row=1, column=2).value = '区域名'
         ws.cell(row=1, column=3).value = '区域対象年'
@@ -1394,11 +2066,21 @@ def download_area(request):
                 ws.cell(row=i+2, column=8).value = area.crop_damage
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_area()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="area.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_area().")
-    return response
+        ### raise Http404("[ERROR] download_area().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_area()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_area()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_ippan_chosa関数
@@ -1406,7 +2088,23 @@ def download_area(request):
 ###############################################################################
 def download_ippan_chosa(request):
     try:
-        print("download_ippan_chosa1", flush=True)
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/ippan_chosa1.xlsx'
         file_path_to_save = 'static/ippan_chosa2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load, keep_vba=False)
@@ -1430,7 +2128,6 @@ def download_ippan_chosa(request):
 
         ws_city_vlook = wb["CITY_VLOOK"]
         
-        print("download_ippan_chosa2", flush=True)
         ### 01: 建物区分
         building_list = BUILDING.objects.order_by('building_code')[:]
         if building_list:
@@ -2220,11 +2917,21 @@ def download_ippan_chosa(request):
         ws_ippan.conditional_formatting.add('F20:Z1048576', FormulaRule(formula=['$C20="建物以外"'], fill=gray_fill))
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_chosa.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_ippan_chosa().")
-    return response
+        ### raise Http404("[ERROR] download_ippan_chosa().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_chosa()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_chosa()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_ippan_city関数
@@ -2232,14 +2939,30 @@ def download_ippan_chosa(request):
 ###############################################################################
 def download_ippan_city(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         ippan_list = IPPAN.objects.order_by('ippan_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/ippan_city1.xlsx'
         file_path_to_save = 'static/ippan_city2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '一般資産調査票'
         ws.cell(row=1, column=1).value = '一般資産調査票ID'
         ws.cell(row=1, column=2).value = '一般資産調査票名'
         
@@ -2383,11 +3106,21 @@ def download_ippan_city(request):
         ### ws.add_data_validation(dv)
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_city.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_ippan_city().")
-    return response
+        ### raise Http404("[ERROR] download_ippan_city().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_city()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_city()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_ippan_ken関数
@@ -2395,14 +3128,30 @@ def download_ippan_city(request):
 ###############################################################################
 def download_ippan_ken(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         ippan_list = IPPAN.objects.order_by('ippan_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/ippan_ken1.xlsx'
         file_path_to_save = 'static/ippan_ken2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '一般資産調査票'
         ws.cell(row=1, column=1).value = '一般資産調査票ID'
         ws.cell(row=1, column=2).value = '一般資産調査票名'
         
@@ -2546,11 +3295,21 @@ def download_ippan_ken(request):
         ### ws.add_data_validation(dv)
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_ken.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_ippan_ken().")
-    return response
+        ### raise Http404("[ERROR] download_ippan_ken().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_ken()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_ippan_ken()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### 公共土木、公益事業
@@ -2564,14 +3323,30 @@ def download_ippan_ken(request):
 ###############################################################################
 def download_restoration(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_restoration()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_restoration()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         restoration_list = RESTORATION.objects.order_by('restoration_code')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/restoration.xlsx'
         file_path_to_save = 'static/restoration2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '復旧事業工種'
         ws.cell(row=1, column=1).value = '復旧事業工種コード'
         ws.cell(row=1, column=2).value = '復旧事業工種名'
         
@@ -2581,11 +3356,21 @@ def download_restoration(request):
                 ws.cell(row=i+2, column=2).value = restoration.restoration_name
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_restoration()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="restoration.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_restoration().")
-    return response
+        ### raise Http404("[ERROR] download_restoration().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_restoration()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_restoration()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### 公共土木、公益事業
@@ -2599,14 +3384,30 @@ def download_restoration(request):
 ###############################################################################
 def download_kokyo(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         kokyo_list = KOKYO.objects.order_by('kokyo_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/kokyo.xlsx'
         file_path_to_save = 'static/kokyo2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '公共土木調査票'
         ws.cell(row=1, column=1).value = '公共土木調査票ID'
         ws.cell(row=1, column=2).value = '都道府県コード'
         ws.cell(row=1, column=3).value = '市区町村コード'
@@ -2626,11 +3427,21 @@ def download_kokyo(request):
                 ws.cell(row=i+2, column=7).value = kokyo.end_date
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kokyo.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_kokyo().")
-    return response
+        ### raise Http404("[ERROR] download_kokyo().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kokyo()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_kokyo()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
 ### download_koeki関数
@@ -2638,14 +3449,30 @@ def download_kokyo(request):
 ###############################################################################
 def download_koeki(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_koeki()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.download_koeki()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
         koeki_list = KOEKI.objects.order_by('koeki_id')[:]
     
+        #######################################################################
+        ### EXCEL入出力処理
+        ### テンプレート用のEXCELファイルを読み込む。
+        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
         file_path_to_load = 'static/koeki.xlsx'
         file_path_to_save = 'static/koeki2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
-        ws.title = 'sheet99'
-
+        ws.title = '公益事業調査票'
         ws.cell(row=i+1, column=1).value = '公益事業調査票ID'
         ws.cell(row=i+1, column=2).value = '都道府県コード'
         ws.cell(row=i+1, column=3).value = '市区町村コード'
@@ -2665,12 +3492,19 @@ def download_koeki(request):
                 ws.cell(row=i+1, column=7).value = koeki.end_date
         
         wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### HttpResponse処理
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.download_koeki()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="koeki.xlsx"'
+        
     except:
-        raise Http404("[ERROR] download_koeki().")
-    return response
-
-
-
+        ### raise Http404("[ERROR] download_koeki().")
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_koeki()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_koeki()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 

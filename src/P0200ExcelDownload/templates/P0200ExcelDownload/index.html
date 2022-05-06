@@ -9,8 +9,8 @@
     <title>{% block title %}EXCELアップロード方式EXCELダウンロード画面{% endblock %}</title>
     {% block head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    {# bootstrap_css #}
+    {# bootstrap_javascript #}
 </head>
 <body>
     {% bootstrap_messages %}
@@ -21,7 +21,7 @@
     </div>
     <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
         <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
-        <button class="btn btn-primary" type="button">全エリア・全拠点選択</button>
+        <button class="btn btn-primary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>
     <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
         <table class="table table-bordered">
@@ -31,9 +31,7 @@
                     {% for ken in ken_list %}
                     <th>
                         <div class="text-center"><label class="form-check-label">{{ ken.ken_name }}</label></div>
-                        <div class="text-center"><button class="btn btn-primary" type="button" id="button{{ ken.ken_code }}" name="submit_button1">全選択</button></div>
-                        {#<button id="button{{ forloop.counter }}" class="btn btn-link" type="button" name="submit_button1">全選択</button><br><br>#}
-                        {# bootstrap_button id=ken.ken_code button_type="button" content="全選択" size="sm" #}
+                        <div class="text-center"><button class="btn btn-primary" type="button" id="button_ken{{ ken.ken_code }}" name="button_ken{{ ken.ken_code }}">全選択</button></div>
                     </th>
                     {% endfor %}
                 </tr>
@@ -43,237 +41,237 @@
                     <td>市区町村</td>                
                     <td nowrap>
                         {% for city01 in city_list01 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city01.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city01.city_code }}" name="checkbox_city{{ city01.city_code }}"/><label class="form-check-label">{{ city01.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city02 in city_list02 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city02.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city02.city_code }}" name="checkbox_city{{ city02.city_code }}"/><label class="form-check-label">{{ city02.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city03 in city_list03 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city03.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city03.city_code }}" name="checkbox_city{{ city03.city_code }}"/><label class="form-check-label">{{ city03.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city04 in city_list04 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city04.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city04.city_code }}" name="checkbox_city{{ city04.city_code }}"/><label class="form-check-label">{{ city04.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city05 in city_list05 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city05.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city05.city_code }}" name="checkbox_city{{ city05.city_code }}"/><label class="form-check-label">{{ city05.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city06 in city_list06 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city06.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city06.city_code }}" name="checkbox_city{{ city06.city_code }}"/><label class="form-check-label">{{ city06.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city07 in city_list07 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city07.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city07.city_code }}" name="checkbox_city{{ city07.city_code }}"/><label class="form-check-label">{{ city07.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city08 in city_list08 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city08.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city08.city_code }}" name="checkbox_city{{ city08.city_code }}"/><label class="form-check-label">{{ city08.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city09 in city_list09 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city09.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city09.city_code }}" name="checkbox_city{{ city09.city_code }}"/><label class="form-check-label">{{ city09.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city10 in city_list10 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city10.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city10.city_code }}" name="checkbox_city{{ city10.city_code }}"/><label class="form-check-label">{{ city10.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city11 in city_list11 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city11.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city11.city_code }}" name="checkbox_city{{ city11.city_code }}"/><label class="form-check-label">{{ city11.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city12 in city_list12 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city12.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city12.city_code }}" name="checkbox_city{{ city12.city_code }}"/><label class="form-check-label">{{ city12.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city13 in city_list13 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city13.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city13.city_code }}" name="checkbox_city{{ city13.city_code }}"/><label class="form-check-label">{{ city13.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city14 in city_list14 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city14.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city14.city_code }}" name="checkbox_city{{ city14.city_code }}"/><label class="form-check-label">{{ city14.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city15 in city_list15 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city15.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city15.city_code }}" name="checkbox_city{{ city15.city_code }}"/><label class="form-check-label">{{ city15.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city16 in city_list16 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city16.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city16.city_code }}" name="checkbox_city{{ city16.city_code }}"/><label class="form-check-label">{{ city16.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city17 in city_list17 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city17.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city17.city_code }}" name="checkbox_city{{ city17.city_code }}"/><label class="form-check-label">{{ city17.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city18 in city_list18 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city18.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city18.city_code }}" name="checkbox_city{{ city18.city_code }}"/><label class="form-check-label">{{ city18.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city19 in city_list19 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city19.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city19.city_code }}" name="checkbox_city{{ city19.city_code }}"/><label class="form-check-label">{{ city19.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city20 in city_list20 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city20.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city20.city_code }}" name="checkbox_city{{ city20.city_code }}"/><label class="form-check-label">{{ city20.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city21 in city_list21 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city21.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city21.city_code }}" name="checkbox_city{{ city21.city_code }}"/><label class="form-check-label">{{ city21.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city22 in city_list22 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city22.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city22.city_code }}" name="checkbox_city{{ city22.city_code }}"/><label class="form-check-label">{{ city22.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city23 in city_list23 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city23.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city23.city_code }}" name="checkbox_city{{ city23.city_code }}"/><label class="form-check-label">{{ city23.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city24 in city_list24 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city24.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city24.city_code }}" name="checkbox_city{{ city24.city_code }}"/><label class="form-check-label">{{ city24.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city25 in city_list25 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city25.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city25.city_code }}" name="checkbox_city{{ city25.city_code }}"/><label class="form-check-label">{{ city25.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city26 in city_list26 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city26.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city26.city_code }}" name="checkbox_city{{ city26.city_code }}"/><label class="form-check-label">{{ city26.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city27 in city_list27 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city27.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city27.city_code }}" name="checkbox_city{{ city27.city_code }}"/><label class="form-check-label">{{ city27.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city28 in city_list28 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city28.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city28.city_code }}" name="checkbox_city{{ city28.city_code }}"/><label class="form-check-label">{{ city28.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city29 in city_list29 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city29.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city29.city_code }}" name="checkbox_city{{ city29.city_code }}"/><label class="form-check-label">{{ city29.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city30 in city_list30 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city30.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city30.city_code }}" name="checkbox_city{{ city30.city_code }}"/><label class="form-check-label">{{ city30.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city31 in city_list31 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city31.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city31.city_code }}" name="checkbox_city{{ city31.city_code }}"/><label class="form-check-label">{{ city31.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city32 in city_list32 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city32.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city32.city_code }}" name="checkbox_city{{ city32.city_code }}"/><label class="form-check-label">{{ city32.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city33 in city_list33 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city33.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city33.city_code }}" name="checkbox_city{{ city33.city_code }}"/><label class="form-check-label">{{ city33.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city34 in city_list34 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city34.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city34.city_code }}" name="checkbox_city{{ city34.city_code }}"/><label class="form-check-label">{{ city34.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city35 in city_list35 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city35.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city35.city_code }}" name="checkbox_city{{ city35.city_code }}"/><label class="form-check-label">{{ city35.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city36 in city_list36 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city36.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city36.city_code }}" name="checkbox_city{{ city36.city_code }}"/><label class="form-check-label">{{ city36.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city37 in city_list37 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city37.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city37.city_code }}" name="checkbox_city{{ city37.city_code }}"/><label class="form-check-label">{{ city37.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city38 in city_list38 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city38.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city38.city_code }}" name="checkbox_city{{ city38.city_code }}"/><label class="form-check-label">{{ city38.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city39 in city_list39 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city39.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city39.city_code }}" name="checkbox_city{{ city39.city_code }}"/><label class="form-check-label">{{ city39.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city40 in city_list40 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city40.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city40.city_code }}" name="checkbox_city{{ city40.city_code }}"/><label class="form-check-label">{{ city40.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city41 in city_list41 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city41.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city41.city_code }}" name="checkbox_city{{ city41.city_code }}"/><label class="form-check-label">{{ city41.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city42 in city_list42 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city42.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city42.city_code }}" name="checkbox_city{{ city42.city_code }}"/><label class="form-check-label">{{ city42.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city43 in city_list43 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city43.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city43.city_code }}" name="checkbox_city{{ city43.city_code }}"/><label class="form-check-label">{{ city43.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city44 in city_list44 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city44.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city44.city_code }}" name="checkbox_city{{ city44.city_code }}"/><label class="form-check-label">{{ city44.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city45 in city_list45 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city45.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city45.city_code }}" name="checkbox_city{{ city45.city_code }}"/><label class="form-check-label">{{ city45.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city46 in city_list46 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city46.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city46.city_code }}" name="checkbox_city{{ city46.city_code }}"/><label class="form-check-label">{{ city46.city_name }}</label></div>
                         {% endfor %}
                     </td>
                     <td nowrap>
                         {% for city47 in city_list47 %}
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox1"/><label class="form-check-label">{{ city47.city_name }}</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox_city{{ city47.city_code }}" name="checkbox_city{{ city47.city_code }}"/><label class="form-check-label">{{ city47.city_name }}</label></div>
                         {% endfor %}
                     </td>
                 </tr>
@@ -285,8 +283,6 @@
     </div>    
     <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
         <select class="form-select" id="form_select_1" name="form_select_1">
-            {#<option value="1">調査員調査票</option>#}
-            {#<option value="2">一般資産調査票</option>#}
             <option value="1">建物区分</option>
             <option value="2">都道府県</option>
             <option value="3">市区町村</option>
@@ -295,7 +291,6 @@
             <option value="6">水系種別（水系・沿岸種別）</option>
             <option value="7">河川（河川・海岸）</option>
             <option value="8">河川種別（河川・海岸種別）</option>
-
             <option value="9">水害原因</option>
             <option value="10">地上地下区分</option>
             <option value="11">地下空間の利用形態</option>
@@ -313,42 +308,603 @@
             <option value="23">農漁家被害率</option>
             <option value="24">異常気象</option>
             <option value="25">区域</option>
-            
             <option value="2601">一般資産調査票（調査員用）</option>
             <option value="2602">一般資産調査票（市区町村用）</option>
             <option value="2603">一般資産調査票（都道府県用）</option>
-            
             <option value="27">復旧事業工種</option>
             <option value="28">公共土木調査票</option>
             <option value="29">公益事業調査票</option>
         </select>
     </div>
     <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <label class="form-check-label">編集ロックの有無を選択してボタンをクリックしてください。</label>
+        <label class="form-check-label">ロックの有無を選択してボタンをクリックしてください。</label>
     </div>
     <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
-        <table class="table table-borderless">
-            <tr>
-                <td>
-                    <label class="form-check-label">他のユーザとの編集の競合を避けるために編集ロック状態でEXCELファイルをダウンロードします。</label>
-                </td>
-                <td>
-                    {#<a class="btn btn-primary" href="{% url 'P0200ExcelDownload:download_file' %}">編集ロック有りでダウンロード</a>#}
-                    {% bootstrap_button id="button1" button_type="button" content="編集ロック有りでダウンロード" %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="form-check-label">参照用にEXCELファイルをダウンロードする場合はこちらをクリックしてください。</label>
-                </td>
-                <td>
-                    {#<a class="btn btn-primary" href="{% url 'P0200ExcelDownload:download_file' %}">編集ロック無しでダウンロード</a>#}
-                    {% bootstrap_button id="button2" button_type="button" content="編集ロック無しでダウンロード" %}
-                </td>
-            </tr>
-        </table>
+        <label class="form-check-label">他のユーザとの編集の競合を避けるために、編集用にロック有りでEXCELファイルをダウンロードします。</label>
+        {# bootstrap_button id="button1" button_type="button" content="編集用にロック有りでダウンロード" #}
+        <button class="btn btn-primary" type="button" id="button1" name="button1">編集用にロック有りでダウンロード</button>
+    </div>
+    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+        <label class="form-check-label">他のユーザとの編集の競合を避けるために、参照用にロック無しでEXCELファイルをダウンロードします。</label>
+        {# bootstrap_button id="button2" button_type="button" content="参照用にロック無しでダウンロード" #}
+        <button class="btn btn-primary" type="button" id="button2" name="button2">参照用にロック無しでダウンロード</button>
     </div>
     <script>
+    var button_all_checked = true;
+    var button_ken01_checked = true;
+    var button_ken02_checked = true;
+    var button_ken03_checked = true;
+    var button_ken04_checked = true;
+    var button_ken05_checked = true;
+    var button_ken06_checked = true;
+    var button_ken07_checked = true;
+    var button_ken08_checked = true;
+    var button_ken09_checked = true;
+    var button_ken10_checked = true;
+    var button_ken11_checked = true;
+    var button_ken12_checked = true;
+    var button_ken13_checked = true;
+    var button_ken14_checked = true;
+    var button_ken15_checked = true;
+    var button_ken16_checked = true;
+    var button_ken17_checked = true;
+    var button_ken18_checked = true;
+    var button_ken19_checked = true;
+    var button_ken20_checked = true;
+    var button_ken21_checked = true;
+    var button_ken22_checked = true;
+    var button_ken23_checked = true;
+    var button_ken24_checked = true;
+    var button_ken25_checked = true;
+    var button_ken26_checked = true;
+    var button_ken27_checked = true;
+    var button_ken28_checked = true;
+    var button_ken29_checked = true;
+    var button_ken30_checked = true;
+    var button_ken31_checked = true;
+    var button_ken32_checked = true;
+    var button_ken33_checked = true;
+    var button_ken34_checked = true;
+    var button_ken35_checked = true;
+    var button_ken36_checked = true;
+    var button_ken37_checked = true;
+    var button_ken38_checked = true;
+    var button_ken39_checked = true;
+    var button_ken40_checked = true;
+    var button_ken41_checked = true;
+    var button_ken42_checked = true;
+    var button_ken43_checked = true;
+    var button_ken44_checked = true;
+    var button_ken45_checked = true;
+    var button_ken46_checked = true;
+    var button_ken47_checked = true;
+    
+    var button_all = document.getElementById("button_all")
+    button_all.addEventListener("click", function(event) {
+        {% for city01 in city_list01 %}
+        document.getElementById("checkbox_city{{ city01.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city02 in city_list02 %}
+        document.getElementById("checkbox_city{{ city02.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city03 in city_list03 %}
+        document.getElementById("checkbox_city{{ city03.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city04 in city_list04 %}
+        document.getElementById("checkbox_city{{ city04.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city05 in city_list05 %}
+        document.getElementById("checkbox_city{{ city05.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city06 in city_list06 %}
+        document.getElementById("checkbox_city{{ city06.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city07 in city_list07 %}
+        document.getElementById("checkbox_city{{ city07.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city08 in city_list08 %}
+        document.getElementById("checkbox_city{{ city08.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city09 in city_list09 %}
+        document.getElementById("checkbox_city{{ city09.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city10 in city_list10 %}
+        document.getElementById("checkbox_city{{ city10.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city11 in city_list11 %}
+        document.getElementById("checkbox_city{{ city11.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city12 in city_list12 %}
+        document.getElementById("checkbox_city{{ city12.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city13 in city_list13 %}
+        document.getElementById("checkbox_city{{ city13.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city14 in city_list14 %}
+        document.getElementById("checkbox_city{{ city14.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city15 in city_list15 %}
+        document.getElementById("checkbox_city{{ city15.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city16 in city_list16 %}
+        document.getElementById("checkbox_city{{ city16.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city17 in city_list17 %}
+        document.getElementById("checkbox_city{{ city17.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city18 in city_list18 %}
+        document.getElementById("checkbox_city{{ city18.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city19 in city_list19 %}
+        document.getElementById("checkbox_city{{ city19.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city20 in city_list20 %}
+        document.getElementById("checkbox_city{{ city20.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city21 in city_list21 %}
+        document.getElementById("checkbox_city{{ city21.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city22 in city_list22 %}
+        document.getElementById("checkbox_city{{ city22.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city23 in city_list23 %}
+        document.getElementById("checkbox_city{{ city23.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city24 in city_list24 %}
+        document.getElementById("checkbox_city{{ city24.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city25 in city_list25 %}
+        document.getElementById("checkbox_city{{ city25.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city26 in city_list26 %}
+        document.getElementById("checkbox_city{{ city26.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city27 in city_list27 %}
+        document.getElementById("checkbox_city{{ city27.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city28 in city_list28 %}
+        document.getElementById("checkbox_city{{ city28.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city29 in city_list29 %}
+        document.getElementById("checkbox_city{{ city29.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city30 in city_list30 %}
+        document.getElementById("checkbox_city{{ city30.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city31 in city_list31 %}
+        document.getElementById("checkbox_city{{ city31.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city32 in city_list32 %}
+        document.getElementById("checkbox_city{{ city32.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city33 in city_list33 %}
+        document.getElementById("checkbox_city{{ city33.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city34 in city_list34 %}
+        document.getElementById("checkbox_city{{ city34.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city35 in city_list35 %}
+        document.getElementById("checkbox_city{{ city35.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city36 in city_list36 %}
+        document.getElementById("checkbox_city{{ city36.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city37 in city_list37 %}
+        document.getElementById("checkbox_city{{ city37.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city38 in city_list38 %}
+        document.getElementById("checkbox_city{{ city38.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city39 in city_list39 %}
+        document.getElementById("checkbox_city{{ city39.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city40 in city_list40 %}
+        document.getElementById("checkbox_city{{ city40.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city41 in city_list41 %}
+        document.getElementById("checkbox_city{{ city41.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city42 in city_list42 %}
+        document.getElementById("checkbox_city{{ city42.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city43 in city_list43 %}
+        document.getElementById("checkbox_city{{ city43.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city44 in city_list44 %}
+        document.getElementById("checkbox_city{{ city44.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city45 in city_list45 %}
+        document.getElementById("checkbox_city{{ city45.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city46 in city_list46 %}
+        document.getElementById("checkbox_city{{ city46.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        {% for city47 in city_list47 %}
+        document.getElementById("checkbox_city{{ city47.city_code }}").checked = button_all_checked;
+        {% endfor %}
+        button_all_checked = !button_all_checked;
+        button_ken01_checked = button_all_checked;
+        button_ken02_checked = button_all_checked;
+        button_ken03_checked = button_all_checked;
+        button_ken04_checked = button_all_checked;
+        button_ken05_checked = button_all_checked;
+        button_ken06_checked = button_all_checked;
+        button_ken07_checked = button_all_checked;
+        button_ken08_checked = button_all_checked;
+        button_ken09_checked = button_all_checked;
+        button_ken10_checked = button_all_checked;
+        button_ken11_checked = button_all_checked;
+        button_ken12_checked = button_all_checked;
+        button_ken13_checked = button_all_checked;
+        button_ken14_checked = button_all_checked;
+        button_ken15_checked = button_all_checked;
+        button_ken16_checked = button_all_checked;
+        button_ken17_checked = button_all_checked;
+        button_ken18_checked = button_all_checked;
+        button_ken19_checked = button_all_checked;
+        button_ken20_checked = button_all_checked;
+        button_ken21_checked = button_all_checked;
+        button_ken22_checked = button_all_checked;
+        button_ken23_checked = button_all_checked;
+        button_ken24_checked = button_all_checked;
+        button_ken25_checked = button_all_checked;
+        button_ken26_checked = button_all_checked;
+        button_ken27_checked = button_all_checked;
+        button_ken28_checked = button_all_checked;
+        button_ken29_checked = button_all_checked;
+        button_ken30_checked = button_all_checked;
+        button_ken31_checked = button_all_checked;
+        button_ken32_checked = button_all_checked;
+        button_ken33_checked = button_all_checked;
+        button_ken34_checked = button_all_checked;
+        button_ken35_checked = button_all_checked;
+        button_ken36_checked = button_all_checked;
+        button_ken37_checked = button_all_checked;
+        button_ken38_checked = button_all_checked;
+        button_ken39_checked = button_all_checked;
+        button_ken40_checked = button_all_checked;
+        button_ken41_checked = button_all_checked;
+        button_ken42_checked = button_all_checked;
+        button_ken43_checked = button_all_checked;
+        button_ken44_checked = button_all_checked;
+        button_ken45_checked = button_all_checked;
+        button_ken46_checked = button_all_checked;
+        button_ken47_checked = button_all_checked;
+    });
+    
+    var button_ken01 = document.getElementById("button_ken01")
+    var button_ken02 = document.getElementById("button_ken02")
+    var button_ken03 = document.getElementById("button_ken03")
+    var button_ken04 = document.getElementById("button_ken04")
+    var button_ken05 = document.getElementById("button_ken05")
+    var button_ken06 = document.getElementById("button_ken06")
+    var button_ken07 = document.getElementById("button_ken07")
+    var button_ken08 = document.getElementById("button_ken08")
+    var button_ken09 = document.getElementById("button_ken09")
+    var button_ken10 = document.getElementById("button_ken10")
+    var button_ken11 = document.getElementById("button_ken11")
+    var button_ken12 = document.getElementById("button_ken12")
+    var button_ken13 = document.getElementById("button_ken13")
+    var button_ken14 = document.getElementById("button_ken14")
+    var button_ken15 = document.getElementById("button_ken15")
+    var button_ken16 = document.getElementById("button_ken16")
+    var button_ken17 = document.getElementById("button_ken17")
+    var button_ken18 = document.getElementById("button_ken18")
+    var button_ken19 = document.getElementById("button_ken19")
+    var button_ken20 = document.getElementById("button_ken20")
+    var button_ken21 = document.getElementById("button_ken21")
+    var button_ken22 = document.getElementById("button_ken22")
+    var button_ken23 = document.getElementById("button_ken23")
+    var button_ken24 = document.getElementById("button_ken24")
+    var button_ken25 = document.getElementById("button_ken25")
+    var button_ken26 = document.getElementById("button_ken26")
+    var button_ken27 = document.getElementById("button_ken27")
+    var button_ken28 = document.getElementById("button_ken28")
+    var button_ken29 = document.getElementById("button_ken29")
+    var button_ken30 = document.getElementById("button_ken30")
+    var button_ken31 = document.getElementById("button_ken31")
+    var button_ken32 = document.getElementById("button_ken32")
+    var button_ken33 = document.getElementById("button_ken33")
+    var button_ken34 = document.getElementById("button_ken34")
+    var button_ken35 = document.getElementById("button_ken35")
+    var button_ken36 = document.getElementById("button_ken36")
+    var button_ken37 = document.getElementById("button_ken37")
+    var button_ken38 = document.getElementById("button_ken38")
+    var button_ken39 = document.getElementById("button_ken39")
+    var button_ken40 = document.getElementById("button_ken40")
+    var button_ken41 = document.getElementById("button_ken41")
+    var button_ken42 = document.getElementById("button_ken42")
+    var button_ken43 = document.getElementById("button_ken43")
+    var button_ken44 = document.getElementById("button_ken44")
+    var button_ken45 = document.getElementById("button_ken45")
+    var button_ken46 = document.getElementById("button_ken46")
+    var button_ken47 = document.getElementById("button_ken47")
+    
+    button_ken01.addEventListener("click", function(event) {
+        {% for city01 in city_list01 %}
+        document.getElementById("checkbox_city{{ city01.city_code }}").checked = button_ken01_checked;
+        {% endfor %}
+        button_ken01_checked = !button_ken01_checked;
+    });
+    button_ken02.addEventListener("click", function(event) {
+        {% for city02 in city_list02 %}
+        document.getElementById("checkbox_city{{ city02.city_code }}").checked = button_ken02_checked;
+        {% endfor %}
+        button_ken02_checked = !button_ken02_checked;
+    });
+    button_ken03.addEventListener("click", function(event) {
+        {% for city03 in city_list03 %}
+        document.getElementById("checkbox_city{{ city03.city_code }}").checked = button_ken03_checked;
+        {% endfor %}
+        button_ken03_checked = !button_ken03_checked;
+    });
+    button_ken04.addEventListener("click", function(event) {
+        {% for city04 in city_list04 %}
+        document.getElementById("checkbox_city{{ city04.city_code }}").checked = button_ken04_checked;
+        {% endfor %}
+        button_ken04_checked = !button_ken04_checked;
+    });
+    button_ken05.addEventListener("click", function(event) {
+        {% for city05 in city_list05 %}
+        document.getElementById("checkbox_city{{ city05.city_code }}").checked = button_ken05_checked;
+        {% endfor %}
+        button_ken05_checked = !button_ken05_checked;
+    });
+    button_ken06.addEventListener("click", function(event) {
+        {% for city06 in city_list06 %}
+        document.getElementById("checkbox_city{{ city06.city_code }}").checked = button_ken06_checked;
+        {% endfor %}
+        button_ken06_checked = !button_ken06_checked;
+    });
+    button_ken07.addEventListener("click", function(event) {
+        {% for city07 in city_list07 %}
+        document.getElementById("checkbox_city{{ city07.city_code }}").checked = button_ken07_checked;
+        {% endfor %}
+        button_ken07_checked = !button_ken07_checked;
+    });
+    button_ken08.addEventListener("click", function(event) {
+        {% for city08 in city_list08 %}
+        document.getElementById("checkbox_city{{ city08.city_code }}").checked = button_ken08_checked;
+        {% endfor %}
+        button_ken08_checked = !button_ken08_checked;
+    });
+    button_ken09.addEventListener("click", function(event) {
+        {% for city09 in city_list09 %}
+        document.getElementById("checkbox_city{{ city09.city_code }}").checked = button_ken09_checked;
+        {% endfor %}
+        button_ken09_checked = !button_ken09_checked;
+    });
+    button_ken10.addEventListener("click", function(event) {
+        {% for city10 in city_list10 %}
+        document.getElementById("checkbox_city{{ city10.city_code }}").checked = button_ken10_checked;
+        {% endfor %}
+        button_ken10_checked = !button_ken10_checked;
+    });
+    button_ken11.addEventListener("click", function(event) {
+        {% for city11 in city_list11 %}
+        document.getElementById("checkbox_city{{ city11.city_code }}").checked = button_ken11_checked;
+        {% endfor %}
+        button_ken11_checked = !button_ken11_checked;
+    });
+    button_ken12.addEventListener("click", function(event) {
+        {% for city12 in city_list12 %}
+        document.getElementById("checkbox_city{{ city12.city_code }}").checked = button_ken12_checked;
+        {% endfor %}
+        button_ken12_checked = !button_ken12_checked;
+    });
+    button_ken13.addEventListener("click", function(event) {
+        {% for city13 in city_list13 %}
+        document.getElementById("checkbox_city{{ city13.city_code }}").checked = button_ken13_checked;
+        {% endfor %}
+        button_ken13_checked = !button_ken13_checked;
+    });
+    button_ken14.addEventListener("click", function(event) {
+        {% for city14 in city_list14 %}
+        document.getElementById("checkbox_city{{ city14.city_code }}").checked = button_ken14_checked;
+        {% endfor %}
+        button_ken14_checked = !button_ken14_checked;
+    });
+    button_ken15.addEventListener("click", function(event) {
+        {% for city15 in city_list15 %}
+        document.getElementById("checkbox_city{{ city15.city_code }}").checked = button_ken15_checked;
+        {% endfor %}
+        button_ken15_checked = !button_ken15_checked;
+    });
+    button_ken16.addEventListener("click", function(event) {
+        {% for city16 in city_list16 %}
+        document.getElementById("checkbox_city{{ city16.city_code }}").checked = button_ken16_checked;
+        {% endfor %}
+        button_ken16_checked = !button_ken16_checked;
+    });
+    button_ken17.addEventListener("click", function(event) {
+        {% for city17 in city_list17 %}
+        document.getElementById("checkbox_city{{ city17.city_code }}").checked = button_ken17_checked;
+        {% endfor %}
+        button_ken17_checked = !button_ken17_checked;
+    });
+    button_ken18.addEventListener("click", function(event) {
+        {% for city18 in city_list18 %}
+        document.getElementById("checkbox_city{{ city18.city_code }}").checked = button_ken18_checked;
+        {% endfor %}
+        button_ken18_checked = !button_ken18_checked;
+    });
+    button_ken19.addEventListener("click", function(event) {
+        {% for city19 in city_list19 %}
+        document.getElementById("checkbox_city{{ city19.city_code }}").checked = button_ken19_checked;
+        {% endfor %}
+        button_ken19_checked = !button_ken19_checked;
+    });
+    button_ken20.addEventListener("click", function(event) {
+        {% for city20 in city_list20 %}
+        document.getElementById("checkbox_city{{ city20.city_code }}").checked = button_ken20_checked;
+        {% endfor %}
+        button_ken20_checked = !button_ken20_checked;
+    });
+    button_ken21.addEventListener("click", function(event) {
+        {% for city21 in city_list21 %}
+        document.getElementById("checkbox_city{{ city21.city_code }}").checked = button_ken21_checked;
+        {% endfor %}
+        button_ken21_checked = !button_ken21_checked;
+    });
+    button_ken22.addEventListener("click", function(event) {
+        {% for city22 in city_list22 %}
+        document.getElementById("checkbox_city{{ city22.city_code }}").checked = button_ken22_checked;
+        {% endfor %}
+        button_ken22_checked = !button_ken22_checked;
+    });
+    button_ken23.addEventListener("click", function(event) {
+        {% for city23 in city_list23 %}
+        document.getElementById("checkbox_city{{ city23.city_code }}").checked = button_ken23_checked;
+        {% endfor %}
+        button_ken23_checked = !button_ken23_checked;
+    });
+    button_ken24.addEventListener("click", function(event) {
+        {% for city24 in city_list24 %}
+        document.getElementById("checkbox_city{{ city24.city_code }}").checked = button_ken24_checked;
+        {% endfor %}
+        button_ken24_checked = !button_ken24_checked;
+    });
+    button_ken25.addEventListener("click", function(event) {
+        {% for city25 in city_list25 %}
+        document.getElementById("checkbox_city{{ city25.city_code }}").checked = button_ken25_checked;
+        {% endfor %}
+        button_ken25_checked = !button_ken25_checked;
+    });
+    button_ken26.addEventListener("click", function(event) {
+        {% for city26 in city_list26 %}
+        document.getElementById("checkbox_city{{ city26.city_code }}").checked = button_ken26_checked;
+        {% endfor %}
+        button_ken26_checked = !button_ken26_checked;
+    });
+    button_ken27.addEventListener("click", function(event) {
+        {% for city27 in city_list27 %}
+        document.getElementById("checkbox_city{{ city27.city_code }}").checked = button_ken27_checked;
+        {% endfor %}
+        button_ken27_checked = !button_ken27_checked;
+    });
+    button_ken28.addEventListener("click", function(event) {
+        {% for city28 in city_list28 %}
+        document.getElementById("checkbox_city{{ city28.city_code }}").checked = button_ken28_checked;
+        {% endfor %}
+        button_ken28_checked = !button_ken28_checked;
+    });
+    button_ken29.addEventListener("click", function(event) {
+        {% for city29 in city_list29 %}
+        document.getElementById("checkbox_city{{ city29.city_code }}").checked = button_ken29_checked;
+        {% endfor %}
+        button_ken29_checked = !button_ken29_checked;
+    });
+    button_ken30.addEventListener("click", function(event) {
+        {% for city30 in city_list30 %}
+        document.getElementById("checkbox_city{{ city30.city_code }}").checked = button_ken30_checked;
+        {% endfor %}
+        button_ken30_checked = !button_ken30_checked;
+    });
+    button_ken31.addEventListener("click", function(event) {
+        {% for city31 in city_list31 %}
+        document.getElementById("checkbox_city{{ city31.city_code }}").checked = button_ken31_checked;
+        {% endfor %}
+        button_ken31_checked = !button_ken31_checked;
+    });
+    button_ken32.addEventListener("click", function(event) {
+        {% for city32 in city_list32 %}
+        document.getElementById("checkbox_city{{ city32.city_code }}").checked = button_ken32_checked;
+        {% endfor %}
+        button_ken32_checked = !button_ken32_checked;
+    });
+    button_ken33.addEventListener("click", function(event) {
+        {% for city33 in city_list33 %}
+        document.getElementById("checkbox_city{{ city33.city_code }}").checked = button_ken33_checked;
+        {% endfor %}
+        button_ken33_checked = !button_ken33_checked;
+    });
+    button_ken34.addEventListener("click", function(event) {
+        {% for city34 in city_list34 %}
+        document.getElementById("checkbox_city{{ city34.city_code }}").checked = button_ken34_checked;
+        {% endfor %}
+        button_ken34_checked = !button_ken34_checked;
+    });
+    button_ken35.addEventListener("click", function(event) {
+        {% for city35 in city_list35 %}
+        document.getElementById("checkbox_city{{ city35.city_code }}").checked = button_ken35_checked;
+        {% endfor %}
+        button_ken35_checked = !button_ken35_checked;
+    });
+    button_ken36.addEventListener("click", function(event) {
+        {% for city36 in city_list36 %}
+        document.getElementById("checkbox_city{{ city36.city_code }}").checked = button_ken36_checked;
+        {% endfor %}
+        button_ken36_checked = !button_ken36_checked;
+    });
+    button_ken37.addEventListener("click", function(event) {
+        {% for city37 in city_list37 %}
+        document.getElementById("checkbox_city{{ city37.city_code }}").checked = button_ken37_checked;
+        {% endfor %}
+        button_ken37_checked = !button_ken37_checked;
+    });
+    button_ken38.addEventListener("click", function(event) {
+        {% for city38 in city_list38 %}
+        document.getElementById("checkbox_city{{ city38.city_code }}").checked = button_ken38_checked;
+        {% endfor %}
+        button_ken38_checked = !button_ken38_checked;
+    });
+    button_ken39.addEventListener("click", function(event) {
+        {% for city39 in city_list39 %}
+        document.getElementById("checkbox_city{{ city39.city_code }}").checked = button_ken39_checked;
+        {% endfor %}
+        button_ken39_checked = !button_ken39_checked;
+    });
+    button_ken40.addEventListener("click", function(event) {
+        {% for city40 in city_list40 %}
+        document.getElementById("checkbox_city{{ city40.city_code }}").checked = button_ken40_checked;
+        {% endfor %}
+        button_ken40_checked = !button_ken40_checked;
+    });
+    button_ken41.addEventListener("click", function(event) {
+        {% for city41 in city_list41 %}
+        document.getElementById("checkbox_city{{ city41.city_code }}").checked = button_ken41_checked;
+        {% endfor %}
+        button_ken41_checked = !button_ken41_checked;
+    });
+    button_ken42.addEventListener("click", function(event) {
+        {% for city42 in city_list42 %}
+        document.getElementById("checkbox_city{{ city42.city_code }}").checked = button_ken42_checked;
+        {% endfor %}
+        button_ken42_checked = !button_ken42_checked;
+    });
+    button_ken43.addEventListener("click", function(event) {
+        {% for city43 in city_list43 %}
+        document.getElementById("checkbox_city{{ city43.city_code }}").checked = button_ken43_checked;
+        {% endfor %}
+        button_ken43_checked = !button_ken43_checked;
+    });
+    button_ken44.addEventListener("click", function(event) {
+        {% for city44 in city_list44 %}
+        document.getElementById("checkbox_city{{ city44.city_code }}").checked = button_ken44_checked;
+        {% endfor %}
+        button_ken44_checked = !button_ken44_checked;
+    });
+    button_ken45.addEventListener("click", function(event) {
+        {% for city45 in city_list45 %}
+        document.getElementById("checkbox_city{{ city45.city_code }}").checked = button_ken45_checked;
+        {% endfor %}
+        button_ken45_checked = !button_ken45_checked;
+    });
+    button_ken46.addEventListener("click", function(event) {
+        {% for city46 in city_list46 %}
+        document.getElementById("checkbox_city{{ city46.city_code }}").checked = button_ken46_checked;
+        {% endfor %}
+        button_ken46_checked = !button_ken46_checked;
+    });
+    button_ken47.addEventListener("click", function(event) {
+        {% for city47 in city_list47 %}
+        document.getElementById("checkbox_city{{ city47.city_code }}").checked = button_ken47_checked;
+        {% endfor %}
+        button_ken47_checked = !button_ken47_checked;
+    });
+
+
+    
     var button1 = document.getElementById("button1")
     var button2 = document.getElementById("button2")
     var form_select_1 = document.getElementById("form_select_1")
