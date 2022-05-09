@@ -14,18 +14,28 @@
 </head>
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a>
-    <button class="btn btn-primary" type="button" id="button_update_database">データベースに反映</button>    
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    
     {% block content %}
-    <div class="text-center mb-3"><!-- mb-3 下側のマージンを3 -->
-        <h3>調査票、集計結果、マスタデータ編集</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <h3>調査票、集計結果、マスタデータ編集</h3>
+            </div>    
+            <div class="col d-flex justify-content-end align-items-end">
+                <button class="btn btn-primary" type="button" id="button_master_database">マスタデータベースに反映</button>    
+            </div>
+        </div>
     </div>
     
-    <!-- 都道府県、市区町村、種別選択エリア -->
-    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
+    <!-- 都道府県、市区町村、種別選択 -->
+    <div class="mb-3">
         <table class="table table-borderless">
             <tr>
                 <td>
+                    <!-- 都道府県選択 -->
                     <div class="input-group">
                         <select class="form-select" id="form_select_ken" name="form_select_ken">
                             <option value="">都道府県選択</option>
@@ -37,10 +47,11 @@
                             {% endif %}
                             {% endfor %}
                         </select>
-                        <button class="btn btn-primary" type="button" id="button1">都道府県選択</button>
+                        <button class="btn btn-primary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
                     </div>
                 </td>
                 <td>
+                    <!-- 市区町村選択 -->
                     <div class="input-group">
                         <select class="form-select" id="form_select_city" name="form_select_city">
                             <option value="">市区町村選択</option>
@@ -52,10 +63,11 @@
                             {% endif %}
                             {% endfor %}
                         </select>
-                        <button class="btn btn-primary" type="button" id="button2">市区町村選択</button>
+                        <button class="btn btn-primary" type="button" id="button_city" name="button_city">市区町村選択</button>
                     </div>
                 </td>
                 <td>
+                    <!-- 種別選択 -->
                     <div class="input-group">
                         <select class="form-select" id="form_select_category" name="form_select_category">
                             <option value="1">種別選択</option>
@@ -93,16 +105,17 @@
                             <option value="33">異常気象</option>
                             <option value="34">区域</option>
                         </select>
-                        <button class="btn btn-primary" type="button" id="button3">種別選択</button>
+                        <button class="btn btn-primary" type="button" id="button_category" name="button_category">種別選択</button>
                     </div>
                 </td>
             </tr>    
         </table>
     </div>
     
-    <!-- 参照用一覧表示エリア -->
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
-        <table class="table table-bordered table-striped text-nowrap">
+    <!-- 一覧表示 -->
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap" id="table_list" name="table_list">
+            <!-- 一覧表示（th: テーブルヘッダ） -->
             <thead>
                 <tr>
                     <th class="text-center"></th>
@@ -164,13 +177,16 @@
                     <th class="text-center">農漁家戸数_全壊</th>
                 </tr>
             </thead>
+            <!-- 一覧表示（td: テーブルデータ） -->
             <tbody>
                 {% for ippan in ippan_list %}
-                <tr>
+                <tr id="tr{{ forloop.counter0 }}" name="tr{{ forloop.counter0 }}">
                     <td>
+                        <!-- 編集ボタン -->
                         <button class="btn btn-primary" type="button" id="button_edit{{ ippan.ippan_id }}" name="button_edit{{ ippan.ippan_id }}">編集</button>
                     </td>
                     <td>
+                        <!-- 削除ボタン -->
                         <button class="btn btn-primary" type="button" id="button_delete{{ ippan.ippan_id }}" name="button_delete{{ ippan.ippan_id }}">削除</button>
                     </td>
                     <td>{{ ippan.ippan_id }}</td>
@@ -234,12 +250,16 @@
         </table>
     </div>
     
-    <!-- 編集用表示エリア -->
-    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
-        <button class="btn btn-primary" type="button" id="button_update_display_area">表示エリアに反映</button>
+    <!-- 一覧表示エリアに反映ボタン、追加ボタン -->
+    <div class="mb-3">
+        <button class="btn btn-primary" type="button" id="button_update" name="button_update">一覧表示エリアに反映</button>
+        <button class="btn btn-primary" type="button" id="button_add" name="button_add">追加</button>
     </div>
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    
+    <!-- 入力 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered text-nowrap">
+            <!-- 入力（th: テーブルヘッダ） -->
             <thead>
                 <tr>
                     <th class="text-center">一般資産調査票ID</th>
@@ -299,6 +319,7 @@
                     <th class="text-center">農漁家戸数_全壊</th>
                 </tr>
             </thead>
+            <!-- 入力（td: テーブルデータ） -->
             <tbody>
                 <tr>
                     <td><input class="form-control" type="text" value="" id="input_ippan_id" name="input_ippan_id"></td>
@@ -360,30 +381,30 @@
             </tbody>
         </table>
     </div>
-    <script>
-    <!-- 都道府県、市区町村、種別選択エリア -->
-    var button1 = document.getElementById("button1") <!--県選択ボタン-->
-    var button2 = document.getElementById("button2") <!--市区町村選択ボタン-->
-    var button3 = document.getElementById("button3") <!--種別選択ボタン-->
     
-    button1.addEventListener("click", function(event) {
+    <script>
+    <!-- 都道府県、市区町村、種別選択 -->
+    var button_ken = document.getElementById("button_ken")
+    var button_city = document.getElementById("button_city")
+    var button_category = document.getElementById("button_category")
+    
+    button_ken.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1) {
             window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/ken/"
         }
     });
-    button2.addEventListener("click", function(event) {
+    button_city.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
             window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/" + form_select_city.value + "/city/"
         }
     });
-    button3.addEventListener("click", function(event) {
+    button_category.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1 && form_select_category.value >= 1) {
             window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/" + form_select_city.value + "/" + form_select_category.value + "/category/"
         }
     });
     
-    <!-- 参照用一覧表示エリア -->
-    <!-- 編集用表示エリア -->
+    <!-- 一覧表示、入力 -->
     var input_ippan_id = document.getElementById("input_ippan_id")
     var input_ippan_name = document.getElementById("input_ippan_name")
     var input_building_code = document.getElementById("input_building_code")
@@ -612,74 +633,383 @@
         input_farmer_fisher_full.value = farmer_fisher_full_list[for_loop_counter0];
     }
     
-    /*{% for ippan in ippan_list %}
-    document.getElementById("button_edit{{ ippan.ippan_id }}").addEventListener("click", function(event) {
-        input_ippan_id.value = ippan_id_list[{{ forloop.counter0 }}];
-        input_ippan_name.value = ippan_name_list[{{ forloop.counter0 }}];
-        input_building_code.value = building_code_list[{{ forloop.counter0 }}];
-        input_flood_sediment_code.value = flood_sediment_code_list[{{ forloop.counter0 }}];
-        input_gradient_code.value = gradient_code_list[{{ forloop.counter0 }}];
-        input_industry_code.value = industry_code_list[{{ forloop.counter0 }}];
-        input_ken_code.value = ken_code_list[{{ forloop.counter0 }}];
-        input_city_code.value = city_code_list[{{ forloop.counter0 }}];
-        input_weather_id.value = weather_id_list[{{ forloop.counter0 }}];
-        input_area_id.value = area_id_list[{{ forloop.counter0 }}];
-        input_cause_1_code.value = cause_1_code_list[{{ forloop.counter0 }}];
-        input_cause_2_code.value = cause_2_code_list[{{ forloop.counter0 }}];
-        input_cause_3_code.value = cause_3_code_list[{{ forloop.counter0 }}];
-        input_suikei_code.value = suikei_code_list[{{ forloop.counter0 }}];
-        input_kasen_code.value = kasen_code_list[{{ forloop.counter0 }}];
-        input_kasen_kaigan_code.value = kasen_kaigan_code_list[{{ forloop.counter0 }}];
-        input_underground_code.value = underground_code_list[{{ forloop.counter0 }}];
-        input_usage_code.value = usage_code_list[{{ forloop.counter0 }}];
-        input_building_lv00.value = building_lv00_list[{{ forloop.counter0 }}];
-        input_building_lv01_49.value = building_lv01_49_list[{{ forloop.counter0 }}];
-        input_building_lv50_99.value = building_lv50_99_list[{{ forloop.counter0 }}];
-        input_building_lv100.value = building_lv100_list[{{ forloop.counter0 }}];
-        input_building_half.value = building_half_list[{{ forloop.counter0 }}];
-        input_building_full.value = building_full_list[{{ forloop.counter0 }}];
-        input_floor_area.value = floor_area_list[{{ forloop.counter0 }}];
-        input_family.value = family_list[{{ forloop.counter0 }}];
-        input_office.value = office_list[{{ forloop.counter0 }}];
-        input_floor_area_lv00.value = floor_area_lv00_list[{{ forloop.counter0 }}];
-        input_floor_area_lv01_49.value = floor_area_lv01_49_list[{{ forloop.counter0 }}];
-        input_floor_area_lv50_99.value = floor_area_lv50_99_list[{{ forloop.counter0 }}];
-        input_floor_area_lv100.value = floor_area_lv100_list[{{ forloop.counter0 }}];
-        input_floor_area_half.value = floor_area_half_list[{{ forloop.counter0 }}];
-        input_floor_area_full.value = floor_area_full_list[{{ forloop.counter0 }}];
-        input_family_lv00.value = family_lv00_list[{{ forloop.counter0 }}];
-        input_family_lv01_49.value = family_lv01_49_list[{{ forloop.counter0 }}];
-        input_family_lv50_99.value = family_lv50_99_list[{{ forloop.counter0 }}];
-        input_family_lv100.value = family_lv100_list[{{ forloop.counter0 }}];
-        input_family_half.value = family_half_list[{{ forloop.counter0 }}];
-        input_family_full.value = family_full_list[{{ forloop.counter0 }}];
-        input_office_lv00.value = office_lv00_list[{{ forloop.counter0 }}];
-        input_office_lv01_49.value = office_lv01_49_list[{{ forloop.counter0 }}];
-        input_office_lv50_99.value = office_lv50_99_list[{{ forloop.counter0 }}];
-        input_office_lv100.value = office_lv100_list[{{ forloop.counter0 }}];
-        input_office_half.value = office_half_list[{{ forloop.counter0 }}];
-        input_office_full.value = office_full_list[{{ forloop.counter0 }}];
-        input_employee_lv00.value = employee_lv00_list[{{ forloop.counter0 }}];
-        input_employee_lv01_49.value = employee_lv01_49_list[{{ forloop.counter0 }}];
-        input_employee_lv50_99.value = employee_lv50_99_list[{{ forloop.counter0 }}];
-        input_employee_lv100.value = employee_lv100_list[{{ forloop.counter0 }}];
-        input_employee_full.value = employee_full_list[{{ forloop.counter0 }}];
-        input_farmer_fisher_lv00.value = farmer_fisher_lv00_list[{{ forloop.counter0 }}];
-        input_farmer_fisher_lv01_49.value = farmer_fisher_lv01_49_list[{{ forloop.counter0 }}];
-        input_farmer_fisher_lv50_99.value = farmer_fisher_lv50_99_list[{{ forloop.counter0 }}];
-        input_farmer_fisher_lv100.value = farmer_fisher_lv100_list[{{ forloop.counter0 }}];
-        input_farmer_fisher_full.value = farmer_fisher_full_list[{{ forloop.counter0 }}];
-    });
-    {% endfor %}*/
+    var current_row = 0;
 
+    <!-- 入力ボタン -->
     {% for ippan in ippan_list %}
     document.getElementById("button_edit{{ ippan.ippan_id }}").addEventListener("click", function(event) {
         set_value({{ forloop.counter0 }});
+        current_row = {{ forloop.counter0 }};
+    });
+    {% endfor %}
+
+    <!-- 削除ボタン -->
+    {% for ippan in ippan_list %}
+    document.getElementById("button_delete{{ ippan.ippan_id }}").addEventListener("click", function(event) {
+        document.getElementById("tr" + {{ forloop.counter0 }}).style.backgroundColor = "gray";
     });
     {% endfor %}
     
-    document.getElementById("button_update_display_area").addEventListener("click", function(event) {
-    
+    <!-- 表示エリアに反映ボタン -->
+    var button_update = document.getElementById("button_update")
+    button_update.addEventListener("click", function(event) {
+        document.getElementById("tr" + current_row).style.backgroundColor = "yellow";
+    });
+
+    <!-- 追加ボタン -->
+    var button_add = document.getElementById("button_add")
+    button_add.addEventListener("click", function(event) {
+        // ippan_id_list.push("");
+        // ippan_name_list.push("");
+        // building_code_list.push("");
+        // flood_sediment_code_list.push("");
+        // gradient_code_list.push("");
+        // industry_code_list.push("");
+        // ken_code_list.push("");
+        // city_code_list.push("");
+        // weather_id_list.push("");
+        // area_id_list.push("");
+        // cause_1_code_list.push("");
+        // cause_2_code_list.push("");
+        // cause_3_code_list.push("");
+        // suikei_code_list.push("");
+        // kasen_code_list.push("");
+        // kasen_kaigan_code_list.push("");
+        // underground_code_list.push("");
+        // usage_code_list.push("");
+        // building_lv00_list.push("");
+        // building_lv01_49_list.push("");
+        // building_lv50_99_list.push("");
+        // building_lv100_list.push("");
+        // building_half_list.push("");
+        // building_full_list.push("");
+        // floor_area_list.push("");
+        // family_list.push("");
+        // office_list.push("");
+        // floor_area_lv00_list.push("");
+        // floor_area_lv01_49_list.push("");
+        // floor_area_lv50_99_list.push("");
+        // floor_area_lv100_list.push("");
+        // floor_area_half_list.push("");
+        // floor_area_full_list.push("");
+        // family_lv00_list.push("");
+        // family_lv01_49_list.push("");
+        // family_lv50_99_list.push("");
+        // family_lv100_list.push("");
+        // family_half_list.push("");
+        // family_full_list.push("");
+        // office_lv00_list.push("");
+        // office_lv01_49_list.push("");
+        // office_lv50_99_list.push("");
+        // office_lv100_list.push("");
+        // office_half_list.push("");
+        // office_full_list.push("");
+        // employee_lv00_list.push("");
+        // employee_lv01_49_list.push("");
+        // employee_lv50_99_list.push("");
+        // employee_lv100_list.push("");
+        // employee_full_list.push("");
+        // farmer_fisher_lv00_list.push("");
+        // farmer_fisher_lv01_49_list.push("");
+        // farmer_fisher_lv50_99_list.push("");
+        // farmer_fisher_lv100_list.push("");
+        // farmer_fisher_full_list.push("");
+        
+        table_list = document.getElementById("table_list");
+        new_row = table_list.insertRow();
+        
+        // button_edit
+        new_cell = new_row.insertCell();
+        new_button = document.createElement("button");
+        new_button.className = "btn btn-primary";
+        new_button.innerHTML = "編集";
+        new_button.addEventListener("click", function(event) {
+        });
+        new_cell.appendChild(new_button);
+        
+        // button_delete
+        new_cell = new_row.insertCell();
+        new_button = document.createElement("button");
+        new_button.className = "btn btn-primary";
+        new_button.innerHTML = "削除";
+        new_button.addEventListener("click", function(event) {
+        });
+        new_cell.appendChild(new_button);
+
+        // ippan_id
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // ippan_name
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // flood_sediment_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // gradient_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // industry_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // ken_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // city_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // weather_id
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // area_id
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // cause_1_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // cause_2_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // cause_3_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // suikei_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // kasen_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // kasen_kaigan_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // underground_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // usage_code
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_half
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // building_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_half
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // floor_area_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_half
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // family_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_half
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // office_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // employee_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // employee_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // employee_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // employee_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // employee_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // farmer_fisher_lv00
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // farmer_fisher_lv01_49
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // farmer_fisher_lv50_99
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // farmer_fisher_lv100
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
+        
+        // farmer_fisher_full
+        new_cell = new_row.insertCell();
+        new_text = document.createTextNode("test");
+        new_cell.appendChild(new_text);
     });
     
     </script>
