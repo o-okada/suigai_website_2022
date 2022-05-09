@@ -15,11 +15,22 @@
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    
     {% block content %}
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
-        <h3>EXCELダウンロード画面</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <h3>EXCELダウンロード画面</h3>
+            </div>    
+            <div class="col d-flex justify-content-end align-items-end">
+            </div>
+        </div>
     </div>
-    <div class="mb-3"><!-- mb-3 下側のマージンを3 -->
+    
+    <!-- 都道府県、市区町村、種別選択 -->
+    <div class="mb-3">
         <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
         <button class="btn btn-primary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>

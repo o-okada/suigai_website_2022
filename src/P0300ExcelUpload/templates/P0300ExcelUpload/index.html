@@ -15,10 +15,20 @@
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    
     {% block content %}
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
-        <h3>EXCELアップロード画面</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <h3>EXCELアップロード画面</h3>
+            </div>    
+            <div class="col d-flex justify-content-end align-items-end">
+            </div>
+        </div>
     </div>
+    
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {#{{ form.as_p }}#}

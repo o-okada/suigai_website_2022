@@ -15,20 +15,72 @@
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    
     {% block content %}
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
-        <h3>承認・集計・配布</h3>
-    </div>
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
-        <div class="input-group">
-            <select class="form-select" id="">
-                <option value="">都道府県選択</option>
-            </select>
-            <button class="btn btn-primary" type="button">都道府県選択</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <h3>承認・集計・配布</h3>
+            </div>    
+            <div class="col d-flex justify-content-end align-items-end">
+            </div>
         </div>
     </div>
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+    
+    <!-- 都道府県、市区町村、種別選択 -->
+    <!--<div class="container text-center mb-3">-->
+    <!--    <div class="input-group">-->
+    <!--        <select class="form-select" id="">-->
+    <!--            <option value="">都道府県選択</option>-->
+    <!--        </select>-->
+    <!--        <button class="btn btn-primary" type="button">都道府県選択</button>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <div class="mb-3">
+        <table class="table table-borderless">
+            <tr>
+                <!-- 都道府県選択 -->
+                <td>
+                    <div class="input-group">
+                        <select class="form-select" id="form_select_ken" name="form_select_ken">
+                            <option value="">都道府県選択</option>
+                            {% for ken in ken_list %}
+                            {% if ken.ken_code == ken_code %}
+                            <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
+                            {% else %}
+                            <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-primary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+                    </div>
+                </td>
+                <!-- 市区町村選択 -->
+                <td>
+                    <div class="input-group">
+                        <select class="form-select" id="form_select_city" name="form_select_city">
+                            <option value="">市区町村選択</option>
+                            {% for city in city_list %}
+                            {% if city.city_code == city_code %}
+                            <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
+                            {% else %}
+                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-primary" type="button" id="button_city" name="button_city">市区町村選択</button>
+                    </div>
+                </td>
+            </tr>    
+        </table>
+    </div>
+    
+    <!-- 一覧表示 -->
+    <div class="container mb-3">
         <table class="table table-bordered">
+            <!-- 一覧表示（th: テーブルヘッダ） -->
             <thead>
                 <tr>
                     <th class="text-center">変更日時</th>
@@ -39,6 +91,7 @@
                     <th class="text-center">承認／否認／保留</th>
                 </tr>
             </thead>
+            <!-- 一覧表示（td: テーブルデータ） -->
             <tbody>
                 <tr>
                     <td>2006/11/22 14:39</td>
@@ -89,7 +142,9 @@
             </tbody>
         </table>
     </div>
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+    
+    <!--  -->
+    <div class="container mb-3">
         <table>
             <tr>
                 <td>
@@ -125,14 +180,36 @@
             </tr>
         </table>    
     </div>
-    <div class="container mb-3"><!-- mb-3 下側のマージンを3 -->
+    
+    <!--  -->
+    <div class="container mb-3">
         <label class="col-form-label col-sm-2">承認時コメント</label>
         <textarea class="form-control" value="">承認時コメント</textarea>
     </div>
-    <div class="container text-center mb-3"><!-- mb-3 下側のマージンを3 -->
+    
+    <!--  -->
+    <div class="container text-center mb-3">
         <button class="btn btn-primary" type="button">実行</button>
         <button class="btn btn-primary" type="button">キャンセル</button>
     </div>
+
+    <script>
+    <!-- 都道府県、市区町村、種別選択 -->
+    var button_ken = document.getElementById("button_ken")
+    var button_city = document.getElementById("button_city")
+    
+    button_ken.addEventListener("click", function(event) {
+        if (form_select_ken.value >= 1) {
+            window.location.href = "/P9100AdminCheck/" + form_select_ken.value + "/ken/"
+        }
+    });
+    button_city.addEventListener("click", function(event) {
+        if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
+            window.location.href = "/P9100AdminCheck/" + form_select_ken.value + "/" + form_select_city.value + "/city/"
+        }
+    });
+    </script>
+    
     {% endblock %}
 </body>
 </html>
