@@ -14,7 +14,8 @@
 </head>
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a>
+    <button class="btn btn-primary" type="button" id="button_update_database">データベースに反映</button>    
     {% block content %}
     <div class="text-center mb-3"><!-- mb-3 下側のマージンを3 -->
         <h3>調査票、集計結果、マスタデータ編集</h3>
