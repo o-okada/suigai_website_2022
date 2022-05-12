@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+<!-- P0400OnlineDisplay/index.html -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
@@ -14,7 +15,7 @@
 </head>
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
     
     {% block content %}
     <div class="container-fluid">
@@ -251,7 +252,7 @@
     {% endif %}
     
     {% if category_code == "2" %}{# 一般資産調査票（調査員用） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -399,7 +400,7 @@
     {% endif %}
     
     {% if category_code == "10" %}{# 建物区分 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -420,7 +421,7 @@
     {% endif %}
     
     {% if category_code == "11" %}{# 都道府県 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -441,7 +442,7 @@
     {% endif %}
     
     {% if category_code == "12" %}{# 市区町村 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -468,7 +469,7 @@
     {% endif %}
     
     {% if category_code == "13" %}{# 水害発生地点工種（河川海岸区分） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -489,7 +490,7 @@
     {% endif %}
     
     {% if category_code == "14" %}{# 水系（水系・沿岸） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -512,7 +513,7 @@
     {% endif %}
     
     {% if category_code == "15" %}{# 水系種別（水系・沿岸種別） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -533,7 +534,7 @@
     {% endif %}
     
     {% if category_code == "16" %}{# 河川（河川・海岸） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -558,7 +559,7 @@
     {% endif %}
     
     {% if category_code == "17" %}{# 河川種別（河川・海岸種別） #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -579,7 +580,7 @@
     {% endif %}
     
     {% if category_code == "18" %}{# 水害原因 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -600,7 +601,7 @@
     {% endif %}
     
     {% if category_code == "19" %}{# 地上地下区分 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -621,7 +622,7 @@
     {% endif %}
     
     {% if category_code == "20" %}{# 地下空間の利用形態 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -642,7 +643,7 @@
     {% endif %}
     
     {% if category_code == "21" %}{# 浸水土砂区分 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -663,7 +664,7 @@
     {% endif %}
     
     {% if category_code == "22" %}{# 地盤勾配区分 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -684,7 +685,7 @@
     {% endif %}
     
     {% if category_code == "23" %}{# 産業分類 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -705,7 +706,7 @@
     {% endif %}
     
     {% if category_code == "24" %}{# 県別家屋評価額 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -734,7 +735,7 @@
     {% endif %}
     
     {% if category_code == "25" %}{# 家屋被害率 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -839,7 +840,7 @@
     {% endif %}
     
     {% if category_code == "26" %}{# 家庭用品自動車以外被害率 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -894,7 +895,7 @@
     {% endif %}
     
     {% if category_code == "27" %}{# 家庭用品自動車被害率 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -937,7 +938,7 @@
     {% endif %}
     
     {% if category_code == "28" %}{# 家庭応急対策費 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -994,7 +995,7 @@
     {% endif %}
     
     {% if category_code == "29" %}{# 産業分類別資産額 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -1029,7 +1030,7 @@
     {% endif %}
     
     {% if category_code == "30" %}{# 事業所被害率 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -1117,7 +1118,7 @@
     {% endif %}
     
     {% if category_code == "33" %}{# 異常気象 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -1144,7 +1145,7 @@
     {% endif %}
     
     {% if category_code == "34" %}{# 区域 #}
-    <div class="mb-3 table-responsive"><!-- mb-3 下側のマージンを3 -->
+    <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
@@ -1183,17 +1184,17 @@
     
     button1.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/ken/"
+            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/"
         }
     });
     button2.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/" + form_select_city.value + "/city/"
+            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
         }
     });
     button3.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1 && form_select_category.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + form_select_ken.value + "/" + form_select_city.value + "/" + form_select_category.value + "/category/"
+            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/category/" + form_select_category.value + "/"
         }
     });
     </script>

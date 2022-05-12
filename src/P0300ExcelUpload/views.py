@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
+###############################################################################
+### ファイル名：P0300ExcelUpload/views.py
+###############################################################################
 
+###############################################################################
+### 処理名：インポート処理
+###############################################################################
+import sys
+from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.http import Http404
 from django.shortcuts import render
 from django.template import loader
 from django.views import generic
@@ -17,22 +23,11 @@ from openpyxl.formatting.rule import FormulaRule
 
 from .forms import ExcelUploadForm
 
-### def index(request):
-###     template = loader.get_template('P0300ExcelUpload/index.html')
-###     context = {}
-###     ### return HttpResponse("Hello, world. You're at the P0300ExcelUpload index")
-###     return HttpResponse(template.render(context, request))
-### def index(request):
-###     if request.method == 'POST':
-###         form = UploadFileForm(request.POST, request.FILES)
-###         if form.is_valid():
-###             handle_uploaded_file(request.FILES['file'])
-###             file_obj = request.FILES['file']
-###             return HttpResponseRedirect('success')
-###     else:
-###         form = UploadFileForm()
-###     return render(request, 'P0300ExcelUpload/index.html', {'form': form})
+from P0000Common.common_function import print_log
 
+###############################################################################
+### 
+###############################################################################
 MESSAGE = []
 
 ### 単体入力の必須をチェックする。
@@ -292,8 +287,9 @@ for i in range(476, 500):
     MESSAGE.append([i, '', '', '', ''])
 
 ###############################################################################
-### is_zenkaku関数
+### 関数名：is_zenkaku
 ###############################################################################
+### @login_required(None, login_url='/P0100Login/')
 def is_zenkaku(arg):
     try:
         pass
@@ -302,8 +298,9 @@ def is_zenkaku(arg):
     return True
 
 ###############################################################################
-### is_mmdd関数
+### 関数名：is_mmdd
 ###############################################################################
+### @login_required(None, login_url='/P0100Login/')
 def is_mmdd(arg):
     try:
         pass
@@ -312,17 +309,26 @@ def is_mmdd(arg):
     return True
 
 ###############################################################################
-### index関数
+### 関数名：index_view
 ### GETの場合、EXCELアップロード画面を表示する。
 ### POSTの場合、アップロードされたEXCELファイルをチェックして、正常ケースの場合、DBに登録する。
 ### POSTの場合、アップロードされたEXCELファイルをチェックして、警告ケースの場合、DBに登録する。
 ###############################################################################
-def index(request):
+### @login_required(None, login_url='/P0100Login/')
+### def index(request):
+def index_view(request):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### （１）ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 request = {}'.format(request.method), 'INFO')
+        
         #######################################################################
         ### 局所変数をセットする。
         #######################################################################
-        print('[INFO] index() function started1.', flush=True)
         check_require_list = []                                                     ### 必須チェック結果を格納するリスト
         check_format_list = []                                                      ### 形式チェック結果を格納するリスト
         check_range_list = []                                                       ### 範囲チェック結果を格納するリスト
@@ -2103,6 +2109,7 @@ def index(request):
                 'check_compare_grid': check_compare_grid,
                 'excel_id': 1,
             }
+            print_log('[INFO] P0300ExcelUpload.index_view()関数が正常終了しました。', 'INFO')
             return HttpResponse(template.render(context, request))
         else:
             ### FOR DEBUG
@@ -2122,54 +2129,49 @@ def index(request):
             
             template = loader.get_template('P0300ExcelUpload/success.html')
             context = {}
+            print_log('[INFO] P0300ExcelUpload.index_view()関数が正常終了しました。', 'INFO')
             return HttpResponse(template.render(context, request))
-    
-        #######################################################################
-        ### 
-        #######################################################################
-        print('[INFO] index() function started14.', flush=True)
         
     except:
-        raise Http404("[ERROR] index().")
-    
-    ### return HttpResponseRedirect('success')
-
-### def handle_uploaded_file(file_obj):
-###     file_path = 'media/documents/' + file_obj.name
-###     with open(file_path, 'wb+') as destination:
-###         for chunk in file_obj.chunks():
-###             destination.write(chunk)
-            
-###############################################################################
-### 
-###############################################################################
-### def success(request):
-###     str_out = "Success!<p />"
-###     str_out += "成功<p />"
-###     return HttpResponse(str_out)
-    
-###############################################################################
-### 
-###############################################################################
-### def fail(request):
-###     template = loader.get_template('P0300ExcelUpload/fail.html')
-###     context = {}
-###     return HttpResponse(template.render(context, request))
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300ExcelUpload.index_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0300ExcelUpload.index_viwe()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
 
 ###############################################################################
-### download_ippan_chosa_result関数
+### 関数名：ippan_chosa_result_view
 ###############################################################################
-def download_ippan_chosa_result(request, excel_id):
+### @login_required(None, login_url='/P0100Login/')
+### def download_ippan_chosa_result(request, excel_id):
+def ippan_chosa_result_view(request, excel_id):
     try:
+        #######################################################################
+        ### 引数チェック処理
+        ### （１）ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数 request = {}'.format(request.method), 'INFO')
+        
         file_path_to_load = 'static/ippan_chosa_result2.xlsx'
         file_path_to_save = 'static/ippan_chosa_result2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ### ws = wb.active
         ### ws.title = 'sheet99'
         ### wb.save(file_path_to_save)
+        
+        #######################################################################
+        ### レスポンスセット処理
+        ### （１）コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
+        return response
+        
     except:
-        raise Http404("[ERROR] download_ippan_chosa_result().")
-    return response
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
     

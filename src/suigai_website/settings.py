@@ -2,20 +2,20 @@ import os
 import sys
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+### Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 BOOTSTRAP5_FOLDER = os.path.abspath(os.path.join(BASE_DIR, "..", "django_bootstrap5"))
 if BOOTSTRAP5_FOLDER not in sys.path:
     sys.path.insert(0, BOOTSTRAP5_FOLDER)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+### Quick-start development settings - unsuitable for production
+### See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+### SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-gut+seym7@^5p8p_pb+0qj9&r7r%j*2r#gr%e+!85e6bq2fm$c'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+### SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
@@ -44,12 +44,11 @@ INSTALLED_APPS = [
     'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
     
     ### Area Applications
-    'P0600AreaCreate.apps.P0600AreaCreateConfig',
+    'P0600CreateArea.apps.P0600CreateAreaConfig',
     
     ### Admin Applications
-    'P9100AdminCheck.apps.P9100AdminCheckConfig',
-    'P9200AdminHistory.apps.P9200AdminHistoryConfig',
-    'P9300AdminLock.apps.P9300AdminLockConfig',
+    'P9100Transact.apps.P9100TransactConfig',
+    'P9200Lock.apps.P9200LockConfig',
     
     'django.contrib.sites',
     ### See https://office54.net/python/django/django-bootstratp5-css

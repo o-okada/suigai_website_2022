@@ -618,4 +618,113 @@ class KOEKI(models.Model):
     def __str__(self):
         return '<KOEKI: ' + self.koeki_id + '>'
 
+
+
+
+
+
+
+
+
+### 30: 一般資産レポート
+class IPPAN_REPORT(models.Model):
+    ippan_report_id = models.CharField(max_length=10, primary_key=True)
     
+    class Meta:
+        db_table = 'p0000common_ippan_report'
+        
+    def __str__(self):
+        return '<IPPAN_REPORT: ' + self.ippan_report_id + '>'
+        
+### 31: 公共土木レポート
+class KOKYO_REPORT(models.Model):
+    kokyo_report_id = models.CharField(max_length=10, primary_key=True)        
+    
+    class Meta:
+        db_table = 'p0000common_kokyo_report'
+        
+    def __str__(self):
+        return '<KOKYO_REPORT: ' + self.kokyo_report_id + '>'
+    
+### 32: 公益事業レポート
+class KOEKI_REPORT(models.Model):
+    koeki_report_id = models.CharField(max_length=10, primary_key=True)
+    
+    class Meta:
+        db_table = 'p0000common_koeki_report'
+        
+    def __str__(self):
+        return '<KOEKI_REPORT: ' + self.koeki_report_id + '>'
+
+### 33: 承認履歴
+class APPROVE_HISTORY(models.Model):
+    approve_history_id = models.CharField(max_length=10, primary_key=True)
+    
+    class Meta:
+        db_table = 'p0000common_approve_history'
+        
+    def __str__(self):
+        return '<APPROVE_HISTORY: ' + self.approve_history_id + '>'
+
+### 34: 集計履歴
+class REPORT_HISTORY(models.Model):
+    report_history_id = models.CharField(max_length=10, primary_key=True)
+    
+    class Meta:
+        db_table = 'p0000common_report_history'
+        
+    def __str__(self):
+        return '<REPORT_HISTORY: ' + self.report_history_id + '>'
+
+### 35: 配布履歴
+class DISTRIBUTE_HISTORY(models.Model):
+    distribute_history_id = models.CharField(max_length=10, primary_key=True)
+    
+    class Meta:
+        db_table = 'p0000common_distribute_history'
+        
+    def __str__(self):
+        return '<DISTRIBUTE_HISTORY: ' + self.distribute_history_id + '>'
+
+### class APPROVE(models.Model):
+###     approve_id = models.CharField(max_length=10, primary_key=True)
+###     ken_code = models.CharField(max_length=10)
+###     city_code = models.CharField(max_length=10)
+###     update_date = models.DateField()
+###     regist_data = models.DateField()
+###     schedule_ = models.CharField()
+###     rapid_ = models.CharField()
+###     
+###     class Meta:
+###         db_table = 'p0000common_approve'
+###         
+###     def __str__(self):
+###         return '<APPROVE: ' + self.approve_id + '>'
+
+### 
+class TRANSACT(models.Model):
+    transact_id = models.IntegerField(primary_key=True)
+    download_date = models.DateTimeField()
+    upload_date = models.DateTimeField()
+    transact_date = models.DateTimeField()
+    schedule_date = models.DateTimeField()
+
+    download_user_id = models.CharField(max_length=10)
+    upload_user_id = models.CharField(max_length=10)
+    transact_user_id = models.CharField(max_length=10)
+    
+    ken_code = models.CharField(max_length=10)
+    city_code = models.CharField(max_length=10)
+    
+    approve_disapprove_undetermin_code = models.CharField(max_length=10)
+    
+    ippan_kokyo_koeki_code = models.CharField(max_length=10)
+    ippan_kokyo_koeki_id = models.CharField(max_length=10)
+    
+    comment = models.CharField(max_length=256)
+    
+    class Meta:
+        db_table = 'p0000common_transact'
+        
+    def __str__(self):
+        return '<TRANSACT: ' + self.transact_id + '>'

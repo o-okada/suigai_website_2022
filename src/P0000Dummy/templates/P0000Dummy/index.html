@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+<!-- P0000Dummy/index.html -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
@@ -11,21 +12,27 @@
 </head>
 <body>
     <div>共通機能・共通アプリ</div>
-    <div><a href="{% url 'P0000Dummy:index' %}">P0000 ダミーメニュー画面</a></div>
-    <div><a href="{% url 'P0100Login:index' %}">P0100 ログイン画面</a></div>
+    <div><a href="{% url 'P0000Dummy:index_view' %}">P0000 ダミーメニュー画面</a></div>
+    <div><a href="{% url 'P0100Login:index_view' %}">P0100 ログイン画面</a></div>
     <br><br>
     <div>EXCEL機能・EXCELアプリ</div>
-    <div><a href="{% url 'P0200ExcelDownload:index' %}">P0200 EXCELアップロード方式EXCELダウンロード画面</a></div>
-    <div><a href="{% url 'P0300ExcelUpload:index' %}">P0300 EXCELアップロード方式EXCELアップロード画面</a></div>
+    <div><a href="{% url 'P0200ExcelDownload:index_view' %}">P0200 EXCELアップロード方式EXCELダウンロード画面</a></div>
+    <div><a href="{% url 'P0300ExcelUpload:index_view' %}">P0300 EXCELアップロード方式EXCELアップロード画面</a></div>
     <br><br>
     <div>オンライン機能・オンラインアプリ</div>
-    <div><a href="{% url 'P0400OnlineDisplay:index' %}">P0400 オンライン編集方式オンライン参照画面</a></div>
-    <div><a href="{% url 'P0500OnlineUpdate:index' %}">P0500 オンライン編集方式オンライン編集画面</a></div>
+    <div><a href="{% url 'P0400OnlineDisplay:index_view' %}">P0400 オンライン編集方式オンライン参照画面</a></div>
+    <div><a href="{% url 'P0500OnlineUpdate:index_view' %}">P0500 オンライン編集方式オンライン編集画面</a></div>
+    <!--<div><a href="{# url 'P0600CreateArea:index_view' #}">P0600 水害区域図作成支援画面</a></div>-->
+    <br><br>
+    <div>集計機能・レポート機能</div>
+    <!--<div><a href="{# url 'P0700Report:index_view' #}">P0700 最新データ更新画面</a></div>-->
+    <br><br>
+    <div>分析機能・ダッシュボード機能</div>
+    <!--<div><a href="{# url 'P0800Dashboard:index_view' #}">P0800 ダッシュボード画面</a></div>-->
     <br><br>
     <div>管理機能・管理アプリ</div>
-    <div><a href="{% url 'P9100AdminCheck:index' %}">P9100 承認・集計・配布画面</a></div>
-    <div><a href="{% url 'P9200AdminHistory:index' %}">P9200 承認・集計・配布履歴画面</a></div>
-    <div><a href="{% url 'P9300AdminLock:index' %}">P9300 ロック履歴画面</a></div>
+    <div><a href="{% url 'P9100Transact:index_view' %}">P9100 承認・集計・配布画面</a></div>
+    <div><a href="{% url 'P9200Lock:index_view' %}">P9200 ロック画面</a></div>
     <br><br>
 </body>
 </html>

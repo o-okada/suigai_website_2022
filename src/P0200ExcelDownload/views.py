@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse
+###############################################################################
+### ファイル名：P0200ExcelDownload/views.py
+###############################################################################
+
+###############################################################################
+### 処理名：インポート処理
+###############################################################################
+import sys
 from django.http import Http404
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
@@ -15,11 +23,6 @@ from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.formatting.rule import FormulaRule
 
-###############################################################################
-### 一般資産
-### マスタ系テーブル（参照テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
 from P0000Common.models import BUILDING                ### 01: 建物区分
 from P0000Common.models import KEN                     ### 02: 都道府県
 from P0000Common.models import CITY                    ### 03: 市区町村
@@ -34,12 +37,6 @@ from P0000Common.models import USAGE                   ### 11: 地下空間の�
 from P0000Common.models import FLOOD_SEDIMENT          ### 12: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 13: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 14: 産業分類
-
-###############################################################################
-### 一般資産
-### マスタ系テーブル（参照テーブル）
-### 主に集計用
-###############################################################################
 from P0000Common.models import HOUSE_ASSET             ### 15: 県別家屋評価額
 from P0000Common.models import HOUSE_DAMAGE            ### 16: 家屋被害率
 from P0000Common.models import HOUSEHOLD_DAMAGE        ### 17: 家庭用品自動車以外被害率
@@ -49,117 +46,134 @@ from P0000Common.models import OFFICE_ASSET            ### 20: 産業分類別�
 from P0000Common.models import OFFICE_DAMAGE           ### 21: 事業所被害率
 from P0000Common.models import OFFICE_COST             ### 22: 事業所営業停止損失
 from P0000Common.models import FARMER_FISHER_DAMAGE    ### 23: 農漁家被害率
-
-###############################################################################
-### 一般資産
-### トランザクション系テーブル（更新テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
 from P0000Common.models import WEATHER                 ### 24: 異常気象（ほぼ、水害）
 from P0000Common.models import AREA                    ### 25: 区域
 from P0000Common.models import IPPAN                   ### 26: 一般資産調査票
-
-###############################################################################
-### 公共土木、公益事業
-### マスタ系テーブル（参照テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
 from P0000Common.models import RESTORATION             ### 27: 復旧事業工種
-
-###############################################################################
-### 公共土木、公益事業
-### トランザクション系テーブル（更新テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
 from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 
 from P0000Common.common_function import print_log
 
-### Imaginary function to handle an uploaded file.
-### from somewhere import handle_uploaded_file
-### class IndexView(generic.TemplateView):
-###     template_name = "index1.html"
+###############################################################################
+### 関数名：index_view
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
 ### def index(request):
-###     try:
-###         latest_question_list = P0200Question.objects.order_by('-pub_date')[:5]
-###         template = loader.get_template('P0200ExcelDownload/index1.html')
-###         context = {
-###             'latest_question_list': latest_question_list,
-###         }
-###     except:
-###         raise Http404("P0200Question does not exist.")
-###     return HttpResponse(template.render(context, request))
-
-###############################################################################
-### index 関数
-###############################################################################
-def index(request):
+def index_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.index()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.index()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.index_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.index_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ken_list = KEN.objects.order_by('ken_code')[:]
-        city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
-        city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
-        city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
-        city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
-        city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
-        city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
-        city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
-        city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
-        city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
-        city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
-        city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
-        city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
-        city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
-        city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
-        city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
-        city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
-        city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
-        city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
-        city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
-        city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
-        city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
-        city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
-        city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
-        city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
-        city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
-        city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
-        city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
-        city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
-        city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
-        city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
-        city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
-        city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
-        city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
-        city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
-        city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
-        city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
-        city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
-        city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
-        city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
-        city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
-        city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
-        city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
-        city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
-        city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
-        city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
-        city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
-        city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
+        ### ken_list = KEN.objects.order_by('ken_code')[:]
+        ken_list = KEN.objects.raw("""SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+        ### city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
+        ### city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
+        ### city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
+        ### city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
+        ### city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
+        ### city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
+        ### city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
+        ### city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
+        ### city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
+        ### city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
+        ### city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
+        ### city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
+        ### city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
+        ### city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
+        ### city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
+        ### city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
+        ### city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
+        ### city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
+        ### city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
+        ### city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
+        ### city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
+        ### city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
+        ### city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
+        ### city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
+        ### city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
+        ### city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
+        ### city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
+        ### city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
+        ### city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
+        ### city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
+        ### city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
+        ### city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
+        ### city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
+        ### city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
+        ### city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
+        ### city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
+        ### city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
+        ### city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
+        ### city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
+        ### city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
+        ### city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
+        ### city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
+        ### city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
+        ### city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
+        ### city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
+        ### city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
+        ### city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
+        city_list01 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['01', ])
+        city_list02 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['02', ])
+        city_list03 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['03', ])
+        city_list04 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['04', ])
+        city_list05 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['05', ])
+        city_list06 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['06', ])
+        city_list07 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['07', ])
+        city_list08 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['08', ])
+        city_list09 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['09', ])
+        city_list10 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['10', ])
+        city_list11 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['11', ])
+        city_list12 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['12', ])
+        city_list13 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['13', ])
+        city_list14 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['14', ])
+        city_list15 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['15', ])
+        city_list16 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['16', ])
+        city_list17 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['17', ])
+        city_list18 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['18', ])
+        city_list19 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['19', ])
+        city_list20 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['20', ])
+        city_list21 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['21', ])
+        city_list22 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['22', ])
+        city_list23 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['23', ])
+        city_list24 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['24', ])
+        city_list25 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['25', ])
+        city_list26 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['26', ])
+        city_list27 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['27', ])
+        city_list28 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['28', ])
+        city_list29 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['29', ])
+        city_list30 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['30', ])
+        city_list31 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['31', ])
+        city_list32 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['32', ])
+        city_list33 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['33', ])
+        city_list34 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['34', ])
+        city_list35 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['35', ])
+        city_list36 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['36', ])
+        city_list37 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['37', ])
+        city_list38 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['38', ])
+        city_list39 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['39', ])
+        city_list40 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['40', ])
+        city_list41 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['41', ])
+        city_list42 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['42', ])
+        city_list43 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['43', ])
+        city_list44 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['44', ])
+        city_list45 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['45', ])
+        city_list46 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['46', ])
+        city_list47 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['47', ])
         
         #######################################################################
-        ### HttpResponse処理
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         template = loader.get_template('P0200ExcelDownload/index.html')
         context = {
@@ -212,114 +226,42 @@ def index(request):
             'city_list46': city_list46,
             'city_list47': city_list47,
         }
-        print_log('[INFO] P0200ExcelDownload.index()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.index()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.index()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.index_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
-### def upload_file(request):
-###     if request.method == 'POST':
-###         form = UploadFileForm(request.POST, request.FILES)
-###         if form.is_valid():
-###             handle_uploaded_file(request.FILES['file'])
-###             return HttpResponseRedirect('/success/url/')
-###     else:
-###         form = UploadFileForm()
-###     return render(request, 'upload.html', {'form': form})
-### def handle_uploaded_file(f):
-###     with open('some/file/name.txt', 'wb+') as destination:
-###         for chunk in f.chunks():
-###             destination.write(chunk)
-### def download_file(request):
-###     try:
-###         file_path_to_load = 'static/example.xlsx'
-###         file_path_to_save = 'static/example2.xlsx'
-###         wb = openpyxl.load_workbook(file_path_to_load)
-###         ws = wb.active
-###         ws.title = 'sheet99'
-###         ws['A1'].value = 12345.6789
-###         ws['A2'].value = 12345.6789
-###         ws['A3'].value = '=sum(A1:A2)'
-###         wb.save(file_path_to_save)
-###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-###         response['Content-Disposition'] = 'attachment; filename="your_book.xlsx"'
-###     except:
-###         raise Http404("[ERROR] download_file().")
-###     return response
-
 ###############################################################################
-### 一般資産
-### マスタ系テーブル（参照テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
-### 00: 
-### def download_p0200prefecture(request):
-###     try:
-###         p0200prefecture_list = P0200Prefecture.objects.order_by('CODE')[:]
-###         file_path_to_load = 'static/p0200prefecture.xlsx'
-###         file_path_to_save = 'static/p0200prefecture2.xlsx'
-###         wb = openpyxl.load_workbook(file_path_to_load)
-###         ws = wb.active
-###         ws.title = 'sheet99'
-###         if p0200prefecture_list:
-###             for i, p0200prefecture in enumerate(p0200prefecture_list):
-###                 ws.cell(row=i+1, column=1).value = p0200prefecture.CODE
-###                 ws.cell(row=i+1, column=2).value = p0200prefecture.NAME
-###         wb.save(file_path_to_save)
-###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-###         response['Content-Disposition'] = 'attachment; filename="p0200prefecture.xlsx"'
-###     except:
-###         raise Http404("[ERROR] download_p0200prefecture().")
-###     return response
-### 00: 
-### def download_p0200city(request):
-###     try:
-###         p0200city_list = P0200CITY.objects.order_by('CODE')[:]
-###         file_path_to_load = 'static/p0200city.xlsx'
-###         file_path_to_save = 'static/p0200city2.xlsx'
-###         wb = openpyxl.load_workbook(file_path_to_load)
-###         ws = wb.active
-###         ws.title = 'sheet99'
-###         if p0200city_list:
-###             for i, p0200city in enumerate(p0200city_list):
-###                 ws.cell(row=i+1, column=1).value = p0200city.CODE
-###                 ws.cell(row=i+1, column=2).value = p0200city.PREF_CODE
-###                 ws.cell(row=i+1, column=3).value = p0200city.NAME
-###         wb.save(file_path_to_save)
-###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-###         response['Content-Disposition'] = 'attachment; filename="p0200city.xlsx"'
-###     except:
-###         raise Http404("[ERROR] download_p0200city().")
-###     return response
-
-###############################################################################
-### download_building関数
+### 関数名：building_view
 ### 01: 建物区分
 ###############################################################################
-def download_building(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_building(request):
+def building_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_building()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_building()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.building_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.building_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        building_list = BUILDING.objects.order_by('building_code')[:]
+        ### building_list = BUILDING.objects.order_by('building_code')[:]
+        building_list = BUILDING.objects.raw("""SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
         
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/building.xlsx'
         file_path_to_save = 'static/building2.xlsx'
@@ -344,44 +286,47 @@ def download_building(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_building()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.building_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="building.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_building().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_building()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_building()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.building_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.building_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_ken関数
+### 関数名：ken_view
 ### 02: 都道府県
 ###############################################################################
-def download_ken(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_ken(request):
+def ken_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ken()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ken()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ken_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ken_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ken_list = KEN.objects.order_by('ken_code')[:]
+        ### ken_list = KEN.objects.order_by('ken_code')[:]
+        ken_list = KEN.objects.raw("""SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/ken.xlsx'
         file_path_to_save = 'static/ken2.xlsx'
@@ -399,44 +344,47 @@ def download_ken(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_ken()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ken_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ken.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_ken().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ken()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ken()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ken_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_city関数
+### 関数名：city_view
 ### 03: 市区町村
 ###############################################################################
-def download_city(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_city(request):
+def city_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_city()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_city()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.city_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.city_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        city_list = CITY.objects.order_by('city_code')[:]
+        ### city_list = CITY.objects.order_by('city_code')[:]
+        city_list = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
         
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/city.xlsx'
         file_path_to_save = 'static/city2.xlsx'
@@ -460,44 +408,47 @@ def download_city(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_city()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.city_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="city.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_city().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_city()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_city()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.city_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.city_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_kasen_kaigan関数
+### 関数名：kasen_kaigan_view
 ### 04: 水害発生地点工種（河川海岸区分）
 ###############################################################################
-def download_kasen_kaigan(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_kasen_kaigan(request):
+def kasen_kaigan_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
+        ### kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
+        kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/kasen_kaigan.xlsx'
         file_path_to_save = 'static/kasen_kaigan2.xlsx'
@@ -515,44 +466,47 @@ def download_kasen_kaigan(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_kasen_kaigan()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_kaigan.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_kasen_kaigan().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen_kaigan()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen_kaigan()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_kaigan_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_kaigan_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_suikei関数
+### 関数名：suikei_view
 ### 05: 水系（水系・沿岸）
 ###############################################################################
-def download_suikei(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_suikei(request):
+def suikei_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_suikei()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_suikei()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
+        ### suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
+        suikei_list = SUIKEI.objects.raw("""SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/suikei.xlsx'
         file_path_to_save = 'static/suikei2.xlsx'
@@ -572,44 +526,47 @@ def download_suikei(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_suikei()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_suikei().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_suikei()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_suikei()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_suikei_type関数
+### 関数名：suikei_type_view
 ### 06: 水系種別（水系・沿岸種別）
 ###############################################################################
-def download_suikei_type(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_suikei_type(request):
+def suikei_type_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
+        ### suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
+        suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/suikei_type.xlsx'
         file_path_to_save = 'static/suikei_type2.xlsx'
@@ -627,44 +584,47 @@ def download_suikei_type(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_suikei_type()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei_type.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_suikei_type().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_suikei_type()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_suikei_type()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_type_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_type_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_kasen関数
+### 関数名：kasen_view
 ### 07: 河川（河川・海岸）
 ###############################################################################
-def download_kasen(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_kasen(request):
+def kasen_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        kasen_list = KASEN.objects.order_by('kasen_code')[:]
+        ### kasen_list = KASEN.objects.order_by('kasen_code')[:]
+        kasen_list = KASEN.objects.raw("""SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/kasen.xlsx'
         file_path_to_save = 'static/kasen2.xlsx'
@@ -686,44 +646,47 @@ def download_kasen(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_kasen()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_kasen().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_kasen_type関数
+### 関数名：kasen_type_view
 ### 08: 河川種別（河川・海岸種別）
 ###############################################################################
-def download_kasen_type(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_kasen_type(request):
+def kasen_type_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
+        ### kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
+        kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/kasen_type.xlsx'
         file_path_to_save = 'static/kasen_type2.xlsx'
@@ -741,44 +704,47 @@ def download_kasen_type(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_kasen_type()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_type.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_kasen_type().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen_type()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kasen_type()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_type_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_type_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_cause関数
+### 関数名：cause_view
 ### 09: 水害原因
 ###############################################################################
-def download_cause(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_cause(request):
+def cause_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_cause()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_cause()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.cause_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.cause_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        cause_list = CAUSE.objects.order_by('cause_code')[:]
+        ### cause_list = CAUSE.objects.order_by('cause_code')[:]
+        cause_list = CAUSE.objects.raw("""SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/cause.xlsx'
         file_path_to_save = 'static/cause2.xlsx'
@@ -796,44 +762,47 @@ def download_cause(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_cause()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.cause_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="cause.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_cause().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_cause()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_cause()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.cause_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.cause_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_underground関数
+### 関数名：underground_view
 ### 10: 地上地下区分
 ###############################################################################
-def download_underground(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_underground(request):
+def underground_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_underground()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_underground()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.underground_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.underground_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
+        ### underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
+        underground_list = UNDERGROUND.objects.raw("""SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/underground.xlsx'
         file_path_to_save = 'static/underground2.xlsx'
@@ -851,44 +820,47 @@ def download_underground(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_underground()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.underground_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="underground.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_underground().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_underground()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_underground()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.underground_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.underground_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_usage関数
+### 関数名：usage_view
 ### 11: 地下空間の利用形態
 ###############################################################################
-def download_usage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_usage(request):
+def usage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_usage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_usage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.usage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.usage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        usage_list = USAGE.objects.order_by('usage_code')[:]
+        ### usage_list = USAGE.objects.order_by('usage_code')[:]
+        usage_list = USAGE.objects.raw("""SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/usage.xlsx'
         file_path_to_save = 'static/usage2.xlsx'
@@ -906,29 +878,31 @@ def download_usage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_usage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.usage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="usage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_usage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_usage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_usage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.usage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.usage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_flood_sediment関数
+### 関数名：flood_sediment_view
 ### 12: 浸水土砂区分
 ###############################################################################
-def download_flood_sediment(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_flood_sediment(request):
+def flood_sediment_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数が開始しました。', 'INFO')
@@ -936,14 +910,15 @@ def download_flood_sediment(request):
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
+        ### flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
+        flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/flood_sediment.xlsx'
         file_path_to_save = 'static/flood_sediment2.xlsx'
@@ -961,44 +936,47 @@ def download_flood_sediment(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="flood_sediment.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_usage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_flood_sediment()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_flood_sediment()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.flood_sediment_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.flood_sediment_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_gradient関数
+### 関数名：gradient_view
 ### 13: 地盤勾配区分
 ###############################################################################
-def download_gradient(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_gradient(request):
+def gradient_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### cccブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_gradient()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_gradient()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.gradient_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
+        ### gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
+        gradient_list = GRADIENT.objects.raw("""SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/gradient.xlsx'
         file_path_to_save = 'static/gradient2.xlsx'
@@ -1016,44 +994,47 @@ def download_gradient(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_gradient()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.gradient_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="gradient.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_gradient().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_gradient()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_gradient()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.gradient_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.gradient_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_industry関数
+### 関数名：industry_view
 ### 14: 産業分類
 ###############################################################################
-def download_industry(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_industry(request):
+def industry_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_industry()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_industry()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.industry_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.industry_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        industry_list = INDUSTRY.objects.order_by('industry_code')[:]
+        ### industry_list = INDUSTRY.objects.order_by('industry_code')[:]
+        industry_list = INDUSTRY.objects.raw("""SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/industry.xlsx'
         file_path_to_save = 'static/industry2.xlsx'
@@ -1071,50 +1052,47 @@ def download_industry(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_industry()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.industry_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="industry.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_industry().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_industry()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_industry()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.industry_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.industry_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 一般資産
-### マスタ系テーブル（参照テーブル）
-### 主に集計用
-###############################################################################
-
-###############################################################################
-### download_house_asset関数
+### 関数名：house_asset_view
 ### 15: 県別家屋評価額
 ###############################################################################
-def download_house_asset(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_house_asset(request):
+def house_asset_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        house_asset_list = HOUSE_ASSET.objects.order_by('house_asset_code')[:]
+        ### house_asset_list = HOUSE_ASSET.objects.order_by('house_asset_code')[:]
+        house_asset_list = HOUSE_ASSET.objects.raw("""SELECT * FROM P0000COMMON_HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/house_asset.xlsx'
         file_path_to_save = 'static/house_asset2.xlsx'
@@ -1140,44 +1118,47 @@ def download_house_asset(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_house_asset()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_asset.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_house_asset().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_asset()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_asset()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_asset_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_house_damage関数
+### 関数名：house_damage_view
 ### 16: 家屋被害率
 ###############################################################################
-def download_house_damage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_house_damage(request):
+def house_damage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        house_damage_list = HOUSE_DAMAGE.objects.order_by('house_damage_code')[:]
+        ### house_damage_list = HOUSE_DAMAGE.objects.order_by('house_damage_code')[:]
+        house_damage_list = HOUSE_DAMAGE.objects.raw("""SELECT * FROM P0000COMMON_HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/house_damage.xlsx'
         file_path_to_save = 'static/house_damage2.xlsx'
@@ -1283,44 +1264,47 @@ def download_house_damage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_house_damage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_damage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_house_damage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_damage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_damage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_damage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_damage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_household_damage関数
+### 関数名：household_damage_view
 ### 17: 家庭用品自動車以外被害率
 ###############################################################################
-def download_household_damage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_household_damage(request):
+def household_damage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        household_damage_list = HOUSEHOLD_DAMAGE.objects.order_by('household_damage_code')[:]
+        ### household_damage_list = HOUSEHOLD_DAMAGE.objects.order_by('household_damage_code')[:]
+        household_damage_list = HOUSEHOLD_DAMAGE.objects.raw("""SELECT * FROM P0000COMMON_HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/household_damage.xlsx'
         file_path_to_save = 'static/household_damage2.xlsx'
@@ -1349,7 +1333,7 @@ def download_household_damage(request):
         ws.cell(row=1, column=17).value = '家庭用品自動車以外所有額'
         
         if household_damage_list:
-            for i, house_damage in enumerate(household_damage_list):
+            for i, household_damage in enumerate(household_damage_list):
                 ws.cell(row=i+2, column=1).value = household_damage.household_damage_code
                 ws.cell(row=i+2, column=2).value = household_damage.household_damage_year
                 ws.cell(row=i+2, column=3).value = household_damage.begin_date
@@ -1374,44 +1358,47 @@ def download_household_damage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_household_damage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="household_damage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_household_damage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_household_damage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_household_damage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_damage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_damage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_car_damage関数
+### 関数名：car_damage_view
 ### 18: 家庭用品自動車被害率
 ###############################################################################
-def download_car_damage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_car_damage(request):
+def car_damage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        car_damage_list = CAR_DAMAGE.objects.order_by('car_damage_code')[:]
+        ### car_damage_list = CAR_DAMAGE.objects.order_by('car_damage_code')[:]
+        car_damage_list = CAR_DAMAGE.objects.raw("""SELECT * FROM P0000COMMON_CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/car_damage.xlsx'
         file_path_to_save = 'static/car_damage2.xlsx'
@@ -1451,44 +1438,47 @@ def download_car_damage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_car_damage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="car_damage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_car_damage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_car_damage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_car_damage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_damage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_damage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_house_cost関数
+### 関数名：house_cost_view
 ### 19: 家庭応急対策費
 ###############################################################################
-def download_house_cost(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_house_cost(request):
+def house_cost_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        house_cost_list = HOUSE_COST.objects.order_by('house_cost_code')[:]
+        ### house_cost_list = HOUSE_COST.objects.order_by('house_cost_code')[:]
+        house_cost_list = HOUSE_COST.objects.raw("""SELECT * FROM P0000COMMON_HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/house_cost.xlsx'
         file_path_to_save = 'static/house_cost2.xlsx'
@@ -1542,44 +1532,47 @@ def download_house_cost(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_house_cost()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_cost.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_house_cost().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_cost()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_house_cost()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_cost_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_cost_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_office_asset関数
+### 関数名：office_asset_view
 ### 20: 産業分類別資産額
 ###############################################################################
-def download_office_asset(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_office_asset(request):
+def office_asset_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        office_asset_list = OFFICE_ASSET.objects.order_by('office_asset_code')[:]
+        ### office_asset_list = OFFICE_ASSET.objects.order_by('office_asset_code')[:]
+        office_asset_list = OFFICE_ASSET.objects.raw("""SELECT * FROM P0000COMMON_OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）vvvvvセルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/office_asset.xlsx'
         file_path_to_save = 'static/office_asset2.xlsx'
@@ -1611,44 +1604,47 @@ def download_office_asset(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_office_asset()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_asset.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_office_asset().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_asset()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_asset()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_asset_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_office_damage関数
+### 関数名：office_damage_view
 ### 21: 事業所被害率
 ###############################################################################
-def download_office_damage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_office_damage(request):
+def office_damage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        office_damage_list = OFFICE_DAMAGE.objects.order_by('office_damage_code')[:]
+        ### office_damage_list = OFFICE_DAMAGE.objects.order_by('office_damage_code')[:]
+        office_damage_list = OFFICE_DAMAGE.objects.raw("""SELECT * FROM P0000COMMON_OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/office_damage.xlsx'
         file_path_to_save = 'static/office_damage2.xlsx'
@@ -1691,7 +1687,7 @@ def download_office_damage(request):
         if office_damage_list:
             for i, office_damage in enumerate(office_damage_list):
                 ws.cell(row=i+2, column=1).value = office_damage.office_damage_code
-                ws.cell(row=i+2, column=2).value = office_damage.OFFICE_DAMAGE_YEAR
+                ws.cell(row=i+2, column=2).value = office_damage.office_damage_year
                 ws.cell(row=i+2, column=3).value = office_damage.begin_date
                 ws.cell(row=i+2, column=4).value = office_damage.end_date
                 
@@ -1726,44 +1722,47 @@ def download_office_damage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_office_damage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_damage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_office_damage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_damage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_damage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_damage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_damage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_office_cost関数
+### 関数名：office_cost_view
 ### 22: 事業所営業停止損失
 ###############################################################################
-def download_office_cost(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_office_cost(request):
+def office_cost_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        office_cost_list = OFFICE_COST.objects.order_by('office_cost_code')[:]
+        ### office_cost_list = OFFICE_COST.objects.order_by('office_cost_code')[:]
+        office_cost_list = OFFICE_COST.objects.raw("""SELECT * FROM P0000COMMON_OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/office_cost.xlsx'
         file_path_to_save = 'static/office_cost2.xlsx'
@@ -1813,44 +1812,47 @@ def download_office_cost(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_office_cost()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_cost.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_office_cost().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_cost()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_office_cost()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_cost_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_cost_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_farmer_fisher_damage関数
+### 関数名：farmer_fisher_damage_view
 ### 23: 農漁家被害率
 ###############################################################################
-def download_farmer_fisher_damage(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_farmer_fisher_damage(request):
+def farmer_fisher_damage_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.order_by('farmer_fisher_damage_code')[:]
+        ### farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.order_by('farmer_fisher_damage_code')[:]
+        farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.raw("""SELECT * FROM P0000COMMON_FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/farmer_fisher_damage.xlsx'
         file_path_to_save = 'static/farmer_fisher_damage2.xlsx'
@@ -1934,50 +1936,47 @@ def download_farmer_fisher_damage(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_farmer_fisher_damage()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="farmer_fisher_damage.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_farmer_fisher_damage().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_farmer_fisher_damage()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_farmer_fisher_damage()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_damage_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_damage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 一般資産
-### トランザクション系テーブル（更新テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
-
-###############################################################################
-### download_weather関数
+### 関数名：weather_view
 ### 24: 異常気象
 ###############################################################################
-def download_weather(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_weather(request):
+def weather_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_weather()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_weather()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.weather_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.weather_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        weather_list = WEATHER.objects.order_by('weather_id')[:]
+        ### weather_list = WEATHER.objects.order_by('weather_id')[:]
+        weather_list = WEATHER.objects.raw("""SELECT * FROM P0000COMMON_WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/weather.xlsx'
         file_path_to_save = 'static/weather2.xlsx'
@@ -2001,44 +2000,47 @@ def download_weather(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_weather()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.weather_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="weather.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_weather().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_weather()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_weather()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.weather_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.weather_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_area関数
+### 関数名：area_view
 ### 25: 区域
 ###############################################################################
-def download_area(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_area(request):
+def area_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_area()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_area()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        area_list = AREA.objects.order_by('area_id')[:]
+        ### area_list = AREA.objects.order_by('area_id')[:]
+        area_list = AREA.objects.raw("""SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/area.xlsx'
         file_path_to_save = 'static/area2.xlsx'
@@ -2058,7 +2060,7 @@ def download_area(request):
             for i, area in enumerate(area_list):
                 ws.cell(row=i+2, column=1).value = area.area_id
                 ws.cell(row=i+2, column=2).value = area.area_name
-                ws.cell(row=i+2, column=3).value = area.AREA_YEAR
+                ws.cell(row=i+2, column=3).value = area.area_year
                 ws.cell(row=i+2, column=4).value = area.begin_date
                 ws.cell(row=i+2, column=5).value = area.end_date
                 ws.cell(row=i+2, column=6).value = area.agri_area
@@ -2068,42 +2070,44 @@ def download_area(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_area()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="area.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_area().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_area()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_area()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.area_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.area_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_ippan_chosa関数
+### 関数名：ippan_chosa_view
 ### 2601: 一般資産調査票（調査員用）
 ###############################################################################
-def download_ippan_chosa(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_ippan_chosa(request):
+def ippan_chosa_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/ippan_chosa1.xlsx'
         file_path_to_save = 'static/ippan_chosa2.xlsx'
@@ -2129,7 +2133,8 @@ def download_ippan_chosa(request):
         ws_city_vlook = wb["CITY_VLOOK"]
         
         ### 01: 建物区分
-        building_list = BUILDING.objects.order_by('building_code')[:]
+        ### building_list = BUILDING.objects.order_by('building_code')[:]
+        building_list = BUILDING.objects.raw("""SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
         if building_list:
             for i, building in enumerate(building_list):
                 ws_building.cell(row=i+1, column=1).value = building.building_code
@@ -2137,7 +2142,8 @@ def download_ippan_chosa(request):
 
         print("download_ippan_chosa3", flush=True)
         ### 02: 都道府県
-        ken_list = KEN.objects.order_by('ken_code')[:]
+        ### ken_list = KEN.objects.order_by('ken_code')[:]
+        ken_list = KEN.objects.raw("""SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_list:
             for i, ken in enumerate(ken_list):
                 ws_ken.cell(row=i+1, column=1).value = ken.ken_code
@@ -2146,53 +2152,101 @@ def download_ippan_chosa(request):
                 ws_city_vlook.cell(row=i+1, column=1).value = ken.ken_name
         
         print("download_ippan_chosa4", flush=True)
-        city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
-        city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
-        city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
-        city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
-        city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
-        city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
-        city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
-        city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
-        city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
-        city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
-        city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
-        city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
-        city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
-        city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
-        city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
-        city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
-        city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
-        city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
-        city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
-        city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
-        city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
-        city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
-        city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
-        city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
-        city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
-        city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
-        city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
-        city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
-        city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
-        city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
-        city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
-        city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
-        city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
-        city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
-        city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
-        city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
-        city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
-        city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
-        city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
-        city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
-        city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
-        city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
-        city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
-        city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
-        city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
-        city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
-        city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
+        ### city_list01 = CITY.objects.filter(ken_code='01').order_by('city_code')
+        ### city_list02 = CITY.objects.filter(ken_code='02').order_by('city_code')
+        ### city_list03 = CITY.objects.filter(ken_code='03').order_by('city_code')
+        ### city_list04 = CITY.objects.filter(ken_code='04').order_by('city_code')
+        ### city_list05 = CITY.objects.filter(ken_code='05').order_by('city_code')
+        ### city_list06 = CITY.objects.filter(ken_code='06').order_by('city_code')
+        ### city_list07 = CITY.objects.filter(ken_code='07').order_by('city_code')
+        ### city_list08 = CITY.objects.filter(ken_code='08').order_by('city_code')
+        ### city_list09 = CITY.objects.filter(ken_code='09').order_by('city_code')
+        ### city_list10 = CITY.objects.filter(ken_code='10').order_by('city_code')
+        ### city_list11 = CITY.objects.filter(ken_code='11').order_by('city_code')
+        ### city_list12 = CITY.objects.filter(ken_code='12').order_by('city_code')
+        ### city_list13 = CITY.objects.filter(ken_code='13').order_by('city_code')
+        ### city_list14 = CITY.objects.filter(ken_code='14').order_by('city_code')
+        ### city_list15 = CITY.objects.filter(ken_code='15').order_by('city_code')
+        ### city_list16 = CITY.objects.filter(ken_code='16').order_by('city_code')
+        ### city_list17 = CITY.objects.filter(ken_code='17').order_by('city_code')
+        ### city_list18 = CITY.objects.filter(ken_code='18').order_by('city_code')
+        ### city_list19 = CITY.objects.filter(ken_code='19').order_by('city_code')
+        ### city_list20 = CITY.objects.filter(ken_code='20').order_by('city_code')
+        ### city_list21 = CITY.objects.filter(ken_code='21').order_by('city_code')
+        ### city_list22 = CITY.objects.filter(ken_code='22').order_by('city_code')
+        ### city_list23 = CITY.objects.filter(ken_code='23').order_by('city_code')
+        ### city_list24 = CITY.objects.filter(ken_code='24').order_by('city_code')
+        ### city_list25 = CITY.objects.filter(ken_code='25').order_by('city_code')
+        ### city_list26 = CITY.objects.filter(ken_code='26').order_by('city_code')
+        ### city_list27 = CITY.objects.filter(ken_code='27').order_by('city_code')
+        ### city_list28 = CITY.objects.filter(ken_code='28').order_by('city_code')
+        ### city_list29 = CITY.objects.filter(ken_code='29').order_by('city_code')
+        ### city_list30 = CITY.objects.filter(ken_code='30').order_by('city_code')
+        ### city_list31 = CITY.objects.filter(ken_code='31').order_by('city_code')
+        ### city_list32 = CITY.objects.filter(ken_code='32').order_by('city_code')
+        ### city_list33 = CITY.objects.filter(ken_code='33').order_by('city_code')
+        ### city_list34 = CITY.objects.filter(ken_code='34').order_by('city_code')
+        ### city_list35 = CITY.objects.filter(ken_code='35').order_by('city_code')
+        ### city_list36 = CITY.objects.filter(ken_code='36').order_by('city_code')
+        ### city_list37 = CITY.objects.filter(ken_code='37').order_by('city_code')
+        ### city_list38 = CITY.objects.filter(ken_code='38').order_by('city_code')
+        ### city_list39 = CITY.objects.filter(ken_code='39').order_by('city_code')
+        ### city_list40 = CITY.objects.filter(ken_code='40').order_by('city_code')
+        ### city_list41 = CITY.objects.filter(ken_code='41').order_by('city_code')
+        ### city_list42 = CITY.objects.filter(ken_code='42').order_by('city_code')
+        ### city_list43 = CITY.objects.filter(ken_code='43').order_by('city_code')
+        ### city_list44 = CITY.objects.filter(ken_code='44').order_by('city_code')
+        ### city_list45 = CITY.objects.filter(ken_code='45').order_by('city_code')
+        ### city_list46 = CITY.objects.filter(ken_code='46').order_by('city_code')
+        ### city_list47 = CITY.objects.filter(ken_code='47').order_by('city_code')
+        
+        city_list01 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['01', ])
+        city_list02 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['02', ])
+        city_list03 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['03', ])
+        city_list04 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['04', ])
+        city_list05 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['05', ])
+        city_list06 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['06', ])
+        city_list07 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['07', ])
+        city_list08 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['08', ])
+        city_list09 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['09', ])
+        city_list10 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['10', ])
+        city_list11 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['11', ])
+        city_list12 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['12', ])
+        city_list13 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['13', ])
+        city_list14 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['14', ])
+        city_list15 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['15', ])
+        city_list16 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['16', ])
+        city_list17 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['17', ])
+        city_list18 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['18', ])
+        city_list19 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['19', ])
+        city_list20 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['20', ])
+        city_list21 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['21', ])
+        city_list22 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['22', ])
+        city_list23 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['23', ])
+        city_list24 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['24', ])
+        city_list25 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['25', ])
+        city_list26 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['26', ])
+        city_list27 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['27', ])
+        city_list28 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['28', ])
+        city_list29 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['29', ])
+        city_list30 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['30', ])
+        city_list31 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['31', ])
+        city_list32 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['32', ])
+        city_list33 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['33', ])
+        city_list34 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['34', ])
+        city_list35 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['35', ])
+        city_list36 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['36', ])
+        city_list37 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['37', ])
+        city_list38 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['38', ])
+        city_list39 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['39', ])
+        city_list40 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['40', ])
+        city_list41 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['41', ])
+        city_list42 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['42', ])
+        city_list43 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['43', ])
+        city_list44 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['44', ])
+        city_list45 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['45', ])
+        city_list46 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['46', ])
+        city_list47 = CITY.objects.raw("""SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['47', ])
         
         ws_city_vlook.cell(row=1, column=2).value = 'CITY!$B$1:$B$%d' % len(city_list01)
         ws_city_vlook.cell(row=2, column=2).value = 'CITY!$G$1:$G$%d' % len(city_list02)
@@ -2626,7 +2680,8 @@ def download_ippan_chosa(request):
 
         print("download_ippan_chosa6", flush=True)
         ### 04: 水害発生地点工種（河川海岸区分）
-        kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
+        ### kasen_kaigan_list = KASEN_KAIGAN.objects.order_by('kasen_kaigan_code')[:]
+        kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
         if kasen_kaigan_list:
             for i, kasen_kaigan in enumerate(kasen_kaigan_list):
                 ws_kasen_kaigan.cell(row=i+1, column=1).value = kasen_kaigan.kasen_kaigan_code
@@ -2634,7 +2689,8 @@ def download_ippan_chosa(request):
 
         print("download_ippan_chosa7", flush=True)
         ### 05: 水系（水系・沿岸）
-        suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
+        ### suikei_list = SUIKEI.objects.order_by('suikei_code')[:]
+        suikei_list = SUIKEI.objects.raw("""SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
         if suikei_list:
             for i, suikei in enumerate(suikei_list):
                 ws_suikei.cell(row=i+1, column=1).value = suikei.suikei_code
@@ -2643,7 +2699,8 @@ def download_ippan_chosa(request):
 
         print("download_ippan_chosa8", flush=True)
         ### 06: 水系種別（水系・沿岸種別）
-        suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
+        ### suikei_type_list = SUIKEI_TYPE.objects.order_by('suikei_type_code')[:]
+        suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
         if suikei_type_list:
             for i, suikei_type in enumerate(suikei_type_list):
                 ws_suikei_type.cell(row=i+1, column=1).value = suikei_type.suikei_type_code
@@ -2651,7 +2708,8 @@ def download_ippan_chosa(request):
 
         print("download_ippan_chosa9", flush=True)
         ### 07: 河川（河川・海岸）
-        kasen_list = KASEN.objects.order_by('kasen_code')[:]
+        ### kasen_list = KASEN.objects.order_by('kasen_code')[:]
+        kasen_list = KASEN.objects.raw("""SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)""", [])
         if kasen_list:
             for i, kasen in enumerate(kasen_list):
                 ws_kasen.cell(row=i+1, column=1).value = kasen.kasen_code
@@ -2661,7 +2719,8 @@ def download_ippan_chosa(request):
                 
         print("download_ippan_chosa10", flush=True)
         ### 08: 河川種別（河川・海岸種別）
-        kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
+        ### kasen_type_list = KASEN_TYPE.objects.order_by('kasen_type_code')[:]
+        kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
         if kasen_type_list:
             for i, kasen_type in enumerate(kasen_type_list):
                 ws_kasen_type.cell(row=i+1, column=1).value = kasen_type.kasen_type_code
@@ -2669,7 +2728,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa11", flush=True)
         ### 09: 水害原因
-        cause_list = CAUSE.objects.order_by('cause_code')[:]
+        ### cause_list = CAUSE.objects.order_by('cause_code')[:]
+        cause_list = CAUSE.objects.raw("""SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
         if cause_list:
             for i, cause in enumerate(cause_list):
                 ws_cause.cell(row=i+1, column=1).value = cause.cause_code
@@ -2677,7 +2737,8 @@ def download_ippan_chosa(request):
                 
         print("download_ippan_chosa12", flush=True)
         ### 10: 地上地下区分
-        underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
+        ### underground_list = UNDERGROUND.objects.order_by('underground_code')[:]
+        underground_list = UNDERGROUND.objects.raw("""SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
         if underground_list:
             for i, underground in enumerate(underground_list):
                 ws_underground.cell(row=i+1, column=1).value = underground.underground_code
@@ -2685,7 +2746,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa13", flush=True)
         ### 11: 地下空間の利用形態
-        usage_list = USAGE.objects.order_by('usage_code')[:]
+        ### usage_list = USAGE.objects.order_by('usage_code')[:]
+        usage_list = USAGE.objects.raw("""SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
         if usage_list:
             for i, usage in enumerate(usage_list):
                 ws_usage.cell(row=i+1, column=1).value = usage.usage_code
@@ -2693,7 +2755,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa14", flush=True)
         ### 12: 浸水土砂区分
-        flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
+        ### flood_sediment_list = FLOOD_SEDIMENT.objects.order_by('flood_sediment_code')[:]
+        flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
         if flood_sediment_list:
             for i, flood_sediment in enumerate(flood_sediment_list):
                 ws_flood_sediment.cell(row=i+1, column=1).value = flood_sediment.flood_sediment_code
@@ -2701,7 +2764,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa15", flush=True)
         ### 13: 地盤勾配区分
-        gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
+        ### gradient_list = GRADIENT.objects.order_by('gradient_code')[:]
+        gradient_list = GRADIENT.objects.raw("""SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
         if gradient_list:
             for i, gradient in enumerate(gradient_list):
                 ws_gradient.cell(row=i+1, column=1).value = gradient.gradient_code
@@ -2709,7 +2773,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa16", flush=True)
         ### 14: 産業分類
-        industry_list = INDUSTRY.objects.order_by('industry_code')[:]
+        ### industry_list = INDUSTRY.objects.order_by('industry_code')[:]
+        industry_list = INDUSTRY.objects.raw("""SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
         if industry_list:
             for i, industry in enumerate(industry_list):
                 ws_industry.cell(row=i+1, column=1).value = industry.industry_code
@@ -2717,7 +2782,8 @@ def download_ippan_chosa(request):
         
         print("download_ippan_chosa17", flush=True)
         ### 25: 区域
-        area_list = AREA.objects.order_by('area_id')[:]
+        ### area_list = AREA.objects.order_by('area_id')[:]
+        area_list = AREA.objects.raw("""SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
         if area_list:
             for i, area in enumerate(area_list):
                 ws_area.cell(row=i+1, column=1).value = area.area_id
@@ -2730,7 +2796,8 @@ def download_ippan_chosa(request):
                 ws_area.cell(row=i+1, column=8).value = area.crop_damage
         
         print("download_ippan_chosa18", flush=True)
-        ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ### ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ippan_list = IPPAN.objects.raw("""SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
         ws_ippan.cell(row=5, column=2).value = '都道府県'
         ws_ippan.cell(row=5, column=3).value = '市区町村'
         ws_ippan.cell(row=5, column=4).value = '水害発生月日'
@@ -2919,44 +2986,47 @@ def download_ippan_chosa(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_ippan_chosa()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_chosa.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_ippan_chosa().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_chosa()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_chosa()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_ippan_city関数
+### 関数名：ippan_city_view
 ### 2602: 一般資産調査票（市区町村用）
 ###############################################################################
-def download_ippan_city(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_ippan_city(request):
+def ippan_city_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ### ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ippan_list = IPPAN.objects.raw("""SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/ippan_city1.xlsx'
         file_path_to_save = 'static/ippan_city2.xlsx'
@@ -3108,44 +3178,47 @@ def download_ippan_city(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_ippan_city()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_city.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_ippan_city().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_city()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_city()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_ippan_ken関数
+### 関数名：ippan_ken_view
 ### 2603: 一般資産調査票（都道府県用）
 ###############################################################################
-def download_ippan_ken(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_ippan_ken(request):
+def ippan_ken_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ### ippan_list = IPPAN.objects.order_by('ippan_id')[:]
+        ippan_list = IPPAN.objects.raw("""SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/ippan_ken1.xlsx'
         file_path_to_save = 'static/ippan_ken2.xlsx'
@@ -3297,50 +3370,47 @@ def download_ippan_ken(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_ippan_ken()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_ken.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_ippan_ken().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_ken()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_ippan_ken()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 公共土木、公益事業
-### マスタ系テーブル（参照テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
-
-###############################################################################
-### download_restoration関数
+### 関数名：restoration_view
 ### 27: 復旧事業工種
 ###############################################################################
-def download_restoration(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_restoration(request):
+def restoration_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_restoration()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_restoration()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        restoration_list = RESTORATION.objects.order_by('restoration_code')[:]
+        ### restoration_list = RESTORATION.objects.order_by('restoration_code')[:]
+        restoration_list = RESTORATION.objects.raw("""SELECT * FROM P0000COMMON_RESTORATION ORDER BY CAST(RESTORATION_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/restoration.xlsx'
         file_path_to_save = 'static/restoration2.xlsx'
@@ -3358,50 +3428,47 @@ def download_restoration(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_restoration()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="restoration.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_restoration().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_restoration()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_restoration()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 公共土木、公益事業
-### トランザクション系テーブル（更新テーブル）
-### 主に入力用（アップロードダウンロード）
-###############################################################################
-
-###############################################################################
-### download_kokyo関数
+### 関数名：kokyo_view
 ### 28: 公共土木調査票
 ###############################################################################
-def download_kokyo(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_kokyo(request):
+def kokyo_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        kokyo_list = KOKYO.objects.order_by('kokyo_id')[:]
+        ### kokyo_list = KOKYO.objects.order_by('kokyo_id')[:]
+        kokyo_list = KOKYO.objects.raw("""SELECT * FROM P0000COMMON_KOKYO ORDER BY CAST(KOKYO_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/kokyo.xlsx'
         file_path_to_save = 'static/kokyo2.xlsx'
@@ -3429,61 +3496,64 @@ def download_kokyo(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_kokyo()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kokyo.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_kokyo().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kokyo()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_kokyo()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kokyo_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kokyo_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### download_koeki関数
+### 関数名：koeki_view
 ### 29: 公益事業調査票
 ###############################################################################
-def download_koeki(request):
+### @login_required(None, login_url='/P0100Login/')
+### def download_koeki(request):
+def koeki_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### ブラウザからのリクエストと引数をチェックする。
+        ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_koeki()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_koeki()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.koeki_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.koeki_view()関数 request = {}'.format(request.method), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
-        ### DBにアクセスして、データを取得する。
+        ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         koeki_list = KOEKI.objects.order_by('koeki_id')[:]
+        ### koeki_list = KOEKI.objects.raw("""SELECT * FROM P0000COMMON_KOEKI ORDER BY CAST(KOEKI_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理
-        ### テンプレート用のEXCELファイルを読み込む。
-        ### セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         file_path_to_load = 'static/koeki.xlsx'
         file_path_to_save = 'static/koeki2.xlsx'
         wb = openpyxl.load_workbook(file_path_to_load)
         ws = wb.active
         ws.title = '公益事業調査票'
-        ws.cell(row=i+1, column=1).value = '公益事業調査票ID'
-        ws.cell(row=i+1, column=2).value = '都道府県コード'
-        ws.cell(row=i+1, column=3).value = '市区町村コード'
-        ws.cell(row=i+1, column=4).value = '異常気象ID'
-        ws.cell(row=i+1, column=5).value = '公益事業調査対象年'
-        ws.cell(row=i+1, column=6).value = '開始日'
-        ws.cell(row=i+1, column=7).value = '終了日'
+        ws.cell(row=1, column=1).value = '公益事業調査票ID'
+        ws.cell(row=1, column=2).value = '都道府県コード'
+        ws.cell(row=1, column=3).value = '市区町村コード'
+        ws.cell(row=1, column=4).value = '異常気象ID'
+        ws.cell(row=1, column=5).value = '公益事業調査対象年'
+        ws.cell(row=1, column=6).value = '開始日'
+        ws.cell(row=1, column=7).value = '終了日'
         
         if koeki_list:
             for i, koeki in enumerate(koeki_list):
-                ws.cell(row=i+1, column=1).value = koeki.kokyo_id
+                ws.cell(row=i+1, column=1).value = koeki.koeki_id
                 ws.cell(row=i+1, column=2).value = koeki.ken_code
                 ws.cell(row=i+1, column=3).value = koeki.city_code
                 ws.cell(row=i+1, column=4).value = koeki.weather_id
@@ -3494,17 +3564,17 @@ def download_koeki(request):
         wb.save(file_path_to_save)
         
         #######################################################################
-        ### HttpResponse処理
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### レスポンスセット処理
+        ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_koeki()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.koeki_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="koeki.xlsx"'
+        return response
         
     except:
-        ### raise Http404("[ERROR] download_koeki().")
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_koeki()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.download_koeki()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 

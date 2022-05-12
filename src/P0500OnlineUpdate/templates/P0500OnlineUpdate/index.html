@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+<!-- P0500OnlineUpdate/index.html -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
@@ -14,7 +15,7 @@
 </head>
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
     
     {% block content %}
     <div class="container-fluid">
@@ -390,17 +391,17 @@
     
     button_ken.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1) {
-            window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/ken/"
+            window.location.href = "/P0500OnlineUpdate/" + "ken/" + form_select_ken.value + "/"
         }
     });
     button_city.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
-            window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/" + form_select_city.value + "/city/"
+            window.location.href = "/P0500OnlineUpdate/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
         }
     });
     button_category.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1 && form_select_category.value >= 1) {
-            window.location.href = "/P0500OnlineUpdate/" + form_select_ken.value + "/" + form_select_city.value + "/" + form_select_category.value + "/category/"
+            window.location.href = "/P0500OnlineUpdate/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/category/" + form_select_category.value + "/"
         }
     });
     
