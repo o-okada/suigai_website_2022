@@ -70,43 +70,85 @@
         </table>
     </div>
     
-    <!-- 一覧表示 -->
+    <!-- 一覧表示 AS_HIDDEN -->
+    <form method="POST" action="" id="" name="">
+    {% csrf_token %}
+    {% for choice in choice_formset %}
+    {{ choice.upload_date_hidden.as_hidden }}
+    {{ choice.ken_code_hidden.as_hidden }}
+    {{ choice.ken_name_hidden.as_hidden }}
+    {{ choice.city_code_hidden.as_hidden }}
+    {{ choice.city_name_hidden.as_hidden }}
+    {{ choice.ippan_kokyo_koeki_code_hidden.as_hidden }}
+    {{ choice.ippan_kokyo_koeki_name_hidden.as_hidden }}
+    {{ choice.choice_hidden.as_hidden }}
+    {% endfor %}
+    {% for schedule in schedule_formset %}
+    {{ schedule.year_hidden.as_hidden }}
+    {{ schedule.month_hidden.as_hidden }}
+    {{ schedule.day_hidden.as_hidden }}
+    {{ schedule.hour_hidden.as_hidden }}
+    {{ schedule.minute_hidden.as_hidden }}
+    {{ schedule.comment_hidden.as_hidden }}
+    {{ schedule.choice_hidden.as_hidden }}
+    {% endfor %}
+    </form>
+
+    <!-- 承認／否認／保留 一覧表示 -->
     <div class="container mb-3">
         <table class="table table-bordered">
-            <!-- 一覧表示（th: テーブルヘッダ） -->
+            <!-- 承認／否認／保留 一覧表示（th: テーブルヘッダ） -->
             <thead>
                 <tr>
                     <th class="text-center">変更日時</th>
-                    <th class="text-center">登録者</th>
-                    <th class="text-center">項目</th>
+                    <th class="text-center">都道府県</th>
                     <th class="text-center">市区町村</th>
+                    <th class="text-center">項目</th>
                     <th class="text-center"></th>
                     <th class="text-center">承認／否認／保留</th>
                 </tr>
             </thead>
-            <!-- 一覧表示（td: テーブルデータ） -->
+            <!-- 承認／否認／保留 一覧表示（td: テーブルデータ） -->
+            <!-- <input type="hidden" value="" id="id_choice-0-upload_date_hidden" name="choice-0-upload_date_hidden">-->
+            <!-- <input type="hidden" value="" id="id_choice-0-ken_code_hidden" name="choice-0-ken_code_hidden">-->
+            <!-- <input type="hidden" value="" id="id_choice-0-city_code_hidden" name="choice-0-city_code_hidden">-->
+            <!-- <input type="hidden" value="" id="id_choice-0-ippan_kokyo_koeki_code_hidden" name="choice-0-ippan_kokyo_koeki_code_hidden">-->
+            <!-- <input type="hidden" value="" id="id_choice-0-choice_hidden" name="choice-0-choice_hidden">-->
             <tbody>
-                {% for transact in transact_list %}
+                {% for choice in choice_formset %}
                 <tr>
-                    <td>{{ transact.upload_date }}</td>
-                    <td>{{ transact.ken_code }}</td>
-                    <td>{{ transact.ippan_kokyo_koeki_code }}</td>
-                    <td>{{ transact.city_code }}</td>
-                    <td>
-                        <button class="btn btn-primary" type="button">詳細表示</button>
-                    </td>
+                    <td id="td_{{ forloop.counter0 }}_0"></td>
+                    <td id="td_{{ forloop.counter0 }}_1"></td>
+                    <td id="td_{{ forloop.counter0 }}_2"></td>
+                    <td id="td_{{ forloop.counter0 }}_3"></td>
+                    <td><button class="btn btn-primary" type="button">詳細表示</button></td>
                     <td>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="radio_{{ transact.transact_id }}_1" name="radio_{{ transact.transact_id }}" value="1">
-                            <label class="form-check-label" for="radio_{{ transact.transact_id }}">承認</label>
+                            {% if choice.choice_hidden.data|stringformat:"s" == "1" %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_1" name="choide-{{ forloop.counter0 }}-choice_radio" value="1" checked>
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">承認</label>
+                            {% else %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_1" name="choide-{{ forloop.counter0 }}-choice_radio" value="1">
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">承認</label>
+                            {% endif %}
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="radio_{{ transact.transact_id }}_2" name="radio_{{ transact.transact_id }}" value="2" checked>
-                            <label class="form-check-label" for="radio_{{ transact.transact_id }}">否認</label>
+                            {% if choice.choice_hidden.data|stringformat:"s" == "2" %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_2" name="choice-{{ forloop.counter0 }}-choice_radio" value="2" checked>
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">否認</label>
+                            {% else %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_2" name="choice-{{ forloop.counter0 }}-choice_radio" value="2">
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">否認</label>
+                            {% endif %}
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="radio_{{ transact.transact_id }}_3" name="radio_{{ transact.transact_id }}" value="3">
-                            <label class="form-check-label" for="radio_{{ transact.transact_id }}">保留</label>
+                            {% if choice.choice_hidden.data|stringformat:"s" == "3" %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_3" name="choice-{{ forloop.counter0 }}-choice_radio" value="3" checked>
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">保留</label>
+                            {% else %}
+                            <input class="form-check-input" type="radio" id="id_choice-{{ forloop.counter0 }}-choice_radio_3" name="choice-{{ forloop.counter0 }}-choice_radio" value="3">
+                            <label class="form-check-label" for="choice-{{ forloop.counter0 }}-choice_radio">保留</label>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -115,14 +157,20 @@
         </table>
     </div>
     
-    <!--  -->
+    <!-- スケジュール -->
     <div class="container mb-3">
         <table>
+            {% for schedule in schedule_formset %}
             <tr>
                 <td>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="" name="radio_99" value="" checked>
+                        {% if schedule.choice_hidden.data|stringformat:"s" == "1" %}
+                        <input class="form-check-input" type="radio" id="radio_99_1" name="radio_99" value="1" checked>
                         <label class="form-check-label">スケジュール集計・配布</label>
+                        {% else %}
+                        <input class="form-check-input" type="radio" id="radio_99_1" name="radio_99" value="1">
+                        <label class="form-check-label">スケジュール集計・配布</label>
+                        {% endif %}
                     </div>
                 </td>
                 <td>
@@ -135,54 +183,96 @@
                             <td class="text-center">分</td>
                         </tr>
                         <tr>
-                            <td><select class="form-select" id=""><option value="">2007</option></select></td>
-                            <td><select class="form-select" id=""><option value="">1</option></select></td>
-                            <td><select class="form-select" id=""><option value="">12</option></select></td>
-                            <td><select class="form-select" id=""><option value="">19</option></select></td>
-                            <td><select class="form-select" id=""><option value="">44</option></select></td>
+                            <td>
+                                <select class="form-select" id="form_select_year" name="form_select_year">
+                                    {% for year in year_list %}
+                                    <option value="{{year}}">{{year}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select" id="form_select_month" name="form_select_month">
+                                    {% for month in month_list %}
+                                    <option value="{{month}}">{{month}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select" id="form_select_day" name="form_select_day">
+                                    {% for day in day_list %}
+                                    <option value="{{day}}">{{day}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select" id="form_select_hour" name="form_select_hour">
+                                    {% for hour in hour_list %}
+                                    <option value="{{hour}}">{{hour}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select" id="form_select_minute" name="form_select_minute">
+                                    {% for minute in minute_list %}
+                                    <option value="{{minute}}">{{minute}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
                         </tr>
                     </table>
                 </td>
                 <td>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="" name="radio_99" value="">
+                        {% if schedule.choice_hidden.data|stringformat:"s" == "1" %}
+                        <input class="form-check-input" type="radio" id="radio_99_2" name="radio_99" value="2">
                         <label class="form-check-label">即時集計・配布</label>
+                        {% else %}
+                        <input class="form-check-input" type="radio" id="radio_99_2" name="radio_99" value="2" checked>
+                        <label class="form-check-label">即時集計・配布</label>
+                        {% endif %}
                     </div>    
                 </td>
             </tr>
+            {% endfor %}
         </table>    
     </div>
-    
-    <!--  -->
     <div class="container mb-3">
         <label class="col-form-label col-sm-2">承認時コメント</label>
         <textarea class="form-control" value="">承認時コメント</textarea>
     </div>
-    
-    <!--  -->
     <div class="container text-center mb-3">
         <button class="btn btn-primary" type="button">実行</button>
         <button class="btn btn-primary" type="button">キャンセル</button>
     </div>
-
+    
     <script>
     <!-- 都道府県、市区町村、種別選択 -->
-    var button_ken = document.getElementById("button_ken")
-    var button_city = document.getElementById("button_city")
-    
+    var button_ken = document.getElementById("button_ken");
+    var button_city = document.getElementById("button_city");
     button_ken.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1) {
-            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/"
+            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/";
         }
     });
     button_city.addEventListener("click", function(event) {
         if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
-            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
+            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/";
         }
     });
+    window.onload = function() {
+        {% for choice in choice_formset %}
+        document.getElementById("td_{{ forloop.counter0 }}_0").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-upload_date_hidden").value;
+        document.getElementById("td_{{ forloop.counter0 }}_1").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-ken_name_hidden").value;
+        document.getElementById("td_{{ forloop.counter0 }}_2").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-city_name_hidden").value;
+        document.getElementById("td_{{ forloop.counter0 }}_3").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-ippan_kokyo_koeki_name_hidden").value;
+        {% endfor %}
+        document.getElementById("form_select_year").value = document.getElementById("id_schedule-0-year_hidden").value;
+        document.getElementById("form_select_month").value = document.getElementById("id_schedule-0-month_hidden").value;
+        document.getElementById("form_select_day").value = document.getElementById("id_schedule-0-day_hidden").value;
+        document.getElementById("form_select_hour").value = document.getElementById("id_schedule-0-hour_hidden").value;
+        document.getElementById("form_select_minute").value = document.getElementById("id_schedule-0-minute_hidden").value;
+    };
     </script>
-    
     {% endblock %}
 </body>
 </html>
-

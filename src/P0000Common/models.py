@@ -728,3 +728,14 @@ class TRANSACT(models.Model):
         
     def __str__(self):
         return '<TRANSACT: ' + self.transact_id + '>'
+    
+class IPPAN_KOKYO_KOEKI(models.Model):
+    ippan_kokyo_koeki_code = models.CharField(max_length=10)
+    ippan_kokyo_koeki_name = models.CharField(max_length=128)
+    
+    class Meta:
+        db_table = 'p0000common_ippan_kokyo_koeki'
+        
+    def __str__(self):
+        return '<IPPAN_KOKYO_KOEKI: ' + self.ippan_kokyo_koeki_code + '>'
+    
