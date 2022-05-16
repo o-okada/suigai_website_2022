@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import include, path
-### import file_upload.views as file_upload ### 2022/04/22 Add
 
 urlpatterns = [
     ### Common Applications
@@ -22,7 +21,7 @@ urlpatterns = [
     path('P9100Transact/', include('P9100Transact.urls')),
     path('P9200Lock/', include('P9200Lock.urls')),
     
+    ### See Python Django開発入門, P227
     path('admin/', admin.site.urls),
-    ### path('success/url/', file_upload.success), ### 2022/04/22 Add
-    ### path('file_upload/', include('file_upload.urls')), ### 2022/04/22 Add
+
 ]
