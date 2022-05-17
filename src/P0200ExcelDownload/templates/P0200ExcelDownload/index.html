@@ -2,41 +2,36 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<!-- P0200ExcelDownload/index.html -->
+<!-- P0200ExcelDownload/templates/P0200ExcelDownload/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}EXCELアップロード方式EXCELダウンロード画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>EXCELアップロード方式EXCELダウンロード画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    {# bootstrap_css #}
-    {# bootstrap_javascript #}
-    
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col d-flex justify-content-start align-items-start">
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-                <h3>EXCELダウンロード画面</h3>
-            </div>    
-            <div class="col d-flex justify-content-end align-items-end">
-            </div>
-        </div>
+    
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>EXCELダウンロード画面</h3>
     </div>
     
-    <!-- 都道府県、市区町村、種別選択 -->
+    <!-- BEGIN mb-3 -->
     <div class="mb-3">
         <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
         <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>
+    <!-- END mb-3 -->
+    
+    <!-- BEGIN mb-3 -->
     <div class="mb-3">
         <table class="table table-bordered">
             <thead>
@@ -292,9 +287,15 @@
             </tbody>
         </table>
     </div>
+    <!-- END mb-3 -->
+
+    <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">帳票の種類を選択してください。</label>
     </div>    
+    <!-- END container mb-3 -->
+
+    <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <select class="form-select" id="form_select_1" name="form_select_1">
             <option value="1">建物区分</option>
@@ -330,20 +331,30 @@
             <option value="29">公益事業調査票</option>
         </select>
     </div>
+    <!-- END container mb-3 -->
+
+    <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">ロックの有無を選択してボタンをクリックしてください。</label>
     </div>
+    <!-- END container mb-3 -->
+
+    <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、編集用にロック有りでEXCELファイルをダウンロードします。</label>
-        {# bootstrap_button id="button1" button_type="button" content="編集用にロック有りでダウンロード" #}
         <button class="btn btn-secondary" type="button" id="button1" name="button1">編集用にロック有りでダウンロード</button>
     </div>
+    <!-- END container mb-3 -->
+
+    <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、参照用にロック無しでEXCELファイルをダウンロードします。</label>
-        {# bootstrap_button id="button2" button_type="button" content="参照用にロック無しでダウンロード" #}
         <button class="btn btn-secondary" type="button" id="button2" name="button2">参照用にロック無しでダウンロード</button>
     </div>
+    <!-- END container mb-3 -->
+    
     <script>
+    // 局所変数を定義する。
     var button_all_checked = true;
     var button_ken01_checked = true;
     var button_ken02_checked = true;
@@ -394,6 +405,8 @@
     var button_ken47_checked = true;
     
     var button_all = document.getElementById("button_all")
+    
+    // 全エリア・全拠点選択ボタンクリック時のイベントハンドラを設定する。
     button_all.addEventListener("click", function(event) {
         {% for city01 in city_list01 %}
         document.getElementById("checkbox_city{{ city01.city_code }}").checked = button_all_checked;
@@ -634,282 +647,375 @@
     var button_ken46 = document.getElementById("button_ken46")
     var button_ken47 = document.getElementById("button_ken47")
     
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken01.addEventListener("click", function(event) {
         {% for city01 in city_list01 %}
         document.getElementById("checkbox_city{{ city01.city_code }}").checked = button_ken01_checked;
         {% endfor %}
         button_ken01_checked = !button_ken01_checked;
     });
+    
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken02.addEventListener("click", function(event) {
         {% for city02 in city_list02 %}
         document.getElementById("checkbox_city{{ city02.city_code }}").checked = button_ken02_checked;
         {% endfor %}
         button_ken02_checked = !button_ken02_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken03.addEventListener("click", function(event) {
         {% for city03 in city_list03 %}
         document.getElementById("checkbox_city{{ city03.city_code }}").checked = button_ken03_checked;
         {% endfor %}
         button_ken03_checked = !button_ken03_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken04.addEventListener("click", function(event) {
         {% for city04 in city_list04 %}
         document.getElementById("checkbox_city{{ city04.city_code }}").checked = button_ken04_checked;
         {% endfor %}
         button_ken04_checked = !button_ken04_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken05.addEventListener("click", function(event) {
         {% for city05 in city_list05 %}
         document.getElementById("checkbox_city{{ city05.city_code }}").checked = button_ken05_checked;
         {% endfor %}
         button_ken05_checked = !button_ken05_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken06.addEventListener("click", function(event) {
         {% for city06 in city_list06 %}
         document.getElementById("checkbox_city{{ city06.city_code }}").checked = button_ken06_checked;
         {% endfor %}
         button_ken06_checked = !button_ken06_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken07.addEventListener("click", function(event) {
         {% for city07 in city_list07 %}
         document.getElementById("checkbox_city{{ city07.city_code }}").checked = button_ken07_checked;
         {% endfor %}
         button_ken07_checked = !button_ken07_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken08.addEventListener("click", function(event) {
         {% for city08 in city_list08 %}
         document.getElementById("checkbox_city{{ city08.city_code }}").checked = button_ken08_checked;
         {% endfor %}
         button_ken08_checked = !button_ken08_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken09.addEventListener("click", function(event) {
         {% for city09 in city_list09 %}
         document.getElementById("checkbox_city{{ city09.city_code }}").checked = button_ken09_checked;
         {% endfor %}
         button_ken09_checked = !button_ken09_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken10.addEventListener("click", function(event) {
         {% for city10 in city_list10 %}
         document.getElementById("checkbox_city{{ city10.city_code }}").checked = button_ken10_checked;
         {% endfor %}
         button_ken10_checked = !button_ken10_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken11.addEventListener("click", function(event) {
         {% for city11 in city_list11 %}
         document.getElementById("checkbox_city{{ city11.city_code }}").checked = button_ken11_checked;
         {% endfor %}
         button_ken11_checked = !button_ken11_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken12.addEventListener("click", function(event) {
         {% for city12 in city_list12 %}
         document.getElementById("checkbox_city{{ city12.city_code }}").checked = button_ken12_checked;
         {% endfor %}
         button_ken12_checked = !button_ken12_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken13.addEventListener("click", function(event) {
         {% for city13 in city_list13 %}
         document.getElementById("checkbox_city{{ city13.city_code }}").checked = button_ken13_checked;
         {% endfor %}
         button_ken13_checked = !button_ken13_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken14.addEventListener("click", function(event) {
         {% for city14 in city_list14 %}
         document.getElementById("checkbox_city{{ city14.city_code }}").checked = button_ken14_checked;
         {% endfor %}
         button_ken14_checked = !button_ken14_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken15.addEventListener("click", function(event) {
         {% for city15 in city_list15 %}
         document.getElementById("checkbox_city{{ city15.city_code }}").checked = button_ken15_checked;
         {% endfor %}
         button_ken15_checked = !button_ken15_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken16.addEventListener("click", function(event) {
         {% for city16 in city_list16 %}
         document.getElementById("checkbox_city{{ city16.city_code }}").checked = button_ken16_checked;
         {% endfor %}
         button_ken16_checked = !button_ken16_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken17.addEventListener("click", function(event) {
         {% for city17 in city_list17 %}
         document.getElementById("checkbox_city{{ city17.city_code }}").checked = button_ken17_checked;
         {% endfor %}
         button_ken17_checked = !button_ken17_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken18.addEventListener("click", function(event) {
         {% for city18 in city_list18 %}
         document.getElementById("checkbox_city{{ city18.city_code }}").checked = button_ken18_checked;
         {% endfor %}
         button_ken18_checked = !button_ken18_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken19.addEventListener("click", function(event) {
         {% for city19 in city_list19 %}
         document.getElementById("checkbox_city{{ city19.city_code }}").checked = button_ken19_checked;
         {% endfor %}
         button_ken19_checked = !button_ken19_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken20.addEventListener("click", function(event) {
         {% for city20 in city_list20 %}
         document.getElementById("checkbox_city{{ city20.city_code }}").checked = button_ken20_checked;
         {% endfor %}
         button_ken20_checked = !button_ken20_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken21.addEventListener("click", function(event) {
         {% for city21 in city_list21 %}
         document.getElementById("checkbox_city{{ city21.city_code }}").checked = button_ken21_checked;
         {% endfor %}
         button_ken21_checked = !button_ken21_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken22.addEventListener("click", function(event) {
         {% for city22 in city_list22 %}
         document.getElementById("checkbox_city{{ city22.city_code }}").checked = button_ken22_checked;
         {% endfor %}
         button_ken22_checked = !button_ken22_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken23.addEventListener("click", function(event) {
         {% for city23 in city_list23 %}
         document.getElementById("checkbox_city{{ city23.city_code }}").checked = button_ken23_checked;
         {% endfor %}
         button_ken23_checked = !button_ken23_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken24.addEventListener("click", function(event) {
         {% for city24 in city_list24 %}
         document.getElementById("checkbox_city{{ city24.city_code }}").checked = button_ken24_checked;
         {% endfor %}
         button_ken24_checked = !button_ken24_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken25.addEventListener("click", function(event) {
         {% for city25 in city_list25 %}
         document.getElementById("checkbox_city{{ city25.city_code }}").checked = button_ken25_checked;
         {% endfor %}
         button_ken25_checked = !button_ken25_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken26.addEventListener("click", function(event) {
         {% for city26 in city_list26 %}
         document.getElementById("checkbox_city{{ city26.city_code }}").checked = button_ken26_checked;
         {% endfor %}
         button_ken26_checked = !button_ken26_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken27.addEventListener("click", function(event) {
         {% for city27 in city_list27 %}
         document.getElementById("checkbox_city{{ city27.city_code }}").checked = button_ken27_checked;
         {% endfor %}
         button_ken27_checked = !button_ken27_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken28.addEventListener("click", function(event) {
         {% for city28 in city_list28 %}
         document.getElementById("checkbox_city{{ city28.city_code }}").checked = button_ken28_checked;
         {% endfor %}
         button_ken28_checked = !button_ken28_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken29.addEventListener("click", function(event) {
         {% for city29 in city_list29 %}
         document.getElementById("checkbox_city{{ city29.city_code }}").checked = button_ken29_checked;
         {% endfor %}
         button_ken29_checked = !button_ken29_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken30.addEventListener("click", function(event) {
         {% for city30 in city_list30 %}
         document.getElementById("checkbox_city{{ city30.city_code }}").checked = button_ken30_checked;
         {% endfor %}
         button_ken30_checked = !button_ken30_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken31.addEventListener("click", function(event) {
         {% for city31 in city_list31 %}
         document.getElementById("checkbox_city{{ city31.city_code }}").checked = button_ken31_checked;
         {% endfor %}
         button_ken31_checked = !button_ken31_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken32.addEventListener("click", function(event) {
         {% for city32 in city_list32 %}
         document.getElementById("checkbox_city{{ city32.city_code }}").checked = button_ken32_checked;
         {% endfor %}
         button_ken32_checked = !button_ken32_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken33.addEventListener("click", function(event) {
         {% for city33 in city_list33 %}
         document.getElementById("checkbox_city{{ city33.city_code }}").checked = button_ken33_checked;
         {% endfor %}
         button_ken33_checked = !button_ken33_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken34.addEventListener("click", function(event) {
         {% for city34 in city_list34 %}
         document.getElementById("checkbox_city{{ city34.city_code }}").checked = button_ken34_checked;
         {% endfor %}
         button_ken34_checked = !button_ken34_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken35.addEventListener("click", function(event) {
         {% for city35 in city_list35 %}
         document.getElementById("checkbox_city{{ city35.city_code }}").checked = button_ken35_checked;
         {% endfor %}
         button_ken35_checked = !button_ken35_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken36.addEventListener("click", function(event) {
         {% for city36 in city_list36 %}
         document.getElementById("checkbox_city{{ city36.city_code }}").checked = button_ken36_checked;
         {% endfor %}
         button_ken36_checked = !button_ken36_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken37.addEventListener("click", function(event) {
         {% for city37 in city_list37 %}
         document.getElementById("checkbox_city{{ city37.city_code }}").checked = button_ken37_checked;
         {% endfor %}
         button_ken37_checked = !button_ken37_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken38.addEventListener("click", function(event) {
         {% for city38 in city_list38 %}
         document.getElementById("checkbox_city{{ city38.city_code }}").checked = button_ken38_checked;
         {% endfor %}
         button_ken38_checked = !button_ken38_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken39.addEventListener("click", function(event) {
         {% for city39 in city_list39 %}
         document.getElementById("checkbox_city{{ city39.city_code }}").checked = button_ken39_checked;
         {% endfor %}
         button_ken39_checked = !button_ken39_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken40.addEventListener("click", function(event) {
         {% for city40 in city_list40 %}
         document.getElementById("checkbox_city{{ city40.city_code }}").checked = button_ken40_checked;
         {% endfor %}
         button_ken40_checked = !button_ken40_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken41.addEventListener("click", function(event) {
         {% for city41 in city_list41 %}
         document.getElementById("checkbox_city{{ city41.city_code }}").checked = button_ken41_checked;
         {% endfor %}
         button_ken41_checked = !button_ken41_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken42.addEventListener("click", function(event) {
         {% for city42 in city_list42 %}
         document.getElementById("checkbox_city{{ city42.city_code }}").checked = button_ken42_checked;
         {% endfor %}
         button_ken42_checked = !button_ken42_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken43.addEventListener("click", function(event) {
         {% for city43 in city_list43 %}
         document.getElementById("checkbox_city{{ city43.city_code }}").checked = button_ken43_checked;
         {% endfor %}
         button_ken43_checked = !button_ken43_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken44.addEventListener("click", function(event) {
         {% for city44 in city_list44 %}
         document.getElementById("checkbox_city{{ city44.city_code }}").checked = button_ken44_checked;
         {% endfor %}
         button_ken44_checked = !button_ken44_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken45.addEventListener("click", function(event) {
         {% for city45 in city_list45 %}
         document.getElementById("checkbox_city{{ city45.city_code }}").checked = button_ken45_checked;
         {% endfor %}
         button_ken45_checked = !button_ken45_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken46.addEventListener("click", function(event) {
         {% for city46 in city_list46 %}
         document.getElementById("checkbox_city{{ city46.city_code }}").checked = button_ken46_checked;
         {% endfor %}
         button_ken46_checked = !button_ken46_checked;
     });
+
+    // 県全選択ボタンクリック時のイベントハンドラを設定する。
     button_ken47.addEventListener("click", function(event) {
         {% for city47 in city_list47 %}
         document.getElementById("checkbox_city{{ city47.city_code }}").checked = button_ken47_checked;
@@ -920,143 +1026,211 @@
     var button1 = document.getElementById("button1")
     var button2 = document.getElementById("button2")
     var form_select_1 = document.getElementById("form_select_1")
+    
+    // 編集用にロック有りでダウンロードボタンクリック時のイベントハンドラを設定する。
     button1.addEventListener("click", function(event) {
         if (form_select_1.value == 1) {
             window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
-        } else if (form_select_1.value == 2) {
+        } 
+        else if (form_select_1.value == 2) {
             window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
-        } else if (form_select_1.value == 3) {
+        } 
+        else if (form_select_1.value == 3) {
             window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
-        } else if (form_select_1.value == 4) {
+        } 
+        else if (form_select_1.value == 4) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
-        } else if (form_select_1.value == 5) {
+        } 
+        else if (form_select_1.value == 5) {
             window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
-        } else if (form_select_1.value == 6) {
+        } 
+        else if (form_select_1.value == 6) {
             window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
-        } else if (form_select_1.value == 7) {
+        } 
+        else if (form_select_1.value == 7) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
-        } else if (form_select_1.value == 8) {
+        } 
+        else if (form_select_1.value == 8) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
-        } else if (form_select_1.value == 9) {
+        } 
+        else if (form_select_1.value == 9) {
             window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
-        } else if (form_select_1.value == 10) {
+        } 
+        else if (form_select_1.value == 10) {
             window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
-        } else if (form_select_1.value == 11) {
+        } 
+        else if (form_select_1.value == 11) {
             window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
-        } else if (form_select_1.value == 12) {
+        } 
+        else if (form_select_1.value == 12) {
             window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
-        } else if (form_select_1.value == 13) {
+        } 
+        else if (form_select_1.value == 13) {
             window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
-        } else if (form_select_1.value == 14) {
+        } 
+        else if (form_select_1.value == 14) {
             window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
-        } else if (form_select_1.value == 15) {
+        } 
+        else if (form_select_1.value == 15) {
             window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
-        } else if (form_select_1.value == 16) {
+        } 
+        else if (form_select_1.value == 16) {
             window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
-        } else if (form_select_1.value == 17) {
+        } 
+        else if (form_select_1.value == 17) {
             window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
-        } else if (form_select_1.value == 18) {
+        } 
+        else if (form_select_1.value == 18) {
             window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
-        } else if (form_select_1.value == 19) {
+        } 
+        else if (form_select_1.value == 19) {
             window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
-        } else if (form_select_1.value == 20) {
+        } 
+        else if (form_select_1.value == 20) {
             window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
-        } else if (form_select_1.value == 21) {
+        } 
+        else if (form_select_1.value == 21) {
             window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
-        } else if (form_select_1.value == 22) {
+        } 
+        else if (form_select_1.value == 22) {
             window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
-        } else if (form_select_1.value == 23) {
+        } 
+        else if (form_select_1.value == 23) {
             window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
-        } else if (form_select_1.value == 24) {
+        } 
+        else if (form_select_1.value == 24) {
             window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
-        } else if (form_select_1.value == 25) {
+        } 
+        else if (form_select_1.value == 25) {
             window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
-        } else if (form_select_1.value == 2601) {
+        } 
+        else if (form_select_1.value == 2601) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
-        } else if (form_select_1.value == 2602) {
+        } 
+        else if (form_select_1.value == 2602) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
-        } else if (form_select_1.value == 2603) {
+        } 
+        else if (form_select_1.value == 2603) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
-        } else if (form_select_1.value == 27) {
+        } 
+        else if (form_select_1.value == 27) {
             window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
-        } else if (form_select_1.value == 28) {
+        } 
+        else if (form_select_1.value == 28) {
             window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
-        } else if (form_select_1.value == 29) {
+        } 
+        else if (form_select_1.value == 29) {
             window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
-        } else {
+        } 
+        else {
             window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
         }
     });
+    
+    // 参照用にロック無しでダウンロードボタンクリック時のイベントハンドラを設定する。
     button2.addEventListener("click", function(event) {
         if (form_select_1.value == 1) {
             window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
-        } else if (form_select_1.value == 2) {
+        } 
+        else if (form_select_1.value == 2) {
             window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
-        } else if (form_select_1.value == 3) {
+        } 
+        else if (form_select_1.value == 3) {
             window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
-        } else if (form_select_1.value == 4) {
+        } 
+        else if (form_select_1.value == 4) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
-        } else if (form_select_1.value == 5) {
+        } 
+        else if (form_select_1.value == 5) {
             window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
-        } else if (form_select_1.value == 6) {
+        } 
+        else if (form_select_1.value == 6) {
             window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
-        } else if (form_select_1.value == 7) {
+        } 
+        else if (form_select_1.value == 7) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
-        } else if (form_select_1.value == 8) {
+        } 
+        else if (form_select_1.value == 8) {
             window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
-        } else if (form_select_1.value == 9) {
+        } 
+        else if (form_select_1.value == 9) {
             window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
-        } else if (form_select_1.value == 10) {
+        } 
+        else if (form_select_1.value == 10) {
             window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
-        } else if (form_select_1.value == 11) {
+        } 
+        else if (form_select_1.value == 11) {
             window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
-        } else if (form_select_1.value == 12) {
+        } 
+        else if (form_select_1.value == 12) {
             window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
-        } else if (form_select_1.value == 13) {
+        } 
+        else if (form_select_1.value == 13) {
             window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
-        } else if (form_select_1.value == 14) {
+        } 
+        else if (form_select_1.value == 14) {
             window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
-        } else if (form_select_1.value == 15) {
+        } 
+        else if (form_select_1.value == 15) {
             window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
-        } else if (form_select_1.value == 16) {
+        } 
+        else if (form_select_1.value == 16) {
             window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
-        } else if (form_select_1.value == 17) {
+        } 
+        else if (form_select_1.value == 17) {
             window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
-        } else if (form_select_1.value == 18) {
+        } 
+        else if (form_select_1.value == 18) {
             window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
-        } else if (form_select_1.value == 19) {
+        } 
+        else if (form_select_1.value == 19) {
             window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
-        } else if (form_select_1.value == 20) {
+        } 
+        else if (form_select_1.value == 20) {
             window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
-        } else if (form_select_1.value == 21) {
+        } 
+        else if (form_select_1.value == 21) {
             window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
-        } else if (form_select_1.value == 22) {
+        } 
+        else if (form_select_1.value == 22) {
             window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
-        } else if (form_select_1.value == 23) {
+        } 
+        else if (form_select_1.value == 23) {
             window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
-        } else if (form_select_1.value == 24) {
+        } 
+        else if (form_select_1.value == 24) {
             window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
-        } else if (form_select_1.value == 25) {
+        } 
+        else if (form_select_1.value == 25) {
             window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
-        } else if (form_select_1.value == 2601) {
+        } 
+        else if (form_select_1.value == 2601) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
-        } else if (form_select_1.value == 2602) {
+        } 
+        else if (form_select_1.value == 2602) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
-        } else if (form_select_1.value == 2603) {
+        } 
+        else if (form_select_1.value == 2603) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
-        } else if (form_select_1.value == 27) {
+        } 
+        else if (form_select_1.value == 27) {
             window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
-        } else if (form_select_1.value == 28) {
+        } 
+        else if (form_select_1.value == 28) {
             window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
-        } else if (form_select_1.value == 29) {
+        } 
+        else if (form_select_1.value == 29) {
             window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
-        } else {
+        } 
+        else {
             window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
         }
     });
     </script>
+    
     {% endblock %}
-    <!--<a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>-->
 </body>
+<!-- END Body -->
+
 </html>
 

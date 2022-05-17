@@ -2,63 +2,71 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<!-- P0300ExcelUpload/index.html -->
+<!-- P0300ExcelUpload/templates/P0300ExcelUpload/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}EXCELアップロード方式EXCELアップロード画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>EXCELアップロード方式EXCELアップロード画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    {# bootstrap_css #}
-    {# bootstrap_javascript #}
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col d-flex justify-content-start align-items-start">
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-                <h3>EXCELアップロード画面</h3>
-            </div>    
-            <div class="col d-flex justify-content-end align-items-end">
-            </div>
-        </div>
-    </div>
     
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>EXCELアップロード画面</h3>
+    </div>
+    <!-- END container text-center mb-3 -->
+    
+    <!-- BEGIN form -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {#{{ form.as_p }}#}
+        <!-- BEGIN container mb-3 -->
         <div class="container mb-3">
             <div class="row">
                 <label class="col-form-label">１．ファイルを選択ボタンをクリックして、アップロードするEXCELファイルを選択してください。</label>
                 <div class="input-group">
-                    <input class="form-control" type="file" name="file" required id="id_file">
+                    <input class="form-control" type="file" id="id_file" name="file" required>
                 </div>
             </div>
         </div>
+        <!-- END container mb-3 -->
+        
+        <!-- BEGIN container mb-3 -->
         <div class="container mb-3">
             <div class="row">
                 <label class="col-form-label">２．アップロードボタンをクリックしてください。EXCELファイルがサーバにアップロードされます。</label>
-                <!--<button class="btn btn-secondary" type="submit">アップロード</button>-->
             </div>
         </div>
+        <!-- END container mb-3 -->
+        
+        <!-- BEGIN container text-center mb-3 -->
         <div class="container text-center mb-3">
             <button class="btn btn-secondary" type="submit">アップロード</button>
         </div>
+        <!-- END container text-center mb-3 -->
+
+        <!-- BEGIN container mb-3 -->        
         <div class="container mb-3">
             <div class="row">
                 <label class="col-form-label">※　EXCELファイルがサーバにアップロードされると、承認・集計・配布処理が終了するまで次のアップロードができなくなります。</label>
             </div>
         </div>
+        <!-- END container mb-3 -->
+        
     </form>
+    <!-- END form -->
+    
     {% endblock %}
-    {#<a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>#}
 </body>
+<!-- END Body -->
+
 </html>
 
