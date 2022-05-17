@@ -2,30 +2,34 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<!-- P0100Login/index.html -->
+<!-- P0100Login/templates/P0100Login/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}ログイン画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>ログイン画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    {# bootstrap_css #}
-    {# bootstrap_javascript #}
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
     {% block content %}
+    
+    <!-- BEGIN container text-center mb-3 -->
     <div class="container text-center mb-3">
         <h3>ログイン画面</h3>
     </div>
+    <!-- END container text-center mb-3 -->
     
-    <form id="login_form" name="login_form" action="/P0100Login/" method="post" onSubmit="return login_submit();">
+    <!-- BEGIN form_login -->
+    <form action="/P0100Login/" method="post" onSubmit="return submit_login();" id="form_login" name="form_login">
         {% csrf_token %}
         <div class="container mb-3">
-            <div class="row">
+            <div class="input-group">
                 <label class="col-form-label col-sm-2">ユーザ名</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="text" id="username" name="username" placeholder="ユーザ名を入力してください。">
@@ -33,7 +37,7 @@
             </div>
         </div>
         <div class="container mb-3">
-            <div class="row">
+            <div class="input-group">
                 <label class="col-form-label col-sm-2">パスワード</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="text" id="password" name="password" placeholder="パスワードを入力してください。">
@@ -44,16 +48,22 @@
             <button class="btn btn-secondary" type="submit" onClick="">ログイン</button>
         </div>
     </form>
+    <!-- END form_login -->
 
+    <!-- BEGIN message -->
     {% if message %}
-    <div class="conteiner text-center mb-3">
+    <div class="container text-center mb-3">
     {{ message }}
     </div>
     {% endif %}
+    <!-- END message -->
     
     <script type="text/javascript">
-    var username = "";
-    var password = "";
+    // 局所変数を定義する。
+    var username = ""; // ユーザ名
+    var password = ""; // パスワード
+    
+    // 入力された文字をエスケープする。
     function escape_html(content) {
         var TABLE_FOR_ESCAPE_HTML = {
             "&": "&amp;",
@@ -65,9 +75,11 @@
             return TABLE_FOR_ESCAPE_HTML[match];
         });
     }
-    function login_submit() {
-        username = document.login_form.username.value;
-        password = document.login_form.password.value;
+    
+    // サーバ側にポストで送信する。
+    function submit_login() {
+        username = document.form_login.username.value;
+        password = document.form_login.password.value;
         // alert("username: " + username + " password: " + password);
         if (username === "") {
             alert("[WARN] ユーザ名が入力されていません。ユーザ名を入力してください。");
@@ -89,14 +101,17 @@
             alert("[WARN] パスワードが誤っています。正しいパスワードを入力してください。");
             return false;
         }
-        login_form.action = '/P0100Login/';
-        login_form.enctype = '';
-        login_form.method = 'POST';
-        login_form.submit();
+        form_login.action = '/P0100Login/';
+        form_login.enctype = '';
+        form_login.method = 'POST';
+        form_login.submit();
         return true;
     }
     </script>
+    
     {% endblock %}
 </body>
+<!-- END Body -->
+
 </html>
 

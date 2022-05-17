@@ -2,74 +2,68 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<!-- P9100Transact/index.html -->
+<!-- P9100Transact/templates/P9100Transact/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}承認・集計・配布画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>承認・集計・配布画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    {# bootstrap_css #}
-    {# bootstrap_javascript #}
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
-    <div class="container-fluid">
+    
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>承認・集計・配布</h3>
+    </div>
+    <!-- END container text-center mb-3 -->
+    
+    <!-- BEGIN container mb-3 -->
+    <div class="container mb-3">
         <div class="row">
-            <div class="col d-flex justify-content-start align-items-start">
+            <!-- 都道府県選択 -->
+            <div class="col">
+                <div class="input-group">
+                    <select class="form-select" id="form_select_ken" name="form_select_ken">
+                        <option value="0">都道府県の絞り込み条件を選択してください。</option>
+                        {% for ken in ken_list %}
+                        {% if ken.ken_code == ken_code %}
+                        <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
+                        {% else %}
+                        <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+                </div>
             </div>
-            <div class="col d-flex justify-content-center align-items-center">
-                <h3>承認・集計・配布</h3>
-            </div>    
-            <div class="col d-flex justify-content-end align-items-end">
+            
+            <!-- 市区町村選択 -->
+            <div class="col">
+                <div class="input-group">
+                    <select class="form-select" id="form_select_city" name="form_select_city">
+                        <option value="0">市区町村の絞り込み条件を選択してください。</option>
+                        {% for city in city_list %}
+                        {% if city.city_code == city_code %}
+                        <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
+                        {% else %}
+                        <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city">市区町村選択</button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- 都道府県、市区町村、種別選択 -->
-    <div class="mb-3">
-        <table class="table table-borderless">
-            <tr>
-                <!-- 都道府県選択 -->
-                <td>
-                    <div class="input-group">
-                        <select class="form-select" id="form_select_ken" name="form_select_ken">
-                            <option value="">都道府県選択</option>
-                            {% for ken in ken_list %}
-                            {% if ken.ken_code == ken_code %}
-                            <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
-                            {% else %}
-                            <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-primary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
-                    </div>
-                </td>
-                <!-- 市区町村選択 -->
-                <td>
-                    <div class="input-group">
-                        <select class="form-select" id="form_select_city" name="form_select_city">
-                            <option value="">市区町村選択</option>
-                            {% for city in city_list %}
-                            {% if city.city_code == city_code %}
-                            <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
-                            {% else %}
-                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-primary" type="button" id="button_city" name="button_city">市区町村選択</button>
-                    </div>
-                </td>
-            </tr>    
-        </table>
-    </div>
+    <!-- END container mb-3 -->
     
     <!-- 一覧表示 AS_HIDDEN -->
     <form method="POST" action="" id="" name="">
@@ -96,8 +90,8 @@
     </form>
 
     <!-- 承認／否認／保留 一覧表示 -->
-    <div class="container mb-3">
-        <table class="table table-bordered">
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
             <!-- 承認／否認／保留 一覧表示（th: テーブルヘッダ） -->
             <thead>
                 <tr>
@@ -122,7 +116,7 @@
                     <td id="td_{{ forloop.counter0 }}_1"></td>
                     <td id="td_{{ forloop.counter0 }}_2"></td>
                     <td id="td_{{ forloop.counter0 }}_3"></td>
-                    <td><button class="btn btn-primary" type="button">詳細表示</button></td>
+                    <td><button class="btn btn-secondary" type="button">詳細表示</button></td>
                     <td>
                         <div class="form-check form-check-inline">
                             {% if choice.choice_hidden.data|stringformat:"s" == "1" %}
@@ -242,25 +236,39 @@
         <textarea class="form-control" value="">承認時コメント</textarea>
     </div>
     <div class="container text-center mb-3">
-        <button class="btn btn-primary" type="button">実行</button>
-        <button class="btn btn-primary" type="button">キャンセル</button>
+        <button class="btn btn-secondary" type="button">実行</button>
+        <button class="btn btn-secondary" type="button">キャンセル</button>
     </div>
     
     <script>
-    <!-- 都道府県、市区町村、種別選択 -->
-    var button_ken = document.getElementById("button_ken");
-    var button_city = document.getElementById("button_city");
+    // 局所変数を定義する。
+    var button_ken = document.getElementById("button_ken"); // 都道府県選択ボタン
+    var button_city = document.getElementById("button_city"); // 市区町村選択ボタン
+    
+    // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
     button_ken.addEventListener("click", function(event) {
-        if (form_select_ken.value >= 1) {
-            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/";
-        }
+        window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/";
     });
+    
+    // 市区町村選択ボタンクリック時のイベントハンドラを設定する。
     button_city.addEventListener("click", function(event) {
-        if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
-            window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/";
-        }
+        window.location.href = "/P9100Transact/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/";
     });
+    
     window.onload = function() {
+        if (form_select_ken.value === "0") {
+            document.getElementById("form_select_ken").removeAttribute("disabled");
+            document.getElementById("form_select_city").setAttribute("disabled", true);
+            document.getElementById("button_ken").removeAttribute("disabled");
+            document.getElementById("button_city").setAttribute("disabled", true);
+        }
+        else {
+            document.getElementById("form_select_ken").removeAttribute("disabled");
+            document.getElementById("form_select_city").removeAttribute("disabled");
+            document.getElementById("button_ken").removeAttribute("disabled");
+            document.getElementById("button_city").removeAttribute("disabled");
+        }
+    
         {% for choice in choice_formset %}
         document.getElementById("td_{{ forloop.counter0 }}_0").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-upload_date_hidden").value;
         document.getElementById("td_{{ forloop.counter0 }}_1").innerHTML = document.getElementById("id_choice-{{ forloop.counter0 }}-ken_name_hidden").value;
@@ -274,6 +282,9 @@
         document.getElementById("form_select_minute").value = document.getElementById("id_schedule-0-minute_hidden").value;
     };
     </script>
+    
     {% endblock %}
 </body>
+<!-- END Body -->
+
 </html>

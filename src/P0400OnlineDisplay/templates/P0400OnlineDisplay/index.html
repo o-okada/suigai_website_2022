@@ -2,257 +2,383 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<!-- P0400OnlineDisplay/index.html -->
+<!-- P0400OnlineDisplay/templates/P0400OnlineDisplay/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}オンライン編集方式オンライン参照画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>オンライン編集方式オンライン参照画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    {# bootstrap_css #}
-    {# bootstrap_javascript #}
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
-    <div class="container-fluid">
+    
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>調査票、集計結果、定数データ参照</h3>
+    </div>
+    <!-- END Container text-center mb-3 -->
+    
+    <!-- BEGIN container mb-3 -->
+    <div class="container mb-3">
         <div class="row">
-            <div class="col d-flex justify-content-start align-items-start">
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-                <h3>調査票、集計結果、マスタデータ参照</h3>
-            </div>    
-            <div class="col d-flex justify-content-end align-items-end">
+            <div class="col">
+                <div class="input-group">
+                    <select class="form-select" id="form_select_category1" name="form_select_category1">
+                        {% if category_code1 == "0" %}
+                        <option value="0" selected>参照するデータの種別を選択してください。</option>
+                        {% else %}
+                        <option value="0">参照するデータの種別を選択してください。</option>
+                        {% endif %}
+                        
+                        {% if category_code1 == "1" %}
+                        <option value="1" selected>調査票</option>
+                        {% else %}
+                        <option value="1">調査票</option>
+                        {% endif %}
+                        
+                        {% if category_code1 == "2" %}
+                        <option value="2" selected>集計結果</option>
+                        {% else %}
+                        <option value="2">集計結果</option>
+                        {% endif %}
+                        
+                        {% if category_code1 == "3" %}
+                        <option value="3" selected>定数</option>
+                        {% else %}
+                        <option value="3">定数</option>
+                        {% endif %}
+                        
+                    </select>
+                    <button class="btn btn-secondary" type="button" id="button_category1" name="button_category1">データ種別選択</button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- 都道府県、市区町村、種別選択 -->
-    <div class="mb-3">
-        <table class="table table-borderless">
-            <tr>
-                <!-- 都道府県選択 -->
-                <td>
-                    <div class="input-group">
-                        <select class="form-select" id="form_select_ken" name="form_select_ken">
-                            <option value="">都道府県選択</option>
-                            {% for ken in ken_list %}
-                            {% if ken.ken_code == ken_code %}
-                            <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
-                            {% else %}
-                            <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-primary" type="button" id="button1">都道府県選択</button>
-                    </div>
-                </td>
-                <!-- 市区町村選択 -->
-                <td>
-                    <div class="input-group">
-                        <select class="form-select" id="form_select_city" name="form_select_city">
-                            <option value="">市区町村選択</option>
-                            {% for city in city_list %}
-                            {% if city.city_code == city_code %}
-                            <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
-                            {% else %}
-                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-primary" type="button" id="button2">市区町村選択</button>
-                    </div>
-                </td>
-                <!-- 種別選択 -->
-                <td>
-                    <div class="input-group">
-                        <select class="form-select" id="form_select_category" name="form_select_category">
-                            {% if category_code == "1" %}
-                            <option value="1" selected>種別選択</option>
-                            {% else %}
-                            <option value="1">種別選択</option>
-                            {% endif %}
-                            {% if category_code == "2" %}
-                            <option value="2" selected>一般資産調査票（調査員用）</option>
-                            {% else %}
-                            <option value="2">一般資産調査票（調査員用）</option>
-                            {% endif %}
-                            {% if category_code == "3" %}
-                            <option value="3" selected>一般資産調査票（市区町村用）</option>
-                            {% else %}
-                            <option value="3">一般資産調査票（市区町村用）</option>
-                            {% endif %}
-                            {% if category_code == "4" %}
-                            <option value="4" selected>一般資産調査票（都道府県用）</option>
-                            {% else %}
-                            <option value="4">一般資産調査票（都道府県用）</option>
-                            {% endif %}
-                            {% if category_code == "5" %}
-                            <option value="5" selected>復旧事業工種</option>
-                            {% else %}
-                            <option value="5">復旧事業工種</option>
-                            {% endif %}
-                            {% if category_code == "6" %}
-                            <option value="6" selected>公共土木調査票</option>
-                            {% else %}
-                            <option value="6">公共土木調査票</option>
-                            {% endif %}
-                            {% if category_code == "7" %}
-                            <option value="7" selected>公益事業調査票</option>
-                            {% else %}
-                            <option value="7">公益事業調査票</option>
-                            {% endif %}
-                            {% if category_code == "8" %}
-                            <option value="8" selected>チェック結果</option>
-                            {% else %}
-                            <option value="8">チェック結果</option>
-                            {% endif %}
-                            {% if category_code == "9" %}
-                            <option value="9" selected>集計結果</option>
-                            {% else %}
-                            <option value="9">集計結果</option>
-                            {% endif %}
-                            {% if category_code == "10" %}
-                            <option value="10" selected>建物区分</option>
-                            {% else %}
-                            <option value="10">建物区分</option>
-                            {% endif %}
-                            {% if category_code == "11" %}
-                            <option value="11" selected>都道府県</option>
-                            {% else %}
-                            <option value="11">都道府県</option>
-                            {% endif %}
-                            {% if category_code == "12" %}
-                            <option value="12" selected>市区町村</option>
-                            {% else %}
-                            <option value="12">市区町村</option>
-                            {% endif %}
-                            {% if category_code == "13" %}
-                            <option value="13" selected>水害発生地点工種（河川海岸区分）</option>
-                            {% else %}
-                            <option value="13">水害発生地点工種（河川海岸区分）</option>
-                            {% endif %}
-                            {% if category_code == "14" %}
-                            <option value="14" selected>水系（水系・沿岸）</option>
-                            {% else %}
-                            <option value="14">水系（水系・沿岸）</option>
-                            {% endif %}
-                            {% if category_code == "15" %}
-                            <option value="15" selected>水系種別（水系・沿岸種別）</option>
-                            {% else %}
-                            <option value="15">水系種別（水系・沿岸種別）</option>
-                            {% endif %}
-                            {% if category_code == "16" %}
-                            <option value="16" selected>河川（河川・海岸）</option>
-                            {% else %}
-                            <option value="16">河川（河川・海岸）</option>
-                            {% endif %}
-                            {% if category_code == "17" %}
-                            <option value="17" selected>河川種別（河川・海岸種別）</option>
-                            {% else %}
-                            <option value="17">河川種別（河川・海岸種別）</option>
-                            {% endif %}
-                            {% if category_code == "18" %}
-                            <option value="18" selected>水害原因</option>
-                            {% else %}
-                            <option value="18">水害原因</option>
-                            {% endif %}
-                            {% if category_code == "19" %}
-                            <option value="19" selected>地上地下区分</option>
-                            {% else %}
-                            <option value="19">地上地下区分</option>
-                            {% endif %}
-                            {% if category_code == "20" %}
-                            <option value="20" selected>地下空間の利用形態</option>
-                            {% else %}
-                            <option value="20">地下空間の利用形態</option>
-                            {% endif %}
-                            {% if category_code == "21" %}
-                            <option value="21" selected>浸水土砂区分</option>
-                            {% else %}
-                            <option value="21">浸水土砂区分</option>
-                            {% endif %}
-                            {% if category_code == "22" %}
-                            <option value="22" selected>地盤勾配区分</option>
-                            {% else %}
-                            <option value="22">地盤勾配区分</option>
-                            {% endif %}
-                            {% if category_code == "23" %}
-                            <option value="23" selected>産業分類</option>
-                            {% else %}
-                            <option value="23">産業分類</option>
-                            {% endif %}
-                            {% if category_code == "24" %}
-                            <option value="24" selected>県別家屋評価額</option>
-                            {% else %}
-                            <option value="24">県別家屋評価額</option>
-                            {% endif %}
-                            {% if category_code == "25" %}
-                            <option value="25" selected>家屋被害率</option>
-                            {% else %}
-                            <option value="25">家屋被害率</option>
-                            {% endif %}
-                            {% if category_code == "26" %}
-                            <option value="26" selected>家庭用品自動車以外被害率</option>
-                            {% else %}
-                            <option value="26">家庭用品自動車以外被害率</option>
-                            {% endif %}
-                            {% if category_code == "27" %}
-                            <option value="27" selected>家庭用品自動車被害率</option>
-                            {% else %}
-                            <option value="27">家庭用品自動車被害率</option>
-                            {% endif %}
-                            {% if category_code == "28" %}
-                            <option value="28" selected>家庭応急対策費</option>
-                            {% else %}
-                            <option value="28">家庭応急対策費</option>
-                            {% endif %}
-                            {% if category_code == "29" %}
-                            <option value="29" selected>産業分類別資産額</option>
-                            {% else %}
-                            <option value="29">産業分類別資産額</option>
-                            {% endif %}
-                            {% if category_code == "30" %}
-                            <option value="30" selected>事業所被害率</option>
-                            {% else %}
-                            <option value="30">事業所被害率</option>
-                            {% endif %}
-                            {% if category_code == "31" %}
-                            <option value="31" selected>事業所営業停止損失</option>
-                            {% else %}
-                            <option value="31">事業所営業停止損失</option>
-                            {% endif %}
-                            {% if category_code == "32" %}
-                            <option value="32" selected>農漁家被害率</option>
-                            {% else %}
-                            <option value="32">農漁家被害率</option>
-                            {% endif %}
-                            {% if category_code == "33" %}
-                            <option value="33" selected>異常気象</option>
-                            {% else %}
-                            <option value="33">異常気象</option>
-                            {% endif %}
-                            {% if category_code == "34" %}
-                            <option value="34" selected>区域</option>
-                            {% else %}
-                            <option value="34">区域</option>
-                            {% endif %}
-                        </select>
-                        <button class="btn btn-primary" type="button" id="button3">種別選択</button>
-                    </div>
-                </td>
-            </tr>    
-        </table>
+    <!-- END container mb-3 -->
+
+    <!-- BEGIN mb-3 ms-2 me-2 -->
+    <div class="mb-3 ms-2 me-2">
+        <div class="row">
+            <!-- 都道府県選択 -->
+            <div class="col">
+                <div class="input-group">
+                    {% if category_code1 == "0" %}
+                    <select class="form-select" id="form_select_ken" name="form_select_ken" disabled>
+                    {% elif category_code1 == "1" %}
+                    <select class="form-select" id="form_select_ken" name="form_select_ken">
+                    {% elif category_code1 == "2" %}
+                    <select class="form-select" id="form_select_ken" name="form_select_ken">
+                    {% elif category_code1 == "3" %}
+                    <select class="form-select" id="form_select_ken" name="form_select_ken" disabled>
+                    {% else %}
+                    <select class="form-select" id="form_select_ken" name="form_select_ken" disabled>
+                    {% endif %}
+                        <option value="0">都道府県の絞り込み条件を選択してください。</option>
+                        {% for ken in ken_list %}
+                        {% if ken.ken_code == ken_code %}
+                        <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}</option>
+                        {% else %}
+                        <option value="{{ ken.ken_code }}">{{ ken.ken_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% if category_code1 == "0" %}
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken" disabled>都道府県選択</button>
+                    {% elif category_code1 == "1" %}
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+                    {% elif category_code1 == "2" %}
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+                    {% elif category_code1 == "3" %}
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken" disabled>都道府県選択</button>
+                    {% else %}
+                    <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken" disabled>都道府県選択</button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 市区町村選択 -->
+            <div class="col">
+                <div class="input-group">
+                    {% if category_code1 == "0" %}
+                    <select class="form-select" id="form_select_city" name="form_select_city" disabled>
+                    {% elif category_code1 == "1" %}
+                    <select class="form-select" id="form_select_city" name="form_select_city">
+                    {% elif category_code1 == "2" %}
+                    <select class="form-select" id="form_select_city" name="form_select_city">
+                    {% elif category_code1 == "3" %}
+                    <select class="form-select" id="form_select_city" name="form_select_city" disabled>
+                    {% else %}
+                    <select class="form-select" id="form_select_city" name="form_select_city" disabled>
+                    {% endif %}
+                        <option value="0">市区町村の絞り込み条件を選択してください。</option>
+                        {% for city in city_list %}
+                        {% if city.city_code == city_code %}
+                        <option value="{{ city.city_code }}" selected>{{ city.city_name }}</option>
+                        {% else %}
+                        <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% if category_code1 == "0" %}
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city" disabled>市区町村選択</button>
+                    {% elif category_code1 == "1" %}
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city">市区町村選択</button>
+                    {% elif category_code1 == "2" %}
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city">市区町村選択</button>
+                    {% elif category_code1 == "3" %}
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city" disabled>市区町村選択</button>
+                    {% else %}
+                    <button class="btn btn-secondary" type="button" id="button_city" name="button_city" disabled>市区町村選択</button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 種別選択 -->
+            <div class="col">
+                <div class="input-group">
+                    {% if category_code1 == "0" %}
+                    <select class="form-select" id="form_select_category2" name="form_select_category2" disabled>
+                    {% elif category_code1 == "1" %}
+                    <select class="form-select" id="form_select_category2" name="form_select_category2">
+                    {% elif category_code1 == "2" %}
+                    <select class="form-select" id="form_select_category2" name="form_select_category2">
+                    {% elif category_code1 == "3" %}
+                    <select class="form-select" id="form_select_category2" name="form_select_category2">
+                    {% else %}
+                    <select class="form-select" id="form_select_category2" name="form_select_category2" disabled>
+                    {% endif %}
+                        {% if category_code2 == "1" %}
+                        <option value="1" id="option_1" name="option_1" selected>参照するデータの種別を選択してください。</option>
+                        {% else %}
+                        <option value="1" id="option_1" name="option_1">参照するデータの種別を選択してください。</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "2" %}
+                        <option value="2" id="option_2" name="option_2" selected hidden>一般資産調査票（調査員用）</option>
+                        {% else %}
+                        <option value="2" id="option_2" name="option_2" hidden>一般資産調査票（調査員用）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "3" %}
+                        <option value="3" id="option_3" name="option_3" selected>一般資産調査票（市区町村用）</option>
+                        {% else %}
+                        <option value="3" id="option_3" name="option_3">一般資産調査票（市区町村用）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "4" %}
+                        <option value="4" id="option_4" name="option_4" selected>一般資産調査票（都道府県用）</option>
+                        {% else %}
+                        <option value="4" id="option_4" name="option_4">一般資産調査票（都道府県用）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "5" %}
+                        <option value="5" id="option_5" name="option_5" selected>復旧事業工種</option>
+                        {% else %}
+                        <option value="5" id="option_5" name="option_5">復旧事業工種</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "6" %}
+                        <option value="6" id="option_6" name="option_6" selected>公共土木調査票</option>
+                        {% else %}
+                        <option value="6" id="option_6" name="option_6">公共土木調査票</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "7" %}
+                        <option value="7" id="option_7" name="option_7" selected>公益事業調査票</option>
+                        {% else %}
+                        <option value="7" id="option_7" name="option_7">公益事業調査票</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "8" %}
+                        <option value="8" id="option_8" name="option_8" selected>チェック結果</option>
+                        {% else %}
+                        <option value="8" id="option_8" name="option_8">チェック結果</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "9" %}
+                        <option value="9" id="option_9" name="option_9" selected>集計結果</option>
+                        {% else %}
+                        <option value="9" id="option_9" name="option_9">集計結果</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "10" %}
+                        <option value="10" id="option_10" name="option_10" selected>建物区分</option>
+                        {% else %}
+                        <option value="10" id="option_10" name="option_10">建物区分</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "11" %}
+                        <option value="11" id="option_11" name="option_11" selected>都道府県</option>
+                        {% else %}
+                        <option value="11" id="option_11" name="option_11">都道府県</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "12" %}
+                        <option value="12" id="option_12" name="option_12" selected>市区町村</option>
+                        {% else %}
+                        <option value="12" id="option_12" name="option_12">市区町村</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "13" %}
+                        <option value="13" id="option_13" name="option_13" selected>水害発生地点工種（河川海岸区分）</option>
+                        {% else %}
+                        <option value="13" id="option_13" name="option_13">水害発生地点工種（河川海岸区分）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "14" %}
+                        <option value="14" id="option_14" name="option_14" selected>水系（水系・沿岸）</option>
+                        {% else %}
+                        <option value="14" id="option_14" name="option_14">水系（水系・沿岸）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "15" %}
+                        <option value="15" id="option_15" name="option_15" selected>水系種別（水系・沿岸種別）</option>
+                        {% else %}
+                        <option value="15" id="option_15" name="option_15">水系種別（水系・沿岸種別）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "16" %}
+                        <option value="16" id="option_16" name="option_16" selected>河川（河川・海岸）</option>
+                        {% else %}
+                        <option value="16" id="option_16" name="option_16">河川（河川・海岸）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "17" %}
+                        <option value="17" id="option_17" name="option_17" selected>河川種別（河川・海岸種別）</option>
+                        {% else %}
+                        <option value="17" id="option_17" name="option_17">河川種別（河川・海岸種別）</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "18" %}
+                        <option value="18" id="option_18" name="option_18" selected>水害原因</option>
+                        {% else %}
+                        <option value="18" id="option_18" name="option_18">水害原因</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "19" %}
+                        <option value="19" id="option_19" name="option_19" selected>地上地下区分</option>
+                        {% else %}
+                        <option value="19" id="option_19" name="option_19">地上地下区分</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "20" %}
+                        <option value="20" id="option_20" name="option_20" selected>地下空間の利用形態</option>
+                        {% else %}
+                        <option value="20" id="option_20" name="option_20">地下空間の利用形態</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "21" %}
+                        <option value="21" id="option_21" name="option_21" selected>浸水土砂区分</option>
+                        {% else %}
+                        <option value="21" id="option_21" name="option_21">浸水土砂区分</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "22" %}
+                        <option value="22" id="option_22" name="option_22" selected>地盤勾配区分</option>
+                        {% else %}
+                        <option value="22" id="option_22" name="option_22">地盤勾配区分</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "23" %}
+                        <option value="23" id="option_23" name="option_23" selected>産業分類</option>
+                        {% else %}
+                        <option value="23" id="option_23" name="option_23">産業分類</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "24" %}
+                        <option value="24" id="option_24" name="option_24" selected>県別家屋評価額</option>
+                        {% else %}
+                        <option value="24" id="option_24" name="option_24">県別家屋評価額</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "25" %}
+                        <option value="25" id="option_25" name="option_25" selected>家屋被害率</option>
+                        {% else %}
+                        <option value="25" id="option_25" name="option_25">家屋被害率</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "26" %}
+                        <option value="26" id="option_26" name="option_26" selected>家庭用品自動車以外被害率</option>
+                        {% else %}
+                        <option value="26" id="option_26" name="option_26">家庭用品自動車以外被害率</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "27" %}
+                        <option value="27" id="option_27" name="option_27" selected>家庭用品自動車被害率</option>
+                        {% else %}
+                        <option value="27" id="option_27" name="option_27">家庭用品自動車被害率</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "28" %}
+                        <option value="28" id="option_28" name="option_28" selected>家庭応急対策費</option>
+                        {% else %}
+                        <option value="28" id="option_28" name="option_28">家庭応急対策費</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "29" %}
+                        <option value="29" id="option_29" name="option_29" selected>産業分類別資産額</option>
+                        {% else %}
+                        <option value="29" id="option_29" name="option_29">産業分類別資産額</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "30" %}
+                        <option value="30" id="option_30" name="option_30" selected>事業所被害率</option>
+                        {% else %}
+                        <option value="30" id="option_30" name="option_30">事業所被害率</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "31" %}
+                        <option value="31" id="option_31" name="option_31" selected>事業所営業停止損失</option>
+                        {% else %}
+                        <option value="31" id="option_31" name="option_31">事業所営業停止損失</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "32" %}
+                        <option value="32" id="option_32" name="option_32" selected>農漁家被害率</option>
+                        {% else %}
+                        <option value="32" id="option_32" name="option_32">農漁家被害率</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "33" %}
+                        <option value="33" id="option_33" name="option_33" selected>異常気象</option>
+                        {% else %}
+                        <option value="33" id="option_33" name="option_33">異常気象</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "34" %}
+                        <option value="34" id="option_34" name="option_34" selected>区域</option>
+                        {% else %}
+                        <option value="34" id="option_34" name="option_34">区域</option>
+                        {% endif %}
+                    </select>
+                    {% if category_code1 == "0" %}
+                    <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2" disabled>データ種別選択</button>
+                    {% elif category_code1 == "1" %}
+                    <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
+                    {% elif category_code1 == "2" %}
+                    <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
+                    {% elif category_code1 == "3" %}
+                    <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
+                    {% else %}
+                    <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2" disabled>データ種別選択</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- END mb-3 ms-2 me-2 -->
     
-    {% if category_code == "1" %}{# 種別選択 #}
+    {% if category_code2 == "1" %}{# 種別選択 #}
     {% endif %}
     
-    {% if category_code == "2" %}{# 一般資産調査票（調査員用） #}
+    {% if category_code2 == "2" %}{# 一般資産調査票（調査員用） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -379,28 +505,28 @@
     </div>
     {% endif %}
     
-    {% if category_code == "3" %}{# 一般資産調査票（市区町村用） #}
+    {% if category_code2 == "3" %}{# 一般資産調査票（市区町村用） #}
     {% endif %}
     
-    {% if category_code == "4" %}{# 一般資産調査票（都道府県用） #}
+    {% if category_code2 == "4" %}{# 一般資産調査票（都道府県用） #}
     {% endif %}
     
-    {% if category_code == "5" %}{# 復旧事業工種 #}
+    {% if category_code2 == "5" %}{# 復旧事業工種 #}
     {% endif %}
     
-    {% if category_code == "6" %}{# 公共土木調査票 #}
+    {% if category_code2 == "6" %}{# 公共土木調査票 #}
     {% endif %}
     
-    {% if category_code == "7" %}{# 公益事業調査票 #}
+    {% if category_code2 == "7" %}{# 公益事業調査票 #}
     {% endif %}
     
-    {% if category_code == "8" %}{# チェック結果 #}
+    {% if category_code2 == "8" %}{# チェック結果 #}
     {% endif %}
     
-    {% if category_code == "9" %}{# 集計結果 #}
+    {% if category_code2 == "9" %}{# 集計結果 #}
     {% endif %}
     
-    {% if category_code == "10" %}{# 建物区分 #}
+    {% if category_code2 == "10" %}{# 建物区分 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -421,7 +547,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "11" %}{# 都道府県 #}
+    {% if category_code2 == "11" %}{# 都道府県 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -442,7 +568,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "12" %}{# 市区町村 #}
+    {% if category_code2 == "12" %}{# 市区町村 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -469,7 +595,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "13" %}{# 水害発生地点工種（河川海岸区分） #}
+    {% if category_code2 == "13" %}{# 水害発生地点工種（河川海岸区分） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -490,7 +616,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "14" %}{# 水系（水系・沿岸） #}
+    {% if category_code2 == "14" %}{# 水系（水系・沿岸） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -513,7 +639,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "15" %}{# 水系種別（水系・沿岸種別） #}
+    {% if category_code2 == "15" %}{# 水系種別（水系・沿岸種別） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -534,7 +660,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "16" %}{# 河川（河川・海岸） #}
+    {% if category_code2 == "16" %}{# 河川（河川・海岸） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -559,7 +685,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "17" %}{# 河川種別（河川・海岸種別） #}
+    {% if category_code2 == "17" %}{# 河川種別（河川・海岸種別） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -580,7 +706,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "18" %}{# 水害原因 #}
+    {% if category_code2 == "18" %}{# 水害原因 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -601,7 +727,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "19" %}{# 地上地下区分 #}
+    {% if category_code2 == "19" %}{# 地上地下区分 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -622,7 +748,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "20" %}{# 地下空間の利用形態 #}
+    {% if category_code2 == "20" %}{# 地下空間の利用形態 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -643,7 +769,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "21" %}{# 浸水土砂区分 #}
+    {% if category_code2 == "21" %}{# 浸水土砂区分 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -664,7 +790,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "22" %}{# 地盤勾配区分 #}
+    {% if category_code2 == "22" %}{# 地盤勾配区分 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -685,7 +811,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "23" %}{# 産業分類 #}
+    {% if category_code2 == "23" %}{# 産業分類 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -706,7 +832,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "24" %}{# 県別家屋評価額 #}
+    {% if category_code2 == "24" %}{# 県別家屋評価額 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -735,7 +861,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "25" %}{# 家屋被害率 #}
+    {% if category_code2 == "25" %}{# 家屋被害率 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -840,7 +966,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "26" %}{# 家庭用品自動車以外被害率 #}
+    {% if category_code2 == "26" %}{# 家庭用品自動車以外被害率 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -895,7 +1021,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "27" %}{# 家庭用品自動車被害率 #}
+    {% if category_code2 == "27" %}{# 家庭用品自動車被害率 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -938,7 +1064,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "28" %}{# 家庭応急対策費 #}
+    {% if category_code2 == "28" %}{# 家庭応急対策費 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -995,7 +1121,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "29" %}{# 産業分類別資産額 #}
+    {% if category_code2 == "29" %}{# 産業分類別資産額 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1030,7 +1156,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "30" %}{# 事業所被害率 #}
+    {% if category_code2 == "30" %}{# 事業所被害率 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1112,13 +1238,13 @@
     </div>
     {% endif %}
     
-    {% if category_code == "31" %}{# 事業所営業停止損失 #}
+    {% if category_code2 == "31" %}{# 事業所営業停止損失 #}
     {% endif %}
     
-    {% if category_code == "32" %}{# 農漁家被害率 #}
+    {% if category_code2 == "32" %}{# 農漁家被害率 #}
     {% endif %}
     
-    {% if category_code == "33" %}{# 異常気象 #}
+    {% if category_code2 == "33" %}{# 異常気象 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1145,7 +1271,7 @@
     </div>
     {% endif %}
     
-    {% if category_code == "34" %}{# 区域 #}
+    {% if category_code2 == "34" %}{# 区域 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1178,28 +1304,205 @@
     </div>
     {% endif %}
 
-    <script>
-    var button1 = document.getElementById("button1") <!--県選択ボタン-->
-    var button2 = document.getElementById("button2") <!--市区町村選択ボタン-->
-    var button3 = document.getElementById("button3") <!--種別選択ボタン-->
+    <script type="text/javascript">
+    // 局所変数を定義する。
+    var button_category1 = document.getElementById("button_category1"); // 種別選択ボタン1
+    var button_ken = document.getElementById("button_ken"); // 都道府県選択ボタン
+    var button_city = document.getElementById("button_city"); // 市区町村選択ボタン
+    var button_category2 = document.getElementById("button_category2"); // 種別選択ボタン2
+
+    // 「調査票」に関連する選択肢を非表示にする。
+    function hide_option_raw(hidden) {
+        document.getElementById("option_2").hidden = hidden;
+        document.getElementById("option_3").hidden = hidden;
+        document.getElementById("option_4").hidden = hidden;
+        document.getElementById("option_5").hidden = hidden;
+        document.getElementById("option_6").hidden = hidden;
+        document.getElementById("option_7").hidden = hidden;
+        document.getElementById("option_8").hidden = hidden;
+    }
+
+    // 「集計結果」に関連する選択肢を非表示にする。
+    function hide_option_sum(hidden) {
+        document.getElementById("option_9").hidden = hidden;
+    }
     
-    button1.addEventListener("click", function(event) {
-        if (form_select_ken.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/"
+    // 「定数」に関連する選択肢を非表示にする。
+    function hide_option_master(hidden) {
+        document.getElementById("option_10").hidden = hidden;
+        document.getElementById("option_11").hidden = hidden;
+        document.getElementById("option_12").hidden = hidden;
+        document.getElementById("option_13").hidden = hidden;
+        document.getElementById("option_14").hidden = hidden;
+        document.getElementById("option_15").hidden = hidden;
+        document.getElementById("option_16").hidden = hidden;
+        document.getElementById("option_17").hidden = hidden;
+        document.getElementById("option_18").hidden = hidden;
+        document.getElementById("option_19").hidden = hidden;
+        document.getElementById("option_20").hidden = hidden;
+        document.getElementById("option_21").hidden = hidden;
+        document.getElementById("option_22").hidden = hidden;
+        document.getElementById("option_23").hidden = hidden;
+        document.getElementById("option_24").hidden = hidden;
+        document.getElementById("option_25").hidden = hidden;
+        document.getElementById("option_26").hidden = hidden;
+        document.getElementById("option_27").hidden = hidden;
+        document.getElementById("option_28").hidden = hidden;
+        document.getElementById("option_29").hidden = hidden;
+        document.getElementById("option_30").hidden = hidden;
+        document.getElementById("option_31").hidden = hidden;
+        document.getElementById("option_32").hidden = hidden;
+        document.getElementById("option_33").hidden = hidden;
+        document.getElementById("option_34").hidden = hidden;
+    }
+    
+    // データ種別選択ボタン1クリック時のイベントハンドラを設定する。
+    button_category1.addEventListener("click", function(event) {
+        window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/"
+    });
+
+    // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
+    button_ken.addEventListener("click", function(event) {
+        window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/ken/" + form_select_ken.value + "/"
+    });
+
+    // 市区町村選択ボタンクリック時のイベントハンドラを設定する。
+    button_city.addEventListener("click", function(event) {
+        window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
+    });
+
+    // データ種別選択ボタン2クリック時のイベントハンドラを設定する。
+    button_category2.addEventListener("click", function(event) {
+        if (form_select_category1.value === "3") {
+            window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/ken/0/city/0" + "/category2/" + form_select_category2.value + "/"
+        }
+        else {
+            window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/category2/" + form_select_category2.value + "/"
         }
     });
-    button2.addEventListener("click", function(event) {
-        if (form_select_ken.value >= 1 && form_select_city.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
+    
+    window.onload = function() {
+        // データ種別選択1プルダウンで「参照するデータの種別を選択して下さい」が選択されているとき
+        if (form_select_category1.value === "0") {
+            document.getElementById("form_select_ken").setAttribute("disabled", true);
+            document.getElementById("form_select_city").setAttribute("disabled", true);
+            document.getElementById("form_select_category2").setAttribute("disabled", true);
+            document.getElementById("button_ken").setAttribute("disabled", true);
+            document.getElementById("button_city").setAttribute("disabled", true);
+            document.getElementById("button_category2").setAttribute("disabled", true);
+            // データ種別選択2の選択肢を非表示にする。
+            hide_option_raw(true);
+            hide_option_sum(true);
+            hide_option_master(true);
         }
-    });
-    button3.addEventListener("click", function(event) {
-        if (form_select_ken.value >= 1 && form_select_city.value >= 1 && form_select_category.value >= 1) {
-            window.location.href = "/P0400OnlineDisplay/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/category/" + form_select_category.value + "/"
+        
+        // データ種別選択1プルダウンで「調査票」が選択されているとき
+        else if (form_select_category1.value === "1") {
+            if (form_select_ken.value === "0") {
+                if (form_select_city.value === "0") {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").setAttribute("disabled", true);
+                    document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").setAttribute("disabled", true);
+                    document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+                else {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").setAttribute("disabled", true);
+                    document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").setAttribute("disabled", true);
+                    document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+            }
+            else {
+                if (form_select_city.value === "0") {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").removeAttribute("disabled");
+                    document.getElementById("form_select_category2").removeAttribute("disabled");
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").removeAttribute("disabled");
+                    document.getElementById("button_category2").removeAttribute("disabled");
+                }
+                else {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").removeAttribute("disabled");
+                    document.getElementById("form_select_category2").removeAttribute("disabled");
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").removeAttribute("disabled");
+                    document.getElementById("button_category2").removeAttribute("disabled");
+                }
+            }
+            // データ種別選択2の「調査票」に関連する選択肢を表示、「集計結果」「定数」に関連する選択肢を非表示にする。
+            hide_option_raw(false);
+            hide_option_sum(true);
+            hide_option_master(true);
         }
-    });
+        
+        // データ種別選択1プルダウンで「集計結果」が選択されているとき
+        else if (form_select_category1.value === "2") {
+            if (form_select_ken.value === "0") {
+                if (form_select_city.value === "0") {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").setAttribute("disabled", true);
+                    document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").setAttribute("disabled", true);
+                    document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+                else {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").setAttribute("disabled", true);
+                    document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").setAttribute("disabled", true);
+                    document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+            }
+            else {
+                if (form_select_city.value === "0") {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").removeAttribute("disabled");
+                    document.getElementById("form_select_category2").removeAttribute("disabled");
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").removeAttribute("disabled");
+                    document.getElementById("button_category2").removeAttribute("disabled");
+                }
+                else {
+                    document.getElementById("form_select_ken").removeAttribute("disabled");
+                    document.getElementById("form_select_city").removeAttribute("disabled");
+                    document.getElementById("form_select_category2").removeAttribute("disabled");
+                    document.getElementById("button_ken").removeAttribute("disabled");
+                    document.getElementById("button_city").removeAttribute("disabled");
+                    document.getElementById("button_category2").removeAttribute("disabled");
+                }
+            }
+            // データ種別選択2の「集計結果」に関連する選択肢を表示、「調査票」「定数」に関連する選択肢を非表示にする。
+            hide_option_raw(true);
+            hide_option_sum(false);
+            hide_option_master(true);
+        }
+        
+        // データ種別選択1プルダウンで「定数」が選択されているとき
+        else {
+            document.getElementById("form_select_ken").setAttribute("disabled", true);
+            document.getElementById("form_select_city").setAttribute("disabled", true);
+            document.getElementById("form_select_category2").removeAttribute("disabled", true);
+            document.getElementById("button_ken").setAttribute("disabled", true);
+            document.getElementById("button_city").setAttribute("disabled", true);
+            document.getElementById("button_category2").removeAttribute("disabled", true);
+            // データ種別選択2の「定数」に関連する選択肢を表示、「調査票」「集計結果」に関連する選択肢を非表示にする。
+            hide_option_raw(true);
+            hide_option_sum(true);
+            hide_option_master(false);
+        }
+    }
     </script>
+    
     {% endblock %}
 </body>
+<!-- END Body -->
+
 </html>
 

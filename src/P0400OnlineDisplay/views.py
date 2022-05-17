@@ -74,7 +74,6 @@ def index_view(request):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
         ken_list = KEN.objects.raw("""
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
@@ -97,20 +96,19 @@ def index_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：ken_view
+### 関数名：category_view1
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-### def ken(request, ken_code):
-def ken_view(request, ken_code):
+def category_view1(request, category_code1):
     try:
         #######################################################################
         ### 引数チェック処理
         ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.ken_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.ken_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.ken_view()関数 ken_code = {}'.format(ken_code), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数 category_code1 = {}'.format(category_code1), 'INFO')
         
         #######################################################################
         ### DBアクセス処理
@@ -121,9 +119,58 @@ def ken_view(request, ken_code):
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
+        
+        #######################################################################
+        ### レスポンスセット処理
+        ### （１）コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        template = loader.get_template('P0400OnlineDisplay/index.html')
+        context = {
+            'ken_list': ken_list,
+            'category_code1': category_code1,
+        }
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0400OnlineDisplay.category_view1()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0400OnlineDisplay.category_view1()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：ken_view
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+### def ken(request, ken_code):
+### def ken_view(request, ken_code):
+def ken_view(request, category_code1, ken_code):
+    try:
+        #######################################################################
+        ### 引数チェック処理
+        ### （１）ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.ken_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.ken_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.ken_view()関数 category_code1 = {}'.format(category_code1), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.ken_view()関数 ken_code = {}'.format(ken_code), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### （１）DBにアクセスして、データを取得する。
+        #######################################################################
+        ken_list = KEN.objects.raw(""" 
+            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            """, [])
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
         
         #######################################################################
         ### レスポンスセット処理
@@ -134,6 +181,7 @@ def ken_view(request, ken_code):
             'ken_list': ken_list,
             'city_list': city_list,
             'ken_code': ken_code,
+            'category_code1': category_code1,
         }
         print_log('[INFO] P0400OnlineDisplay.ken_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
@@ -149,7 +197,8 @@ def ken_view(request, ken_code):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def city(request, ken_code, city_code):
-def city_view(request, ken_code, city_code):
+### def city_view(request, ken_code, city_code):
+def city_view(request, category_code1, ken_code, city_code):
     try:
         #######################################################################
         ### 引数チェック処理
@@ -158,6 +207,7 @@ def city_view(request, ken_code, city_code):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0400OnlineDisplay.city_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0400OnlineDisplay.city_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.city_view()関数 category_code1 = {}'.format(category_code1), 'INFO')
         print_log('[INFO] P0400OnlineDisplay.city_view()関数 ken_code = {}'.format(ken_code), 'INFO')
         print_log('[INFO] P0400OnlineDisplay.city_view()関数 city_code = {}'.format(city_code), 'INFO')
         
@@ -165,14 +215,17 @@ def city_view(request, ken_code, city_code):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
         
         #######################################################################
         ### レスポンスセット処理
@@ -184,6 +237,7 @@ def city_view(request, ken_code, city_code):
             'city_list': city_list,
             'ken_code': ken_code,
             'city_code': city_code,
+            'category_code1': category_code1,
         }
         print_log('[INFO] P0400OnlineDisplay.city_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
@@ -195,39 +249,52 @@ def city_view(request, ken_code, city_code):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：category_view
+### 関数名：category_view2
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def category(request, ken_code, city_code, category_code):
-def category_view(request, ken_code, city_code, category_code):
+### def category_view(request, ken_code, city_code, category_code):
+def category_view2(request, category_code1, ken_code, city_code, category_code2):
     try:
         #######################################################################
         ### 引数チェック処理
         ### （１）ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数 category_code = {}'.format(category_code), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数 category_code1 = {}'.format(category_code1), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数 ken_code = {}'.format(ken_code), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数 city_code = {}'.format(city_code), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数 category_code2 = {}'.format(category_code2), 'INFO')
 
         #######################################################################
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
+        ken_list = []
+        city_list = []
+        
+        print_log('[INFO] SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)', 'INFO')
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
         
+        print_log('[INFO] SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)', 'INFO')
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
+        
+        #######################################################################
+        ### DBアクセス処理
+        ### （１）DBにアクセスして、データを取得する。
+        #######################################################################
         building_list = []
-        ### ken_list = []
-        ### city_list = []
         kasen_kaigan_list = []
         suikei_list = []
         suikei_type_list = []
@@ -251,122 +318,195 @@ def category_view(request, ken_code, city_code, category_code):
         area_list = []
         ippan_list = []
         
-        if category_code == "1":
+        if category_code2 == "1":
             pass
-        elif category_code == "2":
-            ippan_list = IPPAN.objects.raw(""" 
-                SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
-                """, [ken_code, city_code, ])
-        elif category_code == "3":
+        
+        elif category_code2 == "2":
+            print_log('[INFO] SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)', 'INFO')
+            if ken_code == "0":
+                if city_code == "0":
+                    ippan_list = IPPAN.objects.raw(""" 
+                        SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        """, [])
+                else:
+                    ippan_list = IPPAN.objects.raw(""" 
+                        SELECT * FROM P0000COMMON_IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        """, [city_code, ])
+            else:
+                if city_code == "0":
+                    ippan_list = IPPAN.objects.raw(""" 
+                        SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        """, [ken_code, ])
+                else:
+                    ippan_list = IPPAN.objects.raw(""" 
+                        SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        """, [ken_code, city_code, ])
+            
+        elif category_code2 == "3":
             pass
-        elif category_code == "4":
+        
+        elif category_code2 == "4":
             pass
-        elif category_code == "5":
+        
+        elif category_code2 == "5":
             pass
-        elif category_code == "6":
+        
+        elif category_code2 == "6":
             pass
-        elif category_code == "7":
+        
+        elif category_code2 == "7":
             pass
-        elif category_code == "8":
+        
+        elif category_code2 == "8":
             pass
-        elif category_code == "9":
+        
+        elif category_code2 == "9":
             pass
-        elif category_code == "10":
+        
+        elif category_code2 == "10":
+            print_log('[INFO] SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)', 'INFO')
             building_list = BUILDING.objects.raw(""" 
                 SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)
                 """, [])
-        elif category_code == "11":
+            
+        elif category_code2 == "11":
             pass
-        elif category_code == "12":
+        
+        elif category_code2 == "12":
             pass
-        elif category_code == "13":
+        
+        elif category_code2 == "13":
+            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)', 'INFO')
             kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""
                 SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)
                 """, [])
-        elif category_code == "14":
+            
+        elif category_code2 == "14":
+            print_log('[INFO] SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)', 'INFO')
             suikei_list = SUIKEI.objects.raw(""" 
                 SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)
                 """, [])
-        elif category_code == "15":
+            
+        elif category_code2 == "15":
+            print_log('[INFO] SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)', 'INFO')
             suikei_type_list = SUIKEI_TYPE.objects.raw("""
                 SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "16":
+            
+        elif category_code2 == "16":
+            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)', 'INFO')
             kasen_list = KASEN.objects.raw("""
                 SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)
                 """, [])
-        elif category_code == "17":
+            
+        elif category_code2 == "17":
+            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)', 'INFO')
             kasen_type_list = KASEN_TYPE.objects.raw("""
                 SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "18":
+            
+        elif category_code2 == "18":
+            print_log('[INFO] SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)', 'INFO')
             cause_list = CAUSE.objects.raw("""
                 SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "19":
+            
+        elif category_code2 == "19":
+            print_log('[INFO] SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)', 'INFO')
             underground_list = UNDERGROUND.objects.raw("""
                 SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)
                 """, [])
-        elif category_code == "20":
+            
+        elif category_code2 == "20":
+            print_log('[INFO] SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)', 'INFO')
             usage_list = USAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "21":
+            
+        elif category_code2 == "21":
+            print_log('[INFO] SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)', 'INFO')
             flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""
                 SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)
                 """, [])
-        elif category_code == "22":
+            
+        elif category_code2 == "22":
+            print_log('[INFO] SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)', 'INFO')
             gradient_list = GRADIENT.objects.raw("""
                 SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)
                 """, [])
-        elif category_code == "23":
+            
+        elif category_code2 == "23":
+            print_log('[INFO] SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)', 'INFO')
             industry_list = INDUSTRY.objects.raw("""
                 SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)
                 """, [])
-        elif category_code == "24":
+            
+        elif category_code2 == "24":
+            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)', 'INFO')
             house_asset_list = HOUSE_ASSET.objects.raw("""
                 SELECT * FROM P0000COMMON_HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)
                 """, [])
-        elif category_code == "25":
+            
+        elif category_code2 == "25":
+            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)', 'INFO')
             house_damage_list = HOUSE_DAMAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "26":
+            
+        elif category_code2 == "26":
+            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)', 'INFO')
             household_damage_list = HOUSEHOLD_DAMAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "27":
+            
+        elif category_code2 == "27":
+            print_log('[INFO] SELECT * FROM P0000COMMON_CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)', 'INFO')
             car_damage_list = CAR_DAMAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "28":
+            
+        elif category_code2 == "28":
+            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)', 'INFO')
             house_cost_list = HOUSE_COST.objects.raw("""
                 SELECT * FROM P0000COMMON_HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)
                 """, [])
-        elif category_code == "29":
+            
+        elif category_code2 == "29":
+            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)', 'INFO')
             office_asset_list = OFFICE_ASSET.objects.raw("""
                 SELECT * FROM P0000COMMON_OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)
                 """, [])
-        elif category_code == "30":
+            
+        elif category_code2 == "30":
+            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)', 'INFO')
             office_damage_list = OFFICE_DAMAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "31":
+            
+        elif category_code2 == "31":
+            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)', 'INFO')
             office_cost_list = OFFICE_COST.objects.raw("""
                 SELECT * FROM P0000COMMON_OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)
                 """, [])
-        elif category_code == "32":
+            
+        elif category_code2 == "32":
+            print_log('[INFO] SELECT * FROM P0000COMMON_FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)', 'INFO')
             farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.raw("""
                 SELECT * FROM P0000COMMON_FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)
                 """, [])
-        elif category_code == "33":
+            
+        elif category_code2 == "33":
+            print_log('[INFO] SELECT * FROM P0000COMMON_WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)', 'INFO')
             weather_list = WEATHER.objects.raw("""
                 SELECT * FROM P0000COMMON_WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)
                 """, [])
-        elif category_code == "34":
+            
+        elif category_code2 == "34":
+            print_log('[INFO] SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)', 'INFO')
             area_list = AREA.objects.raw("""
                 SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)
                 """, [])
+            
         else:
             pass
         
@@ -378,7 +518,8 @@ def category_view(request, ken_code, city_code, category_code):
         context = {
             'ken_code': ken_code,
             'city_code': city_code,
-            'category_code': category_code,
+            'category_code1': category_code1,
+            'category_code2': category_code2,
             'building_list': building_list,
             'ken_list': ken_list,
             'city_list': city_list,
@@ -405,11 +546,11 @@ def category_view(request, ken_code, city_code, category_code):
             'area_list': area_list,
             'ippan_list': ippan_list,
         }
-        print_log('[INFO] P0400OnlineDisplay.category_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view2()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0400OnlineDisplay.category_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0400OnlineDisplay.category_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0400OnlineDisplay.category_view2()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0400OnlineDisplay.category_view2()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

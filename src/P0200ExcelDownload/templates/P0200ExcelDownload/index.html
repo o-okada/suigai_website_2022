@@ -35,7 +35,7 @@
     <!-- 都道府県、市区町村、種別選択 -->
     <div class="mb-3">
         <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
-        <button class="btn btn-primary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
+        <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>
     <div class="mb-3">
         <table class="table table-bordered">
@@ -45,7 +45,7 @@
                     {% for ken in ken_list %}
                     <th>
                         <div class="text-center"><label class="form-check-label">{{ ken.ken_name }}</label></div>
-                        <div class="text-center"><button class="btn btn-primary" type="button" id="button_ken{{ ken.ken_code }}" name="button_ken{{ ken.ken_code }}">全選択</button></div>
+                        <div class="text-center"><button class="btn btn-secondary" type="button" id="button_ken{{ ken.ken_code }}" name="button_ken{{ ken.ken_code }}">全選択</button></div>
                     </th>
                     {% endfor %}
                 </tr>
@@ -336,12 +336,12 @@
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、編集用にロック有りでEXCELファイルをダウンロードします。</label>
         {# bootstrap_button id="button1" button_type="button" content="編集用にロック有りでダウンロード" #}
-        <button class="btn btn-primary" type="button" id="button1" name="button1">編集用にロック有りでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button1" name="button1">編集用にロック有りでダウンロード</button>
     </div>
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、参照用にロック無しでEXCELファイルをダウンロードします。</label>
         {# bootstrap_button id="button2" button_type="button" content="参照用にロック無しでダウンロード" #}
-        <button class="btn btn-primary" type="button" id="button2" name="button2">参照用にロック無しでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button2" name="button2">参照用にロック無しでダウンロード</button>
     </div>
     <script>
     var button_all_checked = true;

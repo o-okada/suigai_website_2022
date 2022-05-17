@@ -249,35 +249,69 @@ def ken_view(request, ken_code):
             ken_list = KEN.objects.raw(""" 
                 SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
                 """, [])
-            city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-                """, [ken_code,])
-            transact_list = TRANSACT.objects.raw("""
-                SELECT 
-                    TR1.TRANSACT_ID AS TRANSACT_ID, 
-                    TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
-                    TR1.UPLOAD_DATE AS UPLOAD_DATE, 
-                    TR1.TRANSACT_DATE AS TRANSACT_DATE, 
-                    TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
-                    TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
-                    TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
-                    TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
-                    TR1.KEN_CODE AS KEN_CODE, 
-                    KE1.KEN_NAME AS KEN_NAME, 
-                    TR1.CITY_CODE AS CITY_CODE, 
-                    CI1.CITY_NAME AS CITY_NAME, 
-                    TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
-                    TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
-                    IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
-                    TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
-                    TR1.COMMENT AS COMMENT 
-                FROM P0000COMMON_TRANSACT AS TR1 
-                    LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
-                WHERE TR1.KEN_CODE=%s 
-                ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
-                """, [ken_code,])
+            
+            if ken_code == "0":
+                city_list = CITY.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                    """, [])
+            else:
+                city_list = CITY.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                    """, [ken_code, ])
+
+            if ken_code == "0":
+                transact_list = TRANSACT.objects.raw("""
+                    SELECT 
+                        TR1.TRANSACT_ID AS TRANSACT_ID, 
+                        TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                        TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                        TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                        TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                        TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                        TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                        TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                        TR1.KEN_CODE AS KEN_CODE, 
+                        KE1.KEN_NAME AS KEN_NAME, 
+                        TR1.CITY_CODE AS CITY_CODE, 
+                        CI1.CITY_NAME AS CITY_NAME, 
+                        TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                        TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                        IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                        TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                        TR1.COMMENT AS COMMENT 
+                    FROM P0000COMMON_TRANSACT AS TR1 
+                        LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                        LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                        LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                    ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                    """, [])
+            else:
+                transact_list = TRANSACT.objects.raw("""
+                    SELECT 
+                        TR1.TRANSACT_ID AS TRANSACT_ID, 
+                        TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                        TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                        TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                        TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                        TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                        TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                        TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                        TR1.KEN_CODE AS KEN_CODE, 
+                        KE1.KEN_NAME AS KEN_NAME, 
+                        TR1.CITY_CODE AS CITY_CODE, 
+                        CI1.CITY_NAME AS CITY_NAME, 
+                        TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                        TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                        IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                        TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                        TR1.COMMENT AS COMMENT 
+                    FROM P0000COMMON_TRANSACT AS TR1 
+                        LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                        LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                        LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                    WHERE TR1.KEN_CODE=%s 
+                    ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                    """, [ken_code, ])
 
             ###################################################################
             ### FORMSETセット処理
@@ -403,38 +437,129 @@ def city_view(request, ken_code, city_code):
             ken_list = KEN.objects.raw(""" 
                 SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
                 """, [])
-            city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-                """, [ken_code,])
+            
+            if ken_code == "0":
+                city_list = CITY.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                    """, [])
+            else:
+                city_list = CITY.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                    """, [ken_code, ])
+            
             ### transact_list = TRANSACT.objects.raw(""" 
             ###     SELECT * FROM P0000COMMON_TRANSACT WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(TRANSACT_ID AS INTEGER)
             ###     """, [ken_code, city_code, ])
-            transact_list = TRANSACT.objects.raw("""
-                SELECT 
-                    TR1.TRANSACT_ID AS TRANSACT_ID, 
-                    TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
-                    TR1.UPLOAD_DATE AS UPLOAD_DATE, 
-                    TR1.TRANSACT_DATE AS TRANSACT_DATE, 
-                    TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
-                    TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
-                    TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
-                    TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
-                    TR1.KEN_CODE AS KEN_CODE, 
-                    KE1.KEN_NAME AS KEN_NAME, 
-                    TR1.CITY_CODE AS CITY_CODE, 
-                    CI1.CITY_NAME AS CITY_NAME, 
-                    TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
-                    TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
-                    IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
-                    TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
-                    TR1.COMMENT AS COMMENT 
-                FROM P0000COMMON_TRANSACT AS TR1 
-                    LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
-                WHERE TR1.KEN_CODE=%s AND TR1.CITY_CODE=%s 
-                ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
-                """, [ken_code, city_code, ])
+            
+            if ken_code == "0":
+                if city_code == "0":
+                    transact_list = TRANSACT.objects.raw("""
+                        SELECT 
+                            TR1.TRANSACT_ID AS TRANSACT_ID, 
+                            TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                            TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                            TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                            TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                            TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                            TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                            TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                            TR1.KEN_CODE AS KEN_CODE, 
+                            KE1.KEN_NAME AS KEN_NAME, 
+                            TR1.CITY_CODE AS CITY_CODE, 
+                            CI1.CITY_NAME AS CITY_NAME, 
+                            TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                            TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                            IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                            TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                            TR1.COMMENT AS COMMENT 
+                        FROM P0000COMMON_TRANSACT AS TR1 
+                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                        """, [])
+                else:
+                    transact_list = TRANSACT.objects.raw("""
+                        SELECT 
+                            TR1.TRANSACT_ID AS TRANSACT_ID, 
+                            TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                            TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                            TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                            TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                            TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                            TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                            TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                            TR1.KEN_CODE AS KEN_CODE, 
+                            KE1.KEN_NAME AS KEN_NAME, 
+                            TR1.CITY_CODE AS CITY_CODE, 
+                            CI1.CITY_NAME AS CITY_NAME, 
+                            TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                            TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                            IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                            TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                            TR1.COMMENT AS COMMENT 
+                        FROM P0000COMMON_TRANSACT AS TR1 
+                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        WHERE TR1.CITY_CODE=%s 
+                        ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                        """, [city_code, ])
+            else:
+                if city_code == "0":
+                    transact_list = TRANSACT.objects.raw("""
+                        SELECT 
+                            TR1.TRANSACT_ID AS TRANSACT_ID, 
+                            TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                            TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                            TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                            TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                            TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                            TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                            TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                            TR1.KEN_CODE AS KEN_CODE, 
+                            KE1.KEN_NAME AS KEN_NAME, 
+                            TR1.CITY_CODE AS CITY_CODE, 
+                            CI1.CITY_NAME AS CITY_NAME, 
+                            TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                            TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                            IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                            TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                            TR1.COMMENT AS COMMENT 
+                        FROM P0000COMMON_TRANSACT AS TR1 
+                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        WHERE TR1.KEN_CODE=%s 
+                        ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                        """, [ken_code, ])
+                else:
+                    transact_list = TRANSACT.objects.raw("""
+                        SELECT 
+                            TR1.TRANSACT_ID AS TRANSACT_ID, 
+                            TR1.DOWNLOAD_DATE AS DOWNLOAD_DATE, 
+                            TR1.UPLOAD_DATE AS UPLOAD_DATE, 
+                            TR1.TRANSACT_DATE AS TRANSACT_DATE, 
+                            TR1.SCHEDULE_DATE AS SCHEDULE_DATE, 
+                            TR1.DOWNLOAD_USER_ID AS DOWNLOAD_USER_ID, 
+                            TR1.UPLOAD_USER_ID AS UPLOAD_USER_ID, 
+                            TR1.TRANSACT_USER_ID AS TRANSACT_USER_ID, 
+                            TR1.KEN_CODE AS KEN_CODE, 
+                            KE1.KEN_NAME AS KEN_NAME, 
+                            TR1.CITY_CODE AS CITY_CODE, 
+                            CI1.CITY_NAME AS CITY_NAME, 
+                            TR1.APPROVE_DISAPPROVE_UNDETERMIN_CODE AS APPROVE_DISAPPROVE_UNDETERMIN_CODE, 
+                            TR1.IPPAN_KOKYO_KOEKI_CODE AS IPPAN_KOKYO_KOEKI_CODE, 
+                            IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
+                            TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
+                            TR1.COMMENT AS COMMENT 
+                        FROM P0000COMMON_TRANSACT AS TR1 
+                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        WHERE TR1.KEN_CODE=%s AND TR1.CITY_CODE=%s 
+                        ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
+                        """, [ken_code, city_code, ])
 
             ###################################################################
             ### FORMSETセット処理

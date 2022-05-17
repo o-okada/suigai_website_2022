@@ -73,7 +73,6 @@ def index_view(request):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
@@ -115,14 +114,17 @@ def ken_view(request, ken_code):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
 
         #######################################################################
         ### レスポンスセット処理
@@ -164,14 +166,17 @@ def city_view(request, ken_code, city_code):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
         
         #######################################################################
         ### レスポンスセット処理
@@ -215,18 +220,38 @@ def category_view(request, ken_code, city_code, category_code):
         ### DBアクセス処理
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
-        ### ippan_list = IPPAN.objects.order_by('ippan_id')[:]
         ken_list = KEN.objects.raw(""" 
             SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
-        city_list = CITY.objects.raw(""" 
-            SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
-            """, [ken_code,])
-        ippan_list = IPPAN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
-            """, [ken_code, city_code, ])        
+        
+        if ken_code == "0":
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [])
+        else:
+            city_list = CITY.objects.raw(""" 
+                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                """, [ken_code,])
+
+        if ken_code == "0":
+            if city_code == "0":
+                ippan_list = IPPAN.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    """, [])        
+            else:
+                ippan_list = IPPAN.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    """, [city_code, ])        
+        else:
+            if city_code == "0":
+                ippan_list = IPPAN.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    """, [ken_code ])        
+            else:
+                ippan_list = IPPAN.objects.raw(""" 
+                    SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    """, [ken_code, city_code, ])    
+                
         #######################################################################
         ### レスポンスセット処理
         ### （１）コンテキストを設定して、レスポンスをブラウザに戻す。
