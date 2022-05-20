@@ -53,7 +53,7 @@ from P0000Common.models import KOKYO                   ### 28: 公共土木調�
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 from P0000Common.models import TRANSACT                ### 40: 
 
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -75,7 +75,7 @@ def index_view(request):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw("""
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
 
         #######################################################################
@@ -117,7 +117,7 @@ def category_view1(request, category_code1):
         ### ken_list = KEN.objects.order_by('ken_code')[:]
         ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         
         #######################################################################
@@ -161,15 +161,15 @@ def ken_view(request, category_code1, ken_code):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
         
         #######################################################################
@@ -216,15 +216,15 @@ def city_view(request, category_code1, ken_code, city_code):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
         
         #######################################################################
@@ -275,19 +275,19 @@ def category_view2(request, category_code1, ken_code, city_code, category_code2)
         ken_list = []
         city_list = []
         
-        print_log('[INFO] SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)', 'INFO')
+        print_log('[INFO] SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)', 'INFO')
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         
-        print_log('[INFO] SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)', 'INFO')
+        print_log('[INFO] SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)', 'INFO')
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
         
         #######################################################################
@@ -322,24 +322,24 @@ def category_view2(request, category_code1, ken_code, city_code, category_code2)
             pass
         
         elif category_code2 == "2":
-            print_log('[INFO] SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)', 'INFO')
             if ken_code == "0":
                 if city_code == "0":
                     ippan_list = IPPAN.objects.raw(""" 
-                        SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
                         """, [])
                 else:
                     ippan_list = IPPAN.objects.raw(""" 
-                        SELECT * FROM P0000COMMON_IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        SELECT * FROM IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                         """, [city_code, ])
             else:
                 if city_code == "0":
                     ippan_list = IPPAN.objects.raw(""" 
-                        SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        SELECT * FROM IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                         """, [ken_code, ])
                 else:
                     ippan_list = IPPAN.objects.raw(""" 
-                        SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                        SELECT * FROM IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                         """, [ken_code, city_code, ])
             
         elif category_code2 == "3":
@@ -364,9 +364,9 @@ def category_view2(request, category_code1, ken_code, city_code, category_code2)
             pass
         
         elif category_code2 == "10":
-            print_log('[INFO] SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)', 'INFO')
             building_list = BUILDING.objects.raw(""" 
-                SELECT * FROM P0000COMMON_BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)
+                SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "11":
@@ -376,135 +376,135 @@ def category_view2(request, category_code1, ken_code, city_code, category_code2)
             pass
         
         elif category_code2 == "13":
-            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)', 'INFO')
             kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""
-                SELECT * FROM P0000COMMON_KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)
+                SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "14":
-            print_log('[INFO] SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)', 'INFO')
             suikei_list = SUIKEI.objects.raw(""" 
-                SELECT * FROM P0000COMMON_SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)
+                SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "15":
-            print_log('[INFO] SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)', 'INFO')
             suikei_type_list = SUIKEI_TYPE.objects.raw("""
-                SELECT * FROM P0000COMMON_SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)
+                SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "16":
-            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)', 'INFO')
             kasen_list = KASEN.objects.raw("""
-                SELECT * FROM P0000COMMON_KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)
+                SELECT * FROM KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "17":
-            print_log('[INFO] SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)', 'INFO')
             kasen_type_list = KASEN_TYPE.objects.raw("""
-                SELECT * FROM P0000COMMON_KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)
+                SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "18":
-            print_log('[INFO] SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)', 'INFO')
             cause_list = CAUSE.objects.raw("""
-                SELECT * FROM P0000COMMON_CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)
+                SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "19":
-            print_log('[INFO] SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)', 'INFO')
             underground_list = UNDERGROUND.objects.raw("""
-                SELECT * FROM P0000COMMON_UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)
+                SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "20":
-            print_log('[INFO] SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)', 'INFO')
             usage_list = USAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)
+                SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "21":
-            print_log('[INFO] SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)', 'INFO')
             flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""
-                SELECT * FROM P0000COMMON_FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)
+                SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "22":
-            print_log('[INFO] SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)', 'INFO')
             gradient_list = GRADIENT.objects.raw("""
-                SELECT * FROM P0000COMMON_GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)
+                SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "23":
-            print_log('[INFO] SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)', 'INFO')
             industry_list = INDUSTRY.objects.raw("""
-                SELECT * FROM P0000COMMON_INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)
+                SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "24":
-            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)', 'INFO')
             house_asset_list = HOUSE_ASSET.objects.raw("""
-                SELECT * FROM P0000COMMON_HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)
+                SELECT * FROM HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "25":
-            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)', 'INFO')
             house_damage_list = HOUSE_DAMAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)
+                SELECT * FROM HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "26":
-            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)', 'INFO')
             household_damage_list = HOUSEHOLD_DAMAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)
+                SELECT * FROM HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "27":
-            print_log('[INFO] SELECT * FROM P0000COMMON_CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)', 'INFO')
             car_damage_list = CAR_DAMAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)
+                SELECT * FROM CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "28":
-            print_log('[INFO] SELECT * FROM P0000COMMON_HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)', 'INFO')
             house_cost_list = HOUSE_COST.objects.raw("""
-                SELECT * FROM P0000COMMON_HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)
+                SELECT * FROM HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "29":
-            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)', 'INFO')
             office_asset_list = OFFICE_ASSET.objects.raw("""
-                SELECT * FROM P0000COMMON_OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)
+                SELECT * FROM OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "30":
-            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)', 'INFO')
             office_damage_list = OFFICE_DAMAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)
+                SELECT * FROM OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "31":
-            print_log('[INFO] SELECT * FROM P0000COMMON_OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)', 'INFO')
             office_cost_list = OFFICE_COST.objects.raw("""
-                SELECT * FROM P0000COMMON_OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)
+                SELECT * FROM OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "32":
-            print_log('[INFO] SELECT * FROM P0000COMMON_FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)', 'INFO')
             farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.raw("""
-                SELECT * FROM P0000COMMON_FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)
+                SELECT * FROM FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)
                 """, [])
             
         elif category_code2 == "33":
-            print_log('[INFO] SELECT * FROM P0000COMMON_WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)', 'INFO')
             weather_list = WEATHER.objects.raw("""
-                SELECT * FROM P0000COMMON_WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)
+                SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)
                 """, [])
             
         elif category_code2 == "34":
-            print_log('[INFO] SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)', 'INFO')
+            print_log('[INFO] SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)', 'INFO')
             area_list = AREA.objects.raw("""
-                SELECT * FROM P0000COMMON_AREA ORDER BY CAST(AREA_ID AS INTEGER)
+                SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)
                 """, [])
             
         else:

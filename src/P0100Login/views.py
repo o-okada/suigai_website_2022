@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect                                   #
 from django.shortcuts import render                                            ### レンダリングモジュール
 from django.template import loader                                             ### テンプレート読み込みモジュール
 from django.views import generic                                               ### モジュール
-from P0000Common.common_function import print_log                              ### ログ出力モジュール
+from P0000Common.common import print_log                                       ### ログ出力モジュール
 
 ###############################################################################
 ### 関数名：index_view

@@ -52,7 +52,7 @@ from P0000Common.models import RESTORATION             ### 27: 復旧事業工�
 from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -74,7 +74,7 @@ def index_view(request):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         
         #######################################################################
@@ -115,15 +115,15 @@ def ken_view(request, ken_code):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
 
         #######################################################################
@@ -167,15 +167,15 @@ def city_view(request, ken_code, city_code):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
         
         #######################################################################
@@ -221,35 +221,35 @@ def category_view(request, ken_code, city_code, category_code):
         ### （１）DBにアクセスして、データを取得する。
         #######################################################################
         ken_list = KEN.objects.raw(""" 
-            SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
         
         if ken_code == "0":
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [])
         else:
             city_list = CITY.objects.raw(""" 
-                SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                 """, [ken_code,])
 
         if ken_code == "0":
             if city_code == "0":
                 ippan_list = IPPAN.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)
                     """, [])        
             else:
                 ippan_list = IPPAN.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    SELECT * FROM IPPAN WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                     """, [city_code, ])        
         else:
             if city_code == "0":
                 ippan_list = IPPAN.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    SELECT * FROM IPPAN WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                     """, [ken_code ])        
             else:
                 ippan_list = IPPAN.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
+                    SELECT * FROM IPPAN WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
                     """, [ken_code, city_code, ])    
                 
         #######################################################################

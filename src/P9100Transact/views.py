@@ -53,7 +53,7 @@ from P0000Common.models import KOKYO                   ### 28: 公共土木調�
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 from P0000Common.models import TRANSACT                ### 40: 
 
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -81,6 +81,7 @@ def index_view(request):
             schedule_formset = ScheduleFormSet(request.POST, prefix='schedule')
             if form.is_valid():
                 return HttpResponseRedirect('P9100Transact/success.html')
+            
             else:
                 pass
 
@@ -90,7 +91,7 @@ def index_view(request):
             ### （１）DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw("""
-                SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+                SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
                 """, [])
             transact_list = TRANSACT.objects.raw("""
                 SELECT 
@@ -111,10 +112,10 @@ def index_view(request):
                     IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                     TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                     TR1.COMMENT AS COMMENT 
-                FROM P0000COMMON_TRANSACT AS TR1 
-                    LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                    LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                FROM TRANSACT AS TR1 
+                    LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                    LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                    LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                 ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                 """, [])
             
@@ -247,16 +248,16 @@ def ken_view(request, ken_code):
             ### （１）DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw(""" 
-                SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+                SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
                 """, [])
             
             if ken_code == "0":
                 city_list = CITY.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                    SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                     """, [])
             else:
                 city_list = CITY.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                    SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                     """, [ken_code, ])
 
             if ken_code == "0":
@@ -279,10 +280,10 @@ def ken_view(request, ken_code):
                         IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                         TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                         TR1.COMMENT AS COMMENT 
-                    FROM P0000COMMON_TRANSACT AS TR1 
-                        LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                        LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                        LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                    FROM TRANSACT AS TR1 
+                        LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                        LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                        LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                     ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                     """, [])
             else:
@@ -305,10 +306,10 @@ def ken_view(request, ken_code):
                         IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                         TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                         TR1.COMMENT AS COMMENT 
-                    FROM P0000COMMON_TRANSACT AS TR1 
-                        LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                        LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                        LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                    FROM TRANSACT AS TR1 
+                        LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                        LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                        LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                     WHERE TR1.KEN_CODE=%s 
                     ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                     """, [ken_code, ])
@@ -435,20 +436,20 @@ def city_view(request, ken_code, city_code):
             ### （１）DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw(""" 
-                SELECT * FROM P0000COMMON_KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+                SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
                 """, [])
             
             if ken_code == "0":
                 city_list = CITY.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_CITY ORDER BY CAST(CITY_CODE AS INTEGER)
+                    SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)
                     """, [])
             else:
                 city_list = CITY.objects.raw(""" 
-                    SELECT * FROM P0000COMMON_CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
+                    SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)
                     """, [ken_code, ])
             
             ### transact_list = TRANSACT.objects.raw(""" 
-            ###     SELECT * FROM P0000COMMON_TRANSACT WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(TRANSACT_ID AS INTEGER)
+            ###     SELECT * FROM TRANSACT WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(TRANSACT_ID AS INTEGER)
             ###     """, [ken_code, city_code, ])
             
             if ken_code == "0":
@@ -472,10 +473,10 @@ def city_view(request, ken_code, city_code):
                             IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                             TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                             TR1.COMMENT AS COMMENT 
-                        FROM P0000COMMON_TRANSACT AS TR1 
-                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        FROM TRANSACT AS TR1 
+                            LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                         ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                         """, [])
                 else:
@@ -498,10 +499,10 @@ def city_view(request, ken_code, city_code):
                             IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                             TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                             TR1.COMMENT AS COMMENT 
-                        FROM P0000COMMON_TRANSACT AS TR1 
-                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        FROM TRANSACT AS TR1 
+                            LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                         WHERE TR1.CITY_CODE=%s 
                         ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                         """, [city_code, ])
@@ -526,10 +527,10 @@ def city_view(request, ken_code, city_code):
                             IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                             TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                             TR1.COMMENT AS COMMENT 
-                        FROM P0000COMMON_TRANSACT AS TR1 
-                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        FROM TRANSACT AS TR1 
+                            LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                         WHERE TR1.KEN_CODE=%s 
                         ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                         """, [ken_code, ])
@@ -553,10 +554,10 @@ def city_view(request, ken_code, city_code):
                             IKK1.IPPAN_KOKYO_KOEKI_NAME AS IPPAN_KOKYO_KOEKI_NAME, 
                             TR1.IPPAN_KOKYO_KOEKI_ID AS IPPAN_KOKYO_KOEKI_ID, 
                             TR1.COMMENT AS COMMENT 
-                        FROM P0000COMMON_TRANSACT AS TR1 
-                            LEFT OUTER JOIN P0000COMMON_KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
-                            LEFT OUTER JOIN P0000COMMON_IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
+                        FROM TRANSACT AS TR1 
+                            LEFT OUTER JOIN KEN AS KE1 ON (TR1.KEN_CODE=KE1.KEN_CODE) 
+                            LEFT OUTER JOIN CITY AS CI1 ON (TR1.CITY_CODE=CI1.CITY_CODE) 
+                            LEFT OUTER JOIN IPPAN_KOKYO_KOEKI AS IKK1 ON (TR1.IPPAN_KOKYO_KOEKI_CODE=IKK1.IPPAN_KOKYO_KOEKI_CODE) 
                         WHERE TR1.KEN_CODE=%s AND TR1.CITY_CODE=%s 
                         ORDER BY CAST(TR1.TRANSACT_ID AS INTEGER) 
                         """, [ken_code, city_code, ])

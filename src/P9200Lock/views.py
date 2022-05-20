@@ -47,7 +47,7 @@ from P0000Common.models import KOKYO                   ### 28: 公共土木調�
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
 from P0000Common.models import TRANSACT
 
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view

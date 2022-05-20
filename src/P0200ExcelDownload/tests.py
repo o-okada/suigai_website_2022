@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from P0000Common.models import KEN
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 class IndexViewTests(TestCase):
     def test_index_view(self):

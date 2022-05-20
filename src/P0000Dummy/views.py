@@ -15,7 +15,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.views import generic
 
-from P0000Common.common_function import print_log
+from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
