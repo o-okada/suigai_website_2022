@@ -528,7 +528,7 @@ class SUIGAI(models.Model):
     gradient_code = models.CharField(max_length=10, null=True)                 ### 地盤勾配区分コードFOR PARAM ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行14
-    residential_area = models.FloatField()                                     ### 農地面積（単位m2）
+    residential_area = models.FloatField()                                     ### 宅地面積（単位m2）
     agricultural_area = models.FloatField()                                    ### 農地面積（単位m2）
     underground_area = models.FloatField()                                     ### 地下面積（単位m2）
     kasen_kaigan_code = models.CharField(max_length=10, null=True)             ### 河川海岸（工種）コード ### FOR GROUP BY
@@ -689,6 +689,7 @@ class IPPAN(models.Model):
     ### 入力データ
     industry_code = models.CharField(max_length=10, null=True)                 ### 産業分類コード ### FOR SUM PARAM
     usage_code = models.CharField(max_length=10, null=True)                    ### 地下空間の利用形態コード
+    comment = models.CharField(max_length=512, null=True)                      ### 備考
 
     class Meta:
         ### db_table = 'p0000common_ippan'
