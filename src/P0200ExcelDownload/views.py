@@ -23,32 +23,33 @@ from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.formatting.rule import FormulaRule
 
-from P0000Common.models import BUILDING                ### 01: 建物区分
-from P0000Common.models import KEN                     ### 02: 都道府県
-from P0000Common.models import CITY                    ### 03: 市区町村
-from P0000Common.models import KASEN_KAIGAN            ### 04: 水害発生地点工種（河川海岸区分）
-from P0000Common.models import SUIKEI                  ### 05: 水系（水系・沿岸）
-from P0000Common.models import SUIKEI_TYPE             ### 06: 水系種別（水系・沿岸種別）
-from P0000Common.models import KASEN                   ### 07: 河川（河川・海岸）
-from P0000Common.models import KASEN_TYPE              ### 08: 河川種別（河川・海岸種別）
-from P0000Common.models import CAUSE                   ### 09: 水害原因
-from P0000Common.models import UNDERGROUND             ### 10: 地上地下区分
-from P0000Common.models import USAGE                   ### 11: 地下空間の利用形態
-from P0000Common.models import FLOOD_SEDIMENT          ### 12: 浸水土砂区分
-from P0000Common.models import GRADIENT                ### 13: 地盤勾配区分
-from P0000Common.models import INDUSTRY                ### 14: 産業分類
-from P0000Common.models import HOUSE_ASSET             ### 15: 県別家屋評価額
-from P0000Common.models import HOUSE_DAMAGE            ### 16: 家屋被害率
-from P0000Common.models import HOUSEHOLD_DAMAGE        ### 17: 家庭用品自動車以外被害率
-from P0000Common.models import CAR_DAMAGE              ### 18: 家庭用品自動車被害率
-from P0000Common.models import HOUSE_COST              ### 19: 家庭応急対策費
-from P0000Common.models import OFFICE_ASSET            ### 20: 産業分類別資産額
-from P0000Common.models import OFFICE_DAMAGE           ### 21: 事業所被害率
-from P0000Common.models import OFFICE_COST             ### 22: 事業所営業停止損失
-from P0000Common.models import FARMER_FISHER_DAMAGE    ### 23: 農漁家被害率
-from P0000Common.models import WEATHER                 ### 24: 異常気象（ほぼ、水害）
-from P0000Common.models import AREA                    ### 25: 区域
-from P0000Common.models import IPPAN                   ### 26: 一般資産調査票
+from P0000Common.models import BUILDING                ### 001: 建物区分
+from P0000Common.models import KEN                     ### 002: 都道府県
+from P0000Common.models import CITY                    ### 003: 市区町村
+from P0000Common.models import KASEN_KAIGAN            ### 004: 水害発生地点工種（河川海岸区分）
+from P0000Common.models import SUIKEI                  ### 005: 水系（水系・沿岸）
+from P0000Common.models import SUIKEI_TYPE             ### 006: 水系種別（水系・沿岸種別）
+from P0000Common.models import KASEN                   ### 007: 河川（河川・海岸）
+from P0000Common.models import KASEN_TYPE              ### 008: 河川種別（河川・海岸種別）
+from P0000Common.models import CAUSE                   ### 009: 水害原因
+from P0000Common.models import UNDERGROUND             ### 010: 地上地下区分
+from P0000Common.models import USAGE                   ### 011: 地下空間の利用形態
+from P0000Common.models import FLOOD_SEDIMENT          ### 012: 浸水土砂区分
+from P0000Common.models import GRADIENT                ### 013: 地盤勾配区分
+from P0000Common.models import INDUSTRY                ### 014: 産業分類
+from P0000Common.models import HOUSE_ASSET             ### 100: 県別家屋評価額
+from P0000Common.models import HOUSE_DAMAGE            ### 101: 家屋被害率
+from P0000Common.models import HOUSEHOLD_DAMAGE        ### 102: 家庭用品自動車以外被害率
+from P0000Common.models import CAR_DAMAGE              ### 103: 家庭用品自動車被害率
+from P0000Common.models import HOUSE_COST              ### 104: 家庭応急対策費
+from P0000Common.models import OFFICE_ASSET            ### 105: 産業分類別資産額
+from P0000Common.models import OFFICE_DAMAGE           ### 106: 事業所被害率
+from P0000Common.models import OFFICE_COST             ### 107: 事業所営業停止損失
+from P0000Common.models import FARMER_FISHER_DAMAGE    ### 108: 農漁家被害率
+from P0000Common.models import SUIGAI                  ### 200: 水害
+from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
+from P0000Common.models import AREA                    ### 202: 区域
+from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
 from P0000Common.models import RESTORATION             ### 27: 復旧事業工種
 from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
 from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
@@ -189,7 +190,7 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：building_view
-### 01: 建物区分
+### 001: 建物区分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_building(request):
@@ -253,7 +254,7 @@ def building_view(request):
 
 ###############################################################################
 ### 関数名：ken_view
-### 02: 都道府県
+### 002: 都道府県
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ken(request):
@@ -310,7 +311,7 @@ def ken_view(request):
 
 ###############################################################################
 ### 関数名：city_view
-### 03: 市区町村
+### 003: 市区町村
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_city(request):
@@ -373,7 +374,7 @@ def city_view(request):
 
 ###############################################################################
 ### 関数名：kasen_kaigan_view
-### 04: 水害発生地点工種（河川海岸区分）
+### 004: 水害発生地点工種（河川海岸区分）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen_kaigan(request):
@@ -430,7 +431,7 @@ def kasen_kaigan_view(request):
 
 ###############################################################################
 ### 関数名：suikei_view
-### 05: 水系（水系・沿岸）
+### 005: 水系（水系・沿岸）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_suikei(request):
@@ -489,7 +490,7 @@ def suikei_view(request):
 
 ###############################################################################
 ### 関数名：suikei_type_view
-### 06: 水系種別（水系・沿岸種別）
+### 006: 水系種別（水系・沿岸種別）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_suikei_type(request):
@@ -546,7 +547,7 @@ def suikei_type_view(request):
 
 ###############################################################################
 ### 関数名：kasen_view
-### 07: 河川（河川・海岸）
+### 007: 河川（河川・海岸）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen(request):
@@ -607,7 +608,7 @@ def kasen_view(request):
 
 ###############################################################################
 ### 関数名：kasen_type_view
-### 08: 河川種別（河川・海岸種別）
+### 008: 河川種別（河川・海岸種別）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen_type(request):
@@ -664,7 +665,7 @@ def kasen_type_view(request):
 
 ###############################################################################
 ### 関数名：cause_view
-### 09: 水害原因
+### 009: 水害原因
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_cause(request):
@@ -721,7 +722,7 @@ def cause_view(request):
 
 ###############################################################################
 ### 関数名：underground_view
-### 10: 地上地下区分
+### 010: 地上地下区分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_underground(request):
@@ -778,7 +779,7 @@ def underground_view(request):
 
 ###############################################################################
 ### 関数名：usage_view
-### 11: 地下空間の利用形態
+### 011: 地下空間の利用形態
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_usage(request):
@@ -835,7 +836,7 @@ def usage_view(request):
 
 ###############################################################################
 ### 関数名：flood_sediment_view
-### 12: 浸水土砂区分
+### 012: 浸水土砂区分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_flood_sediment(request):
@@ -892,7 +893,7 @@ def flood_sediment_view(request):
 
 ###############################################################################
 ### 関数名：gradient_view
-### 13: 地盤勾配区分
+### 013: 地盤勾配区分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_gradient(request):
@@ -949,7 +950,7 @@ def gradient_view(request):
 
 ###############################################################################
 ### 関数名：industry_view
-### 14: 産業分類
+### 014: 産業分類
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_industry(request):
@@ -1006,7 +1007,7 @@ def industry_view(request):
 
 ###############################################################################
 ### 関数名：house_asset_view
-### 15: 県別家屋評価額
+### 100: 県別家屋評価額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_asset(request):
@@ -1071,7 +1072,7 @@ def house_asset_view(request):
 
 ###############################################################################
 ### 関数名：house_damage_view
-### 16: 家屋被害率
+### 101: 家屋被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_damage(request):
@@ -1216,7 +1217,7 @@ def house_damage_view(request):
 
 ###############################################################################
 ### 関数名：household_damage_view
-### 17: 家庭用品自動車以外被害率
+### 102: 家庭用品自動車以外被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_household_damage(request):
@@ -1309,7 +1310,7 @@ def household_damage_view(request):
 
 ###############################################################################
 ### 関数名：car_damage_view
-### 18: 家庭用品自動車被害率
+### 103: 家庭用品自動車被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_car_damage(request):
@@ -1388,7 +1389,7 @@ def car_damage_view(request):
 
 ###############################################################################
 ### 関数名：house_cost_view
-### 19: 家庭応急対策費
+### 104: 家庭応急対策費
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_cost(request):
@@ -1481,7 +1482,7 @@ def house_cost_view(request):
 
 ###############################################################################
 ### 関数名：office_asset_view
-### 20: 産業分類別資産額
+### 105: 産業分類別資産額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_asset(request):
@@ -1552,7 +1553,7 @@ def office_asset_view(request):
 
 ###############################################################################
 ### 関数名：office_damage_view
-### 21: 事業所被害率
+### 106: 事業所被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_damage(request):
@@ -1669,7 +1670,7 @@ def office_damage_view(request):
 
 ###############################################################################
 ### 関数名：office_cost_view
-### 22: 事業所営業停止損失
+### 107: 事業所営業停止損失
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_cost(request):
@@ -1758,7 +1759,7 @@ def office_cost_view(request):
 
 ###############################################################################
 ### 関数名：farmer_fisher_damage_view
-### 23: 農漁家被害率
+### 108: 農漁家被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_farmer_fisher_damage(request):
@@ -1880,8 +1881,99 @@ def farmer_fisher_damage_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
+### 関数名：suigai_view
+### 200 水害
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+### def download_suigai(request):
+def suigai_view(request):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### (1)DBにアクセスして、データを取得する。
+        #######################################################################
+        suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        template_file_path = 'static/template_suigai.xlsx'
+        download_file_path = 'static/download_suigai.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '水害'
+        ws.cell(row=1, column=1).value = '水害ID'
+        ws.cell(row=1, column=2).value = '水害名'
+        ws.cell(row=1, column=3).value = '都道府県コード'
+        ws.cell(row=1, column=4).value = '市区町村コード'
+        ws.cell(row=1, column=5).value = '開始日'
+        ws.cell(row=1, column=6).value = '終了日'
+        ws.cell(row=1, column=7).value = '水害原因_1_コード'
+        ws.cell(row=1, column=8).value = '水害原因_2_コード'
+        ws.cell(row=1, column=9).value = '水害原因_3_コード'
+        ws.cell(row=1, column=10).value = '区域ID'
+        ws.cell(row=1, column=11).value = '水系コード'
+        ws.cell(row=1, column=12).value = '河川コード'
+        ws.cell(row=1, column=13).value = '地盤勾配区分コード'
+        ws.cell(row=1, column=14).value = '宅地面積（単位m2）'
+        ws.cell(row=1, column=15).value = '農地面積（単位m2）'
+        ws.cell(row=1, column=16).value = '地下面積（単位m2）'
+        ws.cell(row=1, column=17).value = '河川海岸（工種）コード'
+        ws.cell(row=1, column=18).value = '農作物被害額（単位千円）'
+        ws.cell(row=1, column=19).value = '異常気象ID'
+        
+        if suigai_list:
+            for i, suigai in enumerate(suigai_list):
+                ws.cell(row=i+2, column=1).value = suigai.suigai_id
+                ws.cell(row=i+2, column=2).value = suigai.suigai_name
+                ws.cell(row=i+2, column=3).value = suigai.ken_code
+                ws.cell(row=i+2, column=4).value = suigai.city_code
+                ws.cell(row=i+2, column=5).value = suigai.begin_date
+                ws.cell(row=i+2, column=6).value = suigai.end_date
+                ws.cell(row=i+2, column=7).value = suigai.cause_1_code
+                ws.cell(row=i+2, column=8).value = suigai.cause_2_code
+                ws.cell(row=i+2, column=9).value = suigai.cause_3_code
+                ws.cell(row=i+2, column=10).value = suigai.area_id
+                ws.cell(row=i+2, column=11).value = suigai.suikei_code
+                ws.cell(row=i+2, column=12).value = suigai.kasen_code
+                ws.cell(row=i+2, column=13).value = suigai.gradient_code
+                ws.cell(row=i+2, column=14).value = suigai.residential_area
+                ws.cell(row=i+2, column=15).value = suigai.agricultural_area
+                ws.cell(row=i+2, column=16).value = suigai.underground_area
+                ws.cell(row=i+2, column=17).value = suigai.kasen_kaigan_code
+                ws.cell(row=i+2, column=18).value = suigai.crop_damage
+                ws.cell(row=i+2, column=19).value = suigai.weather_id
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="suigai.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
 ### 関数名：weather_view
-### 24: 異常気象
+### 201: 異常気象
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_weather(request):
@@ -1944,7 +2036,7 @@ def weather_view(request):
 
 ###############################################################################
 ### 関数名：area_view
-### 25: 区域
+### 202: 区域
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_area(request):
@@ -2013,7 +2105,7 @@ def area_view(request):
 
 ###############################################################################
 ### 関数名：ippan_chosa_view
-### 2601: 一般資産調査票（調査員用）
+### 203: 一般資産調査票（調査員用）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ippan_chosa(request):
@@ -2055,6 +2147,8 @@ def ippan_chosa_view(request):
         ws_flood_sediment = wb["FLOOD_SEDIMENT"]
         ws_gradient = wb["GRADIENT"]
         ws_industry = wb["INDUSTRY"]
+        ws_suigai = wb["SUIGAI"]
+        ws_weather = wb["WEATHER"]
         ws_area = wb["AREA"]
         ws_ippan = wb["IPPAN"]
 
@@ -2065,7 +2159,7 @@ def ippan_chosa_view(request):
         if building_list:
             for i, building in enumerate(building_list):
                 ws_building.cell(row=i+1, column=1).value = building.building_code
-                ws_building.cell(row=i+1, column=2).value = building.building_name + ":" + building.building_code
+                ws_building.cell(row=i+1, column=2).value = str(building.building_name) + ":" + str(building.building_code)
 
         ### 02: 都道府県
         print("download_ippan_chosa3", flush=True)
@@ -2073,9 +2167,9 @@ def ippan_chosa_view(request):
         if ken_list:
             for i, ken in enumerate(ken_list):
                 ws_ken.cell(row=i+1, column=1).value = ken.ken_code
-                ws_ken.cell(row=i+1, column=2).value = ken.ken_name + ":" + ken.ken_code
+                ws_ken.cell(row=i+1, column=2).value = str(ken.ken_name) + ":" + str(ken.ken_code)
                 
-                ws_city_vlook.cell(row=i+1, column=1).value = ken.ken_name + ":" + ken.ken_code
+                ws_city_vlook.cell(row=i+1, column=1).value = str(ken.ken_name) + ":" + str(ken.ken_code)
         
         print("download_ippan_chosa4", flush=True)
         
@@ -2183,7 +2277,7 @@ def ippan_chosa_view(request):
         if city_list01:
             for i, city in enumerate(city_list01):
                 ws_city.cell(row=i+1, column=1).value = city.city_code
-                ws_city.cell(row=i+1, column=2).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=2).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=3).value = city.ken_code
                 ws_city.cell(row=i+1, column=4).value = city.city_population
                 ws_city.cell(row=i+1, column=5).value = city.city_area
@@ -2191,7 +2285,7 @@ def ippan_chosa_view(request):
         if city_list02:
             for i, city in enumerate(city_list02):
                 ws_city.cell(row=i+1, column=6).value = city.city_code
-                ws_city.cell(row=i+1, column=7).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=7).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=8).value = city.ken_code
                 ws_city.cell(row=i+1, column=9).value = city.city_population
                 ws_city.cell(row=i+1, column=10).value = city.city_area
@@ -2199,7 +2293,7 @@ def ippan_chosa_view(request):
         if city_list03:
             for i, city in enumerate(city_list03):
                 ws_city.cell(row=i+1, column=11).value = city.city_code
-                ws_city.cell(row=i+1, column=12).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=12).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=13).value = city.ken_code
                 ws_city.cell(row=i+1, column=14).value = city.city_population
                 ws_city.cell(row=i+1, column=15).value = city.city_area
@@ -2207,7 +2301,7 @@ def ippan_chosa_view(request):
         if city_list04:
             for i, city in enumerate(city_list04):
                 ws_city.cell(row=i+1, column=16).value = city.city_code
-                ws_city.cell(row=i+1, column=17).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=17).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=18).value = city.ken_code
                 ws_city.cell(row=i+1, column=19).value = city.city_population
                 ws_city.cell(row=i+1, column=20).value = city.city_area
@@ -2215,7 +2309,7 @@ def ippan_chosa_view(request):
         if city_list05:
             for i, city in enumerate(city_list05):
                 ws_city.cell(row=i+1, column=21).value = city.city_code
-                ws_city.cell(row=i+1, column=22).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=22).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=23).value = city.ken_code
                 ws_city.cell(row=i+1, column=24).value = city.city_population
                 ws_city.cell(row=i+1, column=25).value = city.city_area
@@ -2223,7 +2317,7 @@ def ippan_chosa_view(request):
         if city_list06:
             for i, city in enumerate(city_list06):
                 ws_city.cell(row=i+1, column=26).value = city.city_code
-                ws_city.cell(row=i+1, column=27).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=27).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=28).value = city.ken_code
                 ws_city.cell(row=i+1, column=29).value = city.city_population
                 ws_city.cell(row=i+1, column=30).value = city.city_area
@@ -2231,7 +2325,7 @@ def ippan_chosa_view(request):
         if city_list07:
             for i, city in enumerate(city_list07):
                 ws_city.cell(row=i+1, column=31).value = city.city_code
-                ws_city.cell(row=i+1, column=32).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=32).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=33).value = city.ken_code
                 ws_city.cell(row=i+1, column=34).value = city.city_population
                 ws_city.cell(row=i+1, column=35).value = city.city_area
@@ -2239,7 +2333,7 @@ def ippan_chosa_view(request):
         if city_list08:
             for i, city in enumerate(city_list08):
                 ws_city.cell(row=i+1, column=36).value = city.city_code
-                ws_city.cell(row=i+1, column=37).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=37).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=38).value = city.ken_code
                 ws_city.cell(row=i+1, column=39).value = city.city_population
                 ws_city.cell(row=i+1, column=40).value = city.city_area
@@ -2247,7 +2341,7 @@ def ippan_chosa_view(request):
         if city_list09:
             for i, city in enumerate(city_list09):
                 ws_city.cell(row=i+1, column=41).value = city.city_code
-                ws_city.cell(row=i+1, column=42).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=42).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=43).value = city.ken_code
                 ws_city.cell(row=i+1, column=44).value = city.city_population
                 ws_city.cell(row=i+1, column=45).value = city.city_area
@@ -2255,7 +2349,7 @@ def ippan_chosa_view(request):
         if city_list10:
             for i, city in enumerate(city_list10):
                 ws_city.cell(row=i+1, column=46).value = city.city_code
-                ws_city.cell(row=i+1, column=47).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=47).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=48).value = city.ken_code
                 ws_city.cell(row=i+1, column=49).value = city.city_population
                 ws_city.cell(row=i+1, column=50).value = city.city_area
@@ -2263,7 +2357,7 @@ def ippan_chosa_view(request):
         if city_list11:
             for i, city in enumerate(city_list11):
                 ws_city.cell(row=i+1, column=51).value = city.city_code
-                ws_city.cell(row=i+1, column=52).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=52).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=53).value = city.ken_code
                 ws_city.cell(row=i+1, column=54).value = city.city_population
                 ws_city.cell(row=i+1, column=55).value = city.city_area
@@ -2271,7 +2365,7 @@ def ippan_chosa_view(request):
         if city_list12:
             for i, city in enumerate(city_list12):
                 ws_city.cell(row=i+1, column=56).value = city.city_code
-                ws_city.cell(row=i+1, column=57).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=57).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=58).value = city.ken_code
                 ws_city.cell(row=i+1, column=59).value = city.city_population
                 ws_city.cell(row=i+1, column=60).value = city.city_area
@@ -2279,7 +2373,7 @@ def ippan_chosa_view(request):
         if city_list13:
             for i, city in enumerate(city_list13):
                 ws_city.cell(row=i+1, column=61).value = city.city_code
-                ws_city.cell(row=i+1, column=62).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=62).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=63).value = city.ken_code
                 ws_city.cell(row=i+1, column=64).value = city.city_population
                 ws_city.cell(row=i+1, column=65).value = city.city_area
@@ -2287,7 +2381,7 @@ def ippan_chosa_view(request):
         if city_list14:
             for i, city in enumerate(city_list14):
                 ws_city.cell(row=i+1, column=66).value = city.city_code
-                ws_city.cell(row=i+1, column=67).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=67).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=68).value = city.ken_code
                 ws_city.cell(row=i+1, column=69).value = city.city_population
                 ws_city.cell(row=i+1, column=70).value = city.city_area
@@ -2295,7 +2389,7 @@ def ippan_chosa_view(request):
         if city_list15:
             for i, city in enumerate(city_list15):
                 ws_city.cell(row=i+1, column=71).value = city.city_code
-                ws_city.cell(row=i+1, column=72).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=72).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=73).value = city.ken_code
                 ws_city.cell(row=i+1, column=74).value = city.city_population
                 ws_city.cell(row=i+1, column=75).value = city.city_area
@@ -2303,7 +2397,7 @@ def ippan_chosa_view(request):
         if city_list16:
             for i, city in enumerate(city_list16):
                 ws_city.cell(row=i+1, column=76).value = city.city_code
-                ws_city.cell(row=i+1, column=77).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=77).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=78).value = city.ken_code
                 ws_city.cell(row=i+1, column=79).value = city.city_population
                 ws_city.cell(row=i+1, column=80).value = city.city_area
@@ -2311,7 +2405,7 @@ def ippan_chosa_view(request):
         if city_list17:
             for i, city in enumerate(city_list17):
                 ws_city.cell(row=i+1, column=81).value = city.city_code
-                ws_city.cell(row=i+1, column=82).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=82).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=83).value = city.ken_code
                 ws_city.cell(row=i+1, column=84).value = city.city_population
                 ws_city.cell(row=i+1, column=85).value = city.city_area
@@ -2319,7 +2413,7 @@ def ippan_chosa_view(request):
         if city_list18:
             for i, city in enumerate(city_list18):
                 ws_city.cell(row=i+1, column=86).value = city.city_code
-                ws_city.cell(row=i+1, column=87).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=87).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=88).value = city.ken_code
                 ws_city.cell(row=i+1, column=89).value = city.city_population
                 ws_city.cell(row=i+1, column=90).value = city.city_area
@@ -2327,7 +2421,7 @@ def ippan_chosa_view(request):
         if city_list19:
             for i, city in enumerate(city_list19):
                 ws_city.cell(row=i+1, column=91).value = city.city_code
-                ws_city.cell(row=i+1, column=92).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=92).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=93).value = city.ken_code
                 ws_city.cell(row=i+1, column=94).value = city.city_population
                 ws_city.cell(row=i+1, column=95).value = city.city_area
@@ -2335,7 +2429,7 @@ def ippan_chosa_view(request):
         if city_list20:
             for i, city in enumerate(city_list20):
                 ws_city.cell(row=i+1, column=96).value = city.city_code
-                ws_city.cell(row=i+1, column=97).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=97).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=98).value = city.ken_code
                 ws_city.cell(row=i+1, column=99).value = city.city_population
                 ws_city.cell(row=i+1, column=100).value = city.city_area
@@ -2343,7 +2437,7 @@ def ippan_chosa_view(request):
         if city_list21:
             for i, city in enumerate(city_list21):
                 ws_city.cell(row=i+1, column=101).value = city.city_code
-                ws_city.cell(row=i+1, column=102).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=102).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=103).value = city.ken_code
                 ws_city.cell(row=i+1, column=104).value = city.city_population
                 ws_city.cell(row=i+1, column=105).value = city.city_area
@@ -2351,7 +2445,7 @@ def ippan_chosa_view(request):
         if city_list22:
             for i, city in enumerate(city_list22):
                 ws_city.cell(row=i+1, column=106).value = city.city_code
-                ws_city.cell(row=i+1, column=107).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=107).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=108).value = city.ken_code
                 ws_city.cell(row=i+1, column=109).value = city.city_population
                 ws_city.cell(row=i+1, column=110).value = city.city_area
@@ -2359,7 +2453,7 @@ def ippan_chosa_view(request):
         if city_list23:
             for i, city in enumerate(city_list23):
                 ws_city.cell(row=i+1, column=111).value = city.city_code
-                ws_city.cell(row=i+1, column=112).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=112).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=113).value = city.ken_code
                 ws_city.cell(row=i+1, column=114).value = city.city_population
                 ws_city.cell(row=i+1, column=115).value = city.city_area
@@ -2367,7 +2461,7 @@ def ippan_chosa_view(request):
         if city_list24:
             for i, city in enumerate(city_list24):
                 ws_city.cell(row=i+1, column=116).value = city.city_code
-                ws_city.cell(row=i+1, column=117).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=117).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=118).value = city.ken_code
                 ws_city.cell(row=i+1, column=119).value = city.city_population
                 ws_city.cell(row=i+1, column=120).value = city.city_area
@@ -2375,7 +2469,7 @@ def ippan_chosa_view(request):
         if city_list25:
             for i, city in enumerate(city_list25):
                 ws_city.cell(row=i+1, column=121).value = city.city_code
-                ws_city.cell(row=i+1, column=122).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=122).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=123).value = city.ken_code
                 ws_city.cell(row=i+1, column=124).value = city.city_population
                 ws_city.cell(row=i+1, column=125).value = city.city_area
@@ -2383,7 +2477,7 @@ def ippan_chosa_view(request):
         if city_list26:
             for i, city in enumerate(city_list26):
                 ws_city.cell(row=i+1, column=126).value = city.city_code
-                ws_city.cell(row=i+1, column=127).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=127).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=128).value = city.ken_code
                 ws_city.cell(row=i+1, column=129).value = city.city_population
                 ws_city.cell(row=i+1, column=130).value = city.city_area
@@ -2391,7 +2485,7 @@ def ippan_chosa_view(request):
         if city_list27:
             for i, city in enumerate(city_list27):
                 ws_city.cell(row=i+1, column=131).value = city.city_code
-                ws_city.cell(row=i+1, column=132).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=132).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=133).value = city.ken_code
                 ws_city.cell(row=i+1, column=134).value = city.city_population
                 ws_city.cell(row=i+1, column=135).value = city.city_area
@@ -2399,7 +2493,7 @@ def ippan_chosa_view(request):
         if city_list28:
             for i, city in enumerate(city_list28):
                 ws_city.cell(row=i+1, column=136).value = city.city_code
-                ws_city.cell(row=i+1, column=137).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=137).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=138).value = city.ken_code
                 ws_city.cell(row=i+1, column=139).value = city.city_population
                 ws_city.cell(row=i+1, column=140).value = city.city_area
@@ -2407,7 +2501,7 @@ def ippan_chosa_view(request):
         if city_list29:
             for i, city in enumerate(city_list29):
                 ws_city.cell(row=i+1, column=141).value = city.city_code
-                ws_city.cell(row=i+1, column=142).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=142).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=143).value = city.ken_code
                 ws_city.cell(row=i+1, column=144).value = city.city_population
                 ws_city.cell(row=i+1, column=145).value = city.city_area
@@ -2415,7 +2509,7 @@ def ippan_chosa_view(request):
         if city_list30:
             for i, city in enumerate(city_list30):
                 ws_city.cell(row=i+1, column=146).value = city.city_code
-                ws_city.cell(row=i+1, column=147).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=147).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=148).value = city.ken_code
                 ws_city.cell(row=i+1, column=149).value = city.city_population
                 ws_city.cell(row=i+1, column=150).value = city.city_area
@@ -2423,7 +2517,7 @@ def ippan_chosa_view(request):
         if city_list31:
             for i, city in enumerate(city_list31):
                 ws_city.cell(row=i+1, column=151).value = city.city_code
-                ws_city.cell(row=i+1, column=152).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=152).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=153).value = city.ken_code
                 ws_city.cell(row=i+1, column=154).value = city.city_population
                 ws_city.cell(row=i+1, column=155).value = city.city_area
@@ -2431,7 +2525,7 @@ def ippan_chosa_view(request):
         if city_list32:
             for i, city in enumerate(city_list32):
                 ws_city.cell(row=i+1, column=156).value = city.city_code
-                ws_city.cell(row=i+1, column=157).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=157).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=158).value = city.ken_code
                 ws_city.cell(row=i+1, column=159).value = city.city_population
                 ws_city.cell(row=i+1, column=160).value = city.city_area
@@ -2439,7 +2533,7 @@ def ippan_chosa_view(request):
         if city_list33:
             for i, city in enumerate(city_list33):
                 ws_city.cell(row=i+1, column=161).value = city.city_code
-                ws_city.cell(row=i+1, column=162).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=162).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=163).value = city.ken_code
                 ws_city.cell(row=i+1, column=164).value = city.city_population
                 ws_city.cell(row=i+1, column=165).value = city.city_area
@@ -2447,7 +2541,7 @@ def ippan_chosa_view(request):
         if city_list34:
             for i, city in enumerate(city_list34):
                 ws_city.cell(row=i+1, column=166).value = city.city_code
-                ws_city.cell(row=i+1, column=167).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=167).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=168).value = city.ken_code
                 ws_city.cell(row=i+1, column=160).value = city.city_population
                 ws_city.cell(row=i+1, column=170).value = city.city_area
@@ -2455,7 +2549,7 @@ def ippan_chosa_view(request):
         if city_list35:
             for i, city in enumerate(city_list35):
                 ws_city.cell(row=i+1, column=171).value = city.city_code
-                ws_city.cell(row=i+1, column=172).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=172).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=173).value = city.ken_code
                 ws_city.cell(row=i+1, column=174).value = city.city_population
                 ws_city.cell(row=i+1, column=175).value = city.city_area
@@ -2463,7 +2557,7 @@ def ippan_chosa_view(request):
         if city_list36:
             for i, city in enumerate(city_list36):
                 ws_city.cell(row=i+1, column=176).value = city.city_code
-                ws_city.cell(row=i+1, column=177).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=177).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=178).value = city.ken_code
                 ws_city.cell(row=i+1, column=179).value = city.city_population
                 ws_city.cell(row=i+1, column=180).value = city.city_area
@@ -2471,7 +2565,7 @@ def ippan_chosa_view(request):
         if city_list37:
             for i, city in enumerate(city_list37):
                 ws_city.cell(row=i+1, column=181).value = city.city_code
-                ws_city.cell(row=i+1, column=182).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=182).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=183).value = city.ken_code
                 ws_city.cell(row=i+1, column=184).value = city.city_population
                 ws_city.cell(row=i+1, column=185).value = city.city_area
@@ -2479,7 +2573,7 @@ def ippan_chosa_view(request):
         if city_list38:
             for i, city in enumerate(city_list38):
                 ws_city.cell(row=i+1, column=186).value = city.city_code
-                ws_city.cell(row=i+1, column=187).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=187).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=188).value = city.ken_code
                 ws_city.cell(row=i+1, column=189).value = city.city_population
                 ws_city.cell(row=i+1, column=190).value = city.city_area
@@ -2487,7 +2581,7 @@ def ippan_chosa_view(request):
         if city_list39:
             for i, city in enumerate(city_list39):
                 ws_city.cell(row=i+1, column=191).value = city.city_code
-                ws_city.cell(row=i+1, column=192).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=192).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=193).value = city.ken_code
                 ws_city.cell(row=i+1, column=194).value = city.city_population
                 ws_city.cell(row=i+1, column=195).value = city.city_area
@@ -2495,7 +2589,7 @@ def ippan_chosa_view(request):
         if city_list40:
             for i, city in enumerate(city_list40):
                 ws_city.cell(row=i+1, column=196).value = city.city_code
-                ws_city.cell(row=i+1, column=197).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=197).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=198).value = city.ken_code
                 ws_city.cell(row=i+1, column=199).value = city.city_population
                 ws_city.cell(row=i+1, column=200).value = city.city_area
@@ -2503,7 +2597,7 @@ def ippan_chosa_view(request):
         if city_list41:
             for i, city in enumerate(city_list41):
                 ws_city.cell(row=i+1, column=201).value = city.city_code
-                ws_city.cell(row=i+1, column=202).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=202).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=203).value = city.ken_code
                 ws_city.cell(row=i+1, column=204).value = city.city_population
                 ws_city.cell(row=i+1, column=205).value = city.city_area
@@ -2511,7 +2605,7 @@ def ippan_chosa_view(request):
         if city_list42:
             for i, city in enumerate(city_list42):
                 ws_city.cell(row=i+1, column=206).value = city.city_code
-                ws_city.cell(row=i+1, column=207).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=207).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=208).value = city.ken_code
                 ws_city.cell(row=i+1, column=209).value = city.city_population
                 ws_city.cell(row=i+1, column=210).value = city.city_area
@@ -2519,7 +2613,7 @@ def ippan_chosa_view(request):
         if city_list43:
             for i, city in enumerate(city_list43):
                 ws_city.cell(row=i+1, column=211).value = city.city_code
-                ws_city.cell(row=i+1, column=212).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=212).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=213).value = city.ken_code
                 ws_city.cell(row=i+1, column=214).value = city.city_population
                 ws_city.cell(row=i+1, column=215).value = city.city_area
@@ -2527,7 +2621,7 @@ def ippan_chosa_view(request):
         if city_list44:
             for i, city in enumerate(city_list44):
                 ws_city.cell(row=i+1, column=216).value = city.city_code
-                ws_city.cell(row=i+1, column=217).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=217).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=218).value = city.ken_code
                 ws_city.cell(row=i+1, column=219).value = city.city_population
                 ws_city.cell(row=i+1, column=220).value = city.city_area
@@ -2535,7 +2629,7 @@ def ippan_chosa_view(request):
         if city_list45:
             for i, city in enumerate(city_list45):
                 ws_city.cell(row=i+1, column=221).value = city.city_code
-                ws_city.cell(row=i+1, column=222).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=222).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=223).value = city.ken_code
                 ws_city.cell(row=i+1, column=224).value = city.city_population
                 ws_city.cell(row=i+1, column=225).value = city.city_area
@@ -2543,7 +2637,7 @@ def ippan_chosa_view(request):
         if city_list46:
             for i, city in enumerate(city_list46):
                 ws_city.cell(row=i+1, column=226).value = city.city_code
-                ws_city.cell(row=i+1, column=227).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=227).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=228).value = city.ken_code
                 ws_city.cell(row=i+1, column=229).value = city.city_population
                 ws_city.cell(row=i+1, column=230).value = city.city_area
@@ -2551,7 +2645,7 @@ def ippan_chosa_view(request):
         if city_list47:
             for i, city in enumerate(city_list47):
                 ws_city.cell(row=i+1, column=231).value = city.city_code
-                ws_city.cell(row=i+1, column=232).value = city.city_name + ":" + city.city_code
+                ws_city.cell(row=i+1, column=232).value = str(city.city_name) + ":" + str(city.city_code)
                 ws_city.cell(row=i+1, column=233).value = city.ken_code
                 ws_city.cell(row=i+1, column=234).value = city.city_population
                 ws_city.cell(row=i+1, column=235).value = city.city_area
@@ -2570,7 +2664,7 @@ def ippan_chosa_view(request):
         if suikei_list:
             for i, suikei in enumerate(suikei_list):
                 ws_suikei.cell(row=i+1, column=1).value = suikei.suikei_code
-                ws_suikei.cell(row=i+1, column=2).value = suikei.suikei_name + ":" + suikei.suikei_code
+                ws_suikei.cell(row=i+1, column=2).value = str(suikei.suikei_name) + ":" + str(suikei.suikei_code)
                 ws_suikei.cell(row=i+1, column=3).value = suikei.suikei_type_code
 
         ### 06: 水系種別（水系・沿岸種別）
@@ -2579,7 +2673,7 @@ def ippan_chosa_view(request):
         if suikei_type_list:
             for i, suikei_type in enumerate(suikei_type_list):
                 ws_suikei_type.cell(row=i+1, column=1).value = suikei_type.suikei_type_code
-                ws_suikei_type.cell(row=i+1, column=2).value = suikei_type.suikei_type_name + ":" + suikei_type.suikei_type_code
+                ws_suikei_type.cell(row=i+1, column=2).value = str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code)
 
         ### 07: 河川（河川・海岸）
         print("download_ippan_chosa9", flush=True)
@@ -2587,7 +2681,7 @@ def ippan_chosa_view(request):
         if kasen_list:
             for i, kasen in enumerate(kasen_list):
                 ws_kasen.cell(row=i+1, column=1).value = kasen.kasen_code
-                ws_kasen.cell(row=i+1, column=2).value = kasen.kasen_name + ":" + kasen.kasen_code
+                ws_kasen.cell(row=i+1, column=2).value = str(kasen.kasen_name) + ":" + str(kasen.kasen_code)
                 ws_kasen.cell(row=i+1, column=3).value = kasen.kasen_type_code
                 ws_kasen.cell(row=i+1, column=4).value = kasen.suikei_code
                 
@@ -2597,7 +2691,7 @@ def ippan_chosa_view(request):
         if kasen_type_list:
             for i, kasen_type in enumerate(kasen_type_list):
                 ws_kasen_type.cell(row=i+1, column=1).value = kasen_type.kasen_type_code
-                ws_kasen_type.cell(row=i+1, column=2).value = kasen_type.kasen_type_name + ":" + kasen_type.kasen_type_code
+                ws_kasen_type.cell(row=i+1, column=2).value = str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code)
         
         ### 09: 水害原因
         print("download_ippan_chosa11", flush=True)
@@ -2605,7 +2699,7 @@ def ippan_chosa_view(request):
         if cause_list:
             for i, cause in enumerate(cause_list):
                 ws_cause.cell(row=i+1, column=1).value = cause.cause_code
-                ws_cause.cell(row=i+1, column=2).value = cause.cause_name + ":" + cause.cause_code
+                ws_cause.cell(row=i+1, column=2).value = str(cause.cause_name) + ":" + str(cause.cause_code)
                 
         ### 10: 地上地下区分
         print("download_ippan_chosa12", flush=True)
@@ -2613,7 +2707,7 @@ def ippan_chosa_view(request):
         if underground_list:
             for i, underground in enumerate(underground_list):
                 ws_underground.cell(row=i+1, column=1).value = underground.underground_code
-                ws_underground.cell(row=i+1, column=2).value = underground.underground_name + ":" + underground.underground_code
+                ws_underground.cell(row=i+1, column=2).value = str(underground.underground_name) + ":" + str(underground.underground_code)
         
         ### 11: 地下空間の利用形態
         print("download_ippan_chosa13", flush=True)
@@ -2621,7 +2715,7 @@ def ippan_chosa_view(request):
         if usage_list:
             for i, usage in enumerate(usage_list):
                 ws_usage.cell(row=i+1, column=1).value = usage.usage_code
-                ws_usage.cell(row=i+1, column=2).value = usage.usage_name + ":" + usage.usage_code
+                ws_usage.cell(row=i+1, column=2).value = str(usage.usage_name) + ":" + str(usage.usage_code)
         
         ### 12: 浸水土砂区分
         print("download_ippan_chosa14", flush=True)
@@ -2629,7 +2723,7 @@ def ippan_chosa_view(request):
         if flood_sediment_list:
             for i, flood_sediment in enumerate(flood_sediment_list):
                 ws_flood_sediment.cell(row=i+1, column=1).value = flood_sediment.flood_sediment_code
-                ws_flood_sediment.cell(row=i+1, column=2).value = flood_sediment.flood_sediment_name + ":" + flood_sediment.flood_sediment_code
+                ws_flood_sediment.cell(row=i+1, column=2).value = str(flood_sediment.flood_sediment_name) + ":" + str(flood_sediment.flood_sediment_code)
         
         ### 13: 地盤勾配区分
         print("download_ippan_chosa15", flush=True)
@@ -2637,7 +2731,7 @@ def ippan_chosa_view(request):
         if gradient_list:
             for i, gradient in enumerate(gradient_list):
                 ws_gradient.cell(row=i+1, column=1).value = gradient.gradient_code
-                ws_gradient.cell(row=i+1, column=2).value = gradient.gradient_name + ":" + gradient.gradient_code
+                ws_gradient.cell(row=i+1, column=2).value = str(gradient.gradient_name) + ":" + str(gradient.gradient_code)
         
         ### 14: 産業分類
         print("download_ippan_chosa16", flush=True)
@@ -2645,69 +2739,250 @@ def ippan_chosa_view(request):
         if industry_list:
             for i, industry in enumerate(industry_list):
                 ws_industry.cell(row=i+1, column=1).value = industry.industry_code
-                ws_industry.cell(row=i+1, column=2).value = industry.industry_name + ":" + industry.industry_code
+                ws_industry.cell(row=i+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
         
-        ### 25: 区域
-        print("download_ippan_chosa17", flush=True)
+        ### 200: 水害
+        print("download_ippan_chosa17_1", flush=True)
+        suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
+        if suigai_list:
+            for i, suigai in enumerate(suigai_list):
+                ws_suigai.cell(row=i+1, column=1).value = suigai.suigai_id
+                ws_suigai.cell(row=i+1, column=2).value = str(suigai.suigai_name) + ":" + str(suigai.suigai_id)
+                ws_suigai.cell(row=i+1, column=3).value = suigai.ken_code
+                ws_suigai.cell(row=i+1, column=4).value = suigai.city_code
+                ws_suigai.cell(row=i+1, column=5).value = suigai.begin_date
+                ws_suigai.cell(row=i+1, column=6).value = suigai.end_date
+                ws_suigai.cell(row=i+1, column=7).value = suigai.cause_1_code
+                ws_suigai.cell(row=i+1, column=8).value = suigai.cause_2_code
+                ws_suigai.cell(row=i+1, column=9).value = suigai.cause_3_code
+                ws_suigai.cell(row=i+1, column=10).value = suigai.area_id
+                ws_suigai.cell(row=i+1, column=11).value = suigai.suikei_code
+                ws_suigai.cell(row=i+1, column=12).value = suigai.kasen_code
+                ws_suigai.cell(row=i+1, column=13).value = suigai.gradient_code
+                ws_suigai.cell(row=i+1, column=14).value = suigai.residential_area
+                ws_suigai.cell(row=i+1, column=15).value = suigai.agricultural_area
+                ws_suigai.cell(row=i+1, column=16).value = suigai.underground_area
+                ws_suigai.cell(row=i+1, column=17).value = suigai.kasen_kaigan_code
+                ws_suigai.cell(row=i+1, column=18).value = suigai.crop_damage
+                ws_suigai.cell(row=i+1, column=19).value = suigai.weather_id
+
+        ### 201: 異常気象
+        print("download_ippan_chosa17_2", flush=True)
+        weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
+        if weather_list:
+            for i, weather in enumerate(weather_list):
+                ws_weather.cell(row=i+1, column=1).value = weather.weather_id
+                ws_weather.cell(row=i+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
+
+        ### 202: 区域
+        print("download_ippan_chosa17_3", flush=True)
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
         if area_list:
             for i, area in enumerate(area_list):
                 ws_area.cell(row=i+1, column=1).value = area.area_id
                 ws_area.cell(row=i+1, column=2).value = str(area.area_name) + ":" + str(area.area_id)
-                ### ws_area.cell(row=i+1, column=3).value = area.area_year
-                ### ws_area.cell(row=i+1, column=4).value = area.begin_date
-                ### ws_area.cell(row=i+1, column=5).value = area.end_date
-                ### ws_area.cell(row=i+1, column=6).value = area.agri_area
-                ### ws_area.cell(row=i+1, column=7).value = area.underground_area
-                ### ws_area.cell(row=i+1, column=8).value = area.crop_damage
         
         #######################################################################
         ### EXCELセルプルダウン埋め込み処理(0030)
         #######################################################################
-        print("download_ippan_chosa18", flush=True)
+        print("download_ippan_chosa18_1", flush=True)
+        ### 203: 一般資産調査票
         ### ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
-        ippan_list = IPPAN.objects.raw("""
+        ### ippan_list = IPPAN.objects.raw("""
+        ###     SELECT 
+        ###     M1.suikei_type_code AS suikei_type_code,
+        ###     M1.suikei_type_name AS suikei_type_name,
+        ###     M2.kasen_type_code AS kasen_type_code,
+        ###     M2.kasen_type_name AS kasen_type_name,
+        ###     IP1.ippan_id AS ippan_id,
+        ###     IP1.ippan_name AS ippan_name,
+        ###     IP1.building_code AS building_code,
+        ###     BU1.building_name AS building_Name,
+        ###     IP1.flood_sediment_code AS flood_sediment_code,
+        ###     FL1.flood_sediment_name AS flood_sediment_name,
+        ###     IP1.gradient_code AS gradient_code,
+        ###     GR1.gradient_name AS gradient_name,
+        ###     IP1.industry_code AS industry_code,
+        ###     IN1.industry_name AS industry_name,
+        ###     IP1.ken_code AS ken_code, 
+        ###     KE1.ken_name AS ken_name,
+        ###     IP1.city_code AS city_code,
+        ###     CI1.city_name AS city_name,
+        ###     IP1.begin_date AS begin_date,
+        ###     IP1.end_date AS end_date,
+        ###     IP1.weather_id AS weather_id,
+        ###     WE1.weather_name as weather_name,
+        ###     IP1.area_id AS area_id,
+        ###     AR1.area_name AS area_name,
+        ###     IP1.cause_1_code AS cause_1_code,
+        ###     CA1.cause_name AS cause_1_name,
+        ###     IP1.cause_2_code AS cause_2_code,
+        ###     CA2.cause_name AS cause_2_name,
+        ###     IP1.cause_3_code AS cause_3_code,
+        ###     CA3.cause_name AS cause_3_name,
+        ###     IP1.suikei_code AS suikei_code,
+        ###     SU1.suikei_name AS suikei_name,
+        ###     IP1.kasen_code AS kasen_code,
+        ###     KA1.kasen_name AS kasen_name,
+        ###     IP1.kasen_kaigan_code AS kasen_kaigan_code,
+        ###     KK1.kasen_kaigan_name AS kasen_kaigan_name,
+        ###     IP1.underground_code AS underground_code,
+        ###     UN1.underground_name AS underground_name,
+        ###     IP1.usage_code as usage_code,
+        ###     US1.usage_name as usage_name,
+        ###     IP1.building_lv00 AS building_lv00,
+        ###     IP1.building_lv01_49 AS building_lv01_49,
+        ###     IP1.building_lv50_99 AS building_lv50_99,
+        ###     IP1.building_lv100 AS building_lv100,
+        ###     IP1.building_half AS building_half,
+        ###     IP1.building_full AS building_full,
+        ###     IP1.floor_area AS floor_area,
+        ###     IP1.family AS family,
+        ###     IP1.office AS office,
+        ###     IP1.floor_area_lv00 AS floor_area_lv00,
+        ###     IP1.floor_area_lv01_49 AS floor_area_lv01_49,
+        ###     IP1.floor_area_lv50_99 AS floor_area_lv50_99,
+        ###     IP1.floor_area_lv100 AS floor_area_lv100,
+        ###     IP1.floor_area_half AS floor_area_half,
+        ###     IP1.floor_area_full AS floor_area_full,
+        ###     IP1.family_lv00 AS family_lv00,
+        ###     IP1.family_lv01_49 AS family_lv01_49,
+        ###     IP1.family_lv50_99 AS family_lv50_99,
+        ###     IP1.family_lv100 AS family_lv100,
+        ###     IP1.family_half AS family_half,
+        ###     IP1.family_full AS family_full,
+        ###     IP1.office_lv00 AS office_lv00,
+        ###     IP1.office_lv01_49 AS office_lv01_49,
+        ###     IP1.office_lv50_99 AS office_lv50_99,
+        ###     IP1.office_lv100 AS office_lv100,
+        ###     IP1.office_half AS office_half,
+        ###     IP1.office_full AS office_full,
+        ###     IP1.employee_lv00 AS employee_lv00,
+        ###     IP1.employee_lv01_49 AS employee_lv01_49,
+        ###     IP1.employee_lv50_99 AS employee_lv50_99,
+        ###     IP1.employee_lv100 AS employee_lv100,
+        ###     IP1.employee_full AS employee_full,
+        ###     IP1.farmer_fisher_lv00 AS farmer_fisher_lv00,
+        ###     IP1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49,
+        ###     IP1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99,
+        ###     IP1.farmer_fisher_lv100 AS farmer_fisher_lv100,
+        ###     IP1.farmer_fisher_full AS farmer_fisher_full
+        ###     FROM IPPAN IP1 
+        ###     LEFT JOIN BUILDING BU1 ON IP1.building_code = BU1.building_code 
+        ###     LEFT JOIN FLOOD_SEDIMENT FL1 ON IP1.flood_sediment_code = FL1.flood_sediment_code 
+        ###     LEFT JOIN GRADIENT GR1 ON IP1.gradient_code = GR1.gradient_code 
+        ###     LEFT JOIN INDUSTRY IN1 ON IP1.industry_code = IN1.industry_code 
+        ###     LEFT JOIN KEN KE1 ON IP1.ken_code = KE1.ken_code 
+        ###     LEFT JOIN CITY CI1 ON IP1.city_code = CI1.city_code 
+        ###     LEFT JOIN WEATHER WE1 ON IP1.weather_id = WE1.weather_id 
+        ###     LEFT JOIN AREA AR1 ON IP1.area_id = AR1.area_id 
+        ###     LEFT JOIN CAUSE CA1 ON IP1.cause_1_code = CA1.cause_code 
+        ###     LEFT JOIN CAUSE CA2 ON IP1.cause_2_code = CA2.cause_code 
+        ###     LEFT JOIN CAUSE CA3 ON IP1.cause_3_code = CA3.cause_code 
+        ###     LEFT JOIN SUIKEI SU1 ON IP1.suikei_code = SU1.suikei_code 
+        ###     LEFT JOIN KASEN KA1 ON IP1.kasen_code = KA1.kasen_code 
+        ###     LEFT JOIN KASEN_KAIGAN KK1 ON IP1.kasen_kaigan_code = KK1.kasen_kaigan_code 
+        ###     LEFT JOIN UNDERGROUND UN1 ON IP1.underground_code = UN1.underground_code 
+        ###     LEFT JOIN USAGE US1 ON IP1.usage_code = US1.usage_code 
+        ###     LEFT JOIN (
+        ###         SELECT 
+        ###         MU1.suikei_code AS suikei_code,
+        ###         MT1.suikei_type_code AS suikei_type_code,
+        ###         MT1.suikei_type_name As suikei_type_name 
+        ###         FROM SUIKEI MU1 
+        ###         LEFT JOIN SUIKEI_TYPE MT1 ON MU1.suikei_type_code = MT1.suikei_type_code
+        ###     ) M1 ON IP1.suikei_code = M1.suikei_code 
+        ###     LEFT JOIN (
+        ###         SELECT 
+        ###         MA2.kasen_code AS kasen_code, 
+        ###         MT2.kasen_type_code AS kasen_type_code, 
+        ###         MT2.kasen_type_name AS kasen_type_name 
+        ###         FROM KASEN MA2 
+        ###         LEFT JOIN KASEN_TYPE MT2 ON MA2.kasen_type_code = MT2.kasen_type_code
+        ###     ) M2 ON IP1.kasen_code = M2.kasen_code 
+        ###     ORDER BY CAST (IP1.IPPAN_ID AS INTEGER)            
+        ###     """, [])
+
+        ### 200: 水害
+        print("download_ippan_chosa18_2", flush=True)
+        suigai_list = SUIGAI.objects.raw("""
             SELECT 
+            SU1.suigai_id AS suigai_id,
+            SU1.suigai_name AS suigai_name,
+            SU1.ken_code AS ken_code, 
+            KE1.ken_name AS ken_name,
+            SU1.city_code AS city_code,
+            CI1.city_name AS city_name,
+            SU1.begin_date AS begin_date,
+            SU1.end_date AS end_date,
+            SU1.cause_1_code AS cause_1_code,
+            CA1.cause_name AS cause_1_name,
+            SU1.cause_2_code AS cause_2_code,
+            CA2.cause_name AS cause_2_name,
+            SU1.cause_3_code AS cause_3_code,
+            CA3.cause_name AS cause_3_name,
+            SU1.area_id AS area_id,
+            AR1.area_name AS area_name,
+            SU1.suikei_code AS suikei_code,
+            SK1.suikei_name AS suikei_name,
             M1.suikei_type_code AS suikei_type_code,
             M1.suikei_type_name AS suikei_type_name,
+            SU1.kasen_code AS kasen_code,
+            KA1.kasen_name AS kasen_name,
             M2.kasen_type_code AS kasen_type_code,
             M2.kasen_type_name AS kasen_type_name,
+            SU1.gradient_code AS gradient_code,
+            GR1.gradient_name AS gradient_name,
+            SU1.residential_area AS residential_area,
+            SU1.agricultural_area AS agricultural_area,
+            SU1.underground_area AS underground_area,
+            SU1.kasen_kaigan_code AS kasen_kaigan_code,
+            KK1.kasen_kaigan_name AS kasen_kaigan_name,
+            SU1.crop_damage AS crop_damage,
+            SU1.weather_id AS weather_id,
+            WE1.weather_name as weather_name
+            FROM SUIGAI SU1 
+            LEFT JOIN KEN KE1 ON SU1.ken_code = KE1.ken_code 
+            LEFT JOIN CITY CI1 ON SU1.city_code = CI1.city_code 
+            LEFT JOIN CAUSE CA1 ON SU1.cause_1_code = CA1.cause_code 
+            LEFT JOIN CAUSE CA2 ON SU1.cause_2_code = CA2.cause_code 
+            LEFT JOIN CAUSE CA3 ON SU1.cause_3_code = CA3.cause_code 
+            LEFT JOIN AREA AR1 ON SU1.area_id = AR1.area_id 
+            LEFT JOIN SUIKEI SK1 ON SU1.suikei_code = SK1.suikei_code 
+            LEFT JOIN (
+                SELECT 
+                MU1.suikei_code AS suikei_code,
+                MT1.suikei_type_code AS suikei_type_code,
+                MT1.suikei_type_name As suikei_type_name 
+                FROM SUIKEI MU1 
+                LEFT JOIN SUIKEI_TYPE MT1 ON MU1.suikei_type_code = MT1.suikei_type_code
+            ) M1 ON SU1.suikei_code = M1.suikei_code 
+            LEFT JOIN KASEN KA1 ON SU1.kasen_code = KA1.kasen_code 
+            LEFT JOIN (
+                SELECT 
+                MA2.kasen_code AS kasen_code, 
+                MT2.kasen_type_code AS kasen_type_code, 
+                MT2.kasen_type_name AS kasen_type_name 
+                FROM KASEN MA2 
+                LEFT JOIN KASEN_TYPE MT2 ON MA2.kasen_type_code = MT2.kasen_type_code
+            ) M2 ON SU1.kasen_code = M2.kasen_code 
+            LEFT JOIN GRADIENT GR1 ON SU1.gradient_code = GR1.gradient_code 
+            LEFT JOIN KASEN_KAIGAN KK1 ON SU1.kasen_kaigan_code = KK1.kasen_kaigan_code 
+            LEFT JOIN WEATHER WE1 ON SU1.weather_id = WE1.weather_id 
+            ORDER BY CAST (SU1.SUIGAI_ID AS INTEGER)            
+            """, [])
+
+        print("download_ippan_chosa18_3", flush=True)
+        ippan_list = IPPAN.objects.raw("""
+            SELECT 
             IP1.ippan_id AS ippan_id,
             IP1.ippan_name AS ippan_name,
             IP1.building_code AS building_code,
             BU1.building_name AS building_Name,
-            IP1.flood_sediment_code AS flood_sediment_code,
-            FL1.flood_sediment_name AS flood_sediment_name,
-            IP1.gradient_code AS gradient_code,
-            GR1.gradient_name AS gradient_name,
-            IP1.industry_code AS industry_code,
-            IN1.industry_name AS industry_name,
-            IP1.ken_code AS ken_code, 
-            KE1.ken_name AS ken_name,
-            IP1.city_code AS city_code,
-            CI1.city_name AS city_name,
-            IP1.begin_date AS begin_date,
-            IP1.end_date AS end_date,
-            IP1.weather_id AS weather_id,
-            WE1.weather_name as weather_name,
-            IP1.area_id AS area_id,
-            AR1.area_name AS area_name,
-            IP1.cause_1_code AS cause_1_code,
-            CA1.cause_name AS cause_1_name,
-            IP1.cause_2_code AS cause_2_code,
-            CA2.cause_name AS cause_2_name,
-            IP1.cause_3_code AS cause_3_code,
-            CA3.cause_name AS cause_3_name,
-            IP1.suikei_code AS suikei_code,
-            SU1.suikei_name AS suikei_name,
-            IP1.kasen_code AS kasen_code,
-            KA1.kasen_name AS kasen_name,
-            IP1.kasen_kaigan_code AS kasen_kaigan_code,
-            KK1.kasen_kaigan_name AS kasen_kaigan_name,
             IP1.underground_code AS underground_code,
             UN1.underground_name AS underground_name,
-            IP1.usage_code as usage_code,
-            US1.usage_name as usage_name,
+            IP1.flood_sediment_code AS flood_sediment_code,
+            FL1.flood_sediment_name AS flood_sediment_name,
             IP1.building_lv00 AS building_lv00,
             IP1.building_lv01_49 AS building_lv01_49,
             IP1.building_lv50_99 AS building_lv50_99,
@@ -2735,52 +3010,31 @@ def ippan_chosa_view(request):
             IP1.office_lv100 AS office_lv100,
             IP1.office_half AS office_half,
             IP1.office_full AS office_full,
+            IP1.farmer_fisher_lv00 AS farmer_fisher_lv00,
+            IP1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49,
+            IP1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99,
+            IP1.farmer_fisher_lv100 AS farmer_fisher_lv100,
+            IP1.farmer_fisher_full AS farmer_fisher_full,
             IP1.employee_lv00 AS employee_lv00,
             IP1.employee_lv01_49 AS employee_lv01_49,
             IP1.employee_lv50_99 AS employee_lv50_99,
             IP1.employee_lv100 AS employee_lv100,
             IP1.employee_full AS employee_full,
-            IP1.farmer_fisher_lv00 AS farmer_fisher_lv00,
-            IP1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49,
-            IP1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99,
-            IP1.farmer_fisher_lv100 AS farmer_fisher_lv100,
-            IP1.farmer_fisher_full AS farmer_fisher_full
+            IP1.industry_code AS industry_code,
+            IN1.industry_name AS industry_name,
+            IP1.usage_code as usage_code,
+            US1.usage_name as usage_name,
+            IP1.comment as comment 
             FROM IPPAN IP1 
             LEFT JOIN BUILDING BU1 ON IP1.building_code = BU1.building_code 
-            LEFT JOIN FLOOD_SEDIMENT FL1 ON IP1.flood_sediment_code = FL1.flood_sediment_code 
-            LEFT JOIN GRADIENT GR1 ON IP1.gradient_code = GR1.gradient_code 
-            LEFT JOIN INDUSTRY IN1 ON IP1.industry_code = IN1.industry_code 
-            LEFT JOIN KEN KE1 ON IP1.ken_code = KE1.ken_code 
-            LEFT JOIN CITY CI1 ON IP1.city_code = CI1.city_code 
-            LEFT JOIN WEATHER WE1 ON IP1.weather_id = WE1.weather_id 
-            LEFT JOIN AREA AR1 ON IP1.area_id = AR1.area_id 
-            LEFT JOIN CAUSE CA1 ON IP1.cause_1_code = CA1.cause_code 
-            LEFT JOIN CAUSE CA2 ON IP1.cause_2_code = CA2.cause_code 
-            LEFT JOIN CAUSE CA3 ON IP1.cause_3_code = CA3.cause_code 
-            LEFT JOIN SUIKEI SU1 ON IP1.suikei_code = SU1.suikei_code 
-            LEFT JOIN KASEN KA1 ON IP1.kasen_code = KA1.kasen_code 
-            LEFT JOIN KASEN_KAIGAN KK1 ON IP1.kasen_kaigan_code = KK1.kasen_kaigan_code 
             LEFT JOIN UNDERGROUND UN1 ON IP1.underground_code = UN1.underground_code 
+            LEFT JOIN FLOOD_SEDIMENT FL1 ON IP1.flood_sediment_code = FL1.flood_sediment_code 
+            LEFT JOIN INDUSTRY IN1 ON IP1.industry_code = IN1.industry_code 
             LEFT JOIN USAGE US1 ON IP1.usage_code = US1.usage_code 
-            LEFT JOIN (
-                SELECT 
-                MU1.suikei_code AS suikei_code,
-                MT1.suikei_type_code AS suikei_type_code,
-                MT1.suikei_type_name As suikei_type_name 
-                FROM SUIKEI MU1 
-                LEFT JOIN SUIKEI_TYPE MT1 ON MU1.suikei_type_code = MT1.suikei_type_code
-            ) M1 ON IP1.suikei_code = M1.suikei_code 
-            LEFT JOIN (
-                SELECT 
-                MA2.kasen_code AS kasen_code, 
-                MT2.kasen_type_code AS kasen_type_code, 
-                MT2.kasen_type_name AS kasen_type_name 
-                FROM KASEN MA2 
-                LEFT JOIN KASEN_TYPE MT2 ON MA2.kasen_type_code = MT2.kasen_type_code
-            ) M2 ON IP1.kasen_code = M2.kasen_code 
             ORDER BY CAST (IP1.IPPAN_ID AS INTEGER)            
             """, [])
             
+        print("download_ippan_chosa18_4", flush=True)
         ws_ippan.cell(row=5, column=2).value = '都道府県'
         ws_ippan.cell(row=5, column=3).value = '市区町村'
         ws_ippan.cell(row=5, column=4).value = '水害発生年月日'
@@ -2919,8 +3173,17 @@ def ippan_chosa_view(request):
         dv_industry.ranges = 'Y20:Y1048576'
         ws_ippan.add_data_validation(dv_industry)
         
-        ### 25: 区域
-        print("download_ippan_chosa33", flush=True)
+        ### 200: 水害
+        print("download_ippan_chosa33_1", flush=True)
+        
+        ### 201: 異常気象
+        print("download_ippan_chosa33_2", flush=True)
+        dv_weather = DataValidation(type="list", formula1="WEATHER!$B$1:$B$%d" % len(weather_list))
+        dv_weather.ranges = 'J14:J14'
+        ws_ippan.add_data_validation(dv_weather)
+        
+        ### 202: 区域
+        print("download_ippan_chosa33_3", flush=True)
         dv_area = DataValidation(type="list", formula1="AREA!$B$1:$B$%d" % len(area_list))
         dv_area.ranges = 'I7:I7'
         ws_ippan.add_data_validation(dv_area)
@@ -2931,25 +3194,32 @@ def ippan_chosa_view(request):
         ### TO-DO: IPPANデータの県名、県コード、水系名、水系コード、発生日などが異なる場合、この帳票フォーマットでは1シートでは表現できない。
         ### TO-DO: IPPANデータの県名、県コード、水系名、水系コード、発生日などが異なる場合、GROUP BYして、シート、EXCELファイルを分ける必要がある。
         #######################################################################
-        print("download_ippan_chosa34", flush=True)
+        print("download_ippan_chosa34_1", flush=True)
+        ws_ippan.cell(row=7, column=2).value = str(suigai_list[0].ken_name) + ":" + str(suigai_list[0].ken_code)
+        ws_ippan.cell(row=7, column=3).value = str(suigai_list[0].city_name) + ":" + str(suigai_list[0].city_code)
+        ws_ippan.cell(row=7, column=4).value = str(suigai_list[0].begin_date)
+        ws_ippan.cell(row=7, column=5).value = str(suigai_list[0].end_date)
+        ws_ippan.cell(row=7, column=6).value = str(suigai_list[0].cause_1_name) + ":" + str(suigai_list[0].cause_1_code)
+        ws_ippan.cell(row=7, column=7).value = str(suigai_list[0].cause_2_name) + ":" + str(suigai_list[0].cause_2_code)
+        ws_ippan.cell(row=7, column=8).value = str(suigai_list[0].cause_3_name) + ":" + str(suigai_list[0].cause_3_code)
+        ws_ippan.cell(row=7, column=9).value = str(suigai_list[0].area_name) + ":" + str(suigai_list[0].area_id)
+        
+        ws_ippan.cell(row=10, column=2).value = str(suigai_list[0].suikei_name) + ":" + str(suigai_list[0].suikei_code)
+        ws_ippan.cell(row=10, column=3).value = str(suigai_list[0].suikei_type_name) + ":" + str(suigai_list[0].suikei_type_code)
+        ws_ippan.cell(row=10, column=4).value = str(suigai_list[0].kasen_name) + ":" + str(suigai_list[0].kasen_code)
+        ws_ippan.cell(row=10, column=5).value = str(suigai_list[0].kasen_type_name) + ":" + str(suigai_list[0].kasen_type_code)
+        ws_ippan.cell(row=10, column=6).value = str(suigai_list[0].gradient_name) + ":" + str(suigai_list[0].gradient_code)
+        
+        ws_ippan.cell(row=14, column=2).value = str(suigai_list[0].residential_area)
+        ws_ippan.cell(row=14, column=3).value = str(suigai_list[0].agricultural_area)
+        ws_ippan.cell(row=14, column=4).value = str(suigai_list[0].underground_area)
+        ws_ippan.cell(row=14, column=6).value = str(suigai_list[0].kasen_kaigan_name) + ":" + str(suigai_list[0].kasen_kaigan_code)
+        ws_ippan.cell(row=14, column=8).value = str(suigai_list[0].crop_damage)
+        ws_ippan.cell(row=14, column=10).value = str(suigai_list[0].weather_name) + ":" + str(suigai_list[0].weather_id)
+
+        print("download_ippan_chosa34_2", flush=True)
         if ippan_list:
             for i, ippan in enumerate(ippan_list):
-                ws_ippan.cell(row=7, column=2).value = str(ippan.ken_name) + ":" + str(ippan.ken_code)
-                ws_ippan.cell(row=7, column=3).value = str(ippan.city_name) + ":" + str(ippan.city_code)
-                ws_ippan.cell(row=7, column=4).value = str(ippan.begin_date)
-                ws_ippan.cell(row=7, column=5).value = str(ippan.end_date)
-                ws_ippan.cell(row=7, column=6).value = str(ippan.cause_1_name) + ":" + str(ippan.cause_1_code)
-                ws_ippan.cell(row=7, column=7).value = str(ippan.cause_2_name) + ":" + str(ippan.cause_2_code)
-                ws_ippan.cell(row=7, column=8).value = str(ippan.cause_3_name) + ":" + str(ippan.cause_3_code)
-                ws_ippan.cell(row=7, column=9).value = str(ippan.area_name) + ":" + str(ippan.area_id)
-                ws_ippan.cell(row=10, column=2).value = str(ippan.suikei_name) + ":" + str(ippan.suikei_code)
-                ws_ippan.cell(row=10, column=3).value = str(ippan.suikei_type_name) + ":" + str(ippan.suikei_type_code)
-                ws_ippan.cell(row=10, column=4).value = str(ippan.kasen_name) + ":" + str(ippan.kasen_code)
-                ws_ippan.cell(row=10, column=5).value = str(ippan.kasen_type_name) + ":" + str(ippan.kasen_type_code)
-                ws_ippan.cell(row=10, column=6).value = str(ippan.gradient_name) + ":" + str(ippan.gradient_code)
-                ws_ippan.cell(row=14, column=6).value = str(ippan.kasen_kaigan_name) + ":" + str(ippan.kasen_kaigan_code)
-                ws_ippan.cell(row=14, column=10).value = str(ippan.weather_name) + ":" + str(ippan.weather_id)
-
                 ws_ippan.cell(row=i+20, column=2).value = ippan.ippan_name
                 ws_ippan.cell(row=i+20, column=3).value = str(ippan.building_name) + ":" + str(ippan.building_code) ### '戸建住宅'
                 ws_ippan.cell(row=i+20, column=4).value = str(ippan.underground_name) + ":" + str(ippan.underground_code) ### '地上のみ'

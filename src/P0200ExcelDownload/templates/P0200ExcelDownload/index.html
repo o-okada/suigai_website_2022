@@ -312,23 +312,24 @@
             <option value="12">浸水土砂区分</option>
             <option value="13">地盤勾配区分</option>
             <option value="14">産業分類</option>
-            <option value="15">県別家屋評価額</option>
-            <option value="16">家屋被害率</option>
-            <option value="17">家庭用品自動車以外被害率</option>
-            <option value="18">家庭用品自動車被害率</option>
-            <option value="19">家庭応急対策費</option>
-            <option value="20">産業分類別資産額</option>
-            <option value="21">事業所被害率</option>
-            <option value="22">事業所営業停止損失</option>
-            <option value="23">農漁家被害率</option>
-            <option value="24">異常気象</option>
-            <option value="25">区域</option>
-            <option value="2601">一般資産調査票（調査員用）</option>
-            <option value="2602">一般資産調査票（市区町村用）</option>
-            <option value="2603">一般資産調査票（都道府県用）</option>
-            <option value="27">復旧事業工種</option>
-            <option value="28">公共土木調査票</option>
-            <option value="29">公益事業調査票</option>
+            <option value="100">県別家屋評価額</option>
+            <option value="101">家屋被害率</option>
+            <option value="102">家庭用品自動車以外被害率</option>
+            <option value="103">家庭用品自動車被害率</option>
+            <option value="104">家庭応急対策費</option>
+            <option value="105">産業分類別資産額</option>
+            <option value="106">事業所被害率</option>
+            <option value="107">事業所営業停止損失</option>
+            <option value="108">農漁家被害率</option>
+            <option value="200">水害</option>
+            <option value="201">異常気象</option>
+            <option value="202">区域</option>
+            <option value="203">一般資産調査票（調査員用）</option>
+            <option value="204">一般資産調査票（市区町村用）</option>
+            <option value="205">一般資産調査票（都道府県用）</option>
+            <option value="206">復旧事業工種</option>
+            <option value="207">公共土木調査票</option>
+            <option value="208">公益事業調査票</option>
         </select>
     </div>
     <!-- END container mb-3 -->
@@ -1071,55 +1072,58 @@
         else if (form_select_1.value == 14) {
             window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
         } 
-        else if (form_select_1.value == 15) {
+        else if (form_select_1.value == 100) {
             window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
         } 
-        else if (form_select_1.value == 16) {
+        else if (form_select_1.value == 101) {
             window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
         } 
-        else if (form_select_1.value == 17) {
+        else if (form_select_1.value == 102) {
             window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
         } 
-        else if (form_select_1.value == 18) {
+        else if (form_select_1.value == 103) {
             window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
         } 
-        else if (form_select_1.value == 19) {
+        else if (form_select_1.value == 104) {
             window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
         } 
-        else if (form_select_1.value == 20) {
+        else if (form_select_1.value == 105) {
             window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
         } 
-        else if (form_select_1.value == 21) {
+        else if (form_select_1.value == 106) {
             window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
         } 
-        else if (form_select_1.value == 22) {
+        else if (form_select_1.value == 107) {
             window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
         } 
-        else if (form_select_1.value == 23) {
+        else if (form_select_1.value == 108) {
             window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
         } 
-        else if (form_select_1.value == 24) {
+        else if (form_select_1.value == 200) {
+            window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+        } 
+        else if (form_select_1.value == 201) {
             window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
         } 
-        else if (form_select_1.value == 25) {
+        else if (form_select_1.value == 202) {
             window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
         } 
-        else if (form_select_1.value == 2601) {
+        else if (form_select_1.value == 203) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
         } 
-        else if (form_select_1.value == 2602) {
+        else if (form_select_1.value == 204) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
         } 
-        else if (form_select_1.value == 2603) {
+        else if (form_select_1.value == 205) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
         } 
-        else if (form_select_1.value == 27) {
+        else if (form_select_1.value == 206) {
             window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
         } 
-        else if (form_select_1.value == 28) {
+        else if (form_select_1.value == 207) {
             window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
         } 
-        else if (form_select_1.value == 29) {
+        else if (form_select_1.value == 208) {
             window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
         } 
         else {
@@ -1171,55 +1175,58 @@
         else if (form_select_1.value == 14) {
             window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
         } 
-        else if (form_select_1.value == 15) {
+        else if (form_select_1.value == 100) {
             window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
         } 
-        else if (form_select_1.value == 16) {
+        else if (form_select_1.value == 101) {
             window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
         } 
-        else if (form_select_1.value == 17) {
+        else if (form_select_1.value == 102) {
             window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
         } 
-        else if (form_select_1.value == 18) {
+        else if (form_select_1.value == 103) {
             window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
         } 
-        else if (form_select_1.value == 19) {
+        else if (form_select_1.value == 104) {
             window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
         } 
-        else if (form_select_1.value == 20) {
+        else if (form_select_1.value == 105) {
             window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
         } 
-        else if (form_select_1.value == 21) {
+        else if (form_select_1.value == 106) {
             window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
         } 
-        else if (form_select_1.value == 22) {
+        else if (form_select_1.value == 107) {
             window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
         } 
-        else if (form_select_1.value == 23) {
+        else if (form_select_1.value == 108) {
             window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
         } 
-        else if (form_select_1.value == 24) {
+        else if (form_select_1.value == 200) {
+            window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+        } 
+        else if (form_select_1.value == 201) {
             window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
         } 
-        else if (form_select_1.value == 25) {
+        else if (form_select_1.value == 202) {
             window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
         } 
-        else if (form_select_1.value == 2601) {
+        else if (form_select_1.value == 203) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
         } 
-        else if (form_select_1.value == 2602) {
+        else if (form_select_1.value == 204) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
         } 
-        else if (form_select_1.value == 2603) {
+        else if (form_select_1.value == 205) {
             window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
         } 
-        else if (form_select_1.value == 27) {
+        else if (form_select_1.value == 206) {
             window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
         } 
-        else if (form_select_1.value == 28) {
+        else if (form_select_1.value == 207) {
             window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
         } 
-        else if (form_select_1.value == 29) {
+        else if (form_select_1.value == 208) {
             window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
         } 
         else {

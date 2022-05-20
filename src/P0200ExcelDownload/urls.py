@@ -28,6 +28,7 @@ urlpatterns = [
     path('office_damage/', views.office_damage_view, name='office_damage_view'),
     path('office_cost/', views.office_cost_view, name='office_cost_view'),
     path('farmer_fisher_damage/', views.farmer_fisher_damage_view, name='farmer_fisher_damage_view'),
+    path('suigai/', views.suigai_view, name='suigai_view'),
     path('weather/', views.weather_view, name='weather_view'),
     path('area/', views.area_view, name='area_view'),
     

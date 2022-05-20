@@ -525,7 +525,7 @@ class SUIGAI(models.Model):
     ### 帳票のヘッダ部分 行10
     suikei_code = models.CharField(max_length=10, null=True)                   ### 水系コード ### FOR GROUP BY
     kasen_code = models.CharField(max_length=10, null=True)                    ### 河川コード ### FOR GROUP BY
-    gradient_code = models.CharField(max_length=10, null=True)                 ### 地盤勾配区分コードFOR PARAM ### FOR GROUP BY
+    gradient_code = models.CharField(max_length=10, null=True)                 ### 地盤勾配区分コード FOR PARAM ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行14
     residential_area = models.FloatField()                                     ### 宅地面積（単位m2）
@@ -671,20 +671,20 @@ class IPPAN(models.Model):
     office_full = models.IntegerField(null=True)                               ### 被災事業所数_全壊
     
     ### 入力データ
-    employee_lv00 = models.IntegerField(null=True)                             ### 被災従業者数_床下
-    employee_lv01_49 = models.IntegerField(null=True)                          ### 被災従業者数_01から49cm
-    employee_lv50_99 = models.IntegerField(null=True)                          ### 被災従業者数_50から99cm
-    employee_lv100 = models.IntegerField(null=True)                            ### 被災従業者数_100cm以上
-    ### employee_half = models.IntegerField(null=True)
-    employee_full = models.IntegerField(null=True)                             ### 被災従業者数_全壊
-    
-    ### 入力データ
     farmer_fisher_lv00 = models.IntegerField(null=True)                        ### 農漁家戸数_床下
     farmer_fisher_lv01_49 = models.IntegerField(null=True)                     ### 農漁家戸数_01から49cm
     farmer_fisher_lv50_99 = models.IntegerField(null=True)                     ### 農漁家戸数_50から99cm
     farmer_fisher_lv100 = models.IntegerField(null=True)                       ### 農漁家戸数_100cm以上
     ### farmer_fisher_half = models.IntegerField(null=True)
     farmer_fisher_full = models.IntegerField(null=True)                        ### 農漁家戸数_全壊
+
+    ### 入力データ
+    employee_lv00 = models.IntegerField(null=True)                             ### 被災従業者数_床下
+    employee_lv01_49 = models.IntegerField(null=True)                          ### 被災従業者数_01から49cm
+    employee_lv50_99 = models.IntegerField(null=True)                          ### 被災従業者数_50から99cm
+    employee_lv100 = models.IntegerField(null=True)                            ### 被災従業者数_100cm以上
+    ### employee_half = models.IntegerField(null=True)
+    employee_full = models.IntegerField(null=True)                             ### 被災従業者数_全壊
 
     ### 入力データ
     industry_code = models.CharField(max_length=10, null=True)                 ### 産業分類コード ### FOR SUM PARAM
