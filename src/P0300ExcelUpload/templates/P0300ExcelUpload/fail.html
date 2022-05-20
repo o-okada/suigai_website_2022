@@ -1,0 +1,154 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0300ExcelUpload/templates/P0300ExcelUpload/fail.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>EXCELアップロード方式EXCELアップロード画面 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+    {% block content %}
+    
+    <div class="container text-center mb-3">
+        <a href="/P0300ExcelUpload/ippan_chosa_result/{{ excel_id }}/">チェック結果をダウンロードする。</a>
+    </div>
+
+
+
+
+    <div class="container mb-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>行</td>
+                    <td>列</td>
+                    <td>エラーコード</td>
+                    <td>チェック</td>
+                    <td>エラーメッセージ</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result_require in result_require_list %}
+                <tr>
+                    <td>{{ result_require.0 }}</td> 
+                    <td>{{ result_require.1 }}</td>
+                    <td>{{ result_require.3 }}</td>
+                    <td>{{ result_require.4 }}</td>
+                    <td>{{ result_require.5 }}<br>{{ result_require.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_format in result_format_list %}
+                <tr>
+                    <td>{{ result_format.0 }}</td> 
+                    <td>{{ result_format.1 }}</td>
+                    <td>{{ result_format.3 }}</td>
+                    <td>{{ result_format.4 }}</td>
+                    <td>{{ result_format.5 }}<br>{{ result_format.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_range in result_range_list %}
+                <tr>
+                    <td>{{ result_range.0 }}</td> 
+                    <td>{{ result_range.1 }}</td>
+                    <td>{{ result_range.3 }}</td>
+                    <td>{{ result_range.4 }}</td>
+                    <td>{{ result_range.5 }}<br>{{ result_range.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_correlate in result_correlate_list %}
+                <tr>
+                    <td>{{ result_correlate.0 }}</td> 
+                    <td>{{ result_correlate.1 }}</td>
+                    <td>{{ result_correlate.3 }}</td>
+                    <td>{{ result_correlate.4 }}</td>
+                    <td>{{ result_correlate.5 }}<br>{{ result_correlate.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_compare in result_compare_list %}
+                <tr>
+                    <td>{{ result_compare.0 }}</td> 
+                    <td>{{ result_compare.1 }}</td>
+                    <td>{{ result_compare.3 }}</td>
+                    <td>{{ result_compare.4 }}</td>
+                    <td>{{ result_compare.5 }}<br>{{ result_compare.6 }}</td>
+                </tr>
+                {% endfor %}
+
+                {% for result_require in result_require_grid %}
+                <tr>
+                    <td>{{ result_require.0 }}</td> 
+                    <td>{{ result_require.1 }}</td>
+                    <td>{{ result_require.3 }}</td>
+                    <td>{{ result_require.4 }}</td>
+                    <td>{{ result_require.5 }}<br>{{ result_require.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_format in result_format_grid %}
+                <tr>
+                    <td>{{ result_format.0 }}</td> 
+                    <td>{{ result_format.1 }}</td>
+                    <td>{{ result_format.3 }}</td>
+                    <td>{{ result_format.4 }}</td>
+                    <td>{{ result_format.5 }}<br>{{ result_format.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_range in result_range_grid %}
+                <tr>
+                    <td>{{ result_range.0 }}</td> 
+                    <td>{{ result_range.1 }}</td>
+                    <td>{{ result_range.3 }}</td>
+                    <td>{{ result_range.4 }}</td>
+                    <td>{{ result_range.5 }}<br>{{ result_range.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_correlate in result_correlate_grid %}
+                <tr>
+                    <td>{{ result_correlate.0 }}</td> 
+                    <td>{{ result_correlate.1 }}</td>
+                    <td>{{ result_correlate.3 }}</td>
+                    <td>{{ result_correlate.4 }}</td>
+                    <td>{{ result_correlate.5 }}<br>{{ result_correlate.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% for result_compare in result_compare_grid %}
+                <tr>
+                    <td>{{ result_compare.0 }}</td> 
+                    <td>{{ result_compare.1 }}</td>
+                    <td>{{ result_compare.3 }}</td>
+                    <td>{{ result_compare.4 }}</td>
+                    <td>{{ result_compare.5 }}<br>{{ result_compare.6 }}</td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    
+    {% endblock %}
+</body>
+<!-- END Body -->
+
+</html>
+
