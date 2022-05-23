@@ -37,6 +37,7 @@ from P0000Common.models import USAGE                   ### 011: 地下空間の�
 from P0000Common.models import FLOOD_SEDIMENT          ### 012: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 013: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 014: 産業分類
+from P0000Common.models import RESTORATION             ### 015: 復旧事業工種
 from P0000Common.models import HOUSE_ASSET             ### 100: 県別家屋評価額
 from P0000Common.models import HOUSE_DAMAGE            ### 101: 家屋被害率
 from P0000Common.models import HOUSEHOLD_DAMAGE        ### 102: 家庭用品自動車以外被害率
@@ -50,9 +51,10 @@ from P0000Common.models import SUIGAI                  ### 200: 水害
 from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
 from P0000Common.models import AREA                    ### 202: 区域
 from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
-from P0000Common.models import RESTORATION             ### 27: 復旧事業工種
-from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
-from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
+### from P0000Common.models import IPPAN_CITY          ### 204: 
+### from P0000Common.models import IPPAN_KEN           ### 205: 
+from P0000Common.models import KOKYO                   ### 206: 公共土木調査票
+from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
 
 from P0000Common.common import print_log
 

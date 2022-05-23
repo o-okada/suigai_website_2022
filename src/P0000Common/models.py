@@ -699,7 +699,11 @@ class IPPAN(models.Model):
     def __str__(self):
         return '<IPPAN: ' + self.ippan_id + ', ' + self.ippan_name + '>'
 
-### 204: 公共土木調査票
+### 204: 一般資産調査票（市区町村用）
+
+### 205: 一般資産調査票（都道府県用）
+
+### 206: 公共土木調査票
 class KOKYO(models.Model):
     ### kokyo_id = models.CharField(max_length=10, primary_key=True)
     kokyo_id = models.IntegerField(primary_key=True)
@@ -720,7 +724,7 @@ class KOKYO(models.Model):
     def __str__(self):
         return '<KOKYO: ' + self.kokyo_id + ', ' + self.kokyo_name + '>'
         
-### 205: 公益事業調査票
+### 207: 公益事業調査票
 class KOEKI(models.Model):
     ### koeki_id = models.CharField(max_length=10, primary_key=True)
     koeki_id = models.IntegerField(primary_key=True)

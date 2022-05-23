@@ -257,16 +257,16 @@
     
     window.onload = function() {
         if (form_select_ken.value === "0") {
-            document.getElementById("form_select_ken").removeAttribute("disabled");
-            document.getElementById("form_select_city").setAttribute("disabled", true);
-            document.getElementById("button_ken").removeAttribute("disabled");
-            document.getElementById("button_city").setAttribute("disabled", true);
+            // document.getElementById("form_select_ken").removeAttribute("disabled");
+            // document.getElementById("form_select_city").setAttribute("disabled", true);
+            // document.getElementById("button_ken").removeAttribute("disabled");
+            // document.getElementById("button_city").setAttribute("disabled", true);
         }
         else {
-            document.getElementById("form_select_ken").removeAttribute("disabled");
-            document.getElementById("form_select_city").removeAttribute("disabled");
-            document.getElementById("button_ken").removeAttribute("disabled");
-            document.getElementById("button_city").removeAttribute("disabled");
+            // document.getElementById("form_select_ken").removeAttribute("disabled");
+            // document.getElementById("form_select_city").removeAttribute("disabled");
+            // document.getElementById("button_ken").removeAttribute("disabled");
+            // document.getElementById("button_city").removeAttribute("disabled");
         }
     
         {% for choice in choice_formset %}

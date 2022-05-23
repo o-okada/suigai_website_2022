@@ -11,6 +11,7 @@ urlpatterns = [
     path('category1/<slug:category_code1>/', views.category_view1, name='category_view1'),
     path('category1/<slug:category_code1>/ken/<slug:ken_code>/', views.ken_view, name='ken_view'),
     path('category1/<slug:category_code1>/ken/<slug:ken_code>/city/<slug:city_code>/', views.city_view, name='city_view'),
-    path('category1/<slug:category_code1>/ken/<slug:ken_code>/city/<slug:city_code>/category2/<slug:category_code2>/', views.category_view2, name='category_view2'),
+    ### path('category1/<slug:category_code1>/ken/<slug:ken_code>/city/<slug:city_code>/category2/<slug:category_code2>/', views.category_view2, name='category_view2'),
+    path('category1/<slug:category_code1>/category2/<slug:category_code2>/ken/<slug:ken_code>/city/<slug:city_code>/', views.category_view2, name='category_view2'),
 
 ]

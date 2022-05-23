@@ -529,15 +529,15 @@ def index_view(request):
         
         ken_code_list = [ken.ken_code for ken in ken_list]
         ken_name_list = [ken.ken_name for ken in ken_list]
-        ken_name_code_list = [ken.ken_name + ":" + ken.ken_code for ken in ken_list]
+        ken_name_code_list = [str(ken.ken_name) + ":" + str(ken.ken_code) for ken in ken_list]
         
         city_code_list = [city.city_code for city in city_list]
         city_name_list = [city.city_name for city in city_list]
-        city_name_code_list = [city.city_name + ":" + city.city_code for city in city_list]
+        city_name_code_list = [str(city.city_name) + ":" + str(city.city_code) for city in city_list]
         
         cause_code_list = [cause.cause_code for cause in cause_list]
         cause_name_list = [cause.cause_name for cause in cause_list]
-        cause_name_code_list = [cause.cause_name + ":" + cause.cause_code for cause in cause_list]
+        cause_name_code_list = [str(cause.cause_name) + ":" + str(cause.cause_code) for cause in cause_list]
         
         area_id_list = [area.area_id for area in area_list]
         area_name_list = [area.area_name for area in area_list]
@@ -545,27 +545,27 @@ def index_view(request):
         
         suikei_code_list = [suikei.suikei_code for suikei in suikei_list]
         suikei_name_list = [suikei.suikei_name for suikei in suikei_list]
-        suikei_name_code_list = [suikei.suikei_name + ":" + suikei.suikei_code for suikei in suikei_list]
+        suikei_name_code_list = [str(suikei.suikei_name) + ":" + str(suikei.suikei_code) for suikei in suikei_list]
         
         suikei_type_code_list = [suikei_type.suikei_type_code for suikei_type in suikei_type_list]
         suikei_type_name_list = [suikei_type.suikei_type_name for suikei_type in suikei_type_list]
-        suikei_type_name_code_list = [suikei_type.suikei_type_name + ":" + suikei_type.suikei_type_code for suikei_type in suikei_type_list]
+        suikei_type_name_code_list = [str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code) for suikei_type in suikei_type_list]
         
         kasen_code_list = [kasen.kasen_code for kasen in kasen_list]
         kasen_name_list = [kasen.kasen_name for kasen in kasen_list]
-        kasen_name_code_list = [kasen.kasen_name + ":" + kasen.kasen_code for kasen in kasen_list]
+        kasen_name_code_list = [str(kasen.kasen_name) + ":" + str(kasen.kasen_code) for kasen in kasen_list]
         
         kasen_type_code_list = [kasen_type.kasen_type_code for kasen_type in kasen_type_list]
         kasen_type_name_list = [kasen_type.kasen_type_name for kasen_type in kasen_type_list]
-        kasen_type_name_code_list = [kasen_type.kasen_type_name + ":" + kasen_type.kasen_type_code for kasen_type in kasen_type_list]
+        kasen_type_name_code_list = [str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code) for kasen_type in kasen_type_list]
         
         gradient_code_list = [gradient.gradient_code for gradient in gradient_list]
         gradient_name_list = [gradient.gradient_name for gradient in gradient_list]
-        gradient_name_code_list = [gradient.gradient_name + ":" + gradient.gradient_code for gradient in gradient_list]
+        gradient_name_code_list = [str(gradient.gradient_name) + ":" + str(gradient.gradient_code) for gradient in gradient_list]
         
         kasen_kaigan_code_list = [kasen_kaigan.kasen_kaigan_code for kasen_kaigan in kasen_kaigan_list]
         kasen_kaigan_name_list = [kasen_kaigan.kasen_kaigan_name for kasen_kaigan in kasen_kaigan_list]
-        kasen_kaigan_name_code_list = [kasen_kaigan.kasen_kaigan_name + ":" + kasen_kaigan.kasen_kaigan_code for kasen_kaigan in kasen_kaigan_list]
+        kasen_kaigan_name_code_list = [str(kasen_kaigan.kasen_kaigan_name) + ":" + str(kasen_kaigan.kasen_kaigan_code) for kasen_kaigan in kasen_kaigan_list]
         
         weather_id_list = [weather.weather_id for weather in weather_list]
         weather_name_list = [weather.weather_name for weather in weather_list]
@@ -573,19 +573,19 @@ def index_view(request):
         
         underground_code_list = [underground.underground_code for underground in underground_list]
         underground_name_list = [underground.underground_name for underground in underground_list]
-        underground_name_code_list = [underground.underground_name + ":" + underground.underground_code for underground in underground_list]
+        underground_name_code_list = [str(underground.underground_name) + ":" + str(underground.underground_code) for underground in underground_list]
         
         flood_sediment_code_list = [flood_sediment.flood_sediment_code for flood_sediment in flood_sediment_list]
         flood_sediment_name_list = [flood_sediment.flood_sediment_name for flood_sediment in flood_sediment_list]
-        flood_sediment_name_code_list = [flood_sediment.flood_sediment_name + ":" + flood_sediment.flood_sediment_code for flood_sediment in flood_sediment_list]
+        flood_sediment_name_code_list = [str(flood_sediment.flood_sediment_name) + ":" + str(flood_sediment.flood_sediment_code) for flood_sediment in flood_sediment_list]
         
         industry_code_list = [industry.industry_code for industry in industry_list]
         industry_name_list = [industry.industry_name for industry in industry_list]
-        industry_name_code_list = [industry.industry_name + ":" + industry.industry_code for industry in industry_list]
+        industry_name_code_list = [str(industry.industry_name) + ":" + str(industry.industry_code) for industry in industry_list]
         
         usage_code_list = [usage.usage_code for usage in usage_list]
         usage_name_list = [usage.usage_name for usage in usage_list]
-        usage_name_code_list = [usage.usage_name + ":" + usage.usage_code for usage in usage_list]
+        usage_name_code_list = [str(usage.usage_name) + ":" + str(usage.usage_code) for usage in usage_list]
     
         #######################################################################
         #######################################################################
@@ -2696,158 +2696,128 @@ def index_view(request):
                     connection_cursor.execute(""" 
                         INSERT INTO IPPAN (
                             ippan_id,              -- 00
-                            
                             ippan_name,            -- 01
-                            building_code,         -- 02
-                            flood_sediment_code,   -- 03
-                            gradient_code,         -- 04
-                            industry_code,         -- 05
                             
-                            ken_code,              -- 06
-                            city_code,             -- 07
-                            weather_id,            -- 08
-                            area_id,               -- 09
-                            cause_1_code,          -- 10
-
-                            cause_2_code,          -- 11
-                            cause_3_code,          -- 12
-                            suikei_code,           -- 13
-                            kasen_code,            -- 14
-                            kasen_kaigan_code,     -- 15
-
-                            underground_code,      -- 16
-                            usage_code,            -- 17
-                            building_lv00,         -- 18 
-                            building_lv01_49,      -- 19
-                            building_lv50_99,      -- 20
-
-                            building_lv100,        -- 21
-                            building_half,         -- 22
-                            building_full,         -- 23
-                            floor_area,            -- 24
-                            family,                -- 25
-
-                            office,                -- 26
-                            floor_area_lv00,       -- 27
-                            floor_area_lv01_49,    -- 28
-                            floor_area_lv50_99,    -- 29
-                            floor_area_lv100,      -- 30
-
-                            floor_area_half,       -- 31
-                            floor_area_full,       -- 32
-                            family_lv00,           -- 33
-                            family_lv01_49,        -- 34
-                            family_lv50_99,        -- 35
-
-                            family_lv100,          -- 36
-                            family_half,           -- 37
-                            family_full,           -- 38
-                            office_lv00,           -- 39
-                            office_lv01_49,        -- 40
-
-                            office_lv50_99,        -- 41
-                            office_lv100,          -- 42
-                            office_half,           -- 43
-                            office_full,           -- 44
-                            employee_lv00,         -- 45
+                            suigai_id,             -- 02
                             
-                            employee_lv01_49,      -- 46
-                            employee_lv50_99,      -- 47
-                            employee_lv100,        -- 48
-                            employee_full,         -- 49
-                            farmer_fisher_lv00,    -- 50
+                            building_code,         -- 03
+                            underground_code,      -- 04
+                            flood_sediment_code,   -- 05
 
-                            farmer_fisher_lv01_49, -- 51
-                            farmer_fisher_lv50_99, -- 52
-                            farmer_fisher_lv100,   -- 53
-                            farmer_fisher_full,    -- 54
-                            begin_date,            -- 55
+                            building_lv00,         -- 06 
+                            building_lv01_49,      -- 07
+                            building_lv50_99,      -- 08
+                            building_lv100,        -- 09
+                            building_half,         -- 10
+                            building_full,         -- 11
                             
-                            end_date               -- 56
+                            floor_area,            -- 12
+                            family,                -- 13
+                            office,                -- 14
+                            
+                            floor_area_lv00,       -- 15
+                            floor_area_lv01_49,    -- 16
+                            floor_area_lv50_99,    -- 17
+                            floor_area_lv100,      -- 18
+                            floor_area_half,       -- 19
+                            floor_area_full,       -- 20
+                            
+                            family_lv00,           -- 21
+                            family_lv01_49,        -- 22
+                            family_lv50_99,        -- 23
+                            family_lv100,          -- 24
+                            family_half,           -- 25
+                            family_full,           -- 26
+                            
+                            office_lv00,           -- 27
+                            office_lv01_49,        -- 28
+                            office_lv50_99,        -- 29
+                            office_lv100,          -- 30
+                            office_half,           -- 31
+                            office_full,           -- 32
+                            
+                            farmer_fisher_lv00,    -- 33
+                            farmer_fisher_lv01_49, -- 34
+                            farmer_fisher_lv50_99, -- 35
+                            farmer_fisher_lv100,   -- 36
+                            farmer_fisher_full,    -- 37
+
+                            employee_lv00,         -- 38
+                            employee_lv01_49,      -- 39
+                            employee_lv50_99,      -- 40
+                            employee_lv100,        -- 41
+                            employee_full,         -- 42
+                            
+                            industry_code,         -- 43
+                            usage_code,            -- 44
+                            comment                -- 45
                             
                         ) VALUES (
                             (SELECT MAX(ippan_id+1) FROM IPPAN), -- 0
-                            %s, %s, %s, %s, %s,    -- 1 2 3 4 5
-                            %s, %s, %s, %s, %s,    -- 6 7 8 9 10
+                            %s, %s, %s, %s, %s,    -- 01 02 03 04 05
+                            %s, %s, %s, %s, %s,    -- 06 07 08 09 10
                             %s, %s, %s, %s, %s,    -- 11 12 13 14 15
                             %s, %s, %s, %s, %s,    -- 16 17 18 19 20
                             %s, %s, %s, %s, %s,    -- 21 22 23 24 25
                             %s, %s, %s, %s, %s,    -- 26 27 28 29 30
                             %s, %s, %s, %s, %s,    -- 31 32 33 34 35
                             %s, %s, %s, %s, %s,    -- 36 37 38 39 40
-                            %s, %s, %s, %s, %s,    -- 41 42 43 44 45
-                            %s, %s, %s, %s, %s,    -- 46 47 48 49 50
-                            %s, %s, %s, %s, %s,    -- 51 52 53 54 55
-                            %s                     -- 56
+                            %s, %s, %s, %s, %s     -- 41 42 43 44 45
                             
                         ) """, [
                             '1',                   ### 01 ippan_name
-                            '1',                   ### 02 building_code
-                            '1',                   ### 03 flood_sediment_code
-                            '1',                   ### 04 gradient_code
-                            '1',                   ### 05 industry_code
+                            1,                     ### 02 suigai_id
+                            '1',                   ### 03 building_code
+                            '1',                   ### 04 underground_code
+                            '1',                   ### 05 flood_sediment_code
                             
-                            '01',                  ### 06 ken_code
-                            '011037',              ### 07 city_code
-                            1,                     ### 08 weather_id
-                            1,                     ### 09 area_id
-                            '1',                   ### 10 cause_1_code
+                            '1',                   ### 06 building_lv00
+                            '1',                   ### 07 building_lv01_49
+                            '1',                   ### 08 building_lv50_99
+                            '1',                   ### 09 building_lv100
+                            '1',                   ### 10 building_half
+                            '1',                   ### 11 building_full
                             
-                            '1',                   ### 11 cause_2_code
-                            '1',                   ### 12 cause_3_code
-                            '1',                   ### 13 suikei_code
-                            '1',                   ### 14 kasen_code
-                            '1',                   ### 15 kasen_kaigan_code
-
-                            '1',                   ### 16 underground_code
-                            '1',                   ### 17 usage_code
-                            '1',                   ### 18 building_lv00
-                            '1',                   ### 19 building_lv01_49
-                            '1',                   ### 20 building_lv50_99
-
-                            '1',                   ### 21 building_lv100
-                            '1',                   ### 22 building_half
-                            '1',                   ### 23 building_full
-                            '1',                   ### 24 floor_area
-                            '1',                   ### 25 family
-
-                            '1',                   ### 26 office
-                            '1',                   ### 27 floor_area_lv00
-                            '1',                   ### 28 floor_area_lv01_49
-                            '1',                   ### 29 floor_area_lv50_99
-                            '1',                   ### 30 floor_area_lv100
-
-                            '1',                   ### 31 floor_area_half
-                            '1',                   ### 32 floor_area_full
-                            '1',                   ### 33 family_lv00
-                            '1',                   ### 34 family_lv01_49
-                            '1',                   ### 35 family_lv50_99
-
-                            '1',                   ### 36 family_lv100
-                            '1',                   ### 37 family_half
-                            '1',                   ### 38 family_full
-                            '1',                   ### 39 office_lv00
-                            '1',                   ### 40 office_lv01_49
-
-                            '1',                   ### 41 office_lv50_99
-                            '1',                   ### 42 office_lv100
-                            '1',                   ### 43 office_half
-                            '1',                   ### 44 office_full
-                            '1',                   ### 45 employee_lv00
-
-                            '1',                   ### 46 employee_lv01_49
-                            '1',                   ### 47 employee_lv50_99
-                            '1',                   ### 48 employee_lv100
-                            '1',                   ### 49 employee_full
-                            '1',                   ### 50 farmer_fisher_lv00
-
-                            '1',                   ### 51 farmer_fisher_lv01_49
-                            '1',                   ### 52 farmer_fisher_lv50_99
-                            '1',                   ### 53 farmer_fisher_lv100
-                            '1',                   ### 54 farmer_fisher_full
-                            '2022-05-20',          ### 55 begin_date
-                            '2022-05-20'           ### 56 end_date
+                            '1',                   ### 12 floor_area
+                            '1',                   ### 13 family
+                            '1',                   ### 14 office
                             
+                            '1',                   ### 15 floor_area_lv00
+                            '1',                   ### 16 floor_area_lv01_49
+                            '1',                   ### 17 floor_area_lv50_99
+                            '1',                   ### 18 floor_area_lv100
+                            '1',                   ### 19 floor_area_half
+                            '1',                   ### 20 floor_area_full
+                            
+                            '1',                   ### 21 family_lv00
+                            '1',                   ### 22 family_lv01_49
+                            '1',                   ### 23 family_lv50_99
+                            '1',                   ### 24 family_lv100
+                            '1',                   ### 25 family_half
+                            '1',                   ### 26 family_full
+                            
+                            '1',                   ### 27 office_lv00
+                            '1',                   ### 28 office_lv01_49
+                            '1',                   ### 29 office_lv50_99
+                            '1',                   ### 30 office_lv100
+                            '1',                   ### 31 office_half
+                            '1',                   ### 32 office_full
+                            
+                            '1',                   ### 33 farmer_fisher_lv00
+                            '1',                   ### 34 farmer_fisher_lv01_49
+                            '1',                   ### 35 farmer_fisher_lv50_99
+                            '1',                   ### 36 farmer_fisher_lv100
+                            '1',                   ### 37 farmer_fisher_full
+                            
+                            '1',                   ### 38 employee_lv00
+                            '1',                   ### 39 employee_lv01_49
+                            '1',                   ### 40 employee_lv50_99
+                            '1',                   ### 41 employee_lv100
+                            '1',                   ### 42 employee_full
+                            
+                            '1',                   ### 43 industry_code
+                            '1',                   ### 44 usage_code
+                            '1'                   ### 45 comment
                         ])
         
                     transaction.commit()
