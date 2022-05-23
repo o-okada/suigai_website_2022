@@ -196,7 +196,7 @@ def index_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_building(request):
-def building_view(request):
+def building_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -205,6 +205,7 @@ def building_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.building_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.building_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.building_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -229,13 +230,6 @@ def building_view(request):
             for i, building in enumerate(building_list):
                 ws.cell(row=i+2, column=1).value = building.building_code
                 ws.cell(row=i+2, column=2).value = building.building_name
-
-        # dv = DataValidation(type="list", formula1='"A,B,C"')
-        ### dv.add(ws.cell(1, 1))
-        ### dv.add(ws.cell(2, 1))
-        ### dv.add(ws.cell(3, 1))
-        # dv.ranges = 'A1:A100'
-        # ws.add_data_validation(dv)
         
         wb.save(download_file_path)
         
@@ -260,7 +254,7 @@ def building_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ken(request):
-def ken_view(request):
+def ken_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -269,6 +263,7 @@ def ken_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ken_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ken_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ken_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -317,7 +312,7 @@ def ken_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_city(request):
-def city_view(request):
+def city_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -326,6 +321,7 @@ def city_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.city_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.city_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.city_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -380,7 +376,7 @@ def city_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen_kaigan(request):
-def kasen_kaigan_view(request):
+def kasen_kaigan_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -389,6 +385,7 @@ def kasen_kaigan_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -437,7 +434,7 @@ def kasen_kaigan_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_suikei(request):
-def suikei_view(request):
+def suikei_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -446,6 +443,7 @@ def suikei_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -496,7 +494,7 @@ def suikei_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_suikei_type(request):
-def suikei_type_view(request):
+def suikei_type_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -505,6 +503,7 @@ def suikei_type_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -553,7 +552,7 @@ def suikei_type_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen(request):
-def kasen_view(request):
+def kasen_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -562,6 +561,7 @@ def kasen_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -614,7 +614,7 @@ def kasen_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kasen_type(request):
-def kasen_type_view(request):
+def kasen_type_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -623,6 +623,7 @@ def kasen_type_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -671,7 +672,7 @@ def kasen_type_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_cause(request):
-def cause_view(request):
+def cause_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -680,6 +681,7 @@ def cause_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.cause_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.cause_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.cause_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -728,7 +730,7 @@ def cause_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_underground(request):
-def underground_view(request):
+def underground_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -737,6 +739,7 @@ def underground_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.underground_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.underground_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.underground_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -785,7 +788,7 @@ def underground_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_usage(request):
-def usage_view(request):
+def usage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -794,6 +797,7 @@ def usage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.usage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.usage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.usage_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -842,15 +846,16 @@ def usage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_flood_sediment(request):
-def flood_sediment_view(request):
+def flood_sediment_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
         ### (1)ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_flood_sediment()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.flood_sediment()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.flood_sediment()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -899,7 +904,7 @@ def flood_sediment_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_gradient(request):
-def gradient_view(request):
+def gradient_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -908,6 +913,7 @@ def gradient_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -956,7 +962,7 @@ def gradient_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_industry(request):
-def industry_view(request):
+def industry_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -965,6 +971,7 @@ def industry_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.industry_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.industry_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.industry_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1008,12 +1015,70 @@ def industry_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
+### 関数名：restoration_view
+### 015: 復旧事業工種
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+### def download_restoration(request):
+def restoration_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 lock = {}'.format(lock), 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### (1)DBにアクセスして、データを取得する。
+        #######################################################################
+        restoration_list = RESTORATION.objects.raw("""SELECT * FROM RESTORATION ORDER BY CAST(RESTORATION_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        template_file_path = 'static/template_restoration.xlsx'
+        download_file_path = 'static/download_restoration.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '復旧事業工種'
+        ws.cell(row=1, column=1).value = '復旧事業工種コード'
+        ws.cell(row=1, column=2).value = '復旧事業工種名'
+        
+        if restoration_list:
+            for i, restoration in enumerate(restoration_list):
+                ws.cell(row=i+2, column=1).value = restoration.restoration_code
+                ws.cell(row=i+2, column=2).value = restoration.restoration_name
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="restoration.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
 ### 関数名：house_asset_view
 ### 100: 県別家屋評価額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_asset(request):
-def house_asset_view(request):
+def house_asset_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1022,6 +1087,7 @@ def house_asset_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1078,7 +1144,7 @@ def house_asset_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_damage(request):
-def house_damage_view(request):
+def house_damage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1087,6 +1153,7 @@ def house_damage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_damage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1223,7 +1290,7 @@ def house_damage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_household_damage(request):
-def household_damage_view(request):
+def household_damage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1232,6 +1299,7 @@ def household_damage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.household_damage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1316,7 +1384,7 @@ def household_damage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_car_damage(request):
-def car_damage_view(request):
+def car_damage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1325,6 +1393,7 @@ def car_damage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.car_damage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1395,7 +1464,7 @@ def car_damage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_house_cost(request):
-def house_cost_view(request):
+def house_cost_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1404,6 +1473,7 @@ def house_cost_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_cost_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1488,7 +1558,7 @@ def house_cost_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_asset(request):
-def office_asset_view(request):
+def office_asset_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1497,6 +1567,7 @@ def office_asset_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1559,7 +1630,7 @@ def office_asset_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_damage(request):
-def office_damage_view(request):
+def office_damage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1568,6 +1639,7 @@ def office_damage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_damage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1676,7 +1748,7 @@ def office_damage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_office_cost(request):
-def office_cost_view(request):
+def office_cost_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1685,6 +1757,7 @@ def office_cost_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_cost_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1765,7 +1838,7 @@ def office_cost_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_farmer_fisher_damage(request):
-def farmer_fisher_damage_view(request):
+def farmer_fisher_damage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1774,6 +1847,7 @@ def farmer_fisher_damage_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1888,7 +1962,7 @@ def farmer_fisher_damage_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_suigai(request):
-def suigai_view(request):
+def suigai_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1897,6 +1971,7 @@ def suigai_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -1979,7 +2054,7 @@ def suigai_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_weather(request):
-def weather_view(request):
+def weather_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -1988,6 +2063,7 @@ def weather_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.weather_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.weather_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.weather_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -2042,7 +2118,7 @@ def weather_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_area(request):
-def area_view(request):
+def area_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -2051,6 +2127,7 @@ def area_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.area_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -2111,7 +2188,7 @@ def area_view(request):
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ippan_chosa(request):
-def ippan_chosa_view(request):
+def ippan_chosa_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -2120,6 +2197,7 @@ def ippan_chosa_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -2155,6 +2233,7 @@ def ippan_chosa_view(request):
         ws_ippan = wb["IPPAN"]
 
         ws_city_vlook = wb["CITY_VLOOK"]
+        ws_kasen_vlook = wb["KASEN_VLOOK"]
         
         ### 01: 建物区分
         building_list = BUILDING.objects.raw("""SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
@@ -2164,7 +2243,7 @@ def ippan_chosa_view(request):
                 ws_building.cell(row=i+1, column=2).value = str(building.building_name) + ":" + str(building.building_code)
 
         ### 02: 都道府県
-        print("download_ippan_chosa3", flush=True)
+        print("ippan_chosa_view3", flush=True)
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_list:
             for i, ken in enumerate(ken_list):
@@ -2173,7 +2252,7 @@ def ippan_chosa_view(request):
                 
                 ws_city_vlook.cell(row=i+1, column=1).value = str(ken.ken_name) + ":" + str(ken.ken_code)
         
-        print("download_ippan_chosa4", flush=True)
+        print("ippan_chosa_view4", flush=True)
         
         city_list01 = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['01', ])
         city_list02 = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['02', ])
@@ -2275,7 +2354,7 @@ def ippan_chosa_view(request):
         ws_city_vlook.cell(row=47, column=2).value = 'CITY!$HX$1:$HX$%d' % len(city_list47)
 
         ### 03: 市区町村
-        print("download_ippan_chosa5", flush=True)
+        print("ippan_chosa_view5", flush=True)
         if city_list01:
             for i, city in enumerate(city_list01):
                 ws_city.cell(row=i+1, column=1).value = city.city_code
@@ -2653,7 +2732,7 @@ def ippan_chosa_view(request):
                 ws_city.cell(row=i+1, column=235).value = city.city_area
 
         ### 04: 水害発生地点工種（河川海岸区分）
-        print("download_ippan_chosa6", flush=True)
+        print("ippan_chosa_view6", flush=True)
         kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
         if kasen_kaigan_list:
             for i, kasen_kaigan in enumerate(kasen_kaigan_list):
@@ -2661,7 +2740,7 @@ def ippan_chosa_view(request):
                 ws_kasen_kaigan.cell(row=i+1, column=2).value = kasen_kaigan.kasen_kaigan_name + ":" + kasen_kaigan.kasen_kaigan_code
 
         ### 05: 水系（水系・沿岸）
-        print("download_ippan_chosa7", flush=True)
+        print("ippan_chosa_view7_1", flush=True)
         suikei_list = SUIKEI.objects.raw("""SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
         if suikei_list:
             for i, suikei in enumerate(suikei_list):
@@ -2669,8 +2748,248 @@ def ippan_chosa_view(request):
                 ws_suikei.cell(row=i+1, column=2).value = str(suikei.suikei_name) + ":" + str(suikei.suikei_code)
                 ws_suikei.cell(row=i+1, column=3).value = suikei.suikei_type_code
 
+                ws_kasen_vlook.cell(row=i+1, column=1).value = str(suikei.suikei_name) + ":" + str(suikei.suikei_code)
+
+        print("ippan_chosa_view7_2", flush=True)
+        kasen_list101 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['101', ])
+        kasen_list102 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['102', ])
+        kasen_list103 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['103', ])
+        kasen_list104 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['104', ])
+        kasen_list105 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['105', ])
+        kasen_list106 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['106', ])
+        kasen_list107 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['107', ])
+        kasen_list108 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['108', ])
+        kasen_list109 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['109', ])
+        kasen_list110 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['110', ])
+        kasen_list111 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['111', ])
+        kasen_list112 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['112', ])
+        kasen_list113 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['113', ])
+
+        kasen_list201 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['201', ])
+        kasen_list202 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['202', ])
+        kasen_list203 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['203', ])
+        kasen_list204 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['204', ])
+        kasen_list205 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['205', ])
+        kasen_list206 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['206', ])
+        kasen_list207 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['207', ])
+        kasen_list208 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['208', ])
+        kasen_list209 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['209', ])
+        kasen_list210 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['210', ])
+        kasen_list211 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['211', ])
+        kasen_list212 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['212', ])
+
+        kasen_list301 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['301', ])
+        kasen_list302 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['302', ])
+        kasen_list303 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['303', ])
+        kasen_list304 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['304', ])
+        kasen_list305 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['305', ])
+        kasen_list306 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['306', ])
+        kasen_list307 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['307', ])
+        kasen_list308 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['308', ])
+
+        kasen_list401 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['401', ])
+        kasen_list402 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['402', ])
+        kasen_list403 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['403', ])
+        kasen_list404 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['404', ])
+        kasen_list405 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['405', ])
+        kasen_list406 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['406', ])
+        kasen_list407 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['407', ])
+        kasen_list408 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['408', ])
+        kasen_list409 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['409', ])
+        kasen_list410 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['410', ])
+        kasen_list411 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['411', ])
+        kasen_list412 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['412', ])
+
+        kasen_list501 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['501', ])
+        kasen_list502 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['502', ])
+        kasen_list503 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['503', ])
+        kasen_list504 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['504', ])
+        kasen_list505 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['505', ])
+        kasen_list506 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['506', ])
+        kasen_list507 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['507', ])
+        kasen_list508 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['508', ])
+        kasen_list509 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['509', ])
+        kasen_list510 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['510', ])
+        kasen_list511 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['511', ])
+        kasen_list512 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['512', ])
+        kasen_list513 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['513', ])
+
+        kasen_list601 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['601', ])
+        kasen_list602 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['602', ])
+        kasen_list603 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['603', ])
+        kasen_list604 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['604', ])
+        kasen_list605 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['605', ])
+        kasen_list606 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['606', ])
+        kasen_list607 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['607', ])
+        kasen_list608 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['608', ])
+        kasen_list609 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['609', ])
+        kasen_list610 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['610', ])
+
+        kasen_list701 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['701', ])
+        kasen_list702 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['702', ])
+        kasen_list703 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['703', ])
+        kasen_list704 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['704', ])
+        kasen_list705 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['705', ])
+        kasen_list706 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['706', ])
+        kasen_list707 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['707', ])
+        kasen_list708 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['708', ])
+        kasen_list709 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['709', ])
+        kasen_list710 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['710', ])
+        kasen_list711 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['711', ])
+        kasen_list712 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['712', ])
+        kasen_list713 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['713', ])
+
+        kasen_list801 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['801', ])
+        kasen_list802 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['802', ])
+        kasen_list803 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['803', ])
+        kasen_list804 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['804', ])
+        kasen_list805 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['805', ])
+        kasen_list806 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['806', ])
+        kasen_list807 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['807', ])
+        kasen_list808 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['808', ])
+
+        kasen_list901 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['901', ])
+        kasen_list902 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['902', ])
+        kasen_list903 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['903', ])
+        kasen_list904 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['904', ])
+        kasen_list905 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['905', ])
+        kasen_list906 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['906', ])
+        kasen_list907 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['907', ])
+        kasen_list908 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['908', ])
+        kasen_list909 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['909', ])
+        kasen_list910 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['910', ])
+        kasen_list911 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['911', ])
+        kasen_list912 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['912', ])
+        kasen_list913 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['913', ])
+        kasen_list914 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['914', ])
+        kasen_list915 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['915', ])
+        kasen_list916 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['916', ])
+        kasen_list917 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['917', ])
+        kasen_list918 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['918', ])
+        kasen_list919 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['919', ])
+        kasen_list920 = KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", ['920', ])
+
+        print("ippan_chosa_view7_3", flush=True)
+        ws_kasen_vlook.cell(row=1, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list101)
+        ws_kasen_vlook.cell(row=2, column=2).value = 'KASEN!$G$1$G$%d' % len(kasen_list102)
+        ws_kasen_vlook.cell(row=3, column=2).value = 'KASEN!$L$1$L$%d' % len(kasen_list103)
+        ws_kasen_vlook.cell(row=4, column=2).value = 'KASEN!$Q$1$Q$%d' % len(kasen_list104)
+        ws_kasen_vlook.cell(row=5, column=2).value = 'KASEN!$V$1$V$%d' % len(kasen_list105)
+        ws_kasen_vlook.cell(row=6, column=2).value = 'KASEN!$AA$1$AA$%d' % len(kasen_list106)
+        ws_kasen_vlook.cell(row=7, column=2).value = 'KASEN!$AF$1$AF$%d' % len(kasen_list107)
+        ws_kasen_vlook.cell(row=8, column=2).value = 'KASEN!$AK$1$AK$%d' % len(kasen_list108)
+        ws_kasen_vlook.cell(row=9, column=2).value = 'KASEN!$AP$1$AP$%d' % len(kasen_list109)
+        ws_kasen_vlook.cell(row=10, column=2).value = 'KASEN!$AU$1$AU$%d' % len(kasen_list110)
+        ws_kasen_vlook.cell(row=11, column=2).value = 'KASEN!$AZ$1$AZ$%d' % len(kasen_list111)
+        ws_kasen_vlook.cell(row=12, column=2).value = 'KASEN!$BE$1$BE$%d' % len(kasen_list112)
+        ws_kasen_vlook.cell(row=13, column=2).value = 'KASEN!$BJ$1$BJ$%d' % len(kasen_list113)
+
+        ws_kasen_vlook.cell(row=14, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list201)
+        ws_kasen_vlook.cell(row=15, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list202)
+        ws_kasen_vlook.cell(row=16, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list203)
+        ws_kasen_vlook.cell(row=17, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list204)
+        ws_kasen_vlook.cell(row=18, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list205)
+        ws_kasen_vlook.cell(row=19, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list206)
+        ws_kasen_vlook.cell(row=20, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list207)
+        ws_kasen_vlook.cell(row=21, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list208)
+        ws_kasen_vlook.cell(row=22, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list209)
+        ws_kasen_vlook.cell(row=23, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list210)
+        ws_kasen_vlook.cell(row=24, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list211)
+        ws_kasen_vlook.cell(row=25, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list212)
+
+        ws_kasen_vlook.cell(row=26, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list301)
+        ws_kasen_vlook.cell(row=27, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list302)
+        ws_kasen_vlook.cell(row=28, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list303)
+        ws_kasen_vlook.cell(row=29, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list304)
+        ws_kasen_vlook.cell(row=30, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list305)
+        ws_kasen_vlook.cell(row=31, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list306)
+        ws_kasen_vlook.cell(row=32, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list307)
+        ws_kasen_vlook.cell(row=33, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list308)
+
+        ws_kasen_vlook.cell(row=34, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list401)
+        ws_kasen_vlook.cell(row=35, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list402)
+        ws_kasen_vlook.cell(row=36, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list403)
+        ws_kasen_vlook.cell(row=37, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list404)
+        ws_kasen_vlook.cell(row=38, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list405)
+        ws_kasen_vlook.cell(row=39, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list406)
+        ws_kasen_vlook.cell(row=40, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list407)
+        ws_kasen_vlook.cell(row=41, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list408)
+        ws_kasen_vlook.cell(row=42, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list409)
+        ws_kasen_vlook.cell(row=43, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list410)
+        ws_kasen_vlook.cell(row=44, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list411)
+        ws_kasen_vlook.cell(row=45, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list412)
+
+        ws_kasen_vlook.cell(row=46, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list501)
+        ws_kasen_vlook.cell(row=47, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list502)
+        ws_kasen_vlook.cell(row=48, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list503)
+        ws_kasen_vlook.cell(row=49, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list504)
+        ws_kasen_vlook.cell(row=50, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list505)
+        ws_kasen_vlook.cell(row=51, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list506)
+        ws_kasen_vlook.cell(row=52, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list507)
+        ws_kasen_vlook.cell(row=53, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list508)
+        ws_kasen_vlook.cell(row=54, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list509)
+        ws_kasen_vlook.cell(row=55, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list510)
+        ws_kasen_vlook.cell(row=56, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list511)
+        ws_kasen_vlook.cell(row=57, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list512)
+        ws_kasen_vlook.cell(row=58, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list513)
+
+        ws_kasen_vlook.cell(row=59, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list601)
+        ws_kasen_vlook.cell(row=60, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list602)
+        ws_kasen_vlook.cell(row=61, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list603)
+        ws_kasen_vlook.cell(row=62, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list604)
+        ws_kasen_vlook.cell(row=63, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list605)
+        ws_kasen_vlook.cell(row=64, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list606)
+        ws_kasen_vlook.cell(row=65, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list607)
+        ws_kasen_vlook.cell(row=66, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list608)
+        ws_kasen_vlook.cell(row=67, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list609)
+        ws_kasen_vlook.cell(row=68, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list610)
+
+        ws_kasen_vlook.cell(row=69, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list701)
+        ws_kasen_vlook.cell(row=70, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list702)
+        ws_kasen_vlook.cell(row=71, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list703)
+        ws_kasen_vlook.cell(row=72, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list704)
+        ws_kasen_vlook.cell(row=73, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list705)
+        ws_kasen_vlook.cell(row=74, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list706)
+        ws_kasen_vlook.cell(row=75, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list707)
+        ws_kasen_vlook.cell(row=76, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list708)
+        ws_kasen_vlook.cell(row=77, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list709)
+        ws_kasen_vlook.cell(row=78, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list710)
+        ws_kasen_vlook.cell(row=79, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list711)
+        ws_kasen_vlook.cell(row=80, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list712)
+        ws_kasen_vlook.cell(row=81, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list713)
+
+        ws_kasen_vlook.cell(row=82, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list801)
+        ws_kasen_vlook.cell(row=83, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list802)
+        ws_kasen_vlook.cell(row=84, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list803)
+        ws_kasen_vlook.cell(row=85, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list804)
+        ws_kasen_vlook.cell(row=86, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list805)
+        ws_kasen_vlook.cell(row=87, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list806)
+        ws_kasen_vlook.cell(row=88, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list807)
+        ws_kasen_vlook.cell(row=89, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list808)
+
+        ws_kasen_vlook.cell(row=90, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list901)
+        ws_kasen_vlook.cell(row=91, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list902)
+        ws_kasen_vlook.cell(row=92, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list903)
+        ws_kasen_vlook.cell(row=93, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list904)
+        ws_kasen_vlook.cell(row=94, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list905)
+        ws_kasen_vlook.cell(row=95, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list906)
+        ws_kasen_vlook.cell(row=96, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list907)
+        ws_kasen_vlook.cell(row=97, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list908)
+        ws_kasen_vlook.cell(row=98, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list909)
+        ws_kasen_vlook.cell(row=99, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list910)
+        ws_kasen_vlook.cell(row=100, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list911)
+        ws_kasen_vlook.cell(row=101, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list912)
+        ws_kasen_vlook.cell(row=102, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list913)
+        ws_kasen_vlook.cell(row=103, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list914)
+        ws_kasen_vlook.cell(row=104, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list915)
+        ws_kasen_vlook.cell(row=105, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list916)
+        ws_kasen_vlook.cell(row=106, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list917)
+        ws_kasen_vlook.cell(row=107, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list918)
+        ws_kasen_vlook.cell(row=108, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list919)
+        ws_kasen_vlook.cell(row=109, column=2).value = 'KASEN!$B$1$B$%d' % len(kasen_list920)
+
         ### 06: 水系種別（水系・沿岸種別）
-        print("download_ippan_chosa8", flush=True)
+        print("ippan_chosa_view8", flush=True)
         suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
         if suikei_type_list:
             for i, suikei_type in enumerate(suikei_type_list):
@@ -2678,7 +2997,7 @@ def ippan_chosa_view(request):
                 ws_suikei_type.cell(row=i+1, column=2).value = str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code)
 
         ### 07: 河川（河川・海岸）
-        print("download_ippan_chosa9", flush=True)
+        print("ippan_chosa_view9", flush=True)
         kasen_list = KASEN.objects.raw("""SELECT * FROM KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)""", [])
         if kasen_list:
             for i, kasen in enumerate(kasen_list):
@@ -2688,7 +3007,7 @@ def ippan_chosa_view(request):
                 ws_kasen.cell(row=i+1, column=4).value = kasen.suikei_code
                 
         ### 08: 河川種別（河川・海岸種別）
-        print("download_ippan_chosa10", flush=True)
+        print("ippan_chosa_view10", flush=True)
         kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
         if kasen_type_list:
             for i, kasen_type in enumerate(kasen_type_list):
@@ -2696,7 +3015,7 @@ def ippan_chosa_view(request):
                 ws_kasen_type.cell(row=i+1, column=2).value = str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code)
         
         ### 09: 水害原因
-        print("download_ippan_chosa11", flush=True)
+        print("ippan_chosa_view11", flush=True)
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
         if cause_list:
             for i, cause in enumerate(cause_list):
@@ -2704,7 +3023,7 @@ def ippan_chosa_view(request):
                 ws_cause.cell(row=i+1, column=2).value = str(cause.cause_name) + ":" + str(cause.cause_code)
                 
         ### 10: 地上地下区分
-        print("download_ippan_chosa12", flush=True)
+        print("ippan_chosa_view12", flush=True)
         underground_list = UNDERGROUND.objects.raw("""SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
         if underground_list:
             for i, underground in enumerate(underground_list):
@@ -2712,7 +3031,7 @@ def ippan_chosa_view(request):
                 ws_underground.cell(row=i+1, column=2).value = str(underground.underground_name) + ":" + str(underground.underground_code)
         
         ### 11: 地下空間の利用形態
-        print("download_ippan_chosa13", flush=True)
+        print("ippan_chosa_view13", flush=True)
         usage_list = USAGE.objects.raw("""SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
         if usage_list:
             for i, usage in enumerate(usage_list):
@@ -2720,7 +3039,7 @@ def ippan_chosa_view(request):
                 ws_usage.cell(row=i+1, column=2).value = str(usage.usage_name) + ":" + str(usage.usage_code)
         
         ### 12: 浸水土砂区分
-        print("download_ippan_chosa14", flush=True)
+        print("ippan_chosa_view14", flush=True)
         flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
         if flood_sediment_list:
             for i, flood_sediment in enumerate(flood_sediment_list):
@@ -2728,7 +3047,7 @@ def ippan_chosa_view(request):
                 ws_flood_sediment.cell(row=i+1, column=2).value = str(flood_sediment.flood_sediment_name) + ":" + str(flood_sediment.flood_sediment_code)
         
         ### 13: 地盤勾配区分
-        print("download_ippan_chosa15", flush=True)
+        print("ippan_chosa_view15", flush=True)
         gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
         if gradient_list:
             for i, gradient in enumerate(gradient_list):
@@ -2736,7 +3055,7 @@ def ippan_chosa_view(request):
                 ws_gradient.cell(row=i+1, column=2).value = str(gradient.gradient_name) + ":" + str(gradient.gradient_code)
         
         ### 14: 産業分類
-        print("download_ippan_chosa16", flush=True)
+        print("ippan_chosa_view16", flush=True)
         industry_list = INDUSTRY.objects.raw("""SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
         if industry_list:
             for i, industry in enumerate(industry_list):
@@ -2744,7 +3063,7 @@ def ippan_chosa_view(request):
                 ws_industry.cell(row=i+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
         
         ### 200: 水害
-        print("download_ippan_chosa17_1", flush=True)
+        print("ippan_chosa_view17_1", flush=True)
         suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
         if suigai_list:
             for i, suigai in enumerate(suigai_list):
@@ -2769,7 +3088,7 @@ def ippan_chosa_view(request):
                 ws_suigai.cell(row=i+1, column=19).value = suigai.weather_id
 
         ### 201: 異常気象
-        print("download_ippan_chosa17_2", flush=True)
+        print("ippan_chosa_view17_2", flush=True)
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
         if weather_list:
             for i, weather in enumerate(weather_list):
@@ -2777,7 +3096,7 @@ def ippan_chosa_view(request):
                 ws_weather.cell(row=i+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
 
         ### 202: 区域
-        print("download_ippan_chosa17_3", flush=True)
+        print("ippan_chosa_view17_3", flush=True)
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
         if area_list:
             for i, area in enumerate(area_list):
@@ -2787,7 +3106,7 @@ def ippan_chosa_view(request):
         #######################################################################
         ### EXCELセルプルダウン埋め込み処理(0030)
         #######################################################################
-        print("download_ippan_chosa18_1", flush=True)
+        print("ippan_chosa_view18_1", flush=True)
         ### 203: 一般資産調査票
         ### ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
         ### ippan_list = IPPAN.objects.raw("""
@@ -2906,7 +3225,7 @@ def ippan_chosa_view(request):
         ###     """, [])
 
         ### 200: 水害
-        print("download_ippan_chosa18_2", flush=True)
+        print("ippan_chosa_view18_2", flush=True)
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
             SU1.suigai_id AS suigai_id,
@@ -2974,7 +3293,7 @@ def ippan_chosa_view(request):
             ORDER BY CAST (SU1.SUIGAI_ID AS INTEGER)            
             """, [])
 
-        print("download_ippan_chosa18_3", flush=True)
+        print("ippan_chosa_view18_3", flush=True)
         ippan_list = IPPAN.objects.raw("""
             SELECT 
             IP1.ippan_id AS ippan_id,
@@ -3036,7 +3355,7 @@ def ippan_chosa_view(request):
             ORDER BY CAST (IP1.IPPAN_ID AS INTEGER)            
             """, [])
             
-        print("download_ippan_chosa18_4", flush=True)
+        print("ippan_chosa_view18_4", flush=True)
         ws_ippan.cell(row=5, column=2).value = '都道府県'
         ws_ippan.cell(row=5, column=3).value = '市区町村'
         ws_ippan.cell(row=5, column=4).value = '水害発生年月日'
@@ -3090,19 +3409,19 @@ def ippan_chosa_view(request):
         ### EXCELセルプルダウン埋め込み処理(0040)
         #######################################################################
         ### 01: 建物区分
-        print("download_ippan_chosa19", flush=True)
+        print("ippan_chosa_view19", flush=True)
         dv_building = DataValidation(type="list", formula1="BUILDING!$B$1:$B$%d" % len(building_list))
         dv_building.ranges = 'C20:C1048576'
         ws_ippan.add_data_validation(dv_building)
 
         ### 02: 都道府県
-        print("download_ippan_chosa20", flush=True)
+        print("ippan_chosa_view20", flush=True)
         dv_ken = DataValidation(type="list", formula1="KEN!$B$1:$B$%d" % len(ken_list))
         dv_ken.ranges = 'B7:B7'
         ws_ippan.add_data_validation(dv_ken)
         
         ### 03: 市区町村
-        print("download_ippan_chosa21", flush=True)
+        print("ippan_chosa_view21", flush=True)
         ### ws_ippan.cell(row=3, column=30).value = "=VLOOKUP(B7,CITY_VLOOK.A:B,2,0)" ### FOR LINUX
         ws_ippan.cell(row=3, column=30).value = "=VLOOKUP(B7,CITY_VLOOK!A:B,2,0)" ### FOR WINDOWS
         dv_city = DataValidation(type="list", formula1="=INDIRECT(AD3)")
@@ -3110,82 +3429,82 @@ def ippan_chosa_view(request):
         ws_ippan.add_data_validation(dv_city)
         
         ### 04: 水害発生地点工種（河川海岸区分）
-        print("download_ippan_chosa22", flush=True)
+        print("ippan_chosa_view22", flush=True)
         dv_kasen_kaigan = DataValidation(type="list", formula1="KASEN_KAIGAN!$B$1:$B$%d" % len(kasen_kaigan_list))
         dv_kasen_kaigan.ranges = 'F14:F14'
         ws_ippan.add_data_validation(dv_kasen_kaigan)
         
         ### 05: 水系（水系・沿岸）
-        print("download_ippan_chosa23", flush=True)
+        print("ippan_chosa_view23", flush=True)
         dv_suikei = DataValidation(type="list", formula1="SUIKEI!$B$1:$B$%d" % len(suikei_list))
         dv_suikei.ranges = 'B10:B10'
         ws_ippan.add_data_validation(dv_suikei)
         
         ### 06: 水系種別（水系・沿岸種別）
-        print("download_ippan_chosa24", flush=True)
+        print("ippan_chosa_view24", flush=True)
         dv_suikei_type = DataValidation(type="list", formula1="SUIKEI_TYPE!$B$1:$B$%d" % len(suikei_type_list))
         dv_suikei_type.ranges = 'C10:C10'
         ws_ippan.add_data_validation(dv_suikei_type)
         
         ### 07: 河川（河川・海岸）
-        print("download_ippan_chosa25", flush=True)
+        print("ippan_chosa_view25", flush=True)
         dv_kasen = DataValidation(type="list", formula1="KASEN!$B$1:$B$%d" % len(kasen_list))
         dv_kasen.ranges = 'D10:D10'
         ws_ippan.add_data_validation(dv_kasen)
         
         ### 08: 河川種別（河川・海岸種別）
-        print("download_ippan_chosa26", flush=True)
+        print("ippan_chosa_view26", flush=True)
         dv_kasen_type = DataValidation(type="list", formula1="KASEN_TYPE!$B$1:$B$%d" % len(kasen_type_list))
         dv_kasen_type.ranges = 'E10:E10'
         ws_ippan.add_data_validation(dv_kasen_type)
         
         ### 09: 水害原因
-        print("download_ippan_chosa27", flush=True)
+        print("ippan_chosa_view27", flush=True)
         dv_cause = DataValidation(type="list", formula1="CAUSE!$B$1:$B$%d" % len(cause_list))
         dv_cause.ranges = 'F7:H7'
         ws_ippan.add_data_validation(dv_cause)
         
         ### 10: 地上地下区分
-        print("download_ippan_chosa28", flush=True)
+        print("ippan_chosa_view28", flush=True)
         dv_underground = DataValidation(type="list", formula1="UNDERGROUND!$B$1:$B$%d" % len(underground_list))
         dv_underground.ranges = 'D20:D1048576'
         ws_ippan.add_data_validation(dv_underground)
         
         ### 11: 地下空間の利用形態
-        print("download_ippan_chosa29", flush=True)
+        print("ippan_chosa_view29", flush=True)
         dv_usage = DataValidation(type="list", formula1="USAGE!$B$1:$B$%d" % len(usage_list))
         dv_usage.ranges = 'Z20:Z1048576'
         ws_ippan.add_data_validation(dv_usage)
         
         ### 12: 浸水土砂区分
-        print("download_ippan_chosa30", flush=True)
+        print("ippan_chosa_view30", flush=True)
         dv_flood_sediment = DataValidation(type="list", formula1="FLOOD_SEDIMENT!$B$1:$B$%d" % len(flood_sediment_list))
         dv_flood_sediment.ranges = 'E20:E1048576'
         ws_ippan.add_data_validation(dv_flood_sediment)
         
         ### 13: 地盤勾配区分
-        print("download_ippan_chosa31", flush=True)
+        print("ippan_chosa_view31", flush=True)
         dv_gradient = DataValidation(type="list", formula1="GRADIENT!$B$1:$B$%d" % len(gradient_list))
         dv_gradient.ranges = 'F10:F10'
         ws_ippan.add_data_validation(dv_gradient)
         
         ### 14: 産業分類
-        print("download_ippan_chosa32", flush=True)
+        print("ippan_chosa_view32", flush=True)
         dv_industry = DataValidation(type="list", formula1="INDUSTRY!$B$1:$B$%d" % len(industry_list))
         dv_industry.ranges = 'Y20:Y1048576'
         ws_ippan.add_data_validation(dv_industry)
         
         ### 200: 水害
-        print("download_ippan_chosa33_1", flush=True)
+        print("ippan_chosa_view33_1", flush=True)
         
         ### 201: 異常気象
-        print("download_ippan_chosa33_2", flush=True)
+        print("ippan_chosa_view33_2", flush=True)
         dv_weather = DataValidation(type="list", formula1="WEATHER!$B$1:$B$%d" % len(weather_list))
         dv_weather.ranges = 'J14:J14'
         ws_ippan.add_data_validation(dv_weather)
         
         ### 202: 区域
-        print("download_ippan_chosa33_3", flush=True)
+        print("ippan_chosa_view33_3", flush=True)
         dv_area = DataValidation(type="list", formula1="AREA!$B$1:$B$%d" % len(area_list))
         dv_area.ranges = 'I7:I7'
         ws_ippan.add_data_validation(dv_area)
@@ -3196,7 +3515,7 @@ def ippan_chosa_view(request):
         ### TO-DO: IPPANデータの県名、県コード、水系名、水系コード、発生日などが異なる場合、この帳票フォーマットでは1シートでは表現できない。
         ### TO-DO: IPPANデータの県名、県コード、水系名、水系コード、発生日などが異なる場合、GROUP BYして、シート、EXCELファイルを分ける必要がある。
         #######################################################################
-        print("download_ippan_chosa34_1", flush=True)
+        print("ippan_chosa_view34_1", flush=True)
         ws_ippan.cell(row=7, column=2).value = str(suigai_list[0].ken_name) + ":" + str(suigai_list[0].ken_code)
         ws_ippan.cell(row=7, column=3).value = str(suigai_list[0].city_name) + ":" + str(suigai_list[0].city_code)
         ws_ippan.cell(row=7, column=4).value = str(suigai_list[0].begin_date)
@@ -3219,7 +3538,7 @@ def ippan_chosa_view(request):
         ws_ippan.cell(row=14, column=8).value = str(suigai_list[0].crop_damage)
         ws_ippan.cell(row=14, column=10).value = str(suigai_list[0].weather_name) + ":" + str(suigai_list[0].weather_id)
 
-        print("download_ippan_chosa34_2", flush=True)
+        print("ippan_chosa_view34_2", flush=True)
         if ippan_list:
             for i, ippan in enumerate(ippan_list):
                 ws_ippan.cell(row=i+20, column=2).value = ippan.ippan_name
@@ -3285,11 +3604,11 @@ def ippan_chosa_view(request):
 
 ###############################################################################
 ### 関数名：ippan_city_view
-### 2602: 一般資産調査票（市区町村用）
+### 204: 一般資産調査票（市区町村用）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ippan_city(request):
-def ippan_city_view(request):
+def ippan_city_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -3298,6 +3617,7 @@ def ippan_city_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -3476,11 +3796,11 @@ def ippan_city_view(request):
 
 ###############################################################################
 ### 関数名：ippan_ken_view
-### 2603: 一般資産調査票（都道府県用）
+### 205: 一般資産調査票（都道府県用）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_ippan_ken(request):
-def ippan_ken_view(request):
+def ippan_ken_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -3489,6 +3809,7 @@ def ippan_ken_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -3666,69 +3987,12 @@ def ippan_ken_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：restoration_view
-### 27: 復旧事業工種
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def download_restoration(request):
-def restoration_view(request):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 request = {}'.format(request.method), 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、データを取得する。
-        #######################################################################
-        restoration_list = RESTORATION.objects.raw("""SELECT * FROM RESTORATION ORDER BY CAST(RESTORATION_CODE AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        template_file_path = 'static/template_restoration.xlsx'
-        download_file_path = 'static/download_restoration.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '復旧事業工種'
-        ws.cell(row=1, column=1).value = '復旧事業工種コード'
-        ws.cell(row=1, column=2).value = '復旧事業工種名'
-        
-        if restoration_list:
-            for i, restoration in enumerate(restoration_list):
-                ws.cell(row=i+2, column=1).value = restoration.restoration_code
-                ws.cell(row=i+2, column=2).value = restoration.restoration_name
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="restoration.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
 ### 関数名：kokyo_view
-### 28: 公共土木調査票
+### 206: 公共土木調査票
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_kokyo(request):
-def kokyo_view(request):
+def kokyo_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -3737,6 +4001,7 @@ def kokyo_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kokyo_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kokyo_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
@@ -3792,11 +4057,11 @@ def kokyo_view(request):
 
 ###############################################################################
 ### 関数名：koeki_view
-### 29: 公益事業調査票
+### 2907 公益事業調査票
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 ### def download_koeki(request):
-def koeki_view(request):
+def koeki_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -3805,6 +4070,7 @@ def koeki_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.koeki_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.koeki_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.koeki_view()関数 lock = {}'.format(lock), 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)

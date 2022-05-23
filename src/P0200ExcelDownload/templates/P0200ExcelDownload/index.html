@@ -26,7 +26,7 @@
     
     <!-- BEGIN mb-3 -->
     <div class="mb-3">
-        <label class="form-check-label">都道府県、市区町村、帳票の種類を選択してください。</label>
+        <label class="form-check-label">都道府県、市区町村、データの種類を選択してください。</label>
         <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>
     <!-- END mb-3 -->
@@ -291,13 +291,13 @@
 
     <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
-        <label class="form-check-label">帳票の種類を選択してください。</label>
+        <label class="form-check-label">データの種類を選択してください。</label>
     </div>    
     <!-- END container mb-3 -->
 
     <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
-        <select class="form-select" id="form_select_1" name="form_select_1">
+        <select class="form-select" id="form_select_category" name="form_select_category">
             <option value="1">建物区分</option>
             <option value="2">都道府県</option>
             <option value="3">市区町村</option>
@@ -343,14 +343,14 @@
     <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、編集用にロック有りでEXCELファイルをダウンロードします。</label>
-        <button class="btn btn-secondary" type="button" id="button1" name="button1">編集用にロック有りでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button_lock" name="button_lock">編集用にロック有りでダウンロード</button>
     </div>
     <!-- END container mb-3 -->
 
     <!-- BEGIN container mb-3 -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、参照用にロック無しでEXCELファイルをダウンロードします。</label>
-        <button class="btn btn-secondary" type="button" id="button2" name="button2">参照用にロック無しでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button_unlock" name="button_unlock">参照用にロック無しでダウンロード</button>
     </div>
     <!-- END container mb-3 -->
     
@@ -1024,213 +1024,275 @@
         button_ken47_checked = !button_ken47_checked;
     });
     
-    var button1 = document.getElementById("button1")
-    var button2 = document.getElementById("button2")
-    var form_select_1 = document.getElementById("form_select_1")
+    var button_lock = document.getElementById("button_lock")
+    var button_unlock = document.getElementById("button_unlock")
+    var form_select_category = document.getElementById("form_select_category")
     
     // 編集用にロック有りでダウンロードボタンクリック時のイベントハンドラを設定する。
-    button1.addEventListener("click", function(event) {
-        if (form_select_1.value == 1) {
-            window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
+    button_lock.addEventListener("click", function(event) {
+        if (form_select_category.value == 1) {
+            // window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
+            window.location.href = "/P0200ExcelDownload/building/lock/1/";
         } 
-        else if (form_select_1.value == 2) {
-            window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
+        else if (form_select_category.value == 2) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
+            window.location.href = "/P0200ExcelDownload/ken/lock/1/";
         } 
-        else if (form_select_1.value == 3) {
-            window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
+        else if (form_select_category.value == 3) {
+            // window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
+            window.location.href = "/P0200ExcelDownload/city/lock/1/";
         } 
-        else if (form_select_1.value == 4) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
+        else if (form_select_category.value == 4) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen_kaigan/lock/1/";
         } 
-        else if (form_select_1.value == 5) {
-            window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
+        else if (form_select_category.value == 5) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
+            window.location.href = "/P0200ExcelDownload/suikei/lock/1/";
         } 
-        else if (form_select_1.value == 6) {
-            window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
+        else if (form_select_category.value == 6) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
+            window.location.href = "/P0200ExcelDownload/suikei_type/lock/1/";
         } 
-        else if (form_select_1.value == 7) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
+        else if (form_select_category.value == 7) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen/lock/1/";
         } 
-        else if (form_select_1.value == 8) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
+        else if (form_select_category.value == 8) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen_type/lock/1/";
         } 
-        else if (form_select_1.value == 9) {
-            window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
+        else if (form_select_category.value == 9) {
+            // window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
+            window.location.href = "/P0200ExcelDownload/cause/lock/1/";
         } 
-        else if (form_select_1.value == 10) {
-            window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
+        else if (form_select_category.value == 10) {
+            // window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
+            window.location.href = "/P0200ExcelDownload/underground/lock/1/";
         } 
-        else if (form_select_1.value == 11) {
-            window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
+        else if (form_select_category.value == 11) {
+            // window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
+            window.location.href = "/P0200ExcelDownload/usage/lock/1/";
         } 
-        else if (form_select_1.value == 12) {
-            window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
+        else if (form_select_category.value == 12) {
+            // window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
+            window.location.href = "/P0200ExcelDownload/flood_sediment/lock/1/";
         } 
-        else if (form_select_1.value == 13) {
-            window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
+        else if (form_select_category.value == 13) {
+            // window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
+            window.location.href = "/P0200ExcelDownload/gradient/lock/1/";
         } 
-        else if (form_select_1.value == 14) {
-            window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
+        else if (form_select_category.value == 14) {
+            // window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
+            window.location.href = "/P0200ExcelDownload/industry/lock/1/";
         } 
-        else if (form_select_1.value == 100) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
+        else if (form_select_category.value == 100) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_asset/lock/1/";
         } 
-        else if (form_select_1.value == 101) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
+        else if (form_select_category.value == 101) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_damage/lock/1/";
         } 
-        else if (form_select_1.value == 102) {
-            window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
+        else if (form_select_category.value == 102) {
+            // window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/household_damage/lock/1/";
         } 
-        else if (form_select_1.value == 103) {
-            window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
+        else if (form_select_category.value == 103) {
+            // window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/car_damage/lock/1/";
         } 
-        else if (form_select_1.value == 104) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
+        else if (form_select_category.value == 104) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_cost/lock/1/";
         } 
-        else if (form_select_1.value == 105) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
+        else if (form_select_category.value == 105) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_asset/lock/1/";
         } 
-        else if (form_select_1.value == 106) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
+        else if (form_select_category.value == 106) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_damage/lock/1/";
         } 
-        else if (form_select_1.value == 107) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
+        else if (form_select_category.value == 107) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_cost/lock/1/";
         } 
-        else if (form_select_1.value == 108) {
-            window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
+        else if (form_select_category.value == 108) {
+            // window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/farmer_fisher/lock/1/";
         } 
-        else if (form_select_1.value == 200) {
-            window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+        else if (form_select_category.value == 200) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+            window.location.href = "/P0200ExcelDownload/suigai/lock/1/";
         } 
-        else if (form_select_1.value == 201) {
-            window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
+        else if (form_select_category.value == 201) {
+            // window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
+            window.location.href = "/P0200ExcelDownload/weather/lock/1/";
         } 
-        else if (form_select_1.value == 202) {
-            window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
+        else if (form_select_category.value == 202) {
+            // window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
+            window.location.href = "/P0200ExcelDownload/area/lock/1/";
         } 
-        else if (form_select_1.value == 203) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
+        else if (form_select_category.value == 203) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_chosa/lock/1/";
         } 
-        else if (form_select_1.value == 204) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
+        else if (form_select_category.value == 204) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_city/lock/1/";
         } 
-        else if (form_select_1.value == 205) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
+        else if (form_select_category.value == 205) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_ken/lock/1/";
         } 
-        else if (form_select_1.value == 206) {
-            window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
+        else if (form_select_category.value == 206) {
+            // window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
+            window.location.href = "/P0200ExcelDownload/restoration/lock/1/";
         } 
-        else if (form_select_1.value == 207) {
-            window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
+        else if (form_select_category.value == 207) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
+            window.location.href = "/P0200ExcelDownload/kokyo/lock/1/";
         } 
-        else if (form_select_1.value == 208) {
-            window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
+        else if (form_select_category.value == 208) {
+            // window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
+            window.location.href = "/P0200ExcelDownload/koeki/lock/1/";
         } 
         else {
-            window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
         }
     });
     
     // 参照用にロック無しでダウンロードボタンクリック時のイベントハンドラを設定する。
-    button2.addEventListener("click", function(event) {
-        if (form_select_1.value == 1) {
-            window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
+    button_unlock.addEventListener("click", function(event) {
+        if (form_select_category.value == 1) {
+            // window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
+            window.location.href = "/P0200ExcelDownload/building/lock/0/";
         } 
-        else if (form_select_1.value == 2) {
-            window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
+        else if (form_select_category.value == 2) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ken_view' %}";
+            window.location.href = "/P0200ExcelDownload/ken/lock/0/";
         } 
-        else if (form_select_1.value == 3) {
-            window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
+        else if (form_select_category.value == 3) {
+            // window.location.href = "{% url 'P0200ExcelDownload:city_view' %}";
+            window.location.href = "/P0200ExcelDownload/city/lock/0/";
         } 
-        else if (form_select_1.value == 4) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
+        else if (form_select_category.value == 4) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_kaigan_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen_kaigan/lock/0/";
         } 
-        else if (form_select_1.value == 5) {
-            window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
+        else if (form_select_category.value == 5) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suikei_view' %}";
+            window.location.href = "/P0200ExcelDownload/suikei/lock/0/";
         } 
-        else if (form_select_1.value == 6) {
-            window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
+        else if (form_select_category.value == 6) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suikei_type_view' %}";
+            window.location.href = "/P0200ExcelDownload/suikei_type/lock/0/";
         } 
-        else if (form_select_1.value == 7) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
+        else if (form_select_category.value == 7) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen/lock/0/";
         } 
-        else if (form_select_1.value == 8) {
-            window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
+        else if (form_select_category.value == 8) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kasen_type_view' %}";
+            window.location.href = "/P0200ExcelDownload/kasen_type/lock/0/";
         } 
-        else if (form_select_1.value == 9) {
-            window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
+        else if (form_select_category.value == 9) {
+            // window.location.href = "{% url 'P0200ExcelDownload:cause_view' %}";
+            window.location.href = "/P0200ExcelDownload/cause/lock/0/";
         } 
-        else if (form_select_1.value == 10) {
-            window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
+        else if (form_select_category.value == 10) {
+            // window.location.href = "{% url 'P0200ExcelDownload:underground_view' %}";
+            window.location.href = "/P0200ExcelDownload/underground/lock/0/";
         } 
-        else if (form_select_1.value == 11) {
-            window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
+        else if (form_select_category.value == 11) {
+            // window.location.href = "{% url 'P0200ExcelDownload:usage_view' %}";
+            window.location.href = "/P0200ExcelDownload/usage/lock/0/";
         } 
-        else if (form_select_1.value == 12) {
-            window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
+        else if (form_select_category.value == 12) {
+            // window.location.href = "{% url 'P0200ExcelDownload:flood_sediment_view' %}";
+            window.location.href = "/P0200ExcelDownload/flood_sediment/lock/0/";
         } 
-        else if (form_select_1.value == 13) {
-            window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
+        else if (form_select_category.value == 13) {
+            // window.location.href = "{% url 'P0200ExcelDownload:gradient_view' %}";
+            window.location.href = "/P0200ExcelDownload/gradient/lock/0/";
         } 
-        else if (form_select_1.value == 14) {
-            window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
+        else if (form_select_category.value == 14) {
+            // window.location.href = "{% url 'P0200ExcelDownload:industry_view' %}";
+            window.location.href = "/P0200ExcelDownload/industry/lock/0/";
         } 
-        else if (form_select_1.value == 100) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
+        else if (form_select_category.value == 100) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_asset_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_asset/lock/0/";
         } 
-        else if (form_select_1.value == 101) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
+        else if (form_select_category.value == 101) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_damage/lock/0/";
         } 
-        else if (form_select_1.value == 102) {
-            window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
+        else if (form_select_category.value == 102) {
+            // window.location.href = "{% url 'P0200ExcelDownload:household_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/household_damage/lock/0/";
         } 
-        else if (form_select_1.value == 103) {
-            window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
+        else if (form_select_category.value == 103) {
+            // window.location.href = "{% url 'P0200ExcelDownload:car_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/car_damage/lock/0/";
         } 
-        else if (form_select_1.value == 104) {
-            window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
+        else if (form_select_category.value == 104) {
+            // window.location.href = "{% url 'P0200ExcelDownload:house_cost_view' %}";
+            window.location.href = "/P0200ExcelDownload/house_cost/lock/0/";
         } 
-        else if (form_select_1.value == 105) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
+        else if (form_select_category.value == 105) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_asset_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_asset/lock/0/";
         } 
-        else if (form_select_1.value == 106) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
+        else if (form_select_category.value == 106) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_damage/lock/0/";
         } 
-        else if (form_select_1.value == 107) {
-            window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
+        else if (form_select_category.value == 107) {
+            // window.location.href = "{% url 'P0200ExcelDownload:office_cost_view' %}";
+            window.location.href = "/P0200ExcelDownload/office_cost/lock/0/";
         } 
-        else if (form_select_1.value == 108) {
-            window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
+        else if (form_select_category.value == 108) {
+            // window.location.href = "{% url 'P0200ExcelDownload:farmer_fisher_damage_view' %}";
+            window.location.href = "/P0200ExcelDownload/farmer_fisher/lock/0/";
         } 
-        else if (form_select_1.value == 200) {
-            window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+        else if (form_select_category.value == 200) {
+            // window.location.href = "{% url 'P0200ExcelDownload:suigai_view' %}";
+            window.location.href = "/P0200ExcelDownload/suigai/lock/0/";
         } 
-        else if (form_select_1.value == 201) {
-            window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
+        else if (form_select_category.value == 201) {
+            // window.location.href = "{% url 'P0200ExcelDownload:weather_view' %}";
+            window.location.href = "/P0200ExcelDownload/weather/lock/0/";
         } 
-        else if (form_select_1.value == 202) {
-            window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
+        else if (form_select_category.value == 202) {
+            // window.location.href = "{% url 'P0200ExcelDownload:area_view' %}";
+            window.location.href = "/P0200ExcelDownload/area/lock/0/";
         } 
-        else if (form_select_1.value == 203) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
+        else if (form_select_category.value == 203) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_chosa_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_chosa/lock/0/";
         } 
-        else if (form_select_1.value == 204) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
+        else if (form_select_category.value == 204) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_city_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_city/lock/0/";
         } 
-        else if (form_select_1.value == 205) {
-            window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
+        else if (form_select_category.value == 205) {
+            // window.location.href = "{% url 'P0200ExcelDownload:ippan_ken_view' %}";
+            window.location.href = "/P0200ExcelDownload/ippan_ken/lock/0/";
         } 
-        else if (form_select_1.value == 206) {
-            window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
+        else if (form_select_category.value == 206) {
+            // window.location.href = "{% url 'P0200ExcelDownload:restoration_view' %}";
+            window.location.href = "/P0200ExcelDownload/restoration/lock/0/";
         } 
-        else if (form_select_1.value == 207) {
-            window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
+        else if (form_select_category.value == 207) {
+            // window.location.href = "{% url 'P0200ExcelDownload:kokyo_view' %}";
+            window.location.href = "/P0200ExcelDownload/kokyo/lock/0/";
         } 
-        else if (form_select_1.value == 208) {
-            window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
+        else if (form_select_category.value == 208) {
+            // window.location.href = "{% url 'P0200ExcelDownload:koeki_view' %}";
+            window.location.href = "/P0200ExcelDownload/koeki/lock/0/";
         } 
         else {
-            window.location.href = "{% url 'P0200ExcelDownload:building_view' %}";
         }
     });
     </script>
