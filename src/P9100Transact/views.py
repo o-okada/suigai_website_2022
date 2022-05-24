@@ -9,6 +9,7 @@
 ###############################################################################
 import datetime
 import sys
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -22,49 +23,52 @@ from django.forms import formset_factory
 from .forms import ChoiceForm
 from .forms import ScheduleForm
 
-from P0000Common.models import BUILDING                ### 01: 建物区分
-from P0000Common.models import KEN                     ### 02: 都道府県
-from P0000Common.models import CITY                    ### 03: 市区町村
-from P0000Common.models import KASEN_KAIGAN            ### 04: 水害発生地点工種（河川海岸区分）
-from P0000Common.models import SUIKEI                  ### 05: 水系（水系・沿岸）
-from P0000Common.models import SUIKEI_TYPE             ### 06: 水系種別（水系・沿岸種別）
-from P0000Common.models import KASEN                   ### 07: 河川（河川・海岸）
-from P0000Common.models import KASEN_TYPE              ### 08: 河川種別（河川・海岸種別）
-from P0000Common.models import CAUSE                   ### 09: 水害原因
-from P0000Common.models import UNDERGROUND             ### 10: 地上地下区分
-from P0000Common.models import USAGE                   ### 11: 地下空間の利用形態
-from P0000Common.models import FLOOD_SEDIMENT          ### 12: 浸水土砂区分
-from P0000Common.models import GRADIENT                ### 13: 地盤勾配区分
-from P0000Common.models import INDUSTRY                ### 14: 産業分類
-from P0000Common.models import HOUSE_ASSET             ### 15: 県別家屋評価額
-from P0000Common.models import HOUSE_DAMAGE            ### 16: 家屋被害率
-from P0000Common.models import HOUSEHOLD_DAMAGE        ### 17: 家庭用品自動車以外被害率
-from P0000Common.models import CAR_DAMAGE              ### 18: 家庭用品自動車被害率
-from P0000Common.models import HOUSE_COST              ### 19: 家庭応急対策費
-from P0000Common.models import OFFICE_ASSET            ### 20: 産業分類別資産額
-from P0000Common.models import OFFICE_DAMAGE           ### 21: 事業所被害率
-from P0000Common.models import OFFICE_COST             ### 22: 事業所営業停止損失
-from P0000Common.models import FARMER_FISHER_DAMAGE    ### 23: 農漁家被害率
-from P0000Common.models import WEATHER                 ### 24: 異常気象（ほぼ、水害）
-from P0000Common.models import AREA                    ### 25: 区域
-from P0000Common.models import IPPAN                   ### 26: 一般資産調査票
-from P0000Common.models import RESTORATION             ### 27: 復旧事業工種
-from P0000Common.models import KOKYO                   ### 28: 公共土木調査票
-from P0000Common.models import KOEKI                   ### 29: 公益事業調査票
-from P0000Common.models import TRANSACT                ### 40: 
+from P0000Common.models import BUILDING                ### 001: 建物区分
+from P0000Common.models import KEN                     ### 002: 都道府県
+from P0000Common.models import CITY                    ### 003: 市区町村
+from P0000Common.models import KASEN_KAIGAN            ### 004: 水害発生地点工種（河川海岸区分）
+from P0000Common.models import SUIKEI                  ### 005: 水系（水系・沿岸）
+from P0000Common.models import SUIKEI_TYPE             ### 006: 水系種別（水系・沿岸種別）
+from P0000Common.models import KASEN                   ### 007: 河川（河川・海岸）
+from P0000Common.models import KASEN_TYPE              ### 008: 河川種別（河川・海岸種別）
+from P0000Common.models import CAUSE                   ### 009: 水害原因
+from P0000Common.models import UNDERGROUND             ### 010: 地上地下区分
+from P0000Common.models import USAGE                   ### 011: 地下空間の利用形態
+from P0000Common.models import FLOOD_SEDIMENT          ### 012: 浸水土砂区分
+from P0000Common.models import GRADIENT                ### 013: 地盤勾配区分
+from P0000Common.models import INDUSTRY                ### 014: 産業分類
+from P0000Common.models import RESTORATION             ### 015: 復旧事業工種
+from P0000Common.models import HOUSE_ASSET             ### 100: 県別家屋評価額
+from P0000Common.models import HOUSE_DAMAGE            ### 101: 家屋被害率
+from P0000Common.models import HOUSEHOLD_DAMAGE        ### 102: 家庭用品自動車以外被害率
+from P0000Common.models import CAR_DAMAGE              ### 103: 家庭用品自動車被害率
+from P0000Common.models import HOUSE_COST              ### 104: 家庭応急対策費
+from P0000Common.models import OFFICE_ASSET            ### 105: 産業分類別資産額
+from P0000Common.models import OFFICE_DAMAGE           ### 106: 事業所被害率
+from P0000Common.models import OFFICE_COST             ### 107: 事業所営業停止損失
+from P0000Common.models import FARMER_FISHER_DAMAGE    ### 108: 農漁家被害率
+from P0000Common.models import SUIGAI                  ### 200: 水害
+from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
+from P0000Common.models import AREA                    ### 202: 区域
+from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
+### from P0000Common.models import IPPAN_CITY          ### 204: 
+### from P0000Common.models import IPPAN_KEN           ### 205: 
+from P0000Common.models import KOKYO                   ### 206: 公共土木調査票
+from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
+
+from P0000Common.models import TRANSACT                ###  
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
 ###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def index(request):
+@login_required(None, login_url='/P0100Login/')
 def index_view(request):
     try:
         #######################################################################
-        ### 引数チェック処理
-        ### （１）ブラウザからのリクエストと引数をチェックする。
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P9100Transact.index_view()関数が開始しました。', 'INFO')
@@ -72,8 +76,8 @@ def index_view(request):
         
         if request.method == 'POST':
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）フォームに値をセットする。
+            ### FORMSETセット処理(0010)
+            ### (1)フォームに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm)
             ScheduleFormSet = formset_factory(ScheduleForm)
@@ -87,8 +91,8 @@ def index_view(request):
 
         else:
             ###################################################################
-            ### DBアクセス処理
-            ### （１）DBにアクセスして、データを取得する。
+            ### DBアクセス処理(0020)
+            ### (1)DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw("""
                 SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
@@ -120,9 +124,9 @@ def index_view(request):
                 """, [])
             
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
-            ### （２）ChoiceFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0030)
+            ### (1)choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
+            ### (2)ChoiceFormSetフォームセットに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm, extra=5)
             
@@ -153,10 +157,10 @@ def index_view(request):
             choice_formset = ChoiceFormSet(prefix='choice', data=choice_data)
             
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
-            ### （２）datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
-            ### （３）ScheduleFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0040)
+            ### (1)schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
+            ### (2)datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
+            ### (3)ScheduleFormSetフォームセットに値をセットする。
             ###################################################################
             JST = datetime.timezone(datetime.timedelta(hours=9), 'JST')
             current_now = datetime.datetime.now(JST)
@@ -183,9 +187,9 @@ def index_view(request):
             schedule_formset = ScheduleFormSet(prefix='schedule', data=schedule_data)
             
             ###################################################################
-            ### レスポンスセット処理
-            ### （１）context用に今年と来年の年を計算してローカル変数にセットする。
-            ### （２）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### レスポンスセット処理(0050)
+            ### (1)context用に今年と来年の年を計算してローカル変数にセットする。
+            ### (2)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             current_now = datetime.datetime.now()
             current_date = current_now.date()
@@ -216,12 +220,11 @@ def index_view(request):
 ### 関数名：ken_view
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-### def ken(request, ken_code):
 def ken_view(request, ken_code):
     try:
         #######################################################################
-        ### 引数チェック処理
-        ### （１）ブラウザからのリクエストと引数をチェックする。
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P9100Transact.ken_view()関数が開始しました。', 'INFO')
@@ -230,8 +233,8 @@ def ken_view(request, ken_code):
 
         if request.method == 'POST':
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）フォームに値をセットする。
+            ### FORMSETセット処理(0010)
+            ### (1)フォームに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm)
             ScheduleFormSet = formset_factory(ScheduleForm)
@@ -244,8 +247,8 @@ def ken_view(request, ken_code):
 
         else:
             ###################################################################
-            ### DBアクセス処理
-            ### （１）DBにアクセスして、データを取得する。
+            ### DBアクセス処理(0020)
+            ### (1)DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw(""" 
                 SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
@@ -315,9 +318,9 @@ def ken_view(request, ken_code):
                     """, [ken_code, ])
 
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
-            ### （２）ChoiceFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0030)
+            ### (1)choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
+            ### (2)ChoiceFormSetフォームセットに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm, extra=5)
 
@@ -338,10 +341,10 @@ def ken_view(request, ken_code):
             choice_formset = ChoiceFormSet(prefix='choice', data=choice_data)
 
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
-            ### （２）datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
-            ### （３）ScheduleFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0040)
+            ### (1)schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
+            ### (2)datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
+            ### (3)ScheduleFormSetフォームセットに値をセットする。
             ###################################################################
             JST = datetime.timezone(datetime.timedelta(hours=9), 'JST')
             current_now = datetime.datetime.now(JST)
@@ -368,9 +371,9 @@ def ken_view(request, ken_code):
             schedule_formset = ScheduleFormSet(prefix='schedule', data=schedule_data)
 
             ###################################################################
-            ### レスポンスセット処理
-            ### （１）context用に今年と来年の年を計算してローカル変数にセットする。
-            ### （２）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### レスポンスセット処理(0050)
+            ### (1)context用に今年と来年の年を計算してローカル変数にセットする。
+            ### (2)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             current_now = datetime.datetime.now()
             current_date = current_now.date()
@@ -403,12 +406,11 @@ def ken_view(request, ken_code):
 ### 関数名：city_view
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-### def city(request, ken_code, city_code):
 def city_view(request, ken_code, city_code):
     try:
         #######################################################################
-        ### 引数チェック処理
-        ### （１）ブラウザからのリクエストと引数をチェックする。
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P9100Transact.city_view()関数が開始しました。', 'INFO')
@@ -418,8 +420,8 @@ def city_view(request, ken_code, city_code):
 
         if request.method == 'POST':
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）フォームに値をセットする。
+            ### FORMSETセット処理(0010)
+            ### (1)フォームに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm)
             ScheduleFormSet = formset_factory(ScheduleForm)
@@ -432,8 +434,8 @@ def city_view(request, ken_code, city_code):
 
         else:
             ###################################################################
-            ### DBアクセス処理
-            ### （１）DBにアクセスして、データを取得する。
+            ### DBアクセス処理(0020)
+            ### (1)DBにアクセスして、データを取得する。
             ###################################################################
             ken_list = KEN.objects.raw(""" 
                 SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
@@ -563,9 +565,9 @@ def city_view(request, ken_code, city_code):
                         """, [ken_code, city_code, ])
 
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
-            ### （２）ChoiceFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0030)
+            ### (1)choice_formsetのchoice_data用に辞書形式のリストを計算してローカル変数にセットする。
+            ### (2)ChoiceFormSetフォームセットに値をセットする。
             ###################################################################
             ChoiceFormSet = formset_factory(ChoiceForm, extra=5)
 
@@ -586,10 +588,10 @@ def city_view(request, ken_code, city_code):
             choice_formset = ChoiceFormSet(prefix='choice', data=choice_data)
 
             ###################################################################
-            ### FORMSETセット処理
-            ### （１）schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
-            ### （２）datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
-            ### （３）ScheduleFormSetフォームセットに値をセットする。
+            ### FORMSETセット処理(0040)
+            ### (1)schedule_formsetのschedule_data用に現在の年、月、日、時、分を計算してローカル変数にセットする。
+            ### (2)datetime.datetime.now()関数のデフォルトがUTCのため、タイムゾーンのJSTを計算してローカル変数にセットする。
+            ### (3)ScheduleFormSetフォームセットに値をセットする。
             ###################################################################
             JST = datetime.timezone(datetime.timedelta(hours=9), 'JST')
             current_now = datetime.datetime.now(JST)
@@ -616,9 +618,9 @@ def city_view(request, ken_code, city_code):
             schedule_formset = ScheduleFormSet(prefix='schedule', data=schedule_data)
         
             ###################################################################
-            ### レスポンスセット処理
-            ### （１）context用に今年と来年の年を計算してローカル変数にセットする。
-            ### （２）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### レスポンスセット処理(0050)
+            ### (1)context用に今年と来年の年を計算してローカル変数にセットする。
+            ### (2)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             current_now = datetime.datetime.now()
             current_date = current_now.date()

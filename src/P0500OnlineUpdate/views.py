@@ -8,6 +8,7 @@
 ### 処理名：インポート処理
 ###############################################################################
 import sys
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -60,8 +61,7 @@ from P0000Common.common import print_log
 ###############################################################################
 ### 関数名：index_view
 ###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def index(request):
+@login_required(None, login_url='/P0100Login/')
 def index_view(request):
     try:
         #######################################################################

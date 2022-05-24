@@ -69,7 +69,8 @@ def index_view(request):
                     ### ユーザが活性（有効）の場合、、、
                     login(request, user)
                     print_log('[INFO] P0100Login.index_view()関数が正常終了しました。0', 'INFO')
-                    return HttpResponseRedirect('/P0200ExcelDownload/')
+                    ### return HttpResponseRedirect('/P0200ExcelDownload/')
+                    return HttpResponseRedirect('/')
                 else:
                     ### ユーザが非活性（無効）の場合、、、
                     template = loader.get_template('P0100Login/index.html')
