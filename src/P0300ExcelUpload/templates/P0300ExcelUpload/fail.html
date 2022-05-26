@@ -46,8 +46,30 @@
                     <td>{{ result_require.6 }}<br>{{ result_require.7 }}</td>
                 </tr>
                 {% endfor %}
+
+                {% for result_require in result_require_grid %}
+                <tr>
+                    <td>{{ result_require.0 }}</td> 
+                    <td>{{ result_require.1 }}</td>
+                    <td>{{ result_require.2 }}</td>
+                    <td>{{ result_require.4 }}</td>
+                    <td>{{ result_require.5 }}</td>
+                    <td>{{ result_require.6 }}<br>{{ result_require.7 }}</td>
+                </tr>
+                {% endfor %}
                 
                 {% for result_format in result_format_list %}
+                <tr>
+                    <td>{{ result_format.0 }}</td> 
+                    <td>{{ result_format.1 }}</td>
+                    <td>{{ result_format.2 }}</td>
+                    <td>{{ result_format.4 }}</td>
+                    <td>{{ result_format.5 }}</td>
+                    <td>{{ result_format.6 }}<br>{{ result_format.7 }}</td>
+                </tr>
+                {% endfor %}
+
+                {% for result_format in result_format_grid %}
                 <tr>
                     <td>{{ result_format.0 }}</td> 
                     <td>{{ result_format.1 }}</td>
@@ -68,8 +90,30 @@
                     <td>{{ result_range.6 }}<br>{{ result_range.7 }}</td>
                 </tr>
                 {% endfor %}
+
+                {% for result_range in result_range_grid %}
+                <tr>
+                    <td>{{ result_range.0 }}</td> 
+                    <td>{{ result_range.1 }}</td>
+                    <td>{{ result_range.2 }}</td>
+                    <td>{{ result_range.4 }}</td>
+                    <td>{{ result_range.5 }}</td>
+                    <td>{{ result_range.6 }}<br>{{ result_range.7 }}</td>
+                </tr>
+                {% endfor %}
                 
                 {% for result_correlate in result_correlate_list %}
+                <tr>
+                    <td>{{ result_correlate.0 }}</td> 
+                    <td>{{ result_correlate.1 }}</td>
+                    <td>{{ result_correlate.2 }}</td>
+                    <td>{{ result_correlate.4 }}</td>
+                    <td>{{ result_correlate.5 }}</td>
+                    <td>{{ result_correlate.6 }}<br>{{ result_correlate.7 }}</td>
+                </tr>
+                {% endfor %}
+
+                {% for result_correlate in result_correlate_grid %}
                 <tr>
                     <td>{{ result_correlate.0 }}</td> 
                     <td>{{ result_correlate.1 }}</td>
@@ -88,50 +132,6 @@
                     <td>{{ result_compare.4 }}</td>
                     <td>{{ result_compare.5 }}</td>
                     <td>{{ result_compare.6 }}<br>{{ result_compare.7 }}</td>
-                </tr>
-                {% endfor %}
-
-                {% for result_require in result_require_grid %}
-                <tr>
-                    <td>{{ result_require.0 }}</td> 
-                    <td>{{ result_require.1 }}</td>
-                    <td>{{ result_require.2 }}</td>
-                    <td>{{ result_require.4 }}</td>
-                    <td>{{ result_require.5 }}</td>
-                    <td>{{ result_require.6 }}<br>{{ result_require.7 }}</td>
-                </tr>
-                {% endfor %}
-                
-                {% for result_format in result_format_grid %}
-                <tr>
-                    <td>{{ result_format.0 }}</td> 
-                    <td>{{ result_format.1 }}</td>
-                    <td>{{ result_format.2 }}</td>
-                    <td>{{ result_format.4 }}</td>
-                    <td>{{ result_format.5 }}</td>
-                    <td>{{ result_format.6 }}<br>{{ result_format.7 }}</td>
-                </tr>
-                {% endfor %}
-                
-                {% for result_range in result_range_grid %}
-                <tr>
-                    <td>{{ result_range.0 }}</td> 
-                    <td>{{ result_range.1 }}</td>
-                    <td>{{ result_range.2 }}</td>
-                    <td>{{ result_range.4 }}</td>
-                    <td>{{ result_range.5 }}</td>
-                    <td>{{ result_range.6 }}<br>{{ result_range.7 }}</td>
-                </tr>
-                {% endfor %}
-                
-                {% for result_correlate in result_correlate_grid %}
-                <tr>
-                    <td>{{ result_correlate.0 }}</td> 
-                    <td>{{ result_correlate.1 }}</td>
-                    <td>{{ result_correlate.2 }}</td>
-                    <td>{{ result_correlate.4 }}</td>
-                    <td>{{ result_correlate.5 }}</td>
-                    <td>{{ result_correlate.6 }}<br>{{ result_correlate.7 }}</td>
                 </tr>
                 {% endfor %}
                 

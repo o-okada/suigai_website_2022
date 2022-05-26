@@ -367,21 +367,21 @@ def is_mmdd(arg):
 ###############################################################################
 def split_name_code(arg):
     try:
-        name_code = [None, None]
+        name_code = ['', '']
         if arg is not None:
             if len(arg.split(':')) == 0:
-                name_code = [None, None]
+                name_code = ['', '']
             elif len(arg.split(':')) == 1:
                 if arg.isdecimal():
-                    name_code = [None, str(arg)]
+                    name_code = ['', str(arg)]
                 else:
-                    name_code = [str(arg), None]
+                    name_code = [str(arg), '']
             elif len(arg.split(':')) == 2:
                 name_code = arg.split(':')
             else:
-                name_code = [None, None]
+                name_code = ['', '']
     except:
-        return [None, None]
+        return ['', '']
     
     return name_code
 
@@ -424,6 +424,30 @@ def none_if_empty(arg):
         return arg
 
 ###############################################################################
+### 関数名：add_comment_to_cell
+### (1) 
+###############################################################################
+def add_comment_to_cell(ws_ippan, ws_result, row, column, message):
+    if ws_ippan.cell(row=row, column=column).comment is None:
+        ws_ippan.cell(row=row, column=column).comment = Comment(message, '')
+    else:
+        ws_ippan.cell(row=row, column=column).comment = Comment(str(ws_ippan.cell(row=row, column=column).comment.text) + message, '')
+    if ws_result.cell(row=row, column=column).comment is None:
+        ws_result.cell(row=row, column=column).comment = Comment(message, '')
+    else:
+        ws_result.cell(row=row, column=column).comment = Comment(str(ws_result.cell(row=row, column=column).comment.text) + message, '')
+    return True    
+
+###############################################################################
+### 関数名：add_fill_to_cell
+### (1) 
+###############################################################################
+def add_fill_to_cell(ws_ippan, ws_result, row, column, fill):
+    ws_ippan.cell(row=row, column=column).fill = fill
+    ws_result.cell(row=row, column=column).fill = fill
+    return True
+
+###############################################################################
 ### 関数名：index_view
 ### (1)GETの場合、EXCELアップロード画面を表示する。
 ### (2)POSTの場合、アップロードされたEXCELファイルをチェックして、正常ケースの場合、DBに登録する。
@@ -448,26 +472,26 @@ def index_view(request):
         ### 局所変数セット処理(0010)
         ### (1)チェック結果を格納するために局所変数をセットする。
         ### result_require_list: 必須チェック結果を格納するリスト
-        ### result_format_list: 形式チェック結果を格納するリスト
-        ### result_range_list: 範囲チェック結果を格納するリスト
-        ### result_correlate_list: 相関チェック結果を格納するリスト
-        ### result_compare_list: 突合チェック結果を格納するリスト
         ### result_require_grid: 必須チェック結果を格納するリスト
+        ### result_format_list: 形式チェック結果を格納するリスト
         ### result_format_grid: 形式チェック結果を格納するリスト
+        ### result_range_list: 範囲チェック結果を格納するリスト
         ### result_range_grid: 範囲チェック結果を格納するリスト
+        ### result_correlate_list: 相関チェック結果を格納するリスト
         ### result_correlate_grid: 相関チェック結果を格納するリスト
+        ### result_compare_list: 突合チェック結果を格納するリスト
         ### result_compare_grid: 突合チェック結果を格納するリスト
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 2/33.', 'INFO')
         result_require_list = []
-        result_format_list = []
-        result_range_list = []
-        result_correlate_list = []
-        result_compare_list = []
         result_require_grid = []
+        result_format_list = []
         result_format_grid = []
+        result_range_list = []
         result_range_grid = []
+        result_correlate_list = []
         result_correlate_grid = []
+        result_compare_list = []
         result_compare_grid = []
     
         #######################################################################
@@ -593,6 +617,7 @@ def index_view(request):
         gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
         kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
+        building_list = BUILDING.objects.raw("""SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
         underground_list = UNDERGROUND.objects.raw("""SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
         flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
         industry_list = INDUSTRY.objects.raw("""SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
@@ -631,6 +656,9 @@ def index_view(request):
         weather_id_list = [weather.weather_id for weather in weather_list]
         weather_name_list = [weather.weather_name for weather in weather_list]
         weather_name_id_list = [str(weather.weather_name) + ":" + str(weather.weather_id) for weather in weather_list]
+        building_code_list = [building.building_code for building in building_list]
+        building_name_list = [building.building_name for building in building_list]
+        building_name_code_list = [str(building.building_name) + ":" + str(building.building_code) for building in building_list]
         underground_code_list = [underground.underground_code for underground in underground_list]
         underground_name_list = [underground.underground_name for underground in underground_list]
         underground_name_code_list = [str(underground.underground_name) + ":" + str(underground.underground_code) for underground in underground_list]
@@ -657,64 +685,48 @@ def index_view(request):
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県に値がセットされていることをチェックする。
-            if ws_ippan[i].cell(row=7, column=2).comment is None:
-                ws_ippan[i].cell(row=7, column=2).comment = Comment(MESSAGE[0][3] + MESSAGE[0][4], '')
-            else:
-                ws_ippan[i].cell(row=7, column=2).comment = Comment(str(ws_ippan[i].cell(row=7, column=2).comment.text) + MESSAGE[0][3] + MESSAGE[0][4], '')
-            if ws_result[i].cell(row=7, column=2).comment is None:
-                ws_result[i].cell(row=7, column=2).comment = Comment(MESSAGE[0][3] + MESSAGE[0][4], '')
-            else:
-                ws_result[i].cell(row=7, column=2).comment = Comment(str(ws_result[i].cell(row=7, column=2).comment.text) + MESSAGE[0][3] + MESSAGE[0][4], '')
             if ws_ippan[i].cell(row=7, column=2).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 2, MESSAGE[0][0], MESSAGE[0][1], MESSAGE[0][2], MESSAGE[0][3], MESSAGE[0][4]])
-                ws_ippan[i].cell(row=7, column=2).fill = fill
-                ws_result[i].cell(row=7, column=2).fill = fill
-                ### if ws_ippan[i].cell(row=7, column=2).comment is None:
-                ###     ws_ippan[i].cell(row=7, column=2).comment = Comment(MESSAGE[0][3] + MESSAGE[0][4], '')
-                ### else:
-                ###     ws_ippan[i].cell(row=7, column=2).comment = Comment(str(ws_ippan[i].cell(row=7, column=2).comment.text) + MESSAGE[0][3] + MESSAGE[0][4], '')
-                ### if ws_result[i].cell(row=7, column=2).comment is None:
-                ###     ws_result[i].cell(row=7, column=2).comment = Comment(MESSAGE[0][3] + MESSAGE[0][4], '')
-                ### else:
-                ###     ws_result[i].cell(row=7, column=2).comment = Comment(str(ws_result[i].cell(row=7, column=2).comment.text) + MESSAGE[0][3] + MESSAGE[0][4], '')
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, message=MESSAGE[0][3]+MESSAGE[0][4])
                 
             ### セルC7: 市区町村に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=3).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 3, MESSAGE[1][0], MESSAGE[1][1], MESSAGE[1][2], MESSAGE[1][3], MESSAGE[1][4]])
-                ws_ippan[i].cell(row=7, column=3).fill = fill
-                ws_result[i].cell(row=7, column=3).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, message=MESSAGE[1][3]+MESSAGE[1][4])
             
             ### セルD7: 水害発生月日に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=4).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 4, MESSAGE[2][0], MESSAGE[2][1], MESSAGE[2][2], MESSAGE[2][3], MESSAGE[2][4]])
-                ws_ippan[i].cell(row=7, column=4).fill = fill
-                ws_result[i].cell(row=7, column=4).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=4, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=4, message=MESSAGE[2][3]+MESSAGE[2][4])
     
             ### セルE7: 水害終了月日に値がセットされていることをチェックする。
     
             ### セルF7: 水害原因1に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=6).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 6, MESSAGE[4][0], MESSAGE[4][1], MESSAGE[4][2], MESSAGE[4][3], MESSAGE[4][4]])
-                ws_ippan[i].cell(row=7, column=6).fill = fill
-                ws_result[i].cell(row=7, column=6).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, message=MESSAGE[4][3]+MESSAGE[4][4])
     
             ### セルG7: 水害原因2に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=7).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 7, MESSAGE[5][0], MESSAGE[5][1], MESSAGE[5][2], MESSAGE[5][3], MESSAGE[5][4]])
-                ws_ippan[i].cell(row=7, column=7).fill = fill
-                ws_result[i].cell(row=7, column=7).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, message=MESSAGE[5][3]+MESSAGE[5][4])
                 
             ### セルH7: 水害原因3に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=8).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 8, MESSAGE[6][0], MESSAGE[6][1], MESSAGE[6][2], MESSAGE[6][3], MESSAGE[6][4]])
-                ws_ippan[i].cell(row=7, column=8).fill = fill
-                ws_result[i].cell(row=7, column=8).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, message=MESSAGE[6][3]+MESSAGE[6][4])
                 
             ### セルI7: 水害区域番号に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=9).value is None:
                 result_require_list.append([ws_ippan[i].title, 7, 9, MESSAGE[7][0], MESSAGE[7][1], MESSAGE[7][2], MESSAGE[7][3], MESSAGE[7][4]])
-                ws_ippan[i].cell(row=7, column=9).fill = fill
-                ws_result[i].cell(row=7, column=9).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, message=MESSAGE[7][3]+MESSAGE[7][4])
     
         #######################################################################
         ### EXCELセルデータ必須チェック処理（1010）
@@ -729,32 +741,32 @@ def index_view(request):
             ### セルB10: 水系・沿岸名に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=2).value is None:
                 result_require_list.append([ws_ippan[i].title, 10, 2, MESSAGE[8][0], MESSAGE[8][1], MESSAGE[8][2], MESSAGE[8][3], MESSAGE[8][4]])
-                ws_ippan[i].cell(row=10, column=2).fill = fill
-                ws_result[i].cell(row=10, column=2).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, message=MESSAGE[8][3]+MESSAGE[8][4])
                 
             ### セルC10: 水系種別に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=3).value is None:
                 result_require_list.append([ws_ippan[i].title, 10, 3, MESSAGE[9][0], MESSAGE[9][1], MESSAGE[9][2], MESSAGE[9][3], MESSAGE[9][4]])
-                ws_ippan[i].cell(row=10, column=3).fill = fill
-                ws_result[i].cell(row=10, column=3).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, message=MESSAGE[9][3]+MESSAGE[9][4])
                 
             ### セルD10: 河川・海岸名に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=4).value is None:
                 result_require_list.append([ws_ippan[i].title, 10, 4, MESSAGE[10][0], MESSAGE[10][1], MESSAGE[10][2], MESSAGE[10][3], MESSAGE[10][4]])
-                ws_ippan[i].cell(row=10, column=4).fill = fill
-                ws_result[i].cell(row=10, column=4).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, message=MESSAGE[10][3]+MESSAGE[10][4])
                 
             ### セルE10: 河川種別に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=5).value is None:
                 result_require_list.append([ws_ippan[i].title, 10, 5, MESSAGE[11][0], MESSAGE[11][1], MESSAGE[11][2], MESSAGE[11][3], MESSAGE[11][4]])
-                ws_ippan[i].cell(row=10, column=5).fill = fill
-                ws_result[i].cell(row=10, column=5).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, message=MESSAGE[11][3]+MESSAGE[11][4])
                 
             ### セルF10: 地盤勾配区分に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=6).value is None:
                 result_require_list.append([ws_ippan[i].title, 10, 6, MESSAGE[12][0], MESSAGE[12][1], MESSAGE[12][2], MESSAGE[12][3], MESSAGE[12][4]])
-                ws_ippan[i].cell(row=10, column=6).fill = fill
-                ws_result[i].cell(row=10, column=6).fill = fill
+                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, fill=fill)
+                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, message=MESSAGE[12][3]+MESSAGE[12][4])
     
         #######################################################################
         ### EXCELセルデータ必須チェック処理（1020）
@@ -787,26 +799,26 @@ def index_view(request):
                     ### セルB20: 町丁名・大字名に値がセットされていることをチェックする。
                     if ws_ippan[i].cell(row=j, column=2).value is None:
                         result_require_grid.append([ws_ippan[i].title, j, 2, MESSAGE[50][0], MESSAGE[50][1], MESSAGE[50][2], MESSAGE[50][3], MESSAGE[50][4]])
-                        ws_ippan[i].cell(row=j, column=2).fill = fill
-                        ws_result[i].cell(row=j, column=2).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=2, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=2, message=MESSAGE[50][3]+MESSAGE[50][4])
                         
                     ### セルC20: 名称に値がセットされていることをチェックする。
                     if ws_ippan[i].cell(row=j, column=3).value is None:
                         result_require_grid.append([ws_ippan[i].title, j, 3, MESSAGE[51][0], MESSAGE[51][1], MESSAGE[51][2], MESSAGE[51][3], MESSAGE[51][4]])
-                        ws_ippan[i].cell(row=j, column=3).fill = fill
-                        ws_result[i].cell(row=j, column=3).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, message=MESSAGE[51][3]+MESSAGE[51][4])
                         
                     ### セルD20: 地上・地下被害の区分に値がセットされていることをチェックする。
                     if ws_ippan[i].cell(row=j, column=4).value is None:
                         result_require_grid.append([ws_ippan[i].title, j, 4, MESSAGE[52][0], MESSAGE[52][1], MESSAGE[52][2], MESSAGE[52][3], MESSAGE[52][4]])
-                        ws_ippan[i].cell(row=j, column=4).fill = fill
-                        ws_result[i].cell(row=j, column=4).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, message=MESSAGE[52][3]+MESSAGE[52][4])
                         
                     ### セルE20: 浸水土砂被害の区分に値がセットされていることをチェックする。
                     if ws_ippan[i].cell(row=j, column=5).value is None:
                         result_require_grid.append([ws_ippan[i].title, j, 5, MESSAGE[53][0], MESSAGE[53][1], MESSAGE[53][2], MESSAGE[53][3], MESSAGE[53][4]])
-                        ws_ippan[i].cell(row=j, column=5).fill = fill
-                        ws_result[i].cell(row=j, column=5).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, message=MESSAGE[53][3]+MESSAGE[53][4])
                         
                     ### セルF20: 被害建物棟数, 床下浸水に値がセットされていることをチェックする。
                     ### セルG20: 被害建物棟数, 1cm〜49cmに値がセットされていることをチェックする。
@@ -851,8 +863,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 2, MESSAGE[100][0], MESSAGE[100][1], MESSAGE[100][2], MESSAGE[100][3], MESSAGE[100][4]])
-                    ws_ippan[i].cell(row=7, column=2).fill = fill
-                    ws_result[i].cell(row=7, column=2).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, message=MESSAGE[100][3]+MESSAGE[100][4])
         
             ### セルC7: 市区町村について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=3).value is None:
@@ -860,8 +872,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1].isdecimal == False:
                     result_format_list.append([ws_ippan[i].title, 7, 3, MESSAGE[101][0], MESSAGE[101][1], MESSAGE[101][2], MESSAGE[101][3], MESSAGE[101][4]])
-                    ws_ippan[i].cell(row=7, column=3).fill = fill
-                    ws_result[i].cell(row=7, column=3).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, message=MESSAGE[101][3]+MESSAGE[101][4])
       
             ### セルD7: 水害発生月日について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=4).value is None:
@@ -869,8 +881,8 @@ def index_view(request):
             else:
                 if is_cell_value_date(ws_ippan[i].cell(row=7, column=4).value) == False:
                     result_format_list.append([ws_ippan[i].title, 7, 4, MESSAGE[102][0], MESSAGE[102][1], MESSAGE[102][2], MESSAGE[102][3], MESSAGE[102][4]])
-                    ws_ippan[i].cell(row=7, column=4).fill = fill
-                    ws_result[i].cell(row=7, column=4).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=4, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=4, message=MESSAGE[102][3]+MESSAGE[102][4])
         
             ### セルE7: 水害終了月日について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=5).value is None:
@@ -878,8 +890,8 @@ def index_view(request):
             else:
                 if is_cell_value_date(ws_ippan[i].cell(row=7, column=5).value) == False:
                     result_format_list.append([ws_ippan[i].title, 7, 5, MESSAGE[103][0], MESSAGE[103][1], MESSAGE[103][2], MESSAGE[103][3], MESSAGE[103][4]])
-                    ws_ippan[i].cell(row=7, column=5).fill = fill
-                    ws_result[i].cell(row=7, column=5).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=5, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=5, message=MESSAGE[103][3]+MESSAGE[103][4])
                 
             ### セルF7: 水害原因1について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=6).value is None:
@@ -887,8 +899,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 6, MESSAGE[104][0], MESSAGE[104][1], MESSAGE[104][2], MESSAGE[104][3], MESSAGE[104][4]])
-                    ws_ippan[i].cell(row=7, column=6).fill = fill
-                    ws_result[i].cell(row=7, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, message=MESSAGE[104][3]+MESSAGE[104][4])
                 
             ### セルG7: 水害原因2について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=7).value is None:
@@ -896,8 +908,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 7, MESSAGE[105][0], MESSAGE[105][1], MESSAGE[105][2], MESSAGE[105][3], MESSAGE[105][4]])
-                    ws_ippan[i].cell(row=7, column=7).fill = fill
-                    ws_result[i].cell(row=7, column=7).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, message=MESSAGE[105][3]+MESSAGE[105][4])
                 
             ### セルH7: 水害原因3について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=8).value is None:
@@ -905,19 +917,17 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 8, MESSAGE[106][0], MESSAGE[106][1], MESSAGE[106][2], MESSAGE[106][3], MESSAGE[106][4]])
-                    ws_ippan[i].cell(row=7, column=8).fill = fill
-                    ws_result[i].cell(row=7, column=8).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, message=MESSAGE[106][3]+MESSAGE[106][4])
                 
             ### セルI7: 水害区域番号について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=9).value is None:
                 pass
             else:
-                ### if isinstance(ws_ippan[i].cell(row=7, column=9).value, int) == False and \
-                ###     isinstance(ws_ippan[i].cell(row=7, column=9).value, float) == False:
                 if split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 9, MESSAGE[107][0], MESSAGE[107][1], MESSAGE[107][2], MESSAGE[107][3], MESSAGE[107][4]])
-                    ws_ippan[i].cell(row=7, column=9).fill = fill
-                    ws_result[i].cell(row=7, column=9).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, message=MESSAGE[107][3]+MESSAGE[107][4])
     
         #######################################################################
         ### EXCELセルデータ形式チェック処理（2010）
@@ -935,8 +945,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 2, MESSAGE[108][0], MESSAGE[108][1], MESSAGE[108][2], MESSAGE[108][3], MESSAGE[108][4]])
-                    ws_ippan[i].cell(row=10, column=2).fill = fill
-                    ws_result[i].cell(row=10, column=2).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, message=MESSAGE[108][3]+MESSAGE[108][4])
                 
             ### セルC10: 水系種別について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=3).value is None:
@@ -944,8 +954,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=10, column=3).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 3, MESSAGE[109][0], MESSAGE[109][1], MESSAGE[109][2], MESSAGE[109][3], MESSAGE[109][4]])
-                    ws_ippan[i].cell(row=10, column=3).fill = fill
-                    ws_result[i].cell(row=10, column=3).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, message=MESSAGE[109][3]+MESSAGE[109][4])
                 
             ### セルD10: 河川・海岸名について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=4).value is None:
@@ -953,8 +963,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 4, MESSAGE[110][0], MESSAGE[110][1], MESSAGE[110][2], MESSAGE[110][3], MESSAGE[110][4]])
-                    ws_ippan[i].cell(row=10, column=4).fill = fill
-                    ws_result[i].cell(row=10, column=4).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, message=MESSAGE[110][3]+MESSAGE[110][4])
                 
             ### セルE10: 河川種別について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=5).value is None:
@@ -962,8 +972,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=10, column=5).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 5, MESSAGE[111][0], MESSAGE[111][1], MESSAGE[111][2], MESSAGE[111][3], MESSAGE[111][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, message=MESSAGE[111][3]+MESSAGE[111][4])
                 
             ### セルF10: 地盤勾配区分について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=6).value is None:
@@ -971,8 +981,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 6, MESSAGE[112][0], MESSAGE[112][1], MESSAGE[112][2], MESSAGE[112][3], MESSAGE[112][4]])
-                    ws_ippan[i].cell(row=10, column=6).fill = fill
-                    ws_result[i].cell(row=10, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, message=MESSAGE[112][3]+MESSAGE[112][4])
     
         #######################################################################
         ### EXCELセルデータ形式チェック処理（2020）
@@ -991,8 +1001,8 @@ def index_view(request):
                 if isinstance(ws_ippan[i].cell(row=14, column=2).value, int) == False and \
                     isinstance(ws_ippan[i].cell(row=14, column=2).value, float) == False:
                     result_format_list.append([ws_ippan[i].title, 14, 2, MESSAGE[113][0], MESSAGE[113][1], MESSAGE[113][2], MESSAGE[113][3], MESSAGE[113][4]])
-                    ws_ippan[i].cell(row=14, column=2).fill = fill
-                    ws_result[i].cell(row=14, column=2).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=2, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=2, message=MESSAGE[113][3]+MESSAGE[113][4])
     
             ### セルC14: 水害区域面積の農地について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=3).value is None:
@@ -1001,8 +1011,8 @@ def index_view(request):
                 if isinstance(ws_ippan[i].cell(row=14, column=3).value, int) == False and \
                     isinstance(ws_ippan[i].cell(row=14, column=3).value, float) == False:
                     result_format_list.append([ws_ippan[i].title, 14, 3, MESSAGE[114][0], MESSAGE[114][1], MESSAGE[114][2], MESSAGE[114][3], MESSAGE[114][4]])
-                    ws_ippan[i].cell(row=14, column=3).fill = fill
-                    ws_result[i].cell(row=14, column=3).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=3, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=3, message=MESSAGE[114][3]+MESSAGE[114][4])
                 
             ### セルD14: 水害区域面積の地下について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=4).value is None:
@@ -1011,8 +1021,8 @@ def index_view(request):
                 if isinstance(ws_ippan[i].cell(row=14, column=4).value, int) == False and \
                     isinstance(ws_ippan[i].cell(row=14, column=4).value, float) == False:
                     result_format_list.append([ws_ippan[i].title, 14, 4, MESSAGE[115][0], MESSAGE[115][1], MESSAGE[115][2], MESSAGE[115][3], MESSAGE[115][4]])
-                    ws_ippan[i].cell(row=14, column=4).fill = fill
-                    ws_result[i].cell(row=14, column=4).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=4, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=4, message=MESSAGE[115][3]+MESSAGE[115][4])
                 
             ### セルF14: 工種について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=6).value is None:
@@ -1020,8 +1030,8 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 14, 6, MESSAGE[116][0], MESSAGE[116][1], MESSAGE[116][2], MESSAGE[116][3], MESSAGE[116][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=6, message=MESSAGE[116][3]+MESSAGE[116][4])
                 
             ### セルH14: 農作物被害額について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=8).value is None:
@@ -1030,19 +1040,17 @@ def index_view(request):
                 if isinstance(ws_ippan[i].cell(row=14, column=8).value, int) == False and \
                     isinstance(ws_ippan[i].cell(row=14, column=8).value, float) == False:
                     result_format_list.append([ws_ippan[i].title, 14, 8, MESSAGE[117][0], MESSAGE[117][1], MESSAGE[117][2], MESSAGE[117][3], MESSAGE[117][4]])
-                    ws_ippan[i].cell(row=14, column=8).fill = fill
-                    ws_result[i].cell(row=14, column=8).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=8, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=8, message=MESSAGE[117][3]+MESSAGE[117][4])
                 
             ### セルJ14: 異常気象コードについて形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=10).value is None:
                 pass
             else:
-                ### if isinstance(ws_ippan[i].cell(row=14, column=10).value, int) == False and \
-                ###     isinstance(ws_ippan[i].cell(row=14, column=10).value, float) == False:
                 if split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 14, 10, MESSAGE[118][0], MESSAGE[118][1], MESSAGE[118][2], MESSAGE[118][3], MESSAGE[118][4]])
-                    ws_ippan[i].cell(row=14, column=10).fill = fill
-                    ws_result[i].cell(row=14, column=10).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=10, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=10, message=MESSAGE[118][3]+MESSAGE[118][4])
                 
         #######################################################################
         ### EXCELセルデータ形式チェック処理（2030）
@@ -1063,8 +1071,8 @@ def index_view(request):
                     else:
                         if split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 3, MESSAGE[151][0], MESSAGE[151][1], MESSAGE[151][2], MESSAGE[151][3], MESSAGE[151][4]])
-                            ws_ippan[i].cell(row=j, column=3).fill = fill
-                            ws_result[i].cell(row=j, column=3).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, message=MESSAGE[151][3]+MESSAGE[151][4])
                         
                     ### セルD20: 地上・地下被害の区分について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=4).value is None:
@@ -1072,8 +1080,8 @@ def index_view(request):
                     else:
                         if split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 4, MESSAGE[152][0], MESSAGE[152][1], MESSAGE[152][2], MESSAGE[152][3], MESSAGE[152][4]])
-                            ws_ippan[i].cell(row=j, column=4).fill = fill
-                            ws_result[i].cell(row=j, column=4).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, message=MESSAGE[152][3]+MESSAGE[152][4])
                         
                     ### セルE20: 浸水土砂被害の区分について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=5).value is None:
@@ -1081,8 +1089,8 @@ def index_view(request):
                     else:
                         if split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 5, MESSAGE[153][0], MESSAGE[153][1], MESSAGE[153][2], MESSAGE[153][3], MESSAGE[153][4]])
-                            ws_ippan[i].cell(row=j, column=5).fill = fill
-                            ws_result[i].cell(row=j, column=5).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, message=MESSAGE[153][3]+MESSAGE[153][4])
                         
                     ### セルF20: 被害建物棟数, 床下浸水について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=6).value is None:
@@ -1091,8 +1099,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=6).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=6).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 6, MESSAGE[154][0], MESSAGE[154][1], MESSAGE[154][2], MESSAGE[154][3], MESSAGE[154][4]])
-                            ws_ippan[i].cell(row=j, column=6).fill = fill
-                            ws_result[i].cell(row=j, column=6).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=6, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=6, message=MESSAGE[154][3]+MESSAGE[154][4])
                         
                     ### セルG20: 被害建物棟数, 1cm〜49cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=7).value is None:
@@ -1101,8 +1109,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=7).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=7).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 7, MESSAGE[155][0], MESSAGE[155][1], MESSAGE[155][2], MESSAGE[155][3], MESSAGE[155][4]])
-                            ws_ippan[i].cell(row=j, column=7).fill = fill
-                            ws_result[i].cell(row=j, column=7).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=7, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=7, message=MESSAGE[155][3]+MESSAGE[155][4])
                         
                     ### セルH20: 被害建物棟数, 50cm〜99cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=8).value is None:
@@ -1111,8 +1119,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=8).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=8).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 8, MESSAGE[156][0], MESSAGE[156][1], MESSAGE[156][2], MESSAGE[156][3], MESSAGE[156][4]])
-                            ws_ippan[i].cell(row=j, column=8).fill = fill
-                            ws_result[i].cell(row=j, column=8).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=8, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=8, message=MESSAGE[156][3]+MESSAGE[156][4])
                         
                     ### セルI20: 被害建物棟数, 1m以上について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=9).value is None:
@@ -1121,8 +1129,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=9).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=9).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 9, MESSAGE[157][0], MESSAGE[157][1], MESSAGE[157][2], MESSAGE[157][3], MESSAGE[157][4]])
-                            ws_ippan[i].cell(row=j, column=9).fill = fill
-                            ws_result[i].cell(row=j, column=9).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=9, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=9, message=MESSAGE[157][3]+MESSAGE[157][4])
                         
                     ### セルJ20: 被害建物棟数, 半壊について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=10).value is None:
@@ -1131,8 +1139,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=10).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=10).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 10, MESSAGE[158][0], MESSAGE[158][1], MESSAGE[158][2], MESSAGE[158][3], MESSAGE[158][4]])
-                            ws_ippan[i].cell(row=j, column=10).fill = fill
-                            ws_result[i].cell(row=j, column=10).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=10, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=10, message=MESSAGE[158][3]+MESSAGE[158][4])
                         
                     ### セルK20: 被害建物棟数, 全壊・流失について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=11).value is None:
@@ -1141,8 +1149,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=11).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=11).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 11, MESSAGE[159][0], MESSAGE[159][1], MESSAGE[159][2], MESSAGE[159][3], MESSAGE[159][4]])
-                            ws_ippan[i].cell(row=j, column=11).fill = fill
-                            ws_result[i].cell(row=j, column=11).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=11, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=11, message=MESSAGE[159][3]+MESSAGE[159][4])
                         
                     ### セルL20: 被害建物の延床面積について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=12).value is None:
@@ -1151,8 +1159,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=12).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=12).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 12, MESSAGE[160][0], MESSAGE[160][1], MESSAGE[160][2], MESSAGE[160][3], MESSAGE[160][4]])
-                            ws_ippan[i].cell(row=j, column=12).fill = fill
-                            ws_result[i].cell(row=j, column=12).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=12, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=12, message=MESSAGE[160][3]+MESSAGE[160][4])
                         
                     ### セルM20: 被災世帯数について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=13).value is None:
@@ -1161,8 +1169,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=13).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=13).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 13, MESSAGE[161][0], MESSAGE[161][1], MESSAGE[161][2], MESSAGE[161][3], MESSAGE[161][4]])
-                            ws_ippan[i].cell(row=j, column=13).fill = fill
-                            ws_result[i].cell(row=j, column=13).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=13, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=13, message=MESSAGE[161][3]+MESSAGE[161][4])
                         
                     ### セルN20: 被災事業所数について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=14).value is None:
@@ -1171,8 +1179,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=14).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=14).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 14, MESSAGE[162][0], MESSAGE[162][1], MESSAGE[162][2], MESSAGE[162][3], MESSAGE[162][4]])
-                            ws_ippan[i].cell(row=j, column=14).fill = fill
-                            ws_result[i].cell(row=j, column=14).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=14, message=MESSAGE[162][3]+MESSAGE[162][4])
                         
                     ### セルO20: 農家・漁家戸数, 床下浸水について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=15).value is None:
@@ -1181,8 +1189,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=15).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=15).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 15, MESSAGE[163][0], MESSAGE[163][1], MESSAGE[163][2], MESSAGE[163][3], MESSAGE[163][4]])
-                            ws_ippan[i].cell(row=j, column=15).fill = fill
-                            ws_result[i].cell(row=j, column=15).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=15, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=15, message=MESSAGE[163][3]+MESSAGE[163][4])
                         
                     ### セルP20: 農家・漁家戸数, 1cm〜49cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=16).value is None:
@@ -1191,8 +1199,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=16).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=16).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 16, MESSAGE[164][0], MESSAGE[164][1], MESSAGE[164][2], MESSAGE[164][3], MESSAGE[164][4]])
-                            ws_ippan[i].cell(row=j, column=16).fill = fill
-                            ws_result[i].cell(row=j, column=16).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=16, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=16, message=MESSAGE[164][3]+MESSAGE[164][4])
                         
                     ### セルQ20: 農家・漁家戸数, 50cm〜99cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=17).value is None:
@@ -1201,8 +1209,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=17).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=17).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 17, MESSAGE[165][0], MESSAGE[165][1], MESSAGE[165][2], MESSAGE[165][3], MESSAGE[165][4]])
-                            ws_ippan[i].cell(row=j, column=17).fill = fill
-                            ws_result[i].cell(row=j, column=17).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=17, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=17, message=MESSAGE[165][3]+MESSAGE[165][4])
                         
                     ### セルR20: 農家・漁家戸数, 1m以上・半壊について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=18).value is None:
@@ -1211,8 +1219,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=18).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=18).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 18, MESSAGE[166][0], MESSAGE[166][1], MESSAGE[166][2], MESSAGE[166][3], MESSAGE[166][4]])
-                            ws_ippan[i].cell(row=j, column=18).fill = fill
-                            ws_result[i].cell(row=j, column=18).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=18, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=18, message=MESSAGE[166][3]+MESSAGE[166][4])
                         
                     ### セルS20: 農家・漁家戸数, 全壊・流失について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=19).value is None:
@@ -1221,8 +1229,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=19).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=19).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 19, MESSAGE[167][0], MESSAGE[167][1], MESSAGE[167][2], MESSAGE[167][3], MESSAGE[167][4]])
-                            ws_ippan[i].cell(row=j, column=19).fill = fill
-                            ws_result[i].cell(row=j, column=19).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=19, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=19, message=MESSAGE[167][3]+MESSAGE[167][4])
                         
                     ### セルT20: 事業所従業者数, 床下浸水について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=20).value is None:
@@ -1231,8 +1239,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=20).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=20).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 20, MESSAGE[168][0], MESSAGE[168][1], MESSAGE[168][2], MESSAGE[168][3], MESSAGE[168][4]])
-                            ws_ippan[i].cell(row=j, column=20).fill = fill
-                            ws_result[i].cell(row=j, column=20).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=20, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=20, message=MESSAGE[168][3]+MESSAGE[168][4])
                         
                     ### セルU20: 事業所従業者数, 1cm〜49cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=21).value is None:
@@ -1241,8 +1249,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=21).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=21).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 21, MESSAGE[169][0], MESSAGE[169][1], MESSAGE[169][2], MESSAGE[169][3], MESSAGE[169][4]])
-                            ws_ippan[i].cell(row=j, column=21).fill = fill
-                            ws_result[i].cell(row=j, column=21).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=21, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=21, message=MESSAGE[169][3]+MESSAGE[169][4])
                         
                     ### セルV20: 事業所従業者数, 50cm〜99cmについて形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=22).value is None:
@@ -1251,8 +1259,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=22).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=22).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 22, MESSAGE[170][0], MESSAGE[170][1], MESSAGE[170][2], MESSAGE[170][3], MESSAGE[170][4]])
-                            ws_ippan[i].cell(row=j, column=22).fill = fill
-                            ws_result[i].cell(row=j, column=22).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=22, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=22, message=MESSAGE[170][3]+MESSAGE[170][4])
                         
                     ### セルW20: 事業所従業者数, 1m以上・半壊について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=23).value is None:
@@ -1261,8 +1269,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=23).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=23).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 23, MESSAGE[171][0], MESSAGE[171][1], MESSAGE[171][2], MESSAGE[171][3], MESSAGE[171][4]])
-                            ws_ippan[i].cell(row=j, column=23).fill = fill
-                            ws_result[i].cell(row=j, column=23).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=23, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=23, message=MESSAGE[171][3]+MESSAGE[171][4])
                         
                     ### セルX20: 事業所従業者数, 全壊・流失について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=24).value is None:
@@ -1271,8 +1279,8 @@ def index_view(request):
                         if isinstance(ws_ippan[i].cell(row=j, column=24).value, int) == False and \
                             isinstance(ws_ippan[i].cell(row=j, column=24).value, float) == False:
                             result_format_grid.append([ws_ippan[i].title, j, 24, MESSAGE[172][0], MESSAGE[172][1], MESSAGE[172][2], MESSAGE[172][3], MESSAGE[172][4]])
-                            ws_ippan[i].cell(row=j, column=24).fill = fill
-                            ws_result[i].cell(row=j, column=24).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=24, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=24, message=MESSAGE[172][3]+MESSAGE[172][4])
                         
                     ### セルY20: 事業所の産業区分について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=25).value is None:
@@ -1280,8 +1288,8 @@ def index_view(request):
                     else:
                         if split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 25, MESSAGE[173][0], MESSAGE[173][1], MESSAGE[173][2], MESSAGE[173][3], MESSAGE[173][4]])
-                            ws_ippan[i].cell(row=j, column=25).fill = fill
-                            ws_result[i].cell(row=j, column=25).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=25, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=25, message=MESSAGE[173][3]+MESSAGE[173][4])
                         
                     ### セルZ20: 地下空間の利用形態について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=26).value is None:
@@ -1289,8 +1297,8 @@ def index_view(request):
                     else:
                         if split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 26, MESSAGE[174][0], MESSAGE[174][1], MESSAGE[174][2], MESSAGE[174][3], MESSAGE[174][4]])
-                            ws_ippan[i].cell(row=j, column=26).fill = fill
-                            ws_result[i].cell(row=j, column=26).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=26, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=26, message=MESSAGE[174][3]+MESSAGE[174][4])
                         
                     ### セルAA20: 備考について形式が正しいことをチェックする。
     
@@ -1315,15 +1323,8 @@ def index_view(request):
             ### 7行目
             ### セルB7: 都道府県について範囲が正しいことをチェックする。
             ### セルC7: 市区町村について範囲が正しいことをチェックする。
-            
             ### セルD7: 水害発生月日について範囲が正しいことをチェックする。
-            ### if ws_ippan[i].cell(row=7, column=4).value is None:
-            ###     result_range_list.append([ws_ippan[i].title, 7, 4, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            
             ### セルE7: 水害終了月日について範囲が正しいことをチェックする。
-            ### if ws_ippan[i].cell(row=7, column=5).value is None:
-            ###     result_range_list.append([ws_ippan[i].title, 7, 5, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            
             ### セルF7: 水害原因1について範囲が正しいことをチェックする。
             ### セルG7: 水害原因2について範囲が正しいことをチェックする。
             ### セルH7: 水害原因3について範囲が正しいことをチェックする。
@@ -1361,8 +1362,8 @@ def index_view(request):
                     isinstance(ws_ippan[i].cell(row=14, column=2).value, float) == True:
                     if float(ws_ippan[i].cell(row=14, column=2).value) < 0:
                         result_range_list.append([ws_ippan[i].title, 14, 2, MESSAGE[213][0], MESSAGE[213][1], MESSAGE[213][2], MESSAGE[213][3], MESSAGE[213][4]])
-                        ws_ippan[i].cell(row=14, column=2).fill = fill
-                        ws_result[i].cell(row=14, column=2).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=2, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=2, message=MESSAGE[213][3]+MESSAGE[213][4])
                 
             ### セルC14: 水害区域面積の農地について範囲が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=3).value is None:
@@ -1372,8 +1373,8 @@ def index_view(request):
                     isinstance(ws_ippan[i].cell(row=14, column=3).value, float) == True:
                     if float(ws_ippan[i].cell(row=14, column=3).value) < 0:
                         result_range_list.append([ws_ippan[i].title, 14, 3, MESSAGE[214][0], MESSAGE[214][1], MESSAGE[214][2], MESSAGE[214][3], MESSAGE[214][4]])
-                        ws_ippan[i].cell(row=14, column=3).fill = fill
-                        ws_result[i].cell(row=14, column=3).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=3, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=3, message=MESSAGE[214][3]+MESSAGE[214][4])
     
             ### セルD14: 水害区域面積の地下について範囲が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=4).value is None:
@@ -1383,8 +1384,8 @@ def index_view(request):
                     isinstance(ws_ippan[i].cell(row=14, column=4).value, float) == True:
                     if float(ws_ippan[i].cell(row=14, column=4).value) < 0:
                         result_range_list.append([ws_ippan[i].title, 14, 4, MESSAGE[215][0], MESSAGE[215][1], MESSAGE[215][2], MESSAGE[215][3], MESSAGE[215][4]])
-                        ws_ippan[i].cell(row=14, column=4).fill = fill
-                        ws_result[i].cell(row=14, column=4).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=4, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=4, message=MESSAGE[215][3]+MESSAGE[215][4])
                 
             ### セルF14: 工種について範囲が正しいことをチェックする。
     
@@ -1396,8 +1397,8 @@ def index_view(request):
                     isinstance(ws_ippan[i].cell(row=14, column=8).value, float) == True:
                     if float(ws_ippan[i].cell(row=14, column=8).value) < 0:
                         result_range_list.append([ws_ippan[i].title, 14, 8, MESSAGE[217][0], MESSAGE[217][1], MESSAGE[217][2], MESSAGE[217][3], MESSAGE[217][4]])
-                        ws_ippan[i].cell(row=14, column=8).fill = fill
-                        ws_result[i].cell(row=14, column=8).fill = fill
+                        add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=8, fill=fill)
+                        add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=8, message=MESSAGE[217][3]+MESSAGE[217][4])
     
             ### セルJ14: 異常気象コードについて範囲が正しいことをチェックする。
 
@@ -1424,8 +1425,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=6).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=6).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 6, MESSAGE[254][0], MESSAGE[254][1], MESSAGE[254][2], MESSAGE[254][3], MESSAGE[254][4]])
-                                ws_ippan[i].cell(row=j, column=6).fill = fill
-                                ws_result[i].cell(row=j, column=6).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=6, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=6, message=MESSAGE[254][3]+MESSAGE[254][4])
     
                     ### セルG20: 被害建物棟数, 1cm〜49cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=7).value is None:
@@ -1435,8 +1436,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=7).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=7).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 7, MESSAGE[255][0], MESSAGE[255][1], MESSAGE[255][2], MESSAGE[255][3], MESSAGE[255][4]])
-                                ws_ippan[i].cell(row=j, column=7).fill = fill
-                                ws_result[i].cell(row=j, column=7).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=7, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=7, message=MESSAGE[255][3]+MESSAGE[255][4])
                     
                     ### セルH20: 被害建物棟数, 50cm〜99cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=8).value is None:
@@ -1446,8 +1447,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=8).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=8).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 8, MESSAGE[256][0], MESSAGE[256][1], MESSAGE[256][2], MESSAGE[256][3], MESSAGE[256][4]])
-                                ws_ippan[i].cell(row=j, column=8).fill = fill
-                                ws_result[i].cell(row=j, column=8).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=8, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=8, message=MESSAGE[256][3]+MESSAGE[256][4])
     
                     ### セルI20: 被害建物棟数, 1m以上について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=9).value is None:
@@ -1457,8 +1458,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=9).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=9).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 9, MESSAGE[257][0], MESSAGE[257][1], MESSAGE[257][2], MESSAGE[257][3], MESSAGE[257][4]])
-                                ws_ippan[i].cell(row=j, column=9).fill = fill
-                                ws_result[i].cell(row=j, column=9).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=9, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=9, message=MESSAGE[257][3]+MESSAGE[257][4])
     
                     ### セルJ20: 被害建物棟数, 半壊について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=10).value is None:
@@ -1468,8 +1469,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=10).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=10).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 10, MESSAGE[258][0], MESSAGE[258][1], MESSAGE[258][2], MESSAGE[258][3], MESSAGE[258][4]])
-                                ws_ippan[i].cell(row=j, column=10).fill = fill
-                                ws_result[i].cell(row=j, column=10).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=10, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=10, message=MESSAGE[258][3]+MESSAGE[258][4])
     
                     ### セルK20: 被害建物棟数, 全壊・流失について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=11).value is None:
@@ -1479,8 +1480,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=11).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=11).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 11, MESSAGE[259][0], MESSAGE[259][1], MESSAGE[259][2], MESSAGE[259][3], MESSAGE[259][4]])
-                                ws_ippan[i].cell(row=j, column=11).fill = fill
-                                ws_result[i].cell(row=j, column=11).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=11, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=11, message=MESSAGE[259][3]+MESSAGE[259][4])
     
                     ### セルL20: 被害建物の延床面積について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=12).value is None:
@@ -1490,8 +1491,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=12).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=12).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 12, MESSAGE[260][0], MESSAGE[260][1], MESSAGE[260][2], MESSAGE[260][3], MESSAGE[260][4]])
-                                ws_ippan[i].cell(row=j, column=12).fill = fill
-                                ws_result[i].cell(row=j, column=12).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=12, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=12, message=MESSAGE[260][3]+MESSAGE[260][4])
     
                     ### セルM20: 被災世帯数について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=13).value is None:
@@ -1501,8 +1502,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=13).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=13).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 13, MESSAGE[261][0], MESSAGE[261][1], MESSAGE[261][2], MESSAGE[261][3], MESSAGE[261][4]])
-                                ws_ippan[i].cell(row=j, column=13).fill = fill
-                                ws_result[i].cell(row=j, column=13).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=13, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=13, message=MESSAGE[261][3]+MESSAGE[261][4])
                     
                     ### セルN20: 被災事業所数について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=14).value is None:
@@ -1512,8 +1513,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=14).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=14).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 14, MESSAGE[262][0], MESSAGE[262][1], MESSAGE[262][2], MESSAGE[262][3], MESSAGE[262][4]])
-                                ws_ippan[i].cell(row=j, column=14).fill = fill
-                                ws_result[i].cell(row=j, column=14).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=14, message=MESSAGE[262][3]+MESSAGE[262][4])
     
                     ### セルO20: 農家・漁家戸数, 床下浸水について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=15).value is None:
@@ -1523,8 +1524,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=15).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=15).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 15, MESSAGE[263][0], MESSAGE[263][1], MESSAGE[263][2], MESSAGE[263][3], MESSAGE[263][4]])
-                                ws_ippan[i].cell(row=j, column=15).fill = fill
-                                ws_result[i].cell(row=j, column=15).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=15, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=15, message=MESSAGE[263][3]+MESSAGE[263][4])
     
                     ### セルP20: 農家・漁家戸数, 1cm〜49cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=16).value is None:
@@ -1534,8 +1535,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=16).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=16).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 16, MESSAGE[264][0], MESSAGE[264][1], MESSAGE[264][2], MESSAGE[264][3], MESSAGE[264][4]])
-                                ws_ippan[i].cell(row=j, column=16).fill = fill
-                                ws_result[i].cell(row=j, column=16).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=16, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=16, message=MESSAGE[264][3]+MESSAGE[264][4])
     
                     ### セルQ20: 農家・漁家戸数, 50cm〜99cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=17).value is None:
@@ -1545,8 +1546,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=17).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=17).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 17, MESSAGE[265][0], MESSAGE[265][1], MESSAGE[265][2], MESSAGE[265][3], MESSAGE[265][4]])
-                                ws_ippan[i].cell(row=j, column=17).fill = fill
-                                ws_result[i].cell(row=j, column=17).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=17, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=17, message=MESSAGE[265][3]+MESSAGE[265][4])
     
                     ### セルR20: 農家・漁家戸数, 1m以上・半壊について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=18).value is None:
@@ -1556,8 +1557,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=18).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=18).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 18, MESSAGE[266][0], MESSAGE[266][1], MESSAGE[266][2], MESSAGE[266][3], MESSAGE[266][4]])
-                                ws_ippan[i].cell(row=j, column=18).fill = fill
-                                ws_result[i].cell(row=j, column=18).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=18, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=18, message=MESSAGE[266][3]+MESSAGE[266][4])
     
                     ### セルS20: 農家・漁家戸数, 全壊・流失について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=19).value is None:
@@ -1567,8 +1568,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=19).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=19).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 19, MESSAGE[267][0], MESSAGE[267][1], MESSAGE[267][2], MESSAGE[267][3], MESSAGE[267][4]])
-                                ws_ippan[i].cell(row=j, column=19).fill = fill
-                                ws_result[i].cell(row=j, column=19).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=19, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=19, message=MESSAGE[267][3]+MESSAGE[267][4])
     
                     ### セルT20: 事業所従業者数, 床下浸水について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=20).value is None:
@@ -1578,8 +1579,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=20).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=20).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 20, MESSAGE[268][0], MESSAGE[268][1], MESSAGE[268][2], MESSAGE[268][3], MESSAGE[268][4]])
-                                ws_ippan[i].cell(row=j, column=20).fill = fill
-                                ws_result[i].cell(row=j, column=20).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=20, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=20, message=MESSAGE[268][3]+MESSAGE[268][4])
     
                     ### セルU20: 事業所従業者数, 1cm〜49cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=21).value is None:
@@ -1589,8 +1590,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=21).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=21).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 21, MESSAGE[269][0], MESSAGE[269][1], MESSAGE[269][2], MESSAGE[269][3], MESSAGE[269][4]])
-                                ws_ippan[i].cell(row=j, column=21).fill = fill
-                                ws_result[i].cell(row=j, column=21).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=21, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=21, message=MESSAGE[269][3]+MESSAGE[269][4])
     
                     ### セルV20: 事業所従業者数, 50cm〜99cmについて範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=22).value is None:
@@ -1600,8 +1601,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=22).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=22).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 22, MESSAGE[270][0], MESSAGE[270][1], MESSAGE[270][2], MESSAGE[270][3], MESSAGE[270][4]])
-                                ws_ippan[i].cell(row=j, column=22).fill = fill
-                                ws_result[i].cell(row=j, column=22).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=22, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=22, message=MESSAGE[270][3]+MESSAGE[270][4])
     
                     ### セルW20: 事業所従業者数, 1m以上・半壊について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=23).value is None:
@@ -1611,8 +1612,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=23).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=23).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 23, MESSAGE[271][0], MESSAGE[271][1], MESSAGE[271][2], MESSAGE[271][3], MESSAGE[271][4]])
-                                ws_ippan[i].cell(row=j, column=23).fill = fill
-                                ws_result[i].cell(row=j, column=23).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=23, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=23, message=MESSAGE[271][3]+MESSAGE[271][4])
     
                     ### セルX20: 事業所従業者数, 全壊・流失について範囲が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=24).value is None:
@@ -1622,8 +1623,8 @@ def index_view(request):
                             isinstance(ws_ippan[i].cell(row=j, column=24).value, float) == True:
                             if float(ws_ippan[i].cell(row=j, column=24).value) < 0:
                                 result_range_grid.append([ws_ippan[i].title, j, 24, MESSAGE[272][0], MESSAGE[272][1], MESSAGE[272][2], MESSAGE[272][3], MESSAGE[272][4]])
-                                ws_ippan[i].cell(row=j, column=24).fill = fill
-                                ws_result[i].cell(row=j, column=24).fill = fill
+                                add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=24, fill=fill)
+                                add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=24, message=MESSAGE[272][3]+MESSAGE[272][4])
     
                     ### セルY20: 事業所の産業区分について範囲が正しいことをチェックする。
                     ### セルZ20: 地下空間の利用形態について範囲が正しいことをチェックする。
@@ -2170,8 +2171,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=2).value not in list(ken_name_list) and \
                     ws_ippan[i].cell(row=7, column=2).value not in list(ken_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 2, MESSAGE[400][0], MESSAGE[400][1], MESSAGE[400][2], MESSAGE[400][3]])
-                    ws_ippan[i].cell(row=7, column=2).fill = fill
-                    ws_result[i].cell(row=7, column=2).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, message=MESSAGE[400][3]+MESSAGE[400][4])
                 
             ### セルC7: 市区町村についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=7, column=3).value is None:
@@ -2181,8 +2182,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=3).value not in list(city_name_list) and \
                     ws_ippan[i].cell(row=7, column=3).value not in list(city_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 3, MESSAGE[401][0], MESSAGE[401][1], MESSAGE[401][2], MESSAGE[401][3]])
-                    ws_ippan[i].cell(row=7, column=3).fill = fill
-                    ws_result[i].cell(row=7, column=3).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=3, message=MESSAGE[401][3]+MESSAGE[401][4])
                 
             ### セルD7: 水害発生月日についてデータベースに登録されている値と突合せチェックする。
             ### セルE7: 水害終了月日についてデータベースに登録されている値と突合せチェックする。
@@ -2195,8 +2196,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=6).value not in list(cause_name_list) and \
                     ws_ippan[i].cell(row=7, column=6).value not in list(cause_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 6, MESSAGE[404][0], MESSAGE[404][1], MESSAGE[404][2], MESSAGE[404][3]])
-                    ws_ippan[i].cell(row=7, column=6).fill = fill
-                    ws_result[i].cell(row=7, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=6, message=MESSAGE[404][3]+MESSAGE[404][4])
                 
             ### セルG7: 水害原因2についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=7, column=7).value is None:
@@ -2206,8 +2207,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=7).value not in list(cause_name_list) and \
                     ws_ippan[i].cell(row=7, column=7).value not in list(cause_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 7, MESSAGE[405][0], MESSAGE[405][1], MESSAGE[405][2], MESSAGE[405][3]])
-                    ws_ippan[i].cell(row=7, column=7).fill = fill
-                    ws_result[i].cell(row=7, column=7).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=7, message=MESSAGE[405][3]+MESSAGE[405][4])
                 
             ### セルH7: 水害原因3についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=7, column=8).value is None:
@@ -2217,8 +2218,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=8).value not in list(cause_name_list) and \
                     ws_ippan[i].cell(row=7, column=8).value not in list(cause_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 8, MESSAGE[406][0], MESSAGE[406][1], MESSAGE[406][2], MESSAGE[406][3]])
-                    ws_ippan[i].cell(row=7, column=8).fill = fill
-                    ws_result[i].cell(row=7, column=8).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=8, message=MESSAGE[406][3]+MESSAGE[406][4])
                 
             ### セルI7: 水害区域番号についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=7, column=9).value is None:
@@ -2228,8 +2229,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=7, column=9).value not in list(area_name_list) and \
                     ws_ippan[i].cell(row=7, column=9).value not in list(area_name_id_list):
                     result_compare_list.append([ws_ippan[i].title, 7, 9, MESSAGE[407][0], MESSAGE[407][1], MESSAGE[407][2], MESSAGE[407][3]])
-                    ws_ippan[i].cell(row=7, column=9).fill = fill
-                    ws_result[i].cell(row=7, column=9).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, message=MESSAGE[407][3]+MESSAGE[407][4])
     
         #######################################################################
         ### EXCELセルデータ突合チェック処理（5010）
@@ -2249,8 +2250,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=2).value not in list(suikei_name_list) and \
                     ws_ippan[i].cell(row=10, column=2).value not in list(suikei_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 10, 2, MESSAGE[408][0], MESSAGE[408][1], MESSAGE[408][2], MESSAGE[408][3]])
-                    ws_ippan[i].cell(row=10, column=2).fill = fill
-                    ws_result[i].cell(row=10, column=2).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, message=MESSAGE[408][3]+MESSAGE[408][4])
                 
             ### セルC10: 水系種別についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=10, column=3).value is None:
@@ -2260,8 +2261,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=3).value not in list(suikei_type_name_list) and \
                     ws_ippan[i].cell(row=10, column=3).value not in list(suikei_type_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 10, 3, MESSAGE[409][0], MESSAGE[409][1], MESSAGE[409][2], MESSAGE[409][3]])
-                    ws_ippan[i].cell(row=10, column=3).fill = fill
-                    ws_result[i].cell(row=10, column=3).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=3, message=MESSAGE[409][3]+MESSAGE[409][4])
                 
             ### セルD10: 河川・海岸名についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=10, column=4).value is None:
@@ -2271,8 +2272,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=4).value not in list(kasen_name_list) and \
                     ws_ippan[i].cell(row=10, column=4).value not in list(kasen_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 10, 4, MESSAGE[410][0], MESSAGE[410][1], MESSAGE[410][2], MESSAGE[410][3]])
-                    ws_ippan[i].cell(row=10, column=4).fill = fill
-                    ws_result[i].cell(row=10, column=4).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=4, message=MESSAGE[410][3]+MESSAGE[410][4])
                 
             ### セルE10: 河川種別についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=10, column=5).value is None:
@@ -2282,8 +2283,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=5).value not in list(kasen_type_name_list) and \
                     ws_ippan[i].cell(row=10, column=5).value not in list(kasen_type_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 10, 5, MESSAGE[411][0], MESSAGE[411][1], MESSAGE[411][2], MESSAGE[411][3]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=5, message=MESSAGE[412][3]+MESSAGE[412][4])
                 
             ### セルF10: 地盤勾配区分についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=10, column=6).value is None:
@@ -2293,8 +2294,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=6).value not in list(gradient_name_list) and \
                     ws_ippan[i].cell(row=10, column=6).value not in list(gradient_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 10, 6, MESSAGE[412][0], MESSAGE[412][1], MESSAGE[412][2], MESSAGE[412][3]])
-                    ws_ippan[i].cell(row=10, column=6).fill = fill
-                    ws_result[i].cell(row=10, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=6, message=MESSAGE[412][3]+MESSAGE[412][4])
     
         #######################################################################
         ### EXCELセルデータ突合チェック処理（5020）
@@ -2318,8 +2319,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=14, column=6).value not in list(kasen_kaigan_name_list) and \
                     ws_ippan[i].cell(row=14, column=6).value not in list(kasen_kaigan_name_code_list):
                     result_compare_list.append([ws_ippan[i].title, 14, 6, MESSAGE[416][0], MESSAGE[416][1], MESSAGE[416][2], MESSAGE[416][3]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=2, message=MESSAGE[416][3]+MESSAGE[416][4])
                 
             ### セルH14: 農作物被害額についてデータベースに登録されている値と突合せチェックする。
                 
@@ -2331,8 +2332,8 @@ def index_view(request):
                     ws_ippan[i].cell(row=14, column=10).value not in list(weather_name_list) and \
                     ws_ippan[i].cell(row=14, column=10).value not in list(weather_name_id_list):
                     result_compare_list.append([ws_ippan[i].title, 14, 10, MESSAGE[418][0], MESSAGE[418][1], MESSAGE[418][2], MESSAGE[418][3]])
-                    ws_ippan[i].cell(row=14, column=10).fill = fill
-                    ws_result[i].cell(row=14, column=10).fill = fill
+                    add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=10, fill=fill)
+                    add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=14, column=10, message=MESSAGE[418][3]+MESSAGE[418][4])
     
         #######################################################################
         ### EXCELセルデータ突合チェック処理（5030）
@@ -2346,7 +2347,17 @@ def index_view(request):
             if ws_max_row[i] >= 20:
                 for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名についてデータベースに登録されている値と突合せチェックする。
+                    
                     ### セルC20: 名称についてデータベースに登録されている値と突合せチェックする。
+                    if ws_ippan[i].cell(row=j, column=4).value is None:
+                        pass
+                    else:
+                        if ws_ippan[i].cell(row=j, column=3).value not in list(building_code_list) and \
+                            ws_ippan[i].cell(row=j, column=3).value not in list(building_name_list) and \
+                            ws_ippan[i].cell(row=j, column=3).value not in list(building_name_code_list):
+                            result_compare_grid.append([ws_ippan[i].title, j, 3, MESSAGE[451][0], MESSAGE[451][1], MESSAGE[451][2], MESSAGE[451][3]])
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=3, message=MESSAGE[451][3]+MESSAGE[451][4])
                         
                     ### セルD20: 地上・地下被害の区分についてデータベースに登録されている値と突合せチェックする。
                     if ws_ippan[i].cell(row=j, column=4).value is None:
@@ -2356,8 +2367,8 @@ def index_view(request):
                             ws_ippan[i].cell(row=j, column=4).value not in list(underground_name_list) and \
                             ws_ippan[i].cell(row=j, column=4).value not in list(underground_name_code_list):
                             result_compare_grid.append([ws_ippan[i].title, j, 4, MESSAGE[452][0], MESSAGE[452][1], MESSAGE[452][2], MESSAGE[452][3]])
-                            ws_ippan[i].cell(row=j, column=4).fill = fill
-                            ws_result[i].cell(row=j, column=4).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=4, message=MESSAGE[452][3]+MESSAGE[452][4])
                         
                     ### セルE20: 浸水土砂被害の区分についてデータベースに登録されている値と突合せチェックする。
                     if ws_ippan[i].cell(row=j, column=5).value is None:
@@ -2367,8 +2378,8 @@ def index_view(request):
                             ws_ippan[i].cell(row=j, column=5).value not in list(flood_sediment_name_list) and \
                             ws_ippan[i].cell(row=j, column=5).value not in list(flood_sediment_name_code_list):
                             result_compare_grid.append([ws_ippan[i].title, j, 5, MESSAGE[453][0], MESSAGE[453][1], MESSAGE[453][2], MESSAGE[453][3]])
-                            ws_ippan[i].cell(row=j, column=5).fill = fill
-                            ws_result[i].cell(row=j, column=5).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=5, message=MESSAGE[453][3]+MESSAGE[453][4])
                         
                     ### セルF20: 被害建物棟数, 床下浸水についてデータベースに登録されている値と突合せチェックする。
                     ### セルG20: 被害建物棟数, 1cm〜49cmについてデータベースに登録されている値と突合せチェックする。
@@ -2398,8 +2409,8 @@ def index_view(request):
                             ws_ippan[i].cell(row=j, column=25).value not in list(industry_name_list) and \
                             ws_ippan[i].cell(row=j, column=25).value not in list(industry_name_code_list):
                             result_compare_grid.append([ws_ippan[i].title, j, 25, MESSAGE[473][0], MESSAGE[473][1], MESSAGE[473][2], MESSAGE[473][3]])
-                            ws_ippan[i].cell(row=j, column=25).fill = fill
-                            ws_result[i].cell(row=j, column=25).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=25, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=25, message=MESSAGE[473][3]+MESSAGE[473][4])
                         
                     ### セルZ20: 地下空間の利用形態についてデータベースに登録されている値と突合せチェックする。
                     if ws_ippan[i].cell(row=j, column=26).value is None:
@@ -2409,8 +2420,8 @@ def index_view(request):
                             ws_ippan[i].cell(row=j, column=26).value not in list(usage_name_list) and \
                             ws_ippan[i].cell(row=j, column=26).value not in list(usage_name_code_list):
                             result_compare_grid.append([ws_ippan[i].title, j, 26, MESSAGE[474][0], MESSAGE[474][1], MESSAGE[474][2], MESSAGE[474][3]])
-                            ws_ippan[i].cell(row=j, column=26).fill = fill
-                            ws_result[i].cell(row=j, column=26).fill = fill
+                            add_fill_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=26, fill=fill)
+                            add_comment_to_cell(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=j, column=26, message=MESSAGE[474][3]+MESSAGE[474][4])
                         
                     ### セルAA20: 備考についてデータベースに登録されている値と突合せチェックする。
 
@@ -2470,22 +2481,22 @@ def index_view(request):
                             %s, %s, %s, %s, %s,                                    -- 11 12 13 14 15
                             %s, %s, %s                                             -- 16 17 18
                         )""", [
-                            'suigai_name',                                                         ### 01 suigai_name
-                            split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1],          ### 02 ken_code
-                            split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1],          ### 03 city_code
-                            split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1],          ### 06 cause_1_code
-                            split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1],          ### 07 cause_2_code
-                            split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1],          ### 08 cause_3_code
-                            split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1],          ### 09 area_id
-                            split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1],         ### 10 suikei_code
-                            split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1],         ### 11 kasen_code
-                            split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1],         ### 12 gradient_code
-                            none_if_empty(ws_ippan[i].cell(row=14, column=2).value),               ### 13 residential_area
-                            none_if_empty(ws_ippan[i].cell(row=14, column=3).value),               ### 14 agricultural_area
-                            none_if_empty(ws_ippan[i].cell(row=14, column=4).value),               ### 15 underground_area
-                            split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1],         ### 16 kasen_kaigan_code
-                            none_if_empty(ws_ippan[i].cell(row=14, column=8).value),               ### 17 crop_damaga
-                            split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1]         ### 18 weather_id
+                            'suigai_name',                                                                   ### 01 suigai_name
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1]),     ### 02 ken_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]),     ### 03 city_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1]),     ### 06 cause_1_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1]),     ### 07 cause_2_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1]),     ### 08 cause_3_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1]),     ### 09 area_id
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1]),    ### 10 suikei_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1]),    ### 11 kasen_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1]),    ### 12 gradient_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=2).value),                         ### 13 residential_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=3).value),                         ### 14 agricultural_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=4).value),                         ### 15 underground_area
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1]),    ### 16 kasen_kaigan_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=8).value),                         ### 17 crop_damaga
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1])    ### 18 weather_id
                         ])
                         
                 ###############################################################
@@ -2535,33 +2546,33 @@ def index_view(request):
                                     %s, %s, %s, %s, %s,                            -- 36 37 38 39 40
                                     %s, %s, %s, %s, %s                             -- 41 42 43 44 45
                                 ) """, [
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=2).value),        ### 01 ippan_name
-                                    1,                                                             ### 02 suigai_id
-                                    split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1],  ### 03 building_code
-                                    split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1],  ### 04 underground_code
-                                    split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1],  ### 05 flood_sediment_code
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=6).value),        ### 06 building_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=7).value),        ### 07 building_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=8).value),        ### 08 building_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=9).value),        ### 09 building_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=10).value),       ### 10 building_half
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=11).value),       ### 11 building_full
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=12).value),       ### 12 floor_area
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=13).value),       ### 13 family
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=14).value),       ### 14 office
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=15).value),       ### 33 farmer_fisher_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=16).value),       ### 34 farmer_fisher_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=17).value),       ### 35 farmer_fisher_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=18).value),       ### 36 farmer_fisher_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=19).value),       ### 37 farmer_fisher_full
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=20).value),       ### 38 employee_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=21).value),       ### 39 employee_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=22).value),       ### 40 employee_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=23).value),       ### 41 employee_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=24).value),       ### 42 employee_full
-                                    split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1], ### 43 industry_code
-                                    split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1], ### 44 usage_code
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=27).value)        ### 45 comment
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=2).value),                            ### 01 ippan_name
+                                    1,                                                                                 ### 02 suigai_id
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1]),       ### 03 building_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1]),       ### 04 underground_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1]),       ### 05 flood_sediment_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=6).value),                            ### 06 building_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=7).value),                            ### 07 building_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=8).value),                            ### 08 building_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=9).value),                            ### 09 building_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=10).value),                           ### 10 building_half
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=11).value),                           ### 11 building_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=12).value),                           ### 12 floor_area
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=13).value),                           ### 13 family
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=14).value),                           ### 14 office
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=15).value),                           ### 33 farmer_fisher_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=16).value),                           ### 34 farmer_fisher_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=17).value),                           ### 35 farmer_fisher_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=18).value),                           ### 36 farmer_fisher_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=19).value),                           ### 37 farmer_fisher_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=20).value),                           ### 38 employee_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=21).value),                           ### 39 employee_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=22).value),                           ### 40 employee_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=23).value),                           ### 41 employee_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=24).value),                           ### 42 employee_full
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1]),      ### 43 industry_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1]),      ### 44 usage_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=27).value)                            ### 45 comment
                                 ])
                 
                             transaction.commit()
@@ -2609,14 +2620,14 @@ def index_view(request):
             template = loader.get_template('P0300ExcelUpload/fail.html')
             context = {
                 'result_require_list': result_require_list,
-                'result_format_list': result_format_list,
-                'result_range_list': result_range_list,
-                'result_correlate_list': result_correlate_list,
-                'result_compare_list': result_compare_list,
                 'result_require_grid': result_require_grid,
+                'result_format_list': result_format_list,
                 'result_format_grid': result_format_grid,
+                'result_range_list': result_range_list,
                 'result_range_grid': result_range_grid,
+                'result_correlate_list': result_correlate_list,
                 'result_correlate_grid': result_correlate_grid,
+                'result_compare_list': result_compare_list,
                 'result_compare_grid': result_compare_grid,
                 'excel_id': 1,
             }
