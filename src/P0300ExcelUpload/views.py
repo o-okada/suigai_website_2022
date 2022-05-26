@@ -8,7 +8,7 @@
 ### 処理名：インポート処理
 ###############################################################################
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
 from django.db import connection
 from django.db import transaction
@@ -360,6 +360,70 @@ def is_mmdd(arg):
     return True
 
 ###############################################################################
+### 関数名：split_name_code
+### (1) 引数がname:codeの場合、[name,code]を返す。
+### (2) 引数がnameの場合、[name,'']を返す。
+### (3) 引数がcodeの場合、['', code]を返す。
+###############################################################################
+def split_name_code(arg):
+    try:
+        name_code = [None, None]
+        if arg is not None:
+            if len(arg.split(':')) == 0:
+                name_code = [None, None]
+            elif len(arg.split(':')) == 1:
+                if arg.isdecimal():
+                    name_code = [None, str(arg)]
+                else:
+                    name_code = [str(arg), None]
+            elif len(arg.split(':')) == 2:
+                name_code = arg.split(':')
+            else:
+                name_code = [None, None]
+    except:
+        return [None, None]
+    
+    return name_code
+
+###############################################################################
+### 関数名：is_cell_value_date
+### (1) 引数がYYYY-MM-DD形式の場合、Trueを返す。
+### (2) 引数がYYYY/MM/DD形式の場合、Trueを返す。
+### (3) 引数が上記以外の場合、Falseを返す。
+###############################################################################
+def is_cell_value_date(arg):
+    try:
+        try:
+            _date_time_ = datetime.strptime(arg, '%Y/%m/%d')
+            return True
+        except ValueError:
+            pass
+        
+        try:
+            _date_time_ = datetime.strptime(arg, '%Y-%m-%d')
+            return True
+        except ValueError:
+            pass
+        
+        return False
+    except:
+        return False
+
+###############################################################################
+### 関数名：none_if_empty
+### (1) 引数がNoneの場合、Noneを返す。
+### (2) 引数が''の場合、Noneを返す。
+### (3) 引数が上記以外の場合、引数を返す。
+###############################################################################
+def none_if_empty(arg):
+    if arg is None or arg == None:
+        return None
+    elif arg == '' or arg == "":
+        return None
+    else:
+        return arg
+
+###############################################################################
 ### 関数名：index_view
 ### (1)GETの場合、EXCELアップロード画面を表示する。
 ### (2)POSTの場合、アップロードされたEXCELファイルをチェックして、正常ケースの場合、DBに登録する。
@@ -378,7 +442,7 @@ def index_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0300ExcelUpload.index_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0300ExcelUpload.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 1/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 1/33.', 'INFO')
         
         #######################################################################
         ### 局所変数セット処理(0010)
@@ -394,7 +458,7 @@ def index_view(request):
         ### result_correlate_grid: 相関チェック結果を格納するリスト
         ### result_compare_grid: 突合チェック結果を格納するリスト
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 2/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 2/33.', 'INFO')
         result_require_list = []
         result_format_list = []
         result_range_list = []
@@ -412,7 +476,7 @@ def index_view(request):
         ### (2)POSTの場合、アップロードされたEXCELファイルをチェックする。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 3/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 3/33.', 'INFO')
         if request.method == 'GET':
             form = ExcelUploadForm()
             return render(request, 'P0300ExcelUpload/index.html', {'form': form})
@@ -426,7 +490,7 @@ def index_view(request):
         ### (2)フォームが正しくない場合、ERROR画面を表示して関数を抜ける。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 4/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 4/33.', 'INFO')
         if form.is_valid():
             pass
         
@@ -434,14 +498,14 @@ def index_view(request):
             return HttpResponseRedirect('fail')
     
         #######################################################################
-        ### ファイル入出力処理(0040)
+        ### EXCELファイル入出力処理(0040)
         ### (1)局所変数に値をセットする。
         ### (2)アップロードされたEXCELファイルを保存する。
         ### upload_file_object: アップロードされたEXCELファイルのオブジェクト
         ### upload_file_path: アップロードされたEXCELファイルの保存先のファイルパス
         ### result_file_path: チェック結果の保存先のファイルパス
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 5/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 5/33.', 'INFO')
         upload_file_object = request.FILES['file']
         upload_file_path = 'media/documents/' + upload_file_object.name
         result_file_path = 'static/ippan_chosa_result2.xlsx'
@@ -451,7 +515,7 @@ def index_view(request):
                 destination.write(chunk)
                 
         #######################################################################
-        ### ファイル入出力処理(0050)
+        ### EXCELファイル入出力処理(0050)
         ### (1)アップロードされたEXCELファイルのワークブックを読み込む。
         ### (2)IPPANワークシートをコピーして、チェック結果を格納するCHECK_RESULTワークシートを追加する。
         ### (3)追加したワークシートを2シート目に移動する。
@@ -463,54 +527,61 @@ def index_view(request):
         ### wx_max_row: ワークシートの最大行数
         ### fill: 背景赤色の塗りつぶし
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 6/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 6/33.', 'INFO')
         wb = openpyxl.load_workbook(upload_file_path)
         ws_ippan = []
         ws_result = []
+        ws_max_row = []
 
-        ### ws_ippan = wb["IPPAN"]
-        ### ws_result = wb.copy_worksheet(wb["IPPAN"])
-        ### ws_result.title = 'RESULT'
-        ### wb.move_sheet('RESULT', offset=-wb.index(ws_result))
-        ### wb.move_sheet('RESULT', offset=1)
-        
-        print("index_view1", flush=True)
         for ws_temp in wb.worksheets:
             if 'IPPAN' in ws_temp.title:
                 ws_ippan.append(ws_temp)
 
-        print('ws_ippan = {}'.format(ws_ippan), flush=True)
-        
-        print("index_view2", flush=True)
         for i, ws_temp in enumerate(wb.worksheets):
             if 'IPPAN' in ws_temp.title:
                 ws_result.append(wb.copy_worksheet(ws_temp))
                 ws_result[-1].title = 'RESULT' + ws_temp.title
                 
-        print('ws_result = {}'.format(ws_result), flush=True)
-                
-        print("index_view3", flush=True)
         for ws_temp in wb.worksheets:
             if 'RESULT' in ws_temp.title:
                 wb.move_sheet(ws_temp.title, offset=-wb.index(ws_temp))
                 wb.move_sheet(ws_temp.title, offset=1)
         
-        print("index_view4", flush=True)
         for ws_temp in wb.worksheets:
             ws_temp.sheet_view.tabSelected = None
             
-        print("index_view5", flush=True)
         wb.active = 1
-        ### ws_max_row = ws.max_row + 1
-        ws_max_row = 43
+
+        #######################################################################
+        ### EXCELファイル入出力処理(0060)
+        ### (1)EXCELシート毎に最大行を探索する。
+        ### (2)局所変数のws_max_rowリストに追加する。
+        #######################################################################
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 7/33.', 'INFO')
+        for i, ws_temp in enumerate(ws_ippan):
+            _max_row = 19
+            for j in range(ws_temp.max_row + 1, 19, -1):
+                if ws_temp.cell(row=j, column=2).value is None:
+                    pass
+                else:
+                    _max_row_ = j
+                    break
+                    
+            ws_max_row.append(_max_row_)
+
+        #######################################################################
+        ### EXCELファイル入出力処理(0070)
+        ### (1)EXCELセルの背景赤色を局所変数のfillに設定する。
+        #######################################################################
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 8/33.', 'INFO')
         fill = openpyxl.styles.PatternFill(patternType='solid', fgColor='FF0000', bgColor='FF0000')
 
         #######################################################################
-        ### DBアクセス処理(0060)
+        ### DBアクセス処理(0080)
         ### (1)DBから突合せチェック用のデータを取得する。
         ### (2)突合せチェック用のリストを生成する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 7/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 9/33.', 'INFO')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         city_list = CITY.objects.raw("""SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
@@ -582,7 +653,7 @@ def index_view(request):
         ### TO-DO: ダミーで全項目を必須としている。任意項目はコメントアウトすること。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 8/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 10/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県に値がセットされていることをチェックする。
@@ -652,7 +723,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: ダミーで全項目を必須としている。任意項目はコメントアウトすること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 9/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 11/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名に値がセットされていることをチェックする。
@@ -692,7 +763,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: ダミーで全項目を必須としている。任意項目はコメントアウトすること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 10/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 12/33.', 'INFO')
         ### for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地に値がセットされていることをチェックする。
@@ -709,10 +780,10 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: ダミーで全項目を必須としている。任意項目はコメントアウトすること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 11/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 13/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
-            if ws_max_row >= 20:
-                for j in range(20, ws_max_row + 1):
+            if ws_max_row[i] >= 20:
+                for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名に値がセットされていることをチェックする。
                     if ws_ippan[i].cell(row=j, column=2).value is None:
                         result_require_grid.append([ws_ippan[i].title, j, 2, MESSAGE[50][0], MESSAGE[50][1], MESSAGE[50][2], MESSAGE[50][3], MESSAGE[50][4]])
@@ -771,14 +842,14 @@ def index_view(request):
         ### 必須チェックは別途必須チェックで行うためである。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 12/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 14/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=2).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=7, column=2).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 2, MESSAGE[100][0], MESSAGE[100][1], MESSAGE[100][2], MESSAGE[100][3], MESSAGE[100][4]])
                     ws_ippan[i].cell(row=7, column=2).fill = fill
                     ws_result[i].cell(row=7, column=2).fill = fill
@@ -787,7 +858,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=3).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=7, column=3).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1].isdecimal == False:
                     result_format_list.append([ws_ippan[i].title, 7, 3, MESSAGE[101][0], MESSAGE[101][1], MESSAGE[101][2], MESSAGE[101][3], MESSAGE[101][4]])
                     ws_ippan[i].cell(row=7, column=3).fill = fill
                     ws_result[i].cell(row=7, column=3).fill = fill
@@ -796,7 +867,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=4).value is None:
                 pass
             else:
-                if is_mmdd(ws_ippan[i].cell(row=7, column=4).value) == False:
+                if is_cell_value_date(ws_ippan[i].cell(row=7, column=4).value) == False:
                     result_format_list.append([ws_ippan[i].title, 7, 4, MESSAGE[102][0], MESSAGE[102][1], MESSAGE[102][2], MESSAGE[102][3], MESSAGE[102][4]])
                     ws_ippan[i].cell(row=7, column=4).fill = fill
                     ws_result[i].cell(row=7, column=4).fill = fill
@@ -805,7 +876,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=5).value is None:
                 pass
             else:
-                if is_mmdd(ws_ippan[i].cell(row=7, column=5).value) == False:
+                if is_cell_value_date(ws_ippan[i].cell(row=7, column=5).value) == False:
                     result_format_list.append([ws_ippan[i].title, 7, 5, MESSAGE[103][0], MESSAGE[103][1], MESSAGE[103][2], MESSAGE[103][3], MESSAGE[103][4]])
                     ws_ippan[i].cell(row=7, column=5).fill = fill
                     ws_result[i].cell(row=7, column=5).fill = fill
@@ -814,7 +885,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=6).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=7, column=6).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 6, MESSAGE[104][0], MESSAGE[104][1], MESSAGE[104][2], MESSAGE[104][3], MESSAGE[104][4]])
                     ws_ippan[i].cell(row=7, column=6).fill = fill
                     ws_result[i].cell(row=7, column=6).fill = fill
@@ -823,7 +894,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=7).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=7, column=7).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 7, MESSAGE[105][0], MESSAGE[105][1], MESSAGE[105][2], MESSAGE[105][3], MESSAGE[105][4]])
                     ws_ippan[i].cell(row=7, column=7).fill = fill
                     ws_result[i].cell(row=7, column=7).fill = fill
@@ -832,7 +903,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=8).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=7, column=8).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 8, MESSAGE[106][0], MESSAGE[106][1], MESSAGE[106][2], MESSAGE[106][3], MESSAGE[106][4]])
                     ws_ippan[i].cell(row=7, column=8).fill = fill
                     ws_result[i].cell(row=7, column=8).fill = fill
@@ -841,8 +912,9 @@ def index_view(request):
             if ws_ippan[i].cell(row=7, column=9).value is None:
                 pass
             else:
-                if isinstance(ws_ippan[i].cell(row=7, column=9).value, int) == False and \
-                    isinstance(ws_ippan[i].cell(row=7, column=9).value, float) == False:
+                ### if isinstance(ws_ippan[i].cell(row=7, column=9).value, int) == False and \
+                ###     isinstance(ws_ippan[i].cell(row=7, column=9).value, float) == False:
+                if split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 7, 9, MESSAGE[107][0], MESSAGE[107][1], MESSAGE[107][2], MESSAGE[107][3], MESSAGE[107][4]])
                     ws_ippan[i].cell(row=7, column=9).fill = fill
                     ws_result[i].cell(row=7, column=9).fill = fill
@@ -854,14 +926,14 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数、is_mmdd関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 13/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 15/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=2).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=10, column=2).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 2, MESSAGE[108][0], MESSAGE[108][1], MESSAGE[108][2], MESSAGE[108][3], MESSAGE[108][4]])
                     ws_ippan[i].cell(row=10, column=2).fill = fill
                     ws_result[i].cell(row=10, column=2).fill = fill
@@ -870,7 +942,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=10, column=3).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=10, column=3).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=10, column=3).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 3, MESSAGE[109][0], MESSAGE[109][1], MESSAGE[109][2], MESSAGE[109][3], MESSAGE[109][4]])
                     ws_ippan[i].cell(row=10, column=3).fill = fill
                     ws_result[i].cell(row=10, column=3).fill = fill
@@ -879,7 +951,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=10, column=4).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=10, column=4).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 4, MESSAGE[110][0], MESSAGE[110][1], MESSAGE[110][2], MESSAGE[110][3], MESSAGE[110][4]])
                     ws_ippan[i].cell(row=10, column=4).fill = fill
                     ws_result[i].cell(row=10, column=4).fill = fill
@@ -888,7 +960,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=10, column=5).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=10, column=5).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=10, column=5).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 5, MESSAGE[111][0], MESSAGE[111][1], MESSAGE[111][2], MESSAGE[111][3], MESSAGE[111][4]])
                     ws_ippan[i].cell(row=10, column=5).fill = fill
                     ws_result[i].cell(row=10, column=5).fill = fill
@@ -897,7 +969,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=10, column=6).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=10, column=6).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 10, 6, MESSAGE[112][0], MESSAGE[112][1], MESSAGE[112][2], MESSAGE[112][3], MESSAGE[112][4]])
                     ws_ippan[i].cell(row=10, column=6).fill = fill
                     ws_result[i].cell(row=10, column=6).fill = fill
@@ -909,7 +981,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数、is_mmdd関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 14/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 16/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地について形式が正しいことをチェックする。
@@ -946,7 +1018,7 @@ def index_view(request):
             if ws_ippan[i].cell(row=14, column=6).value is None:
                 pass
             else:
-                if is_zenkaku(ws_ippan[i].cell(row=14, column=6).value) == False:
+                if split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 14, 6, MESSAGE[116][0], MESSAGE[116][1], MESSAGE[116][2], MESSAGE[116][3], MESSAGE[116][4]])
                     ws_ippan[i].cell(row=14, column=6).fill = fill
                     ws_result[i].cell(row=14, column=6).fill = fill
@@ -965,8 +1037,9 @@ def index_view(request):
             if ws_ippan[i].cell(row=14, column=10).value is None:
                 pass
             else:
-                if isinstance(ws_ippan[i].cell(row=14, column=10).value, int) == False and \
-                    isinstance(ws_ippan[i].cell(row=14, column=10).value, float) == False:
+                ### if isinstance(ws_ippan[i].cell(row=14, column=10).value, int) == False and \
+                ###     isinstance(ws_ippan[i].cell(row=14, column=10).value, float) == False:
+                if split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1].isdecimal() == False:
                     result_format_list.append([ws_ippan[i].title, 14, 10, MESSAGE[118][0], MESSAGE[118][1], MESSAGE[118][2], MESSAGE[118][3], MESSAGE[118][4]])
                     ws_ippan[i].cell(row=14, column=10).fill = fill
                     ws_result[i].cell(row=14, column=10).fill = fill
@@ -978,24 +1051,17 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数、is_mmdd関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 15/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 17/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
-            if ws_max_row >= 20:
-                for j in range(20, ws_max_row + 1):
+            if ws_max_row[i] >= 20:
+                for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名について形式が正しいことをチェックする。
-                    if ws_ippan[i].cell(row=j, column=2).value is None:
-                        pass
-                    else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=2).value) == False:
-                            result_format_grid.append([ws_ippan[i].title, j, 2, MESSAGE[150][0], MESSAGE[150][1], MESSAGE[150][2], MESSAGE[150][3], MESSAGE[150][4]])
-                            ws_ippan[i].cell(row=j, column=2).fill = fill
-                            ws_result[i].cell(row=j, column=2).fill = fill
                         
                     ### セルC20: 名称について形式が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=3).value is None:
                         pass
                     else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=3).value) == False:
+                        if split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 3, MESSAGE[151][0], MESSAGE[151][1], MESSAGE[151][2], MESSAGE[151][3], MESSAGE[151][4]])
                             ws_ippan[i].cell(row=j, column=3).fill = fill
                             ws_result[i].cell(row=j, column=3).fill = fill
@@ -1004,7 +1070,7 @@ def index_view(request):
                     if ws_ippan[i].cell(row=j, column=4).value is None:
                         pass
                     else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=4).value) == False:
+                        if split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 4, MESSAGE[152][0], MESSAGE[152][1], MESSAGE[152][2], MESSAGE[152][3], MESSAGE[152][4]])
                             ws_ippan[i].cell(row=j, column=4).fill = fill
                             ws_result[i].cell(row=j, column=4).fill = fill
@@ -1013,7 +1079,7 @@ def index_view(request):
                     if ws_ippan[i].cell(row=j, column=5).value is None:
                         pass
                     else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=5).value) == False:
+                        if split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 5, MESSAGE[153][0], MESSAGE[153][1], MESSAGE[153][2], MESSAGE[153][3], MESSAGE[153][4]])
                             ws_ippan[i].cell(row=j, column=5).fill = fill
                             ws_result[i].cell(row=j, column=5).fill = fill
@@ -1212,7 +1278,7 @@ def index_view(request):
                     if ws_ippan[i].cell(row=j, column=25).value is None:
                         pass
                     else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=25).value) == False:
+                        if split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 25, MESSAGE[173][0], MESSAGE[173][1], MESSAGE[173][2], MESSAGE[173][3], MESSAGE[173][4]])
                             ws_ippan[i].cell(row=j, column=25).fill = fill
                             ws_result[i].cell(row=j, column=25).fill = fill
@@ -1221,19 +1287,12 @@ def index_view(request):
                     if ws_ippan[i].cell(row=j, column=26).value is None:
                         pass
                     else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=26).value) == False:
+                        if split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1].isdecimal() == False:
                             result_format_grid.append([ws_ippan[i].title, j, 26, MESSAGE[174][0], MESSAGE[174][1], MESSAGE[174][2], MESSAGE[174][3], MESSAGE[174][4]])
                             ws_ippan[i].cell(row=j, column=26).fill = fill
                             ws_result[i].cell(row=j, column=26).fill = fill
                         
                     ### セルAA20: 備考について形式が正しいことをチェックする。
-                    if ws_ippan[i].cell(row=j, column=27).value is None:
-                        pass
-                    else:
-                        if is_zenkaku(ws_ippan[i].cell(row=j, column=27).value) == False:
-                            result_format_grid.append([ws_ippan[i].title, j, 27, MESSAGE[175][0], MESSAGE[175][1], MESSAGE[175][2], MESSAGE[175][3], MESSAGE[175][4]])
-                            ws_ippan[i].cell(row=j, column=27).fill = fill
-                            ws_result[i].cell(row=j, column=27).fill = fill
     
         #######################################################################
         #######################################################################
@@ -1251,8 +1310,8 @@ def index_view(request):
         ### DBとの突合チェックは別途突合チェックで行うためである。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 16/31.', 'INFO')
-        for i, _ in enumerate(ws_ippan):
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 18/33.', 'INFO')
+        ### for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県について範囲が正しいことをチェックする。
             ### セルC7: 市区町村について範囲が正しいことをチェックする。
@@ -1268,17 +1327,7 @@ def index_view(request):
             ### セルF7: 水害原因1について範囲が正しいことをチェックする。
             ### セルG7: 水害原因2について範囲が正しいことをチェックする。
             ### セルH7: 水害原因3について範囲が正しいことをチェックする。
-    
             ### セルI7: 水害区域番号について範囲が正しいことをチェックする。
-            if ws_ippan[i].cell(row=7, column=9).value is None:
-                pass
-            else:
-                if isinstance(ws_ippan[i].cell(row=7, column=9).value, int) == True or \
-                    isinstance(ws_ippan[i].cell(row=7, column=9).value, float) == True:
-                    if float(ws_ippan[i].cell(row=7, column=9).value) < 0:
-                        result_range_list.append([ws_ippan[i].title, 7, 9, MESSAGE[207][0], MESSAGE[207][1], MESSAGE[207][2], MESSAGE[207][3], MESSAGE[207][4]])
-                        ws_ippan[i].cell(row=7, column=9).fill = fill
-                        ws_result[i].cell(row=7, column=9).fill = fill
 
         #######################################################################
         ### EXCELセルデータ範囲チェック処理（3010）
@@ -1286,7 +1335,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 17/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 19/33.', 'INFO')
         ### for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名について範囲が正しいことをチェックする。
@@ -1301,7 +1350,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 18/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 20/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地について範囲が正しいことをチェックする。
@@ -1351,15 +1400,6 @@ def index_view(request):
                         ws_result[i].cell(row=14, column=8).fill = fill
     
             ### セルJ14: 異常気象コードについて範囲が正しいことをチェックする。
-            if ws_ippan[i].cell(row=14, column=10).value is None:
-                pass
-            else:
-                if isinstance(ws_ippan[i].cell(row=14, column=10).value, int) == True or \
-                    isinstance(ws_ippan[i].cell(row=14, column=10).value, float) == True:
-                    if float(ws_ippan[i].cell(row=14, column=10).value) < 0:
-                        result_range_list.append([ws_ippan[i].title, 14, 10, MESSAGE[218][0], MESSAGE[218][1], MESSAGE[218][2], MESSAGE[218][3], MESSAGE[218][4]])
-                        ws_ippan[i].cell(row=14, column=10).fill = fill
-                        ws_result[i].cell(row=14, column=10).fill = fill
 
         #######################################################################
         ### EXCELセルデータ範囲チェック処理（3030）
@@ -1367,10 +1407,10 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 19/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 21/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
-            if ws_max_row >= 20:
-                for j in range(20, ws_max_row + 1):
+            if ws_max_row[i] >= 20:
+                for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名について範囲が正しいことをチェックする。
                     ### セルC20: 名称について範囲が正しいことをチェックする。
                     ### セルD20: 地上・地下被害の区分について範囲が正しいことをチェックする。
@@ -1597,12 +1637,13 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 20/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 22/33.', 'INFO')
         ### for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県について他項目との相関関係が正しいことをチェックする。
             ### if ws_ippan[i].cell(row=7, column=2).value is None:
             ###     result_correlate_list.append([ws_ippan[i].title, 7, 2, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
+            ### 都道府県名に対して無効な市区町村名が入力されていないか。
             
             ### セルC7: 市区町村について他項目との相関関係が正しいことをチェックする。
             ### if ws_ippan[i].cell(row=7, column=3).value is None:
@@ -1612,6 +1653,7 @@ def index_view(request):
             ### セルD7: 水害発生月日について他項目との相関関係が正しいことをチェックする。
             ### if ws_ippan[i].cell(row=7, column=4).value is None:
             ###     result_correlate_list.append([ws_ippan[i].title, 7, 4, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
+            ### 水害発生月日に対して無効な水害終了月日が入力されていないか。
     
             ### セルE7: 水害終了月日について他項目との相関関係が正しいことをチェックする。
             ### if ws_ippan[i].cell(row=7, column=5).value is None:
@@ -1640,7 +1682,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 21/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 23/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名について他項目との相関関係が正しいことをチェックする。
@@ -1671,9 +1713,10 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=5).value == '5' or ws_ippan[i].cell(row=10, column=5).value == '普通':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「1:一級」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
                     
             ### セルC10: 水系種別について他項目との相関関係が正しいことをチェックする。
@@ -1685,9 +1728,10 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=5).value == '5' or ws_ippan[i].cell(row=10, column=5).value == '普通':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「2:二級」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルC10: 水系種別について他項目との相関関係が正しいことをチェックする。
@@ -1698,9 +1742,10 @@ def index_view(request):
                     ws_ippan[i].cell(row=10, column=5).value == '5' or ws_ippan[i].cell(row=10, column=5).value == '普通':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「3:準用」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルC10: 水系種別について他項目との相関関係が正しいことをチェックする。
@@ -1710,9 +1755,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=10, column=5).value == '5' or ws_ippan[i].cell(row=10, column=5).value == '普通':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「4:普通」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルC10: 水系種別について他項目との相関関係が正しいことをチェックする。
@@ -1722,9 +1768,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=10, column=5).value == '6' or ws_ippan[i].cell(row=10, column=5).value == '海岸':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「5:沿岸」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルC10: 水系種別について他項目との相関関係が正しいことをチェックする。
@@ -1734,9 +1781,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=10, column=5).value == '7' or ws_ippan[i].cell(row=10, column=5).value == '河川海岸以外':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
-                    ws_ippan[i].cell(row=10, column=5).fill = fill
-                    ws_result[i].cell(row=10, column=5).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 10, 5, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
+                    ### ws_ippan[i].cell(row=10, column=5).fill = fill
+                    ### ws_result[i].cell(row=10, column=5).fill = fill
                     ### print('水系種別が「6:河川海岸以外」のときに、河川種別に選択範囲外の不正な文字が入力されています。', flush=True)
                     
             ### セルF10: 地盤勾配区分について他項目との相関関係が正しいことをチェックする。
@@ -1749,7 +1797,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 22/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 24/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地について他項目との相関関係が正しいことをチェックする。
@@ -1784,9 +1832,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '1' or ws_ippan[i].cell(row=14, column=6).value == '河川':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水系種別が「1:一級」「2:二級」「3:準用」「4:普通」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1796,9 +1845,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '2' or ws_ippan[i].cell(row=14, column=6).value == '海岸':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水系種別が「5:沿岸」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1808,9 +1858,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '3' or ws_ippan[i].cell(row=14, column=6).value == '河川海岸以外':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水系種別が「6:河川海岸以外」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1823,9 +1874,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '1' or ws_ippan[i].cell(row=14, column=6).value == '河川':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水害原因1が「10:破堤」「20:有堤部溢水」「30:無堤部溢水」「40:内水」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1837,9 +1889,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '3' or ws_ippan[i].cell(row=14, column=6).value == '河川海岸以外':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水害原因1が「50:窪地内水」「80:地すべり」「90:急傾斜地崩壊水」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1849,9 +1902,10 @@ def index_view(request):
                 if ws_ippan[i].cell(row=14, column=6).value == '2' or ws_ippan[i].cell(row=14, column=6).value == '海岸':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水害原因1が「93:波浪」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1864,9 +1918,10 @@ def index_view(request):
                     ws_ippan[i].cell(row=14, column=6).value == '2' or ws_ippan[i].cell(row=14, column=6).value == '海岸':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水害原因1が「60:洗堀・流失」「91:高潮」「92:津波」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルF14: 工種について他項目との相関関係が正しいことをチェックする。
@@ -1877,9 +1932,10 @@ def index_view(request):
                     ws_ippan[i].cell(row=14, column=6).value == '3' or ws_ippan[i].cell(row=14, column=6).value == '河川海岸以外':
                     pass
                 else:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
-                    ws_ippan[i].cell(row=14, column=6).fill = fill
-                    ws_result[i].cell(row=14, column=6).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 6, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
+                    ### ws_ippan[i].cell(row=14, column=6).fill = fill
+                    ### ws_result[i].cell(row=14, column=6).fill = fill
                     ### print('水害原因1が「70:土石流」のときに、工種に選択範囲外の不正な文字が入力されています。', flush=True)
         
             ### セルH14: 農作物被害額について他項目との相関関係が正しいことをチェックする。
@@ -1892,9 +1948,10 @@ def index_view(request):
                 pass
             else:
                 if ws_ippan[i].cell(row=14, column=8).value is None:
-                    result_correlate_list.append([ws_ippan[i].title, 14, 8, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
-                    ws_ippan[i].cell(row=14, column=8).fill = fill
-                    ws_result[i].cell(row=14, column=8).fill = fill
+                    pass
+                    ### result_correlate_list.append([ws_ippan[i].title, 14, 8, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
+                    ### ws_ippan[i].cell(row=14, column=8).fill = fill
+                    ### ws_result[i].cell(row=14, column=8).fill = fill
                     ### print('水害区域面積の農地が入力されているときに、農作物被害額が入力されていません。', flush=True)
             
             ### セルJ14: 異常気象コードについて他項目との相関関係が正しいことをチェックする。
@@ -1908,165 +1965,191 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。相関チェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 23/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 25/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
-            if ws_max_row >= 20:
-                for j in range(20, ws_max_row + 1):
+            if ws_max_row[i] >= 20:
+                for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=2).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 2, MESSAGE[350][0], MESSAGE[350][1], MESSAGE[350][2], MESSAGE[350][3], MESSAGE[350][4]])
-                        ws_ippan[i].cell(row=j, column=2).fill = fill
-                        ws_result[i].cell(row=j, column=2).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 2, MESSAGE[350][0], MESSAGE[350][1], MESSAGE[350][2], MESSAGE[350][3], MESSAGE[350][4]])
+                        ### ws_ippan[i].cell(row=j, column=2).fill = fill
+                        ### ws_result[i].cell(row=j, column=2).fill = fill
                         
                     ### セルC20: 名称について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=3).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 3, MESSAGE[351][0], MESSAGE[351][1], MESSAGE[351][2], MESSAGE[351][3], MESSAGE[351][4]])
-                        ws_ippan[i].cell(row=j, column=3).fill = fill
-                        ws_result[i].cell(row=j, column=3).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 3, MESSAGE[351][0], MESSAGE[351][1], MESSAGE[351][2], MESSAGE[351][3], MESSAGE[351][4]])
+                        ### ws_ippan[i].cell(row=j, column=3).fill = fill
+                        ### ws_result[i].cell(row=j, column=3).fill = fill
                         
                     ### セルD20: 地上・地下被害の区分について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=4).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 4, MESSAGE[352][0], MESSAGE[352][1], MESSAGE[352][2], MESSAGE[352][3], MESSAGE[352][4]])
-                        ws_ippan[i].cell(row=j, column=4).fill = fill
-                        ws_result[i].cell(row=j, column=4).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 4, MESSAGE[352][0], MESSAGE[352][1], MESSAGE[352][2], MESSAGE[352][3], MESSAGE[352][4]])
+                        ### ws_ippan[i].cell(row=j, column=4).fill = fill
+                        ### ws_result[i].cell(row=j, column=4).fill = fill
                         
                     ### セルE20: 浸水土砂被害の区分について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=5).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 5, MESSAGE[353][0], MESSAGE[353][1], MESSAGE[353][2], MESSAGE[353][3], MESSAGE[353][4]])
-                        ws_ippan[i].cell(row=j, column=5).fill = fill
-                        ws_result[i].cell(row=j, column=5).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 5, MESSAGE[353][0], MESSAGE[353][1], MESSAGE[353][2], MESSAGE[353][3], MESSAGE[353][4]])
+                        ### ws_ippan[i].cell(row=j, column=5).fill = fill
+                        ### ws_result[i].cell(row=j, column=5).fill = fill
                         
                     ### セルF20: 被害建物棟数, 床下浸水について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=6).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 6, MESSAGE[354][0], MESSAGE[354][1], MESSAGE[354][2], MESSAGE[354][3], MESSAGE[354][4]])
-                        ws_ippan[i].cell(row=j, column=6).fill = fill
-                        ws_result[i].cell(row=j, column=6).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 6, MESSAGE[354][0], MESSAGE[354][1], MESSAGE[354][2], MESSAGE[354][3], MESSAGE[354][4]])
+                        ### ws_ippan[i].cell(row=j, column=6).fill = fill
+                        ### ws_result[i].cell(row=j, column=6).fill = fill
                         
                     ### セルG20: 被害建物棟数, 1cm〜49cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=7).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 7, MESSAGE[355][0], MESSAGE[355][1], MESSAGE[355][2], MESSAGE[355][3], MESSAGE[355][4]])
-                        ws_ippan[i].cell(row=j, column=7).fill = fill
-                        ws_result[i].cell(row=j, column=7).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 7, MESSAGE[355][0], MESSAGE[355][1], MESSAGE[355][2], MESSAGE[355][3], MESSAGE[355][4]])
+                        ### ws_ippan[i].cell(row=j, column=7).fill = fill
+                        ### ws_result[i].cell(row=j, column=7).fill = fill
                         
                     ### セルH20: 被害建物棟数, 50cm〜99cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=8).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 8, MESSAGE[356][0], MESSAGE[356][1], MESSAGE[356][2], MESSAGE[356][3], MESSAGE[356][4]])
-                        ws_ippan[i].cell(row=j, column=8).fill = fill
-                        ws_result[i].cell(row=j, column=8).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 8, MESSAGE[356][0], MESSAGE[356][1], MESSAGE[356][2], MESSAGE[356][3], MESSAGE[356][4]])
+                        ### ws_ippan[i].cell(row=j, column=8).fill = fill
+                        ### ws_result[i].cell(row=j, column=8).fill = fill
                         
                     ### セルI20: 被害建物棟数, 1m以上について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=9).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 9, MESSAGE[357][0], MESSAGE[357][1], MESSAGE[357][2], MESSAGE[357][3], MESSAGE[357][4]])
-                        ws_ippan[i].cell(row=j, column=9).fill = fill
-                        ws_result[i].cell(row=j, column=9).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 9, MESSAGE[357][0], MESSAGE[357][1], MESSAGE[357][2], MESSAGE[357][3], MESSAGE[357][4]])
+                        ### ws_ippan[i].cell(row=j, column=9).fill = fill
+                        ### ws_result[i].cell(row=j, column=9).fill = fill
                         
                     ### セルJ20: 被害建物棟数, 半壊について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=10).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 10, MESSAGE[358][0], MESSAGE[358][1], MESSAGE[358][2], MESSAGE[358][3], MESSAGE[358][4]])
-                        ws_ippan[i].cell(row=j, column=10).fill = fill
-                        ws_result[i].cell(row=j, column=10).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 10, MESSAGE[358][0], MESSAGE[358][1], MESSAGE[358][2], MESSAGE[358][3], MESSAGE[358][4]])
+                        ### ws_ippan[i].cell(row=j, column=10).fill = fill
+                        ### ws_result[i].cell(row=j, column=10).fill = fill
                         
                     ### セルK20: 被害建物棟数, 全壊・流失について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=11).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 11, MESSAGE[359][0], MESSAGE[359][1], MESSAGE[359][2], MESSAGE[359][3], MESSAGE[359][4]])
-                        ws_ippan[i].cell(row=j, column=11).fill = fill
-                        ws_result[i].cell(row=j, column=11).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 11, MESSAGE[359][0], MESSAGE[359][1], MESSAGE[359][2], MESSAGE[359][3], MESSAGE[359][4]])
+                        ### ws_ippan[i].cell(row=j, column=11).fill = fill
+                        ### ws_result[i].cell(row=j, column=11).fill = fill
                         
                     ### セルL20: 被害建物の延床面積について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=12).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 12, MESSAGE[360][0], MESSAGE[360][1], MESSAGE[360][2], MESSAGE[360][3], MESSAGE[360][4]])
-                        ws_ippan[i].cell(row=j, column=12).fill = fill
-                        ws_result[i].cell(row=j, column=12).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 12, MESSAGE[360][0], MESSAGE[360][1], MESSAGE[360][2], MESSAGE[360][3], MESSAGE[360][4]])
+                        ### ws_ippan[i].cell(row=j, column=12).fill = fill
+                        ### ws_result[i].cell(row=j, column=12).fill = fill
                         
                     ### セルM20: 被災世帯数について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=13).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 13, MESSAGE[361][0], MESSAGE[361][1], MESSAGE[361][2], MESSAGE[361][3], MESSAGE[361][4]])
-                        ws_ippan[i].cell(row=j, column=13).fill = fill
-                        ws_result[i].cell(row=j, column=13).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 13, MESSAGE[361][0], MESSAGE[361][1], MESSAGE[361][2], MESSAGE[361][3], MESSAGE[361][4]])
+                        ### ws_ippan[i].cell(row=j, column=13).fill = fill
+                        ### ws_result[i].cell(row=j, column=13).fill = fill
                         
                     ### セルN20: 被災事業所数について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=14).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 14, MESSAGE[362][0], MESSAGE[362][1], MESSAGE[362][2], MESSAGE[362][3], MESSAGE[362][4]])
-                        ws_ippan[i].cell(row=j, column=14).fill = fill
-                        ws_result[i].cell(row=j, column=14).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 14, MESSAGE[362][0], MESSAGE[362][1], MESSAGE[362][2], MESSAGE[362][3], MESSAGE[362][4]])
+                        ### ws_ippan[i].cell(row=j, column=14).fill = fill
+                        ### ws_result[i].cell(row=j, column=14).fill = fill
                         
                     ### セルO20: 農家・漁家戸数, 床下浸水について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=15).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 15, MESSAGE[363][0], MESSAGE[363][1], MESSAGE[363][2], MESSAGE[363][3], MESSAGE[363][4]])
-                        ws_ippan[i].cell(row=j, column=15).fill = fill
-                        ws_result[i].cell(row=j, column=15).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 15, MESSAGE[363][0], MESSAGE[363][1], MESSAGE[363][2], MESSAGE[363][3], MESSAGE[363][4]])
+                        ### ws_ippan[i].cell(row=j, column=15).fill = fill
+                        ### ws_result[i].cell(row=j, column=15).fill = fill
                         
                     ### セルP20: 農家・漁家戸数, 1cm〜49cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=16).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 16, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
-                        ws_ippan[i].cell(row=j, column=16).fill = fill
-                        ws_result[i].cell(row=j, column=16).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 16, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
+                        ### ws_ippan[i].cell(row=j, column=16).fill = fill
+                        ### ws_result[i].cell(row=j, column=16).fill = fill
                         
                     ### セルQ20: 農家・漁家戸数, 50cm〜99cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=17).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 17, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
-                        ws_ippan[i].cell(row=j, column=17).fill = fill
-                        ws_result[i].cell(row=j, column=17).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 17, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
+                        ### ws_ippan[i].cell(row=j, column=17).fill = fill
+                        ### ws_result[i].cell(row=j, column=17).fill = fill
                         
                     ### セルR20: 農家・漁家戸数, 1m以上・半壊について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=18).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 18, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                        ws_ippan[i].cell(row=j, column=18).fill = fill
-                        ws_result[i].cell(row=j, column=18).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 18, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
+                        ### ws_ippan[i].cell(row=j, column=18).fill = fill
+                        ### ws_result[i].cell(row=j, column=18).fill = fill
                         
                     ### セルS20: 農家・漁家戸数, 全壊・流失について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=19).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 19, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                        ws_ippan[i].cell(row=j, column=19).fill = fill
-                        ws_result[i].cell(row=j, column=19).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 19, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
+                        ### ws_ippan[i].cell(row=j, column=19).fill = fill
+                        ### ws_result[i].cell(row=j, column=19).fill = fill
                         
                     ### セルT20: 事業所従業者数, 床下浸水について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=20).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 20, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
-                        ws_ippan[i].cell(row=j, column=20).fill = fill
-                        ws_result[i].cell(row=j, column=20).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 20, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
+                        ### ws_ippan[i].cell(row=j, column=20).fill = fill
+                        ### ws_result[i].cell(row=j, column=20).fill = fill
                         
                     ### セルU20: 事業所従業者数, 1cm〜49cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=21).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 21, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
-                        ws_ippan[i].cell(row=j, column=21).fill = fill
-                        ws_result[i].cell(row=j, column=21).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 21, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
+                        ### ws_ippan[i].cell(row=j, column=21).fill = fill
+                        ### ws_result[i].cell(row=j, column=21).fill = fill
                         
                     ### セルV20: 事業所従業者数, 50cm〜99cmについて他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=22).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 22, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                        ws_ippan[i].cell(row=j, column=22).fill = fill
-                        ws_result[i].cell(row=j, column=22).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 22, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
+                        ### ws_ippan[i].cell(row=j, column=22).fill = fill
+                        ### ws_result[i].cell(row=j, column=22).fill = fill
                         
                     ### セルW20: 事業所従業者数, 1m以上・半壊について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=23).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 23, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                        ws_ippan[i].cell(row=j, column=23).fill = fill
-                        ws_result[i].cell(row=j, column=23).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 23, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
+                        ### ws_ippan[i].cell(row=j, column=23).fill = fill
+                        ### ws_result[i].cell(row=j, column=23).fill = fill
                         
                     ### セルX20: 事業所従業者数, 全壊・流失について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=24).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 24, MESSAGE[372][0], MESSAGE[372][1], MESSAGE[372][2], MESSAGE[372][3], MESSAGE[372][4]])
-                        ws_ippan[i].cell(row=j, column=24).fill = fill
-                        ws_result[i].cell(row=j, column=24).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 24, MESSAGE[372][0], MESSAGE[372][1], MESSAGE[372][2], MESSAGE[372][3], MESSAGE[372][4]])
+                        ### ws_ippan[i].cell(row=j, column=24).fill = fill
+                        ### ws_result[i].cell(row=j, column=24).fill = fill
                         
                     ### セルY20: 事業所の産業区分について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=25).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 25, MESSAGE[373][0], MESSAGE[373][1], MESSAGE[373][2], MESSAGE[373][3], MESSAGE[373][4]])
-                        ws_ippan[i].cell(row=j, column=25).fill = fill
-                        ws_result[i].cell(row=j, column=25).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 25, MESSAGE[373][0], MESSAGE[373][1], MESSAGE[373][2], MESSAGE[373][3], MESSAGE[373][4]])
+                        ### ws_ippan[i].cell(row=j, column=25).fill = fill
+                        ### ws_result[i].cell(row=j, column=25).fill = fill
                         
                     ### セルZ20: 地下空間の利用形態について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=26).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 26, MESSAGE[374][0], MESSAGE[374][1], MESSAGE[374][2], MESSAGE[374][3], MESSAGE[374][4]])
-                        ws_ippan[i].cell(row=j, column=26).fill = fill
-                        ws_result[i].cell(row=j, column=26).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 26, MESSAGE[374][0], MESSAGE[374][1], MESSAGE[374][2], MESSAGE[374][3], MESSAGE[374][4]])
+                        ### ws_ippan[i].cell(row=j, column=26).fill = fill
+                        ### ws_result[i].cell(row=j, column=26).fill = fill
                         
                     ### セルAA20: 備考について他項目との相関関係が正しいことをチェックする。
                     if ws_ippan[i].cell(row=j, column=27).value is None:
-                        result_correlate_grid.append([ws_ippan[i].title, j, 27, MESSAGE[375][0], MESSAGE[375][1], MESSAGE[375][2], MESSAGE[375][3], MESSAGE[375][4]])
-                        ws_ippan[i].cell(row=j, column=27).fill = fill
-                        ws_result[i].cell(row=j, column=27).fill = fill
+                        pass
+                        ### result_correlate_grid.append([ws_ippan[i].title, j, 27, MESSAGE[375][0], MESSAGE[375][1], MESSAGE[375][2], MESSAGE[375][3], MESSAGE[375][4]])
+                        ### ws_ippan[i].cell(row=j, column=27).fill = fill
+                        ### ws_result[i].cell(row=j, column=27).fill = fill
     
         #######################################################################
         #######################################################################
@@ -2076,7 +2159,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 24/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 26/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県についてデータベースに登録されている値と突合せチェックする。
@@ -2155,7 +2238,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 25/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 27/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名についてデータベースに登録されている値と突合せチェックする。
@@ -2220,7 +2303,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 26/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 28/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地についてデータベースに登録されている値と突合せチェックする。
@@ -2258,10 +2341,10 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 27/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 29/33.', 'INFO')
         for i, _ in enumerate(ws_ippan):
-            if ws_max_row >= 20:
-                for j in range(20, ws_max_row + 1):
+            if ws_max_row[i] >= 20:
+                for j in range(20, ws_max_row[i] + 1):
                     ### セルB20: 町丁名・大字名についてデータベースに登録されている値と突合せチェックする。
                     ### セルC20: 名称についてデータベースに登録されている値と突合せチェックする。
                         
@@ -2337,165 +2420,161 @@ def index_view(request):
         ### (1)チェック結果ファイルを保存する。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 28/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 30/33.', 'INFO')
         result_file_path = 'static/ippan_chosa_result2.xlsx'
         wb.save(result_file_path)
         
         #######################################################################
         ### DBアクセス処理(6010)
-        ### (1)トランザクションテーブルにタスクを登録する。
+        ### (1)水害テーブルにデータを登録する。
+        ### (2)一般資産調査票（調査員）テーブルにデータを登録する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 29/31.', 'INFO')
-        print("index_view6", flush=True)
-        ### if len(result_require_list) == 0 and len(result_require_grid) == 0 and \
-        ###     len(result_format_list) == 0 and len(result_format_grid) == 0 and \
-        ###     len(result_range_list) == 0 and len(result_range_grid) == 0 and \
-        ###     len(result_correlate_list) == 0 and len(result_correlate_grid) == 0 and \
-        ###     len(result_compare_list) == 0 and len(result_compare_grid) == 0:
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31/33.', 'INFO')
+        if len(result_require_list) == 0 and len(result_require_grid) == 0 and \
+            len(result_format_list) == 0 and len(result_format_grid) == 0 and \
+            len(result_range_list) == 0 and len(result_range_grid) == 0 and \
+            len(result_correlate_list) == 0 and len(result_correlate_grid) == 0 and \
+            len(result_compare_list) == 0 and len(result_compare_grid) == 0:
 
-        print("index_view7", flush=True)
-        connection_cursor = connection.cursor()
-        try:
-            ###################################################################
-            ### DBアクセス処理(6020)
-            ### (1)トランザクションテーブルにタスクを登録する。
-            ###################################################################
-            print("index_view8", flush=True)
-            for i, _ in enumerate(ws_ippan):
-                ### connection_cursor.execute(""" INSERT INTO SUIGAI (SUIGAI_ID, SUIGAI_NAME, KEN_CODE, CITY_CODE, BEGIN_DATE, END_DATE, CAUSE_1_CODE, CAUSE_2_CODE, CAUSE_3_CODE, AREA_ID, SUIKEI_CODE, KASEN_CODE, GRADIENT_CODE, RESIDENTIAL_AREA, AGRICULTURAL_AREA, UNDERGROUND_AREA, KASEN_KAIGAN_CODE, CROP_DAMAGE, WEATHER_ID) VALUES (11,'水害名_10','01','011011',date('2022-04-01'),date('2022-04-02'),'90','90','90',1,'101','1',1,100,100,100,'1',100,1) """)
-                connection_cursor.execute("""
-                    INSERT INTO SUIGAI (
-                        suigai_id,                                             -- 00
-                        suigai_name,                                           -- 01
-                        ken_code,                                              -- 02
-                        city_code,                                             -- 03
-                        cause_1_code,                                          -- 06
-                        cause_2_code,                                          -- 07
-                        cause_3_code,                                          -- 08
-                        area_id,                                               -- 09
-                        suikei_code,                                           -- 10
-                        kasen_code,                                            -- 11
-                        gradient_code,                                         -- 12
-                        residential_area,                                      -- 13
-                        agricultural_area,                                     -- 14
-                        underground_area,                                      -- 15
-                        kasen_kaigan_code,                                     -- 16
-                        crop_damage,                                           -- 17
-                        weather_id                                             -- 18
-                    ) VALUES (
-                        (SELECT MAX(suigai_id+1) FROM SUIGAI),                 -- 00
-                        %s, %s, %s,                                            -- 01 02 03 
-                        %s, %s, %s, %s, %s,                                    -- 06 07 08 09 10
-                        %s, %s, %s, %s, %s,                                    -- 11 12 13 14 15
-                        %s, %s, %s                                             -- 16 17 18
-                    )""", [
-                        'suigai_name',                                         ### 01 suigai_name
-                        ws_ippan[i].cell(row=7, column=2).value,               ### 02 ken_code
-                        ws_ippan[i].cell(row=7, column=3).value,               ### 03 city_code
-                        ws_ippan[i].cell(row=7, column=6).value,               ### 06 cause_1_code
-                        ws_ippan[i].cell(row=7, column=7).value,               ### 07 cause_2_code
-                        ws_ippan[i].cell(row=7, column=8).value,               ### 08 cause_3_code
-                        1,               ### 09 area_id
-                        '1',              ### 10 suikei_code
-                        '1',              ### 11 kasen_code
-                        '1',              ### 12 gradient_code
-                        1,              ### 13 residential_area
-                        1,              ### 14 agricultural_area
-                        1,              ### 15 underground_area
-                        '1',              ### 16 kasen_kaigan_code
-                        1,              ### 17 crop_damaga
-                        1              ### 18 weather_id
-                    ])
-                    
-            ###################################################################
-            ### DBアクセス処理(6030)
-            ### (1)トランザクションテーブルにタスクを登録する。
-            ###################################################################
-            print("index_view9", flush=True)
-            for i, _ in enumerate(ws_ippan):
-                if ws_max_row >= 20:
-                    ### for j in range(20, ws_max_row + 1):
-                    for j in range(20, 21):
-                        ### connection_cursor.execute(""" INSERT INTO IPPAN (ippan_id) VALUES ((SELECT MAX(ippan_id+1) FROM IPPAN)) """)
-                        connection_cursor.execute(""" 
-                            INSERT INTO IPPAN (
-                                ippan_id,                                      -- 00
-                                ippan_name,                                    -- 01
-                                suigai_id,                                     -- 02
-                                building_code,                                 -- 03
-                                underground_code,                              -- 04
-                                flood_sediment_code,                           -- 05
-                                building_lv00,                                 -- 06 
-                                building_lv01_49,                              -- 07
-                                building_lv50_99,                              -- 08
-                                building_lv100,                                -- 09
-                                building_half,                                 -- 10
-                                building_full,                                 -- 11
-                                floor_area,                                    -- 12
-                                family,                                        -- 13
-                                office,                                        -- 14
-                                farmer_fisher_lv00,                            -- 33
-                                farmer_fisher_lv01_49,                         -- 34
-                                farmer_fisher_lv50_99,                         -- 35
-                                farmer_fisher_lv100,                           -- 36
-                                farmer_fisher_full,                            -- 37
-                                employee_lv00,                                 -- 38
-                                employee_lv01_49,                              -- 39
-                                employee_lv50_99,                              -- 40
-                                employee_lv100,                                -- 41
-                                employee_full,                                 -- 42
-                                industry_code,                                 -- 43
-                                usage_code,                                    -- 44
-                                comment                                        -- 45
-                            ) VALUES (
-                                (SELECT MAX(ippan_id+1) FROM IPPAN),           -- 00
-                                %s, %s, %s, %s, %s,                            -- 01 02 03 04 05
-                                %s, %s, %s, %s, %s,                            -- 06 07 08 09 10
-                                %s, %s, %s, %s,                                -- 11 12 13 14
-                                        %s, %s, %s,                            --       33 34 35
-                                %s, %s, %s, %s, %s,                            -- 36 37 38 39 40
-                                %s, %s, %s, %s, %s                             -- 41 42 43 44 45
-                            ) """, [
-                                ws_ippan[i].cell(row=j, column=2).value,       ### 01 ippan_name
-                                1,                                             ### 02 suigai_id
-                                ws_ippan[i].cell(row=j, column=3).value[:-2],  ### 03 building_code
-                                ws_ippan[i].cell(row=j, column=4).value[:-2],  ### 04 underground_code
-                                ws_ippan[i].cell(row=j, column=5).value[:-2],  ### 05 flood_sediment_code
-                                ws_ippan[i].cell(row=j, column=6).value,       ### 06 building_lv00
-                                ws_ippan[i].cell(row=j, column=7).value,       ### 07 building_lv01_49
-                                ws_ippan[i].cell(row=j, column=8).value,       ### 08 building_lv50_99
-                                ws_ippan[i].cell(row=j, column=9).value,       ### 09 building_lv100
-                                ws_ippan[i].cell(row=j, column=10).value,      ### 10 building_half
-                                ws_ippan[i].cell(row=j, column=11).value,      ### 11 building_full
-                                ws_ippan[i].cell(row=j, column=12).value,      ### 12 floor_area
-                                ws_ippan[i].cell(row=j, column=13).value,      ### 13 family
-                                ws_ippan[i].cell(row=j, column=14).value,      ### 14 office
-                                '1',      ### 33 farmer_fisher_lv00
-                                '1',      ### 34 farmer_fisher_lv01_49
-                                '1',      ### 35 farmer_fisher_lv50_99
-                                '1',      ### 36 farmer_fisher_lv100
-                                '1',      ### 37 farmer_fisher_full
-                                '1',      ### 38 employee_lv00
-                                '1',      ### 39 employee_lv01_49
-                                '1',      ### 40 employee_lv50_99
-                                '1',      ### 41 employee_lv100
-                                '1',      ### 42 employee_full
-                                '1',      ### 43 industry_code
-                                '1',      ### 44 usage_code
-                                ws_ippan[i].cell(row=j, column=27).value       ### 45 comment
-                            ])
-            
-                        transaction.commit()
-                    
-        except:
-            connection_cursor.rollback()
-        finally:
-            connection_cursor.close()
+            connection_cursor = connection.cursor()
+            try:
+                ###############################################################
+                ### DBアクセス処理(6020)
+                ### (1)水害テーブルにデータを登録する。
+                ###############################################################
+                for i, _ in enumerate(ws_ippan):
+                    ### connection_cursor.execute(""" INSERT INTO SUIGAI (SUIGAI_ID, SUIGAI_NAME, KEN_CODE, CITY_CODE, BEGIN_DATE, END_DATE, CAUSE_1_CODE, CAUSE_2_CODE, CAUSE_3_CODE, AREA_ID, SUIKEI_CODE, KASEN_CODE, GRADIENT_CODE, RESIDENTIAL_AREA, AGRICULTURAL_AREA, UNDERGROUND_AREA, KASEN_KAIGAN_CODE, CROP_DAMAGE, WEATHER_ID) VALUES (11,'水害名_10','01','011011',date('2022-04-01'),date('2022-04-02'),'90','90','90',1,'101','1',1,100,100,100,'1',100,1) """)
+                    connection_cursor.execute("""
+                        INSERT INTO SUIGAI (
+                            suigai_id,                                             -- 00
+                            suigai_name,                                           -- 01
+                            ken_code,                                              -- 02
+                            city_code,                                             -- 03
+                            cause_1_code,                                          -- 06
+                            cause_2_code,                                          -- 07
+                            cause_3_code,                                          -- 08
+                            area_id,                                               -- 09
+                            suikei_code,                                           -- 10
+                            kasen_code,                                            -- 11
+                            gradient_code,                                         -- 12
+                            residential_area,                                      -- 13
+                            agricultural_area,                                     -- 14
+                            underground_area,                                      -- 15
+                            kasen_kaigan_code,                                     -- 16
+                            crop_damage,                                           -- 17
+                            weather_id                                             -- 18
+                        ) VALUES (
+                            (SELECT MAX(suigai_id+1) FROM SUIGAI),                 -- 00
+                            %s, %s, %s,                                            -- 01 02 03 
+                            %s, %s, %s, %s, %s,                                    -- 06 07 08 09 10
+                            %s, %s, %s, %s, %s,                                    -- 11 12 13 14 15
+                            %s, %s, %s                                             -- 16 17 18
+                        )""", [
+                            'suigai_name',                                                         ### 01 suigai_name
+                            split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1],          ### 02 ken_code
+                            split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1],          ### 03 city_code
+                            split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1],          ### 06 cause_1_code
+                            split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1],          ### 07 cause_2_code
+                            split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1],          ### 08 cause_3_code
+                            split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1],          ### 09 area_id
+                            split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1],         ### 10 suikei_code
+                            split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1],         ### 11 kasen_code
+                            split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1],         ### 12 gradient_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=2).value),               ### 13 residential_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=3).value),               ### 14 agricultural_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=4).value),               ### 15 underground_area
+                            split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1],         ### 16 kasen_kaigan_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=8).value),               ### 17 crop_damaga
+                            split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1]         ### 18 weather_id
+                        ])
+                        
+                ###############################################################
+                ### DBアクセス処理(6030)
+                ### (1)一般資産調査票（調査員）テーブルにデータを登録する。
+                ###############################################################
+                for i, _ in enumerate(ws_ippan):
+                    if ws_max_row[i] >= 20:
+                        for j in range(20, ws_max_row[i] + 1):
+                            ### connection_cursor.execute(""" INSERT INTO IPPAN (ippan_id) VALUES ((SELECT MAX(ippan_id+1) FROM IPPAN)) """)
+                            connection_cursor.execute(""" 
+                                INSERT INTO IPPAN (
+                                    ippan_id,                                      -- 00
+                                    ippan_name,                                    -- 01
+                                    suigai_id,                                     -- 02
+                                    building_code,                                 -- 03
+                                    underground_code,                              -- 04
+                                    flood_sediment_code,                           -- 05
+                                    building_lv00,                                 -- 06 
+                                    building_lv01_49,                              -- 07
+                                    building_lv50_99,                              -- 08
+                                    building_lv100,                                -- 09
+                                    building_half,                                 -- 10
+                                    building_full,                                 -- 11
+                                    floor_area,                                    -- 12
+                                    family,                                        -- 13
+                                    office,                                        -- 14
+                                    farmer_fisher_lv00,                            -- 33
+                                    farmer_fisher_lv01_49,                         -- 34
+                                    farmer_fisher_lv50_99,                         -- 35
+                                    farmer_fisher_lv100,                           -- 36
+                                    farmer_fisher_full,                            -- 37
+                                    employee_lv00,                                 -- 38
+                                    employee_lv01_49,                              -- 39
+                                    employee_lv50_99,                              -- 40
+                                    employee_lv100,                                -- 41
+                                    employee_full,                                 -- 42
+                                    industry_code,                                 -- 43
+                                    usage_code,                                    -- 44
+                                    comment                                        -- 45
+                                ) VALUES (
+                                    (SELECT MAX(ippan_id+1) FROM IPPAN),           -- 00
+                                    %s, %s, %s, %s, %s,                            -- 01 02 03 04 05
+                                    %s, %s, %s, %s, %s,                            -- 06 07 08 09 10
+                                    %s, %s, %s, %s,                                -- 11 12 13 14
+                                            %s, %s, %s,                            --       33 34 35
+                                    %s, %s, %s, %s, %s,                            -- 36 37 38 39 40
+                                    %s, %s, %s, %s, %s                             -- 41 42 43 44 45
+                                ) """, [
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=2).value),        ### 01 ippan_name
+                                    1,                                                             ### 02 suigai_id
+                                    split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1],  ### 03 building_code
+                                    split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1],  ### 04 underground_code
+                                    split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1],  ### 05 flood_sediment_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=6).value),        ### 06 building_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=7).value),        ### 07 building_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=8).value),        ### 08 building_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=9).value),        ### 09 building_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=10).value),       ### 10 building_half
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=11).value),       ### 11 building_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=12).value),       ### 12 floor_area
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=13).value),       ### 13 family
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=14).value),       ### 14 office
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=15).value),       ### 33 farmer_fisher_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=16).value),       ### 34 farmer_fisher_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=17).value),       ### 35 farmer_fisher_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=18).value),       ### 36 farmer_fisher_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=19).value),       ### 37 farmer_fisher_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=20).value),       ### 38 employee_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=21).value),       ### 39 employee_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=22).value),       ### 40 employee_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=23).value),       ### 41 employee_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=24).value),       ### 42 employee_full
+                                    split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1], ### 43 industry_code
+                                    split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1], ### 44 usage_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=27).value)        ### 45 comment
+                                ])
+                
+                            transaction.commit()
+                        
+            except:
+                connection_cursor.rollback()
+            finally:
+                connection_cursor.close()
         
         #######################################################################
         ### ログ出力処理(6040)
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 30/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 32/33.', 'INFO')
         if len(result_require_list) > 0 or len(result_require_grid) > 0 or \
             len(result_format_list) > 0 or len(result_format_grid) > 0 or \
             len(result_range_list) > 0 or len(result_range_grid) > 0 or \
@@ -2518,7 +2597,7 @@ def index_view(request):
         ### レスポンスセット処理(6050)
         ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31/31.', 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33/33.', 'INFO')
         if len(result_require_list) > 0 or len(result_require_grid) > 0 or \
             len(result_format_list) > 0 or len(result_format_grid) > 0 or \
             len(result_range_list) > 0 or len(result_range_grid) > 0 or \

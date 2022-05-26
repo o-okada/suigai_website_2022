@@ -528,11 +528,11 @@ class SUIGAI(models.Model):
     gradient_code = models.CharField(max_length=10, null=True)                 ### 地盤勾配区分コード FOR PARAM ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行14
-    residential_area = models.FloatField()                                     ### 宅地面積（単位m2）
-    agricultural_area = models.FloatField()                                    ### 農地面積（単位m2）
-    underground_area = models.FloatField()                                     ### 地下面積（単位m2）
+    residential_area = models.FloatField(null=True)                            ### 宅地面積（単位m2）
+    agricultural_area = models.FloatField(null=True)                           ### 農地面積（単位m2）
+    underground_area = models.FloatField(null=True)                            ### 地下面積（単位m2）
     kasen_kaigan_code = models.CharField(max_length=10, null=True)             ### 河川海岸（工種）コード ### FOR GROUP BY
-    crop_damage = models.FloatField()                                          ### 農作物被害額（単位千円）
+    crop_damage = models.FloatField(null=True)                                 ### 農作物被害額（単位千円）
     weather_id = models.IntegerField(null=True)                                ### 異常気象ID ### FOR GROUP BY
 
     ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
