@@ -23,13 +23,11 @@
         <a href="/P0300ExcelUpload/ippan_chosa_result/{{ excel_id }}/">チェック結果をダウンロードする。</a>
     </div>
 
-
-
-
     <div class="container mb-3">
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <td>シート名</td>
                     <td>行</td>
                     <td>列</td>
                     <td>エラーコード</td>
@@ -42,9 +40,10 @@
                 <tr>
                     <td>{{ result_require.0 }}</td> 
                     <td>{{ result_require.1 }}</td>
-                    <td>{{ result_require.3 }}</td>
+                    <td>{{ result_require.2 }}</td>
                     <td>{{ result_require.4 }}</td>
-                    <td>{{ result_require.5 }}<br>{{ result_require.6 }}</td>
+                    <td>{{ result_require.5 }}</td>
+                    <td>{{ result_require.6 }}<br>{{ result_require.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -52,9 +51,10 @@
                 <tr>
                     <td>{{ result_format.0 }}</td> 
                     <td>{{ result_format.1 }}</td>
-                    <td>{{ result_format.3 }}</td>
+                    <td>{{ result_format.2 }}</td>
                     <td>{{ result_format.4 }}</td>
-                    <td>{{ result_format.5 }}<br>{{ result_format.6 }}</td>
+                    <td>{{ result_format.5 }}</td>
+                    <td>{{ result_format.6 }}<br>{{ result_format.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -62,9 +62,10 @@
                 <tr>
                     <td>{{ result_range.0 }}</td> 
                     <td>{{ result_range.1 }}</td>
-                    <td>{{ result_range.3 }}</td>
+                    <td>{{ result_range.2 }}</td>
                     <td>{{ result_range.4 }}</td>
-                    <td>{{ result_range.5 }}<br>{{ result_range.6 }}</td>
+                    <td>{{ result_range.5 }}</td>
+                    <td>{{ result_range.6 }}<br>{{ result_range.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -72,9 +73,10 @@
                 <tr>
                     <td>{{ result_correlate.0 }}</td> 
                     <td>{{ result_correlate.1 }}</td>
-                    <td>{{ result_correlate.3 }}</td>
+                    <td>{{ result_correlate.2 }}</td>
                     <td>{{ result_correlate.4 }}</td>
-                    <td>{{ result_correlate.5 }}<br>{{ result_correlate.6 }}</td>
+                    <td>{{ result_correlate.5 }}</td>
+                    <td>{{ result_correlate.6 }}<br>{{ result_correlate.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -82,9 +84,10 @@
                 <tr>
                     <td>{{ result_compare.0 }}</td> 
                     <td>{{ result_compare.1 }}</td>
-                    <td>{{ result_compare.3 }}</td>
+                    <td>{{ result_compare.2 }}</td>
                     <td>{{ result_compare.4 }}</td>
-                    <td>{{ result_compare.5 }}<br>{{ result_compare.6 }}</td>
+                    <td>{{ result_compare.5 }}</td>
+                    <td>{{ result_compare.6 }}<br>{{ result_compare.7 }}</td>
                 </tr>
                 {% endfor %}
 
@@ -92,9 +95,10 @@
                 <tr>
                     <td>{{ result_require.0 }}</td> 
                     <td>{{ result_require.1 }}</td>
-                    <td>{{ result_require.3 }}</td>
+                    <td>{{ result_require.2 }}</td>
                     <td>{{ result_require.4 }}</td>
-                    <td>{{ result_require.5 }}<br>{{ result_require.6 }}</td>
+                    <td>{{ result_require.5 }}</td>
+                    <td>{{ result_require.6 }}<br>{{ result_require.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -102,9 +106,10 @@
                 <tr>
                     <td>{{ result_format.0 }}</td> 
                     <td>{{ result_format.1 }}</td>
-                    <td>{{ result_format.3 }}</td>
+                    <td>{{ result_format.2 }}</td>
                     <td>{{ result_format.4 }}</td>
-                    <td>{{ result_format.5 }}<br>{{ result_format.6 }}</td>
+                    <td>{{ result_format.5 }}</td>
+                    <td>{{ result_format.6 }}<br>{{ result_format.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -112,9 +117,10 @@
                 <tr>
                     <td>{{ result_range.0 }}</td> 
                     <td>{{ result_range.1 }}</td>
-                    <td>{{ result_range.3 }}</td>
+                    <td>{{ result_range.2 }}</td>
                     <td>{{ result_range.4 }}</td>
-                    <td>{{ result_range.5 }}<br>{{ result_range.6 }}</td>
+                    <td>{{ result_range.5 }}</td>
+                    <td>{{ result_range.6 }}<br>{{ result_range.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -122,9 +128,10 @@
                 <tr>
                     <td>{{ result_correlate.0 }}</td> 
                     <td>{{ result_correlate.1 }}</td>
-                    <td>{{ result_correlate.3 }}</td>
+                    <td>{{ result_correlate.2 }}</td>
                     <td>{{ result_correlate.4 }}</td>
-                    <td>{{ result_correlate.5 }}<br>{{ result_correlate.6 }}</td>
+                    <td>{{ result_correlate.5 }}</td>
+                    <td>{{ result_correlate.6 }}<br>{{ result_correlate.7 }}</td>
                 </tr>
                 {% endfor %}
                 
@@ -132,19 +139,16 @@
                 <tr>
                     <td>{{ result_compare.0 }}</td> 
                     <td>{{ result_compare.1 }}</td>
-                    <td>{{ result_compare.3 }}</td>
+                    <td>{{ result_compare.2 }}</td>
                     <td>{{ result_compare.4 }}</td>
-                    <td>{{ result_compare.5 }}<br>{{ result_compare.6 }}</td>
+                    <td>{{ result_compare.5 }}</td>
+                    <td>{{ result_compare.6 }}<br>{{ result_compare.7 }}</td>
                 </tr>
                 {% endfor %}
                 
             </tbody>
         </table>
     </div>
-
-
-
-
     
     {% endblock %}
 </body>
