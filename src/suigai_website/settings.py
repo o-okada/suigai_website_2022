@@ -59,6 +59,11 @@ INSTALLED_APPS = [
     
     ### Area Applications
     'P0600CreateArea.apps.P0600CreateAreaConfig',
+
+    ### Report Applications
+
+    ### Dashboard Applications
+    'P0800Dashboard.apps.P0800DashboardConfig',
     
     ### Admin Applications
     'P9100Transact.apps.P9100TransactConfig',

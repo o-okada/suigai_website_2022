@@ -72,11 +72,13 @@ def index_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0400OnlineDisplay.index_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0400OnlineDisplay.index_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.index_view()関数 STEP 1/3.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### (1)DBにアクセスして、データを取得する。
         #######################################################################
+        print_log('[INFO] P0400OnlineDisplay.index_view()関数 STEP 2/3.', 'INFO')
         ken_list = KEN.objects.raw("""
             SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
             """, [])
@@ -85,6 +87,7 @@ def index_view(request):
         ### レスポンスセット処理(0020)
         ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
+        print_log('[INFO] P0400OnlineDisplay.index_view()関数 STEP 3/3.', 'INFO')
         template = loader.get_template('P0400OnlineDisplay/index.html')
         context = {
             'ken_list': ken_list,
@@ -112,21 +115,20 @@ def category_view1(request, category_code1):
         print_log('[INFO] P0400OnlineDisplay.category_view1()関数が開始しました。', 'INFO')
         print_log('[INFO] P0400OnlineDisplay.category_view1()関数 request = {}'.format(request.method), 'INFO')
         print_log('[INFO] P0400OnlineDisplay.category_view1()関数 category_code1 = {}'.format(category_code1), 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数 STEP 1/3.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### (1)DBにアクセスして、データを取得する。
         #######################################################################
-        ### ken_list = KEN.objects.order_by('ken_code')[:]
-        ### city_list = CITY.objects.filter(ken_code=ken_code).order_by('city_code')[:]
-        ken_list = KEN.objects.raw(""" 
-            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
-            """, [])
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数 STEP 2/3.', 'INFO')
+        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         
         #######################################################################
         ### レスポンスセット処理(0020)
         ### (1)コンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
+        print_log('[INFO] P0400OnlineDisplay.category_view1()関数 STEP 3/3.', 'INFO')
         template = loader.get_template('P0400OnlineDisplay/index.html')
         context = {
             'ken_list': ken_list,

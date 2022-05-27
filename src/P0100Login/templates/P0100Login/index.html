@@ -17,6 +17,7 @@
 <body>
     {% bootstrap_messages %}
     <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+    
     {% block content %}
     
     <!-- BEGIN container text-center mb-3 -->
@@ -30,17 +31,17 @@
         {% csrf_token %}
         <div class="container mb-3">
             <div class="input-group">
-                <label class="col-form-label col-sm-2">ユーザ名</label>
+                <label class="col-form-label col-sm-2">ユーザ名（frics）</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" id="username" name="username" placeholder="ユーザ名 frics を入力してください。">
+                    <input class="form-control" type="text" id="username" name="username" placeholder="ユーザ名を入力してください。">
                 </div>
             </div>
         </div>
         <div class="container mb-3">
             <div class="input-group">
-                <label class="col-form-label col-sm-2">パスワード</label>
+                <label class="col-form-label col-sm-2">パスワード（frics）</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" id="password" name="password" placeholder="パスワード frics を入力してください。">
+                    <input class="form-control" type="text" id="password" name="password" placeholder="パスワードを入力してください。">
                 </div>
             </div>
         </div>

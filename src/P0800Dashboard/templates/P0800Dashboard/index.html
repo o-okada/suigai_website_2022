@@ -1,17 +1,113 @@
+{% load django_bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+<!-- P0800Dashboard/templates/P0800Dashboard/index.html -->
+<!-- BEGIN Head -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>{% block title %}ダッシュボード画面{% endblock %}</title>
-    {% block head %}{% endblock %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">-->
+    <title>集計画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 </head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
 <body>
-    <a href="{% url 'P0000Dummy:index' %}">ダミーメニュー画面に戻る</a><br>
+    {% bootstrap_messages %}
+    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+    
+    {% block content %}
+    
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>集計画面</h3>
+    </div>
+    <!-- END container text-center mb-3 -->
+
+
+    <!-- BEGIN container mb-3 -->
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col">
+                <div class="input-group">
+                    <select class="form-select" id="form_select_category" name="form_select_category">
+                        {% if category_code == "0" %}
+                        <option value="0" selected>集計する被害額を選択してください。</option>
+                        {% else %}
+                        <option value="0">集計する被害額を選択してください。</option>
+                        {% endif %}
+                        
+                        {% if category_code == "1" %}
+                        <option value="1" selected>(1)家屋被害額</option>
+                        {% else %}
+                        <option value="1">(1)家屋被害額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "2" %}
+                        <option value="2" selected>(2)家庭用品自動車以外被害額</option>
+                        {% else %}
+                        <option value="2">(2)家庭用品自動車以外被害額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "3" %}
+                        <option value="3" selected>(3)家庭用品自動車被害額</option>
+                        {% else %}
+                        <option value="3">(3)家庭用品自動車被害額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "4" %}
+                        <option value="4" selected>(4)家庭応急対策費</option>
+                        {% else %}
+                        <option value="4">(4)家庭応急対策費</option>
+                        {% endif %}
+                        
+                        {% if category_code == "5" %}
+                        <option value="5" selected>(5)事業所被害額</option>
+                        {% else %}
+                        <option value="5">(5)事業所被害額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "6" %}
+                        <option value="6" selected>(6)事業所営業損失額</option>
+                        {% else %}
+                        <option value="6">(6)事業所営業損失額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "7" %}
+                        <option value="7" selected>(7)農漁家被害額</option>
+                        {% else %}
+                        <option value="7">(7)農漁家被害額</option>
+                        {% endif %}
+                        
+                        {% if category_code == "8" %}
+                        <option value="8" selected>(8)事業所応急対策費</option>
+                        {% else %}
+                        <option value="8">(8)事業所応急対策費</option>
+                        {% endif %}
+                        
+                    </select>
+                    <button class="btn btn-secondary" type="button" id="button_category" name="button_category">集計する被害額選択</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END container mb-3 -->
+
+
+    <script type="text/javascript">
+    // 局所変数を定義する。
+    var button_category = document.getElementById("button_category"); // 集計する被害額選択ボタン
+    
+    // 集計する被害額選択ボタンクリック時のイベントハンドラを設定する。
+    button_category.addEventListener("click", function(event) {
+        window.location.href = "/P0800Dashboard/" + "category/" + form_select_category.value + "/"
+    });
+    </script>
+
+    
+    {% endblock %}
 </body>
 </html>
 

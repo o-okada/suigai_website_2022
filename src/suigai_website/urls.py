@@ -17,6 +17,12 @@ urlpatterns = [
     ### Area Applications
     path('P0600CreateArea/', include('P0600CreateArea.urls')),
 
+    ### Report Applications
+    ### path('P0700Report/', include('P0700Report.urls')),
+
+    ### Dashboard Applications
+    path('P0800Dashboard/', include('P0800Dashboard.urls')),
+
     ### Admin Applications
     path('P9100Transact/', include('P9100Transact.urls')),
     path('P9200Lock/', include('P9200Lock.urls')),
