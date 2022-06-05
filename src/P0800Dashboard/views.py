@@ -110,8 +110,8 @@ def category_view(request, category_code):
         ### DBアクセス処理(0010)
         ### (1)DBにアクセスして、下記の計算式に用いるデータを取得する。
         ### (1)家屋被害額 = 延床面積 x 家屋評価額 x 浸水または土砂ごとの勾配差による被害率
-        ### (2)家庭用品自動車以外被害額 = 世帯数 x 浸水または土砂ごとの家庭用品被害率家庭用品所有額
-        ### (3)家庭用品自動車被害額 = 世帯数 x 自動車被害率 x 家庭用品所有額
+        ### (2)家庭用品自動車以外被害額 = 世帯数 x 浸水または土砂ごとの家庭用品被害率 x 家庭用品自動車以外所有額
+        ### (3)家庭用品自動車被害額 = 世帯数 x 自動車被害率 x 家庭用品自動車所有額
         ### (4)家庭応急対策費 = (世帯数 x 活動費) + (世帯数 x 清掃日数 x 清掃労働単価)
         ### (5)事業所被害額 = 従業者数 x 産業分類ごとの償却資産 x 浸水または土砂ごとの被害率 + 
         ### 　　　　　　　　　従業者数 x 産業分類ごとの在庫資産 x 浸水または土砂ごとの被害率
@@ -121,16 +121,28 @@ def category_view(request, category_code):
         ### (8)事業所応急対策費 = 事業所数 x 代替活動費
         #######################################################################
         print_log('[INFO] P0800Dashboard.category_view()関数 STEP 2/3.', 'INFO')
-        house_asset_list = HOUSE_ASSET.objects.raw("""SELECT * FROM HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)""", [])
-        house_damage_list = HOUSE_DAMAGE.objects.raw("""SELECT * FROM HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)""", [])
-        household_damage_list = HOUSEHOLD_DAMAGE.objects.raw("""SELECT * FROM HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)""", [])
-        car_damage_list = CAR_DAMAGE.objects.raw("""SELECT * FROM CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)""", [])
-        house_cost_list = HOUSE_COST.objects.raw("""SELECT * FROM HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)""", [])
+        house_asset_list = None
+        house_asset_list = HOUSE_ASSET.objects.raw("""
+            SELECT 
+                HA1.house_asset_code AS house_asset_code, 
+                HA1.ken_code AS ken_code, 
+                HA1.house_asset AS house_asset, 
+                KE1.ken_name AS ken_name 
+            FROM HOUSE_ASSET HA1 
+            LEFT JOIN KEN KE1 ON HA1.ken_code = KE1.ken_code 
+            ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)
+            """, [])
+        house_damage = HOUSE_DAMAGE.objects.raw("""SELECT * FROM HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)""", [])[0]
+        household_damage = HOUSEHOLD_DAMAGE.objects.raw("""SELECT * FROM HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)""", [])[0]
+        car_damage = CAR_DAMAGE.objects.raw("""SELECT * FROM CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)""", [])[0]
+        house_cost = HOUSE_COST.objects.raw("""SELECT * FROM HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)""", [])[0]
         office_asset_list = OFFICE_ASSET.objects.raw("""SELECT * FROM OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)""", [])
-        office_damage_list = OFFICE_DAMAGE.objects.raw("""SELECT * FROM OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)""", [])
-        office_cost_list = OFFICE_COST.objects.raw("""SELECT * FROM OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)""", [])
-        farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.raw("""SELECT * FROM FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)""", [])
-        ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID)""", [])
+        office_damage = OFFICE_DAMAGE.objects.raw("""SELECT * FROM OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)""", [])[0]
+        office_cost = OFFICE_COST.objects.raw("""SELECT * FROM OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)""", [])[0]
+        farmer_fisher_damage = FARMER_FISHER_DAMAGE.objects.raw("""SELECT * FROM FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)""", [])[0]
+        ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+
+        gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
 
         #######################################################################
         ### レスポンスセット処理(0010)
@@ -141,15 +153,16 @@ def category_view(request, category_code):
         context = {
             'category_code': category_code, 
             'house_asset_list': house_asset_list, 
-            'house_damage_list': house_damage_list, 
-            'household_damage_list': household_damage_list, 
-            'car_damage_list': car_damage_list, 
-            'house_cost_list': house_cost_list, 
+            'house_damage': house_damage, 
+            'household_damage': household_damage, 
+            'car_damage': car_damage, 
+            'house_cost': house_cost, 
             'office_asset_list': office_asset_list, 
-            'office_damage_list': office_damage_list, 
-            'office_cost_list': office_cost_list, 
-            'farmer_fisher_damage_list': farmer_fisher_damage_list, 
+            'office_damage': office_damage, 
+            'office_cost': office_cost, 
+            'farmer_fisher_damage': farmer_fisher_damage, 
             'ippan_list': ippan_list, 
+            'gradient_list': gradient_list, 
         }
         print_log('[INFO] P0800Dashboard.category_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

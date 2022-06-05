@@ -442,6 +442,12 @@ class OFFICE_COST(models.Model):
     stagnate_lv100_200 = models.FloatField()                                   ### 営業停滞日数_100から200cm未満
     stagnate_lv200_300 = models.FloatField()                                   ### 営業停滞日数_200から300cm未満
     stagnate_lv300 = models.FloatField()                                       ### 営業停滞日数_300cm以上
+    alt_lv00 = models.FloatField(null=True)                                    ### 代替活動費_床下
+    alt_lv00_50 = models.FloatField(null=True)                                 ### 代替活動費_0から50cm未満
+    alt_lv50_100 = models.FloatField(null=True)                                ### 代替活動費_50から100cm未満
+    alt_lv100_200 = models.FloatField(null=True)                               ### 代替活動費_100から200cm未満
+    alt_lv200_300 = models.FloatField(null=True)                               ### 代替活動費_200から300cm未満
+    alt_lv300 = models.FloatField(null=True)                                   ### 代替活動費_300cm以上
 
     class Meta:
         ### db_table = 'p0000common_office_cost'
@@ -546,6 +552,12 @@ class SUIGAI(models.Model):
         ### db_table = 'p0000common_suigai'
         ### db_table = 'suigai_web_suigai'
         db_table = 'suigai'
+        ### constraints = [
+        ###     models.UniqueConstraint(
+        ###         fields=['ken_code', 'city_code', 'begin_date', 'cause_1_code', 'area_id', 'suikei_code', 'kasen_code', 'gradient_code'],
+        ###         name='suigai_unique'
+        ###     ),
+        ### ]
 
     def __str__(self):
         return '<SUIGAI: ' + self.suigai_id + ', ' + self.suigai_name + '>'
