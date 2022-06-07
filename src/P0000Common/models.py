@@ -761,6 +761,349 @@ class KOEKI(models.Model):
 ### トランザクション系テーブル（更新テーブル）
 ### 主に集計用
 ###############################################################################
+class IPPAN_VIEW(models.Model):
+    ippan_id = models.IntegerField(primary_key=True)                           ### 一般資産調査票ID
+    ippan_name = models.CharField(max_length=128, null=True)                   ### 一般資産調査票名（町丁名、大字名）
+    
+    ### 帳票のヘッダ部分 行7
+    ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
+    ### 例えば、新たなヘッダ部分の情報が登録できるとしても、実際に被害建物棟数が判明するまでは、その情報を管理することができない。
+    ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
+    ### https://torazuka.hatenablog.com/entry/20110713/pk
+    ### https://oss-db.jp/dojo/dojo_info_04
+    ### ken_code = models.CharField(max_length=10, null=True)                  ### 都道府県コード ### FOR GROUP BY
+    ### city_code = models.CharField(max_length=10, null=True)                 ### 市区町村コード ### FOR GROUP BY
+    ### begin_date = models.DateField(null=True)                               ### 開始日 ### FOR GROUP BY
+    ### end_date = models.DateField(null=True)                                 ### 終了日 ### FOR GROUP BY
+    ### cause_1_code = models.CharField(max_length=10, null=True)              ### 水害原因_1_コード ### FOR GROUP BY
+    ### cause_2_code = models.CharField(max_length=10, null=True)              ### 水害原因_2_コード ### FOR GROUP BY
+    ### cause_3_code = models.CharField(max_length=10, null=True)              ### 水害原因_3_コード ### FOR GROUP BY
+    ### area_id = models.IntegerField(null=True)                               ### 区域ID ### FOR GROUP BY
+
+    ### 帳票のヘッダ部分 行10
+    ### suikei_code = models.CharField(max_length=10, null=True)               ### 水系コード ### FOR GROUP BY
+    ### kasen_code = models.CharField(max_length=10, null=True)                ### 河川コード ### FOR GROUP BY
+    ### gradient_code = models.CharField(max_length=10, null=True)             ### 地盤勾配区分コードFOR PARAM ### FOR GROUP BY
+
+    ### 帳票のヘッダ部分 行14
+    ### residential_area = models.FloatField()                                 ### 農地面積（単位m2）
+    ### agricultural_area = models.FloatField()                                ### 農地面積（単位m2）
+    ### underground_area = models.FloatField()                                 ### 地下面積（単位m2）
+    ### kasen_kaigan_code = models.CharField(max_length=10, null=True)         ### 河川海岸（工種）コード ### FOR GROUP BY
+    ### crop_damage = models.FloatField()                                      ### 農作物被害額（単位千円）
+    ### weather_id = models.IntegerField(null=True)                            ### 異常気象ID ### FOR GROUP BY
+
+    ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
+    ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
+    ### 別テーブル（水害テーブル）の主キーは単純な連番とする。
+    ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
+    ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
+    ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+
+    ### 帳票の繰り返し部分 行20以降
+    building_code = models.CharField(max_length=10, null=True)                 ### 建物区分コード
+    building_name = models.CharField(max_length=128)                           ### 建物区分名
+    underground_code = models.CharField(max_length=10, null=True)              ### 地上地下区分コード
+    underground_name = models.CharField(max_length=128)                        ### 地上地下区分名
+    flood_sediment_code = models.CharField(max_length=10, null=True)           ### 浸水土砂区分コード ### FOR SUM PARAM
+    flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名
+    
+    ### 入力データ
+    building_lv00 = models.IntegerField(null=True)                             ### 被害建物棟数_床下
+    building_lv01_49 = models.IntegerField(null=True)                          ### 被害建物棟数_01から49cm
+    building_lv50_99 = models.IntegerField(null=True)                          ### 被害建物棟数_50から99cm
+    building_lv100 = models.IntegerField(null=True)                            ### 被害建物棟数_100cm以上
+    building_half = models.IntegerField(null=True)                             ### 被害建物棟数_半壊
+    building_full = models.IntegerField(null=True)                             ### 被害建物棟数_全壊
+    total_building = models.IntegerField(null=True)
+    
+    ### 入力データ
+    floor_area = models.FloatField(null=True)                                  ### 延床面積
+    family = models.IntegerField(null=True)                                    ### 被災世帯数
+    office = models.IntegerField(null=True)                                    ### 被災事業所数
+    
+    ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
+    floor_area_lv00 = models.FloatField(null=True)                             ### 延床面積_床下
+    floor_area_lv01_49 = models.FloatField(null=True)                          ### 延床面積_01から49cm
+    floor_area_lv50_99 = models.FloatField(null=True)                          ### 延床面積_50から99cm
+    floor_area_lv100 = models.FloatField(null=True)                            ### 延床面積_100cm以上
+    floor_area_half = models.FloatField(null=True)                             ### 延床面積_半壊
+    floor_area_full = models.FloatField(null=True)                             ### 延床面積_全壊
+    total_floor_area = models.FloatField(null=True)
+    
+    ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
+    family_lv00 = models.IntegerField(null=True)                               ### 被災世帯数_床下
+    family_lv01_49 = models.IntegerField(null=True)                            ### 被災世帯数_01から49cm
+    family_lv50_99 = models.IntegerField(null=True)                            ### 被災世帯数_50から99cm
+    family_lv100 = models.IntegerField(null=True)                              ### 被災世帯数_100cm以上
+    family_half = models.IntegerField(null=True)                               ### 被災世帯数_半壊
+    family_full = models.IntegerField(null=True)                               ### 被災世帯数_全壊
+    total_family = models.IntegerField(null=True)
+    
+    ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
+    office_lv00 = models.IntegerField(null=True)                               ### 被災事業所数_床下
+    office_lv01_49 = models.IntegerField(null=True)                            ### 被災事業所数_01から49cm
+    office_lv50_99 = models.IntegerField(null=True)                            ### 被災事業所数_50から99cm
+    office_lv100 = models.IntegerField(null=True)                              ### 被災事業所数_100cm以上
+    office_half = models.IntegerField(null=True)                               ### 被災事業所数_半壊
+    office_full = models.IntegerField(null=True)                               ### 被災事業所数_全壊
+    total_office = models.IntegerField(null=True)
+    
+    ### 入力データ
+    farmer_fisher_lv00 = models.IntegerField(null=True)                        ### 農漁家戸数_床下
+    farmer_fisher_lv01_49 = models.IntegerField(null=True)                     ### 農漁家戸数_01から49cm
+    farmer_fisher_lv50_99 = models.IntegerField(null=True)                     ### 農漁家戸数_50から99cm
+    farmer_fisher_lv100 = models.IntegerField(null=True)                       ### 農漁家戸数_100cm以上
+    ### farmer_fisher_half = models.IntegerField(null=True)
+    farmer_fisher_full = models.IntegerField(null=True)                        ### 農漁家戸数_全壊
+    total_farmer_fisher = models.IntegerField(null=True)
+
+    ### 入力データ
+    employee_lv00 = models.IntegerField(null=True)                             ### 被災従業者数_床下
+    employee_lv01_49 = models.IntegerField(null=True)                          ### 被災従業者数_01から49cm
+    employee_lv50_99 = models.IntegerField(null=True)                          ### 被災従業者数_50から99cm
+    employee_lv100 = models.IntegerField(null=True)                            ### 被災従業者数_100cm以上
+    ### employee_half = models.IntegerField(null=True)
+    employee_full = models.IntegerField(null=True)                             ### 被災従業者数_全壊
+    total_employee = models.IntegerField(null=True)
+
+    ### 入力データ
+    industry_code = models.CharField(max_length=10, null=True)                 ### 産業分類コード ### FOR SUM PARAM
+    industry_name = models.CharField(max_length=128)                           ### 産業分類名
+    usage_code = models.CharField(max_length=10, null=True)                    ### 地下空間の利用形態コード
+    usage_name = models.CharField(max_length=128)                              ### 地下空間の利用形態名
+    ### comment = models.CharField(max_length=512, null=True)                  ### 備考
+    
+    house_damage_lv00 = models.FloatField()
+    house_damage_lv00_50 = models.FloatField()
+    house_damage_lv50_100 = models.FloatField()
+    house_damage_lv100_200 = models.FloatField()
+    house_damage_lv200_300 = models.FloatField()
+    house_damage_lv300 = models.FloatField()
+    
+    household_damage_lv00 = models.FloatField()
+    household_damage_lv00_50 = models.FloatField()
+    household_damage_lv50_100 = models.FloatField()
+    household_damage_lv100_200 = models.FloatField()
+    household_damage_lv200_300 = models.FloatField()
+    household_damage_lv300 = models.FloatField()
+
+    car_damage_lv00 = models.FloatField()
+    car_damage_lv00_50 = models.FloatField()
+    car_damage_lv50_100 = models.FloatField()
+    car_damage_lv100_200 = models.FloatField()
+    car_damage_lv200_300 = models.FloatField()
+    car_damage_lv300 = models.FloatField()
+
+    house_cost_alt_lv00 = models.FloatField()
+    house_cost_alt_lv00_50 = models.FloatField()
+    house_cost_alt_lv50_100 = models.FloatField()
+    house_cost_alt_lv100_200 = models.FloatField()
+    house_cost_alt_lv200_300 = models.FloatField()
+    house_cost_alt_lv300 = models.FloatField()
+
+
+    class Meta:
+        ### db_table = 'p0000common_ippan'
+        ### db_table = 'suigai_web_ippan'
+        db_table = 'ippan_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+
+    def __str__(self):
+        return '<IPPAN: ' + self.ippan_id + ', ' + self.ippan_name + '>'
+
+
+
+### 300: 一般資産集計結果
+class IPPAN_SUMMARY(models.Model):
+    ippan_summary_id = models.IntegerField(primary_key=True)                   ### 一般資産集計結果ID = 一般資産調査票ID
+    ippan_id = models.IntegerField(null=True)                                  ### 一般資産調査票ID
+    
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    
+    ### 集計結果
+    house_damage_lv00 = models.FloatField(null=True)                           ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+    house_damage_lv01_49 = models.FloatField(null=True)                        ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+    house_damage_lv50_99 = models.FloatField(null=True)                        ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+    house_damage_lv100 = models.FloatField(null=True)                          ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+    house_damage_half = models.FloatField(null=True)                           ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+    house_damage_full = models.FloatField(null=True)                           ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
+
+    ### 集計結果
+    household_damage_lv00 = models.FloatField(null=True)                       ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+    household_damage_lv01_49 = models.FloatField(null=True)                    ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+    household_damage_lv50_99 = models.FloatField(null=True)                    ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+    household_damage_lv100 = models.FloatField(null=True)                      ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+    household_damage_half = models.FloatField(null=True)                       ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+    household_damage_full = models.FloatField(null=True)                       ### 家庭用品自動車以外被害額（被災世帯数×家庭用品所有額×浸水または土砂による被害率）
+
+    ### 集計結果
+    car_damage_lv00 = models.FloatField(null=True)                             ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+    car_damage_lv01_49 = models.FloatField(null=True)                          ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+    car_damage_lv50_99 = models.FloatField(null=True)                          ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+    car_damage_lv100 = models.FloatField(null=True)                            ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+    car_damage_half = models.FloatField(null=True)                             ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+    car_damage_full = models.FloatField(null=True)                             ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
+
+    ### 集計結果
+    house_alt_cost_lv00 = models.FloatField(null=True)                         ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_cost_lv01_49 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_cost_lv50_99 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_cost_lv100 = models.FloatField(null=True)                        ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_cost_half = models.FloatField(null=True)                         ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_cost_full = models.FloatField(null=True)                         ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+
+    ### 集計結果
+    house_clean_cost_lv00 = models.FloatField(null=True)                       ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_cost_lv01_49 = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_cost_lv50_99 = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_cost_lv100 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_cost_half = models.FloatField(null=True)                       ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_cost_full = models.FloatField(null=True)                       ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+
+    ### 集計結果
+    office_dep_damage_lv00 = models.FloatField(null=True)                      ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_damage_lv01_49 = models.FloatField(null=True)                   ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_damage_lv50_99 = models.FloatField(null=True)                   ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_damage_lv100 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    ### office_dep_damage_half = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_damage_full = models.FloatField(null=True)                      ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    
+    ### 集計結果
+    office_inv_damage_lv00 = models.FloatField(null=True)                      ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_damage_lv01_49 = models.FloatField(null=True)                   ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_damage_lv50_99 = models.FloatField(null=True)                   ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_damage_lv100 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    ### office_inv_damage_half = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_damage_full = models.FloatField(null=True)                      ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    
+    ### 集計結果
+    office_ope_loss_lv00 = models.FloatField(null=True)                        ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    office_ope_loss_lv01_49 = models.FloatField(null=True)                     ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    office_ope_loss_lv50_99 = models.FloatField(null=True)                     ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    office_ope_loss_lv100 = models.FloatField(null=True)                       ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_loss_half = models.FloatField(null=True)                    ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    office_ope_loss_full = models.FloatField(null=True)                        ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+
+    ### 集計結果
+    farmer_fisher_dep_damage_lv00 = models.FloatField(null=True)               ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_damage_lv01_49 = models.FloatField(null=True)            ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_damage_lv50_99 = models.FloatField(null=True)            ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_damage_lv100 = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    ### farmer_fisher_dep_damage_half = models.FloatField(null=True)           ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_damage_full = models.FloatField(null=True)               ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+
+    ### 集計結果
+    farmer_fisher_inv_damage_lv00 = models.FloatField(null=True)               ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_damage_lv01_49 = models.FloatField(null=True)            ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_damage_lv50_99 = models.FloatField(null=True)            ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_damage_lv100 = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_damage_half = models.FloatField(null=True)               ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_damage_full = models.FloatField(null=True)               ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+
+    ### 集計結果
+    office_alt_cost_lv00 = models.FloatField(null=True)                                       ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_cost_lv01_49 = models.FloatField(null=True)                                    ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_cost_lv50_99 = models.FloatField(null=True)                                    ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_cost_lv100 = models.FloatField(null=True)                                      ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_cost_half = models.FloatField(null=True)                                       ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_cost_full = models.FloatField(null=True)                                       ### 事業所応急対策費（事業所数×代替活動費）
+
+    ### 集計結果の検証結果
+    house_damage_lv00_verified = models.CharField(max_length=10, null=True)                   ### 家屋被害額のマニュアル検証結果
+    house_damage_lv01_49_verified = models.CharField(max_length=10, null=True)                ### 家屋被害額のマニュアル検証結果
+    house_damage_lv50_99_verified = models.CharField(max_length=10, null=True)                ### 家屋被害額のマニュアル検証結果
+    house_damage_lv100_verified = models.CharField(max_length=10, null=True)                  ### 家屋被害額のマニュアル検証結果
+    house_damage_half_verified = models.CharField(max_length=10, null=True)                   ### 家屋被害額のマニュアル検証結果
+    house_damage_full_verified = models.CharField(max_length=10, null=True)                   ### 家屋被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    household_damage_lv00_verified = models.CharField(max_length=10, null=True)               ### 家庭用品自動車以外被害額のマニュアル検証結果
+    household_damage_lv01_49_verified = models.CharField(max_length=10, null=True)            ### 家庭用品自動車以外被害額のマニュアル検証結果
+    household_damage_lv50_99_verified = models.CharField(max_length=10, null=True)            ### 家庭用品自動車以外被害額のマニュアル検証結果
+    household_damage_lv100_verified = models.CharField(max_length=10, null=True)              ### 家庭用品自動車以外被害額のマニュアル検証結果
+    household_damage_half_verified = models.CharField(max_length=10, null=True)               ### 家庭用品自動車以外被害額のマニュアル検証結果
+    household_damage_full_verified = models.CharField(max_length=10, null=True)               ### 家庭用品自動車以外被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    car_damage_lv00_verified = models.CharField(max_length=10, null=True)                     ### 家庭用品自動車被害額のマニュアル検証結果
+    car_damage_lv01_49_verified = models.CharField(max_length=10, null=True)                  ### 家庭用品自動車被害額のマニュアル検証結果
+    car_damage_lv50_99_verified = models.CharField(max_length=10, null=True)                  ### 家庭用品自動車被害額のマニュアル検証結果
+    car_damage_lv100_verified = models.CharField(max_length=10, null=True)                    ### 家庭用品自動車被害額のマニュアル検証結果
+    car_damage_half_verified = models.CharField(max_length=10, null=True)                     ### 家庭用品自動車被害額のマニュアル検証結果
+    car_damage_full_verified = models.CharField(max_length=10, null=True)                     ### 家庭用品自動車被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    house_alt_cost_lv00_verified = models.CharField(max_length=10, null=True)                 ### 家庭応急対策費のマニュアル検証結果
+    house_alt_cost_lv01_49_verified = models.CharField(max_length=10, null=True)              ### 家庭応急対策費のマニュアル検証結果
+    house_alt_cost_lv50_99_verified = models.CharField(max_length=10, null=True)              ### 家庭応急対策費のマニュアル検証結果
+    house_alt_cost_lv100_verified = models.CharField(max_length=10, null=True)                ### 家庭応急対策費のマニュアル検証結果
+    house_alt_cost_half_verified = models.CharField(max_length=10, null=True)                 ### 家庭応急対策費のマニュアル検証結果
+    house_alt_cost_full_verified = models.CharField(max_length=10, null=True)                 ### 家庭応急対策費のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    house_clean_cost_lv00_verified = models.CharField(max_length=10, null=True)               ### 家庭応急対策費のマニュアル検証結果
+    house_clean_cost_lv01_49_verified = models.CharField(max_length=10, null=True)            ### 家庭応急対策費のマニュアル検証結果
+    house_clean_cost_lv50_99_verified = models.CharField(max_length=10, null=True)            ### 家庭応急対策費のマニュアル検証結果
+    house_clean_cost_lv100_verified = models.CharField(max_length=10, null=True)              ### 家庭応急対策費のマニュアル検証結果
+    house_clean_cost_half_verified = models.CharField(max_length=10, null=True)               ### 家庭応急対策費のマニュアル検証結果
+    house_clean_cost_full_verified = models.CharField(max_length=10, null=True)               ### 家庭応急対策費のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    office_dep_damage_lv00_verified = models.CharField(max_length=10, null=True)              ### 事業所被害額のマニュアル検証結果
+    office_dep_damage_lv01_49_verified = models.CharField(max_length=10, null=True)           ### 事業所被害額のマニュアル検証結果
+    office_dep_damage_lv50_99_verified = models.CharField(max_length=10, null=True)           ### 事業所被害額のマニュアル検証結果
+    office_dep_damage_lv100_verified = models.CharField(max_length=10, null=True)             ### 事業所被害額のマニュアル検証結果
+    ### office_dep_damage_half_verified = models.CharField(max_length=10, null=True)          ### 事業所被害額のマニュアル検証結果
+    office_dep_damage_full_verified = models.CharField(max_length=10, null=True)              ### 事業所被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    office_inv_damage_lv00_verified = models.CharField(max_length=10, null=True)              ### 事業所被害額のマニュアル検証結果
+    office_inv_damage_lv01_49_verified = models.CharField(max_length=10, null=True)           ### 事業所被害額のマニュアル検証結果
+    office_inv_damage_lv50_99_verified = models.CharField(max_length=10, null=True)           ### 事業所被害額のマニュアル検証結果
+    office_inv_damage_lv100_verified = models.CharField(max_length=10, null=True)             ### 事業所被害額のマニュアル検証結果
+    ### office_inv_damage_half_verified = models.CharField(max_length=10, null=True)          ### 事業所被害額のマニュアル検証結果
+    office_inv_damage_full_verified = models.CharField(max_length=10, null=True)              ### 事業所被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    office_ope_loss_lv00_verified = models.CharField(max_length=10, null=True)                ### 事業所営業損失額のマニュアル検証結果
+    office_ope_loss_lv01_49_verified = models.CharField(max_length=10, null=True)             ### 事業所営業損失額のマニュアル検証結果
+    office_ope_loss_lv50_99_verified = models.CharField(max_length=10, null=True)             ### 事業所営業損失額のマニュアル検証結果
+    office_ope_loss_lv100_verified = models.CharField(max_length=10, null=True)               ### 事業所営業損失額のマニュアル検証結果
+    ### office_ope_loss_half_verified = models.CharField(max_length=10, null=True)            ### 事業所営業損失額のマニュアル検証結果
+    office_ope_loss_full_verified = models.CharField(max_length=10, null=True)                ### 事業所営業損失額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    farmer_fisher_dep_damage_lv00_verified = models.CharField(max_length=10, null=True)       ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_dep_damage_lv01_49_verified = models.CharField(max_length=10, null=True)    ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_dep_damage_lv50_99_verified = models.CharField(max_length=10, null=True)    ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_dep_damage_lv100_verified = models.CharField(max_length=10, null=True)      ### 農漁家被害額のマニュアル検証結果
+    ### farmer_fisher_dep_damage_half_verified = models.CharField(max_length=10, null=True)   ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_dep_damage_full_verified = models.CharField(max_length=10, null=True)       ### 農漁家被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    farmer_fisher_inv_damage_lv00_verified = models.CharField(max_length=10, null=True)       ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_inv_damage_lv01_49_verified = models.CharField(max_length=10, null=True)    ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_inv_damage_lv50_99_verified = models.CharField(max_length=10, null=True)    ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_inv_damage_lv100_verified = models.CharField(max_length=10, null=True)      ### 農漁家被害額のマニュアル検証結果
+    ### farmer_fisher_inv_damage_half_verified = models.CharField(max_length=10, null=True)   ### 農漁家被害額のマニュアル検証結果
+    farmer_fisher_inv_damage_full_verified = models.CharField(max_length=10, null=True)       ### 農漁家被害額のマニュアル検証結果
+
+    ### 集計結果の検証結果
+    office_alt_cost_lv00_verified = models.CharField(max_length=10, null=True)                ### 事業所応急対策費のマニュアル検証結果
+    office_alt_cost_lv01_49_verified = models.CharField(max_length=10, null=True)             ### 事業所応急対策費のマニュアル検証結果
+    office_alt_cost_lv50_99_verified = models.CharField(max_length=10, null=True)             ### 事業所応急対策費のマニュアル検証結果
+    office_alt_cost_lv100_verified = models.CharField(max_length=10, null=True)               ### 事業所応急対策費のマニュアル検証結果
+    office_alt_cost_half_verified = models.CharField(max_length=10, null=True)                ### 事業所応急対策費のマニュアル検証結果
+    office_alt_cost_full_verified = models.CharField(max_length=10, null=True)                ### 事業所応急対策費のマニュアル検証結果
+    
+    class Meta:
+        db_table = 'ippan_summary'
+        
+    def __str__(self):
+        return '<IPPAN_SUMMARY: ' + self.ippan_summary_id + '>'
+
 ### 300: 一般資産レポート
 class IPPAN_REPORT(models.Model):
     ippan_report_id = models.CharField(max_length=10, primary_key=True)

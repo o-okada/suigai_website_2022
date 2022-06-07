@@ -16,9 +16,22 @@
 <!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
+    
+    <!-- BEGIN container-fluid mb-3 -->
+    <div class="container-fluid mb-3">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+                <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+            </div>
+            <div class="col d-flex justify-content-end align-items-end">
+                <a href="{% url 'P0100Login:index_view' %}">ログアウト</a><br>
+            </div>
+        </div>
+    </div>
+    <!-- END container-fluid mb-3 -->
     
     <!-- BEGIN container text-center mb-3 -->
     <div class="container text-center mb-3">
