@@ -1,0 +1,199 @@
+psql -U frics -d suigai_web -h localhost
+
+CREATE VIEW ippan_view AS 
+SELECT 
+    SUB1.ippan_id AS ippan_id, 
+    SUB1.ippan_name AS ippan_name, 
+    SUB1.suigai_id AS suigai_id, 
+    SUB1.building_code AS building_code, 
+    SUB1.building_name AS building_name, 
+    SUB1.underground_code AS underground_code, 
+    SUB1.underground_name AS underground_name, 
+    SUB1.flood_sediment_code AS flood_sediment_code, 
+    SUB1.flood_sediment_name AS flood_sediment_name, 
+    SUB1.building_lv00 AS building_lv00, 
+    SUB1.building_lv01_49 AS building_lv01_49, 
+    SUB1.building_lv50_99 AS building_lv50_99, 
+    SUB1.building_lv100 AS building_lv100, 
+    SUB1.building_half AS building_half, 
+    SUB1.building_full AS building_full, 
+    SUB1.total_building AS total_building, 
+    SUB1.floor_area AS floor_area, 
+    SUB1.family AS family, 
+    SUB1.office AS office, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_lv00 / SUB1.total_building) END AS floor_area_lv00, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_lv01_49 / SUB1.total_building) END AS floor_area_lv01_49, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_lv50_99 / SUB1.total_building) END AS floor_area_lv01_99, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_lv100 / SUB1.total_building) END AS floor_area_lv100, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_half / SUB1.total_building) END AS floor_area_half, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.floor_area * SUB1.building_full / SUB1.total_building) END AS floor_area_full, 
+    SUB1.total_floor_area AS total_floor_area, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_lv00 / SUB1.total_building) END AS family_lv00, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_lv01_49 / SUB1.total_building) END AS family_lv01_49, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_lv50_99 / SUB1.total_building) END AS family_lv01_99, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_lv100 / SUB1.total_building) END AS family_lv100, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_half / SUB1.total_building) END AS family_half, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.family * SUB1.building_full / SUB1.total_building) END AS family_full, 
+    SUB1.total_family AS total_family, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_lv00 / SUB1.total_building) END AS office_lv00, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_lv01_49 / SUB1.total_building) END AS office_lv01_49, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_lv50_99 / SUB1.total_building) END AS office_lv50_99, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_lv100 / SUB1.total_building) END AS office_lv100, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_half / SUB1.total_building) END AS office_half, 
+    CASE WHEN (SUB1.total_building) <= 0 THEN NULL ELSE (SUB1.office * SUB1.building_full / SUB1.total_building) END AS office_full, 
+    SUB1.total_office AS total_office, 
+    SUB1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
+    SUB1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
+    SUB1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
+    SUB1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
+    SUB1.farmer_fisher_full AS farmer_fisher_full, 
+    SUB1.total_farmer_fisher AS total_farmer_fisher, 
+    SUB1.employee_lv00 AS employee_lv00, 
+    SUB1.employee_lv01_49 AS employee_lv01_49, 
+    SUB1.employee_lv50_99 AS employee_lv50_99, 
+    SUB1.employee_lv100 AS employee_lv100, 
+    SUB1.employee_full AS employee_full, 
+    SUB1.total_employee AS total_employee, 
+    SUB1.industry_code AS industry_code, 
+    SUB1.industry_name AS industry_name, 
+    SUB1.usage_code AS usage_code, 
+    SUB1.usage_name AS usage_name, 
+    SUB1.house_damage_lv00 AS house_damage_lv00, 
+    SUB1.house_damage_lv00_50 AS house_damage_lv00_50, 
+    SUB1.house_damage_lv50_100 AS house_damage_lv50_100, 
+    SUB1.house_damage_lv100_200 AS house_damage_lv100_200, 
+    SUB1.house_damage_lv200_300 AS house_damage_lv200_300, 
+    SUB1.house_damage_lv300 AS house_damage_lv300, 
+    SUB1.household_damage_lv00 AS household_damage_lv00, 
+    SUB1.household_damage_lv00_50 AS household_damage_lv00_50, 
+    SUB1.household_damage_lv50_100 AS household_damage_lv50_100, 
+    SUB1.household_damage_lv100_200 AS household_damage_lv100_200, 
+    SUB1.household_damage_lv200_300 AS household_damage_lv200_300, 
+    SUB1.household_damage_lv300 AS household_damage_lv300, 
+    SUB1.car_damage_lv00 AS car_damage_lv00, 
+    SUB1.car_damage_lv00_50 AS car_damage_lv00_50, 
+    SUB1.car_damage_lv50_100 AS car_damage_lv50_100, 
+    SUB1.car_damage_lv100_200 AS car_damage_lv100_200, 
+    SUB1.car_damage_lv200_300 AS car_damage_lv200_300, 
+    SUB1.car_damage_lv300 AS car_damage_lv300, 
+    SUB1.house_cost_alt_lv00 AS house_cost_alt_lv00, 
+    SUB1.house_cost_alt_lv00_50 AS house_cost_alt_lv00_50, 
+    SUB1.house_cost_alt_lv50_100 AS house_cost_alt_lv50_100, 
+    SUB1.house_cost_alt_lv100_200 AS house_cost_alt_lv100_200, 
+    SUB1.house_cost_alt_lv200_300 AS house_cost_alt_lv200_300, 
+    SUB1.house_cost_alt_lv300 AS house_cost_alt_lv300 
+FROM 
+(
+    SELECT 
+        IP1.ippan_id AS ippan_id, 
+        IP1.ippan_name AS ippan_name, 
+        IP1.suigai_id AS suigai_id, 
+        IP1.building_code AS building_code, 
+        BD1.building_name AS building_name, 
+        IP1.underground_code AS underground_code, 
+        UD1.underground_name AS underground_name, 
+        IP1.flood_sediment_code AS flood_sediment_code, 
+        FL1.flood_sediment_name AS flood_sediment_name, 
+        IP1.building_lv00 AS building_lv00, 
+        IP1.building_lv01_49 AS building_lv01_49, 
+        IP1.building_lv50_99 AS building_lv50_99, 
+        IP1.building_lv100 AS building_lv100, 
+        IP1.building_half AS building_half, 
+        IP1.building_full AS building_full, 
+        (IP1.building_lv00+IP1.building_lv01_49+IP1.building_lv50_99+IP1.building_lv100+IP1.building_half+IP1.building_full) AS total_building, 
+        IP1.floor_area AS floor_area, 
+        IP1.family AS family, 
+        IP1.office AS office, 
+        IP1.floor_area AS total_floor_area, 
+        IP1.family AS total_family, 
+        IP1.office AS total_office, 
+        IP1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
+        IP1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
+        IP1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
+        IP1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
+        IP1.farmer_fisher_full AS farmer_fisher_full, 
+        (IP1.farmer_fisher_lv00+IP1.farmer_fisher_lv01_49+IP1.farmer_fisher_lv50_99+IP1.farmer_fisher_lv100+IP1.farmer_fisher_full) AS total_farmer_fisher, 
+        IP1.employee_lv00 AS employee_lv00, 
+        IP1.employee_lv01_49 AS employee_lv01_49, 
+        IP1.employee_lv50_99 AS employee_lv50_99, 
+        IP1.employee_lv100 AS employee_lv100, 
+        IP1.employee_full AS employee_full, 
+        (IP1.employee_lv00+IP1.employee_lv01_49+IP1.employee_lv50_99+IP1.employee_lv100+IP1.employee_full) AS total_employee, 
+        IP1.industry_code AS industry_code, 
+        IN1.industry_name AS industry_name, 
+        IP1.usage_code AS usage_code, 
+        US1.usage_name AS usage_name, 
+        CASE 
+        WHEN IP1.flood_sediment_code = '1' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.fl_gr1_lv00 
+            WHEN SU1.gradient_code = '2' THEN HD1.fl_gr2_lv00 
+            WHEN SU1.gradient_code = '3' THEN HD1.fl_gr3_lv00 
+            END 
+        WHEN IP1.flood_sediment_code = '2' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.sd_gr1_lv00 
+            WHEN SU1.gradient_code = '2' THEN HD1.sd_gr2_lv00 
+            WHEN SU1.gradient_code = '3' THEN HD1.sd_gr3_lv00 
+            END 
+        END AS house_damage_lv00, 
+        CASE 
+        WHEN IP1.flood_sediment_code = '1' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.fl_gr1_lv00_50 
+            WHEN SU1.gradient_code = '2' THEN HD1.fl_gr2_lv00_50 
+            WHEN SU1.gradient_code = '3' THEN HD1.fl_gr3_lv00_50 
+            END 
+        WHEN IP1.flood_sediment_code = '2' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.sd_gr1_lv00_50 
+            WHEN SU1.gradient_code = '2' THEN HD1.sd_gr2_lv00_50 
+            WHEN SU1.gradient_code = '3' THEN HD1.sd_gr3_lv00_50 
+        END AS house_damage_lv00_50, 
+        CASE 
+        WHEN IP1.flood_sediment_code = '1' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.fl_gr1_lv50_100 
+            WHEN SU1.gradient_code = '2' THEN HD1.fl_gr2_lv50_100 
+            WHEN SU1.gradient_code = '3' THEN HD1.fl_gr3_lv50_100 
+        WHEN IP1.flood_sediment_code = '2' THEN 
+            CASE 
+            WHEN SU1.gradient_code = '1' THEN HD1.sd_gr1_lv50_100 
+            WHEN SU1.gradient_code = '2' THEN HD1.sd_gr2_lv50_100 
+            WHEN SU1.gradient_code = '3' THEN HD1.sd_gr3_lv50_100 
+        END AS house_damage_lv50_100, 
+        HD1.fl_gr1_lv100_200 AS house_damage_lv100_200, 
+        HD1.fl_gr1_lv200_300 AS house_damage_lv200_300, 
+        HD1.fl_gr1_lv300 AS house_damage_lv300, 
+        
+        HH1.fl_lv00 AS household_damage_lv00, 
+        HH1.fl_lv00_50 AS household_damage_lv00_50, 
+        HH1.fl_lv50_100 AS household_damage_lv50_100, 
+        HH1.fl_lv100_200 AS household_damage_lv100_200, 
+        HH1.fl_lv200_300 AS household_damage_lv200_300, 
+        HH1.fl_lv300 AS household_damage_lv300, 
+        
+        CD1.fl_lv00 AS car_damage_lv00, 
+        CD1.fl_lv00_50 AS car_damage_lv00_50, 
+        CD1.fl_lv50_100 AS car_damage_lv50_100, 
+        CD1.fl_lv100_200 AS car_damage_lv100_200, 
+        CD1.fl_lv200_300 AS car_damage_lv200_300, 
+        CD1.fl_lv300 AS car_damage_lv300, 
+        
+        HC1.alt_lv00 AS house_cost_alt_lv00, 
+        HC1.alt_lv00_50 AS house_cost_alt_lv00_50, 
+        HC1.alt_lv50_100 AS house_cost_alt_lv50_100, 
+        HC1.alt_lv100_200 AS house_cost_alt_lv100_200, 
+        HC1.alt_lv200_300 AS house_cost_alt_lv200_300, 
+        HC1.alt_lv300 AS house_cost_alt_lv300 
+    FROM ippan IP1 
+    LEFT JOIN BUILDING BD1 ON IP1.building_code = BD1.building_code 
+    LEFT JOIN UNDERGROUND UD1 ON IP1.underground_code = UD1.underground_code 
+    LEFT JOIN FLOOD_SEDIMENT FL1 ON IP1.flood_sediment_code = FL1.flood_sediment_code 
+    LEFT JOIN INDUSTRY IN1 ON IP1.industry_code = IN1.industry_code 
+    LEFT JOIN USAGE US1 ON IP1.usage_code = US1.usage_code 
+    LEFT JOIN SUIGAI SU1 ON IP1.suigai_id = SU1.suigai_id, 
+    house_damage HD1, household_damage HH1, car_damage CD1, house_cost HC1 
+    ORDER BY CAST(IP1.IPPAN_ID AS INTEGER)
+) SUB1 
+;
