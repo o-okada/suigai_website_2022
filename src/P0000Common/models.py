@@ -1136,20 +1136,20 @@ class IPPAN_SUMMARY(models.Model):
     car_summary_full = models.FloatField(null=True)                            ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
 
     ### 家庭応急対策費_代替活動費(集計DB) 
-    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_alt_summary_lv01_49 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_alt_summary_lv50_99 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_alt_summary_lv100 = models.FloatField(null=True)                     ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_alt_summary_half = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_alt_summary_full = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_lv01_49 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_lv50_99 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_lv100 = models.FloatField(null=True)                     ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_half = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_full = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
 
     ### 家庭応急対策費_清掃費(集計DB) 
-    house_clean_summary_lv00 = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv01_49 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv50_99 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv100 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_half = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_full = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×代替活動費）+（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv00 = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv01_49 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv50_99 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv100 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_half = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_full = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
 
     ### 事業所被害額_償却資産被害額(集計DB) 
     office_dep_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
@@ -1168,36 +1168,52 @@ class IPPAN_SUMMARY(models.Model):
     office_inv_summary_full = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
     
     ### 事業所営業損失額(集計DB) 
-    office_ope_summary_lv00 = models.FloatField(null=True)                     ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    office_ope_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    office_ope_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    office_ope_summary_lv100 = models.FloatField(null=True)                    ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### office_ope_summary_half = models.FloatField(null=True)                 ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    office_ope_summary_full = models.FloatField(null=True)                     ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_summary_lv00 = models.FloatField(null=True)                 ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_summary_lv01_49 = models.FloatField(null=True)              ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_summary_lv50_99 = models.FloatField(null=True)              ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_summary_lv100 = models.FloatField(null=True)                ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### ### office_ope_summary_half = models.FloatField(null=True)             ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    ### office_ope_summary_full = models.FloatField(null=True)                 ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
+    
+    ### 事業所被害額_営業停止に伴う損失額(集計DB) 
+    office_sus_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    ### office_sus_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+
+    ### 事業所被害額_営業停滞に伴う損失額(集計DB) 
+    office_stg_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    ### office_stg_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
 
     ### 農漁家被害額_償却資産被害額(集計DB)
-    farmer_fisher_dep_summary_lv00 = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
-    farmer_fisher_dep_summary_lv01_49 = models.FloatField(null=True)           ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
-    farmer_fisher_dep_summary_lv50_99 = models.FloatField(null=True)           ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
-    farmer_fisher_dep_summary_lv100 = models.FloatField(null=True)             ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
-    ### farmer_fisher_dep_summary_half = models.FloatField(null=True)          ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
-    farmer_fisher_dep_summary_full = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_summary_lv00 = models.FloatField(null=True)              ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_summary_lv01_49 = models.FloatField(null=True)           ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_summary_lv50_99 = models.FloatField(null=True)           ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_summary_lv100 = models.FloatField(null=True)             ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    ### farmer_fisher_dep_summary_half = models.FloatField(null=True)          ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
+    farmer_fisher_dep_summary_full = models.FloatField(null=True)              ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
 
     ### 農漁家被害額_在庫資産被害額(集計DB) 
-    farmer_fisher_inv_summary_lv00 = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
-    farmer_fisher_inv_summary_lv01_49 = models.FloatField(null=True)           ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
-    farmer_fisher_inv_summary_lv50_99 = models.FloatField(null=True)           ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
-    farmer_fisher_inv_summary_lv100 = models.FloatField(null=True)             ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
-    ### farmer_fisher_inv_summary_half = models.FloatField(null=True)          ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
-    farmer_fisher_inv_summary_full = models.FloatField(null=True)              ### 農漁家被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_summary_lv00 = models.FloatField(null=True)              ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_summary_lv01_49 = models.FloatField(null=True)           ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_summary_lv50_99 = models.FloatField(null=True)           ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_summary_lv100 = models.FloatField(null=True)             ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    ### farmer_fisher_inv_summary_half = models.FloatField(null=True)          ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
+    farmer_fisher_inv_summary_full = models.FloatField(null=True)              ### 農漁家被害額_在庫資産被害額（農漁家戸数×農漁家の在庫資産×浸水または土砂による被害率）
 
     ### 事業所応急対策費_代替活動費(集計DB) 
-    office_alt_summary_lv00 = models.FloatField(null=True)                     ### 事業所応急対策費（事業所数×代替活動費）
-    office_alt_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所応急対策費（事業所数×代替活動費）
-    office_alt_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所応急対策費（事業所数×代替活動費）
-    office_alt_summary_lv100 = models.FloatField(null=True)                    ### 事業所応急対策費（事業所数×代替活動費）
-    ### office_alt_summary_half = models.FloatField(null=True)                 ### 事業所応急対策費（事業所数×代替活動費）
-    office_alt_summary_full = models.FloatField(null=True)                     ### 事業所応急対策費（事業所数×代替活動費）
+    office_alt_summary_lv00 = models.FloatField(null=True)                     ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
+    office_alt_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
+    office_alt_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
+    office_alt_summary_lv100 = models.FloatField(null=True)                    ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
+    ### office_alt_summary_half = models.FloatField(null=True)                 ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
+    office_alt_summary_full = models.FloatField(null=True)                     ### 事業所応急対策費_代替活動費（事業所数×代替活動費）
     
     class Meta:
         db_table = 'ippan_summary'

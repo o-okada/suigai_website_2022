@@ -142,9 +142,9 @@ def category_view(request, category_code):
         office_asset_list = OFFICE_ASSET.objects.raw("""
             SELECT 
                 OA1.office_asset_code AS office_asset_code, 
-                OA1.depreciable_asset AS depreciable_asset, 
-                OA1.inventory_asset AS inventory_asset, 
-                OA1.value_added AS value_added, 
+                OA1.office_dep_asset AS office_dep_asset, 
+                OA1.office_inv_asset AS office_inv_asset, 
+                OA1.office_va_asset AS office_va_asset, 
                 IN1.industry_name AS industry_name 
             FROM OFFICE_ASSET OA1 
             LEFT JOIN INDUSTRY IN1 ON OA1.industry_code = IN1.industry_code 
@@ -468,15 +468,25 @@ def category_view(request, category_code):
                 -- CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv200_300) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_half / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv200_300)) END AS employee_half_reverse_office_inv_summary, 
                 CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv300) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_full / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv300)) END AS employee_full_reverse_office_inv_summary, 
 
-                -- 事業所被害額_営業損失額(集計DB) 
-                SUB1.office_ope_summary_lv00 AS office_ope_summary_lv00, 
-                SUB1.office_ope_summary_lv01_49 AS office_ope_summary_lv01_49, 
-                SUB1.office_ope_summary_lv50_99 AS office_ope_summary_lv50_99, 
-                SUB1.office_ope_summary_lv100 AS office_ope_summary_lv100, 
-                -- SUB1.office_ope_summary_half AS office_ope_summary_half, 
-                SUB1.office_ope_summary_full AS office_ope_summary_full, 
+                -- 事業所被害額_営業停止に伴う損失額(集計DB) 
+                SUB1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
+                SUB1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
+                SUB1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
+                SUB1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
+                -- SUB1.office_sus_summary_half AS office_sus_summary_half, 
+                SUB1.office_sus_summary_full AS office_sus_summary_full, 
 
-                -- 事業所被害額_営業損失額(集計DB)から逆計算により被災従業者数を求めた結果 
+                -- 事業所被害額_営業停止に伴う損失額(集計DB)から逆計算により被災従業者数を求めた結果 
+
+                -- 事業所被害額_営業停滞に伴う損失額(集計DB) 
+                SUB1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
+                SUB1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
+                SUB1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
+                SUB1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
+                -- SUB1.office_stg_summary_half AS office_stg_summary_half, 
+                SUB1.office_stg_summary_full AS office_stg_summary_full, 
+
+                -- 事業所被害額_営業停滞に伴う損失額(集計DB)から逆計算により被災従業者数を求めた結果 
 
                 -- 農漁家被害額_償却資産被害額(集計DB) 
                 SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
@@ -507,6 +517,7 @@ def category_view(request, category_code):
                 SUB1.office_alt_summary_full AS office_alt_summary_full,
 
                 -- 事業所応急対策費_代替活動費(集計DB)から逆計算により被災事業所数を求めた結果 
+
 
 
 
@@ -745,13 +756,21 @@ def category_view(request, category_code):
                     -- IS1.office_inv_summary_half AS office_inv_summary_half, 
                     IS1.office_inv_summary_full AS office_inv_summary_full, 
     
-                    -- 事業所営業損失額(集計DB) 
-                    IS1.office_ope_summary_lv00 AS office_ope_summary_lv00, 
-                    IS1.office_ope_summary_lv01_49 AS office_ope_summary_lv01_49, 
-                    IS1.office_ope_summary_lv50_99 AS office_ope_summary_lv50_99, 
-                    IS1.office_ope_summary_lv100 AS office_ope_summary_lv100, 
-                    -- IS1.office_ope_summary_half AS office_ope_summary_half, 
-                    IS1.office_ope_summary_full AS office_ope_summary_full, 
+                    -- 事業所被害額_営業停止に伴う損失額(集計DB) 
+                    IS1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
+                    IS1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
+                    IS1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
+                    IS1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
+                    -- IS1.office_sus_summary_half AS office_sus_summary_half, 
+                    IS1.office_sus_summary_full AS office_sus_summary_full, 
+    
+                    -- 事業所被害額_営業停滞に伴う損失額(集計DB) 
+                    IS1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
+                    IS1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
+                    IS1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
+                    IS1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
+                    -- IS1.office_stg_summary_half AS office_stg_summary_half, 
+                    IS1.office_stg_summary_full AS office_stg_summary_full, 
     
                     -- 農漁家被害額_償却資産被害額(集計DB) 
                     IS1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
@@ -776,6 +795,8 @@ def category_view(request, category_code):
                     IS1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
                     -- IS1.office_alt_summary_half AS office_alt_summary_half, 
                     IS1.office_alt_summary_full AS office_alt_summary_full, 
+
+
                     
                     -- 県別家屋評価額(マスタDB) 
                     HA1.house_asset AS house_asset, 

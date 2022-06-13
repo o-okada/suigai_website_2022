@@ -135,29 +135,41 @@
 
                         <!-- 事業所営業損失額 -->
                         {% if category_code == "12" %}
-                        <option value="12" selected>事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12</option>
+                        <option value="12" selected>事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12</option>
                         {% else %}
-                        <option value="12">事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12</option>
+                        <option value="12">事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12</option>
+                        {% endif %}
+
+                        {% if category_code == "13" %}
+                        <option value="13" selected>事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13</option>
+                        {% else %}
+                        <option value="13">事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13</option>
                         {% endif %}
 
                         <!-- 農漁家被害額 -->
-                        {% if category_code == "13" %}
-                        <option value="13" selected>農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13</option>
-                        {% else %}
-                        <option value="13">農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13</option>
-                        {% endif %}
-
-                        <!-- 事業所応急対策費 -->
                         {% if category_code == "14" %}
-                        <option value="14" selected>事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14</option>
+                        <option value="14" selected>農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14</option>
                         {% else %}
-                        <option value="14">事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14</option>
+                        <option value="14">農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14</option>
                         {% endif %}
 
                         {% if category_code == "15" %}
-                        <option value="15" selected>事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15</option>
+                        <option value="15" selected>農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15</option>
                         {% else %}
-                        <option value="15">事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15</option>
+                        <option value="15">農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15</option>
+                        {% endif %}
+
+                        <!-- 事業所応急対策費 -->
+                        {% if category_code == "16" %}
+                        <option value="16" selected>事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16</option>
+                        {% else %}
+                        <option value="16">事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16</option>
+                        {% endif %}
+
+                        {% if category_code == "17" %}
+                        <option value="17" selected>事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17</option>
+                        {% else %}
+                        <option value="17">事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17</option>
                         {% endif %}
                         
                     </select>
@@ -2108,7 +2120,7 @@
                                     {% for office_asset in office_asset_list %}
                                     <tr>
                                         <td>{{ office_asset.industry_name }}:{{ office_asset.industry_code }}</td>
-                                        <td>{{ office_asset.depreciable_asset }}</td>
+                                        <td>{{ office_asset.office_dep_asset }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -2333,7 +2345,7 @@
                                     {% for office_asset in office_asset_list %}
                                     <tr>
                                         <td>{{ office_asset.industry_name }}:{{ office_asset.industry_code }}</td>
-                                        <td>{{ office_asset.inventory_asset }}</td>
+                                        <td>{{ office_asset.office_inv_asset }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -2367,18 +2379,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>浸水:1</td><td>床下</td><td>{{ office_damage.dep_fl_lv00 }}</td><td>{{ office_damage.inv_fl_lv00 }}</td></tr>
-                                    <tr><td>浸水:1</td><td>0から50cm未満</td><td>{{ office_damage.dep_fl_lv00_50 }}</td><td>{{ office_damage.inv_fl_lv00_50 }}</td></tr>
-                                    <tr><td>浸水:1</td><td>50から100cm未満</td><td>{{ office_damage.dep_fl_lv50_100 }}</td><td>{{ office_damage.inv_fl_lv50_100 }}</td></tr>
-                                    <tr><td>浸水:1</td><td>100から200cm未満</td><td>{{ office_damage.dep_fl_lv100_200 }}</td><td>{{ office_damage.inv_fl_lv100_200 }}</td></tr>
-                                    <tr><td>浸水:1</td><td>200から300cm未満</td><td>{{ office_damage.dep_fl_lv200_300 }}</td><td>{{ office_damage.inv_fl_lv200_300 }}</td></tr>
-                                    <tr><td>浸水:1</td><td>300cm以上</td><td>{{ office_damage.dep_fl_lv300 }}</td><td>{{ office_damage.inv_fl_lv300 }}</td></tr>
-                                    <tr><td>土砂:2</td><td>床下</td><td>{{ office_damage.dep_sd_lv00 }}</td><td>{{ office_damage.inv_sd_lv00 }}</td></tr>
-                                    <tr><td>土砂:2</td><td>0から50cm未満</td><td>{{ office_damage.dep_sd_lv00_50 }}</td><td>{{ office_damage.inv_sd_lv00_50 }}</td></tr>
-                                    <tr><td>土砂:2</td><td>50から100cm未満</td><td>{{ office_damage.dep_sd_lv50_100 }}</td><td>{{ office_damage.inv_sd_lv50_100 }}</td></tr>
-                                    <tr><td>土砂:2</td><td>100から200cm未満</td><td>{{ office_damage.dep_sd_lv100_200 }}</td><td>{{ office_damage.inv_sd_lv100_200 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>床下</td><td>{{ office_damage.inv_fl_lv00 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>0から50cm未満</td><td>{{ office_damage.inv_fl_lv00_50 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>50から100cm未満</td><td>{{ office_damage.inv_fl_lv50_100 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>100から200cm未満</td><td>{{ office_damage.inv_fl_lv100_200 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>200から300cm未満</td><td>{{ office_damage.inv_fl_lv200_300 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>300cm以上</td><td>{{ office_damage.inv_fl_lv300 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>床下</td><td>{{ office_damage.inv_sd_lv00 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>0から50cm未満</td><td>{{ office_damage.inv_sd_lv00_50 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>50から100cm未満</td><td>{{ office_damage.inv_sd_lv50_100 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>100から200cm未満</td><td>{{ office_damage.inv_sd_lv100_200 }}</td></tr>
                                     <tr><td>土砂:2</td><td>200から300cm未満</td><td>{{ office_damage.dep_sd_lv200_300 }}</td><td>{{ office_damage.inv_sd_lv200_300 }}</td></tr>
-                                    <tr><td>土砂:2</td><td>300cm以上</td><td>{{ office_damage.dep_sd_lv300 }}</td><td>{{ office_damage.dep_sd_lv300 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>300cm以上</td><td>{{ office_damage.dep_sd_lv300 }}</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -2520,7 +2532,6 @@
             </div>
         </div>
         <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 当該浸水深の事業所従業者数（逆計算） -->
-        
     </div>
     {% endif %}
     <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11 -->
@@ -2536,10 +2547,10 @@
 
 
 
-    <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12 -->
+    <!-- BEGIN 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12 -->
     {% if category_code == "12" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
+        <!-- BEGIN 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -2563,7 +2574,7 @@
                                     {% for office_asset in office_asset_list %}
                                     <tr>
                                         <td>{{ office_asset.industry_name }}:{{ office_asset.industry_code }}</td>
-                                        <td>{{ office_asset.value_added }}</td>
+                                        <td>{{ office_asset.office_va_asset }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -2573,9 +2584,9 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
+        <!-- END 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
         
-        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+        <!-- BEGIN 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
         <div class="col-12 col-xl-8">
             <div class="accordion" id="accordion_two">
                 <div class="accordion-item">
@@ -2610,11 +2621,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+        <!-- END 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- BEGIN 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
@@ -2636,7 +2647,6 @@
                                         <th class="text-center">建物区分</th>
                                         <th class="text-center">地上・地下被害の区分</th>
                                         <th class="text-center">浸水土砂被害の区分</th>
-                                        
                                         <th class="text-center">浸水深</th>
                                         <th class="text-center">当該浸水深の事業所従業者数（逆計算）</th>
                                         <th class="text-center">当該浸水深の事業所従業者数（入力DB）</th>
@@ -2719,11 +2729,10 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
-        
+        <!-- END 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
     </div>
     {% endif %}
-    <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12 -->
+    <!-- END 事業所被害額_営業停止に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停止に伴う損失額の整合性チェック: 12 -->
 
 
 
@@ -2731,16 +2740,222 @@
 
 
 
-
-
-
-
-
-
-    <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13 -->
+    <!-- BEGIN 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13 -->
     {% if category_code == "13" %}
     <div class="row mb-3">
-        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
+        <!-- BEGIN 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 付加価値額(マスタDB) -->
+        <div class="col-12 col-xl-4 mb-4 mb-lg-0">
+            <div class="accordion" id="accordion_one">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_one">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_one" aria-expanded="true" aria-controls="collapse_one">
+                        付加価値額
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_one" aria-labelledby="heading_one">
+                    <div class="accordion-body">
+                        <div class="table-responsive overflow-auto" style="max-height: 200px;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">事業所の産業区分</th>
+                                        <th class="text-center">付加価値額</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for office_asset in office_asset_list %}
+                                    <tr>
+                                        <td>{{ office_asset.industry_name }}:{{ office_asset.industry_code }}</td>
+                                        <td>{{ office_asset.office_va_asset }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 付加価値額(マスタDB) -->
+        
+        <!-- BEGIN 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+        <div class="col-12 col-xl-8">
+            <div class="accordion" id="accordion_two">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_two">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_two" aria-expanded="true" aria-controls="collapse_two">
+                        営業停止日数、営業停滞日数
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_two" aria-labelledby="heading_two">
+                    <div class="accordion-body">
+                        <div class="table-responsive overflow-auto" style="max-height: 200px;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">浸水深</th>
+                                        <th class="text-center">営業停止日数</th>
+                                        <th class="text-center">営業停滞日数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>床下</td><td>{{ office_cost.suspend_lv00 }}</td><td>{{ office_cost.stagnate_lv00 }}</td></tr>
+                                    <tr><td>0から50cm未満</td><td>{{ office_cost.suspend_lv00_50 }}</td><td>{{ office_cost.stagnate_lv00_50 }}</td></tr>
+                                    <tr><td>50から100cm未満</td><td>{{ office_cost.suspend_lv50_100 }}</td><td>{{ office_cost.stagnate_lv50_100 }}</td></tr>
+                                    <tr><td>100から200cm未満</td><td>{{ office_cost.suspend_lv100_200 }}</td><td>{{ office_cost.stagnate_lv100_200 }}</td></tr>
+                                    <tr><td>200から300cm未満</td><td>{{ office_cost.suspend_lv200_300 }}</td><td>{{ office_cost.stagnate_lv200_300 }}</td></tr>
+                                    <tr><td>300cm以上</td><td>{{ office_cost.suspend_lv300 }}</td><td>{{ office_cost.stagnate_lv300 }}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+    </div>
+    
+    <div class="row mb-3">
+        <!-- BEGIN 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 当該浸水深の事業所従業者数（逆計算） -->
+        <div class="col-12 col-xl-12">
+            <div class="accordion" id="accordion_three">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="collapse_three">
+                        当該浸水深の事業所従業者数(逆計算) = 当該浸水深の事業所営業損失額(集計DB) &divide; ((浸水深ごとの営業停止日数(マスタDB) + 浸水深ごとの営業停滞日数(マスタDB) &divide; 2) &times; 事業所の産業区分ごとの付加価値額(マスタDB))
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_three" aria-labbledby="heading_three">
+                    <div class="accordion-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">水害ID</th>
+                                        <th class="text-center">調査票ID</th>
+                                        <th class="text-center">町丁名・大字名</th>
+                                        <th class="text-center">建物区分</th>
+                                        <th class="text-center">地上・地下被害の区分</th>
+                                        <th class="text-center">浸水土砂被害の区分</th>
+                                        <th class="text-center">浸水深</th>
+                                        <th class="text-center">当該浸水深の事業所従業者数（逆計算）</th>
+                                        <th class="text-center">当該浸水深の事業所従業者数（入力DB）</th>
+                                        <th class="text-center">整合性検証結果</th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ippan in ippan_list %}
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>床下</td>
+                                        <td>15.0 = 150.0 &divide; ((5.0 + 10.0 &divide; 2.0) &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>01から49cm</td>
+                                        <td>15.0 = 150.0 &divide; ((5.0 + 10.0 &divide; 2.0) &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>50から99cm</td>
+                                        <td>15.0 = 150.0 &divide; ((5.0 + 10.0 &divide; 2.0) &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>1m以上・半壊</td>
+                                        <td>15.0 = 150.0 &divide; ((5.0 + 10.0 &divide; 2.0) &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>全壊・流失</td>
+                                        <td>15.0 = 150.0 &divide; ((5.0 + 10.0 &divide; 2.0) &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13: 当該浸水深の事業所従業者数（逆計算） -->
+    </div>
+    {% endif %}
+    <!-- END 事業所被害額_営業停滞に伴う損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業停滞に伴う損失額の整合性チェック: 13 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14 -->
+    {% if category_code == "14" %}
+    <div class="row mb-3">
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -2772,9 +2987,9 @@
                 </div>
             </div>
         </div>
-        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
         
-        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 農漁家被害率(マスタDB) -->
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 農漁家被害率(マスタDB) -->
         <div class="col-12 col-xl-8">
             <div class="accordion" id="accordion_two">
                 <div class="accordion-item">
@@ -2816,11 +3031,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 農漁家被害率(マスタDB) -->
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 農漁家被害率(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 当該浸水深の農漁家戸数（逆計算） -->
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 当該浸水深の農漁家戸数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
@@ -2925,11 +3140,10 @@
                 </div>
             </div>
         </div>
-        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13: 当該浸水深の農漁家戸数（逆計算） -->
-        
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14: 当該浸水深の農漁家戸数（逆計算） -->
     </div>
     {% endif %}
-    <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 13 -->
+    <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 14 -->
 
 
 
@@ -2940,10 +3154,211 @@
 
 
 
-    <!-- BEGIN 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14 -->
-    {% if category_code == "14" %}
+
+    <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15 -->
+    {% if category_code == "15" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14: 当該浸水深の被害建物棟数（逆計算） -->
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
+        <div class="col-12 col-xl-4 mb-4 mb-lg-0">
+            <div class="accordion" id="accordion_one">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_one">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_one" aria-expanded="true" aria-controls="collapse_one">
+                        農漁家償却資産額、農漁家在庫資産額
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_one" aria-labelledby="heading_one">
+                    <div class="accordion-body">
+                        <div class="table-responsive overflow-auto" style="max-height: 200px;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">農漁家償却資産額</th>
+                                        <th class="text-center">農漁家在庫資産額</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ farmer_fisher_damage.depreciable_asset }}</td>
+                                        <td>{{ farmer_fisher_damage.inventory_asset }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 農漁家償却資産額(マスタDB)、農漁家在庫資産額(マスタDB) -->
+        
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 農漁家被害率(マスタDB) -->
+        <div class="col-12 col-xl-8">
+            <div class="accordion" id="accordion_two">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_two">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_two" aria-expanded="true" aria-controls="collapse_two">
+                        農漁家被害率
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_two" aria-labelledby="heading_two">
+                    <div class="accordion-body">
+                        <div class="table-responsive overflow-auto" style="max-height: 200px;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">浸水土砂被害の区分</th>
+                                        <th class="text-center">浸水深</th>
+                                        <th class="text-center">償却資産額被害率</th>
+                                        <th class="text-center">在庫資産額被害率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>浸水:1</td><td>床下</td><td>{{ farmer_fisher_damage.dep_fl_lv00 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv00 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>0から50cm未満</td><td>{{ farmer_fisher_damage.dep_fl_lv00_50 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv00_50 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>50から100cm未満</td><td>{{ farmer_fisher_damage.dep_fl_lv50_100 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv50_100 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>100から200cm未満</td><td>{{ farmer_fisher_damage.dep_fl_lv100_200 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv100_200 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>200から300cm未満</td><td>{{ farmer_fisher_damage.dep_fl_lv200_300 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv200_300 }}</td></tr>
+                                    <tr><td>浸水:1</td><td>300cm以上</td><td>{{ farmer_fisher_damage.dep_fl_lv300 }}</td><td>{{ farmer_fisher_damage.inv_fl_lv300 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>床下</td><td>{{ farmer_fisher_damage.dep_sd_lv00 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv00 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>0から50cm未満</td><td>{{ farmer_fisher_damage.dep_sd_lv00_50 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv00_50 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>50から100cm未満</td><td>{{ farmer_fisher_damage.dep_sd_lv50_100 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv50_100 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>100から200cm未満</td><td>{{ farmer_fisher_damage.dep_sd_lv100_200 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv100_200 }}</td></tr>
+                                    <tr><td>土砂:2</td><td>200から300cm未満</td><td>{{ farmer_fisher_damage.dep_sd_lv200_300 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv200_300 }}</td></tr>
+                                    <tr><td>償却資産</td><td>土砂:2</td><td>300cm以上</td><td>{{ farmer_fisher_damage.dep_sd_lv300 }}</td><td>{{ farmer_fisher_damage.inv_sd_lv300 }}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 農漁家被害率(マスタDB) -->
+    </div>
+    
+    <div class="row mb-3">
+        <!-- BEGIN 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 当該浸水深の農漁家戸数（逆計算） -->
+        <div class="col-12 col-xl-12">
+            <div class="accordion" id="accordion_three">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="collapse_three">
+                        当該浸水深の農漁家戸数(逆計算) = 当該浸水深の農漁家被害額(集計DB) &divide; ((農漁家償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB)) + (農漁家在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)))
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-collapse collapse show" id="collapse_three" aria-labbledby="heading_three">
+                    <div class="accordion-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">水害ID</th>
+                                        <th class="text-center">調査票ID</th>
+                                        <th class="text-center">町丁名・大字名</th>
+                                        <th class="text-center">建物区分</th>
+                                        <th class="text-center">地上・地下被害の区分</th>
+                                        <th class="text-center">浸水土砂被害の区分</th>
+                                        
+                                        <th class="text-center">浸水深</th>
+                                        <th class="text-center">当該浸水深の農漁家戸数（逆計算）</th>
+                                        <th class="text-center">当該浸水深の農漁家戸数（入力DB）</th>
+                                        <th class="text-center">整合性検証結果</th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ippan in ippan_list %}
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>床下</td>
+                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>01から49cm</td>
+                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>50から99cm</td>
+                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>1m以上・半壊</td>
+                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ ippan.suigai_id }}</td>
+                                        <td>{{ ippan.ippan_id }}</td>
+                                        <td>{{ ippan.ippan_name }}</td>
+                                        <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
+                                        <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
+                                        <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
+                                        <td>全壊・流失</td>
+                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
+                                        <td>16.0</td>
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15: 当該浸水深の農漁家戸数（逆計算） -->
+    </div>
+    {% endif %}
+    <!-- END 農漁家被害額: 農漁家戸数の逆計算手法を用いた農漁家被害額の整合性チェック: 15 -->
+
+
+
+
+
+
+
+
+    <!-- BEGIN 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16 -->
+    {% if category_code == "16" %}
+    <div class="row mb-3">
+        <!-- BEGIN 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16: 当該浸水深の被害建物棟数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
@@ -3102,10 +3517,10 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14: 当該浸水深の被害建物棟数（逆計算） -->
+        <!-- END 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16: 当該浸水深の被害建物棟数（逆計算） -->
     </div>
     {% endif %}
-    <!-- END 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 14 -->
+    <!-- END 事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16 -->
     
     
 
@@ -3116,10 +3531,10 @@
 
 
 
-    <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15 -->
-    {% if category_code == "15" %}
+    <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17 -->
+    {% if category_code == "17" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15: 代替活動費(マスタDB) -->
+        <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17: 代替活動費(マスタDB) -->
         <div class="col-12 col-xl-12 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -3153,11 +3568,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15: 代替活動費(マスタDB) -->
+        <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17: 代替活動費(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15: 当該浸水深の被災事業所数（逆計算） -->
+        <!-- BEGIN 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17: 当該浸水深の被災事業所数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
@@ -3275,10 +3690,10 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15: 当該浸水深の被災事業所数（逆計算） -->
+        <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17: 当該浸水深の被災事業所数（逆計算） -->
     </div>
     {% endif %}
-    <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 15 -->
+    <!-- END 事業所応急対策費: 被災事業所数の逆計算手法を用いた事業所応急対策費の整合性チェック: 17 -->
 
 
     
