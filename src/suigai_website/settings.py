@@ -73,6 +73,9 @@ INSTALLED_APPS = [
     ### 'allauth',
     ### 'allauth.account',
     ### 'accounts.apps.AccountsConfig',
+    
+    ### See vector-ium.com/django-mathfilters/
+    ### 'mathfilters', 
 ]
 
 ### These items in your MIDDLEWARE setting:
