@@ -2081,10 +2081,10 @@
 
 
 
-    <!-- BEGIN 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10 -->
+    <!-- BEGIN 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10 -->
     {% if category_code == "10" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
+        <!-- BEGIN 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -2118,9 +2118,9 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
+        <!-- END 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
         
-        <!-- BEGIN 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 事業所_償却資産被害率(マスタDB) -->
+        <!-- BEGIN 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 事業所_償却資産被害率(マスタDB) -->
         <div class="col-12 col-xl-8">
             <div class="accordion" id="accordion_two">
                 <div class="accordion-item">
@@ -2138,7 +2138,7 @@
                                     <tr>
                                         <th class="text-center">浸水土砂被害の区分</th>
                                         <th class="text-center">浸水深</th>
-                                        <th class="text-center">償却資産額被害率</th>
+                                        <th class="text-center">償却資産被害率</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2161,17 +2161,17 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 事業所_償却資産被害率(マスタDB) -->
+        <!-- END 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 事業所_償却資産被害率(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- BEGIN 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 当該浸水深の事業所従業者数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="collapse_three">
-                        当該浸水深の事業所従業者数(逆計算) = 当該浸水深の事業所_償却資産額被害額(集計DB) &divide; (事業所の産業区分ごとの償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB))
+                        当該浸水深の事業所従業者数(逆計算) = 当該浸水深の事業所被害額_償却資産額被害額(集計DB) &divide; (事業所の産業区分ごとの償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB))
                         </button>
                     </h2>
                 </div>
@@ -2204,10 +2204,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>床下</td>
-                                        <td>{{ ippan.employee_lv00_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_lv00 }} &divide; ({{ ippan. }} &times; {{ ippan. }})</td>
+                                        <td>{{ ippan.employee_lv00_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_lv00 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv00 }})</td>
                                         <td>{{ ippan.employee_lv00 }}</td>
+                                        {% if ippan.employee_lv00_reverse_office_dep_summary == ippan.employee_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2217,10 +2222,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>01から49cm</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv01_49_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_lv01_49 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv00_50 }})</td>
+                                        <td>{{ ippan.employee_lv01_49 }}</td>
+                                        {% if ippan.employee_lv01_49_reverse_office_dep_summary == ippan.employee_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2230,10 +2240,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>50から99cm</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv50_99_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_lv50_99 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv50_100 }})</td>
+                                        <td>{{ ippan.employee_lv50_99 }}</td>
+                                        {% if ippan.employee_lv50_99_reverse_office_dep_summary == ippan.employee_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2243,10 +2258,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>1m以上・半壊</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv100_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_lv100 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv100_200 }})</td>
+                                        <td>{{ ippan.employee_lv100 }}</td>
+                                        {% if ippan.employee_lv100_reverse_office_dep_summary == ippan.employee_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2256,10 +2276,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>全壊・流失</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_full_reverse_office_dep_summary }} = {{ ippan.office_dep_summary_full }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv300 }})</td>
+                                        <td>{{ ippan.employee_full }}</td>
+                                        {% if ippan.employee_full_reverse_office_dep_summary == ippan.employee_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -2269,11 +2294,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- END 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10: 当該浸水深の事業所従業者数（逆計算） -->
         
     </div>
     {% endif %}
-    <!-- END 事業所_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所_償却資産被害額の整合性チェック: 10 -->
+    <!-- END 事業所被害額_償却資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_償却資産被害額の整合性チェック: 10 -->
 
 
 
@@ -2281,10 +2306,10 @@
 
 
 
-    <!-- BEGIN 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11 -->
+    <!-- BEGIN 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11 -->
     {% if category_code == "11" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
+        <!-- BEGIN 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -2301,7 +2326,6 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">事業所の産業区分</th>
-                                        <th class="text-center">償却資産額</th>
                                         <th class="text-center">在庫資産額</th>
                                     </tr>
                                 </thead>
@@ -2309,7 +2333,6 @@
                                     {% for office_asset in office_asset_list %}
                                     <tr>
                                         <td>{{ office_asset.industry_name }}:{{ office_asset.industry_code }}</td>
-                                        <td>{{ office_asset.depreciable_asset }}</td>
                                         <td>{{ office_asset.inventory_asset }}</td>
                                     </tr>
                                     {% endfor %}
@@ -2320,15 +2343,15 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
+        <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 償却資産額(マスタDB)、在庫資産額(マスタDB) -->
         
-        <!-- BEGIN 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 事業所被害率(マスタDB) -->
+        <!-- BEGIN 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 事業所被害率(マスタDB) -->
         <div class="col-12 col-xl-8">
             <div class="accordion" id="accordion_two">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading_two">
                         <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_two" aria-expanded="true" aria-controls="collapse_two">
-                        事業所被害率
+                        在庫資産被害率
                         </button>
                     </h2>
                 </div>
@@ -2340,8 +2363,7 @@
                                     <tr>
                                         <th class="text-center">浸水土砂被害の区分</th>
                                         <th class="text-center">浸水深</th>
-                                        <th class="text-center">償却資産額被害率</th>
-                                        <th class="text-center">在庫資産額被害率</th>
+                                        <th class="text-center">在庫資産被害率</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2364,17 +2386,17 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 事業所被害率(マスタDB) -->
+        <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 事業所被害率(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- BEGIN 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 当該浸水深の事業所従業者数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button btn-light" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="collapse_three">
-                        当該浸水深の事業所従業者数(逆計算) = 当該浸水深の事業所被害額(集計DB) &divide; ((事業所の産業区分ごとの償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB) + 事業所の産業区分ごとの在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)))
+                        当該浸水深の事業所従業者数(逆計算) = 当該浸水深の事業所被害額_在庫資産額被害額(集計DB) &divide; (事業所の産業区分ごとの在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB))
                         </button>
                     </h2>
                 </div>
@@ -2390,7 +2412,6 @@
                                         <th class="text-center">建物区分</th>
                                         <th class="text-center">地上・地下被害の区分</th>
                                         <th class="text-center">浸水土砂被害の区分</th>
-                                        
                                         <th class="text-center">浸水深</th>
                                         <th class="text-center">当該浸水深の事業所従業者数（逆計算）</th>
                                         <th class="text-center">当該浸水深の事業所従業者数（入力DB）</th>
@@ -2408,10 +2429,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>床下</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv00_reverse_office_inv_summary }} = {{ ippan.office_inv_summary_lv00 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv00 }})</td>
+                                        <td>{{ ippan.employee_lv00 }}</td>
+                                        {% if ippan.employee_lv00_reverse_office_inv_summary == ippan.employee_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2421,10 +2447,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>01から49cm</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv01_49_reverse_office_inv_summary }} = {{ ippan.office_inv_summary_lv01_49 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv00_50 }})</td>
+                                        <td>{{ ippan.employee_lv01_49 }}</td>
+                                        {% if ippan.employee_lv01_49_reverse_office_inv_summary == ippan.employee_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2434,10 +2465,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>50から99cm</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv50_99_reverse_office_inv_summary }} = {{ ippan.office_inv_summary_lv50_99 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv50_100 }})</td>
+                                        <td>{{ ippan.employee_lv50_99 }}</td>
+                                        {% if ippan.employee_lv50_99_reverse_inv_summary == ippan.employee_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2447,10 +2483,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>1m以上・半壊</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_lv100_reverse_office_inv_summary }} = {{ ippan.office_inv_summary_lv100 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv100_200 }})</td>
+                                        <td>{{ ippan.employee_lv100 }}</td>
+                                        {% if ippan.employee_lv100_reverse_office_inv_summary == ippan.employee_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td>{{ ippan.suigai_id }}</td>
@@ -2460,10 +2501,15 @@
                                         <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                         <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                         <td>全壊・流失</td>
-                                        <td>15.0 = 150.0 &divide; (5.0 &times; 1.0 + 5.0 &times; 1.0)</td>
-                                        <td>16.0</td>
+                                        <td>{{ ippan.employee_full_reverse_office_inv_summary }} = {{ ippan.office_inv_summary_full }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv300 }})</td>
+                                        <td>{{ ippan.employee_full }}</td>
+                                        {% if ippan.employee_full_reverse_office_inv_summary %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
                                         <td><label class="form-check-label" for="check_1">NG</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -2473,11 +2519,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11: 当該浸水深の事業所従業者数（逆計算） -->
         
     </div>
     {% endif %}
-    <!-- END 事業所_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所_在庫資産被害額の整合性チェック: 11 -->
+    <!-- END 事業所被害額_在庫資産被害額: 事業所従業者数の逆計算手法を用いた事業所被害額_在庫資産被害額の整合性チェック: 11 -->
 
 
 
@@ -2490,10 +2536,10 @@
 
 
 
-    <!-- BEGIN 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所事業所営業損失額の整合性チェック: 12 -->
+    <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12 -->
     {% if category_code == "12" %}
     <div class="row mb-3">
-        <!-- BEGIN 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所事業所営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
+        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="accordion" id="accordion_one">
                 <div class="accordion-item">
@@ -2527,9 +2573,9 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
+        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 付加価値額(マスタDB) -->
         
-        <!-- BEGIN 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
         <div class="col-12 col-xl-8">
             <div class="accordion" id="accordion_two">
                 <div class="accordion-item">
@@ -2564,11 +2610,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
+        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 営業停止日数(マスタDB)、営業停滞日数(マスタDB) -->
     </div>
     
     <div class="row mb-3">
-        <!-- BEGIN 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- BEGIN 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
         <div class="col-12 col-xl-12">
             <div class="accordion" id="accordion_three">
                 <div class="accordion-item">
@@ -2673,11 +2719,11 @@
                 </div>
             </div>
         </div>
-        <!-- END 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
+        <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12: 当該浸水深の事業所従業者数（逆計算） -->
         
     </div>
     {% endif %}
-    <!-- END 事業所営業損失額: 事業所従業者数の逆計算手法を用いた事業所営業損失額の整合性チェック: 12 -->
+    <!-- END 事業所被害額_営業損失額: 事業所従業者数の逆計算手法を用いた事業所被害額_営業損失額の整合性チェック: 12 -->
 
 
 

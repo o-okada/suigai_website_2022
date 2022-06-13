@@ -332,7 +332,7 @@ def category_view(request, category_code):
                 SUB1.usage_code AS usage_code,
                 SUB1.usage_name AS usage_name, 
 
-                -- 延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
+                -- 被害建物の延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
                 CASE WHEN (SUB1.floor_area_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.floor_area_lv00 / SUB1.floor_area_total) END AS building_lv00_reverse_floor_area, 
                 CASE WHEN (SUB1.floor_area_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.floor_area_lv01_49 / SUB1.floor_area_total) END AS building_lv01_49_reverse_floor_area, 
                 CASE WHEN (SUB1.floor_area_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.floor_area_lv50_99 / SUB1.floor_area_total) END AS building_lv50_99_reverse_floor_area, 
@@ -340,7 +340,7 @@ def category_view(request, category_code):
                 CASE WHEN (SUB1.floor_area_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.floor_area_half / SUB1.floor_area_total) END AS building_half_reverse_floor_area, 
                 CASE WHEN (SUB1.floor_area_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.floor_area_full / SUB1.floor_area_total) END AS building_full_reverse_floor_area, 
 
-                -- 世帯数(入力DB)から逆計算により被害建物棟数を求めた結果
+                -- 被災世帯数(入力DB)から逆計算により被害建物棟数を求めた結果
                 CASE WHEN (SUB1.family_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.family_lv00 / SUB1.family_total) END AS building_lv00_reverse_family, 
                 CASE WHEN (SUB1.family_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.family_lv01_49 / SUB1.family_total) END AS building_lv01_49_reverse_family, 
                 CASE WHEN (SUB1.family_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.family_lv50_99 / SUB1.family_total) END AS building_lv50_99_reverse_family, 
@@ -348,7 +348,7 @@ def category_view(request, category_code):
                 CASE WHEN (SUB1.family_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.family_half / SUB1.family_total) END AS building_half_reverse_family, 
                 CASE WHEN (SUB1.family_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.family_full / SUB1.family_total) END AS building_full_reverse_family, 
 
-                -- 事業所数(入力DB)から逆計算により被害建物棟数を求めた結果
+                -- 被災事業所数(入力DB)から逆計算により被害建物棟数を求めた結果
                 CASE WHEN (SUB1.office_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.office_lv00 / SUB1.office_total) END AS building_lv00_reverse_office, 
                 CASE WHEN (SUB1.office_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.office_lv01_49 / SUB1.office_total) END AS building_lv01_49_reverse_office, 
                 CASE WHEN (SUB1.office_total) <= 0 THEN NULL ELSE ((SUB1.building_total) * SUB1.office_lv50_99 / SUB1.office_total) END AS building_lv50_99_reverse_office, 
@@ -443,6 +443,14 @@ def category_view(request, category_code):
                 SUB1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
                 -- SUB1.office_dep_summary_half AS office_dep_summary_half, 
                 SUB1.office_dep_summary_full AS office_dep_summary_full, 
+                
+                -- 事業所被害額_償却資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
+                CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv00) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_lv00 / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv00)) END AS employee_lv00_reverse_office_dep_summary, 
+                CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv00_50) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_lv01_49 / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv00_50)) END AS employee_lv01_49_reverse_office_dep_summary, 
+                CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv50_100) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_lv50_99 / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv50_100)) END AS employee_lv50_99_reverse_office_dep_summary, 
+                CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv100_200) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_lv100 / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv100_200)) END AS employee_lv100_reverse_office_dep_summary, 
+                -- CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv200_300) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_half / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv200_300)) END AS employee_half_reverse_office_dep_summary, 
+                CASE WHEN (SUB1.office_dep_asset * SUB1.office_dep_rate_lv300) <= 0 THEN NULL ELSE (SUB1.office_dep_summary_full / (SUB1.office_dep_asset * SUB1.office_dep_rate_lv300)) END AS employee_full_reverse_office_dep_summary, 
 
                 -- 事業所被害額_在庫資産被害額(集計DB) 
                 SUB1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
@@ -451,14 +459,24 @@ def category_view(request, category_code):
                 SUB1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
                 -- SUB1.office_inv_summary_half AS office_inv_summary_half, 
                 SUB1.office_inv_summary_full AS office_inv_summary_full, 
+                
+                -- 事業所被害額_在庫資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
+                CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv00) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_lv00 / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv00)) END AS employee_lv00_reverse_office_inv_summary, 
+                CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv00_50) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_lv01_49 / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv00_50)) END AS employee_lv01_49_reverse_office_inv_summary, 
+                CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv50_100) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_lv50_99 / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv50_100)) END AS employee_lv50_99_reverse_office_inv_summary, 
+                CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv100_200) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_lv100 / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv100_200)) END AS employee_lv100_reverse_office_inv_summary, 
+                -- CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv200_300) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_half / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv200_300)) END AS employee_half_reverse_office_inv_summary, 
+                CASE WHEN (SUB1.office_inv_asset * SUB1.office_inv_rate_lv300) <= 0 THEN NULL ELSE (SUB1.office_inv_summary_full / (SUB1.office_inv_asset * SUB1.office_inv_rate_lv300)) END AS employee_full_reverse_office_inv_summary, 
 
-                -- 事業所営業損失額(集計DB) 
+                -- 事業所被害額_営業損失額(集計DB) 
                 SUB1.office_ope_summary_lv00 AS office_ope_summary_lv00, 
                 SUB1.office_ope_summary_lv01_49 AS office_ope_summary_lv01_49, 
                 SUB1.office_ope_summary_lv50_99 AS office_ope_summary_lv50_99, 
                 SUB1.office_ope_summary_lv100 AS office_ope_summary_lv100, 
                 -- SUB1.office_ope_summary_half AS office_ope_summary_half, 
                 SUB1.office_ope_summary_full AS office_ope_summary_full, 
+
+                -- 事業所被害額_営業損失額(集計DB)から逆計算により被災従業者数を求めた結果 
 
                 -- 農漁家被害額_償却資産被害額(集計DB) 
                 SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
@@ -468,6 +486,8 @@ def category_view(request, category_code):
                 -- SUB1.farmer_fisher_dep_summary_half AS farmer_fisher_dep_summary_half, 
                 SUB1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
 
+                -- 農漁家被害額_償却資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
+
                 -- 農漁家被害額_在庫資産被害額(集計DB) 
                 SUB1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
                 SUB1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
@@ -476,6 +496,8 @@ def category_view(request, category_code):
                 -- SUB1.farmer_fisher_inv_summary_half AS farmer_fisher_inv_summary_half, 
                 SUB1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
 
+                -- 農漁家被害額_在庫資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
+
                 -- 事業所応急対策費_代替活動費(集計DB) 
                 SUB1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
                 SUB1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
@@ -483,6 +505,13 @@ def category_view(request, category_code):
                 SUB1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
                 -- SUB1.office_alt_summary_half AS office_alt_summary_half, 
                 SUB1.office_alt_summary_full AS office_alt_summary_full,
+
+                -- 事業所応急対策費_代替活動費(集計DB)から逆計算により被災事業所数を求めた結果 
+
+
+
+
+
                 
                 -- 県別家屋評価額(マスタDB) 
                 SUB1.house_asset AS house_asset, 
@@ -536,11 +565,27 @@ def category_view(request, category_code):
                 SUB1.house_clean_days_lv200_300 AS house_clean_days_lv200_300, 
                 SUB1.house_clean_days_lv300 AS house_clean_days_lv300, 
                 
-                -- 事業所_償却資産額(マスタDB) 
-                SUB1.office_
+                -- 事業所資産額_償却資産額(マスタDB) 
+                SUB1.office_dep_asset AS office_dep_asset, 
+                
+                -- 事業所被害率_償却資産被害率(マスタDB) 
+                SUB1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
+                SUB1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
+                SUB1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
+                SUB1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
+                -- SUB1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
+                SUB1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
 
-                -- 事業所_在庫資産額(マスタDB) 
-                SUB1.office_
+                -- 事業所資産額_在庫資産額(マスタDB) 
+                SUB1.office_inv_asset AS office_inv_asset, 
+
+                -- 事業所被害率_在庫資産被害率(マスタDB) 
+                SUB1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
+                SUB1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
+                SUB1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
+                SUB1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
+                -- SUB1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
+                SUB1.office_inv_rate_lv300 AS office_inv_rate_lv300 
                 
             FROM 
             (
@@ -782,13 +827,37 @@ def category_view(request, category_code):
                     HCL1.house_clean_days_lv50_100 AS house_clean_days_lv50_100, 
                     HCL1.house_clean_days_lv100_200 AS house_clean_days_lv100_200, 
                     HCL1.house_clean_days_lv200_300 AS house_clean_days_lv200_300, 
-                    HCL1.house_clean_days_lv300 AS house_clean_days_lv300 
+                    HCL1.house_clean_days_lv300 AS house_clean_days_lv300, 
+
+                    -- 事業所資産額_償却資産額(マスタDB) 
+                    OA1.office_dep_asset AS office_dep_asset, 
+                    
+                    -- 事業所被害率_償却資産被害率(マスタDB) 
+                    OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
+                    OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
+                    OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
+                    OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
+                    -- OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
+                    OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
+    
+                    -- 事業所資産額_在庫資産額(マスタDB) 
+                    OA1.office_inv_asset AS office_inv_asset, 
+    
+                    -- 事業所被害率_在庫資産被害率(マスタDB) 
+                    OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
+                    OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
+                    OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
+                    OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
+                    -- OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
+                    OR1.office_inv_rate_lv300 AS office_inv_rate_lv300 
                     
                 FROM IPPAN_VIEW IV1 
                 LEFT JOIN IPPAN_SUMMARY IS1 ON IV1.ippan_id = IS1.ippan_id 
                 LEFT JOIN HOUSE_ASSET HA1 ON IV1.ken_code = HA1.ken_code 
                 LEFT JOIN HOUSE_RATE HR1 ON IV1.flood_sediment_code = HR1.flood_sediment_code AND IV1.gradient_code = HR1.gradient_code 
-                LEFT JOIN HOUSEHOLD_RATE HHR1 ON IV1.flood_sediment_code = HHR1.flood_sediment_code, 
+                LEFT JOIN HOUSEHOLD_RATE HHR1 ON IV1.flood_sediment_code = HHR1.flood_sediment_code 
+                LEFT JOIN OFFICE_ASSET OA1 ON IV1.industry_code = OA1.industry_code 
+                LEFT JOIN OFFICE_RATE OR1 ON IV1.flood_sediment_code = OR1.flood_sediment_code, 
                 HOUSEHOLD_ASSET HHA1, 
                 CAR_ASSET CA1, 
                 CAR_RATE CR1, 

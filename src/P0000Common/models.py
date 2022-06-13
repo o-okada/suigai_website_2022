@@ -225,30 +225,83 @@ class INDUSTRY(models.Model):
 
 
 
-
-
-
-
 ###############################################################################
-### 1200: 家屋評価額（マスタDB）
+### 2010: 家屋評価額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class HOUSE_ASSET(models.Model):
     house_asset_code = models.CharField(max_length=10, primary_key=True)       ### 家屋評価額コード
     ken_code = models.CharField(max_length=10)                                 ### 県コード
-    house_asset_year = models.IntegerField()                                   ### 家屋被害対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    house_asset = models.FloatField()                                          ### 家屋評価額
+    house_asset = models.FloatField(null=True)                                 ### 家屋評価額
 
     class Meta:
         db_table = 'house_asset'
 
     def __str__(self):
         return '<HOUSE_ASSET: ' + self.house_asset_code + '>'
+    
+###############################################################################
+### 2020: 家庭応急対策費（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class HOUSE_ALT(models.Model):
+    house_alt_code = models.CharField(max_length=10, primary_key=True)         ### 家庭応急対策費_代替活動費コード
+    house_alt_lv00 = models.FloatField()                                       ### 家庭応急対策費_代替活動費_床下
+    house_alt_lv00_50 = models.FloatField()                                    ### 家庭応急対策費_代替活動費_0から50cm未満
+    house_alt_lv50_100 = models.FloatField()                                   ### 家庭応急対策費_代替活動費_50から100cm未満
+    house_alt_lv100_200 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_100から200cm未満
+    house_alt_lv200_300 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_200から300cm未満
+    house_alt_lv300 = models.FloatField()                                      ### 家庭応急対策費_代替活動費_300cm以上
+    
+    class Meta:
+        db_table = 'house_alt'
+    
+    def __str__(self):
+        return '<HOUSE_ALT: ' + self.house_alt_code + '>'
 
 ###############################################################################
-### 1210: 家庭用品自動車以外所有額（マスタDB）
+### 2030: 家庭応急対策費（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class HOUSE_CLEAN(models.Model):
+    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃費コード
+    house_clean_days_lv00 = models.FloatField()                                ### 家庭応急対策費_清掃日数_床下
+    house_clean_days_lv00_50 = models.FloatField()                             ### 家庭応急対策費_清掃日数_0から50cm未満
+    house_clean_days_lv50_100 = models.FloatField()                            ### 家庭応急対策費_清掃日数_50から100cm未満
+    house_clean_days_lv100_200 = models.FloatField()                           ### 家庭応急対策費_清掃日数_100から200cm未満
+    house_clean_days_lv200_300 = models.FloatField()                           ### 家庭応急対策費_清掃日数_200から300cm未満
+    house_clean_days_lv300 = models.FloatField()                               ### 家庭応急対策費_清掃日数_300cm以上
+    house_clean_unit_cost = models.FloatField()                                ### 家庭応急対策費_清掃労働単価
+    
+    class Meta:
+        db_table = 'house_clean'
+    
+    def __str__(self):
+        return '<HOUSE_CLEAN: ' + self.house_clean_code + '>'
+
+###############################################################################
+### 2040: 家屋被害率（マスタDB）
+### 集計用被害率
+###############################################################################
+class HOUSE_RATE(models.Model):
+    house_rate_code = models.CharField(max_length=10, primary_key=True)        ### 家屋被害率コード
+    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
+    gradient_code = models.CharField(max_length=10)                            ### 地盤勾配区分コード
+    house_rate_lv00 = models.FloatField()                                      ### 家屋被害率_床下
+    house_rate_lv00_50 = models.FloatField()                                   ### 家屋被害率_0から50cm未満
+    house_rate_lv50_100 = models.FloatField()                                  ### 家屋被害率_50から100cm未満
+    house_rate_lv100_200 = models.FloatField()                                 ### 家屋被害率_100から200cm未満
+    house_rate_lv200_300 = models.FloatField()                                 ### 家屋被害率_200から300cm未満
+    house_rate_lv300 = models.FloatField()                                     ### 家屋被害率_300cm以上
+
+    class Meta:
+        db_table = 'house_rate'
+
+    def __str__(self):
+        return '<HOUSE_RATE: ' + self.house_rate_code + '>'
+
+###############################################################################
+### 3010: 家庭用品自動車以外所有額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class HOUSEHOLD_ASSET(models.Model):
@@ -262,7 +315,28 @@ class HOUSEHOLD_ASSET(models.Model):
         return '<HOUSEHOLD_ASSET: ' + self.household_asset_code + '>'
 
 ###############################################################################
-### 1220: 家庭用品自動車所有額（マスタDB）
+### 3020: 家庭用品自動車以外被害率（マスタDB）
+### 集計用被害率
+###############################################################################
+class HOUSEHOLD_RATE(models.Model):
+    household_rate_code = models.CharField(max_length=10, primary_key=True)    ### 家庭用品自動車以外被害率コード
+    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
+    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
+    household_rate_lv00 = models.FloatField()                                  ### 家庭用品自動車以外被害率_床下
+    household_rate_lv00_50 = models.FloatField()                               ### 家庭用品自動車以外被害率_0から50cm未満
+    household_rate_lv50_100 = models.FloatField()                              ### 家庭用品自動車以外被害率_50から100cm未満
+    household_rate_lv100_200 = models.FloatField()                             ### 家庭用品自動車以外被害率_100から200cm未満
+    household_rate_lv200_300 = models.FloatField()                             ### 家庭用品自動車以外被害率_200から300cm未満
+    household_rate_lv300 = models.FloatField()                                 ### 家庭用品自動車以外被害率_300cm以上
+
+    class Meta:
+        db_table = 'household_rate'
+
+    def __str__(self):
+        return '<HOUSEHOLD_RATE: ' + self.household_rate_code + '>'
+
+###############################################################################
+### 4010: 家庭用品自動車所有額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class CAR_ASSET(models.Model):
@@ -276,9 +350,170 @@ class CAR_ASSET(models.Model):
         return '<CAR_ASSET: ' + self.car_asset_code + '>'
 
 ###############################################################################
-### 1230: 家庭応急対策費（マスタDB）
+### 4020: 家庭用品自動車被害率（マスタDB）
+### 集計用被害率
+###############################################################################
+class CAR_RATE(models.Model):
+    car_rate_code = models.CharField(max_length=10, primary_key=True)          ### 家庭用品自動車被害率コード
+    ### flood_sediment_code = models.CharField(max_length=10)                  ### 浸水土砂区分コード
+    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
+    car_rate_lv00 = models.FloatField()                                        ### 家庭用品自動車被害率_床下
+    car_rate_lv00_50 = models.FloatField()                                     ### 家庭用品自動車被害率_0から50cm未満
+    car_rate_lv50_100 = models.FloatField()                                    ### 家庭用品自動車被害率_50から100cm未満
+    car_rate_lv100_200 = models.FloatField()                                   ### 家庭用品自動車被害率_100から200cm未満
+    car_rate_lv200_300 = models.FloatField()                                   ### 家庭用品自動車被害率_200から300cm未満
+    car_rate_lv300 = models.FloatField()                                       ### 家庭用品自動車被害率_300cm以上
+
+    class Meta:
+        db_table = 'car_rate'
+
+    def __str__(self):
+        return '<CAR_RATE: ' + self.car_rate_code + '>'
+
+###############################################################################
+### 5010: 事業所資産額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
+class OFFICE_ASSET(models.Model):
+    office_asset_code = models.CharField(max_length=10, primary_key=True)      ### 事業所資産額コード
+    industry_code = models.CharField(max_length=10)                            ### 事業所産業分類コード
+    office_dep_asset = models.FloatField(null=True)                            ### 事業所償却資産額
+    office_inv_asset = models.FloatField(null=True)                            ### 事業所在庫資産額
+    office_va_asset = models.FloatField(null=True)                             ### 事業所付加価値額
+
+    class Meta:
+        db_table = 'office_asset'
+
+    def __str__(self):
+        return '<OFFICE_ASSET: ' + self.office_asset_code + '>'
+
+###############################################################################
+### 5020: 事業所営業停止損失（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class OFFICE_SUSPEND(models.Model):
+    office_suspend_code = models.CharField(max_length=10, primary_key=True)    ### 事業所営業停止コード
+    office_suspend_days_lv00 = models.FloatField()                             ### 事業所営業停止日数_床下
+    office_suspend_days_lv00_50 = models.FloatField()                          ### 事業所営業停止日数_0から50cm未満
+    office_suspend_days_lv50_100 = models.FloatField()                         ### 事業所営業停止日数_50から100cm未満
+    office_suspend_days_lv100_200 = models.FloatField()                        ### 事業所営業停止日数_100から200cm未満
+    office_suspend_days_lv200_300 = models.FloatField()                        ### 事業所営業停止日数_200から300cm未満
+    office_suspend_days_lv300 = models.FloatField()                            ### 事業所営業停止日数_300cm以上
+    
+    class Meta:
+        db_table = 'office_suspend'
+        
+    def __str__(self):
+        return '<OFFICE_SUSPEND: ' + self.office_suspend_code + '>'
+
+###############################################################################
+### 5030: 事業所営業停止損失（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class OFFICE_STAGNATE(models.Model):
+    office_stagnate_code = models.CharField(max_length=10, primary_key=True)   ### 事業所営業停止コード
+    office_stagnate_days_lv00 = models.FloatField()                            ### 事業所営業停止コード
+    office_stagnate_days_lv00_50 = models.FloatField()                         ### 事業所営業停止コード
+    office_stagnate_days_lv50_100 = models.FloatField()                        ### 事業所営業停止コード
+    office_stagnate_days_lv100_200 = models.FloatField()                       ### 事業所営業停止コード
+    office_stagnate_days_lv200_300 = models.FloatField()                       ### 事業所営業停止コード
+    office_stagnate_days_lv300 = models.FloatField()                           ### 事業所営業停止コード
+
+    class Meta:
+        db_table = 'office_stagnate'
+        
+    def __str__(self):
+        return '<OFFICE_STAGNATE: ' + self.office_stagnate_code + '>'
+
+###############################################################################
+### 5040: 事業所営業停止損失（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class OFFICE_ALT(models.Model):
+    office_alt_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停止コード
+    office_alt_lv00 = models.FloatField()                                      ### 事業所営業停止コード
+    office_alt_lv00_50 = models.FloatField()                                   ### 事業所営業停止コード
+    office_alt_lv50_100 = models.FloatField()                                  ### 事業所営業停止コード
+    office_alt_lv100_200 = models.FloatField()                                 ### 事業所営業停止コード
+    office_alt_lv200_300 = models.FloatField()                                 ### 事業所営業停止コード
+    office_alt_lv300 = models.FloatField()                                     ### 事業所営業停止コード
+
+    class Meta:
+        db_table = 'office_alt'
+        
+    def __str__(self):
+        return '<OFFICE_ALT: ' + self.office_alt_code + '>'
+
+###############################################################################
+### 5050: 事業所被害率（マスタDB）
+### 集計用被害率
+###############################################################################
+class OFFICE_RATE(models.Model):
+    office_rate_code = models.CharField(max_length=10, primary_key=True)       ### 事業所被害率コード
+    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
+    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
+    office_dep_rate_lv00 = models.FloatField()                                 ### 事業所償却資産被害率_床下
+    office_dep_rate_lv00_50 = models.FloatField()                              ### 事業所償却資産被害率_0から50cm未満
+    office_dep_rate_lv50_100 = models.FloatField()                             ### 事業所償却資産被害率_50から100cm未満
+    office_dep_rate_lv100_200 = models.FloatField()                            ### 事業所償却資産被害率_100から200cm未満
+    office_dep_rate_lv200_300 = models.FloatField()                            ### 事業所償却資産被害率_200から300cm未満
+    office_dep_rate_lv300 = models.FloatField()                                ### 事業所償却資産被害率_300cm以上
+    office_inv_rate_lv00 = models.FloatField()                                 ### 事業所在庫資産被害率_床下
+    office_inv_rate_lv00_50 = models.FloatField()                              ### 事業所在庫資産被害率_0から50cm未満
+    office_inv_rate_lv50_100 = models.FloatField()                             ### 事業所在庫資産被害率_50から100cm未満
+    office_inv_rate_lv100_200 = models.FloatField()                            ### 事業所在庫資産被害率_100から200cm未満
+    office_inv_rate_lv200_300 = models.FloatField()                            ### 事業所在庫資産被害率_200から300cm未満
+    office_inv_rate_lv300 = models.FloatField()                                ### 事業所在庫資産被害率_300cm以上
+
+    class Meta:
+        db_table = 'office_rate'
+
+    def __str__(self):
+        return '<OFFICE_RATE: ' + self.office_rate_code + '>'
+
+###############################################################################
+### 6010: 農漁家資産額（マスタDB）
+### 集計用資産額、集計用損失額
+###############################################################################
+class FARMER_FISHER_ASSET(models.Model):
+    farmer_fisher_asset_code = models.CharField(max_length=10, primary_key=True)    ### 農漁家資産額コード
+    farmer_fisher_dep_asset = models.FloatField(null=True)                     ### 農漁家償却資産額
+    farmer_fisher_inv_asset = models.FloatField(null=True)                     ### 農漁家在庫資産額
+
+    class Meta:
+        db_table = 'farmer_fisher_asset'
+
+    def __str__(self):
+        return '<FARMER_FISHER_ASSET: ' + self.farmer_fisher_asset_code + '>'
+
+###############################################################################
+### 6020: 農漁家被害率（マスタDB）
+### 集計用被害率
+###############################################################################
+class FARMER_FISHER_RATE(models.Model):
+    farmer_fisher_rate_code = models.CharField(max_length=10, primary_key=True)     ### 事業所被害率コード
+    flood_sediment_code = models.CharField(max_length=10)                           ### 浸水土砂区分コード
+    ### gradient_code = models.CharField(max_length=10)                             ### 地盤勾配区分コード
+    farmer_fisher_dep_rate_lv00 = models.FloatField()                               ### 農漁家償却資産被害率_床下
+    farmer_fisher_dep_rate_lv00_50 = models.FloatField()                            ### 農漁家償却資産被害率_0から50cm未満
+    farmer_fisher_dep_rate_lv50_100 = models.FloatField()                           ### 農漁家償却資産被害率_50から100cm未満
+    farmer_fisher_dep_rate_lv100_200 = models.FloatField()                          ### 農漁家償却資産被害率_100から200cm未満
+    farmer_fisher_dep_rate_lv200_300 = models.FloatField()                          ### 農漁家償却資産被害率_200から300cm未満
+    farmer_fisher_dep_rate_lv300 = models.FloatField()                              ### 農漁家償却資産被害率_300cm以上
+    farmer_fisher_inv_rate_lv00 = models.FloatField()                               ### 農漁家在庫資産被害率_床下
+    farmer_fisher_inv_rate_lv00_50 = models.FloatField()                            ### 農漁家在庫資産被害率_0から50cm未満
+    farmer_fisher_inv_rate_lv50_100 = models.FloatField()                           ### 農漁家在庫資産被害率_50から100cm未満
+    farmer_fisher_inv_rate_lv100_200 = models.FloatField()                          ### 農漁家在庫資産被害率_100から200cm未満
+    farmer_fisher_inv_rate_lv200_300 = models.FloatField()                          ### 農漁家在庫資産被害率_200から300cm未満
+    farmer_fisher_inv_rate_lv300 = models.FloatField()                              ### 農漁家在庫資産被害率_300cm以上
+
+    class Meta:
+        db_table = 'farmer_fisher_rate'
+
+    def __str__(self):
+        return '<FARMER_FISHER_RATE: ' + self.farmer_fisher_rate_code + '>'
+
+### ---: 家庭応急対策費（マスタDB） ※削除予定
 class HOUSE_COST(models.Model):
     house_cost_code = models.CharField(max_length=10, primary_key=True)        ### 家庭応急対策費コード
     house_cost_year = models.IntegerField()                                    ### 家庭応急対策費対象年
@@ -303,70 +538,8 @@ class HOUSE_COST(models.Model):
 
     def __str__(self):
         return '<HOUSE_COST: ' + self.house_cost_code + '>'
-    
-###############################################################################
-### 1230: 家庭応急対策費（マスタDB）
-### 集計用資産額、集計用損失額
-###############################################################################
-class HOUSE_ALT(models.Model):
-    house_alt_code = models.CharField(max_length=10, primary_key=True)         ### 家庭応急対策費_代替活動費コード
-    house_alt_lv00 = models.FloatField()                                       ### 家庭応急対策費_代替活動費_床下
-    house_alt_lv00_50 = models.FloatField()                                    ### 家庭応急対策費_代替活動費_0から50cm未満
-    house_alt_lv50_100 = models.FloatField()                                   ### 家庭応急対策費_代替活動費_50から100cm未満
-    house_alt_lv100_200 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_100から200cm未満
-    house_alt_lv200_300 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_200から300cm未満
-    house_alt_lv300 = models.FloatField()                                      ### 家庭応急対策費_代替活動費_300cm以上
-    
-    class Meta:
-        db_table = 'house_alt'
-    
-    def __str__(self):
-        return '<HOUSE_ALT: ' + self.house_alt_code + '>'
 
-###############################################################################
-### 1230: 家庭応急対策費（マスタDB）
-### 集計用資産額、集計用損失額
-###############################################################################
-class HOUSE_CLEAN(models.Model):
-    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃費コード
-    house_clean_days_lv00 = models.FloatField()                                ### 家庭応急対策費_清掃日数_床下
-    house_clean_days_lv00_50 = models.FloatField()                             ### 家庭応急対策費_清掃日数_0から50cm未満
-    house_clean_days_lv50_100 = models.FloatField()                            ### 家庭応急対策費_清掃日数_50から100cm未満
-    house_clean_days_lv100_200 = models.FloatField()                           ### 家庭応急対策費_清掃日数_100から200cm未満
-    house_clean_days_lv200_300 = models.FloatField()                           ### 家庭応急対策費_清掃日数_200から300cm未満
-    house_clean_days_lv300 = models.FloatField()                               ### 家庭応急対策費_清掃日数_300cm以上
-    house_clean_unit_cost = models.FloatField()                                ### 家庭応急対策費_清掃労働単価
-    
-    class Meta:
-        db_table = 'house_clean'
-    
-    def __str__(self):
-        return '<HOUSE_CLEAN: ' + self.house_clean_code + '>'
-
-###############################################################################
-### 1240: 事業所資産額（マスタDB）
-### 集計用資産額、集計用損失額
-###############################################################################
-class OFFICE_ASSET(models.Model):
-    office_asset_code = models.CharField(max_length=10, primary_key=True)      ### 事業所資産額コード
-    industry_code = models.CharField(max_length=10)                            ### 事業所産業分類コード
-    office_asset_year = models.IntegerField()                                  ### 事業所産業分類別資産額対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    depreciable_asset = models.IntegerField()                                  ### 事業所償却資産額
-    inventory_asset = models.IntegerField()                                    ### 事業所在庫資産額
-    value_added = models.IntegerField()                                        ### 事業所付加価値額
-
-    class Meta:
-        db_table = 'office_asset'
-
-    def __str__(self):
-        return '<OFFICE_ASSET: ' + self.office_asset_code + '>'
-
-###############################################################################
-### 1250: 事業所営業停止損失（マスタDB）
-### 集計用資産額、集計用損失額
-###############################################################################
+### ---: 事業所営業停止損失（マスタDB） ※削除予定
 class OFFICE_COST(models.Model):
     office_cost_code = models.CharField(max_length=10, primary_key=True)       ### 事業所営業損失コード
     office_cost_year = models.IntegerField()                                   ### 事業所営業損失対象年
@@ -396,148 +569,6 @@ class OFFICE_COST(models.Model):
 
     def __str__(self):
         return '<OFFICE_COST: ' + self.office_cost_code + '>'
-
-###############################################################################
-### 1260: 農漁家資産額（マスタDB）
-### 集計用資産額、集計用損失額
-###############################################################################
-class FARMER_FISHER_ASSET(models.Model):
-    farmer_fisher_asset_code = models.CharField(max_length=10, primary_key=True)    ### 農漁家資産額コード
-    depreciable_asset = models.IntegerField()                                       ### 農漁家償却資産額
-    inventory_asset = models.IntegerField()                                         ### 農漁家在庫資産額
-
-    class Meta:
-        db_table = 'farmer_fisher_asset'
-
-    def __str__(self):
-        return '<FARMER_FISHER_ASSET: ' + self.farmer_fisher_asset_code + '>'
-
-
-
-
-
-
-
-
-
-###############################################################################
-### 1150: 家屋被害率（マスタDB）
-### 集計用被害率
-###############################################################################
-class HOUSE_RATE(models.Model):
-    house_rate_code = models.CharField(max_length=10, primary_key=True)        ### 家屋被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    gradient_code = models.CharField(max_length=10)                            ### 地盤勾配区分コード
-    house_rate_lv00 = models.FloatField()                                      ### 家屋被害率_床下
-    house_rate_lv00_50 = models.FloatField()                                   ### 家屋被害率_0から50cm未満
-    house_rate_lv50_100 = models.FloatField()                                  ### 家屋被害率_50から100cm未満
-    house_rate_lv100_200 = models.FloatField()                                 ### 家屋被害率_100から200cm未満
-    house_rate_lv200_300 = models.FloatField()                                 ### 家屋被害率_200から300cm未満
-    house_rate_lv300 = models.FloatField()                                     ### 家屋被害率_300cm以上
-
-    class Meta:
-        db_table = 'house_rate'
-
-    def __str__(self):
-        return '<HOUSE_RATE: ' + self.house_rate_code + '>'
-
-###############################################################################
-### 1160: 家庭用品自動車以外被害率（マスタDB）
-### 集計用被害率
-###############################################################################
-class HOUSEHOLD_RATE(models.Model):
-    household_rate_code = models.CharField(max_length=10, primary_key=True)    ### 家庭用品自動車以外被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    household_rate_lv00 = models.FloatField()                                  ### 家庭用品自動車以外被害率_床下
-    household_rate_lv00_50 = models.FloatField()                               ### 家庭用品自動車以外被害率_0から50cm未満
-    household_rate_lv50_100 = models.FloatField()                              ### 家庭用品自動車以外被害率_50から100cm未満
-    household_rate_lv100_200 = models.FloatField()                             ### 家庭用品自動車以外被害率_100から200cm未満
-    household_rate_lv200_300 = models.FloatField()                             ### 家庭用品自動車以外被害率_200から300cm未満
-    household_rate_lv300 = models.FloatField()                                 ### 家庭用品自動車以外被害率_300cm以上
-
-    class Meta:
-        db_table = 'household_rate'
-
-    def __str__(self):
-        return '<HOUSEHOLD_RATE: ' + self.household_rate_code + '>'
-    
-###############################################################################
-### 1170: 家庭用品自動車被害率（マスタDB）
-### 集計用被害率
-###############################################################################
-class CAR_RATE(models.Model):
-    car_rate_code = models.CharField(max_length=10, primary_key=True)          ### 家庭用品自動車被害率コード
-    ### flood_sediment_code = models.CharField(max_length=10)                  ### 浸水土砂区分コード
-    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    car_rate_lv00 = models.FloatField()                                        ### 家庭用品自動車被害率_床下
-    car_rate_lv00_50 = models.FloatField()                                     ### 家庭用品自動車被害率_0から50cm未満
-    car_rate_lv50_100 = models.FloatField()                                    ### 家庭用品自動車被害率_50から100cm未満
-    car_rate_lv100_200 = models.FloatField()                                   ### 家庭用品自動車被害率_100から200cm未満
-    car_rate_lv200_300 = models.FloatField()                                   ### 家庭用品自動車被害率_200から300cm未満
-    car_rate_lv300 = models.FloatField()                                       ### 家庭用品自動車被害率_300cm以上
-
-    class Meta:
-        db_table = 'car_rate'
-
-    def __str__(self):
-        return '<CAR_RATE: ' + self.car_rate_code + '>'
-
-###############################################################################
-### 1180: 事業所被害率（マスタDB）
-### 集計用被害率
-###############################################################################
-class OFFICE_RATE(models.Model):
-    office_rate_code = models.CharField(max_length=10, primary_key=True)       ### 事業所被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    office_dep_rate_lv00 = models.FloatField()                                 ### 事業所償却資産被害率_床下
-    office_dep_rate_lv00_50 = models.FloatField()                              ### 事業所償却資産被害率_0から50cm未満
-    office_dep_rate_lv50_100 = models.FloatField()                             ### 事業所償却資産被害率_50から100cm未満
-    office_dep_rate_lv100_200 = models.FloatField()                            ### 事業所償却資産被害率_100から200cm未満
-    office_dep_rate_lv200_300 = models.FloatField()                            ### 事業所償却資産被害率_200から300cm未満
-    office_dep_rate_lv300 = models.FloatField()                                ### 事業所償却資産被害率_300cm以上
-    office_inv_rate_lv00 = models.FloatField()                                 ### 事業所在庫資産被害率_床下
-    office_inv_rate_lv00_50 = models.FloatField()                              ### 事業所在庫資産被害率_0から50cm未満
-    office_inv_rate_lv50_100 = models.FloatField()                             ### 事業所在庫資産被害率_50から100cm未満
-    office_inv_rate_lv100_200 = models.FloatField()                            ### 事業所在庫資産被害率_100から200cm未満
-    office_inv_rate_lv200_300 = models.FloatField()                            ### 事業所在庫資産被害率_200から300cm未満
-    office_inv_rate_lv300 = models.FloatField()                                ### 事業所在庫資産被害率_300cm以上
-
-    class Meta:
-        db_table = 'office_rate'
-
-    def __str__(self):
-        return '<OFFICE_RATE: ' + self.office_rate_code + '>'
-
-###############################################################################
-### 1190: 農漁家被害率（マスタDB）
-### 集計用被害率
-###############################################################################
-class FARMER_FISHER_RATE(models.Model):
-    farmer_fisher_rate_code = models.CharField(max_length=10, primary_key=True)     ### 事業所被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                           ### 浸水土砂区分コード
-    ### gradient_code = models.CharField(max_length=10)                             ### 地盤勾配区分コード
-    farmer_fisher_dep_rate_lv00 = models.FloatField()                               ### 農漁家償却資産被害率_床下
-    farmer_fisher_dep_rate_lv00_50 = models.FloatField()                            ### 農漁家償却資産被害率_0から50cm未満
-    farmer_fisher_dep_rate_lv50_100 = models.FloatField()                           ### 農漁家償却資産被害率_50から100cm未満
-    farmer_fisher_dep_rate_lv100_200 = models.FloatField()                          ### 農漁家償却資産被害率_100から200cm未満
-    farmer_fisher_dep_rate_lv200_300 = models.FloatField()                          ### 農漁家償却資産被害率_200から300cm未満
-    farmer_fisher_dep_rate_lv300 = models.FloatField()                              ### 農漁家償却資産被害率_300cm以上
-    farmer_fisher_inv_rate_lv00 = models.FloatField()                               ### 農漁家在庫資産被害率_床下
-    farmer_fisher_inv_rate_lv00_50 = models.FloatField()                            ### 農漁家在庫資産被害率_0から50cm未満
-    farmer_fisher_inv_rate_lv50_100 = models.FloatField()                           ### 農漁家在庫資産被害率_50から100cm未満
-    farmer_fisher_inv_rate_lv100_200 = models.FloatField()                          ### 農漁家在庫資産被害率_100から200cm未満
-    farmer_fisher_inv_rate_lv200_300 = models.FloatField()                          ### 農漁家在庫資産被害率_200から300cm未満
-    farmer_fisher_inv_rate_lv300 = models.FloatField()                              ### 農漁家在庫資産被害率_300cm以上
-
-    class Meta:
-        db_table = 'farmer_fisher_rate'
-
-    def __str__(self):
-        return '<FARMER_FISHER_RATE: ' + self.farmer_fisher_rate_code + '>'
-
-
     
 ### ---: 家屋被害率（マスタDB） ※削除予定
 class HOUSE_DAMAGE(models.Model):
