@@ -233,48 +233,9 @@ class HOUSE_ASSET(models.Model):
 
     def __str__(self):
         return '<HOUSE_ASSET: ' + self.house_asset_code + '>'
-    
-###############################################################################
-### 2020: 家庭応急対策費（マスタDB）
-### 集計用資産額、集計用被害率
-###############################################################################
-class HOUSE_ALT(models.Model):
-    house_alt_code = models.CharField(max_length=10, primary_key=True)         ### 家庭応急対策費_代替活動費コード
-    house_alt_lv00 = models.FloatField()                                       ### 家庭応急対策費_代替活動費_床下
-    house_alt_lv00_50 = models.FloatField()                                    ### 家庭応急対策費_代替活動費_0から50cm未満
-    house_alt_lv50_100 = models.FloatField()                                   ### 家庭応急対策費_代替活動費_50から100cm未満
-    house_alt_lv100_200 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_100から200cm未満
-    house_alt_lv200_300 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_200から300cm未満
-    house_alt_lv300 = models.FloatField()                                      ### 家庭応急対策費_代替活動費_300cm以上
-    
-    class Meta:
-        db_table = 'house_alt'
-    
-    def __str__(self):
-        return '<HOUSE_ALT: ' + self.house_alt_code + '>'
 
 ###############################################################################
-### 2030: 家庭応急対策費（マスタDB）
-### 集計用資産額、集計用被害率
-###############################################################################
-class HOUSE_CLEAN(models.Model):
-    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃費コード
-    house_clean_days_lv00 = models.FloatField()                                ### 家庭応急対策費_清掃日数_床下
-    house_clean_days_lv00_50 = models.FloatField()                             ### 家庭応急対策費_清掃日数_0から50cm未満
-    house_clean_days_lv50_100 = models.FloatField()                            ### 家庭応急対策費_清掃日数_50から100cm未満
-    house_clean_days_lv100_200 = models.FloatField()                           ### 家庭応急対策費_清掃日数_100から200cm未満
-    house_clean_days_lv200_300 = models.FloatField()                           ### 家庭応急対策費_清掃日数_200から300cm未満
-    house_clean_days_lv300 = models.FloatField()                               ### 家庭応急対策費_清掃日数_300cm以上
-    house_clean_unit_cost = models.FloatField()                                ### 家庭応急対策費_清掃労働単価
-    
-    class Meta:
-        db_table = 'house_clean'
-    
-    def __str__(self):
-        return '<HOUSE_CLEAN: ' + self.house_clean_code + '>'
-
-###############################################################################
-### 2040: 家屋被害率（マスタDB）
+### 2020: 家屋被害率（マスタDB）
 ### 集計用資産額、集計用被害率
 ###############################################################################
 class HOUSE_RATE(models.Model):
@@ -293,6 +254,45 @@ class HOUSE_RATE(models.Model):
 
     def __str__(self):
         return '<HOUSE_RATE: ' + self.house_rate_code + '>'
+    
+###############################################################################
+### 2030: 家庭応急対策費（マスタDB）
+### 集計用資産額、集計用被害率
+###############################################################################
+class HOUSE_ALT(models.Model):
+    house_alt_code = models.CharField(max_length=10, primary_key=True)         ### 家庭応急対策費_代替活動費コード
+    house_alt_lv00 = models.FloatField()                                       ### 家庭応急対策費_代替活動費_床下
+    house_alt_lv00_50 = models.FloatField()                                    ### 家庭応急対策費_代替活動費_0から50cm未満
+    house_alt_lv50_100 = models.FloatField()                                   ### 家庭応急対策費_代替活動費_50から100cm未満
+    house_alt_lv100_200 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_100から200cm未満
+    house_alt_lv200_300 = models.FloatField()                                  ### 家庭応急対策費_代替活動費_200から300cm未満
+    house_alt_lv300 = models.FloatField()                                      ### 家庭応急対策費_代替活動費_300cm以上
+    
+    class Meta:
+        db_table = 'house_alt'
+    
+    def __str__(self):
+        return '<HOUSE_ALT: ' + self.house_alt_code + '>'
+
+###############################################################################
+### 2040: 家庭応急対策費（マスタDB）
+### 集計用資産額、集計用被害率
+###############################################################################
+class HOUSE_CLEAN(models.Model):
+    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃費コード
+    house_clean_days_lv00 = models.FloatField()                                ### 家庭応急対策費_清掃日数_床下
+    house_clean_days_lv00_50 = models.FloatField()                             ### 家庭応急対策費_清掃日数_0から50cm未満
+    house_clean_days_lv50_100 = models.FloatField()                            ### 家庭応急対策費_清掃日数_50から100cm未満
+    house_clean_days_lv100_200 = models.FloatField()                           ### 家庭応急対策費_清掃日数_100から200cm未満
+    house_clean_days_lv200_300 = models.FloatField()                           ### 家庭応急対策費_清掃日数_200から300cm未満
+    house_clean_days_lv300 = models.FloatField()                               ### 家庭応急対策費_清掃日数_300cm以上
+    house_clean_unit_cost = models.FloatField()                                ### 家庭応急対策費_清掃労働単価
+    
+    class Meta:
+        db_table = 'house_clean'
+    
+    def __str__(self):
+        return '<HOUSE_CLEAN: ' + self.house_clean_code + '>'
 
 ###############################################################################
 ### 3010: 家庭用品自動車以外所有額（マスタDB）
@@ -382,64 +382,7 @@ class OFFICE_ASSET(models.Model):
         return '<OFFICE_ASSET: ' + self.office_asset_code + '>'
 
 ###############################################################################
-### 5020: 事業所営業停止日数（マスタDB）
-### 集計用資産額、集計用被害率
-###############################################################################
-class OFFICE_SUSPEND(models.Model):
-    office_sus_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停止日数コード
-    office_sus_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停止日数_床下
-    office_sus_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停止日数_0から50cm未満
-    office_sus_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停止日数_50から100cm未満
-    office_sus_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停止日数_100から200cm未満
-    office_sus_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停止日数_200から300cm未満
-    office_sus_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停止日数_300cm以上
-    
-    class Meta:
-        db_table = 'office_suspend'
-        
-    def __str__(self):
-        return '<OFFICE_SUSPEND: ' + self.office_sus_code + '>'
-
-###############################################################################
-### 5030: 事業所営業停滞日数（マスタDB）
-### 集計用資産額、集計用被害率
-###############################################################################
-class OFFICE_STAGNATE(models.Model):
-    office_stg_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停滞日数コード
-    office_stg_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停滞日数_床下
-    office_stg_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停滞日数_0から50cm未満
-    office_stg_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停滞日数_50から100cm未満
-    office_stg_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停滞日数_100から200cm未満
-    office_stg_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停滞日数_200から300cm未満
-    office_stg_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停滞日数_300cm以上
-
-    class Meta:
-        db_table = 'office_stagnate'
-        
-    def __str__(self):
-        return '<OFFICE_STAGNATE: ' + self.office_stg_code + '>'
-
-###############################################################################
-### 5040: 事業所応急対策費_代替活動費（マスタDB）
-### 集計用資産額、集計用被害率
-###############################################################################
-class OFFICE_ALT(models.Model):
-    office_alt_code = models.CharField(max_length=10, primary_key=True)        ### 事業所応急対策費_代替活動費コード
-    office_alt_lv00 = models.FloatField(null=True)                             ### 事業所応急対策費_代替活動費_床下
-    office_alt_lv00_50 = models.FloatField(null=True)                          ### 事業所応急対策費_代替活動費_0から50cm未満
-    office_alt_lv50_100 = models.FloatField(null=True)                         ### 事業所応急対策費_代替活動費_50から100cm未満
-    office_alt_lv100_200 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_100から200cm未満
-    office_alt_lv200_300 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_200から300cm未満
-    office_alt_lv300 = models.FloatField(null=True)                            ### 事業所応急対策費_代替活動費_300cm以上
-
-    class Meta:
-        db_table = 'office_alt'
-        
-    def __str__(self):
-        return '<OFFICE_ALT: ' + self.office_alt_code + '>'
-
-###############################################################################
-### 5050: 事業所被害率（マスタDB）
+### 5020: 事業所被害率（マスタDB）
 ### 集計用資産額、集計用被害率
 ###############################################################################
 class OFFICE_RATE(models.Model):
@@ -464,6 +407,63 @@ class OFFICE_RATE(models.Model):
 
     def __str__(self):
         return '<OFFICE_RATE: ' + self.office_rate_code + '>'
+
+###############################################################################
+### 5030: 事業所営業停止日数（マスタDB）
+### 集計用資産額、集計用被害率
+###############################################################################
+class OFFICE_SUSPEND(models.Model):
+    office_sus_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停止日数コード
+    office_sus_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停止日数_床下
+    office_sus_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停止日数_0から50cm未満
+    office_sus_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停止日数_50から100cm未満
+    office_sus_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停止日数_100から200cm未満
+    office_sus_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停止日数_200から300cm未満
+    office_sus_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停止日数_300cm以上
+    
+    class Meta:
+        db_table = 'office_suspend'
+        
+    def __str__(self):
+        return '<OFFICE_SUSPEND: ' + self.office_sus_code + '>'
+
+###############################################################################
+### 5040: 事業所営業停滞日数（マスタDB）
+### 集計用資産額、集計用被害率
+###############################################################################
+class OFFICE_STAGNATE(models.Model):
+    office_stg_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停滞日数コード
+    office_stg_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停滞日数_床下
+    office_stg_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停滞日数_0から50cm未満
+    office_stg_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停滞日数_50から100cm未満
+    office_stg_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停滞日数_100から200cm未満
+    office_stg_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停滞日数_200から300cm未満
+    office_stg_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停滞日数_300cm以上
+
+    class Meta:
+        db_table = 'office_stagnate'
+        
+    def __str__(self):
+        return '<OFFICE_STAGNATE: ' + self.office_stg_code + '>'
+
+###############################################################################
+### 5050: 事業所応急対策費_代替活動費（マスタDB）
+### 集計用資産額、集計用被害率
+###############################################################################
+class OFFICE_ALT(models.Model):
+    office_alt_code = models.CharField(max_length=10, primary_key=True)        ### 事業所応急対策費_代替活動費コード
+    office_alt_lv00 = models.FloatField(null=True)                             ### 事業所応急対策費_代替活動費_床下
+    office_alt_lv00_50 = models.FloatField(null=True)                          ### 事業所応急対策費_代替活動費_0から50cm未満
+    office_alt_lv50_100 = models.FloatField(null=True)                         ### 事業所応急対策費_代替活動費_50から100cm未満
+    office_alt_lv100_200 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_100から200cm未満
+    office_alt_lv200_300 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_200から300cm未満
+    office_alt_lv300 = models.FloatField(null=True)                            ### 事業所応急対策費_代替活動費_300cm以上
+
+    class Meta:
+        db_table = 'office_alt'
+        
+    def __str__(self):
+        return '<OFFICE_ALT: ' + self.office_alt_code + '>'
 
 ###############################################################################
 ### 6010: 農漁家資産額（マスタDB）
@@ -736,13 +736,46 @@ class FARMER_FISHER_DAMAGE(models.Model):
         return '<FARMER_FISHER_DAMAGE: ' + self.farmer_fisher_damage_code + '>'
 
 ###############################################################################
-###############################################################################
 ### 入力DB
-###############################################################################
 ###############################################################################
 
 ###############################################################################
-### 2010: 水害（入力DB）
+### 7010: 一般資産調査票（入力DB）
+###############################################################################
+class AREA(models.Model):
+    area_id = models.IntegerField(primary_key=True)                            ### 区域ID
+    area_name = models.CharField(max_length=128)                               ### 区域名
+    ### area_year = models.IntegerField()                                      ### 区域対象年
+    ### begin_date = models.DateField()                                        ### 開始日
+    ### end_date = models.DateField()                                          ### 終了日
+    ### agri_area = models.IntegerField()                                      ### 農地面積
+    ### underground_area = models.IntegerField()                               ### 地下面積
+    ### crop_damage = models.IntegerField()                                    ### 農作物被害額
+
+    class Meta:
+        db_table = 'area'
+
+    def __str__(self):
+        return '<AREA: ' + self.area_id + ', ' + self.area_name + '>'
+
+###############################################################################
+### 7020: 一般資産調査票（入力DB）
+###############################################################################
+class WEATHER(models.Model):
+    weather_id = models.IntegerField(primary_key=True)                         ### 異常気象ID
+    weather_name = models.CharField(max_length=128)                            ### 異常気象名
+    ### weather_year = models.IntegerField()                                   ### 異常気象対象年
+    begin_date = models.DateField()                                            ### 開始日
+    end_date = models.DateField()                                              ### 終了日
+
+    class Meta:
+        db_table = 'weather'
+    
+    def __str__(self):
+        return '<WEATHER: ' + self.weather_id + ', ' + self.weather_name + '>'
+
+###############################################################################
+### 7030: 一般資産調査票（入力DB）
 ### トランザクション系テーブル（更新テーブル）
 ### 主に入力用（アップロードダウンロード）
 ### 調査員調査票のヘッダ部分（都道府県、市区町村、水害区域番号、水害区域面積、農作物被害額、異常気象コードなど）と
@@ -804,42 +837,7 @@ class SUIGAI(models.Model):
         return '<SUIGAI: ' + self.suigai_id + ', ' + self.suigai_name + '>'
 
 ###############################################################################
-### 2020: 異常気象（ほぼ、水害）（入力DB）
-###############################################################################
-class WEATHER(models.Model):
-    weather_id = models.IntegerField(primary_key=True)                         ### 異常気象ID
-    weather_name = models.CharField(max_length=128)                            ### 異常気象名
-    ### weather_year = models.IntegerField()                                   ### 異常気象対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-
-    class Meta:
-        db_table = 'weather'
-    
-    def __str__(self):
-        return '<WEATHER: ' + self.weather_id + ', ' + self.weather_name + '>'
-
-###############################################################################
-### 2030: 区域（入力DB）
-###############################################################################
-class AREA(models.Model):
-    area_id = models.IntegerField(primary_key=True)                            ### 区域ID
-    area_name = models.CharField(max_length=128)                               ### 区域名
-    ### area_year = models.IntegerField()                                      ### 区域対象年
-    ### begin_date = models.DateField()                                        ### 開始日
-    ### end_date = models.DateField()                                          ### 終了日
-    ### agri_area = models.IntegerField()                                      ### 農地面積
-    ### underground_area = models.IntegerField()                               ### 地下面積
-    ### crop_damage = models.IntegerField()                                    ### 農作物被害額
-
-    class Meta:
-        db_table = 'area'
-
-    def __str__(self):
-        return '<AREA: ' + self.area_id + ', ' + self.area_name + '>'
-
-###############################################################################
-### 2040: 一般資産調査票（入力DB）
+### 7040: 一般資産調査票（入力DB）
 ###############################################################################
 class IPPAN(models.Model):
     ippan_id = models.IntegerField(primary_key=True)                           ### 一般資産調査票ID
@@ -951,7 +949,7 @@ class IPPAN(models.Model):
         return '<IPPAN: ' + self.ippan_id + ', ' + self.ippan_name + '>'
 
 ###############################################################################
-### 2050: 一般資産調査票（入力DB）
+### 7050: 一般資産調査票（入力DB）
 ###############################################################################
 class IPPAN_VIEW(models.Model):
     ippan_id = models.IntegerField(primary_key=True)                           ### 一般資産調査票ID
@@ -1085,25 +1083,16 @@ class IPPAN_VIEW(models.Model):
         return '<IPPAN_VIEW: ' + self.ippan_id + ', ' + self.ippan_name + '>'
 
 ###############################################################################
-### ---: 一般資産調査票（市区町村用）
-###############################################################################
-###############################################################################
-### ---: 一般資産調査票（都道府県用）
-###############################################################################
-
-###############################################################################
-###############################################################################
 ### 集計DB
-###############################################################################
 ###############################################################################
         
 ###############################################################################
-### 3010: 一般資産集計結果（集計DB）
+### 8010: 一般資産調査票（集計DB）
 ###############################################################################
 class IPPAN_SUMMARY(models.Model):
-    ippan_summary_id = models.IntegerField(primary_key=True)                   ### 一般資産集計結果ID = 一般資産調査票ID
+    ### ippan_summary_id = models.IntegerField(primary_key=True)               ### postgresの自動インクリメントを使用する。 ※一般資産調査票の複数行の集計計算を１個のSQLで行うため ※MAX(*_ID+1)の場合、FORループが必要となる。
     ippan_id = models.IntegerField(null=True)                                  ### 一般資産調査票ID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    suigai_id = models.IntegerField(null=True)                                 ### 一般資産調査票ID
     
     ### 家屋被害額(集計DB)
     house_summary_lv00 = models.FloatField(null=True)                          ### 家屋被害額（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
@@ -1130,7 +1119,7 @@ class IPPAN_SUMMARY(models.Model):
     car_summary_full = models.FloatField(null=True)                            ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
 
     ### 家庭応急対策費_代替活動費(集計DB) 
-    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費_代替活動費vv（被災世帯数×代替活動費）
+    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
     house_alt_summary_lv01_49 = models.FloatField(null=True)                   ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
     house_alt_summary_lv50_99 = models.FloatField(null=True)                   ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
     house_alt_summary_lv100 = models.FloatField(null=True)                     ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
@@ -1146,36 +1135,36 @@ class IPPAN_SUMMARY(models.Model):
     house_clean_summary_full = models.FloatField(null=True)                    ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
 
     ### 事業所被害額_償却資産被害額(集計DB) 
-    office_dep_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
-    office_dep_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
-    office_dep_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
-    office_dep_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
-    ### office_dep_summary_half = models.FloatField(null=True)                 ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
-    office_dep_summary_full = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    ### office_dep_summary_half = models.FloatField(null=True)                 ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
+    office_dep_summary_full = models.FloatField(null=True)                     ### 事業所被害額_償却資産被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
     
     ### 事業所被害額_在庫資産被害額(集計DB) 
-    office_inv_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    office_inv_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    office_inv_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    office_inv_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    ### office_inv_summary_half = models.FloatField(null=True)                 ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    office_inv_summary_full = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    ### office_inv_summary_half = models.FloatField(null=True)                 ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
+    office_inv_summary_full = models.FloatField(null=True)                     ### 事業所被害額_在庫資産被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
     
-    ### 事業所被害額_営業停止に伴う損失額(集計DB) 
-    office_sus_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
-    office_sus_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
-    office_sus_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
-    office_sus_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
-    ### office_sus_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
-    office_sus_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
+    ### 事業所被害額_営業停止に伴う被害額(集計DB) 
+    office_sus_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
+    ### office_sus_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
+    office_sus_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う被害額（従業者数×営業停止日数×付加価値額）
 
-    ### 事業所被害額_営業停滞に伴う損失額(集計DB) 
-    office_stg_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
-    office_stg_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
-    office_stg_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
-    office_stg_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
-    ### office_stg_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
-    office_stg_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う損失額（従業者数×（営業停滞日数/2）×付加価値額）
+    ### 事業所被害額_営業停滞に伴う被害額(集計DB) 
+    office_stg_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv01_49 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv50_99 = models.FloatField(null=True)                  ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
+    ### office_stg_summary_half = models.FloatField(null=True)                 ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
+    office_stg_summary_full = models.FloatField(null=True)                     ### 事業所被害額_営業停滞に伴う被害額（従業者数×（営業停滞日数/2）×付加価値額）
 
     ### 農漁家被害額_償却資産被害額(集計DB)
     farmer_fisher_dep_summary_lv00 = models.FloatField(null=True)              ### 農漁家被害額_償却資産被害額（農漁家戸数×農漁家の償却資産×浸水または土砂による被害率）
@@ -1208,13 +1197,11 @@ class IPPAN_SUMMARY(models.Model):
         return '<IPPAN_SUMMARY: ' + self.ippan_summary_id + '>'
 
 ###############################################################################
-###############################################################################
 ### 管理DB
-###############################################################################
 ###############################################################################
         
 ###############################################################################
-### 4010: 一般資産レポート（管理DB）
+### 9010: 一般資産調査票（管理DB）
 ###############################################################################
 class IPPAN_REPORT(models.Model):
     ippan_report_id = models.CharField(max_length=10, primary_key=True)
@@ -1226,9 +1213,7 @@ class IPPAN_REPORT(models.Model):
         return '<IPPAN_REPORT: ' + self.ippan_report_id + '>'
 
 ###############################################################################
-###############################################################################
 ### その他DB、未使用DB
-###############################################################################
 ###############################################################################
         
 ### ---: 公共土木レポート
@@ -1360,4 +1345,12 @@ class KOEKI(models.Model):
     def __str__(self):
         return '<KOEKI: ' + self.koeki_id + ', ' + self.koeki_name + '>'
 
+### ---: 
+class TEST_20220614(models.Model):    
+    test_name = models.FloatField(null=True)
     
+    class Meta:
+        db_table = 'test_20220614'
+        
+    def __str__(self):
+        return '<TEST_20220614: ' + self.test_name + '>'

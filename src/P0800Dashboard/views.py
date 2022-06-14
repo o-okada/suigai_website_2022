@@ -58,7 +58,7 @@ from P0000Common.models import KOKYO                   ### 206: 公共土木調�
 from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
 
 from P0000Common.models import IPPAN_VIEW
-from P0000Common.models import IPPAN_SUMMARY
+### from P0000Common.models import IPPAN_SUMMARY
 
 from P0000Common.common import print_log
 
