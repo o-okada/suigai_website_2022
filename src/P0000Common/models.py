@@ -388,55 +388,55 @@ class OFFICE_ASSET(models.Model):
         return '<OFFICE_ASSET: ' + self.office_asset_code + '>'
 
 ###############################################################################
-### 5020: 事業所営業停止損失（マスタDB）
+### 5020: 事業所被害額_営業停止に伴う損失額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class OFFICE_SUSPEND(models.Model):
-    office_suspend_code = models.CharField(max_length=10, primary_key=True)    ### 事業所営業停止コード
-    office_suspend_days_lv00 = models.FloatField()                             ### 事業所営業停止日数_床下
-    office_suspend_days_lv00_50 = models.FloatField()                          ### 事業所営業停止日数_0から50cm未満
-    office_suspend_days_lv50_100 = models.FloatField()                         ### 事業所営業停止日数_50から100cm未満
-    office_suspend_days_lv100_200 = models.FloatField()                        ### 事業所営業停止日数_100から200cm未満
-    office_suspend_days_lv200_300 = models.FloatField()                        ### 事業所営業停止日数_200から300cm未満
-    office_suspend_days_lv300 = models.FloatField()                            ### 事業所営業停止日数_300cm以上
+    office_sus_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停止コード
+    office_sus_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停止日数_床下
+    office_sus_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停止日数_0から50cm未満
+    office_sus_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停止日数_50から100cm未満
+    office_sus_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停止日数_100から200cm未満
+    office_sus_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停止日数_200から300cm未満
+    office_sus_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停止日数_300cm以上
     
     class Meta:
         db_table = 'office_suspend'
         
     def __str__(self):
-        return '<OFFICE_SUSPEND: ' + self.office_suspend_code + '>'
+        return '<OFFICE_SUSPEND: ' + self.office_sus_code + '>'
 
 ###############################################################################
-### 5030: 事業所営業停止損失（マスタDB）
+### 5030: 事業所被害額_営業停滞に伴う損失額（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class OFFICE_STAGNATE(models.Model):
-    office_stagnate_code = models.CharField(max_length=10, primary_key=True)   ### 事業所営業停止コード
-    office_stagnate_days_lv00 = models.FloatField()                            ### 事業所営業停止コード
-    office_stagnate_days_lv00_50 = models.FloatField()                         ### 事業所営業停止コード
-    office_stagnate_days_lv50_100 = models.FloatField()                        ### 事業所営業停止コード
-    office_stagnate_days_lv100_200 = models.FloatField()                       ### 事業所営業停止コード
-    office_stagnate_days_lv200_300 = models.FloatField()                       ### 事業所営業停止コード
-    office_stagnate_days_lv300 = models.FloatField()                           ### 事業所営業停止コード
+    office_stg_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停滞コード
+    office_stg_days_lv00 = models.FloatField(null=True)                        ### 事業所営業停滞日数_床下
+    office_stg_days_lv00_50 = models.FloatField(null=True)                     ### 事業所営業停滞日数_0から50cm未満
+    office_stg_days_lv50_100 = models.FloatField(null=True)                    ### 事業所営業停滞日数_50から100cm未満
+    office_stg_days_lv100_200 = models.FloatField(null=True)                   ### 事業所営業停滞日数_100から200cm未満
+    office_stg_days_lv200_300 = models.FloatField(null=True)                   ### 事業所営業停滞日数_200から300cm未満
+    office_stg_days_lv300 = models.FloatField(null=True)                       ### 事業所営業停滞日数_300cm以上
 
     class Meta:
         db_table = 'office_stagnate'
         
     def __str__(self):
-        return '<OFFICE_STAGNATE: ' + self.office_stagnate_code + '>'
+        return '<OFFICE_STAGNATE: ' + self.office_stg_code + '>'
 
 ###############################################################################
-### 5040: 事業所営業停止損失（マスタDB）
+### 5040: 事業所応急対策費_代替活動費（マスタDB）
 ### 集計用資産額、集計用損失額
 ###############################################################################
 class OFFICE_ALT(models.Model):
-    office_alt_code = models.CharField(max_length=10, primary_key=True)        ### 事業所営業停止コード
-    office_alt_lv00 = models.FloatField()                                      ### 事業所営業停止コード
-    office_alt_lv00_50 = models.FloatField()                                   ### 事業所営業停止コード
-    office_alt_lv50_100 = models.FloatField()                                  ### 事業所営業停止コード
-    office_alt_lv100_200 = models.FloatField()                                 ### 事業所営業停止コード
-    office_alt_lv200_300 = models.FloatField()                                 ### 事業所営業停止コード
-    office_alt_lv300 = models.FloatField()                                     ### 事業所営業停止コード
+    office_alt_code = models.CharField(max_length=10, primary_key=True)        ### 事業所応急対策費_代替活動費コード
+    office_alt_lv00 = models.FloatField(null=True)                             ### 事業所応急対策費_代替活動費_床下
+    office_alt_lv00_50 = models.FloatField(null=True)                          ### 事業所応急対策費_代替活動費_0から50cm未満
+    office_alt_lv50_100 = models.FloatField(null=True)                         ### 事業所応急対策費_代替活動費_50から100cm未満
+    office_alt_lv100_200 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_100から200cm未満
+    office_alt_lv200_300 = models.FloatField(null=True)                        ### 事業所応急対策費_代替活動費_200から300cm未満
+    office_alt_lv300 = models.FloatField(null=True)                            ### 事業所応急対策費_代替活動費_300cm以上
 
     class Meta:
         db_table = 'office_alt'
@@ -452,18 +452,18 @@ class OFFICE_RATE(models.Model):
     office_rate_code = models.CharField(max_length=10, primary_key=True)       ### 事業所被害率コード
     flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
     ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    office_dep_rate_lv00 = models.FloatField()                                 ### 事業所償却資産被害率_床下
-    office_dep_rate_lv00_50 = models.FloatField()                              ### 事業所償却資産被害率_0から50cm未満
-    office_dep_rate_lv50_100 = models.FloatField()                             ### 事業所償却資産被害率_50から100cm未満
-    office_dep_rate_lv100_200 = models.FloatField()                            ### 事業所償却資産被害率_100から200cm未満
-    office_dep_rate_lv200_300 = models.FloatField()                            ### 事業所償却資産被害率_200から300cm未満
-    office_dep_rate_lv300 = models.FloatField()                                ### 事業所償却資産被害率_300cm以上
-    office_inv_rate_lv00 = models.FloatField()                                 ### 事業所在庫資産被害率_床下
-    office_inv_rate_lv00_50 = models.FloatField()                              ### 事業所在庫資産被害率_0から50cm未満
-    office_inv_rate_lv50_100 = models.FloatField()                             ### 事業所在庫資産被害率_50から100cm未満
-    office_inv_rate_lv100_200 = models.FloatField()                            ### 事業所在庫資産被害率_100から200cm未満
-    office_inv_rate_lv200_300 = models.FloatField()                            ### 事業所在庫資産被害率_200から300cm未満
-    office_inv_rate_lv300 = models.FloatField()                                ### 事業所在庫資産被害率_300cm以上
+    office_dep_rate_lv00 = models.FloatField()                                 ### 事業所被害率_償却資産被害率_床下
+    office_dep_rate_lv00_50 = models.FloatField()                              ### 事業所被害率_償却資産被害率_0から50cm未満
+    office_dep_rate_lv50_100 = models.FloatField()                             ### 事業所被害率_償却資産被害率_50から100cm未満
+    office_dep_rate_lv100_200 = models.FloatField()                            ### 事業所被害率_償却資産被害率_100から200cm未満
+    office_dep_rate_lv200_300 = models.FloatField()                            ### 事業所被害率_償却資産被害率_200から300cm未満
+    office_dep_rate_lv300 = models.FloatField()                                ### 事業所被害率_償却資産被害率_300cm以上
+    office_inv_rate_lv00 = models.FloatField()                                 ### 事業所被害率_在庫資産被害率_床下
+    office_inv_rate_lv00_50 = models.FloatField()                              ### 事業所被害率_在庫資産被害率_0から50cm未満
+    office_inv_rate_lv50_100 = models.FloatField()                             ### 事業所被害率_在庫資産被害率_50から100cm未満
+    office_inv_rate_lv100_200 = models.FloatField()                            ### 事業所被害率_在庫資産被害率_100から200cm未満
+    office_inv_rate_lv200_300 = models.FloatField()                            ### 事業所被害率_在庫資産被害率_200から300cm未満
+    office_inv_rate_lv300 = models.FloatField()                                ### 事業所被害率_在庫資産被害率_300cm以上
 
     class Meta:
         db_table = 'office_rate'
@@ -1136,20 +1136,20 @@ class IPPAN_SUMMARY(models.Model):
     car_summary_full = models.FloatField(null=True)                            ### 家庭用品自動車被害額（被災世帯数×家庭用品自動車所有額×浸水または土砂による被害率）
 
     ### 家庭応急対策費_代替活動費(集計DB) 
-    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
-    house_alt_summary_lv01_49 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）
-    house_alt_summary_lv50_99 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×代替活動費）
-    house_alt_summary_lv100 = models.FloatField(null=True)                     ### 家庭応急対策費（被災世帯数×代替活動費）
-    house_alt_summary_half = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
-    house_alt_summary_full = models.FloatField(null=True)                      ### 家庭応急対策費（被災世帯数×代替活動費）
+    house_alt_summary_lv00 = models.FloatField(null=True)                      ### 家庭応急対策費_代替活動費vv（被災世帯数×代替活動費）
+    house_alt_summary_lv01_49 = models.FloatField(null=True)                   ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
+    house_alt_summary_lv50_99 = models.FloatField(null=True)                   ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
+    house_alt_summary_lv100 = models.FloatField(null=True)                     ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
+    house_alt_summary_half = models.FloatField(null=True)                      ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
+    house_alt_summary_full = models.FloatField(null=True)                      ### 家庭応急対策費_代替活動費（被災世帯数×代替活動費）
 
     ### 家庭応急対策費_清掃費(集計DB) 
-    house_clean_summary_lv00 = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv01_49 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv50_99 = models.FloatField(null=True)                 ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_lv100 = models.FloatField(null=True)                   ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_half = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
-    house_clean_summary_full = models.FloatField(null=True)                    ### 家庭応急対策費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv00 = models.FloatField(null=True)                    ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv01_49 = models.FloatField(null=True)                 ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv50_99 = models.FloatField(null=True)                 ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_lv100 = models.FloatField(null=True)                   ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_half = models.FloatField(null=True)                    ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
+    house_clean_summary_full = models.FloatField(null=True)                    ### 家庭応急対策費_清掃費（被災世帯数×清掃日数×清掃労働単価）
 
     ### 事業所被害額_償却資産被害額(集計DB) 
     office_dep_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの償却資産×浸水または土砂による被害率）
@@ -1166,14 +1166,6 @@ class IPPAN_SUMMARY(models.Model):
     office_inv_summary_lv100 = models.FloatField(null=True)                    ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
     ### office_inv_summary_half = models.FloatField(null=True)                 ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
     office_inv_summary_full = models.FloatField(null=True)                     ### 事業所被害額（従業者数×産業分類ごとの在庫資産×浸水または土砂による被害率）
-    
-    ### 事業所営業損失額(集計DB) 
-    ### office_ope_summary_lv00 = models.FloatField(null=True)                 ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### office_ope_summary_lv01_49 = models.FloatField(null=True)              ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### office_ope_summary_lv50_99 = models.FloatField(null=True)              ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### office_ope_summary_lv100 = models.FloatField(null=True)                ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### ### office_ope_summary_half = models.FloatField(null=True)             ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
-    ### office_ope_summary_full = models.FloatField(null=True)                 ### 事業所営業損失額（従業者数×（営業停止日数+営業停滞日数/2）×付加価値額）
     
     ### 事業所被害額_営業停止に伴う損失額(集計DB) 
     office_sus_summary_lv00 = models.FloatField(null=True)                     ### 事業所被害額_営業停止に伴う損失額（従業者数×営業停止日数×付加価値額）
