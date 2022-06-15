@@ -52,10 +52,6 @@ from P0000Common.models import SUIGAI                  ### 200: 水害
 from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
 from P0000Common.models import AREA                    ### 202: 区域
 from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
-### from P0000Common.models import IPPAN_CITY          ### 204: 
-### from P0000Common.models import IPPAN_KEN           ### 205: 
-from P0000Common.models import KOKYO                   ### 206: 公共土木調査票
-from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
 
 from P0000Common.models import IPPAN_VIEW
 ### from P0000Common.models import IPPAN_SUMMARY

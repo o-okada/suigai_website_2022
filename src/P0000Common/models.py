@@ -12,9 +12,7 @@ from django.db import models
 ###     pass
 
 ###############################################################################
-###############################################################################
 ### マスタDB
-###############################################################################
 ###############################################################################
 
 ###############################################################################
@@ -225,7 +223,7 @@ class INDUSTRY(models.Model):
 ###############################################################################
 class HOUSE_ASSET(models.Model):
     house_asset_code = models.CharField(max_length=10, primary_key=True)       ### 家屋評価額コード
-    ken_code = models.CharField(max_length=10)                                 ### 県コード
+    ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
     house_asset = models.FloatField(null=True)                                 ### 家屋評価額
 
     class Meta:
@@ -279,7 +277,7 @@ class HOUSE_ALT(models.Model):
 ### 集計用資産額、集計用被害率
 ###############################################################################
 class HOUSE_CLEAN(models.Model):
-    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃費コード
+    house_clean_code = models.CharField(max_length=10, primary_key=True)       ### 家庭応急対策費_清掃日数コード
     house_clean_days_lv00 = models.FloatField()                                ### 家庭応急対策費_清掃日数_床下
     house_clean_days_lv00_50 = models.FloatField()                             ### 家庭応急対策費_清掃日数_0から50cm未満
     house_clean_days_lv50_100 = models.FloatField()                            ### 家庭応急対策費_清掃日数_50から100cm未満
@@ -370,7 +368,7 @@ class CAR_RATE(models.Model):
 ###############################################################################
 class OFFICE_ASSET(models.Model):
     office_asset_code = models.CharField(max_length=10, primary_key=True)      ### 事業所資産額コード
-    industry_code = models.CharField(max_length=10)                            ### 事業所産業分類コード
+    industry_code = models.CharField(max_length=10)                            ### 産業分類コード
     office_dep_asset = models.FloatField(null=True)                            ### 事業所資産額_償却資産額
     office_inv_asset = models.FloatField(null=True)                            ### 事業所資産額_在庫資産額
     office_va_asset = models.FloatField(null=True)                             ### 事業所資産額_付加価値額
@@ -740,17 +738,11 @@ class FARMER_FISHER_DAMAGE(models.Model):
 ###############################################################################
 
 ###############################################################################
-### 7010: 一般資産調査票（入力DB）
+### 7010: 一般資産入力データ_水害区域（入力DB）
 ###############################################################################
 class AREA(models.Model):
-    area_id = models.IntegerField(primary_key=True)                            ### 区域ID
-    area_name = models.CharField(max_length=128)                               ### 区域名
-    ### area_year = models.IntegerField()                                      ### 区域対象年
-    ### begin_date = models.DateField()                                        ### 開始日
-    ### end_date = models.DateField()                                          ### 終了日
-    ### agri_area = models.IntegerField()                                      ### 農地面積
-    ### underground_area = models.IntegerField()                               ### 地下面積
-    ### crop_damage = models.IntegerField()                                    ### 農作物被害額
+    area_id = models.IntegerField(primary_key=True)                            ### 水害区域ID
+    area_name = models.CharField(max_length=128)                               ### 水害区域名
 
     class Meta:
         db_table = 'area'
@@ -759,7 +751,7 @@ class AREA(models.Model):
         return '<AREA: ' + self.area_id + ', ' + self.area_name + '>'
 
 ###############################################################################
-### 7020: 一般資産調査票（入力DB）
+### 7020: 一般資産入力データ_異常気象（入力DB）
 ###############################################################################
 class WEATHER(models.Model):
     weather_id = models.IntegerField(primary_key=True)                         ### 異常気象ID
@@ -775,7 +767,7 @@ class WEATHER(models.Model):
         return '<WEATHER: ' + self.weather_id + ', ' + self.weather_name + '>'
 
 ###############################################################################
-### 7030: 一般資産調査票（入力DB）
+### 7030: 一般資産入力データ_ヘッダ部分（入力DB）
 ### トランザクション系テーブル（更新テーブル）
 ### 主に入力用（アップロードダウンロード）
 ### 調査員調査票のヘッダ部分（都道府県、市区町村、水害区域番号、水害区域面積、農作物被害額、異常気象コードなど）と
@@ -797,12 +789,12 @@ class SUIGAI(models.Model):
     ### https://oss-db.jp/dojo/dojo_info_04
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ### FOR GROUP BY
     city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ### FOR GROUP BY
-    begin_date = models.DateField(null=True)                                   ### 開始日 ### FOR GROUP BY
-    end_date = models.DateField(null=True)                                     ### 終了日 ### FOR GROUP BY
+    begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ### FOR GROUP BY
+    end_date = models.DateField(null=True)                                     ### 水害終了年月日 ### FOR GROUP BY
     cause_1_code = models.CharField(max_length=10, null=True)                  ### 水害原因_1_コード ### FOR GROUP BY
     cause_2_code = models.CharField(max_length=10, null=True)                  ### 水害原因_2_コード ### FOR GROUP BY
     cause_3_code = models.CharField(max_length=10, null=True)                  ### 水害原因_3_コード ### FOR GROUP BY
-    area_id = models.IntegerField(null=True)                                   ### 区域ID ### FOR GROUP BY
+    area_id = models.IntegerField(null=True)                                   ### 水害区域ID ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行10
     suikei_code = models.CharField(max_length=10, null=True)                   ### 水系コード ### FOR GROUP BY
@@ -837,7 +829,7 @@ class SUIGAI(models.Model):
         return '<SUIGAI: ' + self.suigai_id + ', ' + self.suigai_name + '>'
 
 ###############################################################################
-### 7040: 一般資産調査票（入力DB）
+### 7040: 一般資産入力データ_一覧表部分（入力DB）
 ###############################################################################
 class IPPAN(models.Model):
     ippan_id = models.IntegerField(primary_key=True)                           ### 一般資産調査票ID
@@ -849,27 +841,10 @@ class IPPAN(models.Model):
     ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
     ### https://torazuka.hatenablog.com/entry/20110713/pk
     ### https://oss-db.jp/dojo/dojo_info_04
-    ### ken_code = models.CharField(max_length=10, null=True)                  ### 都道府県コード ### FOR GROUP BY
-    ### city_code = models.CharField(max_length=10, null=True)                 ### 市区町村コード ### FOR GROUP BY
-    ### begin_date = models.DateField(null=True)                               ### 開始日 ### FOR GROUP BY
-    ### end_date = models.DateField(null=True)                                 ### 終了日 ### FOR GROUP BY
-    ### cause_1_code = models.CharField(max_length=10, null=True)              ### 水害原因_1_コード ### FOR GROUP BY
-    ### cause_2_code = models.CharField(max_length=10, null=True)              ### 水害原因_2_コード ### FOR GROUP BY
-    ### cause_3_code = models.CharField(max_length=10, null=True)              ### 水害原因_3_コード ### FOR GROUP BY
-    ### area_id = models.IntegerField(null=True)                               ### 区域ID ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行10
-    ### suikei_code = models.CharField(max_length=10, null=True)               ### 水系コード ### FOR GROUP BY
-    ### kasen_code = models.CharField(max_length=10, null=True)                ### 河川コード ### FOR GROUP BY
-    ### gradient_code = models.CharField(max_length=10, null=True)             ### 地盤勾配区分コードFOR PARAM ### FOR GROUP BY
 
     ### 帳票のヘッダ部分 行14
-    ### residential_area = models.FloatField()                                 ### 農地面積（単位m2）
-    ### agricultural_area = models.FloatField()                                ### 農地面積（単位m2）
-    ### underground_area = models.FloatField()                                 ### 地下面積（単位m2）
-    ### kasen_kaigan_code = models.CharField(max_length=10, null=True)         ### 河川海岸（工種）コード ### FOR GROUP BY
-    ### crop_damage = models.FloatField()                                      ### 農作物被害額（単位千円）
-    ### weather_id = models.IntegerField(null=True)                            ### 異常気象ID ### FOR GROUP BY
 
     ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
     ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
@@ -974,14 +949,14 @@ class IPPAN_VIEW(models.Model):
     ken_name = models.CharField(max_length=128)                                ### 都道府県名
     city_code = models.CharField(max_length=10)                                ### 市区町村コード
     city_name = models.CharField(max_length=128)                               ### 市区町村名
-    cause_1_code = models.CharField(max_length=10)                             ### 水害原因コード
-    cause_1_name = models.CharField(max_length=128)                            ### 水害原因名
-    cause_2_code = models.CharField(max_length=10)                             ### 水害原因コード
-    cause_2_name = models.CharField(max_length=128)                            ### 水害原因名
-    cause_3_code = models.CharField(max_length=10)                             ### 水害原因コード
-    cause_3_name = models.CharField(max_length=128)                            ### 水害原因名
-    area_id = models.IntegerField()                                            ### 区域ID
-    area_name = models.CharField(max_length=128)                               ### 区域名
+    cause_1_code = models.CharField(max_length=10)                             ### 水害原因コード1
+    cause_1_name = models.CharField(max_length=128)                            ### 水害原因名1
+    cause_2_code = models.CharField(max_length=10)                             ### 水害原因コード2
+    cause_2_name = models.CharField(max_length=128)                            ### 水害原因名2
+    cause_3_code = models.CharField(max_length=10)                             ### 水害原因コード3
+    cause_3_name = models.CharField(max_length=128)                            ### 水害原因名3
+    area_id = models.IntegerField()                                            ### 水害区域ID
+    area_name = models.CharField(max_length=128)                               ### 水害区域名
 
     ### 帳票のヘッダ部分 行10
     suikei_code = models.CharField(max_length=10)                              ### 水系コード
@@ -1087,7 +1062,7 @@ class IPPAN_VIEW(models.Model):
 ###############################################################################
         
 ###############################################################################
-### 8010: 一般資産調査票（集計DB）
+### 8010: 一般資産集計データ（集計DB）
 ###############################################################################
 class IPPAN_SUMMARY(models.Model):
     ### ippan_summary_id = models.IntegerField(primary_key=True)               ### postgresの自動インクリメントを使用する。 ※一般資産調査票の複数行の集計計算を１個のSQLで行うため ※MAX(*_ID+1)の場合、FORループが必要となる。
@@ -1195,6 +1170,14 @@ class IPPAN_SUMMARY(models.Model):
         
     def __str__(self):
         return '<IPPAN_SUMMARY: ' + self.ippan_summary_id + '>'
+
+
+
+
+
+
+
+
 
 ###############################################################################
 ### 管理DB
