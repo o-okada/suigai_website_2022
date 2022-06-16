@@ -38,24 +38,32 @@ from P0000Common.models import USAGE                   ### 011: 地下空間の�
 from P0000Common.models import FLOOD_SEDIMENT          ### 012: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 013: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 014: 産業分類
-from P0000Common.models import RESTORATION             ### 015: 復旧事業工種
-from P0000Common.models import HOUSE_ASSET             ### 100: 県別家屋評価額
-from P0000Common.models import HOUSE_DAMAGE            ### 101: 家屋被害率
-from P0000Common.models import HOUSEHOLD_DAMAGE        ### 102: 家庭用品自動車以外被害率
-from P0000Common.models import CAR_DAMAGE              ### 103: 家庭用品自動車被害率
-from P0000Common.models import HOUSE_COST              ### 104: 家庭応急対策費
-from P0000Common.models import OFFICE_ASSET            ### 105: 産業分類別資産額
-from P0000Common.models import OFFICE_DAMAGE           ### 106: 事業所被害率
-from P0000Common.models import OFFICE_COST             ### 107: 事業所営業停止損失
-from P0000Common.models import FARMER_FISHER_DAMAGE    ### 108: 農漁家被害率
-from P0000Common.models import SUIGAI                  ### 200: 水害
-from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
-from P0000Common.models import AREA                    ### 202: 区域
-from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
-### from P0000Common.models import IPPAN_CITY          ### 204: 
-### from P0000Common.models import IPPAN_KEN           ### 205: 
-from P0000Common.models import KOKYO                   ### 206: 公共土木調査票
-from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
+
+from P0000Common.models import HOUSE_ASSET             ### 100: 家屋評価額
+from P0000Common.models import HOUSE_RATE              ### 101: 家屋被害率
+from P0000Common.models import HOUSE_ALT               ### 102: 家庭応急対策費_代替活動費
+from P0000Common.models import HOUSE_CLEAN             ### 103: 家庭応急対策費_清掃日数、清掃労働単価
+from P0000Common.models import HOUSEHOLD_ASSET         ### 104: 家庭用品自動車以外所有額
+from P0000Common.models import HOUSEHOLD_RATE          ### 105: 家庭用品自動車以外被害率
+from P0000Common.models import CAR_ASSET               ### 106: 家庭用品自動車所有額
+from P0000Common.models import CAR_RATE                ### 107: 家庭用品自動車被害率
+from P0000Common.models import OFFICE_ASSET            ### 108: 事業所資産額
+from P0000Common.models import OFFICE_RATE             ### 109: 事業所被害率
+from P0000Common.models import OFFICE_SUSPEND          ### 110: 事業所営業停止日数
+from P0000Common.models import OFFICE_STAGNATE         ### 111: 事業所営業停滞日数
+from P0000Common.models import OFFICE_ALT              ### 112: 事業所応急対策費_代替活動費
+from P0000Common.models import FARMER_FISHER_ASSET     ### 113: 農漁家資産額
+from P0000Common.models import FARMER_FISHER_RATE      ### 114: 農漁家被害率
+
+from P0000Common.models import AREA                    ### 200: 一般資産入力データ_水害区域
+from P0000Common.models import WEATHER                 ### 201: 一般資産入力データ_異常気象
+from P0000Common.models import SUIGAI                  ### 202: 一般資産入力データ_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 203: 一般資産入力データ_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 204: 一般資産ビューデータ_一覧表部分
+
+from P0000Common.models import IPPAN_SUMMARY           ### 300: 一般資産集計データ_集計結果
+### from P0000Common.models import IPPAN_GROUP_BY_KEN      ### 301: 一般資産集計データ_集計結果_都道府県別
+### from P0000Common.models import IPPAN_GROUP_BY_SUIKEI   ### 302: 一般資産集計データ_集計結果_水系別
 
 from P0000Common.common import print_log
 
@@ -67,7 +75,7 @@ def index_view(request):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.index_view()関数が開始しました。', 'INFO')
@@ -131,7 +139,7 @@ def index_view(request):
 
         #######################################################################
         ### レスポンスセット処理(0020)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.index_view()関数 STEP 3/4.', 'INFO')
         template = loader.get_template('P0200ExcelDownload/index.html')
@@ -204,7 +212,7 @@ def building_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.building_view()関数が開始しました。', 'INFO')
@@ -214,7 +222,7 @@ def building_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、建物区分データを取得する。
+        ### DBにアクセスして、建物区分データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 2/4.', 'INFO')
         building_list = BUILDING.objects.raw("""SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
@@ -242,7 +250,7 @@ def building_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.building_view()関数が正常終了しました。', 'INFO')
@@ -265,7 +273,7 @@ def ken_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ken_view()関数が開始しました。', 'INFO')
@@ -275,7 +283,7 @@ def ken_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、都道府県データを取得する。
+        ### DBにアクセスして、都道府県データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 2/4.', 'INFO')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
@@ -303,7 +311,7 @@ def ken_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ken_view()関数が正常終了しました。', 'INFO')
@@ -326,7 +334,7 @@ def city_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.city_view()関数が開始しました。', 'INFO')
@@ -336,7 +344,7 @@ def city_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、市区町村データを取得する。
+        ### DBにアクセスして、市区町村データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 2/4.', 'INFO')
         city_list = CITY.objects.raw("""SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
@@ -370,7 +378,7 @@ def city_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.city_view()関数が正常終了しました。', 'INFO')
@@ -393,7 +401,7 @@ def kasen_kaigan_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が開始しました。', 'INFO')
@@ -403,7 +411,7 @@ def kasen_kaigan_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、水害発生地点工種（河川海岸区分）データを取得する。
+        ### DBにアクセスして、水害発生地点工種（河川海岸区分）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 2/4.', 'INFO')
         kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
@@ -431,7 +439,7 @@ def kasen_kaigan_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が正常終了しました。', 'INFO')
@@ -454,7 +462,7 @@ def suikei_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数が開始しました。', 'INFO')
@@ -464,7 +472,7 @@ def suikei_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、水系（水系・沿岸）データを取得する。
+        ### DBにアクセスして、水系（水系・沿岸）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 2/4.', 'INFO')
         suikei_list = SUIKEI.objects.raw("""SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
@@ -494,7 +502,7 @@ def suikei_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数が正常終了しました。', 'INFO')
@@ -517,7 +525,7 @@ def suikei_type_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が開始しました。', 'INFO')
@@ -527,7 +535,7 @@ def suikei_type_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、水系種別（水系・沿岸種別）データを取得する。
+        ### DBにアクセスして、水系種別（水系・沿岸種別）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 2/4.', 'INFO')
         suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
@@ -555,7 +563,7 @@ def suikei_type_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が正常終了しました。', 'INFO')
@@ -578,7 +586,7 @@ def kasen_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数が開始しました。', 'INFO')
@@ -588,7 +596,7 @@ def kasen_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、河川（河川・海岸）データを取得する。
+        ### DBにアクセスして、河川（河川・海岸）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 2/4.', 'INFO')
         kasen_list = KASEN.objects.raw("""SELECT * FROM KASEN ORDER BY CAST(KASEN_CODE AS INTEGER)""", [])
@@ -620,7 +628,7 @@ def kasen_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数が正常終了しました。', 'INFO')
@@ -643,7 +651,7 @@ def kasen_type_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が開始しました。', 'INFO')
@@ -653,7 +661,7 @@ def kasen_type_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、河川種別（河川・海岸種別）データを取得する。
+        ### DBにアクセスして、河川種別（河川・海岸種別）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 2/4.', 'INFO')
         kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
@@ -681,7 +689,7 @@ def kasen_type_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が正常終了しました。', 'INFO')
@@ -704,7 +712,7 @@ def cause_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.cause_view()関数が開始しました。', 'INFO')
@@ -714,7 +722,7 @@ def cause_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、水害原因データを取得する。
+        ### DBにアクセスして、水害原因データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 2/4.', 'INFO')
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
@@ -742,7 +750,7 @@ def cause_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.cause_view()関数が正常終了しました。', 'INFO')
@@ -765,7 +773,7 @@ def underground_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.underground_view()関数が開始しました。', 'INFO')
@@ -775,7 +783,7 @@ def underground_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、地上地下区分データを取得する。
+        ### DBにアクセスして、地上地下区分データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 2/4.', 'INFO')
         underground_list = UNDERGROUND.objects.raw("""SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
@@ -803,7 +811,7 @@ def underground_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.underground_view()関数が正常終了しました。', 'INFO')
@@ -826,7 +834,7 @@ def usage_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.usage_view()関数が開始しました。', 'INFO')
@@ -836,7 +844,7 @@ def usage_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、地下空間の利用形態データを取得する。
+        ### DBにアクセスして、地下空間の利用形態データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 2/4.', 'INFO')
         usage_list = USAGE.objects.raw("""SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
@@ -864,7 +872,7 @@ def usage_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.usage_view()関数が正常終了しました。', 'INFO')
@@ -887,7 +895,7 @@ def flood_sediment_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.flood_sediment()関数が開始しました。', 'INFO')
@@ -897,7 +905,7 @@ def flood_sediment_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、浸水土砂区分データを取得する。
+        ### DBにアクセスして、浸水土砂区分データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 2/4.', 'INFO')
         flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
@@ -925,7 +933,7 @@ def flood_sediment_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数が正常終了しました。', 'INFO')
@@ -948,7 +956,7 @@ def gradient_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数が開始しました。', 'INFO')
@@ -958,7 +966,7 @@ def gradient_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、地盤勾配区分データを取得する。
+        ### DBにアクセスして、地盤勾配区分データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 2/4.', 'INFO')
         gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
@@ -986,7 +994,7 @@ def gradient_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数が正常終了しました。', 'INFO')
@@ -1009,7 +1017,7 @@ def industry_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.industry_view()関数が開始しました。', 'INFO')
@@ -1019,7 +1027,7 @@ def industry_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、産業分類データを取得する。
+        ### DBにアクセスして、産業分類データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 2/4.', 'INFO')
         industry_list = INDUSTRY.objects.raw("""SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
@@ -1047,7 +1055,7 @@ def industry_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.industry_view()関数が正常終了しました。', 'INFO')
@@ -1062,76 +1070,15 @@ def industry_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：restoration_view
-### 015: 復旧事業工種
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def restoration_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 STEP 1/4.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、復旧事業工種データを取得する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 STEP 2/4.', 'INFO')
-        restoration_list = RESTORATION.objects.raw("""SELECT * FROM RESTORATION ORDER BY CAST(RESTORATION_CODE AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_restoration.xlsx'
-        download_file_path = 'static/download_restoration.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '復旧事業工種'
-        ws.cell(row=1, column=1).value = '復旧事業工種コード'
-        ws.cell(row=1, column=2).value = '復旧事業工種名'
-        
-        if restoration_list:
-            for i, restoration in enumerate(restoration_list):
-                ws.cell(row=i+2, column=1).value = restoration.restoration_code
-                ws.cell(row=i+2, column=2).value = restoration.restoration_name
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.restoration_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="restoration.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.restoration_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
 ### 関数名：house_asset_view
-### 100: 県別家屋評価額
+### 100: 家屋評価額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def house_asset_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が開始しました。', 'INFO')
@@ -1141,7 +1088,7 @@ def house_asset_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、県別家屋評価額データを取得する。
+        ### DBにアクセスして、県別家屋評価額データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 2/4.', 'INFO')
         house_asset_list = HOUSE_ASSET.objects.raw("""SELECT * FROM HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)""", [])
@@ -1156,28 +1103,22 @@ def house_asset_view(request, lock):
         download_file_path = 'static/download_house_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '県別家屋被害'
-        ws.cell(row=1, column=1).value = '県別家屋被害コード'
-        ws.cell(row=1, column=2).value = '県コード'
-        ws.cell(row=1, column=3).value = '県別家屋被害対象年'
-        ws.cell(row=1, column=4).value = '開始日'
-        ws.cell(row=1, column=5).value = '終了日'
-        ws.cell(row=1, column=6).value = '県別家屋評価額'
+        ws.title = '家屋被害'
+        ws.cell(row=1, column=1).value = '家屋被害コード'
+        ws.cell(row=1, column=2).value = '都道府県コード'
+        ws.cell(row=1, column=3).value = '家屋評価額'
         
         if house_asset_list:
             for i, house_asset in enumerate(house_asset_list):
                 ws.cell(row=i+2, column=1).value = house_asset.house_asset_code
                 ws.cell(row=i+2, column=2).value = house_asset.ken_code
-                ws.cell(row=i+2, column=3).value = house_asset.house_asset_year
-                ws.cell(row=i+2, column=4).value = house_asset.begin_date
-                ws.cell(row=i+2, column=5).value = house_asset.end_date
-                ws.cell(row=i+2, column=6).value = house_asset.house_asset
+                ws.cell(row=i+2, column=3).value = house_asset.house_asset
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が正常終了しました。', 'INFO')
@@ -1192,441 +1133,500 @@ def house_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：house_damage_view
+### 関数名：house_rate_view
 ### 101: 家屋被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def house_damage_view(request, lock):
+def house_rate_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、家屋被害率データを取得する。
+        ### DBにアクセスして、家屋被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 STEP 2/4.', 'INFO')
-        house_damage_list = HOUSE_DAMAGE.objects.raw("""SELECT * FROM HOUSE_DAMAGE ORDER BY CAST(HOUSE_DAMAGE_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 2/4.', 'INFO')
+        house_rate_list = HOUSE_RATE.objects.raw("""SELECT * FROM HOUSE_RATE ORDER BY CAST(HOUSE_RATE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_house_damage.xlsx'
-        download_file_path = 'static/download_house_damage.xlsx'
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_house_rate.xlsx'
+        download_file_path = 'static/download_house_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
         ws.title = '家屋被害率'
         ws.cell(row=1, column=1).value = '家屋被害率コード'
-        ws.cell(row=1, column=2).value = '家屋被害率対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.cell(row=1, column=2).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=3).value = '地盤勾配区分コード'
+        ws.cell(row=1, column=4).value = '家屋被害率_床下'
+        ws.cell(row=1, column=5).value = '家屋被害率_0から50cm未満'
+        ws.cell(row=1, column=6).value = '家屋被害率_50から100cm未満'
+        ws.cell(row=1, column=7).value = '家屋被害率_100から200cm未満'
+        ws.cell(row=1, column=8).value = '家屋被害率_200から300cm未満'
+        ws.cell(row=1, column=9).value = '家屋被害率_300cm以上'
         
-        ws.cell(row=1, column=5).value = '被害率_浸水_勾配1_床下'
-        ws.cell(row=1, column=6).value = '被害率_浸水_勾配1_0から50cm未満'
-        ws.cell(row=1, column=7).value = '被害率_浸水_勾配1_50から100cm未満'
-        ws.cell(row=1, column=8).value = '被害率_浸水_勾配1_100から200cm未満'
-        ws.cell(row=1, column=9).value = '被害率_浸水_勾配1_200から300cm未満'
-        ws.cell(row=1, column=10).value = '被害率_浸水_勾配1_300cm以上'
-
-        ws.cell(row=1, column=11).value = '被害率_浸水_勾配2_床下'
-        ws.cell(row=1, column=12).value = '被害率_浸水_勾配2_0から50cm未満'
-        ws.cell(row=1, column=13).value = '被害率_浸水_勾配2_50から100cm未満'
-        ws.cell(row=1, column=14).value = '被害率_浸水_勾配2_100から200cm未満'
-        ws.cell(row=1, column=15).value = '被害率_浸水_勾配2_200から300cm未満'
-        ws.cell(row=1, column=16).value = '被害率_浸水_勾配2_300cm以上'
-
-        ws.cell(row=1, column=17).value = '被害率_浸水_勾配3_床下'
-        ws.cell(row=1, column=18).value = '被害率_浸水_勾配3_0から50cm未満'
-        ws.cell(row=1, column=19).value = '被害率_浸水_勾配3_50から100cm未満'
-        ws.cell(row=1, column=20).value = '被害率_浸水_勾配3_100から200cm未満'
-        ws.cell(row=1, column=21).value = '被害率_浸水_勾配3_200から300cm未満'
-        ws.cell(row=1, column=22).value = '被害率_浸水_勾配3_300cm以上'
-
-        ws.cell(row=1, column=23).value = '被害率_土砂_勾配1_床下'
-        ws.cell(row=1, column=24).value = '被害率_土砂_勾配1_0から50cm未満'
-        ws.cell(row=1, column=25).value = '被害率_土砂_勾配1_50から100cm未満'
-        ws.cell(row=1, column=26).value = '被害率_土砂_勾配1_100から200cm未満'
-        ws.cell(row=1, column=27).value = '被害率_土砂_勾配1_200から300cm未満'
-        ws.cell(row=1, column=28).value = '被害率_土砂_勾配1_300cm以上'
-
-        ws.cell(row=1, column=29).value = '被害率_土砂_勾配2_床下'
-        ws.cell(row=1, column=30).value = '被害率_土砂_勾配2_0から50cm未満'
-        ws.cell(row=1, column=31).value = '被害率_土砂_勾配2_50から100cm未満'
-        ws.cell(row=1, column=32).value = '被害率_土砂_勾配2_100から200cm未満'
-        ws.cell(row=1, column=33).value = '被害率_土砂_勾配2_200から300cm未満'
-        ws.cell(row=1, column=34).value = '被害率_土砂_勾配2_300cm以上'
-
-        ws.cell(row=1, column=35).value = '被害率_土砂_勾配3_床下'
-        ws.cell(row=1, column=36).value = '被害率_土砂_勾配3_0から50cm未満'
-        ws.cell(row=1, column=37).value = '被害率_土砂_勾配3_50から100cm未満'
-        ws.cell(row=1, column=38).value = '被害率_土砂_勾配3_100から200cm未満'
-        ws.cell(row=1, column=39).value = '被害率_土砂_勾配3_200から300cm未満'
-        ws.cell(row=1, column=40).value = '被害率_土砂_勾配3_300cm以上'
-        
-        if house_damage_list:
-            for i, house_damage in enumerate(house_damage_list):
-                ws.cell(row=i+2, column=1).value = house_damage.house_damage_code
-                ws.cell(row=i+2, column=2).value = house_damage.house_damage_year
-                ws.cell(row=i+2, column=3).value = house_damage.begin_date
-                ws.cell(row=i+2, column=4).value = house_damage.end_date
-                
-                ws.cell(row=i+2, column=5).value = house_damage.fl_gr1_lv00
-                ws.cell(row=i+2, column=6).value = house_damage.fl_gr1_lv00_50
-                ws.cell(row=i+2, column=7).value = house_damage.fl_gr1_lv50_100
-                ws.cell(row=i+2, column=8).value = house_damage.fl_gr1_lv100_200
-                ws.cell(row=i+2, column=9).value = house_damage.fl_gr1_lv200_300
-                ws.cell(row=i+2, column=10).value = house_damage.fl_gr1_lv300
-        
-                ws.cell(row=i+2, column=11).value = house_damage.fl_gr2_lv00
-                ws.cell(row=i+2, column=12).value = house_damage.fl_gr2_lv00_50
-                ws.cell(row=i+2, column=13).value = house_damage.fl_gr2_lv50_100
-                ws.cell(row=i+2, column=14).value = house_damage.fl_gr2_lv100_200
-                ws.cell(row=i+2, column=15).value = house_damage.fl_gr2_lv200_300
-                ws.cell(row=i+2, column=16).value = house_damage.fl_gr2_lv300
-
-                ws.cell(row=i+2, column=17).value = house_damage.fl_gr3_lv00
-                ws.cell(row=i+2, column=18).value = house_damage.fl_gr3_lv00_50
-                ws.cell(row=i+2, column=19).value = house_damage.fl_gr3_lv50_100
-                ws.cell(row=i+2, column=20).value = house_damage.fl_gr3_lv100_200
-                ws.cell(row=i+2, column=21).value = house_damage.fl_gr3_lv200_300
-                ws.cell(row=i+2, column=22).value = house_damage.fl_gr3_lv300
-        
-                ws.cell(row=i+2, column=23).value = house_damage.sd_gr1_lv00
-                ws.cell(row=i+2, column=24).value = house_damage.sd_gr1_lv00_50
-                ws.cell(row=i+2, column=25).value = house_damage.sd_gr1_lv50_100
-                ws.cell(row=i+2, column=26).value = house_damage.sd_gr1_lv100_200
-                ws.cell(row=i+2, column=27).value = house_damage.sd_gr1_lv200_300
-                ws.cell(row=i+2, column=28).value = house_damage.sd_gr1_lv300
-        
-                ws.cell(row=i+2, column=29).value = house_damage.sd_gr2_lv00
-                ws.cell(row=i+2, column=30).value = house_damage.sd_gr2_lv00_50
-                ws.cell(row=i+2, column=31).value = house_damage.sd_gr2_lv50_100
-                ws.cell(row=i+2, column=32).value = house_damage.sd_gr2_lv100_200
-                ws.cell(row=i+2, column=33).value = house_damage.sd_gr2_lv200_300
-                ws.cell(row=i+2, column=34).value = house_damage.sd_gr2_lv300
-
-                ws.cell(row=i+2, column=35).value = house_damage.sd_gr3_lv00
-                ws.cell(row=i+2, column=36).value = house_damage.sd_gr3_lv00_50
-                ws.cell(row=i+2, column=37).value = house_damage.sd_gr3_lv50_100
-                ws.cell(row=i+2, column=38).value = house_damage.sd_gr3_lv100_200
-                ws.cell(row=i+2, column=39).value = house_damage.sd_gr3_lv200_300
-                ws.cell(row=i+2, column=40).value = house_damage.sd_gr3_lv300
+        if house_rate_list:
+            for i, house_rate in enumerate(house_rate_list):
+                ws.cell(row=i+2, column=1).value = house_rate.house_rate_code
+                ws.cell(row=i+2, column=2).value = house_rate.flood_sediment_code
+                ws.cell(row=i+2, column=3).value = house_rate.gradient_code
+                ws.cell(row=i+2, column=4).value = house_rate.house_rate_lv00
+                ws.cell(row=i+2, column=5).value = house_rate.house_rate_lv00_50
+                ws.cell(row=i+2, column=6).value = house_rate.house_rate_lv50_100
+                ws.cell(row=i+2, column=7).value = house_rate.house_rate_lv100_200
+                ws.cell(row=i+2, column=8).value = house_rate.house_rate_lv200_300
+                ws.cell(row=i+2, column=9).value = house_rate.house_rate_lv300
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_damage_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="house_damage.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="house_rate.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.house_damage_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.house_damage_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_rate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：household_damage_view
-### 102: 家庭用品自動車以外被害率
+### 関数名：house_alt_view
+### 102: 家庭応急対策費_代替活動費
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def household_damage_view(request, lock):
+def house_alt_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、家庭用品自動車以外被害率データを取得する。
+        ### DBにアクセスして、家庭応急対策費データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 STEP 2/4.', 'INFO')
-        household_damage_list = HOUSEHOLD_DAMAGE.objects.raw("""SELECT * FROM HOUSEHOLD_DAMAGE ORDER BY CAST(HOUSEHOLD_DAMAGE_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 2/4.', 'INFO')
+        house_alt_list = HOUSE_ALT.objects.raw("""SELECT * FROM HOUSE_ALT ORDER BY CAST(HOUSE_ALT_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_household_damage.xlsx'
-        download_file_path = 'static/download_household_damage.xlsx'
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_house_alt.xlsx'
+        download_file_path = 'static/download_house_alt.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '家庭応急対策費_代替活動費'
+        ws.cell(row=1, column=1).value = '家庭応急対策費_代替活動費コード'
+        ws.cell(row=1, column=2).value = '家庭応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=3).value = '家庭応急対策費_代替活動費_0から50cm未満'
+        ws.cell(row=1, column=4).value = '家庭応急対策費_代替活動費_50から100cm未満'
+        ws.cell(row=1, column=5).value = '家庭応急対策費_代替活動費_100から200cm未満'
+        ws.cell(row=1, column=6).value = '家庭応急対策費_代替活動費_200から300cm未満'
+        ws.cell(row=1, column=7).value = '家庭応急対策費_代替活動費_300cm以上'
+        
+        if house_alt_list:
+            for i, house_alt in enumerate(house_alt_list):
+                ws.cell(row=i+2, column=1).value = house_alt.house_alt_code
+                ws.cell(row=i+2, column=2).value = house_alt.house_alt_lv00
+                ws.cell(row=i+2, column=3).value = house_alt.house_alt_lv00_50
+                ws.cell(row=i+2, column=4).value = house_alt.house_alt_lv50_100
+                ws.cell(row=i+2, column=5).value = house_alt.house_alt_lv100_200
+                ws.cell(row=i+2, column=6).value = house_alt.house_alt_lv200_300
+                ws.cell(row=i+2, column=7).value = house_alt.house_alt_lv300
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="household_alt.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_alt_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_alt_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：house_clean_view
+### 103: 家庭応急対策費_清掃日数、清掃労働単価
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def house_clean_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、家庭応急対策費_清掃日数、清掃労働単価データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 2/4.', 'INFO')
+        house_clean_list = HOUSE_CLEAN.objects.raw("""SELECT * FROM HOUSE_CLEAN ORDER BY CAST(HOUSE_CLEAN_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_house_clean.xlsx'
+        download_file_path = 'static/download_house_clean.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '家庭応急対策費_清掃日数'
+        ws.cell(row=1, column=1).value = '家庭応急対策費_清掃日数コード'
+        ws.cell(row=1, column=2).value = '家庭応急対策費_清掃日数_床下'
+        ws.cell(row=1, column=3).value = '家庭応急対策費_清掃日数_0から50cm未満'
+        ws.cell(row=1, column=4).value = '家庭応急対策費_清掃日数_50から100cm未満'
+        ws.cell(row=1, column=5).value = '家庭応急対策費_清掃日数_100から200cm未満'
+        ws.cell(row=1, column=6).value = '家庭応急対策費_清掃日数_200から300cm未満'
+        ws.cell(row=1, column=7).value = '家庭応急対策費_清掃日数_300cm以上'
+        ws.cell(row=1, column=8).value = '家庭応急対策費_清掃労働単価'
+        
+        if house_clean_list:
+            for i, house_clean in enumerate(house_clean_list):
+                ws.cell(row=i+2, column=1).value = house_clean.house_clean_code
+                ws.cell(row=i+2, column=2).value = house_clean.house_clean_days_lv00
+                ws.cell(row=i+2, column=3).value = house_clean.house_clean_days_lv00_50
+                ws.cell(row=i+2, column=4).value = house_clean.house_clean_days_lv50_100
+                ws.cell(row=i+2, column=5).value = house_clean.house_clean_days_lv100_200
+                ws.cell(row=i+2, column=6).value = house_clean.house_clean_days_lv200_300
+                ws.cell(row=i+2, column=7).value = house_clean.house_clean_days_lv300
+                ws.cell(row=i+2, column=8).value = house_clean.house_clean_unit_cost
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="house_clean.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_clean_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_clean_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：household_asset_view
+### 104: 家庭用品自動車以外所有額
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def household_asset_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、家庭用品自動車以外所有額データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 2/4.', 'INFO')
+        household_asset_list = HOUSEHOLD_ASSET.objects.raw("""SELECT * FROM HOUSEHOLD_ASSET ORDER BY CAST(HOUSEHOLD_ASSET_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_household_asset.xlsx'
+        download_file_path = 'static/download_household_asset.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '家庭用品自動車以外所有額'
+        ws.cell(row=1, column=1).value = '家庭用品自動車以外所有額コード'
+        ws.cell(row=1, column=2).value = '家庭用品自動車以外所有額'
+        
+        if household_asset_list:
+            for i, household_asset in enumerate(household_asset_list):
+                ws.cell(row=i+2, column=1).value = household_asset.household_asset_code
+                ws.cell(row=i+2, column=2).value = household_asset.household_asset
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="household_asset.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_asset_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_asset_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：household_rate_view
+### 105: 家庭用品自動車以外被害率
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def household_rate_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、家庭用品自動車以外被害率データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 2/4.', 'INFO')
+        household_rate_list = HOUSEHOLD_RATE.objects.raw("""SELECT * FROM HOUSEHOLD_RATE ORDER BY CAST(HOUSEHOLD_RATE_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_household_rate.xlsx'
+        download_file_path = 'static/download_household_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
         ws.title = '家庭用品自動車以外被害率'
         ws.cell(row=1, column=1).value = '家庭用品自動車以外被害率コード'
-        ws.cell(row=1, column=2).value = '家庭用品自動車以外被害率対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.cell(row=1, column=2).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=3).value = '家庭用品自動車以外被害率_床下'
+        ws.cell(row=1, column=4).value = '家庭用品自動車以外被害率_0から50cm未満'
+        ws.cell(row=1, column=5).value = '家庭用品自動車以外被害率_50から100cm未満'
+        ws.cell(row=1, column=6).value = '家庭用品自動車以外被害率_100から200cm未満'
+        ws.cell(row=1, column=7).value = '家庭用品自動車以外被害率_200から300cm未満'
+        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害率_300cm以上'
         
-        ws.cell(row=1, column=5).value = '被害率_浸水_床下'
-        ws.cell(row=1, column=6).value = '被害率_浸水_0から50cm未満'
-        ws.cell(row=1, column=7).value = '被害率_浸水_50から100cm未満'
-        ws.cell(row=1, column=8).value = '被害率_浸水_100から200cm未満'
-        ws.cell(row=1, column=9).value = '被害率_浸水_200から300cm未満'
-        ws.cell(row=1, column=10).value = '被害率_浸水_300cm以上'
-
-        ws.cell(row=1, column=11).value = '被害率_土砂_床下'
-        ws.cell(row=1, column=12).value = '被害率_土砂_0から50cm未満'
-        ws.cell(row=1, column=13).value = '被害率_土砂_50から100cm未満'
-        ws.cell(row=1, column=14).value = '被害率_土砂_100から200cm未満'
-        ws.cell(row=1, column=15).value = '被害率_土砂_200から300cm未満'
-        ws.cell(row=1, column=16).value = '被害率_土砂_300cm以上'
-
-        ws.cell(row=1, column=17).value = '家庭用品自動車以外所有額'
-        
-        if household_damage_list:
-            for i, household_damage in enumerate(household_damage_list):
-                ws.cell(row=i+2, column=1).value = household_damage.household_damage_code
-                ws.cell(row=i+2, column=2).value = household_damage.household_damage_year
-                ws.cell(row=i+2, column=3).value = household_damage.begin_date
-                ws.cell(row=i+2, column=4).value = household_damage.end_date
-                
-                ws.cell(row=i+2, column=5).value = household_damage.fl_lv00
-                ws.cell(row=i+2, column=6).value = household_damage.fl_lv00_50
-                ws.cell(row=i+2, column=7).value = household_damage.fl_lv50_100
-                ws.cell(row=i+2, column=8).value = household_damage.fl_lv100_200
-                ws.cell(row=i+2, column=9).value = household_damage.fl_lv200_300
-                ws.cell(row=i+2, column=10).value = household_damage.fl_lv300
-        
-                ws.cell(row=i+2, column=11).value = household_damage.sd_lv00
-                ws.cell(row=i+2, column=12).value = household_damage.sd_lv00_50
-                ws.cell(row=i+2, column=13).value = household_damage.sd_lv50_100
-                ws.cell(row=i+2, column=14).value = household_damage.sd_lv100_200
-                ws.cell(row=i+2, column=15).value = household_damage.sd_lv200_300
-                ws.cell(row=i+2, column=16).value = household_damage.sd_lv300
-
-                ws.cell(row=i+2, column=17).value = household_damage.household_asset
+        if household_rate_list:
+            for i, household_rate in enumerate(household_rate_list):
+                ws.cell(row=i+2, column=1).value = household_rate.household_rate_code
+                ws.cell(row=i+2, column=2).value = household_rate.flood_sediment_code
+                ws.cell(row=i+2, column=3).value = household_rate.household_rate_lv00
+                ws.cell(row=i+2, column=4).value = household_rate.household_rate_lv00_50
+                ws.cell(row=i+2, column=5).value = household_rate.household_rate_lv50_100
+                ws.cell(row=i+2, column=6).value = household_rate.household_rate_lv100_200
+                ws.cell(row=i+2, column=7).value = household_rate.household_rate_lv200_300
+                ws.cell(row=i+2, column=8).value = household_rate.household_rate_lv300
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_damage_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="household_damage.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="household_rate.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.household_damage_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.household_damage_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_rate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：car_damage_view
-### 103: 家庭用品自動車被害率
+### 関数名：car_asset_view
+### 106: 家庭用品自動車所有額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def car_damage_view(request, lock):
+def car_asset_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、家庭用品自動車被害率データを取得する。
+        ### DBにアクセスして、家庭用品自動車所有額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 STEP 2/4.', 'INFO')
-        car_damage_list = CAR_DAMAGE.objects.raw("""SELECT * FROM CAR_DAMAGE ORDER BY CAST(CAR_DAMAGE_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 2/4.', 'INFO')
+        car_asset_list = CAR_ASSET.objects.raw("""SELECT * FROM CAR_ASSET ORDER BY CAST(CAR_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_car_damage.xlsx'
-        download_file_path = 'static/download_car_damage.xlsx'
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_car_asset.xlsx'
+        download_file_path = 'static/download_car_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '自動車被害率'
-        ws.cell(row=1, column=1).value = '自動車被害率コード'
-        ws.cell(row=1, column=2).value = '自動車被害率対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.title = '家庭用品自動車所有額'
+        ws.cell(row=1, column=1).value = '家庭用品自動車所有額コード'
+        ws.cell(row=1, column=2).value = '家庭用品自動車所有額'
         
-        ws.cell(row=1, column=5).value = '被害率_浸水_床下'
-        ws.cell(row=1, column=6).value = '被害率_浸水_0から50cm未満'
-        ws.cell(row=1, column=7).value = '被害率_浸水_50から100cm未満'
-        ws.cell(row=1, column=8).value = '被害率_浸水_100から200cm未満'
-        ws.cell(row=1, column=9).value = '被害率_浸水_200から300cm未満'
-        ws.cell(row=1, column=10).value = '被害率_浸水_300cm以上'
-
-        ws.cell(row=1, column=11).value = '家庭用品自動車所有額'
-        
-        if car_damage_list:
-            for i, car_damage in enumerate(car_damage_list):
-                ws.cell(row=i+2, column=1).value = car_damage.car_damage_code
-                ws.cell(row=i+2, column=2).value = car_damage.car_damage_year
-                ws.cell(row=i+2, column=3).value = car_damage.begin_date
-                ws.cell(row=i+2, column=4).value = car_damage.end_date
-                
-                ws.cell(row=i+2, column=5).value = car_damage.fl_lv00
-                ws.cell(row=i+2, column=6).value = car_damage.fl_lv00_50
-                ws.cell(row=i+2, column=7).value = car_damage.fl_lv50_100
-                ws.cell(row=i+2, column=8).value = car_damage.fl_lv100_200
-                ws.cell(row=i+2, column=9).value = car_damage.fl_lv200_300
-                ws.cell(row=i+2, column=10).value = car_damage.fl_lv300
-
-                ws.cell(row=i+2, column=11).value = car_damage.car_asset
+        if car_asset_list:
+            for i, car_asset in enumerate(car_asset_list):
+                ws.cell(row=i+2, column=1).value = car_asset.car_asset_code
+                ws.cell(row=i+2, column=2).value = car_asset.car_asset
         
         wb.save(download_file_path)
         
         #######################################################################
-        ### レスポンスセット処理(0030)
+        ### レスポンスセット処理(0000)
         ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_damage_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="car_damage.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="car_asset.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.car_damage_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.car_damage_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_asset_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：house_cost_view
-### 104: 家庭応急対策費
+### 関数名：car_rate_view
+### 107: 家庭用品自動車被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def house_cost_view(request, lock):
+def car_rate_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、家庭応急対策費データを取得する。
+        ### DBにアクセスして、事業所営業停止損失データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 STEP 2/4.', 'INFO')
-        house_cost_list = HOUSE_COST.objects.raw("""SELECT * FROM HOUSE_COST ORDER BY CAST(HOUSE_COST_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 2/4.', 'INFO')
+        car_rate_list = CAR_RATE.objects.raw("""SELECT * FROM CAR_RATE ORDER BY CAST(CAR_RATE_CODE AS INTEGER)""", [])
     
         #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### EXCEL入出力処理
+        ### （１）テンプレート用のEXCELファイルを読み込む。
+        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_house_cost.xlsx'
-        download_file_path = 'static/download_house_cost.xlsx'
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_car_rate.xlsx'
+        download_file_path = 'static/download_car_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '家庭応急対策費'
-        ws.cell(row=1, column=1).value = '家庭応急対策費コード'
-        ws.cell(row=1, column=2).value = '家庭応急対策費対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.title = '家庭用品自動車被害率'
+        ws.cell(row=1, column=1).value = '家庭用品自動車被害率コード'
+        ws.cell(row=1, column=2).value = '家庭用品自動車被害率_床下'
+        ws.cell(row=1, column=3).value = '家庭用品自動車被害率_0から50cm未満'
+        ws.cell(row=1, column=4).value = '家庭用品自動車被害率_50から100cm未満'
+        ws.cell(row=1, column=5).value = '家庭用品自動車被害率_100から200cm未満'
+        ws.cell(row=1, column=6).value = '家庭用品自動車被害率_200から300cm未満'
+        ws.cell(row=1, column=7).value = '家庭用品自動車被害率_300cm以上'
         
-        ws.cell(row=1, column=5).value = '代替活動費_床下'
-        ws.cell(row=1, column=6).value = '代替活動費_0から50cm未満'
-        ws.cell(row=1, column=7).value = '代替活動費_50から100cm未満'
-        ws.cell(row=1, column=8).value = '代替活動費_100から200cm未満'
-        ws.cell(row=1, column=9).value = '代替活動費_200から300cm未満'
-        ws.cell(row=1, column=10).value = '代替活動費_300cm以上'
-
-        ws.cell(row=1, column=11).value = '清掃費_床下'
-        ws.cell(row=1, column=12).value = '清掃費_0から50cm未満'
-        ws.cell(row=1, column=13).value = '清掃費_50から100cm未満'
-        ws.cell(row=1, column=14).value = '清掃費_100から200cm未満'
-        ws.cell(row=1, column=15).value = '清掃費_200から300cm未満'
-        ws.cell(row=1, column=16).value = '清掃費_300cm以上'
-
-        ws.cell(row=1, column=17).value = '清掃労働単価'
-        
-        if house_cost_list:
-            for i, house_cost in enumerate(house_cost_list):
-                ws.cell(row=i+2, column=1).value = house_cost.house_cost_code
-                ws.cell(row=i+2, column=2).value = house_cost.house_cost_year
-                ws.cell(row=i+2, column=3).value = house_cost.begin_date
-                ws.cell(row=i+2, column=4).value = house_cost.end_date
-                
-                ws.cell(row=i+2, column=5).value = house_cost.alt_lv00
-                ws.cell(row=i+2, column=6).value = house_cost.alt_lv00_50
-                ws.cell(row=i+2, column=7).value = house_cost.alt_lv50_100
-                ws.cell(row=i+2, column=8).value = house_cost.alt_lv100_200
-                ws.cell(row=i+2, column=9).value = house_cost.alt_lv200_300
-                ws.cell(row=i+2, column=10).value = house_cost.alt_lv300
-
-                ws.cell(row=i+2, column=11).value = house_cost.clean_lv00
-                ws.cell(row=i+2, column=12).value = house_cost.clean_lv00_50
-                ws.cell(row=i+2, column=13).value = house_cost.clean_lv50_100
-                ws.cell(row=i+2, column=14).value = house_cost.clean_lv100_200
-                ws.cell(row=i+2, column=15).value = house_cost.clean_lv200_300
-                ws.cell(row=i+2, column=16).value = house_cost.clean_lv300
-
-                ws.cell(row=i+2, column=17).value = house_cost.house_cost
+        if car_rate_list:
+            for i, car_rate in enumerate(car_rate_list):
+                ws.cell(row=i+2, column=1).value = car_rate.car_rate_code
+                ws.cell(row=i+2, column=2).value = car_rate.car_rate_lv00
+                ws.cell(row=i+2, column=3).value = car_rate.car_rate_lv00_50
+                ws.cell(row=i+2, column=4).value = car_rate.car_rate_lv50_100
+                ws.cell(row=i+2, column=5).value = car_rate.car_rate_lv100_200
+                ws.cell(row=i+2, column=6).value = car_rate.car_rate_lv200_300
+                ws.cell(row=i+2, column=7).value = car_rate.car_rate_lv300
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_cost_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="house_cost.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="car_rate.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.house_cost_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.house_cost_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_rate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：office_asset_view
-### 105: 産業分類別資産額
+### 108: 事業所資産額
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_asset_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が開始しました。', 'INFO')
@@ -1636,7 +1636,7 @@ def office_asset_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、産業分類別資産額データを取得する。
+        ### DBにアクセスして、事業所資産額データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 2/4.', 'INFO')
         office_asset_list = OFFICE_ASSET.objects.raw("""SELECT * FROM OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)""", [])
@@ -1651,34 +1651,26 @@ def office_asset_view(request, lock):
         download_file_path = 'static/download_office_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '産業分類別資産額'
-        ws.cell(row=1, column=1).value = '産業分類別資産額コード'
+        ws.title = '事業所資産額'
+        ws.cell(row=1, column=1).value = '事業所資産額コード'
         ws.cell(row=1, column=2).value = '産業分類コード'
-        ws.cell(row=1, column=3).value = '産業分類別資産額対象年'
-        ws.cell(row=1, column=4).value = '開始日'
-        ws.cell(row=1, column=5).value = '終了日'
-        
-        ws.cell(row=1, column=6).value = '償却資産額'
-        ws.cell(row=1, column=7).value = '在庫資産額'
-        ws.cell(row=1, column=8).value = '付加価値額'
+        ws.cell(row=1, column=3).value = '事業所資産額_償却資産額'
+        ws.cell(row=1, column=4).value = '事業所資産額_在庫資産額'
+        ws.cell(row=1, column=5).value = '事業所資産額_付加価値額'
         
         if office_asset_list:
             for i, office_asset in enumerate(office_asset_list):
                 ws.cell(row=i+2, column=1).value = office_asset.office_asset_code
                 ws.cell(row=i+2, column=2).value = office_asset.industry_code
-                ws.cell(row=i+2, column=3).value = office_asset.office_asset_year
-                ws.cell(row=i+2, column=4).value = office_asset.begin_date
-                ws.cell(row=i+2, column=5).value = office_asset.end_date
-                
-                ws.cell(row=i+2, column=6).value = office_asset.depreciable_asset
-                ws.cell(row=i+2, column=7).value = office_asset.inventory_asset
-                ws.cell(row=i+2, column=8).value = office_asset.value_added
+                ws.cell(row=i+2, column=3).value = office_asset.office_dep_asset
+                ws.cell(row=i+2, column=4).value = office_asset.office_inv_asset
+                ws.cell(row=i+2, column=5).value = office_asset.office_va_asset
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が正常終了しました。', 'INFO')
@@ -1693,345 +1685,525 @@ def office_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：office_damage_view
-### 106: 事業所被害率
+### 関数名：office_rate_view
+### 109: 事業所被害率
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def office_damage_view(request, lock):
+def office_rate_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、事業所被害率データを取得する。
+        ### DBにアクセスして、事業所被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 STEP 2/4.', 'INFO')
-        office_damage_list = OFFICE_DAMAGE.objects.raw("""SELECT * FROM OFFICE_DAMAGE ORDER BY CAST(OFFICE_DAMAGE_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 2/4.', 'INFO')
+        office_rate_list = OFFICE_RATE.objects.raw("""SELECT * FROM OFFICE_RATE ORDER BY CAST(OFFICE_RATE_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_office_damage.xlsx'
-        download_file_path = 'static/download_office_damage.xlsx'
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_office_rate.xlsx'
+        download_file_path = 'static/download_office_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
         ws.title = '事業所被害率'
         ws.cell(row=1, column=1).value = '事業所被害率コード'
-        ws.cell(row=1, column=2).value = '事業所被害率対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.cell(row=1, column=2).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=3).value = '事業所被害率_償却資産被害率_床下'
+        ws.cell(row=1, column=4).value = '事業所被害率_償却資産被害率_0から50cm未満'
+        ws.cell(row=1, column=5).value = '事業所被害率_償却資産被害率_50から100cm未満'
+        ws.cell(row=1, column=6).value = '事業所被害率_償却資産被害率_100から200cm未満'
+        ws.cell(row=1, column=7).value = '事業所被害率_償却資産被害率_200から300cm未満'
+        ws.cell(row=1, column=8).value = '事業所被害率_償却資産被害率数_300cm以上'
+        ws.cell(row=1, column=9).value = '事業所被害率_在庫資産被害率_床下'
+        ws.cell(row=1, column=10).value = '事業所被害率_在庫資産被害率_0から50cm未満'
+        ws.cell(row=1, column=11).value = '事業所被害率_在庫資産被害率_50から100cm未満'
+        ws.cell(row=1, column=12).value = '事業所被害率_在庫資産被害率_100から200cm未満'
+        ws.cell(row=1, column=13).value = '事業所被害率_在庫資産被害率_200から300cm未満'
+        ws.cell(row=1, column=14).value = '事業所被害率_在庫資産被害率数_300cm以上'
         
-        ws.cell(row=1, column=5).value = '償却資産率_浸水_床下'
-        ws.cell(row=1, column=6).value = '償却資産率_浸水_0から50cm未満'
-        ws.cell(row=1, column=7).value = '償却資産率_浸水_50から100cm未満'
-        ws.cell(row=1, column=8).value = '償却資産率_浸水_100から200cm未満'
-        ws.cell(row=1, column=9).value = '償却資産率_浸水_200から300cm未満'
-        ws.cell(row=1, column=10).value = '償却資産率_浸水_300cm以上'
-
-        ws.cell(row=1, column=11).value = '償却資産率_土砂_床下'
-        ws.cell(row=1, column=12).value = '償却資産率_土砂_0から50cm未満'
-        ws.cell(row=1, column=13).value = '償却資産率_土砂_50から100cm未満'
-        ws.cell(row=1, column=14).value = '償却資産率_土砂_100から200cm未満'
-        ws.cell(row=1, column=15).value = '償却資産率_土砂_200から300cm未満'
-        ws.cell(row=1, column=16).value = '償却資産率_土砂_300cm以上'
-
-        ws.cell(row=1, column=17).value = '在庫資産率_浸水_床下'
-        ws.cell(row=1, column=18).value = '在庫資産率_浸水_0から50cm未満'
-        ws.cell(row=1, column=19).value = '在庫資産率_浸水_50から100cm未満'
-        ws.cell(row=1, column=20).value = '在庫資産率_浸水_100から200cm未満'
-        ws.cell(row=1, column=21).value = '在庫資産率_浸水_200から300cm未満'
-        ws.cell(row=1, column=22).value = '在庫資産率_浸水_300cm以上'
-
-        ws.cell(row=1, column=23).value = '在庫資産率_土砂_床下'
-        ws.cell(row=1, column=24).value = '在庫資産率_土砂_0から50cm未満'
-        ws.cell(row=1, column=25).value = '在庫資産率_土砂_50から100cm未満'
-        ws.cell(row=1, column=26).value = '在庫資産率_土砂_100から200cm未満'
-        ws.cell(row=1, column=27).value = '在庫資産率_土砂_200から300cm未満'
-        ws.cell(row=1, column=28).value = '在庫資産率_土砂_300cm以上'
-        
-        if office_damage_list:
-            for i, office_damage in enumerate(office_damage_list):
-                ws.cell(row=i+2, column=1).value = office_damage.office_damage_code
-                ws.cell(row=i+2, column=2).value = office_damage.office_damage_year
-                ws.cell(row=i+2, column=3).value = office_damage.begin_date
-                ws.cell(row=i+2, column=4).value = office_damage.end_date
-                
-                ws.cell(row=i+2, column=5).value = office_damage.dep_fl_lv00
-                ws.cell(row=i+2, column=6).value = office_damage.dep_fl_lv00_50
-                ws.cell(row=i+2, column=7).value = office_damage.dep_fl_lv50_100
-                ws.cell(row=i+2, column=8).value = office_damage.dep_fl_lv100_200
-                ws.cell(row=i+2, column=9).value = office_damage.dep_fl_lv200_300
-                ws.cell(row=i+2, column=10).value = office_damage.dep_fl_lv300
-
-                ws.cell(row=i+2, column=11).value = office_damage.dep_sd_lv00
-                ws.cell(row=i+2, column=12).value = office_damage.dep_sd_lv00_50
-                ws.cell(row=i+2, column=13).value = office_damage.dep_sd_lv50_100
-                ws.cell(row=i+2, column=14).value = office_damage.dep_sd_lv100_200
-                ws.cell(row=i+2, column=15).value = office_damage.dep_sd_lv200_300
-                ws.cell(row=i+2, column=16).value = office_damage.dep_sd_lv300
-
-                ws.cell(row=i+2, column=17).value = office_damage.inv_fl_lv00
-                ws.cell(row=i+2, column=18).value = office_damage.inv_fl_lv00_50
-                ws.cell(row=i+2, column=19).value = office_damage.inv_fl_lv50_100
-                ws.cell(row=i+2, column=20).value = office_damage.inv_fl_lv100_200
-                ws.cell(row=i+2, column=21).value = office_damage.inv_fl_lv200_300
-                ws.cell(row=i+2, column=22).value = office_damage.inv_fl_lv300
-
-                ws.cell(row=i+2, column=23).value = office_damage.inv_sd_lv00
-                ws.cell(row=i+2, column=24).value = office_damage.inv_sd_lv00_50
-                ws.cell(row=i+2, column=25).value = office_damage.inv_sd_lv50_100
-                ws.cell(row=i+2, column=26).value = office_damage.inv_sd_lv100_200
-                ws.cell(row=i+2, column=27).value = office_damage.inv_sd_lv200_300
-                ws.cell(row=i+2, column=28).value = office_damage.inv_sd_lv300
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0000)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_damage_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="office_damage.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.office_damage_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.office_damage_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名：office_cost_view
-### 107: 事業所営業停止損失
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def office_cost_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 STEP 1/4.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、事業所営業停止損失データを取得する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 STEP 2/4.', 'INFO')
-        office_cost_list = OFFICE_COST.objects.raw("""SELECT * FROM OFFICE_COST ORDER BY CAST(OFFICE_COST_CODE AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理
-        ### （１）テンプレート用のEXCELファイルを読み込む。
-        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_office_cost.xlsx'
-        download_file_path = 'static/download_office_cost.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '事業所営業損失'
-        ws.cell(row=1, column=1).value = '事業所営業損失コード'
-        ws.cell(row=1, column=2).value = '事業所営業損失対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
-        
-        ws.cell(row=1, column=5).value = '営業停止日数_床下'
-        ws.cell(row=1, column=6).value = '営業停止日数_0から50cm未満'
-        ws.cell(row=1, column=7).value = '営業停止日数_50から100cm未満'
-        ws.cell(row=1, column=8).value = '営業停止日数_100から200cm未満'
-        ws.cell(row=1, column=9).value = '営業停止日数_200から300cm未満'
-        ws.cell(row=1, column=10).value = '営業停止日数_300cm以上'
-
-        ws.cell(row=1, column=11).value = '営業停滞日数_床下'
-        ws.cell(row=1, column=12).value = '営業停滞日数_0から50cm未満'
-        ws.cell(row=1, column=13).value = '営業停滞日数_50から100cm未満'
-        ws.cell(row=1, column=14).value = '営業停滞日数_100から200cm未満'
-        ws.cell(row=1, column=15).value = '営業停滞日数_200から300cm未満'
-        ws.cell(row=1, column=16).value = 'cccccc'
-        
-        if office_cost_list:
-            for i, office_cost in enumerate(office_cost_list):
-                ws.cell(row=i+2, column=1).value = office_cost.office_cost_code
-                ws.cell(row=i+2, column=2).value = office_cost.office_cost_year
-                ws.cell(row=i+2, column=3).value = office_cost.begin_date
-                ws.cell(row=i+2, column=4).value = office_cost.end_date
-                
-                ws.cell(row=i+2, column=5).value = office_cost.suspend_lv00
-                ws.cell(row=i+2, column=6).value = office_cost.suspend_lv00_50
-                ws.cell(row=i+2, column=7).value = office_cost.suspend_lv50_100
-                ws.cell(row=i+2, column=8).value = office_cost.suspend_lv100_200
-                ws.cell(row=i+2, column=9).value = office_cost.suspend_lv200_300
-                ws.cell(row=i+2, column=10).value = office_cost.suspend_lv300
-
-                ws.cell(row=i+2, column=11).value = office_cost.stagnate_lv00
-                ws.cell(row=i+2, column=12).value = office_cost.stagnate_lv00_50
-                ws.cell(row=i+2, column=13).value = office_cost.stagnate_lv50_100
-                ws.cell(row=i+2, column=14).value = office_cost.stagnate_lv100_200
-                ws.cell(row=i+2, column=15).value = office_cost.stagnate_lv200_300
-                ws.cell(row=i+2, column=16).value = office_cost.stagnate_lv300
+        if office_rate_list:
+            for i, office_rate in enumerate(office_rate_list):
+                ws.cell(row=i+2, column=1).value = office_rate.office_rate_code
+                ws.cell(row=i+2, column=2).value = office_rate.flood_sediment_code
+                ws.cell(row=i+2, column=3).value = office_rate.office_dep_rate_lv00
+                ws.cell(row=i+2, column=4).value = office_rate.office_dep_rate_lv00_50
+                ws.cell(row=i+2, column=5).value = office_rate.office_dep_rate_lv50_100
+                ws.cell(row=i+2, column=6).value = office_rate.office_dep_rate_lv100_200
+                ws.cell(row=i+2, column=7).value = office_rate.office_dep_rate_lv200_300
+                ws.cell(row=i+2, column=8).value = office_rate.office_dep_rate_lv300
+                ws.cell(row=i+2, column=9).value = office_rate.office_inv_rate_lv00
+                ws.cell(row=i+2, column=10).value = office_rate.office_inv_rate_lv00_50
+                ws.cell(row=i+2, column=11).value = office_rate.office_inv_rate_lv50_100
+                ws.cell(row=i+2, column=12).value = office_rate.office_inv_rate_lv100_200
+                ws.cell(row=i+2, column=13).value = office_rate.office_inv_rate_lv200_300
+                ws.cell(row=i+2, column=14).value = office_rate.office_inv_rate_lv300
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_cost_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="office_cost.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="office_rate.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.office_cost_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.office_cost_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_rate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：farmer_fisher_damage_view
-### 108: 農漁家被害率
+### 関数名：office_suspend_view
+### 110: 事業所営業停止日数
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def farmer_fisher_damage_view(request, lock):
+def office_suspend_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、農漁家被害率データを取得する。
+        ### DBにアクセスして、事業所営業停止日数データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 STEP 2/4.', 'INFO')
-        farmer_fisher_damage_list = FARMER_FISHER_DAMAGE.objects.raw("""SELECT * FROM FARMER_FISHER_DAMAGE ORDER BY CAST(FARMER_FISHER_DAMAGE_CODE AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 2/4.', 'INFO')
+        office_suspend_list = OFFICE_SUSPEND.objects.raw("""SELECT * FROM OFFICE_SUSPEND ORDER BY CAST(OFFICE_SUS_CODE AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_farmer_fisher_damage.xlsx'
-        download_file_path = 'static/download_farmer_fisher_damage.xlsx'
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_office_suspend.xlsx'
+        download_file_path = 'static/download_office_suspend.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '農漁家被害率'
-        ws.cell(row=1, column=1).value = '農漁家被害率コード'
-        ws.cell(row=1, column=2).value = '農漁家被害率対象年'
-        ws.cell(row=1, column=3).value = '開始日'
-        ws.cell(row=1, column=4).value = '終了日'
+        ws.title = '事業所営業停止日数'
+        ws.cell(row=1, column=1).value = '事業所営業停止日数コード'
+        ws.cell(row=1, column=2).value = '事業所営業停止日数_床下'
+        ws.cell(row=1, column=3).value = '事業所営業停止日数_0から50cm未満'
+        ws.cell(row=1, column=4).value = '事業所営業停止日数_50から100cm未満'
+        ws.cell(row=1, column=5).value = '事業所営業停止日数_100から200cm未満'
+        ws.cell(row=1, column=6).value = '事業所営業停止日数_200から300cm未満'
+        ws.cell(row=1, column=7).value = '事業所営業停止日数_300cm以上'
         
-        ws.cell(row=1, column=5).value = '償却資産被害率_浸水_床下'
-        ws.cell(row=1, column=6).value = '償却資産被害率_浸水_0から50cm未満'
-        ws.cell(row=1, column=7).value = '償却資産被害率_浸水_50から100cm未満'
-        ws.cell(row=1, column=8).value = '償却資産被害率_浸水_100から200cm未満'
-        ws.cell(row=1, column=9).value = '償却資産被害率_浸水_200から300cm未満'
-        ws.cell(row=1, column=10).value = '償却資産被害率_浸水_300cm以上'
-
-        ws.cell(row=1, column=11).value = '償却資産被害率_土砂_床下'
-        ws.cell(row=1, column=12).value = '償却資産被害率_土砂_0から50cm未満'
-        ws.cell(row=1, column=13).value = '償却資産被害率_土砂_50から100cm未満'
-        ws.cell(row=1, column=14).value = '償却資産被害率_土砂_100から200cm未満'
-        ws.cell(row=1, column=15).value = '償却資産被害率_土砂_200から300cm未満'
-        ws.cell(row=1, column=16).value = '償却資産被害率_土砂_300cm以上'
-
-        ws.cell(row=1, column=17).value = '在庫資産被害率_浸水_床下'
-        ws.cell(row=1, column=18).value = '在庫資産被害率_浸水_0から50cm未満'
-        ws.cell(row=1, column=19).value = '在庫資産被害率_浸水_50から100cm未満'
-        ws.cell(row=1, column=20).value = '在庫資産被害率_浸水_100から200cm未満'
-        ws.cell(row=1, column=21).value = '在庫資産被害率_浸水_200から300cm未満'
-        ws.cell(row=1, column=22).value = '在庫資産被害率_浸水_300cm以上'
-
-        ws.cell(row=1, column=23).value = '在庫資産被害率_土砂_床下'
-        ws.cell(row=1, column=24).value = '在庫資産被害率_土砂_0から50cm未満'
-        ws.cell(row=1, column=25).value = '在庫資産被害率_土砂_50から100cm未満'
-        ws.cell(row=1, column=26).value = '在庫資産被害率_土砂_100から200cm未満'
-        ws.cell(row=1, column=27).value = '在庫資産被害率_土砂_200から300cm未満'
-        ws.cell(row=1, column=28).value = '在庫資産被害率_土砂_300cm以上'
-
-        ws.cell(row=1, column=29).value = '農漁家償却資産額'
-        ws.cell(row=1, column=30).value = '農漁家在庫資産額'
-        
-        if farmer_fisher_damage_list:
-            for i, farmer_fisher_damage in enumerate(farmer_fisher_damage_list):
-                ws.cell(row=i+2, column=1).value = farmer_fisher_damage.farmer_fisher_damage_code
-                ws.cell(row=i+2, column=2).value = farmer_fisher_damage.farmer_fisher_damage_year
-                ws.cell(row=i+2, column=3).value = farmer_fisher_damage.begin_date
-                ws.cell(row=i+2, column=4).value = farmer_fisher_damage.end_date
-                
-                ws.cell(row=i+2, column=5).value = farmer_fisher_damage.dep_fl_lv00
-                ws.cell(row=i+2, column=6).value = farmer_fisher_damage.dep_fl_lv00_50
-                ws.cell(row=i+2, column=7).value = farmer_fisher_damage.dep_fl_lv50_100
-                ws.cell(row=i+2, column=8).value = farmer_fisher_damage.dep_fl_lv100_200
-                ws.cell(row=i+2, column=9).value = farmer_fisher_damage.dep_fl_lv200_300
-                ws.cell(row=i+2, column=10).value = farmer_fisher_damage.dep_fl_lv300
-
-                ws.cell(row=i+2, column=11).value = farmer_fisher_damage.dep_sd_lv00
-                ws.cell(row=i+2, column=12).value = farmer_fisher_damage.dep_sd_lv00_50
-                ws.cell(row=i+2, column=13).value = farmer_fisher_damage.dep_sd_lv50_100
-                ws.cell(row=i+2, column=14).value = farmer_fisher_damage.dep_sd_lv100_200
-                ws.cell(row=i+2, column=15).value = farmer_fisher_damage.dep_sd_lv200_300
-                ws.cell(row=i+2, column=16).value = farmer_fisher_damage.dep_sd_lv300
-        
-                ws.cell(row=i+2, column=17).value = farmer_fisher_damage.inv_fl_lv00
-                ws.cell(row=i+2, column=18).value = farmer_fisher_damage.inv_fl_lv00_50
-                ws.cell(row=i+2, column=19).value = farmer_fisher_damage.inv_fl_lv50_100
-                ws.cell(row=i+2, column=20).value = farmer_fisher_damage.inv_fl_lv100_200
-                ws.cell(row=i+2, column=21).value = farmer_fisher_damage.inv_fl_lv200_300
-                ws.cell(row=i+2, column=22).value = farmer_fisher_damage.inv_fl_lv300
-
-                ws.cell(row=i+2, column=23).value = farmer_fisher_damage.inv_sd_lv00
-                ws.cell(row=i+2, column=24).value = farmer_fisher_damage.inv_sd_lv00_50
-                ws.cell(row=i+2, column=25).value = farmer_fisher_damage.inv_sd_lv50_100
-                ws.cell(row=i+2, column=26).value = farmer_fisher_damage.inv_sd_lv100_200
-                ws.cell(row=i+2, column=27).value = farmer_fisher_damage.inv_sd_lv200_300
-                ws.cell(row=i+2, column=28).value = farmer_fisher_damage.inv_sd_lv300
-
-                ws.cell(row=i+2, column=29).value = farmer_fisher_damage.depreciable_asset
-                ws.cell(row=i+2, column=30).value = farmer_fisher_damage.inventory_asset
+        if office_suspend_list:
+            for i, office_suspend in enumerate(office_suspend_list):
+                ws.cell(row=i+2, column=1).value = office_suspend.office_sus_code
+                ws.cell(row=i+2, column=2).value = office_suspend.office_sus_days_lv00
+                ws.cell(row=i+2, column=3).value = office_suspend.office_sus_days_lv00_50
+                ws.cell(row=i+2, column=4).value = office_suspend.office_sus_days_lv50_100
+                ws.cell(row=i+2, column=5).value = office_suspend.office_sus_days_lv100_200
+                ws.cell(row=i+2, column=6).value = office_suspend.office_sus_days_lv200_300
+                ws.cell(row=i+2, column=7).value = office_suspend.office_sus_days_lv300
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_damage_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="farmer_fisher_damage.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="office_suspend.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_damage_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_damage_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_suspend_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_suspend_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
+
+###############################################################################
+### 関数名：office_stagnate_view
+### 111: 事業所営業停滞日数
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def office_stagnate_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、事業所営業停滞日数データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 2/4.', 'INFO')
+        office_stagnate_list = OFFICE_STAGNATE.objects.raw("""SELECT * FROM OFFICE_STAGNATE ORDER BY CAST(OFFICE_STG_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_office_stagnate.xlsx'
+        download_file_path = 'static/download_office_stagnate.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '事業所営業停滞日数'
+        ws.cell(row=1, column=1).value = '事業所営業停滞日数コード'
+        ws.cell(row=1, column=2).value = '事業所営業停滞日数_床下'
+        ws.cell(row=1, column=3).value = '事業所営業停滞日数_0から50cm未満'
+        ws.cell(row=1, column=4).value = '事業所営業停滞日数_50から100cm未満'
+        ws.cell(row=1, column=5).value = '事業所営業停滞日数_100から200cm未満'
+        ws.cell(row=1, column=6).value = '事業所営業停滞日数_200から300cm未満'
+        ws.cell(row=1, column=7).value = '事業所営業停滞日数_300cm以上'
+        
+        if office_stagnate_list:
+            for i, office_stagnate in enumerate(office_stagnate_list):
+                ws.cell(row=i+2, column=1).value = office_stagnate.office_stg_code
+                ws.cell(row=i+2, column=2).value = office_stagnate.office_stg_days_lv00
+                ws.cell(row=i+2, column=3).value = office_stagnate.office_stg_days_lv00_50
+                ws.cell(row=i+2, column=4).value = office_stagnate.office_stg_days_lv50_100
+                ws.cell(row=i+2, column=5).value = office_stagnate.office_stg_days_lv100_200
+                ws.cell(row=i+2, column=6).value = office_stagnate.office_stg_days_lv200_300
+                ws.cell(row=i+2, column=7).value = office_stagnate.office_stg_days_lv300
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="office_stagnate.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_stagnate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_stagnate_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：office_alt_view
+### 112: 事業所応急対策費_代替活動費
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def office_alt_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、事業所応急対策費_代替活動費データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 2/4.', 'INFO')
+        office_alt_list = OFFICE_ALT.objects.raw("""SELECT * FROM OFFICE_ALT ORDER BY CAST(OFFICE_ALT_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_office_alt.xlsx'
+        download_file_path = 'static/download_office_alt.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '事業所応急対策費_代替活動費'
+        ws.cell(row=1, column=1).value = '事業所応急対策費_代替活動費コード'
+        ws.cell(row=1, column=2).value = '事業所応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=3).value = '事業所応急対策費_代替活動費_0から50cm未満'
+        ws.cell(row=1, column=4).value = '事業所応急対策費_代替活動費_50から100cm未満'
+        ws.cell(row=1, column=5).value = '事業所応急対策費_代替活動費_100から200cm未満'
+        ws.cell(row=1, column=6).value = '事業所応急対策費_代替活動費_200から300cm未満'
+        ws.cell(row=1, column=7).value = '事業所応急対策費_代替活動費_300cm以上'
+        
+        if office_alt_list:
+            for i, office_alt in enumerate(office_alt_list):
+                ws.cell(row=i+2, column=1).value = office_alt.office_alt_code
+                ws.cell(row=i+2, column=2).value = office_alt.office_alt_lv00
+                ws.cell(row=i+2, column=3).value = office_alt.office_alt_lv00_50
+                ws.cell(row=i+2, column=4).value = office_alt.office_alt_lv50_100
+                ws.cell(row=i+2, column=5).value = office_alt.office_alt_lv100_200
+                ws.cell(row=i+2, column=6).value = office_alt.office_alt_lv200_300
+                ws.cell(row=i+2, column=7).value = office_alt.office_alt_lv300
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="office_alt.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_alt_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_alt_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：farmer_fisher_asset_view
+### 113: 農漁家資産額
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def farmer_fisher_asset_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、農漁家資産額データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 2/4.', 'INFO')
+        farmer_fisher_asset_list = FARMER_FISHER_ASSET.objects.raw("""SELECT * FROM FARMER_FISHER_ASSET ORDER BY CAST(FARMER_FISHER_ASSET_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_farmer_fisher_asset.xlsx'
+        download_file_path = 'static/download_farmer_fisher_asset.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '農漁家資産額'
+        ws.cell(row=1, column=1).value = '農漁家資産額コード'
+        ws.cell(row=1, column=2).value = '農漁家資産額_償却資産額'
+        ws.cell(row=1, column=3).value = '農漁家資産額_在庫資産額'
+        
+        if farmer_fisher_asset_list:
+            for i, farmer_fisher_asset in enumerate(farmer_fisher_asset_list):
+                ws.cell(row=i+2, column=1).value = farmer_fisher_asset.farmer_fisher_asset_code
+                ws.cell(row=i+2, column=2).value = farmer_fisher_asset.farmer_fisher_dep_asset
+                ws.cell(row=i+2, column=3).value = farmer_fisher_asset.farmer_fisher_inv_asset
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="farmer_fisher_asset.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_asset_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_asset_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：farmer_fisher_rate_view
+### 114: 農漁家被害率
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def farmer_fisher_rate_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、農漁家被害率データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 2/4.', 'INFO')
+        farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""SELECT * FROM FARMER_FISHER_RATE ORDER BY CAST(FARMER_FISHER_RATE_CODE AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_farmer_fisher_rate.xlsx'
+        download_file_path = 'static/download_farmer_fisher_rate.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '農漁家被害率'
+        ws.cell(row=1, column=1).value = '農漁家被害率コード'
+        ws.cell(row=1, column=2).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=3).value = '農漁家被害率_償却資産被害率_床下'
+        ws.cell(row=1, column=4).value = '農漁家被害率_償却資産被害率_0から50cm未満'
+        ws.cell(row=1, column=5).value = '農漁家被害率_償却資産被害率_50から100cm未満'
+        ws.cell(row=1, column=6).value = '農漁家被害率_償却資産被害率_100から200cm未満'
+        ws.cell(row=1, column=7).value = '農漁家被害率_償却資産被害率_200から300cm未満'
+        ws.cell(row=1, column=9).value = '農漁家被害率_償却資産被害率_300cm以上'
+        ws.cell(row=1, column=10).value = '農漁家被害率_在庫資産被害率_床下'
+        ws.cell(row=1, column=11).value = '農漁家被害率_在庫資産被害率_0から50cm未満'
+        ws.cell(row=1, column=12).value = '農漁家被害率_在庫資産被害率_50から100cm未満'
+        ws.cell(row=1, column=13).value = '農漁家被害率_在庫資産被害率_100から200cm未満'
+        ws.cell(row=1, column=14).value = '農漁家被害率_在庫資産被害率_200から300cm未満'
+        ws.cell(row=1, column=15).value = '農漁家被害率_在庫資産被害率_300cm以上'
+        
+        if farmer_fisher_rate_list:
+            for i, farmer_fisher_rate in enumerate(farmer_fisher_rate_list):
+                ws.cell(row=i+2, column=1).value = farmer_fisher_rate.farmer_fisher_rate_code
+                ws.cell(row=i+2, column=2).value = farmer_fisher_rate.flood_sediment_code
+                ws.cell(row=i+2, column=3).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00
+                ws.cell(row=i+2, column=4).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50
+                ws.cell(row=i+2, column=5).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100
+                ws.cell(row=i+2, column=6).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv100_200
+                ws.cell(row=i+2, column=7).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv200_300
+                ws.cell(row=i+2, column=8).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv300
+                ws.cell(row=i+2, column=9).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00
+                ws.cell(row=i+2, column=10).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00_50
+                ws.cell(row=i+2, column=11).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv50_100
+                ws.cell(row=i+2, column=12).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv100_200
+                ws.cell(row=i+2, column=13).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv200_300
+                ws.cell(row=i+2, column=14).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv300
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="farmer_fisher_rate.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_rate_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_rate_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+
+
+
+
+
+
+
+
+###############################################################################
+### 関数名：area_view
+### 200: 一般資産入力データ_水害区域
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def area_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、一般資産入力データ_水害区域データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 2/4.', 'INFO')
+        area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_area.xlsx'
+        download_file_path = 'static/download_area.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '一般資産入力データ_水害区域'
+        ws.cell(row=1, column=1).value = '区域ID'
+        ws.cell(row=1, column=2).value = '区域名'
+        
+        if area_list:
+            for i, area in enumerate(area_list):
+                ws.cell(row=i+2, column=1).value = area.area_id
+                ws.cell(row=i+2, column=2).value = area.area_name
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.area_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="area.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.area_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.area_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+
+
+
+
+
 
 ###############################################################################
 ### 関数名：suigai_view
@@ -2130,14 +2302,14 @@ def suigai_view(request, lock):
 
 ###############################################################################
 ### 関数名：weather_view
-### 201: 異常気象
+### 201: 一般資産入力データ_異常気象
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def weather_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.weather_view()関数が開始しました。', 'INFO')
@@ -2147,7 +2319,7 @@ def weather_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、異常気象データを取得する。
+        ### DBにアクセスして、一般資産入力データ_異常気象データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 2/4.', 'INFO')
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
@@ -2162,7 +2334,7 @@ def weather_view(request, lock):
         download_file_path = 'static/download_weather.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '異常気象'
+        ws.title = '一般資産入力データ_異常気象'
         ws.cell(row=1, column=1).value = '異常気象ID'
         ws.cell(row=1, column=2).value = '異常気象名'
         ws.cell(row=1, column=3).value = '開始日'
@@ -2179,7 +2351,7 @@ def weather_view(request, lock):
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.weather_view()関数が正常終了しました。', 'INFO')
@@ -2194,69 +2366,1119 @@ def weather_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：area_view
-### 202: 区域
+### 関数名：ippan_view
+### 203: 一般資産入力データ_一覧表部分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def area_view(request, lock):
+def ippan_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 1/4.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、区域データを取得する。
+        ### DBにアクセスして、一般資産入力データ_一覧表部分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 2/4.', 'INFO')
-        area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 2/4.', 'INFO')
+        ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_area.xlsx'
-        download_file_path = 'static/download_area.xlsx'
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_ippan.xlsx'
+        download_file_path = 'static/download_ippan.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '区域'
-        ws.cell(row=1, column=1).value = '区域ID'
-        ws.cell(row=1, column=2).value = '区域名'
+        ws.title = '一般資産入力データ_一覧表部分'
+        ws.cell(row=1, column=1).value = '一般資産調査票ID'
+        ws.cell(row=1, column=2).value = '一般資産調査票名（町丁目、大字名）'
+        ws.cell(row=1, column=3).value = '水害ID'
+        ws.cell(row=1, column=4).value = '建物区分コード'
+        ws.cell(row=1, column=5).value = '地上地下区分コード'
+        ws.cell(row=1, column=6).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=7).value = '被害建物棟数_床下'
+        ws.cell(row=1, column=8).value = '被害建物棟数_01から49cm'
+        ws.cell(row=1, column=9).value = '被害建物棟数_50から99cm'
+        ws.cell(row=1, column=10).value = '被害建物棟数_100cm以上'
+        ws.cell(row=1, column=11).value = '被害建物棟数_半壊'
+        ws.cell(row=1, column=12).value = '被害建物棟数_全壊'
+        ws.cell(row=1, column=13).value = '延床面積'
+        ws.cell(row=1, column=14).value = '被災世帯数'
+        ws.cell(row=1, column=15).value = '被災事業所数'
+        ws.cell(row=1, column=16).value = '農漁家戸数_床下'
+        ws.cell(row=1, column=17).value = '農漁家戸数_01から49cm'
+        ws.cell(row=1, column=18).value = '農漁家戸数_50から99cm'
+        ws.cell(row=1, column=19).value = '農漁家戸数_100cm以上'
+        ws.cell(row=1, column=20).value = '農漁家戸数_全壊'
+        ws.cell(row=1, column=21).value = '被災従業者数_床下'
+        ws.cell(row=1, column=22).value = '被災従業者数_01から49cm'
+        ws.cell(row=1, column=23).value = '被災従業者数_50から99cm'
+        ws.cell(row=1, column=24).value = '被災従業者数_100cm以上'
+        ws.cell(row=1, column=25).value = '被災従業者数_全壊'
+        ws.cell(row=1, column=26).value = '産業分類コード'
+        ws.cell(row=1, column=27).value = '地下空間の利用形態コード'
+        ws.cell(row=1, column=28).value = '備考'
         
-        if area_list:
-            for i, area in enumerate(area_list):
-                ws.cell(row=i+2, column=1).value = area.area_id
-                ws.cell(row=i+2, column=2).value = area.area_name
-        
+        if ippan_list:
+            for i, ippan in enumerate(ippan_list):
+                ws.cell(row=i+2, column=1).value = ippan.ippan_id
+                ws.cell(row=i+2, column=2).value = ippan.ippan_name
+                ws.cell(row=i+2, column=3).value = ippan.suigai_id
+                ws.cell(row=i+2, column=4).value = ippan.building_code
+                ws.cell(row=i+2, column=5).value = ippan.underground_code
+                ws.cell(row=i+2, column=6).value = ippan.flood_sediment_code
+                ws.cell(row=i+2, column=7).value = ippan.building_lv00
+                ws.cell(row=i+2, column=8).value = ippan.building_lv01_49
+                ws.cell(row=i+2, column=9).value = ippan.building_lv50_99
+                ws.cell(row=i+2, column=10).value = ippan.building_lv100
+                ws.cell(row=i+2, column=11).value = ippan.building_half
+                ws.cell(row=i+2, column=12).value = ippan.building_full
+                ws.cell(row=i+2, column=13).value = ippan.floor_area
+                ws.cell(row=i+2, column=14).value = ippan.family
+                ws.cell(row=i+2, column=15).value = ippan.office
+                ws.cell(row=i+2, column=16).value = ippan.farmer_fisher_lv00
+                ws.cell(row=i+2, column=17).value = ippan.farmer_fisher_lv01_49
+                ws.cell(row=i+2, column=18).value = ippan.farmer_fisher_lv50_99
+                ws.cell(row=i+2, column=19).value = ippan.farmer_fisher_lv100
+                ws.cell(row=i+2, column=20).value = ippan.farmer_fisher_full
+                ws.cell(row=i+2, column=21).value = ippan.employee_lv00
+                ws.cell(row=i+2, column=22).value = ippan.employee_lv01_49
+                ws.cell(row=i+2, column=23).value = ippan.employee_lv50_99
+                ws.cell(row=i+2, column=24).value = ippan.employee_lv100
+                ws.cell(row=i+2, column=25).value = ippan.employee_full
+                ws.cell(row=i+2, column=26).value = ippan.industry_code
+                ws.cell(row=i+2, column=27).value = ippan.usage_code
+                ws.cell(row=i+2, column=28).value = ippan.comment
+
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="area.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="ippan.xlsx"'
         return response
         
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.area_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.area_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+
+
+
+
+
+
+###############################################################################
+### 関数名：ippan_view_view
+### 204: 一般資産ビューデータ_一覧表部分
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def ippan_view_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、一般資産ビューデータ一覧表部分データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 2/4.', 'INFO')
+        ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_ippan_view.xlsx'
+        download_file_path = 'static/download_ippan_view.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '一般資産ビューデータ_一覧表部分'
+        ws.cell(row=1, column=1).value = '一般資産調査票ID'
+        ws.cell(row=1, column=2).value = '一般資産調査票名（町丁目、大字名）'
+        ws.cell(row=1, column=3).value = '水害ID'
+        ws.cell(row=1, column=4).value = '水害名'
+        ws.cell(row=1, column=5).value = '都道府県コード'
+        ws.cell(row=1, column=6).value = '都道府県名'
+        ws.cell(row=1, column=7).value = '市区町村コード'
+        ws.cell(row=1, column=8).value = '市区町村名'
+        ws.cell(row=1, column=9).value = '水害原因コード1'
+        ws.cell(row=1, column=10).value = '水害原因名1'
+        ws.cell(row=1, column=11).value = '水害原因コード2'
+        ws.cell(row=1, column=12).value = '水害原因名2'
+        ws.cell(row=1, column=13).value = '水害原因コード3'
+        ws.cell(row=1, column=14).value = '水害原因名3'
+        ws.cell(row=1, column=15).value = '水害区域ID'
+        ws.cell(row=1, column=16).value = '水害区域名'
+        ws.cell(row=1, column=17).value = '水系コード'
+        ws.cell(row=1, column=18).value = '水系名'
+        ws.cell(row=1, column=19).value = '河川コード'
+        ws.cell(row=1, column=20).value = '河川名'
+        ws.cell(row=1, column=21).value = '地盤勾配区分コード'
+        ws.cell(row=1, column=22).value = '地盤勾配区分名'
+        ws.cell(row=1, column=23).value = '宅地面積'
+        ws.cell(row=1, column=24).value = '農地面積'
+        ws.cell(row=1, column=25).value = '地下面積'
+        ws.cell(row=1, column=26).value = '河川海岸（工種）コード'
+        ws.cell(row=1, column=27).value = '河川海岸（工種）名'
+        ws.cell(row=1, column=28).value = '農作物被害額'
+        ws.cell(row=1, column=29).value = '異常気象ID'
+        ws.cell(row=1, column=30).value = '異常気象名'
+        ws.cell(row=1, column=31).value = '建物区分コード'
+        ws.cell(row=1, column=32).value = '建物区分名'
+        ws.cell(row=1, column=33).value = '地上地下区分コード'
+        ws.cell(row=1, column=34).value = '地上地下区分名'
+        ws.cell(row=1, column=35).value = '浸水土砂区分コード'
+        ws.cell(row=1, column=36).value = '浸水土砂区分名'
+        ws.cell(row=1, column=37).value = '被害建物棟数_床下'
+        ws.cell(row=1, column=38).value = '被害建物棟数_01から49cm'
+        ws.cell(row=1, column=39).value = '被害建物棟数_50から99cm'
+        ws.cell(row=1, column=40).value = '被害建物棟数_100cm以上'
+        ws.cell(row=1, column=41).value = '被害建物棟数_半壊'
+        ws.cell(row=1, column=42).value = '被害建物棟数_全壊'
+        ws.cell(row=1, column=43).value = '被害建物棟数_合計'
+        ws.cell(row=1, column=44).value = '延床面積'
+        ws.cell(row=1, column=45).value = '被災世帯数'
+        ws.cell(row=1, column=46).value = '被災事業所数'
+        ws.cell(row=1, column=47).value = '延床面積_床下'
+        ws.cell(row=1, column=48).value = '延床面積_01から49cm'
+        ws.cell(row=1, column=49).value = '延床面積_50から99cm'
+        ws.cell(row=1, column=50).value = '延床面積_100cm以上'
+        ws.cell(row=1, column=51).value = '延床面積_半壊'
+        ws.cell(row=1, column=52).value = '延床面積_全壊'
+        ws.cell(row=1, column=53).value = '延床面積_合計'
+        ws.cell(row=1, column=54).value = '被災世帯数_床下'
+        ws.cell(row=1, column=55).value = '被災世帯数_01から49cm'
+        ws.cell(row=1, column=56).value = '被災世帯数_50から99cm'
+        ws.cell(row=1, column=57).value = '被災世帯数_100cm以上'
+        ws.cell(row=1, column=58).value = '被災世帯数_半壊'
+        ws.cell(row=1, column=59).value = '被災世帯数_全壊'
+        ws.cell(row=1, column=60).value = '被災世帯数_合計'
+        ws.cell(row=1, column=61).value = '被災事業所数_床下'
+        ws.cell(row=1, column=62).value = '被災事業所数_01から49cm'
+        ws.cell(row=1, column=63).value = '被災事業所数_50から99cm'
+        ws.cell(row=1, column=64).value = '被災事業所数_100cm以上'
+        ws.cell(row=1, column=65).value = '被災事業所数_半壊'
+        ws.cell(row=1, column=66).value = '被災事業所数_全壊'
+        ws.cell(row=1, column=67).value = '被災事業所数_合計'
+        ws.cell(row=1, column=68).value = '農漁家戸数_床下'
+        ws.cell(row=1, column=69).value = '農漁家戸数_01から49cm'
+        ws.cell(row=1, column=70).value = '農漁家戸数_50から99cm'
+        ws.cell(row=1, column=71).value = '農漁家戸数_100cm以上'
+        ws.cell(row=1, column=72).value = '農漁家戸数_全壊'
+        ws.cell(row=1, column=73).value = '農漁家戸数_合計'
+        ws.cell(row=1, column=74).value = '被災従業者数_床下'
+        ws.cell(row=1, column=75).value = '被災従業者数_01から49cm'
+        ws.cell(row=1, column=76).value = '被災従業者数_50から99cm'
+        ws.cell(row=1, column=77).value = '被災従業者数_100cm以上'
+        ws.cell(row=1, column=78).value = '被災従業者数_全壊'
+        ws.cell(row=1, column=79).value = '被災従業者数_合計'
+        ws.cell(row=1, column=80).value = '産業分類コード'
+        ws.cell(row=1, column=81).value = '産業分類名'
+        ws.cell(row=1, column=82).value = '地下空間の利用形態コード'
+        ws.cell(row=1, column=83).value = '地下空間の利用形態名'
+        
+        if ippan_view_list:
+            for i, ippan_view in enumerate(ippan_view_list):
+                ws.cell(row=i+2, column=1).value = ippan_view.ippan_id
+                ws.cell(row=i+2, column=2).value = ippan_view.ippan_name
+                ws.cell(row=i+2, column=3).value = ippan_view.suigai_id
+                ws.cell(row=i+2, column=4).value = ippan_view.suigai_name
+                ws.cell(row=i+2, column=5).value = ippan_view.ken_code
+                ws.cell(row=i+2, column=6).value = ippan_view.ken_name
+                ws.cell(row=i+2, column=7).value = ippan_view.city_code
+                ws.cell(row=i+2, column=8).value = ippan_view.city_name
+                ws.cell(row=i+2, column=9).value = ippan_view.cause_1_code
+                ws.cell(row=i+2, column=10).value = ippan_view.cause_1_name
+                ws.cell(row=i+2, column=11).value = ippan_view.cause_2_code
+                ws.cell(row=i+2, column=12).value = ippan_view.cause_2_name
+                ws.cell(row=i+2, column=13).value = ippan_view.cause_3_code
+                ws.cell(row=i+2, column=14).value = ippan_view.cause_3_name
+                ws.cell(row=i+2, column=15).value = ippan_view.area_id
+                ws.cell(row=i+2, column=16).value = ippan_view.area_name
+                ws.cell(row=i+2, column=17).value = ippan_view.suikei_code
+                ws.cell(row=i+2, column=18).value = ippan_view.suikei_name
+                ws.cell(row=i+2, column=19).value = ippan_view.kasen_code
+                ws.cell(row=i+2, column=20).value = ippan_view.kasen_name
+                ws.cell(row=i+2, column=21).value = ippan_view.gradient_code
+                ws.cell(row=i+2, column=22).value = ippan_view.gradient_name
+                ws.cell(row=i+2, column=23).value = ippan_view.residential_area
+                ws.cell(row=i+2, column=24).value = ippan_view.agricultural_area
+                ws.cell(row=i+2, column=25).value = ippan_view.underground_area
+                ws.cell(row=i+2, column=26).value = ippan_view.kasen_kaigan_code
+                ws.cell(row=i+2, column=27).value = ippan_view.kasen_kaigan_name
+                ws.cell(row=i+2, column=28).value = ippan_view.crop_damage
+                ws.cell(row=i+2, column=29).value = ippan_view.weather_id
+                ws.cell(row=i+2, column=30).value = ippan_view.weather_name
+                ws.cell(row=i+2, column=31).value = ippan_view.building_code
+                ws.cell(row=i+2, column=32).value = ippan_view.building_name
+                ws.cell(row=i+2, column=33).value = ippan_view.underground_code
+                ws.cell(row=i+2, column=34).value = ippan_view.underground_name
+                ws.cell(row=i+2, column=35).value = ippan_view.flood_sediment_code
+                ws.cell(row=i+2, column=36).value = ippan_view.flood_sediment_name
+                ws.cell(row=i+2, column=37).value = ippan_view.building_lv00
+                ws.cell(row=i+2, column=38).value = ippan_view.building_lv01_49
+                ws.cell(row=i+2, column=39).value = ippan_view.building_lv50_99
+                ws.cell(row=i+2, column=40).value = ippan_view.building_lv100
+                ws.cell(row=i+2, column=41).value = ippan_view.building_half
+                ws.cell(row=i+2, column=42).value = ippan_view.building_full
+                ws.cell(row=i+2, column=43).value = ippan_view.building_total
+                ws.cell(row=i+2, column=44).value = ippan_view.floor_area
+                ws.cell(row=i+2, column=45).value = ippan_view.family
+                ws.cell(row=i+2, column=46).value = ippan_view.office
+                ws.cell(row=i+2, column=47).value = ippan_view.floor_area_lv00
+                ws.cell(row=i+2, column=48).value = ippan_view.floor_area_lv01_49
+                ws.cell(row=i+2, column=49).value = ippan_view.floor_area_lv50_99
+
+                ws.cell(row=i+2, column=50).value = ippan_view.floor_area_lv100
+                ws.cell(row=i+2, column=51).value = ippan_view.floor_area_half
+                ws.cell(row=i+2, column=52).value = ippan_view.floor_area_full
+                ws.cell(row=i+2, column=53).value = ippan_view.floor_area_total
+                ws.cell(row=i+2, column=54).value = ippan_view.family_lv00
+                ws.cell(row=i+2, column=55).value = ippan_view.family_lv01_49
+                ws.cell(row=i+2, column=56).value = ippan_view.family_lv50_99
+                ws.cell(row=i+2, column=57).value = ippan_view.family_lv100
+                ws.cell(row=i+2, column=58).value = ippan_view.family_half
+                ws.cell(row=i+2, column=59).value = ippan_view.family_full
+
+                ws.cell(row=i+2, column=60).value = ippan_view.family_total
+                ws.cell(row=i+2, column=61).value = ippan_view.office_lv00
+                ws.cell(row=i+2, column=62).value = ippan_view.office_lv01_49
+                ws.cell(row=i+2, column=63).value = ippan_view.office_lv50_99
+                ws.cell(row=i+2, column=64).value = ippan_view.office_lv100
+                ws.cell(row=i+2, column=65).value = ippan_view.office_half
+                ws.cell(row=i+2, column=66).value = ippan_view.office_full
+                ws.cell(row=i+2, column=67).value = ippan_view.office_total
+                ws.cell(row=i+2, column=68).value = ippan_view.farmer_fisher_lv00
+                ws.cell(row=i+2, column=69).value = ippan_view.farmer_fisher_lv01_49
+
+                ws.cell(row=i+2, column=70).value = ippan_view.farmer_fisher_lv50_99
+                ws.cell(row=i+2, column=71).value = ippan_view.farmer_fisher_lv100
+                ws.cell(row=i+2, column=72).value = ippan_view.farmer_fisher_full
+                ws.cell(row=i+2, column=73).value = ippan_view.farmer_fisher_total
+                ws.cell(row=i+2, column=74).value = ippan_view.employee_lv00
+                ws.cell(row=i+2, column=75).value = ippan_view.employee_lv01_49
+                ws.cell(row=i+2, column=76).value = ippan_view.employee_lv50_99
+                ws.cell(row=i+2, column=77).value = ippan_view.employee_lv100
+                ws.cell(row=i+2, column=78).value = ippan_view.employee_full
+                ws.cell(row=i+2, column=79).value = ippan_view.employee_total
+
+                ws.cell(row=i+2, column=80).value = ippan_view.industry_code
+                ws.cell(row=i+2, column=81).value = ippan_view.industry_name
+                ws.cell(row=i+2, column=82).value = ippan_view.usage_code
+                ws.cell(row=i+2, column=83).value = ippan_view.usage_name
+
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="ippan_view.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：ippan_summary_view
+### 300: 一般資産集計データ_集計結果
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def ippan_summary_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、一般資産集計データ_集計結果データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 2/4.', 'INFO')
+        ippan_summary_list = IPPAN_SUMMARY.objects.raw("""SELECT * FROM IPPAN_SUMMARY ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_ippan_summary.xlsx'
+        download_file_path = 'static/download_ippan_summary.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '一般資産集計データ_集計結果'
+        ws.cell(row=1, column=1).value = '一般資産調査票ID'
+        ws.cell(row=1, column=2).value = '水害ID'
+        ws.cell(row=1, column=3).value = '家屋被害額_床下'
+        ws.cell(row=1, column=4).value = '家屋被害額_01から49cm'
+        ws.cell(row=1, column=5).value = '家屋被害額_50から99cm'
+        ws.cell(row=1, column=6).value = '家屋被害額_100cm以上'
+        ws.cell(row=1, column=7).value = '家屋被害額_半壊'
+        ws.cell(row=1, column=8).value = '家屋被害額_全壊'
+        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_床下'
+        ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_01から49cm'
+        ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_50から99cm'
+        ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_100cm以上'
+        ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_半壊'
+        ws.cell(row=1, column=14).value = '家庭用品自動車以外被害額_全壊'
+        ws.cell(row=1, column=15).value = '家庭用品自動車被害額_床下'
+        ws.cell(row=1, column=16).value = '家庭用品自動車被害額_01から49cm'
+        ws.cell(row=1, column=17).value = '家庭用品自動車被害額_50から99cm'
+        ws.cell(row=1, column=18).value = '家庭用品自動車被害額_100cm以上'
+        ws.cell(row=1, column=19).value = '家庭用品自動車被害額_半壊'
+        ws.cell(row=1, column=20).value = '家庭用品自動車被害額_全壊'
+        ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=26).value = '家庭応急対策費_代替活動費_全壊'
+        ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_床下'
+        ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_01から49cm'
+        ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_50から99cm'
+        ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_100cm以上'
+        ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_半壊'
+        ws.cell(row=1, column=32).value = '家庭応急対策費_清掃費_全壊'
+        ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=37).value = '事業所被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=42).value = '事業所被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_床下'
+        ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
+        ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
+        ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
+        ws.cell(row=1, column=47).value = '事業所被害額_営業停止に伴う被害額_全壊'
+        ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_床下'
+        ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+        ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+        ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+        ws.cell(row=1, column=52).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+        ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=57).value = '農漁家被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=62).value = '農漁家被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=68).value = '事業所応急対策費_代替活動費_全壊'
+        
+        if ippan_summary_list:
+            for i, ippan_summary in enumerate(ippan_summary_list):
+                ws.cell(row=i+2, column=1).value = ippan_summary.ippan_id
+                ws.cell(row=i+2, column=2).value = ippan_summary.suigai_id
+                ws.cell(row=i+2, column=3).value = ippan_summary.house_summary_lv00
+                ws.cell(row=i+2, column=4).value = ippan_summary.house_summary_lv01_49
+                ws.cell(row=i+2, column=5).value = ippan_summary.house_summary_lv50_99
+                ws.cell(row=i+2, column=6).value = ippan_summary.house_summary_lv100
+                ws.cell(row=i+2, column=7).value = ippan_summary.house_summary_half
+                ws.cell(row=i+2, column=8).value = ippan_summary.house_summary_full
+                ws.cell(row=i+2, column=9).value = ippan_summary.household_summary_lv00
+                ws.cell(row=i+2, column=10).value = ippan_summary.household_summary_lv01_49
+                ws.cell(row=i+2, column=11).value = ippan_summary.household_summary_lv50_99
+                ws.cell(row=i+2, column=12).value = ippan_summary.household_summary_lv100
+                ws.cell(row=i+2, column=13).value = ippan_summary.household_summary_half
+                ws.cell(row=i+2, column=14).value = ippan_summary.household_summary_full
+                ws.cell(row=i+2, column=15).value = ippan_summary.car_summary_lv00
+                ws.cell(row=i+2, column=16).value = ippan_summary.car_summary_lv01_49
+                ws.cell(row=i+2, column=17).value = ippan_summary.car_summary_lv50_99
+                ws.cell(row=i+2, column=18).value = ippan_summary.car_summary_lv100
+                ws.cell(row=i+2, column=19).value = ippan_summary.car_summary_half
+                ws.cell(row=i+2, column=20).value = ippan_summary.car_summary_full
+                ws.cell(row=i+2, column=21).value = ippan_summary.house_alt_summary_lv00
+                ws.cell(row=i+2, column=22).value = ippan_summary.house_alt_summary_lv01_49
+                ws.cell(row=i+2, column=23).value = ippan_summary.house_alt_summary_lv50_99
+                ws.cell(row=i+2, column=24).value = ippan_summary.house_alt_summary_lv100
+                ws.cell(row=i+2, column=25).value = ippan_summary.house_alt_summary_half
+                ws.cell(row=i+2, column=26).value = ippan_summary.house_alt_summary_full
+                ws.cell(row=i+2, column=27).value = ippan_summary.house_clean_summary_lv00
+                ws.cell(row=i+2, column=28).value = ippan_summary.house_clean_summary_lv01_49
+                ws.cell(row=i+2, column=29).value = ippan_summary.house_clean_summary_lv50_99
+                ws.cell(row=i+2, column=30).value = ippan_summary.house_clean_summary_lv100
+                ws.cell(row=i+2, column=31).value = ippan_summary.house_clean_summary_half
+                ws.cell(row=i+2, column=32).value = ippan_summary.house_clean_summary_full
+                ws.cell(row=i+2, column=33).value = ippan_summary.office_dep_summary_lv00
+                ws.cell(row=i+2, column=34).value = ippan_summary.office_dep_summary_lv01_49
+                ws.cell(row=i+2, column=35).value = ippan_summary.office_dep_summary_lv50_99
+                ws.cell(row=i+2, column=36).value = ippan_summary.office_dep_summary_lv100
+                ws.cell(row=i+2, column=37).value = ippan_summary.office_dep_summary_full
+                ws.cell(row=i+2, column=38).value = ippan_summary.office_inv_summary_lv00
+                ws.cell(row=i+2, column=39).value = ippan_summary.office_inv_summary_lv01_49
+                ws.cell(row=i+2, column=40).value = ippan_summary.office_inv_summary_lv50_99
+                ws.cell(row=i+2, column=41).value = ippan_summary.office_inv_summary_lv100
+                ws.cell(row=i+2, column=42).value = ippan_summary.office_inv_summary_full
+                ws.cell(row=i+2, column=43).value = ippan_summary.office_sus_summary_lv00
+                ws.cell(row=i+2, column=44).value = ippan_summary.office_sus_summary_lv01_49
+                ws.cell(row=i+2, column=45).value = ippan_summary.office_sus_summary_lv50_99
+                ws.cell(row=i+2, column=46).value = ippan_summary.office_sus_summary_lv100
+                ws.cell(row=i+2, column=47).value = ippan_summary.office_sus_summary_full
+                ws.cell(row=i+2, column=48).value = ippan_summary.office_stg_summary_lv00
+                ws.cell(row=i+2, column=49).value = ippan_summary.office_stg_summary_lv01_49
+                ws.cell(row=i+2, column=50).value = ippan_summary.office_stg_summary_lv50_99
+                ws.cell(row=i+2, column=51).value = ippan_summary.office_stg_summary_lv100
+                ws.cell(row=i+2, column=52).value = ippan_summary.office_stg_summary_full
+                ws.cell(row=i+2, column=53).value = ippan_summary.farmer_fisher_dep_summary_lv00
+                ws.cell(row=i+2, column=54).value = ippan_summary.farmer_fisher_dep_summary_lv01_49
+                ws.cell(row=i+2, column=55).value = ippan_summary.farmer_fisher_dep_summary_lv50_99
+                ws.cell(row=i+2, column=56).value = ippan_summary.farmer_fisher_dep_summary_lv100
+                ws.cell(row=i+2, column=57).value = ippan_summary.farmer_fisher_dep_summary_full
+                ws.cell(row=i+2, column=58).value = ippan_summary.farmer_fisher_inv_summary_lv00
+                ws.cell(row=i+2, column=59).value = ippan_summary.farmer_fisher_inv_summary_lv01_49
+                ws.cell(row=i+2, column=60).value = ippan_summary.farmer_fisher_inv_summary_lv50_99
+                ws.cell(row=i+2, column=61).value = ippan_summary.farmer_fisher_inv_summary_lv100
+                ws.cell(row=i+2, column=62).value = ippan_summary.farmer_fisher_inv_summary_full
+                ws.cell(row=i+2, column=63).value = ippan_summary.office_alt_summary_lv00
+                ws.cell(row=i+2, column=64).value = ippan_summary.office_alt_summary_lv01_49
+                ws.cell(row=i+2, column=65).value = ippan_summary.office_alt_summary_lv50_99
+                ws.cell(row=i+2, column=66).value = ippan_summary.office_alt_summary_lv100
+                ws.cell(row=i+2, column=67).value = ippan_summary.office_alt_summary_half
+                ws.cell(row=i+2, column=68).value = ippan_summary.office_alt_summary_full
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="ippan_summary.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_summary_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_summary_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：ippan_group_by_ken_view
+### 301: 一般資産集計データ_集計結果_都道府県別
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def ippan_group_by_ken_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、一般資産集計データ_集計結果_都道府県別データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'INFO')
+        ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
+            SELECT 
+                SG1.ken_code AS id, 
+                SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
+                SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
+                SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
+                SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
+                SUM(IS1.house_summary_half) AS house_summary_half, 
+                SUM(IS1.house_summary_full) AS house_summary_full, 
+
+                SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
+                SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
+                SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
+                SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
+                SUM(IS1.household_summary_half) AS household_summary_half, 
+                SUM(IS1.household_summary_full) AS household_summary_full, 
+
+                SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
+                SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
+                SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
+                SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
+                SUM(IS1.car_summary_half) AS car_summary_half, 
+                SUM(IS1.car_summary_full) AS car_summary_full, 
+
+                SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
+                SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
+                SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
+                SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
+                SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
+                SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
+
+                SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
+                SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
+                SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
+                SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
+                SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
+                SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
+
+                SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
+                SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
+                SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
+                SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
+                -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
+                SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
+
+                SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
+                SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
+                SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
+                SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
+                -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
+                SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
+
+                SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
+                SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
+                SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
+                SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
+                -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
+                SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
+
+                SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
+                SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
+                SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
+                SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
+                -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
+                SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
+
+                SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
+                SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
+                SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
+                SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
+                -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
+                SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
+
+                SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
+                SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
+                SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
+                SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
+                -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
+                SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
+
+                SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
+                SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
+                SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
+                SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
+                SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
+                SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
+                
+            FROM IPPAN_SUMMARY IS1 
+            LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+            GROUP BY SG1.ken_code 
+            ORDER BY CAST(SG1.KEN_CODE AS INTEGER)
+        """, [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_ippan_group_by_ken.xlsx'
+        download_file_path = 'static/download_ippan_group_by_ken.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '一般資産集計データ_集計結果_都道府県別'
+        ws.cell(row=1, column=1).value = '都道府県コード'
+        ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
+        ### ws.cell(row=1, column=3).value = '水害ID'
+        ws.cell(row=1, column=2).value = '家屋被害額_床下'
+        ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
+        ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
+        ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
+        ws.cell(row=1, column=6).value = '家屋被害額_半壊'
+        ws.cell(row=1, column=7).value = '家屋被害額_全壊'
+        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
+        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
+        ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
+        ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
+        ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
+        ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
+        ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
+        ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
+        ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
+        ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
+        ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
+        ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
+        ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
+        ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
+        ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
+        ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
+        ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
+        ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
+        ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
+        ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
+        ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
+        ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
+        ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
+        ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
+        ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
+        ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+        ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+        ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+        ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+        ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
+        
+        if ippan_group_by_ken_list:
+            for i, ippan_group_by_ken in enumerate(ippan_group_by_ken_list):
+                ws.cell(row=i+2, column=1).value = ippan_group_by_ken.id
+                ### ws.cell(row=i+2, column=2).value = ippan_group_by_ken.ippan_id
+                ### ws.cell(row=i+2, column=3).value = ippan_group_by_ken.suigai_id
+                ws.cell(row=i+2, column=2).value = ippan_group_by_ken.house_summary_lv00
+                ws.cell(row=i+2, column=3).value = ippan_group_by_ken.house_summary_lv01_49
+                ws.cell(row=i+2, column=4).value = ippan_group_by_ken.house_summary_lv50_99
+                ws.cell(row=i+2, column=5).value = ippan_group_by_ken.house_summary_lv100
+                ws.cell(row=i+2, column=6).value = ippan_group_by_ken.house_summary_half
+                ws.cell(row=i+2, column=7).value = ippan_group_by_ken.house_summary_full
+                ws.cell(row=i+2, column=8).value = ippan_group_by_ken.household_summary_lv00
+                ws.cell(row=i+2, column=9).value = ippan_group_by_ken.household_summary_lv01_49
+                ws.cell(row=i+2, column=10).value = ippan_group_by_ken.household_summary_lv50_99
+                ws.cell(row=i+2, column=11).value = ippan_group_by_ken.household_summary_lv100
+                ws.cell(row=i+2, column=12).value = ippan_group_by_ken.household_summary_half
+                ws.cell(row=i+2, column=13).value = ippan_group_by_ken.household_summary_full
+                ws.cell(row=i+2, column=14).value = ippan_group_by_ken.car_summary_lv00
+                ws.cell(row=i+2, column=15).value = ippan_group_by_ken.car_summary_lv01_49
+                ws.cell(row=i+2, column=16).value = ippan_group_by_ken.car_summary_lv50_99
+                ws.cell(row=i+2, column=17).value = ippan_group_by_ken.car_summary_lv100
+                ws.cell(row=i+2, column=18).value = ippan_group_by_ken.car_summary_half
+                ws.cell(row=i+2, column=19).value = ippan_group_by_ken.car_summary_full
+                ws.cell(row=i+2, column=20).value = ippan_group_by_ken.house_alt_summary_lv00
+                ws.cell(row=i+2, column=21).value = ippan_group_by_ken.house_alt_summary_lv01_49
+                ws.cell(row=i+2, column=22).value = ippan_group_by_ken.house_alt_summary_lv50_99
+                ws.cell(row=i+2, column=23).value = ippan_group_by_ken.house_alt_summary_lv100
+                ws.cell(row=i+2, column=24).value = ippan_group_by_ken.house_alt_summary_half
+                ws.cell(row=i+2, column=25).value = ippan_group_by_ken.house_alt_summary_full
+                ws.cell(row=i+2, column=26).value = ippan_group_by_ken.house_clean_summary_lv00
+                ws.cell(row=i+2, column=27).value = ippan_group_by_ken.house_clean_summary_lv01_49
+                ws.cell(row=i+2, column=28).value = ippan_group_by_ken.house_clean_summary_lv50_99
+                ws.cell(row=i+2, column=29).value = ippan_group_by_ken.house_clean_summary_lv100
+                ws.cell(row=i+2, column=30).value = ippan_group_by_ken.house_clean_summary_half
+                ws.cell(row=i+2, column=31).value = ippan_group_by_ken.house_clean_summary_full
+                ws.cell(row=i+2, column=32).value = ippan_group_by_ken.office_dep_summary_lv00
+                ws.cell(row=i+2, column=33).value = ippan_group_by_ken.office_dep_summary_lv01_49
+                ws.cell(row=i+2, column=34).value = ippan_group_by_ken.office_dep_summary_lv50_99
+                ws.cell(row=i+2, column=35).value = ippan_group_by_ken.office_dep_summary_lv100
+                ws.cell(row=i+2, column=36).value = ippan_group_by_ken.office_dep_summary_full
+                ws.cell(row=i+2, column=37).value = ippan_group_by_ken.office_inv_summary_lv00
+                ws.cell(row=i+2, column=38).value = ippan_group_by_ken.office_inv_summary_lv01_49
+                ws.cell(row=i+2, column=39).value = ippan_group_by_ken.office_inv_summary_lv50_99
+                ws.cell(row=i+2, column=40).value = ippan_group_by_ken.office_inv_summary_lv100
+                ws.cell(row=i+2, column=41).value = ippan_group_by_ken.office_inv_summary_full
+                ws.cell(row=i+2, column=42).value = ippan_group_by_ken.office_sus_summary_lv00
+                ws.cell(row=i+2, column=43).value = ippan_group_by_ken.office_sus_summary_lv01_49
+                ws.cell(row=i+2, column=44).value = ippan_group_by_ken.office_sus_summary_lv50_99
+                ws.cell(row=i+2, column=45).value = ippan_group_by_ken.office_sus_summary_lv100
+                ws.cell(row=i+2, column=46).value = ippan_group_by_ken.office_sus_summary_full
+                ws.cell(row=i+2, column=47).value = ippan_group_by_ken.office_stg_summary_lv00
+                ws.cell(row=i+2, column=48).value = ippan_group_by_ken.office_stg_summary_lv01_49
+                ws.cell(row=i+2, column=49).value = ippan_group_by_ken.office_stg_summary_lv50_99
+                ws.cell(row=i+2, column=50).value = ippan_group_by_ken.office_stg_summary_lv100
+                ws.cell(row=i+2, column=51).value = ippan_group_by_ken.office_stg_summary_full
+                ws.cell(row=i+2, column=52).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv00
+                ws.cell(row=i+2, column=53).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv01_49
+                ws.cell(row=i+2, column=54).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv50_99
+                ws.cell(row=i+2, column=55).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv100
+                ws.cell(row=i+2, column=56).value = ippan_group_by_ken.farmer_fisher_dep_summary_full
+                ws.cell(row=i+2, column=57).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv00
+                ws.cell(row=i+2, column=58).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv01_49
+                ws.cell(row=i+2, column=59).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv50_99
+                ws.cell(row=i+2, column=60).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv100
+                ws.cell(row=i+2, column=61).value = ippan_group_by_ken.farmer_fisher_inv_summary_full
+                ws.cell(row=i+2, column=62).value = ippan_group_by_ken.office_alt_summary_lv00
+                ws.cell(row=i+2, column=63).value = ippan_group_by_ken.office_alt_summary_lv01_49
+                ws.cell(row=i+2, column=64).value = ippan_group_by_ken.office_alt_summary_lv50_99
+                ws.cell(row=i+2, column=65).value = ippan_group_by_ken.office_alt_summary_lv100
+                ws.cell(row=i+2, column=66).value = ippan_group_by_ken.office_alt_summary_half
+                ws.cell(row=i+2, column=67).value = ippan_group_by_ken.office_alt_summary_full
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="ippan_group_by_ken.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：ippan_group_by_suikei_view
+### 302: 一般資産集計データ_集計結果_水系別
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def ippan_group_by_suikei_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、一般資産集計データ_集計結果_水系別データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 2/4.', 'INFO')
+        ippan_group_by_suikei_list = IPPAN_SUMMARY.objects.raw("""
+            SELECT 
+                SG1.suikei_code AS id, 
+                SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
+                SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
+                SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
+                SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
+                SUM(IS1.house_summary_half) AS house_summary_half, 
+                SUM(IS1.house_summary_full) AS house_summary_full, 
+
+                SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
+                SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
+                SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
+                SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
+                SUM(IS1.household_summary_half) AS household_summary_half, 
+                SUM(IS1.household_summary_full) AS household_summary_full, 
+
+                SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
+                SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
+                SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
+                SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
+                SUM(IS1.car_summary_half) AS car_summary_half, 
+                SUM(IS1.car_summary_full) AS car_summary_full, 
+
+                SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
+                SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
+                SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
+                SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
+                SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
+                SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
+
+                SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
+                SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
+                SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
+                SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
+                SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
+                SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
+
+                SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
+                SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
+                SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
+                SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
+                -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
+                SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
+
+                SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
+                SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
+                SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
+                SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
+                -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
+                SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
+
+                SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
+                SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
+                SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
+                SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
+                -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
+                SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
+
+                SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
+                SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
+                SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
+                SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
+                -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
+                SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
+
+                SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
+                SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
+                SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
+                SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
+                -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
+                SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
+
+                SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
+                SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
+                SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
+                SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
+                -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
+                SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
+
+                SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
+                SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
+                SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
+                SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
+                SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
+                SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
+                
+            FROM IPPAN_SUMMARY IS1 
+            LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+            GROUP BY SG1.suikei_code 
+            ORDER BY CAST(SG1.SUIKEI_CODE AS INTEGER)
+        """, [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_ippan_group_by_suikei.xlsx'
+        download_file_path = 'static/download_ippan_group_by_suikei.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '一般資産集計データ_集計結果_水系別'
+        ws.cell(row=1, column=1).value = '水系コード'
+        ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
+        ### ws.cell(row=1, column=3).value = '水害ID'
+        ws.cell(row=1, column=2).value = '家屋被害額_床下'
+        ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
+        ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
+        ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
+        ws.cell(row=1, column=6).value = '家屋被害額_半壊'
+        ws.cell(row=1, column=7).value = '家屋被害額_全壊'
+        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
+        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
+        ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
+        ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
+        ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
+        ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
+        ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
+        ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
+        ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
+        ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
+        ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
+        ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
+        ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
+        ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
+        ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
+        ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
+        ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
+        ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
+        ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
+        ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
+        ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
+        ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
+        ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
+        ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
+        ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
+        ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+        ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+        ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+        ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+        ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
+        ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
+        ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
+        ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
+        ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
+        ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
+        ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
+        ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
+        ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
+        ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
+        ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
+        ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
+        ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
+        ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
+        ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
+        ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
+        
+        if ippan_group_by_suikei_list:
+            for i, ippan_group_by_suikei in enumerate(ippan_group_by_suikei_list):
+                ws.cell(row=i+2, column=1).value = ippan_group_by_suikei.id
+                ### ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.ippan_id
+                ### ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.suigai_id
+                ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.house_summary_lv00
+                ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.house_summary_lv01_49
+                ws.cell(row=i+2, column=4).value = ippan_group_by_suikei.house_summary_lv50_99
+                ws.cell(row=i+2, column=5).value = ippan_group_by_suikei.house_summary_lv100
+                ws.cell(row=i+2, column=6).value = ippan_group_by_suikei.house_summary_half
+                ws.cell(row=i+2, column=7).value = ippan_group_by_suikei.house_summary_full
+                ws.cell(row=i+2, column=8).value = ippan_group_by_suikei.household_summary_lv00
+                ws.cell(row=i+2, column=9).value = ippan_group_by_suikei.household_summary_lv01_49
+                ws.cell(row=i+2, column=10).value = ippan_group_by_suikei.household_summary_lv50_99
+                ws.cell(row=i+2, column=11).value = ippan_group_by_suikei.household_summary_lv100
+                ws.cell(row=i+2, column=12).value = ippan_group_by_suikei.household_summary_half
+                ws.cell(row=i+2, column=13).value = ippan_group_by_suikei.household_summary_full
+                ws.cell(row=i+2, column=14).value = ippan_group_by_suikei.car_summary_lv00
+                ws.cell(row=i+2, column=15).value = ippan_group_by_suikei.car_summary_lv01_49
+                ws.cell(row=i+2, column=16).value = ippan_group_by_suikei.car_summary_lv50_99
+                ws.cell(row=i+2, column=17).value = ippan_group_by_suikei.car_summary_lv100
+                ws.cell(row=i+2, column=18).value = ippan_group_by_suikei.car_summary_half
+                ws.cell(row=i+2, column=19).value = ippan_group_by_suikei.car_summary_full
+                ws.cell(row=i+2, column=20).value = ippan_group_by_suikei.house_alt_summary_lv00
+                ws.cell(row=i+2, column=21).value = ippan_group_by_suikei.house_alt_summary_lv01_49
+                ws.cell(row=i+2, column=22).value = ippan_group_by_suikei.house_alt_summary_lv50_99
+                ws.cell(row=i+2, column=23).value = ippan_group_by_suikei.house_alt_summary_lv100
+                ws.cell(row=i+2, column=24).value = ippan_group_by_suikei.house_alt_summary_half
+                ws.cell(row=i+2, column=25).value = ippan_group_by_suikei.house_alt_summary_full
+                ws.cell(row=i+2, column=26).value = ippan_group_by_suikei.house_clean_summary_lv00
+                ws.cell(row=i+2, column=27).value = ippan_group_by_suikei.house_clean_summary_lv01_49
+                ws.cell(row=i+2, column=28).value = ippan_group_by_suikei.house_clean_summary_lv50_99
+                ws.cell(row=i+2, column=29).value = ippan_group_by_suikei.house_clean_summary_lv100
+                ws.cell(row=i+2, column=30).value = ippan_group_by_suikei.house_clean_summary_half
+                ws.cell(row=i+2, column=31).value = ippan_group_by_suikei.house_clean_summary_full
+                ws.cell(row=i+2, column=32).value = ippan_group_by_suikei.office_dep_summary_lv00
+                ws.cell(row=i+2, column=33).value = ippan_group_by_suikei.office_dep_summary_lv01_49
+                ws.cell(row=i+2, column=34).value = ippan_group_by_suikei.office_dep_summary_lv50_99
+                ws.cell(row=i+2, column=35).value = ippan_group_by_suikei.office_dep_summary_lv100
+                ws.cell(row=i+2, column=36).value = ippan_group_by_suikei.office_dep_summary_full
+                ws.cell(row=i+2, column=37).value = ippan_group_by_suikei.office_inv_summary_lv00
+                ws.cell(row=i+2, column=38).value = ippan_group_by_suikei.office_inv_summary_lv01_49
+                ws.cell(row=i+2, column=39).value = ippan_group_by_suikei.office_inv_summary_lv50_99
+                ws.cell(row=i+2, column=40).value = ippan_group_by_suikei.office_inv_summary_lv100
+                ws.cell(row=i+2, column=41).value = ippan_group_by_suikei.office_inv_summary_full
+                ws.cell(row=i+2, column=42).value = ippan_group_by_suikei.office_sus_summary_lv00
+                ws.cell(row=i+2, column=43).value = ippan_group_by_suikei.office_sus_summary_lv01_49
+                ws.cell(row=i+2, column=44).value = ippan_group_by_suikei.office_sus_summary_lv50_99
+                ws.cell(row=i+2, column=45).value = ippan_group_by_suikei.office_sus_summary_lv100
+                ws.cell(row=i+2, column=46).value = ippan_group_by_suikei.office_sus_summary_full
+                ws.cell(row=i+2, column=47).value = ippan_group_by_suikei.office_stg_summary_lv00
+                ws.cell(row=i+2, column=48).value = ippan_group_by_suikei.office_stg_summary_lv01_49
+                ws.cell(row=i+2, column=49).value = ippan_group_by_suikei.office_stg_summary_lv50_99
+                ws.cell(row=i+2, column=50).value = ippan_group_by_suikei.office_stg_summary_lv100
+                ws.cell(row=i+2, column=51).value = ippan_group_by_suikei.office_stg_summary_full
+                ws.cell(row=i+2, column=52).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv00
+                ws.cell(row=i+2, column=53).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv01_49
+                ws.cell(row=i+2, column=54).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv50_99
+                ws.cell(row=i+2, column=55).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv100
+                ws.cell(row=i+2, column=56).value = ippan_group_by_suikei.farmer_fisher_dep_summary_full
+                ws.cell(row=i+2, column=57).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv00
+                ws.cell(row=i+2, column=58).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv01_49
+                ws.cell(row=i+2, column=59).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv50_99
+                ws.cell(row=i+2, column=60).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv100
+                ws.cell(row=i+2, column=61).value = ippan_group_by_suikei.farmer_fisher_inv_summary_full
+                ws.cell(row=i+2, column=62).value = ippan_group_by_suikei.office_alt_summary_lv00
+                ws.cell(row=i+2, column=63).value = ippan_group_by_suikei.office_alt_summary_lv01_49
+                ws.cell(row=i+2, column=64).value = ippan_group_by_suikei.office_alt_summary_lv50_99
+                ws.cell(row=i+2, column=65).value = ippan_group_by_suikei.office_alt_summary_lv100
+                ws.cell(row=i+2, column=66).value = ippan_group_by_suikei.office_alt_summary_half
+                ws.cell(row=i+2, column=67).value = ippan_group_by_suikei.office_alt_summary_full
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="ippan_group_by_suikei.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ippan_chosa_view
-### 203: 一般資産調査票（調査員用）
+### 400: 一般資産調査票（調査員用）
 ### ※複数EXCELファイル、複数EXCELシート対応版
 ### TO-DO: 処理時間がかかるため、メッセージキュー、ダウンロード準備済画面等の遅延処理対策を行う。
 ###############################################################################
@@ -2326,7 +3548,7 @@ def ippan_chosa_view(request, lock):
 
         #######################################################################
         ### DBアクセス処理(0020)
-        ### (1)から市区町村コード毎の水害データの件数を取得する。
+        ### DBから市区町村コード毎の水害データの件数を取得する。
         ### ※関数のメインの処理の前に、EXCELのファイル数、シート数を確定するため。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 3/12.', 'INFO')
@@ -2908,7 +4130,7 @@ def ippan_chosa_view(request, lock):
         
                 ###############################################################
                 ### DBアクセス処理(0090)
-                ### (1)DBから水害のデータを取得する。
+                ### DBから水害のデータを取得する。
                 ###############################################################
                 suigai_list = None
                 suigai_list = SUIGAI.objects.raw("""
@@ -2980,7 +4202,7 @@ def ippan_chosa_view(request, lock):
         
                 ###############################################################
                 ### DBアクセス処理(0100)
-                ### (1)DBから一般資産調査票（調査員）のデータを取得する。
+                ### DBから一般資産調査票（調査員）のデータを取得する。
                 ###############################################################
                 ippan_list = None
                 ippan_list = IPPAN.objects.raw("""
@@ -3164,7 +4386,7 @@ def ippan_chosa_view(request, lock):
 
         #######################################################################
         ### EXCEL入出力処理(0130)
-        ### (1)ダウンロード用のEXCELファイルを保存する。
+        ### ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 10/12.', 'INFO')
         print("ippan_chosa_view38_2", flush=True)
@@ -3173,13 +4395,13 @@ def ippan_chosa_view(request, lock):
 
         #######################################################################
         ### EXCEL入出力処理(0140)
-        ### (1)複数のEXCELファイルを1つに固めて保存する。
+        ### 複数のEXCELファイルを1つに固めて保存する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 11/12.', 'INFO')
         
         #######################################################################
         ### レスポンスセット処理(0150)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 12/12.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数が正常終了しました。', 'INFO')
@@ -3193,9 +4415,19 @@ def ippan_chosa_view(request, lock):
         print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
+
+
+
+
+
+
+
+
+
+
 ###############################################################################
 ### 関数名：ippan_city_view
-### 204: 一般資産調査票（市区町村用）
+### 401: 一般資産調査票（市区町村担当者用）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_city_view(request, lock):
@@ -3203,174 +4435,103 @@ def ippan_city_view(request, lock):
         #######################################################################
         ### 引数チェック処理(0000)
         ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### (2)GETメソッドの場合、関数を抜ける。
+        ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 request = {}'.format(request.method), 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 city_hidden= {}'.format(request.POST['city_hidden']), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 1/12.', 'INFO')
+
+        if request.method == 'GET':
+            print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+            
+
+        #######################################################################
+        ### 局所定数セット処理(0010)
+        ### (1)VLOOKUP用の局所定数をセットする。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 2/12.', 'INFO')
+
+        #######################################################################
+        ### DBアクセス処理(0020)
+        ### DBから市区町村コード毎の水害データの件数を取得する。
+        ### ※関数のメインの処理の前に、EXCELのファイル数、シート数を確定するため。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 3/12.', 'INFO')
         
         #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、データを取得する。
-        #######################################################################
-        ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
+        ### EXCEL入出力処理(0030)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### ※市区町村毎にEXCELファイルを作成する。
+        ### ※水害毎にEXCELシートを作成する。
+        ### ※0件の場合、入力用にIPPANシートを10枚作成する。
+        ### ※5件の場合、既存データ用にIPPANシートを5枚作成する。
+        ### ※5件の場合、入力用にIPPANシートを10枚作成する。（合計15枚作成する。）
         #######################################################################
-        template_file_path = 'static/template_ippan_city.xlsx'
-        download_file_path = 'static/download_ippan_city.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '一般資産調査票'
-        ws.cell(row=1, column=1).value = '一般資産調査票ID'
-        ws.cell(row=1, column=2).value = '一般資産調査票名'
-        
-        ws.cell(row=1, column=3).value = '建物区分コード'
-        
-        ws.cell(row=1, column=4).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=5).value = '地盤勾配区分コード'
-        ws.cell(row=1, column=6).value = '産業分類コード'
-        
-        ws.cell(row=1, column=7).value = '都道府県コード'
-        ws.cell(row=1, column=8).value = '市区町村コード'
-        ws.cell(row=1, column=9).value = '異常気象ID'
-        ws.cell(row=1, column=10).value = '区域ID'
-        ws.cell(row=1, column=11).value = '水害原因_1_コード'
-        ws.cell(row=1, column=12).value = '水害原因_2_コード'
-        ws.cell(row=1, column=13).value = '水害原因_3_コード'
-        
-        ws.cell(row=1, column=14).value = '水系コード'
-        ws.cell(row=1, column=15).value = '河川コード'
-        ws.cell(row=1, column=16).value = '河川海岸コード'
-
-        ws.cell(row=1, column=17).value = '地上地下区分コード'
-        ws.cell(row=1, column=18).value = '地下空間の利用形態コード'
-        
-        ws.cell(row=1, column=19).value = '被害建物棟数_床下'
-        ws.cell(row=1, column=20).value = '被害建物棟数_01から49cm'
-        ws.cell(row=1, column=21).value = '被害建物棟数_50から99cm'
-        ws.cell(row=1, column=22).value = '被害建物棟数_100cm以上'
-        ws.cell(row=1, column=23).value = '被害建物棟数_半壊'
-        ws.cell(row=1, column=24).value = '被害建物棟数_全壊'
-
-        ws.cell(row=1, column=25).value = '延床面積'
-        ws.cell(row=1, column=26).value = '被災世帯数'
-        ws.cell(row=1, column=27).value = '被災事業所数'
-        
-        ws.cell(row=1, column=28).value = '延床面積_床下'
-        ws.cell(row=1, column=29).value = '延床面積_01から49cm'
-        ws.cell(row=1, column=30).value = '延床面積_50から99cm'
-        ws.cell(row=1, column=31).value = '延床面積_100cm以上'
-        ws.cell(row=1, column=32).value = '延床面積_半壊'
-        ws.cell(row=1, column=33).value = '延床面積_全壊'
-        
-        ws.cell(row=1, column=34).value = '被災世帯数_床下'
-        ws.cell(row=1, column=35).value = '被災世帯数_01から49cm'
-        ws.cell(row=1, column=36).value = '被災世帯数_50から99cm'
-        ws.cell(row=1, column=37).value = '被災世帯数_100cm以上'
-        ws.cell(row=1, column=38).value = '被災世帯数_半壊'
-        ws.cell(row=1, column=39).value = '被災世帯数_全壊'
-
-        ws.cell(row=1, column=40).value = '被災事業所数_床下'
-        ws.cell(row=1, column=41).value = '被災事業所数_01から49cm'
-        ws.cell(row=1, column=42).value = '被災事業所数_50から99cm'
-        ws.cell(row=1, column=43).value = '被災事業所数_100cm以上'
-        ws.cell(row=1, column=44).value = '被災事業所数_半壊'
-        ws.cell(row=1, column=45).value = '被災事業所数_全壊'
-
-        ws.cell(row=1, column=46).value = '被災従業者数_床下'
-        ws.cell(row=1, column=47).value = '被災従業者数_01から49cm'
-        ws.cell(row=1, column=48).value = '被災従業者数_50から99cm'
-        ws.cell(row=1, column=49).value = '被災従業者数_100cm以上'
-        ws.cell(row=1, column=50).value = '被災従業者数_全壊'
-
-        ws.cell(row=1, column=51).value = '農漁家戸数_床下'
-        ws.cell(row=1, column=52).value = '農漁家戸数_01から49cm'
-        ws.cell(row=1, column=53).value = '農漁家戸数_50から99cm'
-        ws.cell(row=1, column=54).value = '農漁家戸数_100cm以上'
-        ws.cell(row=1, column=55).value = '農漁家戸数_全壊'
-        
-        if ippan_list:
-            for i, ippan in enumerate(ippan_list):
-                ws.cell(row=i+2, column=1).value = ippan.ippan_id
-                ws.cell(row=i+2, column=2).value = ippan.ippan_name
-                
-                ws.cell(row=i+2, column=3).value = ippan.building_code
-                
-                ws.cell(row=i+2, column=4).value = ippan.flood_sediment_code
-                ws.cell(row=i+2, column=5).value = ippan.gradient_code
-                ws.cell(row=i+2, column=6).value = ippan.industry_code
-                
-                ws.cell(row=i+2, column=7).value = ippan.ken_code
-                ws.cell(row=i+2, column=8).value = ippan.city_code
-                ws.cell(row=i+2, column=9).value = ippan.weather_id
-                ws.cell(row=i+2, column=10).value = ippan.area_id
-                ws.cell(row=i+2, column=11).value = ippan.cause_1_code
-                ws.cell(row=i+2, column=12).value = ippan.cause_2_code
-                ws.cell(row=i+2, column=13).value = ippan.cause_3_code
-                
-                ws.cell(row=i+2, column=14).value = ippan.suikei_code
-                ws.cell(row=i+2, column=15).value = ippan.kasen_code
-                ws.cell(row=i+2, column=16).value = ippan.kasen_kaigan_code
-
-                ws.cell(row=i+2, column=17).value = ippan.underground_code
-                ws.cell(row=i+2, column=18).value = ippan.usage_code
-                
-                ws.cell(row=i+2, column=19).value = ippan.building_lv00
-                ws.cell(row=i+2, column=20).value = ippan.building_lv01_49
-                ws.cell(row=i+2, column=21).value = ippan.building_lv50_99
-                ws.cell(row=i+2, column=22).value = ippan.building_lv100
-                ws.cell(row=i+2, column=23).value = ippan.building_half
-                ws.cell(row=i+2, column=24).value = ippan.building_full
-
-                ws.cell(row=i+2, column=25).value = ippan.floor_area
-                ws.cell(row=i+2, column=26).value = ippan.family
-                ws.cell(row=i+2, column=27).value = ippan.office
-                
-                ws.cell(row=i+2, column=28).value = ippan.floor_area_lv00
-                ws.cell(row=i+2, column=29).value = ippan.floor_area_lv01_49
-                ws.cell(row=i+2, column=30).value = ippan.floor_area_lv50_99
-                ws.cell(row=i+2, column=31).value = ippan.floor_area_lv100
-                ws.cell(row=i+2, column=32).value = ippan.floor_area_half
-                ws.cell(row=i+2, column=33).value = ippan.floor_area_full
-                
-                ws.cell(row=i+2, column=34).value = ippan.family_lv00
-                ws.cell(row=i+2, column=35).value = ippan.family_lv01_49
-                ws.cell(row=i+2, column=36).value = ippan.family_lv50_99
-                ws.cell(row=i+2, column=37).value = ippan.family_lv100
-                ws.cell(row=i+2, column=38).value = ippan.family_half
-                ws.cell(row=i+2, column=39).value = ippan.family_full
-
-                ws.cell(row=i+2, column=40).value = ippan.office_lv00
-                ws.cell(row=i+2, column=41).value = ippan.office_lv01_49
-                ws.cell(row=i+2, column=42).value = ippan.office_lv50_99
-                ws.cell(row=i+2, column=43).value = ippan.office_lv100
-                ws.cell(row=i+2, column=44).value = ippan.office_half
-                ws.cell(row=i+2, column=45).value = ippan.office_full
-
-                ws.cell(row=i+2, column=46).value = ippan.employee_lv00
-                ws.cell(row=i+2, column=47).value = ippan.employee_lv01_49
-                ws.cell(row=i+2, column=48).value = ippan.employee_lv50_99
-                ws.cell(row=i+2, column=49).value = ippan.employee_lv100
-                ws.cell(row=i+2, column=50).value = ippan.employee_full
-        
-                ws.cell(row=i+2, column=51).value = ippan.farmer_fisher_lv00
-                ws.cell(row=i+2, column=52).value = ippan.farmer_fisher_lv01_49
-                ws.cell(row=i+2, column=53).value = ippan.farmer_fisher_lv50_99
-                ws.cell(row=i+2, column=54).value = ippan.farmer_fisher_lv100
-                ws.cell(row=i+2, column=55).value = ippan.farmer_fisher_full
-
-        wb.save(download_file_path)
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 4/12.', 'INFO')
         
         #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### DBアクセス処理(0040)
+        ### EXCEL入出力処理(0040)
+        ### (1)DBから建物区分等のマスタデータを取得する。
+        ### (2)EXCELのマスタ用のシートのセルに、DBから取得した建物区分等のマスタデータを埋め込む。
+        ### (3)EXCELのVLOKUP用のシートのセルに、DBから取得した都道府県等のマスタデータを埋め込む。
         #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 5/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0050)
+        ### (1)EXCELのヘッダ部のセルに、キャプションのテキストを埋め込む。
+        ### (2)EXCELの一覧部のセルに、キャプションのテキストを埋め込む。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 6/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0060)
+        ### (1)EXCELのセルに、建物区分に応じて、背景灰色、背景白色を変化させる条件付き形式を埋め込む。
+        ### (2)ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 7/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0070)
+        ### (1)EXCELのヘッダ部のセルに、単純プルダウン、連動プルダウンの設定を埋め込む。
+        ### (2)EXCELの一覧部のセルに、単純プルダウンの設定を埋め込む。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 8/12.', 'INFO')
+        
+        
+        #######################################################################
+        ### DBアクセス処理(0080)
+        ### (1)DBから水害のデータを取得する。
+        ### (2)DBから一般資産調査票（調査員）のデータを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 9/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0130)
+        ### ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 10/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0140)
+        ### 複数のEXCELファイルを1つに固めて保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 11/12.', 'INFO')
+        
+        #######################################################################
+        ### レスポンスセット処理(0150)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 12/12.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response = HttpResponse(content=save_virtual_workbook(wb[0]), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_city.xlsx"'
         return response
         
@@ -3382,7 +4543,7 @@ def ippan_city_view(request, lock):
 
 ###############################################################################
 ### 関数名：ippan_ken_view
-### 205: 一般資産調査票（都道府県用）
+### 402: 一般資産調査票（都道府県担当者用）
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_ken_view(request, lock):
@@ -3390,174 +4551,103 @@ def ippan_ken_view(request, lock):
         #######################################################################
         ### 引数チェック処理(0000)
         ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### (2)GETメソッドの場合、関数を抜ける。
+        ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 request = {}'.format(request.method), 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 city_hidden= {}'.format(request.POST['city_hidden']), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 1/12.', 'INFO')
+
+        if request.method == 'GET':
+            print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+            
+
+        #######################################################################
+        ### 局所定数セット処理(0010)
+        ### (1)VLOOKUP用の局所定数をセットする。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 2/12.', 'INFO')
+
+        #######################################################################
+        ### DBアクセス処理(0020)
+        ### DBから市区町村コード毎の水害データの件数を取得する。
+        ### ※関数のメインの処理の前に、EXCELのファイル数、シート数を確定するため。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 3/12.', 'INFO')
         
         #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、データを取得する。
-        #######################################################################
-        ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
+        ### EXCEL入出力処理(0030)
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### ※市区町村毎にEXCELファイルを作成する。
+        ### ※水害毎にEXCELシートを作成する。
+        ### ※0件の場合、入力用にIPPANシートを10枚作成する。
+        ### ※5件の場合、既存データ用にIPPANシートを5枚作成する。
+        ### ※5件の場合、入力用にIPPANシートを10枚作成する。（合計15枚作成する。）
         #######################################################################
-        template_file_path = 'static/template_ippan_ken.xlsx'
-        download_file_path = 'static/download_ippan_ken.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '一般資産調査票'
-        ws.cell(row=1, column=1).value = '一般資産調査票ID'
-        ws.cell(row=1, column=2).value = '一般資産調査票名'
-        
-        ws.cell(row=1, column=3).value = '建物区分コード'
-        
-        ws.cell(row=1, column=4).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=5).value = '地盤勾配区分コード'
-        ws.cell(row=1, column=6).value = '産業分類コード'
-        
-        ws.cell(row=1, column=7).value = '都道府県コード'
-        ws.cell(row=1, column=8).value = '市区町村コード'
-        ws.cell(row=1, column=9).value = '異常気象ID'
-        ws.cell(row=1, column=10).value = '区域ID'
-        ws.cell(row=1, column=11).value = '水害原因_1_コード'
-        ws.cell(row=1, column=12).value = '水害原因_2_コード'
-        ws.cell(row=1, column=13).value = '水害原因_3_コード'
-        
-        ws.cell(row=1, column=14).value = '水系コード'
-        ws.cell(row=1, column=15).value = '河川コード'
-        ws.cell(row=1, column=16).value = '河川海岸コード'
-
-        ws.cell(row=1, column=17).value = '地上地下区分コード'
-        ws.cell(row=1, column=18).value = '地下空間の利用形態コード'
-        
-        ws.cell(row=1, column=19).value = '被害建物棟数_床下'
-        ws.cell(row=1, column=20).value = '被害建物棟数_01から49cm'
-        ws.cell(row=1, column=21).value = '被害建物棟数_50から99cm'
-        ws.cell(row=1, column=22).value = '被害建物棟数_100cm以上'
-        ws.cell(row=1, column=23).value = '被害建物棟数_半壊'
-        ws.cell(row=1, column=24).value = '被害建物棟数_全壊'
-
-        ws.cell(row=1, column=25).value = '延床面積'
-        ws.cell(row=1, column=26).value = '被災世帯数'
-        ws.cell(row=1, column=27).value = '被災事業所数'
-        
-        ws.cell(row=1, column=28).value = '延床面積_床下'
-        ws.cell(row=1, column=29).value = '延床面積_01から49cm'
-        ws.cell(row=1, column=30).value = '延床面積_50から99cm'
-        ws.cell(row=1, column=31).value = '延床面積_100cm以上'
-        ws.cell(row=1, column=32).value = '延床面積_半壊'
-        ws.cell(row=1, column=33).value = '延床面積_全壊'
-        
-        ws.cell(row=1, column=34).value = '被災世帯数_床下'
-        ws.cell(row=1, column=35).value = '被災世帯数_01から49cm'
-        ws.cell(row=1, column=36).value = '被災世帯数_50から99cm'
-        ws.cell(row=1, column=37).value = '被災世帯数_100cm以上'
-        ws.cell(row=1, column=38).value = '被災世帯数_半壊'
-        ws.cell(row=1, column=39).value = '被災世帯数_全壊'
-
-        ws.cell(row=1, column=40).value = '被災事業所数_床下'
-        ws.cell(row=1, column=41).value = '被災事業所数_01から49cm'
-        ws.cell(row=1, column=42).value = '被災事業所数_50から99cm'
-        ws.cell(row=1, column=43).value = '被災事業所数_100cm以上'
-        ws.cell(row=1, column=44).value = '被災事業所数_半壊'
-        ws.cell(row=1, column=45).value = '被災事業所数_全壊'
-
-        ws.cell(row=1, column=46).value = '被災従業者数_床下'
-        ws.cell(row=1, column=47).value = '被災従業者数_01から49cm'
-        ws.cell(row=1, column=48).value = '被災従業者数_50から99cm'
-        ws.cell(row=1, column=49).value = '被災従業者数_100cm以上'
-        ws.cell(row=1, column=50).value = '被災従業者数_全壊'
-
-        ws.cell(row=1, column=51).value = '農漁家戸数_床下'
-        ws.cell(row=1, column=52).value = '農漁家戸数_01から49cm'
-        ws.cell(row=1, column=53).value = '農漁家戸数_50から99cm'
-        ws.cell(row=1, column=54).value = '農漁家戸数_100cm以上'
-        ws.cell(row=1, column=55).value = '農漁家戸数_全壊'
-        
-        if ippan_list:
-            for i, ippan in enumerate(ippan_list):
-                ws.cell(row=i+2, column=1).value = ippan.ippan_id
-                ws.cell(row=i+2, column=2).value = ippan.ippan_name
-                
-                ws.cell(row=i+2, column=3).value = ippan.building_code
-                
-                ws.cell(row=i+2, column=4).value = ippan.flood_sediment_code
-                ws.cell(row=i+2, column=5).value = ippan.gradient_code
-                ws.cell(row=i+2, column=6).value = ippan.industry_code
-                
-                ws.cell(row=i+2, column=7).value = ippan.ken_code
-                ws.cell(row=i+2, column=8).value = ippan.city_code
-                ws.cell(row=i+2, column=9).value = ippan.weather_id
-                ws.cell(row=i+2, column=10).value = ippan.area_id
-                ws.cell(row=i+2, column=11).value = ippan.cause_1_code
-                ws.cell(row=i+2, column=12).value = ippan.cause_2_code
-                ws.cell(row=i+2, column=13).value = ippan.cause_3_code
-                
-                ws.cell(row=i+2, column=14).value = ippan.suikei_code
-                ws.cell(row=i+2, column=15).value = ippan.kasen_code
-                ws.cell(row=i+2, column=16).value = ippan.kasen_kaigan_code
-
-                ws.cell(row=i+2, column=17).value = ippan.underground_code
-                ws.cell(row=i+2, column=18).value = ippan.usage_code
-                
-                ws.cell(row=i+2, column=19).value = ippan.building_lv00
-                ws.cell(row=i+2, column=20).value = ippan.building_lv01_49
-                ws.cell(row=i+2, column=21).value = ippan.building_lv50_99
-                ws.cell(row=i+2, column=22).value = ippan.building_lv100
-                ws.cell(row=i+2, column=23).value = ippan.building_half
-                ws.cell(row=i+2, column=24).value = ippan.building_full
-
-                ws.cell(row=i+2, column=25).value = ippan.floor_area
-                ws.cell(row=i+2, column=26).value = ippan.family
-                ws.cell(row=i+2, column=27).value = ippan.office
-                
-                ws.cell(row=i+2, column=28).value = ippan.floor_area_lv00
-                ws.cell(row=i+2, column=29).value = ippan.floor_area_lv01_49
-                ws.cell(row=i+2, column=30).value = ippan.floor_area_lv50_99
-                ws.cell(row=i+2, column=31).value = ippan.floor_area_lv100
-                ws.cell(row=i+2, column=32).value = ippan.floor_area_half
-                ws.cell(row=i+2, column=33).value = ippan.floor_area_full
-                
-                ws.cell(row=i+2, column=34).value = ippan.family_lv00
-                ws.cell(row=i+2, column=35).value = ippan.family_lv01_49
-                ws.cell(row=i+2, column=36).value = ippan.family_lv50_99
-                ws.cell(row=i+2, column=37).value = ippan.family_lv100
-                ws.cell(row=i+2, column=38).value = ippan.family_half
-                ws.cell(row=i+2, column=39).value = ippan.family_full
-
-                ws.cell(row=i+2, column=40).value = ippan.office_lv00
-                ws.cell(row=i+2, column=41).value = ippan.office_lv01_49
-                ws.cell(row=i+2, column=42).value = ippan.office_lv50_99
-                ws.cell(row=i+2, column=43).value = ippan.office_lv100
-                ws.cell(row=i+2, column=44).value = ippan.office_half
-                ws.cell(row=i+2, column=45).value = ippan.office_full
-
-                ws.cell(row=i+2, column=46).value = ippan.employee_lv00
-                ws.cell(row=i+2, column=47).value = ippan.employee_lv01_49
-                ws.cell(row=i+2, column=48).value = ippan.employee_lv50_99
-                ws.cell(row=i+2, column=49).value = ippan.employee_lv100
-                ws.cell(row=i+2, column=50).value = ippan.employee_full
-        
-                ws.cell(row=i+2, column=51).value = ippan.farmer_fisher_lv00
-                ws.cell(row=i+2, column=52).value = ippan.farmer_fisher_lv01_49
-                ws.cell(row=i+2, column=53).value = ippan.farmer_fisher_lv50_99
-                ws.cell(row=i+2, column=54).value = ippan.farmer_fisher_lv100
-                ws.cell(row=i+2, column=55).value = ippan.farmer_fisher_full
-
-        wb.save(download_file_path)
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 4/12.', 'INFO')
         
         #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### DBアクセス処理(0040)
+        ### EXCEL入出力処理(0040)
+        ### (1)DBから建物区分等のマスタデータを取得する。
+        ### (2)EXCELのマスタ用のシートのセルに、DBから取得した建物区分等のマスタデータを埋め込む。
+        ### (3)EXCELのVLOKUP用のシートのセルに、DBから取得した都道府県等のマスタデータを埋め込む。
         #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 5/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0050)
+        ### (1)EXCELのヘッダ部のセルに、キャプションのテキストを埋め込む。
+        ### (2)EXCELの一覧部のセルに、キャプションのテキストを埋め込む。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 6/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0060)
+        ### (1)EXCELのセルに、建物区分に応じて、背景灰色、背景白色を変化させる条件付き形式を埋め込む。
+        ### (2)ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 7/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0070)
+        ### (1)EXCELのヘッダ部のセルに、単純プルダウン、連動プルダウンの設定を埋め込む。
+        ### (2)EXCELの一覧部のセルに、単純プルダウンの設定を埋め込む。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 8/12.', 'INFO')
+        
+        
+        #######################################################################
+        ### DBアクセス処理(0080)
+        ### (1)DBから水害のデータを取得する。
+        ### (2)DBから一般資産調査票（調査員）のデータを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 9/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0130)
+        ### ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 10/12.', 'INFO')
+
+        #######################################################################
+        ### EXCEL入出力処理(0140)
+        ### 複数のEXCELファイルを1つに固めて保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 11/12.', 'INFO')
+        
+        #######################################################################
+        ### レスポンスセット処理(0150)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 12/12.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response = HttpResponse(content=save_virtual_workbook(wb[0]), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_ken.xlsx"'
         return response
         
@@ -3565,141 +4655,5 @@ def ippan_ken_view(request, lock):
         print_log(sys.exc_info()[0], 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名：kokyo_view
-### 206: 公共土木調査票
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def kokyo_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数 lock = {}'.format(lock), 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、データを取得する。
-        #######################################################################
-        ### kokyo_list = KOKYO.objects.order_by('kokyo_id')[:]
-        kokyo_list = KOKYO.objects.raw("""SELECT * FROM KOKYO ORDER BY CAST(KOKYO_ID AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        template_file_path = 'static/template_kokyo.xlsx'
-        download_file_path = 'static/download_kokyo.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '公共土木調査票'
-        ws.cell(row=1, column=1).value = '公共土木調査票ID'
-        ws.cell(row=1, column=2).value = '都道府県コード'
-        ws.cell(row=1, column=3).value = '市区町村コード'
-        ws.cell(row=1, column=4).value = '異常気象ID'
-        ws.cell(row=1, column=5).value = '公共土木調査対象年'
-        ws.cell(row=1, column=6).value = '開始日'
-        ws.cell(row=1, column=7).value = '終了日'
-        
-        if kokyo_list:
-            for i, kokyo in enumerate(kokyo_list):
-                ws.cell(row=i+2, column=1).value = kokyo.kokyo_id
-                ws.cell(row=i+2, column=2).value = kokyo.ken_code
-                ws.cell(row=i+2, column=3).value = kokyo.city_code
-                ws.cell(row=i+2, column=4).value = kokyo.weather_id
-                ws.cell(row=i+2, column=5).value = kokyo.kokyo_year
-                ws.cell(row=i+2, column=6).value = kokyo.begin_date
-                ws.cell(row=i+2, column=7).value = kokyo.end_date
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kokyo_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="kokyo.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.kokyo_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.kokyo_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名：koeki_view
-### 2907 公益事業調査票
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def koeki_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.koeki_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.koeki_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.koeki_view()関数 lock = {}'.format(lock), 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、データを取得する。
-        #######################################################################
-        koeki_list = KOEKI.objects.order_by('koeki_id')[:]
-        ### koeki_list = KOEKI.objects.raw("""SELECT * FROM KOEKI ORDER BY CAST(KOEKI_ID AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        template_file_path = 'static/template_koeki.xlsx'
-        download_file_path = 'static/download_koeki.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '公益事業調査票'
-        ws.cell(row=1, column=1).value = '公益事業調査票ID'
-        ws.cell(row=1, column=2).value = '都道府県コード'
-        ws.cell(row=1, column=3).value = '市区町村コード'
-        ws.cell(row=1, column=4).value = '異常気象ID'
-        ws.cell(row=1, column=5).value = '公益事業調査対象年'
-        ws.cell(row=1, column=6).value = '開始日'
-        ws.cell(row=1, column=7).value = '終了日'
-        
-        if koeki_list:
-            for i, koeki in enumerate(koeki_list):
-                ws.cell(row=i+1, column=1).value = koeki.koeki_id
-                ws.cell(row=i+1, column=2).value = koeki.ken_code
-                ws.cell(row=i+1, column=3).value = koeki.city_code
-                ws.cell(row=i+1, column=4).value = koeki.weather_id
-                ws.cell(row=i+1, column=5).value = koeki.koeki_year
-                ws.cell(row=i+1, column=6).value = koeki.begin_date
-                ws.cell(row=i+1, column=7).value = koeki.end_date
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.koeki_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="koeki.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
