@@ -1171,11 +1171,87 @@ class IPPAN_SUMMARY(models.Model):
     def __str__(self):
         return '<IPPAN_SUMMARY: ' + self.ippan_summary_id + '>'
 
+###############################################################################
+### CI/CD DB
+###############################################################################
 
 ###############################################################################
-### 管理DB
+### 9000: 一般資産集計データ（CI/CD DB）
+### CI/CD Automatic Test, Automatic Quality Assurance, Insight
+### circleci
+### 出力データ_一般資産調査票_チェックアウト: P0200ExcelDownload
+### 入力データ_一般資産調査票_チェックイン: P0300ExcelUpload
+###   入力データ検証: Automated Acceptance Test
+###   按分計算: Proportional Calculation
+###   逆計算による按分データ検証: Automated Reverse Verification
+###   集計計算: Summary Calculation
+###   逆計算による集計データ検証: Automated Reverse Verification
+### 入力データ_水害区域図_チェックイン: P0310AreaUpload
+###   入力データ検証: Automated Acceptance Test
+###   集計計算: Summary Calculation, Group By Area
+###   逆計算による集計データ検証: Automated Reverse Verification
+### 入力データ_異常気象コード_チェックイン: P0320WeatherUpload
+###   入力データ検証: Automated Acceptance Test
+###   集計計算: Summary Calculation, Group By Weather
+###   逆計算による集計データ検証: Automated Reverse Verification
+### マニュアルによるデータ検証: Manual Verification
+### リリース: Release
 ###############################################################################
-        
+class IPPAN_REPOSITORY(models.Model):
+    ippan_repository_id = models.IntegerField(primary_key=True)                ### レポジトリID
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    suigai_name = models.CharField(max_length=128, null=True)                  ### 水害名
+    ### ippan_id = models.IntegerField(null=True)                              ### 一般資産調査票ID
+    
+    pipeline_code = models.CharField(max_length=10, null=True)                 ### パイプラインコード
+    pipeline_name = models.CharField(max_length=128, null=True)                ### パイプライン名
+    ### 1: 一般資産調査票_チェックアウト
+    
+    ### 2: 一般資産調査票_チェックイン
+    ### 3: 入力データ検証
+    ### 4: 按分計算
+    ### 5: 逆計算による按分データ検証
+    ### 6: 集計計算
+    ### 7: 逆計算による集計データ検証
+    
+    ### 8: 水害区域図_チェックイン
+    ### 9: 入力データ検証
+    ### 10: 集計計算
+    ### 11: 逆計算による集計データ検証
+    
+    ### 12: 異常気象コード_チェックイン
+    ### 13: 入力データ検証
+    ### 14: 集計計算
+    ### 15: 逆計算による集計データ検証
+    ### 16: マニュアルによるデータ検証
+    ### 17: リリース
+
+    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+    status_name = models.CharField(max_length=128, null=True)                  ### 状態名
+    ### 1: 実行中: running
+    ### 2: キャンセル: cancel
+    ### 3: 成功: success
+    ### 4: 失敗: failure
+    
+    start_date = models.DateField(null=True)                                   ### 開始日時
+    end_date = models.DateField(null=True)                                     ### 終了日時
+    duration = models.DateField(null=True)                                     ### 経過時間
+    success_count = models.IntegerField(null=True)                             ### 成功数
+    failure_count = models.IntegerField(null=True)                             ### 失敗数
+    success_rate = models.FloatField(null=True)                                ### 成功率
+    input_file_path = models.CharField(max_length=256, null=True)              ### 
+    output_file_path = models.CharField(max_length=256, null=True)             ### 
+    trigger_date = models.DateField(null=True)                                 ### トリガー発行日時
+    trigger_message = models.CharField(max_length=512, null=True)              ### トリガーメッセージ
+    feedback_date = models.DateField(null=True)                                ### フィードバック発行日時
+    feedback_message = models.CharField(max_length=512, null=True)             ### フィードバックメッセージ
+    
+    class Meta:
+        db_table = 'ippan_repository'
+    
+    def __str__(self):
+        return '<IPPAN_REPOSITORY: ' + self.ippan_repository_id + '>'
+
 ###############################################################################
 ### 9010: 一般資産調査票（管理DB）
 ###############################################################################

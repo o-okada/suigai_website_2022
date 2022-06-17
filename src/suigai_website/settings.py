@@ -62,8 +62,11 @@ INSTALLED_APPS = [
 
     ### Report Applications
 
-    ### Dashboard Applications
-    'P0800Dashboard.apps.P0800DashboardConfig',
+    ### Reverse Verification Applications
+    'P0800Reverse.apps.P0800ReverseConfig',
+    
+    ### CI Applications
+    'P0900CI.apps.P0900CIConfig',
     
     ### Admin Applications
     'P9100Transact.apps.P9100TransactConfig',

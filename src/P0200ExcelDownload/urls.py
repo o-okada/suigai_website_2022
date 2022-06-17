@@ -44,8 +44,8 @@ urlpatterns = [
     path('ippan_group_by_suikei/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
 
     path('ippan_chosa/', views.ippan_chosa_view, name='ippan_chosa_view'), 
-    ### path('ippan_city/', views.ippan_city_view, name='ippan_city_view'), 
-    ### path('ippan_ken/', views.ippan_ken_view, name='ippan_ken_view'), 
+    path('ippan_city/', views.ippan_city_view, name='ippan_city_view'), 
+    path('ippan_ken/', views.ippan_ken_view, name='ippan_ken_view'), 
     
     path('building/lock/<slug:lock>/', views.building_view, name='building_view'), 
     path('ken/lock/<slug:lock>/', views.ken_view, name='ken_view'), 
@@ -86,6 +86,6 @@ urlpatterns = [
     path('ippan_group_by_suikei/lock/<slug:lock>/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
 
     path('ippan_chosa/lock/<slug:lock>/', views.ippan_chosa_view, name='ippan_chosa_view'), 
-    ### path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view'), 
-    ### path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view'), 
+    path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view'), 
+    path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view'), 
 ]

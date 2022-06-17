@@ -20,12 +20,15 @@ urlpatterns = [
     ### Report Applications
     ### path('P0700Report/', include('P0700Report.urls')),
 
-    ### Dashboard Applications
-    path('P0800Dashboard/', include('P0800Dashboard.urls')),
+    ### Reverse Verification Applications
+    path('P0800Reverse/', include('P0800Reverse.urls')),
+    
+    ### CI Applications
+    path('P0900CI/', include('P0900CI.urls')),
 
     ### Admin Applications
-    path('P9100Transact/', include('P9100Transact.urls')),
-    path('P9200Lock/', include('P9200Lock.urls')),
+    ### path('P9100Transact/', include('P9100Transact.urls')),
+    ### path('P9200Lock/', include('P9200Lock.urls')),
     
     ### See Python Django開発入門, P227
     path('admin/', admin.site.urls),

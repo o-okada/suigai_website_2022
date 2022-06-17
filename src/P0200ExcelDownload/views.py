@@ -4564,7 +4564,6 @@ def ippan_ken_view(request, lock):
         if request.method == 'GET':
             print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
             return render(request, 'error.html')
-            
 
         #######################################################################
         ### 局所定数セット処理(0010)
