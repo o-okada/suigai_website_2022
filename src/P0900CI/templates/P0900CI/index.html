@@ -1,0 +1,45 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0900CI/templates/P0900CI/index.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>CI画面 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    {% block content %}
+
+    <!-- BEGIN container-fluid mb-3 -->
+    <div class="container-fluid mb-3">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+                <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+            </div>
+            <div class="col d-flex justify-content-end align-items-end">
+                <a href="{% url 'P0100Login:index_view' %}">ログアウト</a><br>
+            </div>
+        </div>
+    </div>
+    <!-- END container-fluid mb-3 -->
+    
+    <!-- BEGIN container text-center mb-3 -->
+    <div class="container text-center mb-3">
+        <h3>定数、調査票、集計結果参照</h3>
+    </div>
+    <!-- END Container text-center mb-3 -->
+    
+    {% endblock %}
+</body>
+<!-- END Body -->
+</html>
