@@ -8,10 +8,11 @@
 ### 処理名：インポート処理
 ###############################################################################
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from django.contrib.auth.decorators import login_required
 from django.db import connection
 from django.db import transaction
+from django.db.models import Max
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -27,45 +28,55 @@ from openpyxl.writer.excel import save_virtual_workbook
 
 from .forms import ExcelUploadForm
 
-from P0000Common.models import BUILDING                ### 001: 建物区分
-from P0000Common.models import KEN                     ### 002: 都道府県
-from P0000Common.models import CITY                    ### 003: 市区町村
-from P0000Common.models import KASEN_KAIGAN            ### 004: 水害発生地点工種（河川海岸区分）
-from P0000Common.models import SUIKEI                  ### 005: 水系（水系・沿岸）
-from P0000Common.models import SUIKEI_TYPE             ### 006: 水系種別（水系・沿岸種別）
-from P0000Common.models import KASEN                   ### 007: 河川（河川・海岸）
-from P0000Common.models import KASEN_TYPE              ### 008: 河川種別（河川・海岸種別）
-from P0000Common.models import CAUSE                   ### 009: 水害原因
-from P0000Common.models import UNDERGROUND             ### 010: 地上地下区分
-from P0000Common.models import USAGE                   ### 011: 地下空間の利用形態
-from P0000Common.models import FLOOD_SEDIMENT          ### 012: 浸水土砂区分
-from P0000Common.models import GRADIENT                ### 013: 地盤勾配区分
-from P0000Common.models import INDUSTRY                ### 014: 産業分類
-from P0000Common.models import RESTORATION             ### 015: 復旧事業工種
-from P0000Common.models import HOUSE_ASSET             ### 100: 県別家屋評価額
-from P0000Common.models import HOUSE_DAMAGE            ### 101: 家屋被害率
-from P0000Common.models import HOUSEHOLD_DAMAGE        ### 102: 家庭用品自動車以外被害率
-from P0000Common.models import CAR_DAMAGE              ### 103: 家庭用品自動車被害率
-from P0000Common.models import HOUSE_COST              ### 104: 家庭応急対策費
-from P0000Common.models import OFFICE_ASSET            ### 105: 産業分類別資産額
-from P0000Common.models import OFFICE_DAMAGE           ### 106: 事業所被害率
-from P0000Common.models import OFFICE_COST             ### 107: 事業所営業停止損失
-from P0000Common.models import FARMER_FISHER_DAMAGE    ### 108: 農漁家被害率
-from P0000Common.models import SUIGAI                  ### 200: 水害
-from P0000Common.models import WEATHER                 ### 201: 異常気象（ほぼ、水害）
-from P0000Common.models import AREA                    ### 202: 区域
-from P0000Common.models import IPPAN                   ### 203: 一般資産調査票
-### from P0000Common.models import IPPAN_CITY          ### 204: 
-### from P0000Common.models import IPPAN_KEN           ### 205: 
-from P0000Common.models import KOKYO                   ### 206: 公共土木調査票
-from P0000Common.models import KOEKI                   ### 207: 公益事業調査票
-from P0000Common.models import TRANSACT                ### 
+from P0000Common.models import BUILDING                ### 1000: 建物区分
+from P0000Common.models import KEN                     ### 1010: 都道府県
+from P0000Common.models import CITY                    ### 1020: 市区町村
+from P0000Common.models import KASEN_KAIGAN            ### 1030: 水害発生地点工種（河川海岸区分）
+from P0000Common.models import SUIKEI                  ### 1040: 水系（水系・沿岸）
+from P0000Common.models import SUIKEI_TYPE             ### 1050: 水系種別（水系・沿岸種別）
+from P0000Common.models import KASEN                   ### 1060: 河川（河川・海岸）
+from P0000Common.models import KASEN_TYPE              ### 1070: 河川種別（河川・海岸種別）
+from P0000Common.models import CAUSE                   ### 1080: 水害原因
+from P0000Common.models import UNDERGROUND             ### 1090: 地上地下区分
+from P0000Common.models import USAGE                   ### 1100: 地下空間の利用形態
+from P0000Common.models import FLOOD_SEDIMENT          ### 1110: 浸水土砂区分
+from P0000Common.models import GRADIENT                ### 1120: 地盤勾配区分
+from P0000Common.models import INDUSTRY                ### 1130: 産業分類
+
+from P0000Common.models import HOUSE_ASSET             ### 2000: 家屋評価額
+from P0000Common.models import HOUSE_ALT               ### 2020: 家庭応急対策費_代替活動費
+from P0000Common.models import HOUSE_CLEAN             ### 2030: 家庭応急対策費_清掃日数
+
+from P0000Common.models import HOUSEHOLD_ASSET         ### 3000: 家庭用品自動車以外所有額
+from P0000Common.models import HOUSEHOLD_RATE          ### 3010: 家庭用品自動車以外被害率
+
+from P0000Common.models import CAR_ASSET               ### 4000: 家庭用品自動車所有額
+from P0000Common.models import CAR_RATE                ### 4010: 家庭用品自動車被害率
+
+from P0000Common.models import OFFICE_ASSET            ### 5000: 事業所資産額
+from P0000Common.models import OFFICE_RATE             ### 5010: 事業所被害率
+from P0000Common.models import OFFICE_SUSPEND          ### 5020: 事業所営業停止日数
+from P0000Common.models import OFFICE_STAGNATE         ### 5030: 事業所営業停滞日数
+from P0000Common.models import OFFICE_ALT              ### 5040: 事業所応急対策費_代替活動費
+
+from P0000Common.models import FARMER_FISHER_ASSET     ### 6000: 農漁家資産額
+from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害率
+
+from P0000Common.models import AREA                    ### 7000: 一般資産入力データ_水害区域
+from P0000Common.models import WEATHER                 ### 7010: 一般資産入力データ_異常気象
+from P0000Common.models import SUIGAI                  ### 7020: 一般資産入力データ_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 一般資産入力データ_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビューデータ_一覧表部分
+
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
+
+from P0000Common.models import IPPAN_REPOSITORY        ### 9000: 一般資産集計データ
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 処理名：定数定義
-### (1)単体入力の必須チェックを行った結果のメッセージを定義する。
+### 単体入力の必須チェックを行った結果のメッセージを定義する。
 ###############################################################################
 MESSAGE = []
 
@@ -123,7 +134,7 @@ for i in range(76, 100):
 
 ###############################################################################
 ### 処理名：定数定義
-### (1)単体入力の形式チェックを行った結果のメッセージを定義する。
+### 単体入力の形式チェックを行った結果のメッセージを定義する。
 ###############################################################################
 MESSAGE.append([100, 'W0100', '形式', '都道府県に全角以外の無効な文字が入力されています。', '全角文字を入力してください。'])
 MESSAGE.append([101, 'W0101', '形式', '市区町村に全角以外の無効な文字が入力されています。', '全角文字を入力してください。'])
@@ -178,7 +189,7 @@ for i in range(176, 200):
 
 ###############################################################################
 ### 処理名：定数定義
-### (1)単体入力の範囲チェックを行った結果のメッセージを定義する。
+### 単体入力の範囲チェックを行った結果のメッセージを定義する。
 ###############################################################################
 MESSAGE.append([200, 'W0200', '範囲', '都道府県に入力範囲外の無効な値が入力されています。', ''])
 MESSAGE.append([201, 'W0201', '範囲', '市区町村に入力範囲外の無効な値が入力されています。', ''])
@@ -233,7 +244,7 @@ for i in range(276, 300):
 
 ###############################################################################
 ### 処理名：定数定義
-### (1)単体入力の相関チェックを行った結果のメッセージを定義する。
+### 単体入力の相関チェックを行った結果のメッセージを定義する。
 ###############################################################################
 MESSAGE.append([300, 'W0300', '相関', '都道府県名が入力されていません。', '都道府県名が入力されていません。'])
 MESSAGE.append([301, 'W0301', '相関', '都道府県名が入力されていません。', '都道府県名が入力されていません。'])
@@ -284,7 +295,7 @@ for i in range(376, 400):
 
 ###############################################################################
 ### 処理名：定数定義
-### (1)単体入力の突合チェックを行った結果のメッセージを定義する。
+### 単体入力の突合チェックを行った結果のメッセージを定義する。
 ###############################################################################
 MESSAGE.append([400, 'W0400', '突合', '都道府県がデータベースに登録されている都道府県と一致しません。', '正しい都道府県を入力してください。'])
 MESSAGE.append([401, 'W0401', '突合', '市区町村がデータベースに登録されている市区町村と一致しません。', '正しい市区町村を入力してください。'])
@@ -425,7 +436,7 @@ def none_if_empty(arg):
 
 ###############################################################################
 ### 関数名：add_comment_to_cell
-### (1) 
+### 
 ###############################################################################
 def add_comment_to_cell(ws_ippan, ws_result, row, column, message):
     if ws_ippan.cell(row=row, column=column).comment is None:
@@ -440,7 +451,7 @@ def add_comment_to_cell(ws_ippan, ws_result, row, column, message):
 
 ###############################################################################
 ### 関数名：add_fill_to_cell
-### (1) 
+### 
 ###############################################################################
 def add_fill_to_cell(ws_ippan, ws_result, row, column, fill):
     ws_ippan.cell(row=row, column=column).fill = fill
@@ -460,7 +471,7 @@ def index_view(request):
         #######################################################################
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
@@ -470,7 +481,7 @@ def index_view(request):
         
         #######################################################################
         ### 局所変数セット処理(0010)
-        ### (1)チェック結果を格納するために局所変数をセットする。
+        ### チェック結果を格納するために局所変数をセットする。
         ### result_require_list: 必須チェック結果を格納するリスト
         ### result_require_grid: 必須チェック結果を格納するリスト
         ### result_format_list: 形式チェック結果を格納するリスト
@@ -525,18 +536,28 @@ def index_view(request):
         ### EXCELファイル入出力処理(0040)
         ### (1)局所変数に値をセットする。
         ### (2)アップロードされたEXCELファイルを保存する。
-        ### upload_file_object: アップロードされたEXCELファイルのオブジェクト
-        ### upload_file_path: アップロードされたEXCELファイルの保存先のファイルパス
-        ### result_file_path: チェック結果の保存先のファイルパス
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 5/33.', 'INFO')
-        upload_file_object = request.FILES['file']
-        upload_file_path = 'media/documents/' + upload_file_object.name
-        result_file_path = 'static/ippan_chosa_result2.xlsx'
-        
-        with open(upload_file_path, 'wb+') as destination:
-            for chunk in upload_file_object.chunks():
+        ### upload_file_object = request.FILES['file']
+        ### upload_file_path = 'media/documents/' + upload_file_object.name
+        ### result_file_path = 'static/ippan_chosa_result2.xlsx'
+        ### with open(upload_file_path, 'wb+') as destination:
+        ###     for chunk in upload_file_object.chunks():
+        ###         destination.write(chunk)
+
+        t_delta = timedelta(hours=9)
+        JST = timezone(t_delta, 'JST')
+        now_strftime = datetime.now(JST).strftime('%Y%m%d%H%M%S')
+        input_file_object = request.FILES['file']
+        input_file_path = 'repository/202206/ippan_chosa_input_' + now_strftime + '.xlsx'
+        with open(input_file_path, 'wb+') as destination:
+            for chunk in input_file_object.chunks():
                 destination.write(chunk)
+
+        output_file_path = 'repository/202206/ippan_chosa_output_' + now_strftime + '.xlsx'
+        
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'INFO')
+        print_log('[INFO] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'INFO')
                 
         #######################################################################
         ### EXCELファイル入出力処理(0050)
@@ -552,7 +573,8 @@ def index_view(request):
         ### fill: 背景赤色の塗りつぶし
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 6/33.', 'INFO')
-        wb = openpyxl.load_workbook(upload_file_path)
+        ### wb = openpyxl.load_workbook(upload_file_path)
+        wb = openpyxl.load_workbook(input_file_path)
         ws_ippan = []
         ws_result = []
         ws_max_row = []
@@ -595,7 +617,7 @@ def index_view(request):
 
         #######################################################################
         ### EXCELファイル入出力処理(0070)
-        ### (1)EXCELセルの背景赤色を局所変数のfillに設定する。
+        ### EXCELセルの背景赤色を局所変数のfillに設定する。
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 8/33.', 'INFO')
         fill = openpyxl.styles.PatternFill(patternType='solid', fgColor='FF0000', bgColor='FF0000')
@@ -2428,17 +2450,19 @@ def index_view(request):
         #######################################################################
         #######################################################################
         ### ファイル入出力処理(6000)
-        ### (1)チェック結果ファイルを保存する。
+        ### チェック結果ファイルを保存する。
         #######################################################################
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 30/33.', 'INFO')
-        result_file_path = 'static/ippan_chosa_result2.xlsx'
-        wb.save(result_file_path)
+        ### result_file_path = 'static/ippan_chosa_result2.xlsx'
+        ### wb.save(result_file_path)
+        wb.save(output_file_path)
         
         #######################################################################
         ### DBアクセス処理(6010)
-        ### (1)水害テーブルにデータを登録する。
-        ### (2)一般資産調査票（調査員）テーブルにデータを登録する。
+        ### (1)一般資産入力データ_ヘッダ部分テーブルにデータを登録する。
+        ### (2)一般資産入力データ_一覧票部分テーブルにデータを登録する。
+        ### (3)レポジトリテーブルにデータを登録する。
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31/33.', 'INFO')
         if len(result_require_list) == 0 and len(result_require_grid) == 0 and \
@@ -2447,135 +2471,225 @@ def index_view(request):
             len(result_correlate_list) == 0 and len(result_correlate_grid) == 0 and \
             len(result_compare_list) == 0 and len(result_compare_grid) == 0:
 
+            print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_1/33.', 'INFO')
             connection_cursor = connection.cursor()
             try:
-                ###############################################################
-                ### DBアクセス処理(6020)
-                ### (1)水害テーブルにデータを登録する。
-                ###############################################################
                 for i, _ in enumerate(ws_ippan):
-                    ### connection_cursor.execute(""" INSERT INTO SUIGAI (SUIGAI_ID, SUIGAI_NAME, KEN_CODE, CITY_CODE, BEGIN_DATE, END_DATE, CAUSE_1_CODE, CAUSE_2_CODE, CAUSE_3_CODE, AREA_ID, SUIKEI_CODE, KASEN_CODE, GRADIENT_CODE, RESIDENTIAL_AREA, AGRICULTURAL_AREA, UNDERGROUND_AREA, KASEN_KAIGAN_CODE, CROP_DAMAGE, WEATHER_ID) VALUES (11,'水害名_10','01','011011',date('2022-04-01'),date('2022-04-02'),'90','90','90',1,'101','1',1,100,100,100,'1',100,1) """)
+                    ###########################################################
+                    ### DBアクセス処理(6020)
+                    ### 一般資産入力データ_ヘッダ部分テーブルにデータを登録する。
+                    ###########################################################
+                    print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_2/33.', 'INFO')
+                    suigai_id = SUIGAI.objects.all().aggregate(Max('suigai_id'))['suigai_id__max']
+                    if suigai_id == None:
+                        suigai_id = 0
+                    else:
+                        suigai_id = suigai_id + 1
+                        
+                    print_log('suigai_id = {}'.format(suigai_id), 'INFO')
+                    
+                    print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_3/33.', 'INFO')
                     connection_cursor.execute("""
                         INSERT INTO SUIGAI (
-                            suigai_id,                                             -- 00
-                            suigai_name,                                           -- 01
-                            ken_code,                                              -- 02
-                            city_code,                                             -- 03
-                            cause_1_code,                                          -- 06
-                            cause_2_code,                                          -- 07
-                            cause_3_code,                                          -- 08
-                            area_id,                                               -- 09
-                            suikei_code,                                           -- 10
-                            kasen_code,                                            -- 11
-                            gradient_code,                                         -- 12
-                            residential_area,                                      -- 13
-                            agricultural_area,                                     -- 14
-                            underground_area,                                      -- 15
-                            kasen_kaigan_code,                                     -- 16
-                            crop_damage,                                           -- 17
-                            weather_id                                             -- 18
+                            suigai_id, 
+                            suigai_name, 
+                            ken_code, 
+                            city_code, 
+                            cause_1_code, 
+                            cause_2_code, 
+                            cause_3_code, 
+                            area_id, 
+                            suikei_code, 
+                            kasen_code, 
+                            gradient_code, 
+                            residential_area, 
+                            agricultural_area, 
+                            underground_area, 
+                            kasen_kaigan_code, 
+                            crop_damage, 
+                            weather_id 
                         ) VALUES (
-                            (SELECT MAX(suigai_id+1) FROM SUIGAI),                 -- 00
-                            %s, %s, %s,                                            -- 01 02 03 
-                            %s, %s, %s, %s, %s,                                    -- 06 07 08 09 10
-                            %s, %s, %s, %s, %s,                                    -- 11 12 13 14 15
-                            %s, %s, %s                                             -- 16 17 18
+                            %s, -- suigai_id 
+                            %s, -- suigai_name 
+                            %s, -- ken_code 
+                            %s, -- city_code 
+                            %s, -- cause_1_code 
+                            %s, -- cause_2_code 
+                            %s, -- cause_3_code 
+                            %s, -- area_id 
+                            %s, -- suikei_code 
+                            %s, -- kasen_code 
+                            %s, -- gradient_code 
+                            %s, -- residential_area 
+                            %s, -- agricultural_area 
+                            %s, -- underground_area 
+                            %s, -- kasen_kaigan_code 
+                            %s, -- crop_damage 
+                            %s  -- weather_id 
                         )""", [
-                            'suigai_name',                                                                   ### 01 suigai_name
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1]),     ### 02 ken_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]),     ### 03 city_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1]),     ### 06 cause_1_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1]),     ### 07 cause_2_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1]),     ### 08 cause_3_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1]),     ### 09 area_id
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1]),    ### 10 suikei_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1]),    ### 11 kasen_code
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1]),    ### 12 gradient_code
-                            none_if_empty(ws_ippan[i].cell(row=14, column=2).value),                         ### 13 residential_area
-                            none_if_empty(ws_ippan[i].cell(row=14, column=3).value),                         ### 14 agricultural_area
-                            none_if_empty(ws_ippan[i].cell(row=14, column=4).value),                         ### 15 underground_area
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1]),    ### 16 kasen_kaigan_code
-                            none_if_empty(ws_ippan[i].cell(row=14, column=8).value),                         ### 17 crop_damaga
-                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1])    ### 18 weather_id
+                            suigai_id,                                                                       ### suigai_id
+                            'suigai_name',                                                                   ### suigai_name
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1]),     ### ken_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]),     ### city_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=6).value)[-1]),     ### cause_1_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=7).value)[-1]),     ### cause_2_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=8).value)[-1]),     ### cause_3_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1]),     ### area_id
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=2).value)[-1]),    ### suikei_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=4).value)[-1]),    ### kasen_code
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=10, column=6).value)[-1]),    ### gradient_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=2).value),                         ### residential_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=3).value),                         ### agricultural_area
+                            none_if_empty(ws_ippan[i].cell(row=14, column=4).value),                         ### underground_area
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1]),    ### kasen_kaigan_code
+                            none_if_empty(ws_ippan[i].cell(row=14, column=8).value),                         ### crop_damaga
+                            none_if_empty(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1])    ### weather_id
                         ])
                         
-                ###############################################################
-                ### DBアクセス処理(6030)
-                ### (1)一般資産調査票（調査員）テーブルにデータを登録する。
-                ###############################################################
-                for i, _ in enumerate(ws_ippan):
+                    ###########################################################
+                    ### DBアクセス処理(6030)
+                    ### 一般資産入力データ_一覧票部分テーブルにデータを登録する。
+                    ###########################################################
+                    print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_4/33.', 'INFO')
                     if ws_max_row[i] >= 20:
                         for j in range(20, ws_max_row[i] + 1):
-                            ### connection_cursor.execute(""" INSERT INTO IPPAN (ippan_id) VALUES ((SELECT MAX(ippan_id+1) FROM IPPAN)) """)
                             connection_cursor.execute(""" 
                                 INSERT INTO IPPAN (
-                                    ippan_id,                                      -- 00
-                                    ippan_name,                                    -- 01
-                                    suigai_id,                                     -- 02
-                                    building_code,                                 -- 03
-                                    underground_code,                              -- 04
-                                    flood_sediment_code,                           -- 05
-                                    building_lv00,                                 -- 06 
-                                    building_lv01_49,                              -- 07
-                                    building_lv50_99,                              -- 08
-                                    building_lv100,                                -- 09
-                                    building_half,                                 -- 10
-                                    building_full,                                 -- 11
-                                    floor_area,                                    -- 12
-                                    family,                                        -- 13
-                                    office,                                        -- 14
-                                    farmer_fisher_lv00,                            -- 33
-                                    farmer_fisher_lv01_49,                         -- 34
-                                    farmer_fisher_lv50_99,                         -- 35
-                                    farmer_fisher_lv100,                           -- 36
-                                    farmer_fisher_full,                            -- 37
-                                    employee_lv00,                                 -- 38
-                                    employee_lv01_49,                              -- 39
-                                    employee_lv50_99,                              -- 40
-                                    employee_lv100,                                -- 41
-                                    employee_full,                                 -- 42
-                                    industry_code,                                 -- 43
-                                    usage_code,                                    -- 44
-                                    comment                                        -- 45
+                                    ippan_id, 
+                                    ippan_name, 
+                                    suigai_id, 
+                                    building_code, 
+                                    underground_code, 
+                                    flood_sediment_code, 
+                                    building_lv00, 
+                                    building_lv01_49, 
+                                    building_lv50_99, 
+                                    building_lv100, 
+                                    building_half, 
+                                    building_full, 
+                                    floor_area, 
+                                    family, 
+                                    office, 
+                                    farmer_fisher_lv00, 
+                                    farmer_fisher_lv01_49, 
+                                    farmer_fisher_lv50_99, 
+                                    farmer_fisher_lv100, 
+                                    farmer_fisher_full, 
+                                    employee_lv00, 
+                                    employee_lv01_49, 
+                                    employee_lv50_99, 
+                                    employee_lv100, 
+                                    employee_full, 
+                                    industry_code, 
+                                    usage_code, 
+                                    comment 
                                 ) VALUES (
-                                    (SELECT MAX(ippan_id+1) FROM IPPAN),           -- 00
-                                    %s, %s, %s, %s, %s,                            -- 01 02 03 04 05
-                                    %s, %s, %s, %s, %s,                            -- 06 07 08 09 10
-                                    %s, %s, %s, %s,                                -- 11 12 13 14
-                                            %s, %s, %s,                            --       33 34 35
-                                    %s, %s, %s, %s, %s,                            -- 36 37 38 39 40
-                                    %s, %s, %s, %s, %s                             -- 41 42 43 44 45
+                                    (SELECT MAX(ippan_id+1) FROM IPPAN), -- ippan_id 
+                                    %s, -- ippan_name 
+                                    %s, -- suigai_id 
+                                    %s, -- building_code 
+                                    %s, -- underground_code 
+                                    %s, -- flood_sediment_code 
+                                    %s, -- building_lv00 
+                                    %s, -- building_lv01_49 
+                                    %s, -- building_lv50_99 
+                                    %s, -- building_lv100 
+                                    %s, -- building_half 
+                                    %s, -- building_full 
+                                    %s, -- floor_area 
+                                    %s, -- family 
+                                    %s, -- office 
+                                    %s, -- farmer_fisher_lv00 
+                                    %s, -- farmer_fisher_lv01_49 
+                                    %s, -- farmer_fisher_lv50_99 
+                                    %s, -- farmer_fisher_lv100 
+                                    %s, -- farmer_fisher_full 
+                                    %s, -- employee_lv00 
+                                    %s, -- employee_lv01_49 
+                                    %s, -- employee_lv50_99 
+                                    %s, -- employee_lv100 
+                                    %s, -- employee_full 
+                                    %s, -- industry_code 
+                                    %s, -- usage_code 
+                                    %s  -- comment 
                                 ) """, [
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=2).value),                            ### 01 ippan_name
-                                    1,                                                                                 ### 02 suigai_id
-                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1]),       ### 03 building_code
-                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1]),       ### 04 underground_code
-                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1]),       ### 05 flood_sediment_code
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=6).value),                            ### 06 building_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=7).value),                            ### 07 building_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=8).value),                            ### 08 building_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=9).value),                            ### 09 building_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=10).value),                           ### 10 building_half
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=11).value),                           ### 11 building_full
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=12).value),                           ### 12 floor_area
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=13).value),                           ### 13 family
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=14).value),                           ### 14 office
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=15).value),                           ### 33 farmer_fisher_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=16).value),                           ### 34 farmer_fisher_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=17).value),                           ### 35 farmer_fisher_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=18).value),                           ### 36 farmer_fisher_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=19).value),                           ### 37 farmer_fisher_full
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=20).value),                           ### 38 employee_lv00
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=21).value),                           ### 39 employee_lv01_49
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=22).value),                           ### 40 employee_lv50_99
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=23).value),                           ### 41 employee_lv100
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=24).value),                           ### 42 employee_full
-                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1]),      ### 43 industry_code
-                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1]),      ### 44 usage_code
-                                    none_if_empty(ws_ippan[i].cell(row=j, column=27).value)                            ### 45 comment
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=2).value),                            ### ippan_name
+                                    suigai_id,                                                                         ### suigai_id
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=3).value)[-1]),       ### building_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=4).value)[-1]),       ### underground_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=5).value)[-1]),       ### flood_sediment_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=6).value),                            ### building_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=7).value),                            ### building_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=8).value),                            ### building_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=9).value),                            ### building_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=10).value),                           ### building_half
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=11).value),                           ### building_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=12).value),                           ### floor_area
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=13).value),                           ### family
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=14).value),                           ### office
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=15).value),                           ### farmer_fisher_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=16).value),                           ### farmer_fisher_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=17).value),                           ### farmer_fisher_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=18).value),                           ### farmer_fisher_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=19).value),                           ### farmer_fisher_full
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=20).value),                           ### employee_lv00
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=21).value),                           ### employee_lv01_49
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=22).value),                           ### employee_lv50_99
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=23).value),                           ### employee_lv100
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=24).value),                           ### employee_full
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1]),      ### industry_code
+                                    none_if_empty(split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1]),      ### usage_code
+                                    none_if_empty(ws_ippan[i].cell(row=j, column=27).value)                            ### comment
                                 ])
+
+                    ###########################################################
+                    ### DBアクセス処理(6040)
+                    ### レポジトリテーブルにデータを登録する。
+                    ###########################################################
+                    print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_5/33.', 'INFO')
+                    connection_cursor.execute("""
+                        INSERT INTO REPOSITORY (
+                            repository_id, 
+                            suigai_id, 
+                            suigai_name, 
+                            commit_id, 
+                            action_code, 
+                            action_name, 
+                            status_code, 
+                            status_name, 
+                            success_count, 
+                            failure_count, 
+                            input_file_path, 
+                            output_file_path 
+                        ) VALUES (
+                            (SELECT MAX(repository_id) + 1 FROM REPOSITORY), 
+                            %s, -- suigai_id 
+                            %s, -- suigai_name 
+                            %s, -- commit_id  
+                            %s, -- action_code 
+                            %s, -- action_name 
+                            %s, -- status_code 
+                            %s, -- status_name 
+                            %s, -- success_count 
+                            %s, -- failure_count 
+                            %s, -- input_file_path 
+                            %s  -- output_file_path 
+                        )""", [
+                            suigai_id,                                         ### suigai_id
+                            'suigai_name',                                     ### suigai_name 
+                            '10',                                              ### commit_id 
+                            '3',                                               ### action_code 
+                            '入力データ検証',                                  ### action_name 
+                            '4',                                               ### status_code 
+                            '失敗',                                            ### status_name 
+                            10,                                                ### success_count 
+                            0,                                                 ### failure_count 
+                            input_file_path,                                   ### input_file_path 
+                            output_file_path                                   ### output_file_path 
+                        ])
                 
-                            transaction.commit()
+                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31_6/33.', 'INFO')
+                transaction.commit()
                         
             except:
                 connection_cursor.rollback()
@@ -2606,7 +2720,7 @@ def index_view(request):
             
         #######################################################################
         ### レスポンスセット処理(6050)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33/33.', 'INFO')
         if len(result_require_list) > 0 or len(result_require_grid) > 0 or \
@@ -2650,24 +2764,26 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：ippan_chosa_result_view
+### 
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_chosa_result_view(request, excel_id):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数 STEP 1/1.', 'INFO')
         
         result_file_path = 'static/ippan_chosa_result2.xlsx'
         wb = openpyxl.load_workbook(result_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0010)
-        ### (1)コンテキストを設定して、レスポンスをブラウザに戻す。
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')

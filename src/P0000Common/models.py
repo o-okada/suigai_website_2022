@@ -1203,6 +1203,8 @@ class IPPAN_REPOSITORY(models.Model):
     suigai_name = models.CharField(max_length=128, null=True)                  ### 水害名
     ### ippan_id = models.IntegerField(null=True)                              ### 一般資産調査票ID
     
+    commit_id = models.CharField(max_length=128, null=True)                    ### 
+    commit_date = models.DateField(null=True)                                  ### 
     pipeline_code = models.CharField(max_length=10, null=True)                 ### パイプラインコード
     pipeline_name = models.CharField(max_length=128, null=True)                ### パイプライン名
     ### 1: 一般資産調査票_チェックアウト
@@ -1235,14 +1237,16 @@ class IPPAN_REPOSITORY(models.Model):
     
     start_date = models.DateField(null=True)                                   ### 開始日時
     end_date = models.DateField(null=True)                                     ### 終了日時
-    duration = models.DateField(null=True)                                     ### 経過時間
+    duration = models.FloatField(null=True)                                    ### 経過時間
     success_count = models.IntegerField(null=True)                             ### 成功数
     failure_count = models.IntegerField(null=True)                             ### 失敗数
     success_rate = models.FloatField(null=True)                                ### 成功率
     input_file_path = models.CharField(max_length=256, null=True)              ### 
     output_file_path = models.CharField(max_length=256, null=True)             ### 
+    trigger_id = models.IntegerField(null=True)                                ### 
     trigger_date = models.DateField(null=True)                                 ### トリガー発行日時
     trigger_message = models.CharField(max_length=512, null=True)              ### トリガーメッセージ
+    feedback_id = models.IntegerField(null=True)                               ### 
     feedback_date = models.DateField(null=True)                                ### フィードバック発行日時
     feedback_message = models.CharField(max_length=512, null=True)             ### フィードバックメッセージ
     
@@ -1251,6 +1255,65 @@ class IPPAN_REPOSITORY(models.Model):
     
     def __str__(self):
         return '<IPPAN_REPOSITORY: ' + self.ippan_repository_id + '>'
+
+class REPOSITORY(models.Model):
+    repository_id = models.IntegerField(primary_key=True)                      ### レポジトリID
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    suigai_name = models.CharField(max_length=128, null=True)                  ### 水害名
+    ### ippan_id = models.IntegerField(null=True)                              ### 一般資産調査票ID
+    
+    commit_id = models.CharField(max_length=128, null=True)                    ### 
+    commit_date = models.DateField(null=True)                                  ### 
+    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
+    action_name = models.CharField(max_length=128, null=True)                  ### アクション名
+    ### 1: 一般資産調査票_チェックアウト
+
+    ### 2: 一般資産調査票_チェックイン
+    ### 3: 入力データ検証
+    ### 4: 按分計算
+    ### 5: 逆計算による按分データ検証
+    ### 6: 集計計算
+    ### 7: 逆計算による集計データ検証
+    
+    ### 8: 水害区域図_チェックイン
+    ### 9: 入力データ検証
+    ### 10: 集計計算
+    ### 11: 逆計算による集計データ検証
+    
+    ### 12: 異常気象コード_チェックイン
+    ### 13: 入力データ検証
+    ### 14: 集計計算
+    ### 15: 逆計算による集計データ検証
+    ### 16: マニュアルによるデータ検証
+    ### 17: リリース
+
+    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+    status_name = models.CharField(max_length=128, null=True)                  ### 状態名
+    ### 1: 実行中: running
+    ### 2: キャンセル: cancel
+    ### 3: 成功: success
+    ### 4: 失敗: failure
+    
+    start_date = models.DateField(null=True)                                   ### 開始日時
+    end_date = models.DateField(null=True)                                     ### 終了日時
+    duration = models.FloatField(null=True)                                    ### 経過時間
+    success_count = models.IntegerField(null=True)                             ### 成功数
+    failure_count = models.IntegerField(null=True)                             ### 失敗数
+    success_rate = models.FloatField(null=True)                                ### 成功率
+    input_file_path = models.CharField(max_length=256, null=True)              ### 
+    output_file_path = models.CharField(max_length=256, null=True)             ### 
+    trigger_id = models.IntegerField(null=True)                                ### 
+    trigger_date = models.DateField(null=True)                                 ### トリガー発行日時
+    trigger_message = models.CharField(max_length=512, null=True)              ### トリガーメッセージ
+    feedback_id = models.IntegerField(null=True)                               ### 
+    feedback_date = models.DateField(null=True)                                ### フィードバック発行日時
+    feedback_message = models.CharField(max_length=512, null=True)             ### フィードバックメッセージ
+    
+    class Meta:
+        db_table = 'repository'
+    
+    def __str__(self):
+        return '<REPOSITORY: ' + self.repository_id + '>'
 
 ###############################################################################
 ### 9010: 一般資産調査票（管理DB）

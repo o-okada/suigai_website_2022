@@ -8,8 +8,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>CI画面 | 水害統計オンラインサイト</title>
+    <title>データ一貫性、整合性検証の自動化画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+    .btn-fail    {background: #F44B25; color: #FFFFFF;}
+    .btn-running {background: #258AC4; color: #FFFFFF;}
+    .btn-cancel  {background: #6C757D; color: #FFFFFF;}
+    .btn-success {background: #54AB51; color: #FFFFFF;}
+    </style>
 </head>
 <!-- END Head -->
 
@@ -18,7 +26,7 @@
     {% bootstrap_messages %}
     {% block content %}
 
-    <!-- BEGIN container-fluid mb-3 -->
+    <!-- BEGIN トップパネル -->
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col d-flex justify-content-start align-items-start">
@@ -31,14 +39,307 @@
             </div>
         </div>
     </div>
-    <!-- END container-fluid mb-3 -->
-    
-    <!-- BEGIN container text-center mb-3 -->
+    <!-- END トップパネル -->
+
+    <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
-        <h3>定数、調査票、集計結果参照</h3>
+        <h3>データ一貫性、整合性検証の自動化画面</h3>
     </div>
-    <!-- END Container text-center mb-3 -->
+    <!-- END 画面名 -->
+
+    <!-- BEGIN データ一貫性と整合性検証の実行中、検証結果 -->
+    <!--<div class="row mb-3">-->
+    <!--    <div class="col-12 col-xl-4">-->
+    <!--        <div id="columnchart_values1"></div>-->
+    <!--    </div>-->
+    <!--    <div class="col-12 col-xl-4">-->
+    <!--        <div id="columnchart_values2"></div>-->
+    <!--    </div>-->
+    <!--    <div class="col-12 col-xl-4">-->
+    <!--        <div id="columnchart_values3"></div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!-- END データ一貫性と整合性検証の実行中、検証結果 -->
     
+    <!-- BEGIN 検索とフィルタ -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_ken" name="form_select_ken">
+                    <option value="0">都道府県の絞り込み条件を選択してください。</option>
+                    {% for ken in ken_list %}
+                    {% if ken.ken_code == ken_code %}
+                    <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}: {{ ken.ken_code }}</option>
+                    {% else %}
+                    <option value="{{ ken.ken_code }}">{{ ken.ken_name }}: {{ ken.ken_code }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary btn-sm" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_city" name="form_select_city">
+                    <option value="0">市区町村の絞り込み条件を選択してください。</option>
+                    {% for city in city_list %}
+                    {% if city.city_code == city_code %}
+                    <option value="{{ city.city_code }}" selected>{{ city.city_name }}: {{ city.city_code }}</option>
+                    {% else %}
+                    <option value="{{ city.city_code }}">{{ city.city_name }}: {{ city.city_code }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary btn-sm" type="button" id="button_city" name="button_city">市区町村選択</button>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_status" name="form_select_status">
+                    <option value="0">状態の絞り込み条件を選択してください。</option>
+                    {% if status_code == '1' %}
+                    <option value="1" selected>実行中</option>
+                    <option value="2">キャンセル</option>
+                    <option value="3">成功</option>
+                    <option value="4">失敗</option>
+                    {% elif status_code == '2' %}
+                    <option value="1">実行中</option>
+                    <option value="2" selected>キャンセル</option>
+                    <option value="3">成功</option>
+                    <option value="4">失敗</option>
+                    {% elif status_code == '3' %}
+                    <option value="1">実行中</option>
+                    <option value="2">キャンセル</option>
+                    <option value="3" selected>成功</option>
+                    <option value="4">失敗</option>
+                    {% elif status_code == '4' %}
+                    <option value="1">実行中</option>
+                    <option value="2">キャンセル</option>
+                    <option value="3">成功</option>
+                    <option value="4" selected>失敗</option>
+                    {% else %}
+                    <option value="1">実行中</option>
+                    <option value="2">キャンセル</option>
+                    <option value="3">成功</option>
+                    <option value="4">失敗</option>
+                    {% endif %}
+                </select>
+                <button class="btn btn-secondary btn-sm" type="button" id="button_status" name="button_status">状態選択</button>
+            </div>
+        </div>
+    </div>
+    <!-- END 検索とフィルタ -->
+
+    <!-- BEGIN データ一貫性と整合性検証結果の時系列グラフ -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-12">
+            <!--<div id="columnchart_values" style="width: 900px; height: 300px;"></div>-->
+            <div id="columnchart_values4"></div>
+        </div>
+    </div>
+    <!-- END データ一貫性と整合性検証結果の時系列グラフ -->
+
+    <!-- BEGIN データ一貫性と整合性検証結果の一覧表示 -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-12">
+            <div class="table-responsive overflow-auto" style="">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">水害</th>
+                            <th class="text-center">アクション</th>
+                            <th class="text-center">状態</th>
+                            <th class="text-center">開始日時</th>
+                            <th class="text-center">経過時間</th>
+                            <th class="text-center">詳細</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for repository in repository_list %}
+                        <tr>
+                            <td>{{ repository.suigai_name }}: {{ repository.suigai_id }}</td>
+                            <td>{{ repository.action_name }}: {{ repository.action_code }}</td>
+                            {% if repository.status_code == '1' %}
+                            <td><button class="btn btn-running btn-sm col-4" type="button">実行中</button></td>
+                            {% elif repository.status_code == '2' %}
+                            <td><button class="btn btn-cancel btn-sm col-4" type="button">キャンセル</button></td>
+                            {% elif repository.status_code == '3' %}
+                            <td><button class="btn btn-success btn-sm col-4" type="button">成功</button></td>
+                            {% elif repository.status_code == '4' %}
+                            <td><button class="btn btn-fail btn-sm col-4" type="button">失敗</button></td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>{{ repository.start_date }}</td>
+                            <td>{{ repository.duration }}</td>
+                            <td><a href="/P0900CI/repository/{{ repository.repository_id }}">詳細</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- END データ一貫性と整合性検証結果の一覧表示 -->
+    
+    <script type="text/javascript">
+    var button_ken = document.getElementById("button_ken"); // 都道府県選択ボタン
+    var button_city = document.getElementById("button_city"); // 市区町村選択ボタン
+    var button_status = document.getElementById("button_status"); // 状態選択ボタン
+    
+    // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
+    button_ken.addEventListener("click", function(event) {
+        window.location.href = "/P0900CI/" + "ken/" + form_select_ken.value + "/city/0" + "/status/" + form_select_status.value + "/"
+    });
+
+    // 市区町村選択ボタンクリック時のイベントハンドラを設定する。
+    button_city.addEventListener("click", function(event) {
+        window.location.href = "/P0900CI/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/status/" + form_select_status.value + "/"
+    });
+    
+    // 状態選択ボタンクリック時のイベントハンドラを設定する。
+    button_status.addEventListener("click", function(event) {
+        window.location.href = "/P0900CI/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/status/" + form_select_status.value + "/"
+    });
+    
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+    
+        // ####################################################################
+        // chart1
+        // ####################################################################
+        // var data1 = google.visualization.arrayToDataTable([
+        //     ['Effort', 'Amount given'], 
+        //     ['My all', 100], 
+        // ]);
+        // var options1 = {
+        //     pieHole: 0.8, 
+        //     pieSliceTextStyle: {color: 'black'}, 
+        //     legend: 'none', 
+        //     colors: ['#54AB51', '#F76F51'], 
+        //     backgroundColor: '#f7f7f7' 
+        // };
+        // var chart1 = new google.visualization.PieChart(document.getElementById("columnchart_values1"));
+        // chart1.draw(data1, options1); 
+        // ####################################################################
+        // chart2
+        // ####################################################################
+        // var data2 = google.visualization.arrayToDataTable([
+        //     ['Genre', 'Fantasy & Sci Fi', 'Romance', 'Mystery/Crime', 'General', 'Western', 'Literature', {role: 'annotation'}],
+        //     ['2010', 10, 24, 20, 32, 18, 5, ''],
+        //     ['2020', 16, 22, 23, 30, 16, 9, ''],
+        //     ['2030', 28, 19, 29, 30, 12, 13, '']
+        // ]);
+        // var view2 = new google.visualization.DataView(data2);
+        // var options2 = {
+        //     legend: {position: 'top', maxLines: 3}, 
+        //     bar: {groupWidth: '75%'}, 
+        //     isStacked: true, 
+        //     backgroundColor: '#f7f7f7' 
+        // };
+        // var chart2 = new google.visualization.ColumnChart(document.getElementById("columnchart_values2"));
+        // chart2.draw(view2, options2); 
+        // ####################################################################
+        // chart3
+        // ####################################################################
+        // var data3 = google.visualization.arrayToDataTable([
+        //     ['Genre', 'Fantasy & Sci Fi', 'Romance', 'Mystery/Crime', 'General', 'Western', 'Literature', {role: 'annotation'}],
+        //     ['2010', 10, 24, 20, 32, 18, 5, ''],
+        //     ['2020', 16, 22, 23, 30, 16, 9, ''],
+        //     ['2030', 28, 19, 29, 30, 12, 13, '']
+        // ]);
+        // var view3 = new google.visualization.DataView(data3);
+        // var options3 = {
+        //     legend: {position: 'top', maxLines: 3}, 
+        //     bar: {groupWidth: '75%'}, 
+        //     isStacked: true, 
+        //     backgroundColor: '#f7f7f7' 
+        // };
+        // var chart3 = new google.visualization.ColumnChart(document.getElementById("columnchart_values3"));
+        // chart3.draw(view3, options3); 
+        
+        // ####################################################################
+        // chart4
+        // ####################################################################
+        var data4 = google.visualization.arrayToDataTable([
+            ['', '成功', '失敗', {role: 'style'}],
+            ['04/01', 10, 24, ''], 
+            ['04/02', 16, 22, ''], 
+            ['04/03', 28, 19, ''], 
+            ['04/04', 28, 19, ''], 
+            ['04/05', 28, 19, ''], 
+            ['04/06', 28, 19, ''], 
+            ['04/07', 28, 19, ''], 
+            ['04/08', 28, 19, ''], 
+            ['04/09', 28, 19, ''], 
+            ['04/10', 28, 19, ''], 
+            ['04/11', 28, 19, ''], 
+            ['04/12', 28, 19, ''], 
+            ['04/13', 28, 19, ''], 
+            ['04/14', 28, 19, ''], 
+            ['04/15', 28, 19, ''], 
+            ['04/16', 28, 19, ''], 
+            ['04/17', 28, 19, ''], 
+            ['04/18', 28, 19, ''], 
+            ['04/19', 28, 19, ''], 
+            ['04/20', 28, 19, ''], 
+            ['04/21', 28, 19, ''], 
+            ['04/22', 28, 19, ''], 
+            ['04/23', 28, 19, ''], 
+            ['04/24', 28, 19, ''], 
+            ['04/25', 28, 19, ''], 
+            ['04/26', 28, 19, ''], 
+            ['04/27', 28, 19, ''], 
+            ['04/28', 28, 19, ''], 
+            ['04/29', 28, 19, ''], 
+            ['04/30', 28, 19, ''], 
+            ['05/01', 28, 19, ''], 
+            ['05/02', 28, 19, ''], 
+            ['05/03', 28, 19, ''], 
+            ['05/04', 28, 19, ''], 
+            ['05/05', 28, 19, ''], 
+            ['05/06', 28, 19, ''], 
+            ['05/07', 28, 19, ''], 
+            ['05/08', 28, 19, ''], 
+            ['05/09', 28, 19, ''], 
+            ['05/10', 28, 19, ''], 
+            ['05/11', 28, 19, ''], 
+            ['05/12', 28, 19, ''], 
+            ['05/13', 28, 19, ''], 
+            ['05/14', 28, 19, ''], 
+            ['05/15', 28, 19, ''], 
+            ['05/16', 28, 19, ''], 
+            ['05/17', 28, 19, ''], 
+            ['05/18', 28, 19, ''], 
+            ['05/19', 28, 19, ''], 
+            ['05/20', 28, 19, ''], 
+            ['05/21', 28, 19, ''], 
+            ['05/22', 28, 19, ''], 
+            ['05/23', 28, 19, ''], 
+            ['05/24', 28, 19, ''], 
+            ['05/25', 28, 19, ''], 
+            ['05/26', 28, 19, ''], 
+            ['05/27', 28, 19, ''], 
+            ['05/28', 28, 19, ''], 
+            ['05/29', 28, 19, ''], 
+            ['05/30', 28, 19, ''], 
+            ['05/31', 28, 19, ''], 
+            ['06/01', 28, 19, '']
+        ]);
+        var view4 = new google.visualization.DataView(data4);
+        var options4 = {
+            legend: 'none', 
+            bar: {groupWidth: '75%'}, 
+            isStacked: true, 
+            colors: ['#54AB51', '#F44B25'], 
+            backgroundColor: '#f7f7f7' 
+        };
+        var chart4 = new google.visualization.ColumnChart(document.getElementById("columnchart_values4"));
+        chart4.draw(view4, options4); 
+        
+    }
+    </script>
     {% endblock %}
 </body>
 <!-- END Body -->
