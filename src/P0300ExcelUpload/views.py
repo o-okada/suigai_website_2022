@@ -70,7 +70,7 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビ
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
 
-from P0000Common.models import IPPAN_REPOSITORY        ### 9000: 一般資産集計データ
+from P0000Common.models import REPOSITORY              ### 9000: レポジトリ
 
 from P0000Common.common import print_log
 
@@ -2680,8 +2680,8 @@ def index_view(request):
                             '10',                                              ### commit_id 
                             '3',                                               ### action_code 
                             '入力データ検証',                                  ### action_name 
-                            '4',                                               ### status_code 
-                            '失敗',                                            ### status_name 
+                            '2',                                               ### status_code 
+                            'キャンセル',                                      ### status_name 
                             10,                                                ### success_count 
                             0,                                                 ### failure_count 
                             input_file_path,                                   ### input_file_path 

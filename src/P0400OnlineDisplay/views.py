@@ -66,8 +66,6 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビ
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
 
-from P0000Common.models import IPPAN_REPOSITORY        ### 9000: 一般資産集計データ
-
 from P0000Common.common import print_log
 
 ###############################################################################

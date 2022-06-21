@@ -67,6 +67,7 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビ
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
 
 from P0000Common.models import REPOSITORY              ### 9000: レポジトリ
+from P0000Common.models import TRIGGER                 ### 9010: トリガ
 
 from P0000Common.common import print_log
 
@@ -91,7 +92,8 @@ def index_view(request):
         #######################################################################
         print_log('[INFO] P0900CI.index_view()関数 STEP 2/3.', 'INFO')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+        ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+        trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -101,7 +103,8 @@ def index_view(request):
         template = loader.get_template('P0900CI/index.html')
         context = {
             'ken_list': ken_list, 
-            'repository_list': repository_list, 
+            ### 'repository_list': repository_list, 
+            'trigger_list': trigger_list, 
         }
         print_log('[INFO] P0900CI.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
@@ -137,31 +140,39 @@ def ken_city_status_view(request, ken_code, city_code, status_code):
         print_log('[INFO] P0900CI.ken_city_status_view()関数 STEP 2/3.', 'INFO')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_code == "0":
-            city_list = CITY.objects.raw("""SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
+            city_list = []
         else:
             city_list = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken_code,])
         if ken_code == "0":
             if city_code == "0":
                 if status_code == "0":
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
             else:
                 if status_code == "0":
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
         else:
             if city_code == "0":
                 if status_code == "0":
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
             else:
                 if status_code == "0":
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
                     
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -175,7 +186,8 @@ def ken_city_status_view(request, ken_code, city_code, status_code):
             'status_code': status_code, 
             'ken_list': ken_list, 
             'city_list': city_list, 
-            'repository_list': repository_list, 
+            ### 'repository_list': repository_list, 
+            'trigger_list': trigger_list, 
         }
         print_log('[INFO] P0900CI.ken_city_status_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

@@ -3,6 +3,9 @@ from . import views
 
 app_name = 'P0800Reverse'
 urlpatterns = [
-    path('', views.index_view, name='index_view'),
-    path('category/<slug:category_code>/', views.category_view, name='category_view'),
+    path('input/', views.input_view, name='input_view'), 
+    path('input/category/<slug:category_code>/', views.input_category_view, name='input_category_view'), 
+    
+    path('summary/', views.summary_view, name='summary_view'), 
+    path('summary/category/<slug:category_code>/', views.summary_category_view, name='summary_category_view'), 
 ]

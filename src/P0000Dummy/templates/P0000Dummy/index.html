@@ -33,10 +33,11 @@
     <br><br>
     <div>データ整合性検証機能</div>
     <!--<div><a href="">P0800 入力EXCELファイル vs 入力DBのデータ整合性検証画面</a></div>-->
-    <div><a href="{% url 'P0800Reverse:index_view' %}">P0800 入力DB vs 集計DBのデータ整合性検証画面</a></div>
+    <div><a href="{% url 'P0800Reverse:input_view' %}">P0800 入力DB内のデータ整合性検証画面</a></div>
+    <div><a href="{% url 'P0800Reverse:summary_view' %}">P0800 入力DB vs 集計DBのデータ整合性検証画面</a></div>
     <br><br>
-    <div>CI機能</div>
-    <div><a href="{% url 'P0900CI:index_view' %}">P0900 CI画面</a></div>
+    <div>自動検証機能・ワークフロー機能</div>
+    <div><a href="{% url 'P0900CI:index_view' %}">P0900 データ一貫性、整合性の自動検証画面</a></div>
     <br><br>
     <div>管理機能・管理アプリ</div>
     <!--<div><a href="{# url 'P9100Transact:index_view' #}">P9100 承認・集計・配布画面</a></div>-->
