@@ -16,17 +16,19 @@
 <!-- BEGIN Body -->
 <body>
     {% bootstrap_messages %}
-    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
-    
     {% block content %}
+
+    <!-- BEGIN トップパネル -->
+    <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+    <!-- END トップパネル -->
     
-    <!-- BEGIN container text-center mb-3 -->
+    <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
         <h3>ログイン画面</h3>
     </div>
-    <!-- END container text-center mb-3 -->
+    <!-- END 画面名 -->
     
-    <!-- BEGIN form_login -->
+    <!-- BEGIN ユーザID、パスワード入力フォーム -->
     <form action="/P0100Login/" method="post" onSubmit="return submit_login();" id="form_login" name="form_login">
         {% csrf_token %}
         <div class="container mb-3">
@@ -49,15 +51,15 @@
             <button class="btn btn-secondary" type="submit" onClick="">ログイン</button>
         </div>
     </form>
-    <!-- END form_login -->
+    <!-- END ユーザID、パスワード入力フォーム -->
 
-    <!-- BEGIN message -->
+    <!-- BEGIN ログイン結果メッセージ -->
     {% if message %}
     <div class="container text-center mb-3">
     {{ message }}
     </div>
     {% endif %}
-    <!-- END message -->
+    <!-- END ログイン結果メッセージ -->
     
     <script type="text/javascript">
     // 局所変数を定義する。
@@ -109,10 +111,7 @@
         return true;
     }
     </script>
-    
     {% endblock %}
 </body>
 <!-- END Body -->
-
 </html>
-

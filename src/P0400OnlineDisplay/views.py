@@ -69,7 +69,7 @@ from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名：index_view
+### 関数名： index_view
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):

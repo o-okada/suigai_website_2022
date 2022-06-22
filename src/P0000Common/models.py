@@ -60,6 +60,21 @@ class CITY(models.Model):
     def __str__(self):
         return '<CITY: ' + self.city_code + ', ' + self.city_name + '>'
 
+class CITY_VIEW(models.Model):
+    city_code = models.CharField(max_length=10, primary_key=True)              ### 市区町村コード
+    city_name = models.CharField(max_length=128)                               ### 市区町村名
+    ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
+    ken_name = models.CharField(max_length=128)                                ### 都道府県名
+    city_population = models.IntegerField()                                    ### 市区町村人口
+    city_area = models.IntegerField()                                          ### 市区町村面積
+
+    class Meta:
+        db_table = 'city_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+    
+    def __str__(self):
+        return '<CITY_VIEW: ' + self.city_code + ', ' + self.city_name + '>'
+
 ###############################################################################
 ### 1030: 水害発生地点工種（河川海岸区分）（マスタDB）
 ### 入力用コード、集計用コード
@@ -88,6 +103,19 @@ class SUIKEI(models.Model):
 
     def __str__(self):
         return '<SUIKEI: ' + self.suikei_code + ', ' + self.suikei_name + '>'
+
+class SUIKEI_VIEW(models.Model):
+    suikei_code = models.CharField(max_length=10, primary_key=True)            ### 水系コード
+    suikei_name = models.CharField(max_length=128)                             ### 水系名
+    suikei_type_code = models.CharField(max_length=10)                         ### 水系種別コード
+    suikei_type_name = models.CharField(max_length=128)                        ### 水系種別名
+    
+    class Meta:
+        db_table = 'suikei_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+    
+    def __str__(self):
+        return '<SUIKEI_VIEW: ' + self.suikei_code + ', ' + self.suikei_name + '>'
 
 ###############################################################################
 ### 1050: 水系種別（水系・沿岸種別）（マスタDB）
@@ -118,6 +146,21 @@ class KASEN(models.Model):
 
     def __str__(self):
         return '<KASEN: ' + self.kasen_code + ', ' + self.kasen_name + '>'
+
+class KASEN_VIEW(models.Model):
+    kasen_code = models.CharField(max_length=10, primary_key=True)             ### 河川コード
+    kasen_name = models.CharField(max_length=128)                              ### 河川名
+    kasen_type_code = models.CharField(max_length=10)                          ### 河川種別コード
+    kasen_type_name = models.CharField(max_length=128)                         ### 河川種別名
+    suikei_code = models.CharField(max_length=10)                              ### 水系コード
+    suikei_name = models.CharField(max_length=128)                             ### 水系名
+
+    class Meta:
+        db_table = 'kasen_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+
+    def __str__(self):
+        return '<KASEN_VIEW: ' + self.kasen_code + ', ' + self.kasen_name + '>'
 
 ###############################################################################
 ### 1070: 河川種別（河川・海岸種別）（マスタDB）
@@ -232,6 +275,19 @@ class HOUSE_ASSET(models.Model):
     def __str__(self):
         return '<HOUSE_ASSET: ' + self.house_asset_code + '>'
 
+class HOUSE_ASSET_VIEW(models.Model):
+    house_asset_code = models.CharField(max_length=10, primary_key=True)       ### 家屋評価額コード
+    ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
+    ken_name = models.CharField(max_length=128)                                ### 都道府県名
+    house_asset = models.FloatField(null=True)                                 ### 家屋評価額
+
+    class Meta:
+        db_table = 'house_asset_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+
+    def __str__(self):
+        return '<HOUSE_ASSET_VIEW: ' + self.house_asset_code + '>'
+
 ###############################################################################
 ### 2010: 家屋被害率（マスタDB）
 ### 集計用資産額、集計用被害率
@@ -252,6 +308,26 @@ class HOUSE_RATE(models.Model):
 
     def __str__(self):
         return '<HOUSE_RATE: ' + self.house_rate_code + '>'
+
+class HOUSE_RATE_VIEW(models.Model):
+    house_rate_code = models.CharField(max_length=10, primary_key=True)        ### 家屋被害率コード
+    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
+    flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名
+    gradient_code = models.CharField(max_length=10)                            ### 地盤勾配区分コード
+    gradient_name = models.CharField(max_length=128)                           ### 地盤勾配区分名
+    house_rate_lv00 = models.FloatField()                                      ### 家屋被害率_床下
+    house_rate_lv00_50 = models.FloatField()                                   ### 家屋被害率_0から50cm未満
+    house_rate_lv50_100 = models.FloatField()                                  ### 家屋被害率_50から100cm未満
+    house_rate_lv100_200 = models.FloatField()                                 ### 家屋被害率_100から200cm未満
+    house_rate_lv200_300 = models.FloatField()                                 ### 家屋被害率_200から300cm未満
+    house_rate_lv300 = models.FloatField()                                     ### 家屋被害率_300cm以上
+
+    class Meta:
+        db_table = 'house_rate_view'
+        managed = False                                                        ### マイグレーションの対象外とする。
+
+    def __str__(self):
+        return '<HOUSE_RATE_VIEW: ' + self.house_rate_code + '>'
     
 ###############################################################################
 ### 2020: 家庭応急対策費_代替活動費（マスタDB）
@@ -949,6 +1025,8 @@ class IPPAN_VIEW(models.Model):
     ken_name = models.CharField(max_length=128)                                ### 都道府県名
     city_code = models.CharField(max_length=10)                                ### 市区町村コード
     city_name = models.CharField(max_length=128)                               ### 市区町村名
+    begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ### FOR GROUP BY
+    end_date = models.DateField(null=True)                                     ### 水害終了年月日 ### FOR GROUP BY
     cause_1_code = models.CharField(max_length=10)                             ### 水害原因コード1
     cause_1_name = models.CharField(max_length=128)                            ### 水害原因名1
     cause_2_code = models.CharField(max_length=10)                             ### 水害原因コード2
@@ -961,8 +1039,12 @@ class IPPAN_VIEW(models.Model):
     ### 帳票のヘッダ部分 行10
     suikei_code = models.CharField(max_length=10)                              ### 水系コード
     suikei_name = models.CharField(max_length=128)                             ### 水系名
+    suikei_type_code = models.CharField(max_length=10)                         ### 水系種別コード
+    suikei_type_name = models.CharField(max_length=128)                        ### 水系種別名
     kasen_code = models.CharField(max_length=10)                               ### 河川コード
     kasen_name = models.CharField(max_length=128)                              ### 河川名
+    kasen_type_code = models.CharField(max_length=10)                          ### 河川種別コード
+    kasen_type_name = models.CharField(max_length=128)                         ### 河川種別名
     gradient_code = models.CharField(max_length=10)                            ### 地盤勾配区分コード
     gradient_name = models.CharField(max_length=128)                           ### 地盤勾配区分名
 
@@ -1048,7 +1130,7 @@ class IPPAN_VIEW(models.Model):
     industry_name = models.CharField(max_length=128)                           ### 産業分類名
     usage_code = models.CharField(max_length=10, null=True)                    ### 地下空間の利用形態コード
     usage_name = models.CharField(max_length=128)                              ### 地下空間の利用形態名
-    ### comment = models.CharField(max_length=512, null=True)                  ### 備考
+    comment = models.CharField(max_length=512, null=True)                  ### 備考
 
     class Meta:
         db_table = 'ippan_view'

@@ -18,7 +18,7 @@
     {% bootstrap_messages %}
     {% block content %}
 
-    <!-- BEGIN container-fluid mb-3 -->
+    <!-- BEGIN トップパネル -->
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col d-flex justify-content-start align-items-start">
@@ -31,18 +31,18 @@
             </div>
         </div>
     </div>
-    <!-- END container-fluid mb-3 -->
+    <!-- END トップパネル -->
     
-    <!-- BEGIN container text-center mb-3 -->
+    <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
         <h3>定数、調査票、集計結果参照</h3>
     </div>
-    <!-- END Container text-center mb-3 -->
+    <!-- END 画面名 -->
     
-    <!-- BEGIN データ種別選択 -->
+    <!-- BEGIN 検索とフィルタ データ種別選択 -->
     <div class="container mb-3">
         <div class="row">
-            <!-- 動的データ種別選択 -->
+            <!-- 検索とフィルタ 動的データ種別選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_category1" name="form_select_category1">
@@ -74,7 +74,7 @@
                 </div>
             </div>
             
-            <!-- 動的データ種別選択 -->
+            <!-- 検索とフィルタ 動的データ種別選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_category2" name="form_select_category2">
@@ -311,12 +311,12 @@
             </div>
         </div>
     </div>
-    <!-- END データ種別選択 -->
+    <!-- END 検索とフィルタ データ種別選択 -->
 
-    <!-- BEGIN データ種別選択、絞込選択 -->
+    <!-- BEGIN 検索とフィルタ データ種別選択、絞込選択 -->
     <div class="mb-3 ms-2 me-2">
         <div class="row">
-            <!-- 都道府県選択 -->
+            <!-- 検索とフィルタ 都道府県選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_ken" name="form_select_ken">
@@ -333,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 市区町村選択 -->
+            <!-- 検索とフィルタ 市区町村選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_city" name="form_select_city">
@@ -351,7 +351,7 @@
             </div>
         </div>
     </div>
-    <!-- END データ種別選択、絞込選択 -->
+    <!-- END 検索とフィルタ データ種別選択、絞込選択 -->
     
     <!-- BEGIN 一覧表示 -->
     <!-- 種別選択: 0 -->

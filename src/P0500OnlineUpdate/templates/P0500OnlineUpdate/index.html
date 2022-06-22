@@ -18,7 +18,7 @@
     {% bootstrap_messages %}
     {% block content %}
     
-    <!-- BEGIN container-fluid mb-3 -->
+    <!-- BEGIN トップパネル -->
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col d-flex justify-content-start align-items-start">
@@ -31,9 +31,9 @@
             </div>
         </div>
     </div>
-    <!-- END container-fluid mb-3 -->
+    <!-- END トップパネル -->
     
-    <!-- BEGIN container-fluid mb-3 -->
+    <!-- BEGIN 画面名 -->
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col d-flex justify-content-start align-items-start">
@@ -46,12 +46,12 @@
             </div>
         </div>
     </div>
-    <!-- END container-fluid mb-3 -->
+    <!-- END 画面名 -->
     
-    <!-- BEGIN mb-3 ms-2 me-2 -->
+    <!-- BEGIN 検索とフィルタ -->
     <div class="mb-3 ms-2 me-2">
         <div class="row">
-            <!-- 種別選択 -->
+            <!-- 検索とフィルタ 種別選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_category" name="form_select_category">
@@ -113,7 +113,7 @@
                 </div>
             </div>
         
-            <!-- 都道府県選択 -->
+            <!-- 検索とフィルタ 都道府県選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_ken" name="form_select_ken">
@@ -130,7 +130,7 @@
                 </div>
             </div>
             
-            <!-- 市区町村選択 -->
+            <!-- 検索とフィルタ 市区町村選択 -->
             <div class="col">
                 <div class="input-group">
                     <select class="form-select" id="form_select_city" name="form_select_city">
@@ -148,12 +148,12 @@
             </div>
         </div>    
     </div>
-    <!-- END mb-3 ms-2 me-2 -->
+    <!-- END 検索とフィルタ -->
 
 
 
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "200" %}{# 水害 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap" id="table_list" name="table_list">
@@ -218,8 +218,9 @@
         </table>
     </div>
     {% endif %}
+    <!-- END 表示部 -->
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "201" %}{# 異常気象 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap" id="table_list" name="table_list">
@@ -254,8 +255,9 @@
         </table>
     </div>
     {% endif %}
+    <!-- END 表示部 -->
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "202" %}{# 区域 #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap" id="table_list" name="table_list">
@@ -286,8 +288,9 @@
         </table>
     </div>
     {% endif %}
+    <!-- END 表示部 -->
     
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "203" %}{# 一般資産調査票（調査員用） #}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap" id="table_list" name="table_list">
@@ -406,21 +409,27 @@
         </table>
     </div>
     {% endif %}
+    <!-- END 表示部 -->
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "204" %}{# 一般資産調査票（市区町村用） #}
     {% endif %}
+    <!-- END 表示部 -->
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "205" %}{# 一般資産調査票（都道府県用） #}
     {% endif %}
+    <!-- END 表示部 -->
 
-    <!-- 表示部 -->
+    <!-- BEGIN 表示部 -->
     {% if category_code == "206" %}{# 公共土木調査票 #}
     {% endif %}
+    <!-- END 表示部 -->
 
+    <!-- BEGIN 表示部 -->
     {% if category_code == "207" %}{# 公益事業調査票 #}
     {% endif %}
+    <!-- END 表示部 -->
 
 
 
@@ -1348,10 +1357,7 @@
         new_cell.appendChild(new_text);
     });
     </script>
-    
     {% endblock %}
 </body>
 <!-- END Body -->
-
 </html>
-
