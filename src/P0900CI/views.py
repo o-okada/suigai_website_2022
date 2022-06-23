@@ -66,8 +66,13 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビ
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
 
-from P0000Common.models import REPOSITORY              ### 9000: レポジトリ
-from P0000Common.models import TRIGGER                 ### 9010: トリガ
+from P0000Common.models import ACTION                  ### 10000: アクション
+from P0000Common.models import STATUS                  ### 10010: 状態
+from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
+from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
+from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
+from P0000Common.models import REPOSITORY              ### 10050: EXCELファイルレポジトリ
+### from P0000Common.models import EXECUTE             ### 10060: 実行管理
 
 from P0000Common.common import print_log
 
@@ -91,9 +96,25 @@ def index_view(request):
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[INFO] P0900CI.index_view()関数 STEP 2/3.', 'INFO')
-        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
-        trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
+        ken_list = KEN.objects.raw("""
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+        trigger_list = TRIGGER.objects.raw("""
+            SELECT 
+                TR1.TRIGGER_ID AS TRIGGER_ID, 
+                TR1.SUIGAI_ID AS SUIGAI_ID, 
+                TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                TR1.ACTION_CODE AS ACTION_CODE, 
+                AC1.ACTION_NAME AS ACTION_NAME, 
+                TR1.STATUS_CODE AS STATUS_CODE, 
+                ST1.STATUS_NAME AS STATUS_NAME, 
+                TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                TR1.CONSUMED_AT AS CONSUMED_AT, 
+                TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                TR1.FAILURE_COUNT AS FAILURE_COUNT 
+            FROM TRIGGER TR1 
+            LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+            LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+            ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [])
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -103,7 +124,6 @@ def index_view(request):
         template = loader.get_template('P0900CI/index.html')
         context = {
             'ken_list': ken_list, 
-            ### 'repository_list': repository_list, 
             'trigger_list': trigger_list, 
         }
         print_log('[INFO] P0900CI.index_view()関数が正常終了しました。', 'INFO')
@@ -138,41 +158,168 @@ def ken_city_status_view(request, ken_code, city_code, status_code):
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[INFO] P0900CI.ken_city_status_view()関数 STEP 2/3.', 'INFO')
-        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+        ken_list = KEN.objects.raw("""
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_code == "0":
             city_list = []
         else:
-            city_list = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken_code,])
+            city_list = CITY.objects.raw("""
+                SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken_code,])
+            
         if ken_code == "0":
             if city_code == "0":
                 if status_code == "0":
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        WHERE TR1.STATUS_CODE=%s 
+                        ORDER BY CAST(TR.TRIGGER_ID AS INTEGER)""", [status_code,])
             else:
                 if status_code == "0":
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        WHERE TR1.STATUS_CODE=%s 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [status_code,])
         else:
             if city_code == "0":
                 if status_code == "0":
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        WHERE TR1.STATUS_CODE=%s 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [status_code,])
             else:
                 if status_code == "0":
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [])
                 else:
-                    ### repository_list = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE STATUS_CODE=%s ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [status_code,])
-                    trigger_list = TRIGGER.objects.raw("""SELECT * FROM TRIGGER WHERE STATUS_CODE=%s ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [status_code,])
+                    trigger_list = TRIGGER.objects.raw("""
+                        SELECT 
+                            TR1.TRIGGER_ID AS TRIGGER_ID, 
+                            TR1.SUIGAI_ID AS SUIGAI_ID, 
+                            TR1.REPOSITORY_ID AS REPOSITORY_ID, 
+                            TR1.ACTION_CODE AS ACTION_CODE, 
+                            AC1.ACTION_NAME AS ACTION_NAME, 
+                            TR1.STATUS_CODE AS STATUS_CODE, 
+                            ST1.STATUS_NAME AS STATUS_NAME, 
+                            TR1.PUBLISHED_AT AS PUBLISHED_AT, 
+                            TR1.CONSUMED_AT AS CONSUMED_AT, 
+                            TR1.SUCCESS_COUNT AS SUCCESS_COUNT, 
+                            TR1.FAILURE_COUNT AS FAILURE_COUNT 
+                        FROM TRIGGER TR1 
+                        LEFT JOIN ACTION AC1 ON TR1.ACTION_CODE=AC1.ACTION_CODE 
+                        LEFT JOIN STATUS ST1 ON TR1.STATUS_CODE=ST1.STATUS_CODE 
+                        WHERE TR1.STATUS_CODE=%s 
+                        ORDER BY CAST(TR1.TRIGGER_ID AS INTEGER)""", [status_code,])
                     
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -186,7 +333,6 @@ def ken_city_status_view(request, ken_code, city_code, status_code):
             'status_code': status_code, 
             'ken_list': ken_list, 
             'city_list': city_list, 
-            ### 'repository_list': repository_list, 
             'trigger_list': trigger_list, 
         }
         print_log('[INFO] P0900CI.ken_city_status_view()関数が正常終了しました。', 'INFO')
@@ -219,7 +365,21 @@ def repository_view(request, repository_id):
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[INFO] P0900CI.repository_view()関数 STEP 2/3.', 'INFO')
-        repository = REPOSITORY.objects.raw("""SELECT * FROM REPOSITORY WHERE REPOSITORY_ID=%s""", [repository_id,])
+        repository = REPOSITORY.objects.raw("""
+        SELECT 
+            RE1.REPOSITORY_ID AS REPOSITORY_ID, 
+            RE1.SUIGAI_ID AS SUIGAI_ID, 
+            RE1.ACTION_CODE AS ACTION_CODE, 
+            AC1.ACTION_NAME AS ACTION_NAME, 
+            RE1.STATUS_CODE AS STATUS_CODE, 
+            ST1.STATUS_NAME AS STATUS_NAME, 
+            RE1.CREATED_AT AS CREATED_AT, 
+            RE1.UPDATED_AT AS UPDATED_AT, 
+            RE1.INPUT_FILE_PATH AS INPUT_FILE_PATH 
+        FROM REPOSITORY RE1 
+        LEFT JOIN ACTION AC1 ON RE1.ACTION_CODE=AC1.ACTION_CODE 
+        LEFT JOIN STATUS ST1 ON RE1.STATUS_CODE=ST1.STATUS_CODE 
+        WHERE REPOSITORY_ID=%s""", [repository_id,])
 
         #######################################################################
         ### レスポンスセット処理(0020)

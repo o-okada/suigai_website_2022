@@ -131,7 +131,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="text-center">トリガ</th>
+                            <th class="text-center">トリガー</th>
                             <th class="text-center">水害</th>
                             <th class="text-center">アクション</th>
                             <th class="text-center">状態</th>
@@ -147,15 +147,15 @@
                         <tr>
                             <td>{{ trigger.trigger_id }}</td>
                             <td>{{ trigger.suigai_id }}</td>
-                            <td>{{ trigger.action_code }}</td>
+                            <td>{{ trigger.action_name }}:{{ trigger.action_code }}</td>
                             {% if trigger.status_code == '1' %}
-                            <td><button class="btn btn-running btn-sm col-6" type="button">実行中</button></td>
+                            <td><button class="btn btn-running btn-sm col-6" type="button">{{ trigger.status_name }}</button></td>
                             {% elif trigger.status_code == '2' %}
-                            <td><button class="btn btn-cancel btn-sm col-6" type="button">キャンセル</button></td>
+                            <td><button class="btn btn-cancel btn-sm col-6" type="button">{{ trigger.status_name }}</button></td>
                             {% elif trigger.status_code == '3' %}
-                            <td><button class="btn btn-success btn-sm col-6" type="button">成功</button></td>
+                            <td><button class="btn btn-success btn-sm col-6" type="button">{{ trigger.status_name }}</button></td>
                             {% elif trigger.status_code == '4' %}
-                            <td><button class="btn btn-fail btn-sm col-6" type="button">失敗</button></td>
+                            <td><button class="btn btn-fail btn-sm col-6" type="button">{{ trigger.status_name }}</button></td>
                             {% else %}
                             <td></td>
                             {% endif %}
@@ -163,7 +163,7 @@
                             <td>{{ trigger.consumed_at }}</td>
                             <td>{{ trigger.success_count }}</td>
                             <td>{{ trigger.failure_count }}</td>
-                            <td><a href="/P0900CI/repository/{{ repository.repository_id }}">詳細</a></td>
+                            <td><a href="/P0900CI/repository/{{ trigger.repository_id }}">詳細</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

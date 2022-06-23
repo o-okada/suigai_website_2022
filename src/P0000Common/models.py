@@ -1345,7 +1345,90 @@ class IPPAN_SUMMARY(models.Model):
 ###############################################################################
 
 ###############################################################################
-### 10000: EXCELファイルレポジトリ（自動化DB）
+### 10000: アクション（マスタDB）
+###############################################################################
+class ACTION(models.Model):
+    action_code = models.CharField(max_length=10, primary_key=True)            ### アクションコード
+    action_name = models.CharField(max_length=128, null=True)                  ### アクション名
+    
+    class Meta:
+        db_table = 'action'
+    
+    def __str__(self):
+        return '<ACTION: ' + self.action_code + '>'
+
+###############################################################################
+### 10010: 状態（マスタDB）
+###############################################################################
+class STATUS(models.Model):
+    status_code = models.CharField(max_length=10, primary_key=True)            ### 状態コード
+    status_name = models.CharField(max_length=128, null=True)                  ### 状態名
+    
+    class Meta:
+        db_table = 'status'
+    
+    def __str__(self):
+        return '<STATUS: ' + self.status_code + '>'
+
+###############################################################################
+### 10020: トリガーメッセージ（自動化DB）
+###############################################################################
+class TRIGGER(models.Model):
+    trigger_id = models.IntegerField(primary_key=True)                         ### トリガーID
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    repository_id = models.IntegerField(null=True)                             ### レポジトリID
+    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
+    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+    published_at = models.DateTimeField(null=True)                             ### 発行日時
+    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
+    success_count = models.IntegerField(null=True)                             ### 成功数 ※削除予定
+    failure_count = models.IntegerField(null=True)                             ### 失敗数 ※削除予定
+    ### success_rate = models.FloatField(null=True)                            ### 成功率
+    
+    class Meta:
+        db_table = 'trigger'
+    
+    def __str__(self):
+        return '<TRIGGER: ' + self.trigger_id + '>'
+
+###############################################################################
+### 10030: 承認メッセージ（自動化DB）
+###############################################################################
+class APPROVAL(models.Model):
+    approval_id = models.IntegerField(primary_key=True)                        ### 承認ID
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    repository_id = models.IntegerField(null=True)                             ### レポジトリID
+    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
+    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+    published_at = models.DateTimeField(null=True)                             ### 発行日時
+    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
+    
+    class Meta:
+        db_table = 'approval'
+        
+    def __str__(self):
+        return '<APPROVAL: ' + self.approval_id + '>'
+    
+###############################################################################
+### 10040: フィードバックメッセージ（自動化DB）
+###############################################################################
+class FEEDBACK(models.Model):
+    feedback_id = models.IntegerField(primary_key=True)                        ### フィードバックID
+    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    repository_id = models.IntegerField(null=True)                             ### レポジトリID
+    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
+    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+    published_at = models.DateTimeField(null=True)                             ### 発行日時
+    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
+    
+    class Meta:
+        db_table = 'feedback'
+        
+    def __str__(self):
+        return '<FEEDBACK: ' + self.feedback_id + '>'
+
+###############################################################################
+### 10050: EXCELファイルレポジトリ（自動化DB）
 ### ※詳細リンククリックで表示される詳細画面に使用する。
 ### ※自動化画面の一覧には、EXECUTEのデータを表示する。
 ### CI/CD Automatic Test, Automatic Quality Assurance, Insight
@@ -1413,101 +1496,33 @@ class REPOSITORY(models.Model):
         return '<REPOSITORY: ' + self.repository_id + '>'
 
 ###############################################################################
-### 10000: トリガメッセージ（自動化DB）
+### 10060: 実行管理（自動化DB）
+### ※アルファ版、ベータ版、初期リリース版では使用しない。
+### ※JP1のような高機能版で使用する。
+### ※アルファ版、ベータ版、初期リリース版ではトリガーテーブルで代用する。
 ###############################################################################
-class TRIGGER(models.Model):
-    trigger_id = models.IntegerField(primary_key=True)                         ### トリガID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    repository_id = models.IntegerField(null=True)                             ### レポジトリID
-    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
-    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    published_at = models.DateTimeField(null=True)                             ### 発行日時
-    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
-    success_count = models.IntegerField(null=True)                             ### 成功数 ※削除予定
-    failure_count = models.IntegerField(null=True)                             ### 失敗数 ※削除予定
-    ### success_rate = models.FloatField(null=True)                            ### 成功率
-    
-    class Meta:
-        db_table = 'trigger'
-    
-    def __str__(self):
-        return '<TRIGGER: ' + self.trigger_id + '>'
+### class EXECUTE(models.Model):
+###     execute_id = models.IntegerField(primary_key=True)                     ### 実行ID
+###     execute_name = models.CharField(max_length=128, null=True)             ### 実行名
+###     suigai_id = models.IntegerField(null=True)                             ### 水害ID
+###     repository_id = models.IntegerField(null=True)                         ### レポジトリID
+###     action_code = models.CharField(max_length=10, null=True)               ### アクションコード
+###     status_code = models.CharField(max_length=10, null=True)               ### 状態コード
+###     success_count = models.IntegerField(null=True)                         ### 成功数
+###     failure_count = models.IntegerField(null=True)                         ### 失敗数
+###     created_at = models.DateTimeField(null=True)                           ### 生成日時
+###     scheduled_at = models.DateTimeField(null=True)                         ### 計画日時
+###     started_at = models.DateTimeField(null=True)                           ### 開始日時
+###     finished_at = models.DateTimeField(null=True)                          ### 終了日時
+###     canceled_at = models.DateTimeField(null=True)                          ### キャンセル日時
+###     stopped_at = models.DateTimeField(null=True)                           ### 停止日時
+###     restarted_at = models.DateTimeField(null=True)                         ### 再実行日時
+###     class Meta:
+###         db_table = 'execute'
+###     def __str__(self):
+###         return '<ACTION: ' + self.action_id + '>'
 
-###############################################################################
-### 10000: 承認メッセージ（自動化DB）
-###############################################################################
-class APPROVAL(models.Model):
-    approval_id = models.IntegerField(primary_key=True)                        ### 承認ID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    repository_id = models.IntegerField(null=True)                             ### レポジトリID
-    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
-    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    published_at = models.DateTimeField(null=True)                             ### 発行日時
-    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     
-    class Meta:
-        db_table = 'approval'
-        
-    def __str__(self):
-        return '<APPROVAL: ' + self.approval_id + '>'
-    
-###############################################################################
-### 10000: フィードバックメッセージ（自動化DB）
-###############################################################################
-class FEEDBACK(models.Model):
-    feedback_id = models.IntegerField(primary_key=True)                        ### フィードバックID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    repository_id = models.IntegerField(null=True)                             ### レポジトリID
-    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
-    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    published_at = models.DateTimeField(null=True)                             ### 発行日時
-    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
-    
-    class Meta:
-        db_table = 'feedback'
-        
-    def __str__(self):
-        return '<FEEDBACK: ' + self.feedback_id + '>'
-
-###############################################################################
-### 10000: 実行（自動化DB）
-###############################################################################
-class EXECUTE(models.Model):
-    execute_id = models.IntegerField(primary_key=True)                         ### 実行ID
-    execute_name = models.CharField(max_length=128, null=True)                 ### 実行名
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    repository_id = models.IntegerField(null=True)                             ### レポジトリID
-    action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
-    status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    success_count = models.IntegerField(null=True)                             ### 成功数
-    failure_count = models.IntegerField(null=True)                             ### 失敗数
-    created_at = models.DateTimeField(null=True)                               ### 生成日時
-    scheduled_at = models.DateTimeField(null=True)                             ### 計画日時
-    started_at = models.DateTimeField(null=True)                               ### 開始日時
-    finished_at = models.DateTimeField(null=True)                              ### 終了日時
-    canceled_at = models.DateTimeField(null=True)                              ### キャンセル日時
-    stopped_at = models.DateTimeField(null=True)                               ### 停止日時
-    restarted_at = models.DateTimeField(null=True)                             ### 再実行日時
-
-    class Meta:
-        db_table = 'execute'
-    
-    def __str__(self):
-        return '<ACTION: ' + self.action_id + '>'
-
-###############################################################################
-### 10000: アクション（マスタDB）
-###############################################################################
-class ACTION(models.Model):
-    action_code = models.CharField(max_length=10, primary_key=True)            ### アクションコード
-    action_name = models.CharField(max_length=128, null=True)                  ### アクション名
-    
-    class Meta:
-        db_table = 'action'
-    
-    def __str__(self):
-        return '<ACTION: ' + self.action_code + '>'
-
 ###############################################################################
 ### 9010: 一般資産調査票（管理DB）
 ###############################################################################
