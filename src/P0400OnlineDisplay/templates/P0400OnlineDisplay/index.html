@@ -59,15 +59,21 @@
                         {% endif %}
                         
                         {% if category_code1 == "2" %}
-                        <option value="2" selected>調査票: 2</option>
+                        <option value="2" selected>入力: 2</option>
                         {% else %}
-                        <option value="2">調査票: 2</option>
+                        <option value="2">入力: 2</option>
                         {% endif %}
                         
                         {% if category_code1 == "3" %}
-                        <option value="3" selected>集計結果: 3</option>
+                        <option value="3" selected>集計: 3</option>
                         {% else %}
-                        <option value="3">集計結果: 3</option>
+                        <option value="3">集計: 3</option>
+                        {% endif %}
+
+                        {% if category_code1 == "4" %}
+                        <option value="4" selected>ワークフロー: 4</option>
+                        {% else %}
+                        <option value="4">ワークフロー: 4</option>
                         {% endif %}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category1" name="button_category1">データ種別選択</button>
@@ -84,226 +90,262 @@
                         <option value="0" id="option_0" name="option_0">参照するデータの種別を選択してください。</option>
                         {% endif %}
                         
-                        {% if category_code2 == "1" %}
+                        {% if category_code2 == "1" or category_code2 == "1000" %}
                         <option value="1" id="option_1" name="option_1" selected>建物区分: building</option>
                         {% else %}
                         <option value="1" id="option_1" name="option_1">建物区分: building</option>
                         {% endif %}
                         
-                        {% if category_code2 == "2" %}
+                        {% if category_code2 == "2" or category_code2 == "1010" %}
                         <option value="2" id="option_2" name="option_2" selected>都道府県: ken</option>
                         {% else %}
                         <option value="2" id="option_2" name="option_2">都道府県: ken</option>
                         {% endif %}
                         
-                        {% if category_code2 == "3" %}
+                        {% if category_code2 == "3" or category_code2 == "1020" %}
                         <option value="3" id="option_3" name="option_3" selected>市区町村: city</option>
                         {% else %}
                         <option value="3" id="option_3" name="option_3">市区町村: city</option>
                         {% endif %}
                         
-                        {% if category_code2 == "4" %}
+                        {% if category_code2 == "4" or category_code2 == "1030" %}
                         <option value="4" id="option_4" name="option_4" selected>水害発生地点工種（河川海岸区分）: kasen_kaigan</option>
                         {% else %}
                         <option value="4" id="option_4" name="option_4">水害発生地点工種（河川海岸区分）: kasen_kaigan</option>
                         {% endif %}
                         
-                        {% if category_code2 == "5" %}
+                        {% if category_code2 == "5" or category_code2 == "1040" %}
                         <option value="5" id="option_5" name="option_5" selected>水系（水系・沿岸）: suikei</option>
                         {% else %}
                         <option value="5" id="option_5" name="option_5">水系（水系・沿岸）: suikei</option>
                         {% endif %}
                         
-                        {% if category_code2 == "6" %}
+                        {% if category_code2 == "6" or category_code2 == "1050" %}
                         <option value="6" id="option_6" name="option_6" selected>水系種別（水系・沿岸種別）: suikei_type</option>
                         {% else %}
                         <option value="6" id="option_6" name="option_6">水系種別（水系・沿岸種別）: suikei_type</option>
                         {% endif %}
                         
-                        {% if category_code2 == "7" %}
+                        {% if category_code2 == "7" or category_code2 == "1060" %}
                         <option value="7" id="option_7" name="option_7" selected>河川（河川・海岸）: kasen</option>
                         {% else %}
                         <option value="7" id="option_7" name="option_7">河川（河川・海岸）: kasen</option>
                         {% endif %}
                         
-                        {% if category_code2 == "8" %}
+                        {% if category_code2 == "8" or category_code2 == "1070" %}
                         <option value="8" id="option_8" name="option_8" selected>河川種別（河川・海岸種別）: kasen_type</option>
                         {% else %}
                         <option value="8" id="option_8" name="option_8">河川種別（河川・海岸種別）: kasen_type</option>
                         {% endif %}
                         
-                        {% if category_code2 == "9" %}
+                        {% if category_code2 == "9" or category_code2 == "1080" %}
                         <option value="9" id="option_9" name="option_9" selected>水害原因: cause</option>
                         {% else %}
                         <option value="9" id="option_9" name="option_9">水害原因: cause</option>
                         {% endif %}
                         
-                        {% if category_code2 == "10" %}
+                        {% if category_code2 == "10" or category_code2 == "1090" %}
                         <option value="10" id="option_10" name="option_10" selected>地上地下区分: underground</option>
                         {% else %}
                         <option value="10" id="option_10" name="option_10">地上地下区分: underground</option>
                         {% endif %}
                         
-                        {% if category_code2 == "11" %}
+                        {% if category_code2 == "11" or category_code2 == "1100" %}
                         <option value="11" id="option_11" name="option_11" selected>地下空間の利用形態: usage</option>
                         {% else %}
                         <option value="11" id="option_11" name="option_11">地下空間の利用形態: usage</option>
                         {% endif %}
                         
-                        {% if category_code2 == "12" %}
+                        {% if category_code2 == "12" or category_code2 == "1110" %}
                         <option value="12" id="option_12" name="option_12" selected>浸水土砂区分: flood_sediment</option>
                         {% else %}
                         <option value="12" id="option_12" name="option_12">浸水土砂区分: flood_sediment</option>
                         {% endif %}
                         
-                        {% if category_code2 == "13" %}
+                        {% if category_code2 == "13" or category_code2 == "1120" %}
                         <option value="13" id="option_13" name="option_13" selected>地盤勾配区分: gradient</option>
                         {% else %}
                         <option value="13" id="option_13" name="option_13">地盤勾配区分: gradient</option>
                         {% endif %}
                         
-                        {% if category_code2 == "14" %}
+                        {% if category_code2 == "14" or category_code2 == "1130" %}
                         <option value="14" id="option_14" name="option_14" selected>産業分類: industry</option>
                         {% else %}
                         <option value="14" id="option_14" name="option_14">産業分類: industry</option>
                         {% endif %}
 
-                        {% if category_code2 == "100" %}
+                        {% if category_code2 == "100" or category_code2 == "2000" %}
                         <option value="100" id="option_100" name="option_100" selected>家屋評価額: house_asset</option>
                         {% else %}
                         <option value="100" id="option_100" name="option_100">家屋評価額: house_asset</option>
                         {% endif %}
                         
-                        {% if category_code2 == "101" %}
+                        {% if category_code2 == "101" or category_code2 == "2010" %}
                         <option value="101" id="option_101" name="option_101" selected>家屋被害率: house_rate</option>
                         {% else %}
                         <option value="101" id="option_101" name="option_101">家屋被害率: house_rate</option>
                         {% endif %}
 
-                        {% if category_code2 == "102" %}
+                        {% if category_code2 == "102" or category_code2 == "2020" %}
                         <option value="102" id="option_102" name="option_102" selected>家庭応急対策費_代替活動費: house_alt</option>
                         {% else %}
                         <option value="102" id="option_102" name="option_102">家庭応急対策費_代替活動費: house_alt</option>
                         {% endif %}
 
-                        {% if category_code2 == "103" %}
+                        {% if category_code2 == "103" or category_code2 == "2030" %}
                         <option value="103" id="option_103" name="option_103" selected>家庭応急対策費_清掃日数、清掃労働単価: house_clean</option>
                         {% else %}
                         <option value="103" id="option_103" name="option_103">家庭応急対策費_清掃日数、清掃労働単価: house_clean</option>
                         {% endif %}
                         
-                        {% if category_code2 == "104" %}
+                        {% if category_code2 == "104" or category_code2 == "3000" %}
                         <option value="104" id="option_104" name="option_104" selected>家庭用品自動車以外所有額: household_asset</option>
                         {% else %}
                         <option value="104" id="option_104" name="option_104">家庭用品自動車以外所有額: household_asset</option>
                         {% endif %}
 
-                        {% if category_code2 == "105" %}
+                        {% if category_code2 == "105" or category_code2 == "3010" %}
                         <option value="105" id="option_105" name="option_105" selected>家庭用品自動車以外被害率: household_rate</option>
                         {% else %}
                         <option value="105" id="option_105" name="option_105">家庭用品自動車以外被害率: household_rate</option>
                         {% endif %}
 
-                        {% if category_code2 == "106" %}
+                        {% if category_code2 == "106" or category_code2 == "4000" %}
                         <option value="106" id="option_106" name="option_106" selected>家庭用品自動車所有額: car_asset</option>
                         {% else %}
                         <option value="106" id="option_106" name="option_106">家庭用品自動車所有額: car_asset</option>
                         {% endif %}
                         
-                        {% if category_code2 == "107" %}
+                        {% if category_code2 == "107" or category_code2 == "4010" %}
                         <option value="107" id="option_107" name="option_107" selected>家庭用品自動車被害率: car_rate</option>
                         {% else %}
                         <option value="107" id="option_107" name="option_107">家庭用品自動車被害率: car_rate</option>
                         {% endif %}
                         
-                        {% if category_code2 == "108" %}
+                        {% if category_code2 == "108" or category_code2 == "5000" %}
                         <option value="108" id="option_108" name="option_108" selected>事業所資産額: office_asset</option>
                         {% else %}
                         <option value="108" id="option_108" name="option_108">事業所資産額: office_asset</option>
                         {% endif %}
                         
-                        {% if category_code2 == "109" %}
+                        {% if category_code2 == "109" or category_code2 == "5010" %}
                         <option value="109" id="option_109" name="option_109" selected>事業所被害率: office_rate</option>
                         {% else %}
                         <option value="109" id="option_109" name="option_109">事業所被害率: office_rate</option>
                         {% endif %}
 
-                        {% if category_code2 == "110" %}
+                        {% if category_code2 == "110" or category_code2 == "5020" %}
                         <option value="110" id="option_110" name="option_110" selected>事業所営業停止日数: office_suspend</option>
                         {% else %}
                         <option value="110" id="option_110" name="option_110">事業所営業停止日数: office_suspend</option>
                         {% endif %}
                         
-                        {% if category_code2 == "111" %}
+                        {% if category_code2 == "111" or category_code2 == "5030" %}
                         <option value="111" id="option_111" name="option_111" selected>事業所営業停滞日数: office_stagnate</option>
                         {% else %}
                         <option value="111" id="option_111" name="option_111">事業所営業停滞日数: office_stagnate</option>
                         {% endif %}
 
-                        {% if category_code2 == "112" %}
+                        {% if category_code2 == "112" or category_code2 == "5040" %}
                         <option value="112" id="option_112" name="option_112" selected>事業所応急対策費_代替活動費: office_alt</option>
                         {% else %}
                         <option value="112" id="option_112" name="option_112">事業所応急対策費_代替活動費: office_alt</option>
                         {% endif %}
 
-                        {% if category_code2 == "113" %}
+                        {% if category_code2 == "113" or category_code2 == "6000" %}
                         <option value="113" id="option_113" name="option_113" selected>農漁家資産額: farmer_fisher_asset</option>
                         {% else %}
                         <option value="113" id="option_113" name="option_113">農漁家資産額: farmer_fisher_asset</option>
                         {% endif %}
                         
-                        {% if category_code2 == "114" %}
+                        {% if category_code2 == "114" or category_code2 == "6010" %}
                         <option value="114" id="option_114" name="option_114" selected>農漁家被害率: farmer_fisher_rate</option>
                         {% else %}
                         <option value="114" id="option_114" name="option_114">農漁家被害率: farmer_fisher_rate</option>
                         {% endif %}
 
-                        {% if category_code2 == "200" %}
-                        <option value="200" id="option_200" name="option_200" selected>一般資産入力データ_水害区域: area</option>
+                        {% if category_code2 == "200" or category_code2 == "7000" %}
+                        <option value="200" id="option_200" name="option_200" selected>水害区域: area</option>
                         {% else %}
-                        <option value="200" id="option_200" name="option_200">一般資産入力データ_水害区域: area</option>
+                        <option value="200" id="option_200" name="option_200">水害区域: area</option>
                         {% endif %}
 
-                        {% if category_code2 == "201" %}
-                        <option value="201" id="option_201" name="option_201" selected>一般資産入力データ_異常気象: weather</option>
+                        {% if category_code2 == "201" or category_code2 == "7010" %}
+                        <option value="201" id="option_201" name="option_201" selected>異常気象: weather</option>
                         {% else %}
-                        <option value="201" id="option_201" name="option_201">一般資産入力データ_異常気象: weather</option>
+                        <option value="201" id="option_201" name="option_201">異常気象: weather</option>
                         {% endif %}
 
-                        {% if category_code2 == "202" %}
-                        <option value="202" id="option_202" name="option_202" selected>一般資産入力データ_ヘッダ部分: suigai</option>
+                        {% if category_code2 == "202" or category_code2 == "7020" %}
+                        <option value="202" id="option_202" name="option_202" selected>ヘッダ部分: suigai</option>
                         {% else %}
-                        <option value="202" id="option_202" name="option_202">一般資産入力データ_ヘッダ部分: suigai</option>
+                        <option value="202" id="option_202" name="option_202">ヘッダ部分: suigai</option>
                         {% endif %}
 
-                        {% if category_code2 == "203" %}
-                        <option value="203" id="option_203" name="option_203" selected hidden>一般資産入力データ_一覧表部分: ippan</option>
+                        {% if category_code2 == "203" or category_code2 == "7030" %}
+                        <option value="203" id="option_203" name="option_203" selected hidden>一覧表部分: ippan</option>
                         {% else %}
-                        <option value="203" id="option_203" name="option_203" hidden>一般資産入力データ_一覧表部分: ippan</option>
+                        <option value="203" id="option_203" name="option_203" hidden>一覧表部分: ippan</option>
                         {% endif %}
                         
-                        {% if category_code2 == "204" %}
-                        <option value="204" id="option_204" name="option_204" selected hidden>一般資産ビューデータ_一覧表部分: ippan_view</option>
+                        {% if category_code2 == "204" or category_code2 == "7040" %}
+                        <option value="204" id="option_204" name="option_204" selected hidden>一覧表部分_按分データ: ippan_view</option>
                         {% else %}
-                        <option value="204" id="option_204" name="option_204" hidden>一般資産ビューデータ_一覧表部分: ippan_view</option>
+                        <option value="204" id="option_204" name="option_204" hidden>一覧表部分_按分データ: ippan_view</option>
                         {% endif %}
                         
-                        {% if category_code2 == "300" %}
-                        <option value="300" id="option_300" name="option_300" selected>一般資産集計データ_集計結果: ippan_summary</option>
+                        {% if category_code2 == "300" or category_code2 == "8000" %}
+                        <option value="300" id="option_300" name="option_300" selected>集計データ: ippan_summary</option>
                         {% else %}
-                        <option value="300" id="option_300" name="option_300">一般資産集計データ_集計結果: ippan_summary</option>
+                        <option value="300" id="option_300" name="option_300">集計データ: ippan_summary</option>
                         {% endif %}
 
-                        {% if category_code2 == "301" %}
-                        <option value="301" id="option_301" name="option_301" selected>一般資産集計データ_集計結果_都道府県別: ippan_group_by_ken</option>
+                        {% if category_code2 == "301" or category_code2 == "8010" %}
+                        <option value="301" id="option_301" name="option_301" selected>都道府県別: ippan_group_by_ken</option>
                         {% else %}
-                        <option value="301" id="option_301" name="option_301">一般資産集計データ_集計結果_都道府県別: ippan_group_by_ken</option>
+                        <option value="301" id="option_301" name="option_301">都道府県別: ippan_group_by_ken</option>
                         {% endif %}
                         
-                        {% if category_code2 == "302" %}
-                        <option value="302" id="option_302" name="option_302" selected>一般資産集計データ_集計結果_水系別: ippan_group_by_suikei</option>
+                        {% if category_code2 == "302" or category_code2 == "8020" %}
+                        <option value="302" id="option_302" name="option_302" selected>水系別: ippan_group_by_suikei</option>
                         {% else %}
-                        <option value="302" id="option_302" name="option_302">一般資産集計データ_集計結果_水系別: ippan_group_by_suikei</option>
+                        <option value="302" id="option_302" name="option_302">水系別: ippan_group_by_suikei</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "10000" %}
+                        <option value="10000" id="option_10000" name="option_10000" selected>アクション: action</option>
+                        {% else %}
+                        <option value="10000" id="option_10000" name="option_10000">アクション: action</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "10010" %}
+                        <option value="10010" id="option_10010" name="option_10010" selected>状態: status</option>
+                        {% else %}
+                        <option value="10010" id="option_10010" name="option_10010">状態: status</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "10020" %}
+                        <option value="10020" id="option_10020" name="option_10020" selected>トリガーメッセージ: trigger</option>
+                        {% else %}
+                        <option value="10020" id="option_10020" name="option_10020">トリガーメッセージ: trigger</option>
+                        {% endif %}
+                        
+                        {% if category_code2 == "10030" %}
+                        <option value="10030" id="option_10030" name="option_10030" selected>承認メッセージ: approval</option>
+                        {% else %}
+                        <option value="10030" id="option_10030" name="option_10030">承認メッセージ: approval</option>
+                        {% endif %}
+
+                        {% if category_code2 == "10040" %}
+                        <option value="10040" id="option_10040" name="option_10040" selected>フィードバックメッセージ: feedback</option>
+                        {% else %}
+                        <option value="10040" id="option_10040" name="option_10040">フィードバックメッセージ: feedback</option>
+                        {% endif %}
+
+                        {% if category_code2 == "10050" %}
+                        <option value="10050" id="option_10050" name="option_10050" selected>EXCELファイルレポジトリ: repository</option>
+                        {% else %}
+                        <option value="10050" id="option_10050" name="option_10050">EXCELファイルレポジトリ: repository</option>
                         {% endif %}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
@@ -358,8 +400,8 @@
     {% if category_code2 == "0" %}
     {% endif %}
 
-    <!-- 建物区分: 1 -->
-    {% if category_code2 == "1" %}
+    <!-- 建物区分: 1 1000 -->
+    {% if category_code2 == "1" or category_code2 == "1000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -380,8 +422,8 @@
     </div>
     {% endif %}
     
-    <!-- 都道府県: 2 -->
-    {% if category_code2 == "2" %}
+    <!-- 都道府県: 2 1010 -->
+    {% if category_code2 == "2" or category_code2 == "1010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -402,8 +444,8 @@
     </div>
     {% endif %}
     
-    <!-- 市区町村: 3 -->
-    {% if category_code2 == "3" %}
+    <!-- 市区町村: 3 1020 -->
+    {% if category_code2 == "3" or category_code2 == "1020" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -411,6 +453,7 @@
                     <th class="text-center">市区町村コード</th>
                     <th class="text-center">市区町村名</th>
                     <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
                     <th class="text-center">市区町村人口</th>
                     <th class="text-center">市区町村面積</th>
                 </tr>
@@ -421,6 +464,7 @@
                     <td>{{ city.city_code }}</td>
                     <td>{{ city.city_name }}</td>
                     <td>{{ city.ken_code }}</td>
+                    <td>{{ city.ken_name }}</td>
                     <td>{{ city.city_population }}</td>
                     <td>{{ city.city_area }}</td>
                 </tr>
@@ -430,8 +474,8 @@
     </div>
     {% endif %}
     
-    <!-- 水害発生地点工種（河川海岸区分）: 4 -->
-    {% if category_code2 == "4" %}
+    <!-- 水害発生地点工種（河川海岸区分）: 4 1030 -->
+    {% if category_code2 == "4" or category_code2 == "1030" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -452,8 +496,8 @@
     </div>
     {% endif %}
     
-    <!-- 水系（水系・沿岸）: 5 -->
-    {% if category_code2 == "5" %}
+    <!-- 水系（水系・沿岸）: 5 1040 -->
+    {% if category_code2 == "5" or category_code2 == "1040" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -461,6 +505,7 @@
                     <th class="text-center">水系コード</th>
                     <th class="text-center">水系名</th>
                     <th class="text-center">水系種別コード</th>
+                    <th class="text-center">水系種別名</th>
                 </tr>
             </thead>
             <tbody>
@@ -469,6 +514,7 @@
                     <td>{{ suikei.suikei_code }}</td>
                     <td>{{ suikei.suikei_name }}</td>
                     <td>{{ suikei.suikei_type_code }}</td>
+                    <td>{{ suikei.suikei_type_name }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -476,8 +522,8 @@
     </div>
     {% endif %}
     
-    <!-- 水系種別（水系・沿岸種別）: 6 -->
-    {% if category_code2 == "6" %}
+    <!-- 水系種別（水系・沿岸種別）: 6 1050 -->
+    {% if category_code2 == "6" or category_code2 == "1050" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -498,8 +544,8 @@
     </div>
     {% endif %}
     
-    <!-- 河川（河川・海岸）: 7 -->
-    {% if category_code2 == "7" %}
+    <!-- 河川（河川・海岸）: 7 1060 -->
+    {% if category_code2 == "7" or category_code2 == "1060" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -507,7 +553,9 @@
                     <th class="text-center">河川コード</th>
                     <th class="text-center">河川名</th>
                     <th class="text-center">河川種別コード</th>
+                    <th class="text-center">河川種別名</th>
                     <th class="text-center">水系コード</th>
+                    <th class="text-center">水系名</th>
                 </tr>
             </thead>
             <tbody>
@@ -516,7 +564,9 @@
                     <td>{{ kasen.kasen_code }}</td>
                     <td>{{ kasen.kasen_name }}</td>
                     <td>{{ kasen.kasen_type_code }}</td>
+                    <td>{{ kasen.kasen_type_name }}</td>
                     <td>{{ kasen.suikei_code }}</td>
+                    <td>{{ kasen.suikei_name }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -524,8 +574,8 @@
     </div>
     {% endif %}
     
-    <!-- 河川種別（河川・海岸種別）: 8 -->
-    {% if category_code2 == "8" %}
+    <!-- 河川種別（河川・海岸種別）: 8 1070 -->
+    {% if category_code2 == "8" or category_code2 == "1070" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -546,8 +596,8 @@
     </div>
     {% endif %}
     
-    <!-- 水害原因: 9 -->
-    {% if category_code2 == "9" %}
+    <!-- 水害原因: 9 1080 -->
+    {% if category_code2 == "9" or category_code2 == "1080" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -568,8 +618,8 @@
     </div>
     {% endif %}
     
-    <!-- 地上地下区分: 10 -->
-    {% if category_code2 == "10" %}
+    <!-- 地上地下区分: 10 1090 -->
+    {% if category_code2 == "10" or category_code2 == "1090" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -590,8 +640,8 @@
     </div>
     {% endif %}
     
-    <!-- 地下空間の利用形態: 11 -->
-    {% if category_code2 == "11" %}
+    <!-- 地下空間の利用形態: 11 1100 -->
+    {% if category_code2 == "11" or category_code2 == "1100" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -612,8 +662,8 @@
     </div>
     {% endif %}
     
-    <!-- 浸水土砂区分: 12 -->
-    {% if category_code2 == "12" %}
+    <!-- 浸水土砂区分: 12 1110 -->
+    {% if category_code2 == "12" or category_code2 == "1110" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -634,8 +684,8 @@
     </div>
     {% endif %}
     
-    <!-- 地盤勾配区分: 13 -->
-    {% if category_code2 == "13" %}
+    <!-- 地盤勾配区分: 13 1120 -->
+    {% if category_code2 == "13" or category_code2 == "1120" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -656,8 +706,8 @@
     </div>
     {% endif %}
     
-    <!-- 産業分類: 14 -->
-    {% if category_code2 == "14" %}
+    <!-- 産業分類: 14 1130 -->
+    {% if category_code2 == "14" or category_code2 == "1130" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -678,17 +728,15 @@
     </div>
     {% endif %}
 
-
-
-
-    <!-- 家屋評価額: 100 -->
-    {% if category_code2 == "100" %}
+    <!-- 家屋評価額: 100 2000 -->
+    {% if category_code2 == "100" or category_code2 == "2000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">家屋評価額コード</th>
                     <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
                     <th class="text-center">家屋評価額</th>
                 </tr>
             </thead>
@@ -697,6 +745,7 @@
                 <tr>
                     <td>{{ house_asset.house_asset_code }}</td>
                     <td>{{ house_asset.ken_code }}</td>
+                    <td>{{ house_asset.ken_name }}</td>
                     <td>{{ house_asset.house_asset }}</td>
                 </tr>
                 {% endfor %}
@@ -705,15 +754,17 @@
     </div>
     {% endif %}
     
-    <!-- 家屋被害率: 101 -->
-    {% if category_code2 == "101" %}
+    <!-- 家屋被害率: 101 2010 -->
+    {% if category_code2 == "101" or category_code2 == "2010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">家屋被害率コード</th>
                     <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
                     <th class="text-center">地盤勾配区分コード</th>
+                    <th class="text-center">地盤勾配区分名</th>
                     <th class="text-center">家屋被害率_床下</th>
                     <th class="text-center">家屋被害率_0から50cm未満</th>
                     <th class="text-center">家屋被害率_50から100cm未満</th>
@@ -727,7 +778,9 @@
                 <tr>
                     <td>{{ house_rate.house_rate_code }}</td>
                     <td>{{ house_rate.flood_sediment_code }}</td>
+                    <td>{{ house_rate.flood_sediment_name }}</td>
                     <td>{{ house_rate.gradient_code }}</td>
+                    <td>{{ house_rate.gradient_name }}</td>
                     <td>{{ house_rate.house_rate_lv00 }}</td>
                     <td>{{ house_rate.house_rate_lv00_50 }}</td>
                     <td>{{ house_rate.house_rate_lv50_100 }}</td>
@@ -741,8 +794,8 @@
     </div>
     {% endif %}
 
-    <!-- 家庭応急対策費_代替活動費: 102 -->
-    {% if category_code2 == "102" %}
+    <!-- 家庭応急対策費_代替活動費: 102 2020 -->
+    {% if category_code2 == "102" or category_code2 == "2020" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -773,8 +826,8 @@
     </div>
     {% endif %}
 
-    <!-- 家庭応急対策費_清掃日数: 103 -->
-    {% if category_code2 == "103" %}
+    <!-- 家庭応急対策費_清掃日数: 103 2030 -->
+    {% if category_code2 == "103" or category_code2 == "2030" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -807,8 +860,8 @@
     </div>
     {% endif %}
 
-    <!-- 家庭用品自動車以外所有額: 104 -->
-    {% if category_code2 == "104" %}
+    <!-- 家庭用品自動車以外所有額: 104 3000 -->
+    {% if category_code2 == "104" or category_code2 == "3000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -829,14 +882,15 @@
     </div>
     {% endif %}
     
-    <!-- 家庭用品自動車以外被害率: 105 -->
-    {% if category_code2 == "105" %}
+    <!-- 家庭用品自動車以外被害率: 105 3010 -->
+    {% if category_code2 == "105" or category_code2 == "3010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">家庭用品自動車以外被害率コード</th>
                     <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
                     <th class="text-center">家庭用品自動車以外被害率_床下</th>
                     <th class="text-center">家庭用品自動車以外被害率_0から50cm未満</th>
                     <th class="text-center">家庭用品自動車以外被害率_50から100cm未満</th>
@@ -850,6 +904,7 @@
                 <tr>
                     <td>{{ household_rate.household_rate_code }}</td>
                     <td>{{ household_rate.flood_sediment_code }}</td>
+                    <td>{{ household_rate.flood_sediment_name }}</td>
                     <td>{{ household_rate.household_rate_lv00 }}</td>
                     <td>{{ household_rate.household_rate_lv00_50 }}</td>
                     <td>{{ household_rate.household_rate_lv50_100 }}</td>
@@ -863,8 +918,8 @@
     </div>
     {% endif %}
 
-    <!-- 家庭用品自動車所有額: 106 -->
-    {% if category_code2 == "106" %}
+    <!-- 家庭用品自動車所有額: 106 4000 -->
+    {% if category_code2 == "106" or category_code2 == "4000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -885,8 +940,8 @@
     </div>
     {% endif %}
 
-    <!-- 家庭用品自動車被害率: 107 -->
-    {% if category_code2 == "107" %}
+    <!-- 家庭用品自動車被害率: 107 4010 -->
+    {% if category_code2 == "107" or category_code2 == "4010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -917,14 +972,15 @@
     </div>
     {% endif %}
     
-    <!-- 事業所資産額: 108 -->
-    {% if category_code2 == "108" %}
+    <!-- 事業所資産額: 108 5000 -->
+    {% if category_code2 == "108" or category_code2 == "5000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">事業所資産額コード</th>
                     <th class="text-center">産業分類コード</th>
+                    <th class="text-center">産業分類名</th>
                     <th class="text-center">事業所資産額_償却資産額</th>
                     <th class="text-center">事業所資産額_在庫資産額</th>
                     <th class="text-center">事業所資産額_付加価値額</th>
@@ -935,6 +991,7 @@
                 <tr>
                     <td>{{ office_asset.office_asset_code }}</td>
                     <td>{{ office_asset.industry_code }}</td>
+                    <td>{{ office_asset.industry_name }}</td>
                     <td>{{ office_asset.office_dep_asset }}</td>
                     <td>{{ office_asset.office_inv_asset }}</td>
                     <td>{{ office_asset.office_va_asset }}</td>
@@ -945,14 +1002,15 @@
     </div>
     {% endif %}
     
-    <!-- 事業所被害率: 109 -->
-    {% if category_code2 == "109" %}
+    <!-- 事業所被害率: 109 5010 -->
+    {% if category_code2 == "109" or category_code2 == "5010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">事業所被害率コード</th>
                     <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
                     <th class="text-center">事業所被害率_償却資産被害率_床下</th>
                     <th class="text-center">事業所被害率_償却資産被害率_0から50cm未満</th>
                     <th class="text-center">事業所被害率_償却資産被害率_50から100cm未満</th>
@@ -972,6 +1030,7 @@
                 <tr>
                     <td>{{ office_rate.office_rate_code }}</td>
                     <td>{{ office_rate.flood_sediment_code }}</td>
+                    <td>{{ office_rate.flood_sediment_name }}</td>
                     <td>{{ office_rate.office_dep_rate_lv00 }}</td>
                     <td>{{ office_rate.office_dep_rate_lv00_50 }}</td>
                     <td>{{ office_rate.office_dep_rate_lv50_100 }}</td>
@@ -991,8 +1050,8 @@
     </div>
     {% endif %}
     
-    <!-- 事業所営業停止日数: 110 -->
-    {% if category_code2 == "110" %}
+    <!-- 事業所営業停止日数: 110 5020 -->
+    {% if category_code2 == "110" or category_code2 == "5020" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1023,8 +1082,8 @@
     </div>
     {% endif %}
 
-    <!-- 事業所営業停滞日数: 111 -->
-    {% if category_code2 == "111" %}
+    <!-- 事業所営業停滞日数: 111 5030 -->
+    {% if category_code2 == "111" or category_code2 == "5030" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1055,8 +1114,8 @@
     </div>
     {% endif %}
 
-    <!-- 事業所応急対策費_代替活動費: 112 -->
-    {% if category_code2 == "112" %}
+    <!-- 事業所応急対策費_代替活動費: 112 5040 -->
+    {% if category_code2 == "112" or category_code2 == "5040" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1087,8 +1146,8 @@
     </div>
     {% endif %}
     
-    <!-- 農漁家資産額: 113-->
-    {% if category_code2 == "113" %}
+    <!-- 農漁家資産額: 113 6000 -->
+    {% if category_code2 == "113" or category_code2 == "6000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1111,14 +1170,15 @@
     </div>
     {% endif %}
     
-    <!-- 農漁家被害率: 114 -->
-    {% if category_code2 == "114" %}
+    <!-- 農漁家被害率: 114 6010 -->
+    {% if category_code2 == "114" or category_code2 == "6010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
                     <th class="text-center">農漁家被害率コード</th>
                     <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
                     <th class="text-center">農漁家被害率_償却資産被害率_床下</th>
                     <th class="text-center">農漁家被害率_償却資産被害率_0から50cm未満</th>
                     <th class="text-center">農漁家被害率_償却資産被害率_50から100cm未満</th>
@@ -1138,6 +1198,7 @@
                 <tr>
                     <td>{{ farmer_fisher_rate.farmer_fisher_damage_code }}</td>
                     <td>{{ farmer_fisher_rate.flood_sediment_code }}</td>
+                    <td>{{ farmer_fisher_rate.flood_sediment_name }}</td>
                     <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00 }}</td>
                     <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50 }}</td>
                     <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100 }}</td>
@@ -1157,11 +1218,8 @@
     </div>
     {% endif %}
 
-
-
-
-    <!-- 一般資産入力データ_水害区域: 200 -->
-    {% if category_code2 == "200" %}
+    <!-- 入力データ_水害区域: 200 7000 -->
+    {% if category_code2 == "200" or category_code2 == "7000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1182,8 +1240,8 @@
     </div>
     {% endif %}
 
-    <!-- 一般資産入力データ_異常気象: 201 -->
-    {% if category_code2 == "201" %}
+    <!-- 入力データ_異常気象: 201 7010 -->
+    {% if category_code2 == "201" or category_code2 == "7010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1208,8 +1266,8 @@
     </div>
     {% endif %}
 
-    <!-- 一般資産入力データ_ヘッダ部分: 202 -->
-    {% if category_code2 == "202" %}
+    <!-- 入力データ_ヘッダ部分: 202 7020 -->
+    {% if category_code2 == "202" or category_code2 == "7020" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
@@ -1217,22 +1275,33 @@
                     <th class="text-center">水害ID</th>
                     <th class="text-center">水害名</th>
                     <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
                     <th class="text-center">市区町村コード</th>
+                    <th class="text-center">市区町村名</th>
                     <th class="text-center">水害発生年月日</th>
                     <th class="text-center">水害終了年月日</th>
                     <th class="text-center">水害原因_1_コード</th>
+                    <th class="text-center">水害原因_1_名</th>
                     <th class="text-center">水害原因_2_コード</th>
+                    <th class="text-center">水害原因_2_名</th>
                     <th class="text-center">水害原因_3_コード</th>
+                    <th class="text-center">水害原因_3_名</th>
                     <th class="text-center">水害区域ID</th>
+                    <th class="text-center">水害区域名</th>
                     <th class="text-center">水系コード</th>
+                    <th class="text-center">水系名</th>
                     <th class="text-center">河川コード</th>
+                    <th class="text-center">河川名</th>
                     <th class="text-center">地盤勾配区分コード</th>
+                    <th class="text-center">地盤勾配区分名</th>
                     <th class="text-center">宅地面積（単位m2）</th>
                     <th class="text-center">農地面積（単位m2）</th>
                     <th class="text-center">地下面積（単位m2）</th>
                     <th class="text-center">河川海岸（工種）コード</th>
+                    <th class="text-center">河川海岸（工種）名</th>
                     <th class="text-center">農作物被害額（単位千円）</th>
                     <th class="text-center">異常気象ID</th>
+                    <th class="text-center">異常気象名</th>
                 </tr>
             </thead>
             <tbody>
@@ -1241,43 +1310,56 @@
                     <td>{{ suigai.suigai_id }}</td>
                     <td>{{ suigai.suigai_name }}</td>
                     <td>{{ suigai.ken_code }}</td>
+                    <td>{{ suigai.ken_name }}</td>
                     <td>{{ suigai.city_code }}</td>
+                    <td>{{ suigai.city_name }}</td>
                     <td>{{ suigai.begin_date }}</td>
                     <td>{{ suigai.end_date }}</td>
                     <td>{{ suigai.cause_1_code }}</td>
+                    <td>{{ suigai.cause_1_name }}</td>
                     <td>{{ suigai.cause_2_code }}</td>
+                    <td>{{ suigai.cause_2_name }}</td>
                     <td>{{ suigai.cause_3_code }}</td>
+                    <td>{{ suigai.cause_3_name }}</td>
                     <td>{{ suigai.area_id }}</td>
+                    <td>{{ suigai.area_name }}</td>
                     <td>{{ suigai.suikei_code }}</td>
+                    <td>{{ suigai.suikei_name }}</td>
                     <td>{{ suigai.kasen_code }}</td>
+                    <td>{{ suigai.kasen_name }}</td>
                     <td>{{ suigai.gradient_code }}</td>
+                    <td>{{ suigai.gradient_name }}</td>
                     <td>{{ suigai.residential_area }}</td>
                     <td>{{ suigai.agricultural_area }}</td>
                     <td>{{ suigai.underground_area }}</td>
                     <td>{{ suigai.kasen_kaigan_code }}</td>
+                    <td>{{ suigai.kasen_kaigan_name }}</td>
                     <td>{{ suigai.crop_damage }}</td>
                     <td>{{ suigai.weather_id }}</td>
+                    <td>{{ suigai.weather_name }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     {% endif %}
-
-
     
-    <!-- 一般資産入力データ_一覧表部分: 203 -->
-    {% if category_code2 == "203" %}
+    <!-- 入力データ_一覧表部分: 203 7030 -->
+    {% if category_code2 == "203" or category_code2 == "7030" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">一般資産調査票ID</th>
-                    <th class="text-center">一般資産調査票名（町丁名、大字名）</th>
+                    <th class="text-center">行ID</th>
+                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">水害ID</th>
+                    <th class="text-center">水害名</th>
                     <th class="text-center">建物区分コード</th>
+                    <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
+                    <th class="text-center">地上地下区分名</th>
                     <th class="text-center">浸水土砂区分コード</th>
+                    <th class="text-center">浸水土砂区分名</th>
                     <th class="text-center">被害建物棟数_床下</th>
                     <th class="text-center">被害建物棟数_01から49cm</th>
                     <th class="text-center">被害建物棟数_50から99cm</th>
@@ -1298,7 +1380,9 @@
                     <th class="text-center">被災従業者数_100cm以上</th>
                     <th class="text-center">被災従業者数_全壊</th>
                     <th class="text-center">産業分類コード</th>
+                    <th class="text-center">産業分類名</th>
                     <th class="text-center">地下空間の利用形態コード</th>
+                    <th class="text-center">地下空間の利用形態名</th>
                     <th class="text-center">備考</th>
                 </tr>
             </thead>
@@ -1308,9 +1392,13 @@
                     <td>{{ ippan.ippan_id }}</td>
                     <td>{{ ippan.ippan_name }}</td>
                     <td>{{ ippan.suigai_id }}</td>
+                    <td>{{ ippan.suigai_name }}</td>
                     <td>{{ ippan.building_code }}</td>
+                    <td>{{ ippan.building_name }}</td>
                     <td>{{ ippan.underground_code }}</td>
+                    <td>{{ ippan.underground_name }}</td>
                     <td>{{ ippan.flood_sediment_code }}</td>
+                    <td>{{ ippan.flood_sediment_name }}</td>
                     <td>{{ ippan.building_lv00 }}</td>
                     <td>{{ ippan.building_lv01_49 }}</td>
                     <td>{{ ippan.building_lv50_99 }}</td>
@@ -1331,7 +1419,9 @@
                     <td>{{ ippan.employee_lv100 }}</td>
                     <td>{{ ippan.employee_full }}</td>
                     <td>{{ ippan.industry_code }}</td>
+                    <td>{{ ippan.industry_name }}</td>
                     <td>{{ ippan.usage_code }}</td>
+                    <td>{{ ippan.usage_name }}</td>
                     <td>{{ ippan.comment }}</td>
                 </tr>
                 {% endfor %}
@@ -1340,54 +1430,22 @@
     </div>
     {% endif %}
     
-    <!-- 一般資産ビューデータ_一覧表部分: 204 -->
-    {% if category_code2 == "204" %}
+    <!-- 按分データ_一覧表部分: 204 7040 -->
+    {% if category_code2 == "204" or category_code2 == "7040" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">一般資産調査票ID</th>
-                    <th class="text-center">一般資産調査票名（町丁名、大字名）</th>
+                    <th class="text-center">行ID</th>
+                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">水害ID</th>
                     <th class="text-center">水害名</th>
-
-                    <th class="text-center">都道府県コード</th>
-                    <th class="text-center">都道府県名</th>
-                    <th class="text-center">市区町村コード</th>
-                    <th class="text-center">市区町村名</th>
-                    <th class="text-center">水害原因コード1</th>
-                    <th class="text-center">水害原因名1</th>
-                    <th class="text-center">水害原因コード2</th>
-                    <th class="text-center">水害原因名2</th>
-                    <th class="text-center">水害原因コード3</th>
-                    <th class="text-center">水害原因名3</th>
-                    
-                    <th class="text-center">水害区域ID</th>
-                    <th class="text-center">水害区域名</th>
-                    
-                    <th class="text-center">水系コード</th>
-                    <th class="text-center">水系名</th>
-                    <th class="text-center">河川コード</th>
-                    <th class="text-center">河川名</th>
-                    <th class="text-center">地盤勾配区分コード</th>
-                    <th class="text-center">地盤勾配区分名</th>
-                    
-                    <th class="text-center">宅地面積</th>
-                    <th class="text-center">農地面積</th>
-                    <th class="text-center">地下面積</th>
-                    <th class="text-center">河川海岸（工種）コード</th>
-                    <th class="text-center">河川海岸（工種）名</th>
-                    <th class="text-center">農作物被害額</th>
-                    <th class="text-center">異常気象ID</th>
-                    <th class="text-center">異常気象名</th>
-                    
                     <th class="text-center">建物区分コード</th>
                     <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
                     <th class="text-center">地上地下区分名</th>
                     <th class="text-center">浸水土砂区分コード</th>
                     <th class="text-center">浸水土砂区分名</th>
-                    
                     <th class="text-center">被害建物棟数_床下</th>
                     <th class="text-center">被害建物棟数_01から49cm</th>
                     <th class="text-center">被害建物棟数_50から99cm</th>
@@ -1395,11 +1453,9 @@
                     <th class="text-center">被害建物棟数_半壊</th>
                     <th class="text-center">被害建物棟数_全壊</th>
                     <th class="text-center">被害建物棟数_合計</th>
-                    
                     <th class="text-center">延床面積</th>
                     <th class="text-center">被災世帯数</th>
                     <th class="text-center">被災事業所数</th>
-
                     <th class="text-center">延床面積_床下</th>
                     <th class="text-center">延床面積_01から49cm</th>
                     <th class="text-center">延床面積_50から99cm</th>
@@ -1407,7 +1463,6 @@
                     <th class="text-center">延床面積_半壊</th>
                     <th class="text-center">延床面積_全壊</th>
                     <th class="text-center">延床面積_合計</th>
-
                     <th class="text-center">被災世帯数_床下</th>
                     <th class="text-center">被災世帯数_01から49cm</th>
                     <th class="text-center">被災世帯数_50から99cm</th>
@@ -1415,7 +1470,6 @@
                     <th class="text-center">被災世帯数_半壊</th>
                     <th class="text-center">被災世帯数_全壊</th>
                     <th class="text-center">被災世帯数_合計</th>
-
                     <th class="text-center">被災事業所数_床下</th>
                     <th class="text-center">被災事業所数_01から49cm</th>
                     <th class="text-center">被災事業所数_50から99cm</th>
@@ -1423,21 +1477,18 @@
                     <th class="text-center">被災事業所数_半壊</th>
                     <th class="text-center">被災事業所数_全壊</th>
                     <th class="text-center">被災事業所数_合計</th>
-                    
                     <th class="text-center">農漁家戸数_床下</th>
                     <th class="text-center">農漁家戸数_01から49cm</th>
                     <th class="text-center">農漁家戸数_50から99cm</th>
                     <th class="text-center">農漁家戸数_100cm以上</th>
                     <th class="text-center">農漁家戸数_全壊</th>
                     <th class="text-center">農漁家戸数_合計</th>
-                    
                     <th class="text-center">被災従業者数_床下</th>
                     <th class="text-center">被災従業者数_01から49cm</th>
                     <th class="text-center">被災従業者数_50から99cm</th>
                     <th class="text-center">被災従業者数_100cm以上</th>
                     <th class="text-center">被災従業者数_全壊</th>
                     <th class="text-center">被災従業者数_合計</th>
-                    
                     <th class="text-center">産業分類コード</th>
                     <th class="text-center">産業分類名</th>
                     <th class="text-center">地下空間の利用形態コード</th>
@@ -1452,35 +1503,6 @@
                     <td>{{ ippan.ippan_name }}</td>
                     <td>{{ ippan.suigai_id }}</td>
                     <td>{{ ippan.suigai_name }}</td>
-                    
-                    <td>{{ ippan.ken_code }}</td>
-                    <td>{{ ippan.ken_name }}</td>
-                    <td>{{ ippan.city_code }}</td>
-                    <td>{{ ippan.city_name }}</td>
-                    <td>{{ ippan.cause_1_code }}</td>
-                    <td>{{ ippan.cause_1_name }}</td>
-                    <td>{{ ippan.cause_2_code }}</td>
-                    <td>{{ ippan.cause_2_name }}</td>
-                    <td>{{ ippan.cause_3_code }}</td>
-                    <td>{{ ippan.cause_3_name }}</td>
-                    <td>{{ ippan.area_id }}</td>
-                    <td>{{ ippan.area_name }}</td>
-
-                    <td>{{ ippan.suikei_code }}</td>
-                    <td>{{ ippan.suikei_name }}</td>
-                    <td>{{ ippan.kasen_code }}</td>
-                    <td>{{ ippan.kasen_name }}</td>
-                    <td>{{ ippan.gradient_code }}</td>
-                    <td>{{ ippan.gradient_name }}</td>
-
-                    <td>{{ ippan.residential_area }}</td>
-                    <td>{{ ippan.agricultural_area }}</td>
-                    <td>{{ ippan.underground_area }}</td>
-                    <td>{{ ippan.kasen_kaigan_code }}</td>
-                    <td>{{ ippan.kasen_kaigan_name }}</td>
-                    <td>{{ ippan.crop_damage }}</td>
-                    <td>{{ ippan.weather_id }}</td>
-                    <td>{{ ippan.weather_name }}</td>
                     
                     <td>{{ ippan.building_code }}</td>
                     <td>{{ ippan.building_name }}</td>
@@ -1550,19 +1572,18 @@
         </table>
     </div>
     {% endif %}
-    
 
-
-
-    <!-- 一般資産集計データ_集計結果: 300 -->
-    {% if category_code2 == "300" %}
+    <!-- 集計データ: 300 8000 -->
+    {% if category_code2 == "300" or category_code2 == "8000" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">一般資産調査票ID</th>
+                    <th class="text-center">集計ID</th>
+                    <th class="text-center">行ID</th>
+                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">水害ID</th>
-                    
+                    <th class="text-center">水害名</th>
                     <th class="text-center">家屋被害額_床下</th>
                     <th class="text-center">家屋被害額_01から49cm</th>
                     <th class="text-center">家屋被害額_50から99cm</th>
@@ -1645,8 +1666,11 @@
             <tbody>
                 {% for ippan in ippan_summary_list %}
                 <tr>
+                    <td>{{ ippan.id }}</td>
                     <td>{{ ippan.ippan_id }}</td>
+                    <td>{{ ippan.ippan_name }}</td>
                     <td>{{ ippan.suigai_id }}</td>
+                    <td>{{ ippan.suigai_name }}</td>
 
                     <td>{{ ippan.house_summary_lv00 }}</td>
                     <td>{{ ippan.house_summary_lv01_49 }}</td>
@@ -1732,13 +1756,15 @@
     </div>
     {% endif %}
     
-    <!-- 一般資産集計データ_集計結果: 301 -->
-    {% if category_code2 == "301" %}
+    <!-- 集計データ_都道府県別: 301 8010 -->
+    {% if category_code2 == "301" or category_code2 == "8010" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
+                    <th class="text-center">集計ID</th>
                     <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
                     
                     <th class="text-center">家屋被害額_床下</th>
                     <th class="text-center">家屋被害額_01から49cm</th>
@@ -1828,6 +1854,8 @@
             
                 {% for ippan in ippan_group_by_ken_list %}
                     <td>{{ ippan.id }}</td>
+                    <td>{{ ippan.ken_code }}</td>
+                    <td>{{ ippan.ken_name }}</td>
 
                     <td>{{ ippan.house_summary_lv00 }}</td>
                     <td>{{ ippan.house_summary_lv01_49 }}</td>
@@ -1914,13 +1942,15 @@
     </div>
     {% endif %}
     
-    <!-- 一般資産集計データ_集計結果: 302 -->
-    {% if category_code2 == "302" %}
+    <!-- 集計データ_水系別: 302 8020 -->
+    {% if category_code2 == "302" or category_code2 == "8020" %}
     <div class="mb-3 table-responsive">
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
+                    <th class="text-center">集計ID</th>
                     <th class="text-center">水系コード</th>
+                    <th class="text-center">水系名</th>
                     
                     <th class="text-center">家屋被害額_床下</th>
                     <th class="text-center">家屋被害額_01から49cm</th>
@@ -2010,6 +2040,8 @@
             
                 {% for ippan in ippan_group_by_suikei_list %}
                     <td>{{ ippan.id }}</td>
+                    <td>{{ ippan.suikei_code }}</td>
+                    <td>{{ ippan.suikei_name }}</td>
 
                     <td>{{ ippan.house_summary_lv00 }}</td>
                     <td>{{ ippan.house_summary_lv01_49 }}</td>
@@ -2095,6 +2127,182 @@
         </table>
     </div>
     {% endif %}
+    
+    <!-- アクション: 10000 -->
+    {% if category_code2 == "10000" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">アクション名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for action in action_list %}
+                <tr>
+                    <td>{{ action.action_code }}</td>
+                    <td>{{ action.action_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    <!-- 状態: 10010 -->
+    {% if category_code2 == "10010" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">状態名</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in status_list %}
+                <tr>
+                    <td>{{ status.status_code }}</td>
+                    <td>{{ status.status_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- トリガーメッセージ: 10020 -->
+    {% if category_code2 == "10020" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">トリガーID</th>
+                    <th class="text-center">水害ID</th>
+                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">発行日時</th>
+                    <th class="text-center">消費日時</th>
+                    <th class="text-center">成功数</th>
+                    <th class="text-center">失敗数</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trigger in trigger_list %}
+                <tr>
+                    <td>{{ trigger.trigger_id }}</td>
+                    <td>{{ trigger.suigai_id }}</td>
+                    <td>{{ trigger.repository_id }}</td>
+                    <td>{{ trigger.action_code }}</td>
+                    <td>{{ trigger.status_code }}</td>
+                    <td>{{ trigger.published_at }}</td>
+                    <td>{{ trigger.consumed_at }}</td>
+                    <td>{{ trigger.success_count }}</td>
+                    <td>{{ trigger.failure_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- 承認メッセージ: 10030 -->
+    {% if category_code2 == "10030" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">承認ID</th>
+                    <th class="text-center">水害ID</th>
+                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">発行日時</th>
+                    <th class="text-center">消費日時</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for approval in approval_list %}
+                <tr>
+                    <td>{{ approval.approval_id }}</td>
+                    <td>{{ approval.suigai_id }}</td>
+                    <td>{{ approval.repository_id }}</td>
+                    <td>{{ approval.action_code }}</td>
+                    <td>{{ approval.status_code }}</td>
+                    <td>{{ approval.published_at }}</td>
+                    <td>{{ approval.consumed_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    <!-- フィードバックメッセージ: 10040 -->
+    {% if category_code2 == "10040" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">フィードバックID</th>
+                    <th class="text-center">水害ID</th>
+                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">発行日時</th>
+                    <th class="text-center">消費日時</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedback_list %}
+                <tr>
+                    <td>{{ feedback.feedback_id }}</td>
+                    <td>{{ feedback.suigai_id }}</td>
+                    <td>{{ feedback.repository_id }}</td>
+                    <td>{{ feedback.action_code }}</td>
+                    <td>{{ feedback.status_code }}</td>
+                    <td>{{ feedback.published_at }}</td>
+                    <td>{{ feedback.consumed_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- EXCELファイルレポジトリ: 10050 -->
+    {% if category_code2 == "10050" %}
+    <div class="mb-3 table-responsive">
+        <table class="table table-bordered table-striped text-nowrap">
+            <thead>
+                <tr>
+                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">水害ID</th>
+                    <th class="text-center">最新のアクションコード</th>
+                    <th class="text-center">最新の状態コード</th>
+                    <th class="text-center">初期生成日</th>
+                    <th class="text-center">更新日</th>
+                    <th class="text-center">入力ファイルのパス</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repository in repository_list %}
+                <tr>
+                    <td>{{ repository.repository_id }}</td>
+                    <td>{{ repository.suigai_id }}</td>
+                    <td>{{ repository.action_code }}</td>
+                    <td>{{ repository.status_code }}</td>
+                    <td>{{ repository.created_at }}</td>
+                    <td>{{ repository.updated_at }}</td>
+                    <td>{{ repository.input_file_path }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
     <!-- END 一覧表示 -->
     
     <script>
@@ -2137,8 +2345,8 @@
         document.getElementById("option_113").hidden = hidden;
         document.getElementById("option_114").hidden = hidden;
     }
-    // 「調査票」に関連する選択肢を非表示にする。
-    function raw_hidden(hidden) {
+    // 「入力データ」に関連する選択肢を非表示にする。
+    function input_hidden(hidden) {
         document.getElementById("option_200").hidden = hidden;
         document.getElementById("option_201").hidden = hidden;
         document.getElementById("option_202").hidden = hidden;
@@ -2151,6 +2359,16 @@
         document.getElementById("option_300").hidden = hidden;
         document.getElementById("option_301").hidden = hidden;
         document.getElementById("option_302").hidden = hidden;
+    }
+
+    // 「ワークフロー」に関連する選択肢を非表示にする。
+    function workflow_hidden(hidden) {
+        document.getElementById("option_10000").hidden = hidden;
+        document.getElementById("option_10010").hidden = hidden;
+        document.getElementById("option_10020").hidden = hidden;
+        document.getElementById("option_10030").hidden = hidden;
+        document.getElementById("option_10040").hidden = hidden;
+        document.getElementById("option_10050").hidden = hidden;
     }
     
     // データ種別選択ボタン1クリック時のイベントハンドラを設定する。
@@ -2189,8 +2407,9 @@
             // document.getElementById("button_category2").setAttribute("disabled", true);
             // データ種別選択2の選択肢を非表示にする。
             master_hidden(true);
-            raw_hidden(true);
+            input_hidden(true);
             sum_hidden(true);
+            workflow_hidden(true);
         }
 
         // データ種別選択1プルダウンで「定数」が選択されているとき
@@ -2201,13 +2420,14 @@
             // document.getElementById("button_ken").setAttribute("disabled", true);
             // document.getElementById("button_city").setAttribute("disabled", true);
             // document.getElementById("button_category2").removeAttribute("disabled", true);
-            // データ種別選択2の「定数」に関連する選択肢を表示、「調査票」「集計結果」に関連する選択肢を非表示にする。
+            // データ種別選択2の「定数」に関連する選択肢を表示、「入力データ」「集計データ」「ワークフロー」に関連する選択肢を非表示にする。
             master_hidden(false);
-            raw_hidden(true);
+            input_hidden(true);
             sum_hidden(true);
+            workflow_hidden(true);
         }
         
-        // データ種別選択1プルダウンで「調査票」が選択されているとき
+        // データ種別選択1プルダウンで「入力データ」が選択されているとき
         else if (form_select_category1.value === "2") {
             if (form_select_ken.value === "0") {
                 if (form_select_city.value === "0") {
@@ -2245,13 +2465,14 @@
                     // document.getElementById("button_category2").removeAttribute("disabled");
                 }
             }
-            // データ種別選択2の「調査票」に関連する選択肢を表示、「集計結果」「定数」に関連する選択肢を非表示にする。
+            // データ種別選択2の「入力データ」に関連する選択肢を表示、「定数」「集計データ」「ワークフロー」に関連する選択肢を非表示にする。
             master_hidden(true);
-            raw_hidden(false);
+            input_hidden(false);
             sum_hidden(true);
+            workflow_hidden(true);
         }
         
-        // データ種別選択1プルダウンで「集計結果」が選択されているとき
+        // データ種別選択1プルダウンで「集計データ」が選択されているとき
         else if (form_select_category1.value === "3") {
             if (form_select_ken.value === "0") {
                 if (form_select_city.value === "0") {
@@ -2289,11 +2510,58 @@
                     // document.getElementById("button_category2").removeAttribute("disabled");
                 }
             }
-            // データ種別選択2の「集計結果」に関連する選択肢を表示、「調査票」「定数」に関連する選択肢を非表示にする。
+            // データ種別選択2の「集計データ」に関連する選択肢を表示、「定数」「入力データ」「ワークフロー」に関連する選択肢を非表示にする。
             master_hidden(true);
-            raw_hidden(true);
+            input_hidden(true);
             sum_hidden(false);
+            workflow_hidden(true);
         }
+        
+        // データ種別選択1プルダウンで「ワークフロー」が選択されているとき
+        else if (form_select_category1.value === "4") {
+            if (form_select_ken.value === "0") {
+                if (form_select_city.value === "0") {
+                    // document.getElementById("form_select_ken").removeAttribute("disabled");
+                    // document.getElementById("form_select_city").setAttribute("disabled", true);
+                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    // document.getElementById("button_ken").removeAttribute("disabled");
+                    // document.getElementById("button_city").setAttribute("disabled", true);
+                    // document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+                else {
+                    // document.getElementById("form_select_ken").removeAttribute("disabled");
+                    // document.getElementById("form_select_city").setAttribute("disabled", true);
+                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
+                    // document.getElementById("button_ken").removeAttribute("disabled");
+                    // document.getElementById("button_city").setAttribute("disabled", true);
+                    // document.getElementById("button_category2").setAttribute("disabled", true);
+                }
+            }
+            else {
+                if (form_select_city.value === "0") {
+                    // document.getElementById("form_select_ken").removeAttribute("disabled");
+                    // document.getElementById("form_select_city").removeAttribute("disabled");
+                    // document.getElementById("form_select_category2").removeAttribute("disabled");
+                    // document.getElementById("button_ken").removeAttribute("disabled");
+                    // document.getElementById("button_city").removeAttribute("disabled");
+                    // document.getElementById("button_category2").removeAttribute("disabled");
+                }
+                else {
+                    // document.getElementById("form_select_ken").removeAttribute("disabled");
+                    // document.getElementById("form_select_city").removeAttribute("disabled");
+                    // document.getElementById("form_select_category2").removeAttribute("disabled");
+                    // document.getElementById("button_ken").removeAttribute("disabled");
+                    // document.getElementById("button_city").removeAttribute("disabled");
+                    // document.getElementById("button_category2").removeAttribute("disabled");
+                }
+            }
+            // データ種別選択2の「ワークフロー」に関連する選択肢を表示、「定数」「入力データ」「集計データ」に関連する選択肢を非表示にする。
+            master_hidden(true);
+            input_hidden(true);
+            sum_hidden(true);
+            workflow_hidden(false);
+        }
+        
     }
     </script>
     {% endblock %}

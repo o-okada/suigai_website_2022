@@ -147,9 +147,30 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         
         if ken_code == "0":
-            city_list = CITY.objects.raw("""SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code, 
+                    CT1.city_name, 
+                    CT1.ken_code, 
+                    KE1.ken_name, 
+                    CT1.city_population, 
+                    CT1.city_area 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [])
         else:
-            city_list = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken_code,])
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code, 
+                    CT1.city_name, 
+                    CT1.ken_code, 
+                    KE1.ken_name, 
+                    CT1.city_population, 
+                    CT1.city_area 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                WHERE CT1.KEN_CODE=%s 
+                ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [ken_code,])
         
         #######################################################################
         ### DBアクセス処理(0020)
@@ -212,13 +233,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         if category_code2 == "0":
             pass
         
-        elif category_code2 == "1" or category_code2 == "10000":
+        elif category_code2 == "1" or category_code2 == "1000":
             building_list = BUILDING.objects.raw("""
                 SELECT 
-                    BUILDING_CODE, 
-                    BUILDING_NAME 
+                    building_code, 
+                    building_name 
                 FROM BUILDING 
-                ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
+                ORDER BY CAST(building_code AS INTEGER)""", [])
             
         elif category_code2 == "2" or category_code2 == "1010":
             pass
@@ -229,122 +250,138 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "4" or category_code2 == "1030":
             kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""
                 SELECT 
-                    KASEN_KAIGAN_CODE, 
-                    KASEN_KAIGAN_NAME 
+                    kasen_kaigan_code, 
+                    kasen_kaigan_name 
                 FROM KASEN_KAIGAN 
-                ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
+                ORDER BY CAST(kasen_kaigan_code AS INTEGER)""", [])
             
         elif category_code2 == "5" or category_code2 == "1040":
             suikei_list = SUIKEI.objects.raw("""
                 SELECT 
-                    SK1.SUIKEI_CODE, 
-                    SK1.SUIKEI_NAME, 
-                    SK1.SUIKEI_TYPE_CODE, 
-                    ST1.SUIKEI_TYPE_NAME 
+                    SK1.suikei_code AS suikei_code, 
+                    SK1.suikei_name AS suikei_name, 
+                    SK1.suikei_type_code AS suikei_type_code, 
+                    ST1.suikei_type_name AS suikei_type_name 
                 FROM SUIKEI SK1 
-                LEFT JOIN SUIKEI_TYPE ST1 ON SK1.SUIKEI_TYPE_CODE=ST1.SUIKEI_TYPE_CODE 
-                ORDER BY CAST(SK1.SUIKEI_CODE AS INTEGER)""", [])
+                LEFT JOIN SUIKEI_TYPE ST1 ON SK1.suikei_type_code=ST1.suikei_type_code 
+                ORDER BY CAST(SK1.suikei_code AS INTEGER)""", [])
             
         elif category_code2 == "6" or category_code2 == "1050":
             suikei_type_list = SUIKEI_TYPE.objects.raw("""
                 SELECT 
-                    SUIKEI_TYPE_CODE, 
-                    SUIKEI_TYPE_NAME 
+                    suikei_type_code, 
+                    suikei_type_name 
                 FROM SUIKEI_TYPE 
-                ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
+                ORDER BY CAST(suikei_type_code AS INTEGER)""", [])
             
         elif category_code2 == "7" or category_code2 == "1060":
             kasen_list = KASEN.objects.raw("""
                 SELECT 
-                    KA1.KASEN_CODE, 
-                    KA1.KASEN_NAME, 
-                    KA1.KASEN_TYPE_CODE, 
-                    KT1.KASEN_TYPE_NAME, 
-                    SK1.SUIKEI_CODE, 
-                    ST1.SUIKEI_NAME 
+                    KA1.kasen_code AS kasen_code, 
+                    KA1.kasen_name AS kasen_name, 
+                    KA1.kasen_type_code AS kasen_type_code, 
+                    KT1.kasen_type_name AS kasen_type_name, 
+                    SK1.suikei_code AS suikei_code, 
+                    SK1.suikei_name AS suikei_name 
                 FROM KASEN KA1 
-                LEFT JOIN KASEN_TYPE KT1 ON KA1.KASEN_TYPE_CODE=KT1.KASEN_TYPE_CODE 
-                LEFT JOIN SUIKEI SK1 ON KA1.SUIKEI_CODE=SK1.SUIKEI_CODE 
-                ORDER BY CAST(KA1.KASEN_CODE AS INTEGER)""", [])
+                LEFT JOIN KASEN_TYPE KT1 ON KA1.kasen_type_code=KT1.kasen_type_code 
+                LEFT JOIN SUIKEI SK1 ON KA1.suikei_code=SK1.suikei_code 
+                ORDER BY CAST(KA1.kasen_code AS INTEGER)""", [])
             
         elif category_code2 == "8" or category_code2 == "1070":
             kasen_type_list = KASEN_TYPE.objects.raw("""
                 SELECT 
                     * 
                 FROM KASEN_TYPE 
-                ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
+                ORDER BY CAST(kasen_type_code AS INTEGER)""", [])
             
         elif category_code2 == "9" or category_code2 == "1080":
             cause_list = CAUSE.objects.raw("""
                 SELECT 
                     * 
                 FROM CAUSE 
-                ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
+                ORDER BY CAST(cause_code AS INTEGER)""", [])
             
         elif category_code2 == "10" or category_code2 == "1090":
             underground_list = UNDERGROUND.objects.raw("""
                 SELECT 
                     * 
                 FROM UNDERGROUND 
-                ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
+                ORDER BY CAST(underground_code AS INTEGER)""", [])
             
         elif category_code2 == "11" or category_code2 == "1100":
             usage_list = USAGE.objects.raw("""
                 SELECT 
                     * 
                 FROM USAGE 
-                ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
+                ORDER BY CAST(usage_code AS INTEGER)""", [])
             
         elif category_code2 == "12" or category_code2 == "1110":
             flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""
                 SELECT 
                     * 
                 FROM FLOOD_SEDIMENT 
-                ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
+                ORDER BY CAST(flood_sediment_code AS INTEGER)""", [])
             
         elif category_code2 == "13" or category_code2 == "1120":
             gradient_list = GRADIENT.objects.raw("""
                 SELECT 
                     * 
                 FROM GRADIENT 
-                ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
+                ORDER BY CAST(gradient_code AS INTEGER)""", [])
             
         elif category_code2 == "14" or category_code2 == "1130":
             industry_list = INDUSTRY.objects.raw("""
                 SELECT 
                     * 
                 FROM INDUSTRY 
-                ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
+                ORDER BY CAST(industry_code AS INTEGER)""", [])
 
 
             
         elif category_code2 == "100" or category_code2 == "2000":
             house_asset_list = HOUSE_ASSET.objects.raw("""
                 SELECT 
-                    * 
-                FROM HOUSE_ASSET 
-                ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)""", [])
+                    HA1.house_asset_code AS house_asset_code, 
+                    HA1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    HA1.house_asset AS house_asset 
+                FROM HOUSE_ASSET HA1 
+                LEFT JOIN KEN KE1 ON HA1.ken_code=KE1.ken_code 
+                ORDER BY CAST(HA1.house_asset_code AS INTEGER)""", [])
             
         elif category_code2 == "101" or category_code2 == "2010":
             house_rate_list = HOUSE_RATE.objects.raw("""
                 SELECT 
-                    * 
-                FROM HOUSE_RATE 
-                ORDER BY CAST(HOUSE_RATE_CODE AS INTEGER)""", [])
+                    HR1.house_rate_code AS house_rate_code, 
+                    HR1.flood_sediment_code AS flood_sediment_code, 
+                    FS1.flood_sediment_name AS flood_sediment_name, 
+                    HR1.gradient_code AS gradient_code, 
+                    GR1.gradient_name AS gradient_name, 
+                    HR1.house_rate_lv00 AS house_rate_lv00, 
+                    HR1.house_rate_lv00_50 AS house_rate_lv00_50, 
+                    HR1.house_rate_lv50_100 AS house_rate_lv50_100, 
+                    HR1.house_rate_lv100_200 AS house_rate_lv100_200, 
+                    HR1.house_rate_lv200_300 AS house_rate_lv200_300, 
+                    HR1.house_rate_lv300 AS house_rate_lv300 
+                FROM HOUSE_RATE HR1 
+                LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
+                LEFT JOIN GRADIENT GR1 ON HR1.gradient_code=GR1.gradient_code 
+                ORDER BY CAST(HR1.house_rate_code AS INTEGER)""", [])
             
         elif category_code2 == "102" or category_code2 == "2020":
             house_alt_list = HOUSE_ALT.objects.raw("""
                 SELECT 
                     * 
                 FROM HOUSE_ALT 
-                ORDER BY CAST(HOUSE_ALT_CODE AS INTEGER)""", [])
+                ORDER BY CAST(house_alt_code AS INTEGER)""", [])
             
         elif category_code2 == "103" or category_code2 == "2030":
             house_clean_list = HOUSE_CLEAN.objects.raw("""
                 SELECT 
                     * 
                 FROM HOUSE_CLEAN 
-                ORDER BY CAST(HOUSE_CLEAN_CODE AS INTEGER)""", [])
+                ORDER BY CAST(house_clean_code AS INTEGER)""", [])
 
 
             
@@ -353,14 +390,23 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 SELECT 
                     * 
                 FROM HOUSEHOLD_ASSET 
-                ORDER BY CAST(HOUSEHOLD_ASSET_CODE AS INTEGER)""", [])
+                ORDER BY CAST(household_asset_code AS INTEGER)""", [])
             
         elif category_code2 == "105" or category_code2 == "3010":
             household_rate_list = HOUSEHOLD_RATE.objects.raw("""
                 SELECT 
-                    * 
-                FROM HOUSEHOLD_RATE 
-                ORDER BY CAST(HOUSEHOLD_RATE_CODE AS INTEGER)""", [])
+                    HR1.household_rate_code AS household_rate_code, 
+                    HR1.flood_sediment_code AS flood_sediment_code, 
+                    FS1.flood_sediment_name AS flood_sediment_name, 
+                    HR1.household_rate_lv00 AS household_rate_lv00, 
+                    HR1.household_rate_lv00_50 AS household_rate_lv00_50, 
+                    HR1.household_rate_lv50_100 AS household_rate_lv50_100, 
+                    HR1.household_rate_lv100_200 AS household_rate_lv100_200, 
+                    HR1.household_rate_lv200_300 AS household_rate_lv200_300, 
+                    HR1.household_rate_lv300 AS household_rate_lv300 
+                FROM HOUSEHOLD_RATE HR1 
+                LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
+                ORDER BY CAST(HR1.household_rate_code AS INTEGER)""", [])
 
 
             
@@ -369,51 +415,72 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 SELECT 
                     * 
                 FROM CAR_ASSET 
-                ORDER BY CAST(CAR_ASSET_CODE AS INTEGER)""", [])
+                ORDER BY CAST(car_asset_code AS INTEGER)""", [])
             
         elif category_code2 == "107" or category_code2 == "4010":
             car_rate_list = CAR_RATE.objects.raw("""
                 SELECT 
                     * 
                 FROM CAR_RATE 
-                ORDER BY CAST(CAR_RATE_CODE AS INTEGER)""", [])
+                ORDER BY CAST(car_rate_code AS INTEGER)""", [])
 
             
             
         elif category_code2 == "108" or category_code2 == "5000":
             office_asset_list = OFFICE_ASSET.objects.raw("""
                 SELECT 
-                    * 
-                FROM OFFICE_ASSET 
-                ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)""", [])
+                    OA1.office_asset_code AS office_asset_code, 
+                    OA1.industry_code AS industry_code, 
+                    ID1.industry_name AS industry_name, 
+                    OA1.office_dep_asset AS office_dep_asset, 
+                    OA1.office_inv_asset AS office_inv_asset, 
+                    OA1.office_va_asset AS office_va_asset 
+                FROM OFFICE_ASSET OA1 
+                LEFT JOIN INDUSTRY ID1 ON OA1.industry_code=ID1.industry_code 
+                ORDER BY CAST(OA1.office_asset_code AS INTEGER)""", [])
 
         elif category_code2 == "109" or category_code2 == "5010":
             office_rate_list = OFFICE_RATE.objects.raw("""
                 SELECT 
-                    * 
-                FROM OFFICE_RATE 
-                ORDER BY CAST(OFFICE_RATE_CODE AS INTEGER)""", [])
+                    OR1.office_rate_code AS office_rate_code, 
+                    OR1.flood_sediment_code AS flood_sediment_code, 
+                    FS1.flood_sediment_name AS flood_sediment_name, 
+                    OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
+                    OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
+                    OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
+                    OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
+                    OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
+                    OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
+                    OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
+                    OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
+                    OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
+                    OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
+                    OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
+                    OR1.office_inv_rate_lv300 AS office_inv_rate_lv300 
+                FROM OFFICE_RATE OR1 
+                LEFT JOIN FLOOD_SEDIMENT FS1 ON OR1.flood_sediment_code=FS1.flood_sediment_code 
+                ORDER BY CAST(OR1.office_rate_code AS INTEGER)""", [])
 
         elif category_code2 == "110" or category_code2 == "5020":
             office_suspend_list = OFFICE_SUSPEND.objects.raw("""
                 SELECT 
                     * 
                 FROM OFFICE_SUSPEND 
-                ORDER BY CAST(OFFICE_SUS_CODE AS INTEGER)""", [])
+                ORDER BY CAST(office_sus_code AS INTEGER)""", [])
 
         elif category_code2 == "111" or category_code2 == "5030":
             office_stagnate_list = OFFICE_STAGNATE.objects.raw("""
                 SELECT 
                     * 
                 FROM OFFICE_STAGNATE 
-                ORDER BY CAST(OFFICE_STG_CODE AS INTEGER)""", [])
+                ORDER BY CAST(office_stg_code AS INTEGER)""", [])
 
         elif category_code2 == "112" or category_code2 == "5040":
             office_alt_list = OFFICE_ALT.objects.raw("""
                 SELECT 
                     * 
                 FROM OFFICE_ALT 
-                ORDER BY CAST(OFFICE_ALT_CODE AS INTEGER)""", [])
+                ORDER BY CAST(office_alt_code AS INTEGER)""", [])
 
 
 
@@ -422,14 +489,29 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 SELECT 
                     * 
                 FROM FARMER_FISHER_ASSET 
-                ORDER BY CAST(FARMER_FISHER_ASSET_CODE AS INTEGER)""", [])
+                ORDER BY CAST(farmer_fisher_asset_code AS INTEGER)""", [])
 
         elif category_code2 == "114" or category_code2 == "6010":
             farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""
                 SELECT 
-                    * 
-                FROM FARMER_FISHER_RATE 
-                ORDER BY CAST(FARMER_FISHER_RATE_CODE AS INTEGER)""", [])
+                    FFR1.farmer_fisher_rate_code AS farmer_fisher_rate_code, 
+                    FFR1.flood_sediment_code AS flood_sediment_code, 
+                    FS1.flood_sediment_name AS flood_sediment_name, 
+                    FFR1.farmer_fisher_dep_rate_lv00 AS farmer_fisher_dep_rate_lv00, 
+                    FFR1.farmer_fisher_dep_rate_lv00_50 AS farmer_fisher_dep_rate_lv00_50, 
+                    FFR1.farmer_fisher_dep_rate_lv50_100 AS farmer_fisher_dep_rate_lv50_100, 
+                    FFR1.farmer_fisher_dep_rate_lv100_200 AS farmer_fisher_dep_rate_lv100_200, 
+                    FFR1.farmer_fisher_dep_rate_lv200_300 AS farmer_fisher_dep_rate_lv200_300, 
+                    FFR1.farmer_fisher_dep_rate_lv300 AS farmer_fisher_dep_rate_lv300, 
+                    FFR1.farmer_fisher_inv_rate_lv00 AS farmer_fisher_inv_rate_lv00, 
+                    FFR1.farmer_fisher_inv_rate_lv00_50 AS farmer_fisher_inv_rate_lv00_50, 
+                    FFR1.farmer_fisher_inv_rate_lv50_100 AS farmer_fisher_inv_rate_lv50_100, 
+                    FFR1.farmer_fisher_inv_rate_lv100_200 AS farmer_fisher_inv_rate_lv100_200, 
+                    FFR1.farmer_fisher_inv_rate_lv200_300 ASfarmer_fisher_inv_rate_lv200_300, 
+                    FFR1.farmer_fisher_inv_rate_lv300 AS farmer_fisher_inv_rate_lv300 
+                FROM FARMER_FISHER_RATE FFR1 
+                LEFT JOIN FLOOD_SEDIMENT FS1 ON FFR1.flood_sediment_code=FS1.flood_sediment_code 
+                ORDER BY CAST(FFR1.farmer_fisher_rate_code AS INTEGER)""", [])
 
 
 
@@ -450,39 +532,251 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "202" or category_code2 == "7020":
             suigai_list = SUIGAI.objects.raw("""
                 SELECT 
-                    * 
-                FROM SUIGAI 
-                ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
+                    SG1.suigai_id AS suigai_id, 
+                    SG1.suigai_name AS suigai_name, 
+                    SG1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SG1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    SG1.begin_date AS begin_date, 
+                    SG1.end_date AS end_date, 
+                    SG1.cause_1_code AS cause_1_code, 
+                    CA1.cause_name AS cause_1_name, 
+                    SG1.cause_2_code AS cause_2_code, 
+                    CA2.cause_name AS cause_2_name, 
+                    SG1.cause_3_code AS cause_3_code, 
+                    CA3.cause_name AS cause_3_name, 
+                    SG1.area_id AS area_id, 
+                    AR1.area_name AS area_name, 
+                    SG1.suikei_code AS suikei_code, 
+                    SK1.suikei_name AS suikei_name, 
+                    SG1.kasen_code AS kasen_code, 
+                    KA1.kasen_name AS kasen_name, 
+                    SG1.gradient_code AS gradient_code, 
+                    GR1.gradient_name AS gradient_name, 
+                    SG1.residential_area AS residential_area, 
+                    SG1.agricultural_area AS agricultural_area, 
+                    SG1.underground_area AS underground_area, 
+                    SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                    KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                    SG1.crop_damage AS crop_damage, 
+                    SG1.weather_id AS weather_id, 
+                    WE1.weather_name AS weather_name 
+                FROM SUIGAI SG1 
+                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+                LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+                LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+                LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+                LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
+                LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+                LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+                LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+                LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                ORDER BY CAST(SG1.SUIGAI_ID AS INTEGER)""", [])
 
         elif category_code2 == "203" or category_code2 == "7030":
             ippan_list = IPPAN.objects.raw("""
                 SELECT 
-                    * 
-                FROM IPPAN 
-                ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+                    IP1.ippan_id AS ippan_id, 
+                    IP1.ippan_name AS ippan_name, 
+                    IP1.suigai_id AS suigai_id, 
+                    SG1.suigai_name AS suigai_name, 
+                    IP1.building_code AS building_code, 
+                    BD1.building_name AS building_name, 
+                    IP1.underground_code AS underground_code, 
+                    UD1.underground_name AS underground_name, 
+                    IP1.flood_sediment_code AS flood_sediment_code, 
+                    FS1.flood_sediment_name AS flood_sediment_name, 
+                    IP1.building_lv00 AS building_lv00, 
+                    IP1.building_lv01_49 AS building_lv01_49, 
+                    IP1.building_lv50_99 AS building_lv50_99, 
+                    IP1.building_lv100 AS building_lv100, 
+                    IP1.building_half AS building_half, 
+                    IP1.building_full AS building_full, 
+                    IP1.floor_area AS floor_area, 
+                    IP1.family AS family, 
+                    IP1.office AS office, 
+                    IP1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
+                    IP1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
+                    IP1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
+                    IP1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
+                    IP1.farmer_fisher_full AS farmer_fisher_full, 
+                    IP1.employee_lv00 AS employee_lv00, 
+                    IP1.employee_lv01_49 AS employee_lv01_49, 
+                    IP1.employee_lv50_99 AS employee_lv50_99, 
+                    IP1.employee_lv100 AS employee_lv100, 
+                    IP1.employee_full AS employee_full, 
+                    IP1.industry_code AS industry_code, 
+                    ID1.industry_name AS industry_name, 
+                    IP1.usage_code AS usage_code, 
+                    US1.usage_name AS usage_name, 
+                    IP1.comment AS comment 
+                FROM IPPAN IP1 
+                LEFT JOIN SUIGAI SG1 ON IP1.suigai_id=SG1.suigai_id 
+                LEFT JOIN BUILDING BD1 ON IP1.building_code=BD1.building_code 
+                LEFT JOIN UNDERGROUND UD1 ON IP1.underground_code=UD1.underground_code 
+                LEFT JOIN FLOOD_SEDIMENT FS1 ON IP1.flood_sediment_code=FS1.flood_sediment_code 
+                LEFT JOIN INDUSTRY ID1 ON IP1.industry_code=ID1.industry_code 
+                LEFT JOIN USAGE US1 ON IP1.usage_code=US1.usage_code 
+                ORDER BY CAST(IP1.IPPAN_ID AS INTEGER)""", [])
 
         elif category_code2 == "204" or category_code2 == "7040":
-            if ken_code == "0":
-                if city_code == "0":
-                    ippan_view_list = IPPAN_VIEW.objects.raw(""" 
-                        SELECT * FROM IPPAN_VIEW ORDER BY CAST(IPPAN_ID AS INTEGER)
-                        """, [])
-                else:
-                    ippan_view_list = IPPAN_VIEW.objects.raw(""" 
-                        SELECT * FROM IPPAN_VIEW WHERE CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
-                        """, [city_code, ])
-            else:
-                if city_code == "0":
-                    ippan_view_list = IPPAN_VIEW.objects.raw(""" 
-                        SELECT * FROM IPPAN_VIEW WHERE KEN_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
-                        """, [ken_code, ])
-                else:
-                    ippan_view_list = IPPAN_VIEW.objects.raw(""" 
-                        SELECT * FROM IPPAN_VIEW WHERE KEN_CODE=%s AND CITY_CODE=%s ORDER BY CAST(IPPAN_ID AS INTEGER)
-                        """, [ken_code, city_code, ])
+            ippan_view_list = IPPAN_VIEW.objects.raw(""" 
+                SELECT 
+                    ippan_id AS ippan_id, 
+                    ippan_name AS ippan_name, 
+                    suigai_id AS suigai_id, 
+                    suigai_name AS suigai_name, 
+                    building_code AS building_code, 
+                    building_name AS building_name, 
+                    underground_code AS underground_code, 
+                    underground_name AS underground_name, 
+                    flood_sediment_code AS flood_sediment_code, 
+                    flood_sediment_name AS flood_sediment_name, 
+                    building_lv00 AS building_lv00, 
+                    building_lv01_49 AS building_lv01_49, 
+                    building_lv50_99 AS building_lv50_99, 
+                    building_lv100 AS building_lv100, 
+                    building_half AS building_half, 
+                    building_full AS building_full, 
+                    building_total AS building_total, 
+                    floor_area AS floor_area, 
+                    family AS family, 
+                    office AS office, 
+                    floor_area_lv00 AS floor_area_lv00, 
+                    floor_area_lv01_49 AS floor_area_lv01_49, 
+                    floor_area_lv50_99 AS floor_area_lv50_99, 
+                    floor_area_lv100 AS floor_area_lv100, 
+                    floor_area_half AS floor_area_half, 
+                    floor_area_full AS floor_area_full, 
+                    floor_area_total AS floor_area_total, 
+                    family_lv00 AS family_lv00, 
+                    family_lv01_49 AS family_lv01_49, 
+                    family_lv50_99 AS family_lv50_99, 
+                    family_lv100 AS family_lv100, 
+                    family_half AS family_half, 
+                    family_full AS family_full, 
+                    family_total AS family_total, 
+                    office_lv00 AS office_lv00, 
+                    office_lv01_49 AS office_lv01_49, 
+                    office_lv50_99 AS office_lv50_99, 
+                    office_lv100 AS office_lv100, 
+                    office_half AS office_half, 
+                    office_full AS office_full, 
+                    office_total AS office_total, 
+                    farmer_fisher_lv00 AS farmer_fisher_lv00, 
+                    farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
+                    farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
+                    farmer_fisher_lv100 AS farmer_fisher_lv100, 
+                    farmer_fisher_full AS farmer_fisher_full, 
+                    farmer_fisher_total AS farmer_fisher_total, 
+                    employee_lv00 AS employee_lv00, 
+                    employee_lv01_49 AS employee_lv01_49, 
+                    employee_lv50_99 AS employee_lv50_99, 
+                    employee_lv100 AS employee_lv100, 
+                    employee_full AS employee_full, 
+                    employee_total AS employee_total, 
+                    industry_code AS industry_code, 
+                    industry_name AS industry_name, 
+                    usage_code AS usage_code, 
+                    usage_name AS usage_name, 
+                    comment 
+                FROM IPPAN_VIEW 
+                ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
 
         elif category_code2 == "300" or category_code2 == "8000":
-            ippan_summary_list = IPPAN_SUMMARY.objects.raw("""SELECT * FROM IPPAN_SUMMARY ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+            ippan_summary_list = IPPAN_SUMMARY.objects.raw("""
+                SELECT 
+                    IS1.id AS id, 
+                    IS1.ippan_id AS ippan_id, 
+                    IP1.ippan_name AS ippan_name, 
+                    IS1.suigai_id AS suigai_id, 
+                    SG1.suigai_name AS suigai_name, 
+                    
+                    IS1.house_summary_lv00 AS house_summary_lv00, 
+                    IS1.house_summary_lv01_49 AS house_summary_lv01_49, 
+                    IS1.house_summary_lv50_99 AS house_summary_lv50_99, 
+                    IS1.house_summary_lv100 AS house_summary_lv100, 
+                    IS1.house_summary_half AS house_summary_half, 
+                    IS1.house_summary_full AS house_summary_full, 
+                    
+                    IS1.household_summary_lv00 AS household_summary_lv00, 
+                    IS1.household_summary_lv01_49 AS household_summary_lv01_49, 
+                    IS1.household_summary_lv50_99 AS household_summary_lv50_99, 
+                    IS1.household_summary_lv100 AS household_summary_lv100, 
+                    IS1.household_summary_half AS household_summary_half, 
+                    IS1.household_summary_full AS household_summary_full, 
+                    
+                    IS1.car_summary_lv00 AS car_summary_lv00, 
+                    IS1.car_summary_lv01_49 AS car_summary_lv01_49, 
+                    IS1.car_summary_lv50_99 AS car_summary_lv50_99, 
+                    IS1.car_summary_lv100 AS car_summary_lv100, 
+                    IS1.car_summary_half AS car_summary_half, 
+                    IS1.car_summary_full AS car_summary_full, 
+                    
+                    IS1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
+                    IS1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
+                    IS1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
+                    IS1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
+                    IS1.house_alt_summary_half AS house_alt_summary_half, 
+                    IS1.house_alt_summary_full AS house_alt_summary_full, 
+                    
+                    IS1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
+                    IS1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
+                    IS1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
+                    IS1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
+                    IS1.house_clean_summary_half AS house_clean_summary_half, 
+                    IS1.house_clean_summary_full AS house_clean_summary_full, 
+                    
+                    IS1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
+                    IS1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
+                    IS1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
+                    IS1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
+                    IS1.office_dep_summary_full AS office_dep_summary_full, 
+                    
+                    IS1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
+                    IS1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
+                    IS1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
+                    IS1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
+                    IS1.office_inv_summary_full AS office_inv_summary_full, 
+                    
+                    IS1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
+                    IS1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
+                    IS1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
+                    IS1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
+                    IS1.office_sus_summary_full AS office_sus_summary_full, 
+                    
+                    IS1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
+                    IS1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
+                    IS1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
+                    IS1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
+                    IS1.office_stg_summary_full AS office_stg_summary_full, 
+                    
+                    IS1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
+                    IS1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
+                    IS1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
+                    IS1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
+                    IS1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+                    
+                    IS1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
+                    IS1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
+                    IS1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
+                    IS1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
+                    IS1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+                    
+                    IS1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
+                    IS1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
+                    IS1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
+                    IS1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
+                    IS1.office_alt_summary_half AS office_alt_summary_half, 
+                    IS1.office_alt_summary_full AS office_alt_summary_full 
+                    
+                FROM IPPAN_SUMMARY IS1 
+                LEFT JOIN IPPAN IP1 ON IS1.ippan_id=IP1.ippan_id 
+                LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
+                ORDER BY CAST(IS1.IPPAN_ID AS INTEGER)""", [])
 
         elif category_code2 == "301" or category_code2 == "8010":
             ### print_log('[INFO] SELECT * FROM IPPAN_SUMMARY GROUP BY () ORDER BY CAST(AS INTEGER)', 'INFO')
@@ -499,6 +793,89 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
             ### SQLは実行できるが、IPPAN_SUMMARYモデルに正しくセットできないため。
             ### 都道府県コードをPKとする別のモデルを定義しても良さそうだが、未検証。
             ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
+                SELECT 
+                    SUB1.id AS id, 
+                    SUB1.id AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+
+                    SUB1.house_summary_lv00 AS house_summary_lv00, 
+                    SUB1.house_summary_lv01_49 AS house_summary_lv01_49, 
+                    SUB1.house_summary_lv50_99 AS house_summary_lv50_99, 
+                    SUB1.house_summary_lv100 AS house_summary_lv100, 
+                    SUB1.house_summary_half AS house_summary_half, 
+                    SUB1.house_summary_full AS house_summary_full, 
+
+                    SUB1.household_summary_lv00 AS household_summary_lv00, 
+                    SUB1.household_summary_lv01_49 AS household_summary_lv01_49, 
+                    SUB1.household_summary_lv50_99 AS household_summary_lv50_99, 
+                    SUB1.household_summary_lv100 AS household_summary_lv100, 
+                    SUB1.household_summary_half AS household_summary_half, 
+                    SUB1.household_summary_full AS household_summary_full, 
+
+                    SUB1.car_summary_lv00 AS car_summary_lv00, 
+                    SUB1.car_summary_lv01_49 AS car_summary_lv01_49, 
+                    SUB1.car_summary_lv50_99 AS car_summary_lv50_99, 
+                    SUB1.car_summary_lv100 AS car_summary_lv100, 
+                    SUB1.car_summary_half AS car_summary_half, 
+                    SUB1.car_summary_full AS car_summary_full, 
+
+                    SUB1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
+                    SUB1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
+                    SUB1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
+                    SUB1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
+                    SUB1.house_alt_summary_half AS house_alt_summary_half, 
+                    SUB1.house_alt_summary_full AS house_alt_summary_full, 
+
+                    SUB1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
+                    SUB1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
+                    SUB1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
+                    SUB1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
+                    SUB1.house_clean_summary_half AS house_clean_summary_half, 
+                    SUB1.house_clean_summary_full AS house_clean_summary_full, 
+
+                    SUB1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
+                    SUB1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
+                    SUB1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
+                    SUB1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
+                    SUB1.office_dep_summary_full AS office_dep_summary_full, 
+
+                    SUB1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
+                    SUB1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
+                    SUB1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
+                    SUB1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
+                    SUB1.office_inv_summary_full AS office_inv_summary_full, 
+
+                    SUB1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
+                    SUB1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49,  
+                    SUB1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
+                    SUB1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
+                    SUB1.office_sus_summary_full AS office_sus_summary_full, 
+
+                    SUB1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
+                    SUB1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
+                    SUB1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
+                    SUB1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
+                    SUB1.office_stg_summary_full AS office_stg_summary_full, 
+
+                    SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
+                    SUB1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
+                    SUB1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
+                    SUB1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
+                    SUB1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+
+                    SUB1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
+                    SUB1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
+                    SUB1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
+                    SUB1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
+                    SUB1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+
+                    SUB1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
+                    SUB1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
+                    SUB1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
+                    SUB1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
+                    SUB1.office_alt_summary_half AS office_alt_summary_half, 
+                    SUB1.office_alt_summary_full AS office_alt_summary_full 
+                FROM (
                 SELECT 
                     SG1.ken_code AS id, 
                     SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
@@ -589,6 +966,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
                 GROUP BY SG1.ken_code 
                 ORDER BY CAST(SG1.KEN_CODE AS INTEGER)
+                ) SUB1 
+                LEFT JOIN KEN KE1 ON SUB1.id=KE1.ken_code 
             """, [])
 
         elif category_code2 == "302" or category_code2 == "8020":
@@ -598,6 +977,89 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
             ### SQLは実行できるが、IPPAN_SUMMARYモデルに正しくセットできないため。
             ### 水系コードをPKとする別のモデルを定義しても良さそうだが、未検証。
             ippan_group_by_suikei_list = IPPAN_SUMMARY.objects.raw("""
+                SELECT 
+                    SUB1.id AS id, 
+                    SUB1.id AS suikei_code, 
+                    SK1.suikei_name AS suikei_name, 
+
+                    SUB1.house_summary_lv00 AS house_summary_lv00, 
+                    SUB1.house_summary_lv01_49 AS house_summary_lv01_49, 
+                    SUB1.house_summary_lv50_99 AS house_summary_lv50_99, 
+                    SUB1.house_summary_lv100 AS house_summary_lv100, 
+                    SUB1.house_summary_half AS house_summary_half, 
+                    SUB1.house_summary_full AS house_summary_full, 
+
+                    SUB1.household_summary_lv00 AS household_summary_lv00, 
+                    SUB1.household_summary_lv01_49 AS household_summary_lv01_49, 
+                    SUB1.household_summary_lv50_99 AS household_summary_lv50_99, 
+                    SUB1.household_summary_lv100 AS household_summary_lv100, 
+                    SUB1.household_summary_half AS household_summary_half, 
+                    SUB1.household_summary_full AS household_summary_full, 
+
+                    SUB1.car_summary_lv00 AS car_summary_lv00, 
+                    SUB1.car_summary_lv01_49 AS car_summary_lv01_49, 
+                    SUB1.car_summary_lv50_99 AS car_summary_lv50_99, 
+                    SUB1.car_summary_lv100 AS car_summary_lv100, 
+                    SUB1.car_summary_half AS car_summary_half, 
+                    SUB1.car_summary_full AS car_summary_full, 
+
+                    SUB1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
+                    SUB1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
+                    SUB1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
+                    SUB1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
+                    SUB1.house_alt_summary_half AS house_alt_summary_half, 
+                    SUB1.house_alt_summary_full AS house_alt_summary_full, 
+
+                    SUB1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
+                    SUB1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
+                    SUB1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
+                    SUB1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
+                    SUB1.house_clean_summary_half AS house_clean_summary_half, 
+                    SUB1.house_clean_summary_full AS house_clean_summary_full, 
+
+                    SUB1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
+                    SUB1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
+                    SUB1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
+                    SUB1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
+                    SUB1.office_dep_summary_full AS office_dep_summary_full, 
+
+                    SUB1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
+                    SUB1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
+                    SUB1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
+                    SUB1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
+                    SUB1.office_inv_summary_full AS office_inv_summary_full, 
+
+                    SUB1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
+                    SUB1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49,  
+                    SUB1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
+                    SUB1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
+                    SUB1.office_sus_summary_full AS office_sus_summary_full, 
+
+                    SUB1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
+                    SUB1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
+                    SUB1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
+                    SUB1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
+                    SUB1.office_stg_summary_full AS office_stg_summary_full, 
+
+                    SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
+                    SUB1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
+                    SUB1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
+                    SUB1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
+                    SUB1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+
+                    SUB1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
+                    SUB1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
+                    SUB1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
+                    SUB1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
+                    SUB1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+
+                    SUB1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
+                    SUB1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
+                    SUB1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
+                    SUB1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
+                    SUB1.office_alt_summary_half AS office_alt_summary_half, 
+                    SUB1.office_alt_summary_full AS office_alt_summary_full 
+                FROM (    
                 SELECT 
                     SG1.suikei_code AS id, 
                     SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
@@ -688,6 +1150,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
                 GROUP BY SG1.suikei_code 
                 ORDER BY CAST(SG1.suikei_code AS INTEGER)
+                ) SUB1 
+                LEFT JOIN SUIKEI SK1 ON SUB1.id=SK1.suikei_code 
             """, [])
 
         elif category_code2 == "10000":
