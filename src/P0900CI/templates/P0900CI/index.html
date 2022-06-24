@@ -163,7 +163,8 @@
                             <td>{{ trigger.consumed_at }}</td>
                             <td>{{ trigger.success_count }}</td>
                             <td>{{ trigger.failure_count }}</td>
-                            <td><a href="/P0900CI/repository/{{ trigger.repository_id }}">詳細</a></td>
+                            <!--<td><a href="/P0900CI/repository/{# trigger.repository_id #}">詳細</a></td>-->
+                            <td><a href="/P0900CI/trigger/{{ trigger.trigger_id }}">詳細</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

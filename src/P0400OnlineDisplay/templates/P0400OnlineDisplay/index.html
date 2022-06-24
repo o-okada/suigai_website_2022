@@ -75,6 +75,12 @@
                         {% else %}
                         <option value="4">ワークフロー: 4</option>
                         {% endif %}
+
+                        {% if category_code1 == "5" %}
+                        <option value="5" selected>レポジトリ: 5</option>
+                        {% else %}
+                        <option value="5">レポジトリ: 5</option>
+                        {% endif %}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category1" name="button_category1">データ種別選択</button>
                 </div>
@@ -2362,12 +2368,16 @@
     }
 
     // 「ワークフロー」に関連する選択肢を非表示にする。
-    function workflow_hidden(hidden) {
+    function work_hidden(hidden) {
         document.getElementById("option_10000").hidden = hidden;
         document.getElementById("option_10010").hidden = hidden;
         document.getElementById("option_10020").hidden = hidden;
         document.getElementById("option_10030").hidden = hidden;
         document.getElementById("option_10040").hidden = hidden;
+    }
+
+    // 「レポジトリ」に関連する選択肢を非表示にする。
+    function repo_hidden(hidden) {
         document.getElementById("option_10050").hidden = hidden;
     }
     
@@ -2409,7 +2419,8 @@
             master_hidden(true);
             input_hidden(true);
             sum_hidden(true);
-            workflow_hidden(true);
+            work_hidden(true);
+            repo_hidden(true);
         }
 
         // データ種別選択1プルダウンで「定数」が選択されているとき
@@ -2420,146 +2431,52 @@
             // document.getElementById("button_ken").setAttribute("disabled", true);
             // document.getElementById("button_city").setAttribute("disabled", true);
             // document.getElementById("button_category2").removeAttribute("disabled", true);
-            // データ種別選択2の「定数」に関連する選択肢を表示、「入力データ」「集計データ」「ワークフロー」に関連する選択肢を非表示にする。
+            // データ種別選択2の「定数」に関連する選択肢を表示、「入力データ」「集計データ」「ワークフロー」「レポジトリ」に関連する選択肢を非表示にする。
             master_hidden(false);
             input_hidden(true);
             sum_hidden(true);
-            workflow_hidden(true);
+            work_hidden(true);
+            repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「入力データ」が選択されているとき
         else if (form_select_category1.value === "2") {
-            if (form_select_ken.value === "0") {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-            }
-            else {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-            }
-            // データ種別選択2の「入力データ」に関連する選択肢を表示、「定数」「集計データ」「ワークフロー」に関連する選択肢を非表示にする。
+            // データ種別選択2の「入力データ」に関連する選択肢を表示、「定数」「集計データ」「ワークフロー」「レポジトリ」に関連する選択肢を非表示にする。
             master_hidden(true);
             input_hidden(false);
             sum_hidden(true);
-            workflow_hidden(true);
+            work_hidden(true);
+            repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「集計データ」が選択されているとき
         else if (form_select_category1.value === "3") {
-            if (form_select_ken.value === "0") {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-            }
-            else {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-            }
-            // データ種別選択2の「集計データ」に関連する選択肢を表示、「定数」「入力データ」「ワークフロー」に関連する選択肢を非表示にする。
+            // データ種別選択2の「集計データ」に関連する選択肢を表示、「定数」「入力データ」「ワークフロー」「レポジトリ」に関連する選択肢を非表示にする。
             master_hidden(true);
             input_hidden(true);
             sum_hidden(false);
-            workflow_hidden(true);
+            work_hidden(true);
+            repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「ワークフロー」が選択されているとき
         else if (form_select_category1.value === "4") {
-            if (form_select_ken.value === "0") {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").setAttribute("disabled", true);
-                    // document.getElementById("form_select_category2").setAttribute("disabled", true);
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").setAttribute("disabled", true);
-                    // document.getElementById("button_category2").setAttribute("disabled", true);
-                }
-            }
-            else {
-                if (form_select_city.value === "0") {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-                else {
-                    // document.getElementById("form_select_ken").removeAttribute("disabled");
-                    // document.getElementById("form_select_city").removeAttribute("disabled");
-                    // document.getElementById("form_select_category2").removeAttribute("disabled");
-                    // document.getElementById("button_ken").removeAttribute("disabled");
-                    // document.getElementById("button_city").removeAttribute("disabled");
-                    // document.getElementById("button_category2").removeAttribute("disabled");
-                }
-            }
-            // データ種別選択2の「ワークフロー」に関連する選択肢を表示、「定数」「入力データ」「集計データ」に関連する選択肢を非表示にする。
+            // データ種別選択2の「ワークフロー」に関連する選択肢を表示、「定数」「入力データ」「集計データ」「レポジトリ」に関連する選択肢を非表示にする。
             master_hidden(true);
             input_hidden(true);
             sum_hidden(true);
-            workflow_hidden(false);
+            work_hidden(false);
+            repo_hidden(true);
+        }
+
+        // データ種別選択1プルダウンで「レポジトリ」が選択されているとき
+        else if (form_select_category1.value === "5") {
+            // データ種別選択2の「レポジトリ」に関連する選択肢を表示、「定数」「入力データ」「集計データ」「ワークフロー」に関連する選択肢を非表示にする。
+            master_hidden(true);
+            input_hidden(true);
+            sum_hidden(true);
+            work_hidden(true);
+            repo_hidden(false);
         }
         
     }

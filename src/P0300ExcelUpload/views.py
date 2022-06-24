@@ -75,8 +75,9 @@ from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
-from P0000Common.models import REPOSITORY              ### 10050: EXCELファイルレポジトリ
-### from P0000Common.models import EXECUTE             ### 10060: 実行管理
+### from P0000Common.models import EXECUTE             ### 10050: 実行管理
+
+from P0000Common.models import REPOSITORY              ### 11000: EXCELファイルレポジトリ
 
 from P0000Common.common import print_log
 
@@ -488,16 +489,6 @@ def index_view(request):
         #######################################################################
         ### 局所変数セット処理(0010)
         ### チェック結果を格納するために局所変数をセットする。
-        ### result_require_list: 必須チェック結果を格納するリスト
-        ### result_require_grid: 必須チェック結果を格納するリスト
-        ### result_format_list: 形式チェック結果を格納するリスト
-        ### result_format_grid: 形式チェック結果を格納するリスト
-        ### result_range_list: 範囲チェック結果を格納するリスト
-        ### result_range_grid: 範囲チェック結果を格納するリスト
-        ### result_correlate_list: 相関チェック結果を格納するリスト
-        ### result_correlate_grid: 相関チェック結果を格納するリスト
-        ### result_compare_list: 突合チェック結果を格納するリスト
-        ### result_compare_grid: 突合チェック結果を格納するリスト
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 2/34.', 'INFO')
         result_require_list = []
@@ -544,13 +535,6 @@ def index_view(request):
         ### (2)アップロードされたEXCELファイルを保存する。
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 5/34.', 'INFO')
-        ### upload_file_object = request.FILES['file']
-        ### upload_file_path = 'media/documents/' + upload_file_object.name
-        ### result_file_path = 'static/ippan_chosa_result2.xlsx'
-        ### with open(upload_file_path, 'wb+') as destination:
-        ###     for chunk in upload_file_object.chunks():
-        ###         destination.write(chunk)
-
         JST = timezone(timedelta(hours=9), 'JST')
         datetime_now_strftime = datetime.now(JST).strftime('%Y%m%d%H%M%S')
         
@@ -558,7 +542,6 @@ def index_view(request):
         print_log('input_file_object = {}'.format(input_file_object), 'INFO')
         
         input_file_path = 'repository/202206/ippan_chosa_input_' + datetime_now_strftime + '.xlsx'
-        ### input_file_path = '/static/repository/202206/ippan_chosa_input_' + datetime_now_strftime + '.xlsx'
         print_log('input_file_path = {}'.format(input_file_path), 'INFO')
         
         with open(input_file_path, 'wb+') as destination:
@@ -566,7 +549,6 @@ def index_view(request):
                 destination.write(chunk)
 
         output_file_path = 'repository/202206/ippan_chosa_output_' + datetime_now_strftime + '.xlsx'
-        ### output_file_path = '/static/repository/202206/ippan_chosa_output_' + datetime_now_strftime + '.xlsx'
         
         print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'INFO')
         print_log('[INFO] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'INFO')
@@ -585,7 +567,6 @@ def index_view(request):
         ### fill: 背景赤色の塗りつぶし
         #######################################################################
         print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 6/34.', 'INFO')
-        ### wb = openpyxl.load_workbook(upload_file_path)
         wb = openpyxl.load_workbook(input_file_path)
         ws_ippan = []
         ws_result = []
@@ -2760,10 +2741,10 @@ def index_view(request):
                 ###############################################################
                 print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_5/34.', 'INFO')
                 repository_id = REPOSITORY.objects.all().aggregate(Max('repository_id'))['repository_id__max']
-                ### 一般資産入力データ_ヘッダ部分テーブルにレコードが１件も存在しない場合、
+                ### レポジトリテーブルにレコードが1件も存在しない場合、
                 if repository_id is None:
                     repository_id = 0
-                ### 一般資産入力データ_ヘッダ部分テーブルにレコードが存在する場合、
+                ### レポジトリテーブルにレコードが存在する場合、
                 else:
                     repository_id = repository_id + 1
                     
