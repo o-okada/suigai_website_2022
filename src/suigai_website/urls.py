@@ -23,8 +23,11 @@ urlpatterns = [
     ### Reverse Verification Applications
     path('P0800Reverse/', include('P0800Reverse.urls')),
     
-    ### CI Applications
-    path('P0900CI/', include('P0900CI.urls')),
+    ### Action Applications
+    path('P0900Action/', include('P0900Action.urls')),
+
+    ### File Applications
+    path('P1000File/', include('P1000File.urls')),
 
     ### Admin Applications
     ### path('P9100Transact/', include('P9100Transact.urls')),

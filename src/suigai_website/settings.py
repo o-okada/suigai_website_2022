@@ -65,8 +65,11 @@ INSTALLED_APPS = [
     ### Reverse Verification Applications
     'P0800Reverse.apps.P0800ReverseConfig',
     
-    ### CI Applications
-    'P0900CI.apps.P0900CIConfig',
+    ### Action Applications
+    'P0900Action.apps.P0900ActionConfig',
+    
+    ### File Applications
+    'P1000File.apps.P1000FileConfig',
     
     ### Admin Applications
     'P9100Transact.apps.P9100TransactConfig',

@@ -1272,6 +1272,7 @@ class REPOSITORY(models.Model):
     ### output_file_path = models.CharField(max_length=256, null=True)         ### 
 
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時
     
     class Meta:
         db_table = 'repository'

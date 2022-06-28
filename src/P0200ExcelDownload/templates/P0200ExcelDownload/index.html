@@ -42,7 +42,7 @@
     <!-- BEGIN 検索とフィルタ -->
     <div class="mb-3">
         <label class="form-check-label">都道府県、市区町村、データの種類を選択してください。</label>
-        <button class="btn btn-secondary btn-sm" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
+        <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
     </div>
     <!-- END 検索とフィルタ -->
     
@@ -55,7 +55,7 @@
                     {% for ken in ken_list %}
                     <th>
                         <div class="text-center"><label class="form-check-label">{{ ken.ken_name }}</label></div>
-                        <div class="text-center"><button class="btn btn-secondary btn-sm" type="button" id="button_ken{{ ken.ken_code }}" name="button_ken{{ ken.ken_code }}">全選択</button></div>
+                        <div class="text-center"><button class="btn btn-secondary" type="button" id="button_ken{{ ken.ken_code }}" name="button_ken{{ ken.ken_code }}">全選択</button></div>
                     </th>
                     {% endfor %}
                 </tr>
@@ -343,19 +343,19 @@
             <option value="113">農漁家資産額: farmer_fisher_asset</option>
             <option value="114">農漁家被害率: farmer_fisher_rate</option>
             
-            <option value="200">一般資産入力データ_水害区域: area</option>
-            <option value="201">一般資産入力データ_異常気象: weather</option>
-            <option value="202">一般資産入力データ_ヘッダ部分: suigai</option>
-            <option value="203">一般資産入力データ_一覧表部分: ippan</option>
-            <option value="204">一般資産ビューデータ_一覧表部分: ippan_view</option>
+            <option value="200">入力データ_水害区域: area</option>
+            <option value="201">入力データ_異常気象: weather</option>
+            <option value="202">入力データ_ヘッダ部分: suigai</option>
+            <option value="203">入力データ_一覧表部分: ippan</option>
+            <option value="204">ビューデータ_一覧表部分: ippan_view</option>
             
-            <option value="300">一般資産集計データ_集計結果: ippan_summary</option>
-            <option value="301">一般資産集計データ_集計結果_都道府県別: ippan_group_by_ken</option>
-            <option value="302">一般資産集計データ_集計結果_水系別: ippan_group_by_suikei</option>
+            <option value="300">集計データ_集計結果: ippan_summary</option>
+            <option value="301">集計データ_集計結果_都道府県別: ippan_group_by_ken</option>
+            <option value="302">集計データ_集計結果_水系別: ippan_group_by_suikei</option>
 
-            <option value="400">一般資産調査票_調査員用: suigai+ippan</option>
-            <option value="401">一般資産調査票_市区町村担当者用: suigai+ippan</option>
-            <option value="402">一般資産調査票_都道府県担当者用: suigai+ippan</option>
+            <option value="400">調査票_調査員用: suigai+ippan</option>
+            <option value="401">調査票_市区町村担当者用: suigai+ippan</option>
+            <option value="402">調査票_都道府県担当者用: suigai+ippan</option>
             
         </select>
     </div>
@@ -370,14 +370,14 @@
     <!-- BEGIN ダウンロードボタン -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、編集用にロック有りでEXCELファイルをダウンロードします。</label>
-        <button class="btn btn-secondary btn-sm" type="button" id="button_lock" name="button_lock">編集用にロック有りでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button_lock" name="button_lock">編集用にロック有りでダウンロード</button>
     </div>
     <!-- END ダウンロードボタン -->
 
     <!-- BEGIN ダウンロードボタン -->    
     <div class="container mb-3">
         <label class="form-check-label">他のユーザとの編集の競合を避けるために、参照用にロック無しでEXCELファイルをダウンロードします。</label>
-        <button class="btn btn-secondary btn-sm" type="button" id="button_unlock" name="button_unlock">参照用にロック無しでダウンロード</button>
+        <button class="btn btn-secondary" type="button" id="button_unlock" name="button_unlock">参照用にロック無しでダウンロード</button>
     </div>
     <!-- END ダウンロードボタン -->
     

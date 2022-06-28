@@ -113,7 +113,8 @@ SELECT
     SUB1.industry_name AS industry_name, 
     SUB1.usage_code AS usage_code, 
     SUB1.usage_name AS usage_name, 
-    SUB1.comment AS comment 
+    SUB1.comment AS comment, 
+    SUB1.deleted_at AS deleted_at  
 FROM 
 (
     SELECT 
@@ -191,7 +192,8 @@ FROM
         IN1.industry_name AS industry_name, 
         IP1.usage_code AS usage_code, 
         US1.usage_name AS usage_name, 
-        IP1.comment AS comment  
+        IP1.comment AS comment, 
+        IP1.deleted_at AS deleted_at 
     FROM ippan IP1 
     LEFT JOIN SUIGAI SG1                ON IP1.suigai_id = SG1.suigai_id 
     LEFT JOIN KEN KE1                   ON SG1.ken_code = KE1.ken_code 

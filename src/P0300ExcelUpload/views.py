@@ -62,13 +62,13 @@ from P0000Common.models import OFFICE_ALT              ### 5040: 事業所応急
 from P0000Common.models import FARMER_FISHER_ASSET     ### 6000: 農漁家資産額
 from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害率
 
-from P0000Common.models import AREA                    ### 7000: 一般資産入力データ_水害区域
-from P0000Common.models import WEATHER                 ### 7010: 一般資産入力データ_異常気象
-from P0000Common.models import SUIGAI                  ### 7020: 一般資産入力データ_ヘッダ部分
-from P0000Common.models import IPPAN                   ### 7030: 一般資産入力データ_一覧表部分
-from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビューデータ_一覧表部分
+from P0000Common.models import AREA                    ### 7000: 入力データ_水害区域
+from P0000Common.models import WEATHER                 ### 7010: 入力データ_異常気象
+from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
 
-from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 
 from P0000Common.models import ACTION                  ### 10000: アクション
 from P0000Common.models import STATUS                  ### 10010: 状態
@@ -2521,57 +2521,177 @@ def index_view(request):
             print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_1/34.', 'INFO')
             del_suigai_list = SUIGAI.objects.raw("""
                 SELECT 
-                    SUIGAI_ID 
+                    suigai_id 
                 FROM SUIGAI 
-                WHERE CITY_CODE=%s""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+                WHERE 
+                    city_code=%s AND 
+                    deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
             del_suigai_id_list = [del_suigai.suigai_id for del_suigai in del_suigai_list]
             del_suigai_id_str = ",".join([str(i) for i in del_suigai_id_list])
             print_log('del_suigai_id_str = {}'.format(del_suigai_id_str), 'INFO')
             
             del_ippan_list = IPPAN_VIEW.objects.raw("""
                 SELECT 
-                    IPPAN_ID 
+                    ippan_id 
                 FROM IPPAN_VIEW 
-                WHERE CITY_CODE=%s""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+                WHERE 
+                    city_code=%s AND 
+                    deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
             del_ippan_id_list = [del_ippan.ippan_id for del_ippan in del_ippan_list]
             del_ippan_id_str = ",".join([str(i) for i in del_ippan_id_list])
             print_log('del_ippan_id_str = {}'.format(del_ippan_id_str), 'INFO')
-            
-            ### connection_cursor.execute("""
-            ###     DELETE 
-            ###     FROM SUIGAI 
-            ###     WHERE SUIGAI_ID IN (%s)""", [
-            ###     del_suigai_id_str,])
+
+            del_trigger_list = TRIGGER.objects.raw("""
+                SELECT 
+                    TR1.trigger_id AS trigger_id 
+                FROM TRIGGER TR1 
+                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    TR1.deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+            del_trigger_id_list = [del_trigger.trigger_id for del_trigger in del_trigger_list]
+            del_trigger_id_str = ",".join([str(i) for i in del_trigger_id_list])
+            print_log('del_trigger_id_str = {}'.format(del_trigger_id_str), 'INFO')
+
+            del_approval_list = APPROVAL.objects.raw("""
+                SELECT 
+                    AP1.approval_id AS approval_id 
+                FROM APPROVAL AP1 
+                LEFT JOIN SUIGAI SG1 ON AP1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    AP1.deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+            del_approval_id_list = [del_approval.approval_id for del_approval in del_approval_list]
+            del_approval_id_str = ",".join([str(i) for i in del_approval_id_list])
+            print_log('del_approval_id_str = {}'.format(del_approval_id_str), 'INFO')
+
+            del_feedback_list = FEEDBACK.objects.raw("""
+                SELECT 
+                    FB1.feedback_id AS feedback_id 
+                FROM FEEDBACK FB1 
+                LEFT JOIN SUIGAI SG1 ON FB1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    FB1.deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+            del_feedback_id_list = [del_feedback.feedback_id for del_feedback in del_feedback_list]
+            del_feedback_id_str = ",".join([str(i) for i in del_feedback_id_list])
+            print_log('del_feedback_id_str = {}'.format(del_feedback_id_str), 'INFO')
+
+            del_repository_list = REPOSITORY.objects.raw("""
+                SELECT 
+                    RE1.repository_id AS repository_id 
+                FROM REPOSITORY RE1 
+                LEFT JOIN SUIGAI SG1 ON RE1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    RE1.deleted_at IS NULL 
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+            del_repository_id_list = [del_repository.repository_id for del_repository in del_repository_list]
+            del_repository_id_str = ",".join([str(i) for i in del_repository_id_list])
+            print_log('del_repository_id_str = {}'.format(del_repository_id_str), 'INFO')
 
             ### connection_cursor.execute("""
-            ###     DELETE 
-            ###     FROM IPPAN 
-            ###     WHERE IPPAN_ID IN (%s)""", [
-            ###     del_ippan_id_str,])
+            ###     DELETE FROM SUIGAI WHERE SUIGAI_ID IN (SELECT SUIGAI_ID FROM SUIGAI WHERE CITY_CODE=%s)""", [
+            ###     split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+            ### connection_cursor.execute("""
+            ###     DELETE FROM IPPAN WHERE IPPAN_ID IN (SELECT IPPAN_ID FROM IPPAN_VIEW WHERE CITY_CODE=%s)""", [
+            ###     split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
 
             connection_cursor.execute("""
-                DELETE FROM SUIGAI WHERE SUIGAI_ID IN (SELECT SUIGAI_ID FROM SUIGAI WHERE CITY_CODE=%s)""", [
-                split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+                UPDATE SUIGAI SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE suigai_id IN (SELECT suigai_id FROM SUIGAI WHERE city_code=%s AND deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
     
             connection_cursor.execute("""
-                DELETE FROM IPPAN WHERE IPPAN_ID IN (SELECT IPPAN_ID FROM IPPAN_VIEW WHERE CITY_CODE=%s)""", [
-                split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+                UPDATE IPPAN SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE ippan_id IN (SELECT ippan_id FROM IPPAN_VIEW WHERE city_code=%s AND deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+
+            connection_cursor.execute("""
+                UPDATE IPPAN_SUMMARY SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE ippan_id IN (
+                SELECT 
+                    IS1.ippan_id AS ippan_id 
+                FROM IPPAN_SUMMARY IS1 
+                LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    IS1.deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+
+            connection_cursor.execute("""
+                UPDATE TRIGGER SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE trigger_id IN (
+                SELECT 
+                    TR1.trigger_id AS trigger_id 
+                FROM TRIGGER TR1 
+                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    TR1.deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+
+            connection_cursor.execute("""
+                UPDATE APPROVAL SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE approval_id IN (
+                SELECT 
+                    AP1.approval_id AS approval_id 
+                FROM APPROVAL AP1 
+                LEFT JOIN SUIGAI SG1 ON AP1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    AP1.deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+
+            connection_cursor.execute("""
+                UPDATE FEEDBACK SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE feedback_id IN (
+                SELECT 
+                    FB1.feedback_id AS feedback_id 
+                FROM FEEDBACK FB1 
+                LEFT JOIN SUIGAI SG1 ON FB1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    FB1.deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
+
+            connection_cursor.execute("""
+                UPDATE REPOSITORY SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE repository_id IN (
+                SELECT 
+                    RE1.repository_id AS repository_id 
+                FROM REPOSITORY RE1 
+                LEFT JOIN SUIGAI SG1 ON RE1.suigai_id=SG1.suigai_id 
+                WHERE 
+                    SG1.city_code=%s AND 
+                    RE1.deleted_at IS NULL)
+                """, [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1],])
 
             ###############################################################
             ### DBアクセス処理(9020)
+            ### SUIGAI_ID、REPOSITORY_IDはSUIGAI、REPOSITORY以外のテーブルでも外部キーとして使用する。
+            ### このため、SQLのMAX関数ではなく、明示的にSUIGAI_ID、REPOSITORY_IDを取得する。
             ###############################################################
             for i, _ in enumerate(ws_ippan):
                 print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_2/34.', 'INFO')
                 ### suigai_id__max で正しい。
                 suigai_id = SUIGAI.objects.all().aggregate(Max('suigai_id'))['suigai_id__max']
-                
-                ### 一般資産入力データ_ヘッダ部分テーブルにレコードが１件も存在しない場合、
                 if suigai_id is None:
                     suigai_id = 0
-                ### 一般資産入力データ_ヘッダ部分テーブルにレコードが存在する場合、
                 else:
                     suigai_id = suigai_id + 1
-                    
                 print_log('suigai_id = {}'.format(suigai_id), 'INFO')
                 
                 ###############################################################
@@ -2598,7 +2718,8 @@ def index_view(request):
                         underground_area, 
                         kasen_kaigan_code, 
                         crop_damage, 
-                        weather_id 
+                        weather_id, 
+                        deleted_at 
                     ) VALUES (
                         %s, -- suigai_id 
                         %s, -- suigai_name 
@@ -2616,7 +2737,8 @@ def index_view(request):
                         %s, -- underground_area 
                         %s, -- kasen_kaigan_code 
                         %s, -- crop_damage 
-                        %s  -- weather_id 
+                        %s, -- weather_id 
+                        %s  -- deleted_at 
                     )""", [
                         suigai_id,                                                                               ### suigai_id
                         'suigai_name',                                                                           ### suigai_name
@@ -2634,7 +2756,8 @@ def index_view(request):
                         convert_empty_to_none(ws_ippan[i].cell(row=14, column=4).value),                         ### underground_area
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=14, column=6).value)[-1]),    ### kasen_kaigan_code
                         convert_empty_to_none(ws_ippan[i].cell(row=14, column=8).value),                         ### crop_damaga
-                        convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1])    ### weather_id
+                        convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1]),   ### weather_id
+                        None                                                                                     ### deleted_at
                     ])
                     
                 ###############################################################
@@ -2643,8 +2766,10 @@ def index_view(request):
                 ### ※入力チェックでエラーが発見されなかった場合、
                 ###############################################################
                 print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_4/34.', 'INFO')
+                print_log('ws_max_row[i] = {}'.format(ws_max_row[i]), 'INFO')
                 if ws_max_row[i] >= 20:
                     for j in range(20, ws_max_row[i] + 1):
+                        print_log('j = {}'.format(j), 'INFO')
                         connection_cursor.execute(""" 
                             INSERT INTO IPPAN (
                                 ippan_id, 
@@ -2657,6 +2782,7 @@ def index_view(request):
                                 building_lv01_49, 
                                 building_lv50_99, 
                                 building_lv100, 
+                                
                                 building_half, 
                                 building_full, 
                                 floor_area, 
@@ -2667,6 +2793,7 @@ def index_view(request):
                                 farmer_fisher_lv50_99, 
                                 farmer_fisher_lv100, 
                                 farmer_fisher_full, 
+                                
                                 employee_lv00, 
                                 employee_lv01_49, 
                                 employee_lv50_99, 
@@ -2674,9 +2801,10 @@ def index_view(request):
                                 employee_full, 
                                 industry_code, 
                                 usage_code, 
-                                comment 
+                                comment, 
+                                deleted_at 
                             ) VALUES (
-                                (SELECT MAX(ippan_id+1) FROM IPPAN), -- ippan_id 
+                                (SELECT CASE WHEN (MAX(ippan_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(ippan_id+1) AS INTEGER) END AS ippan_id FROM IPPAN), -- ippan_id 
                                 %s, -- ippan_name 
                                 %s, -- suigai_id 
                                 %s, -- building_code 
@@ -2686,6 +2814,7 @@ def index_view(request):
                                 %s, -- building_lv01_49 
                                 %s, -- building_lv50_99 
                                 %s, -- building_lv100 
+                                
                                 %s, -- building_half 
                                 %s, -- building_full 
                                 %s, -- floor_area 
@@ -2696,6 +2825,7 @@ def index_view(request):
                                 %s, -- farmer_fisher_lv50_99 
                                 %s, -- farmer_fisher_lv100 
                                 %s, -- farmer_fisher_full 
+                                
                                 %s, -- employee_lv00 
                                 %s, -- employee_lv01_49 
                                 %s, -- employee_lv50_99 
@@ -2703,7 +2833,8 @@ def index_view(request):
                                 %s, -- employee_full 
                                 %s, -- industry_code 
                                 %s, -- usage_code 
-                                %s  -- comment 
+                                %s, -- comment 
+                                %s  -- deleted_at 
                             ) """, [
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=2).value),                            ### ippan_name
                                 suigai_id,                                                                                 ### suigai_id
@@ -2714,6 +2845,7 @@ def index_view(request):
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=7).value),                            ### building_lv01_49
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=8).value),                            ### building_lv50_99
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=9).value),                            ### building_lv100
+                                
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=10).value),                           ### building_half
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=11).value),                           ### building_full
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=12).value),                           ### floor_area
@@ -2724,6 +2856,7 @@ def index_view(request):
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=17).value),                           ### farmer_fisher_lv50_99
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=18).value),                           ### farmer_fisher_lv100
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=19).value),                           ### farmer_fisher_full
+                                
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=20).value),                           ### employee_lv00
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=21).value),                           ### employee_lv01_49
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=22).value),                           ### employee_lv50_99
@@ -2731,20 +2864,22 @@ def index_view(request):
                                 convert_empty_to_none(ws_ippan[i].cell(row=j, column=24).value),                           ### employee_full
                                 convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=j, column=25).value)[-1]),      ### industry_code
                                 convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=j, column=26).value)[-1]),      ### usage_code
-                                convert_empty_to_none(ws_ippan[i].cell(row=j, column=27).value)                            ### comment
+                                convert_empty_to_none(ws_ippan[i].cell(row=j, column=27).value),                           ### comment
+                                None                                                                                       ### deleted_at 
                             ])
 
                 ###############################################################
                 ### DBアクセス処理(9050)
                 ### レポジトリテーブルにデータを登録する。
                 ### ※入力チェックでエラーが発見されなかった場合、
+                ### SUIGAI_ID、REPOSITORY_IDはSUIGAI、REPOSITORY以外のテーブルでも外部キーとして使用する。
+                ### このため、SQLのMAX関数ではなく、明示的にSUIGAI_ID、REPOSITORY_IDを取得する。
                 ###############################################################
                 print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_5/34.', 'INFO')
+                ### repository_id__max で正しい。
                 repository_id = REPOSITORY.objects.all().aggregate(Max('repository_id'))['repository_id__max']
-                ### レポジトリテーブルにレコードが1件も存在しない場合、
                 if repository_id is None:
                     repository_id = 0
-                ### レポジトリテーブルにレコードが存在する場合、
                 else:
                     repository_id = repository_id + 1
                     
@@ -2758,7 +2893,8 @@ def index_view(request):
                         status_code, 
                         created_at, 
                         updated_at, 
-                        input_file_path 
+                        input_file_path, 
+                        deleted_at 
                     ) VALUES (
                         %s,                -- repository_id 
                         %s,                -- suigai_id 
@@ -2766,13 +2902,15 @@ def index_view(request):
                         %s,                -- status_code 
                         CURRENT_TIMESTAMP, -- created_at 
                         CURRENT_TIMESTAMP, -- updated_at 
-                        %s                 -- input_file_path 
+                        %s,                -- input_file_path 
+                        %s                 -- deleted_at 
                     )""", [
                         repository_id,     ### repository_id 
                         suigai_id,         ### suigai_id 
                         '3',               ### action_code 
                         '3',               ### status_code 
-                        input_file_path    ### input_file_path 
+                        input_file_path,   ### input_file_path 
+                        None               ### deleted_at 
                     ])
 
                 ###############################################################
@@ -2791,9 +2929,43 @@ def index_view(request):
                         published_at, 
                         consumed_at, 
                         success_count, 
-                        failure_count 
+                        failure_count, 
+                        deleted_at 
                     ) VALUES (
-                        (SELECT MAX(trigger_id) + 1 FROM TRIGGER), 
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                        %s,                 -- suigai_id 
+                        %s,                 -- repository_id 
+                        %s,                 -- action_code 
+                        %s,                 -- status_code 
+                        CURRENT_TIMESTAMP,  -- published_at 
+                        CURRENT_TIMESTAMP,  -- consumed_at 
+                        %s,                 -- success_count 
+                        %s,                 -- failure_count 
+                        %s                  -- deleted_at 
+                    )""", [
+                        suigai_id,          ### suigai_id 
+                        repository_id,      ### repository_id  
+                        2,                  ### action_code 
+                        3,                  ### status_code 
+                        1,                  ### success_count
+                        0,                  ### failure_count
+                        None                ### deleted_at 
+                    ])
+
+                connection_cursor.execute("""
+                    INSERT INTO TRIGGER (
+                        trigger_id, 
+                        suigai_id, 
+                        repository_id, 
+                        action_code, 
+                        status_code, 
+                        published_at, 
+                        consumed_at, 
+                        success_count, 
+                        failure_count, 
+                        deleted_at 
+                    ) VALUES (
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
                         %s,                 -- suigai_id 
                         %s,                 -- repository_id 
                         %s,                 -- action_code 
@@ -2801,15 +2973,17 @@ def index_view(request):
                         CURRENT_TIMESTAMP,  -- published_at 
                         %s,                 -- consumed_at 
                         %s,                 -- success_count 
-                        %s                  -- failure_count 
+                        %s,                 -- failure_count 
+                        %s                  -- deleted_at 
                     )""", [
                         suigai_id,          ### suigai_id 
                         repository_id,      ### repository_id  
-                        5,                  ### action_code 
+                        3,                  ### action_code 
                         None,               ### status_code 
                         None,               ### consumed_at 
                         0,                  ### success_count
-                        0                   ### failure_count
+                        0,                  ### failure_count
+                        None                ### deleted_at 
                     ])
             
             print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33_7/34.', 'INFO')

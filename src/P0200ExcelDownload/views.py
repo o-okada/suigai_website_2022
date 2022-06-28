@@ -62,13 +62,13 @@ from P0000Common.models import OFFICE_ALT              ### 5040: 事業所応急
 from P0000Common.models import FARMER_FISHER_ASSET     ### 6000: 農漁家資産額
 from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害率
 
-from P0000Common.models import AREA                    ### 7000: 一般資産入力データ_水害区域
-from P0000Common.models import WEATHER                 ### 7010: 一般資産入力データ_異常気象
-from P0000Common.models import SUIGAI                  ### 7020: 一般資産入力データ_ヘッダ部分
-from P0000Common.models import IPPAN                   ### 7030: 一般資産入力データ_一覧表部分
-from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビューデータ_一覧表部分
+from P0000Common.models import AREA                    ### 7000: 入力データ_水害区域
+from P0000Common.models import WEATHER                 ### 7010: 入力データ_異常気象
+from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
 
-from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ_集計結果
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_集計結果
 
 from P0000Common.common import print_log
 
@@ -2205,14 +2205,14 @@ def area_view(request, lock):
 
 ###############################################################################
 ### 関数名:suigai_view(request, lock)
-### 7020:一般資産入力データ_ヘッダ部分
+### 7020:入力データ_ヘッダ部分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def suigai_view(request, lock):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
-        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
@@ -2222,10 +2222,12 @@ def suigai_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### (1)DBにアクセスして、水害データを取得する。
+        ### DBにアクセスして、水害データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 2/4.', 'INFO')
-        suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
+        suigai_list = SUIGAI.objects.raw("""
+            SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)
+        """, [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -2257,34 +2259,57 @@ def suigai_view(request, lock):
         ws.cell(row=1, column=17).value = '河川海岸（工種）コード'
         ws.cell(row=1, column=18).value = '農作物被害額（単位千円）'
         ws.cell(row=1, column=19).value = '異常気象ID'
+        ws.cell(row=1, column=20).value = '削除日時'
+
+        ws.cell(row=2, column=1).value = 'suigai_id'
+        ws.cell(row=2, column=2).value = 'suigai_name'
+        ws.cell(row=2, column=3).value = 'ken_code'
+        ws.cell(row=2, column=4).value = 'city_code'
+        ws.cell(row=2, column=5).value = 'begin_date'
+        ws.cell(row=2, column=6).value = 'end_date'
+        ws.cell(row=2, column=7).value = 'cause_1_code'
+        ws.cell(row=2, column=8).value = 'cause_2_code'
+        ws.cell(row=2, column=9).value = 'cause_3_code'
+        ws.cell(row=2, column=10).value = 'area_id'
+        ws.cell(row=2, column=11).value = 'suikei_code'
+        ws.cell(row=2, column=12).value = 'kasen_code'
+        ws.cell(row=2, column=13).value = 'gradient_code'
+        ws.cell(row=2, column=14).value = 'residential_area'
+        ws.cell(row=2, column=15).value = 'agricultural_area'
+        ws.cell(row=2, column=16).value = 'underground_area'
+        ws.cell(row=2, column=17).value = 'kasen_kaigan_code'
+        ws.cell(row=2, column=18).value = 'crop_damage'
+        ws.cell(row=2, column=19).value = 'weather_id'
+        ws.cell(row=2, column=20).value = 'deleted_at'
         
         if suigai_list:
             for i, suigai in enumerate(suigai_list):
-                ws.cell(row=i+2, column=1).value = suigai.suigai_id
-                ws.cell(row=i+2, column=2).value = suigai.suigai_name
-                ws.cell(row=i+2, column=3).value = suigai.ken_code
-                ws.cell(row=i+2, column=4).value = suigai.city_code
-                ws.cell(row=i+2, column=5).value = suigai.begin_date
-                ws.cell(row=i+2, column=6).value = suigai.end_date
-                ws.cell(row=i+2, column=7).value = suigai.cause_1_code
-                ws.cell(row=i+2, column=8).value = suigai.cause_2_code
-                ws.cell(row=i+2, column=9).value = suigai.cause_3_code
-                ws.cell(row=i+2, column=10).value = suigai.area_id
-                ws.cell(row=i+2, column=11).value = suigai.suikei_code
-                ws.cell(row=i+2, column=12).value = suigai.kasen_code
-                ws.cell(row=i+2, column=13).value = suigai.gradient_code
-                ws.cell(row=i+2, column=14).value = suigai.residential_area
-                ws.cell(row=i+2, column=15).value = suigai.agricultural_area
-                ws.cell(row=i+2, column=16).value = suigai.underground_area
-                ws.cell(row=i+2, column=17).value = suigai.kasen_kaigan_code
-                ws.cell(row=i+2, column=18).value = suigai.crop_damage
-                ws.cell(row=i+2, column=19).value = suigai.weather_id
+                ws.cell(row=i+3, column=1).value = suigai.suigai_id
+                ws.cell(row=i+3, column=2).value = suigai.suigai_name
+                ws.cell(row=i+3, column=3).value = suigai.ken_code
+                ws.cell(row=i+3, column=4).value = suigai.city_code
+                ws.cell(row=i+3, column=5).value = suigai.begin_date
+                ws.cell(row=i+3, column=6).value = suigai.end_date
+                ws.cell(row=i+3, column=7).value = suigai.cause_1_code
+                ws.cell(row=i+3, column=8).value = suigai.cause_2_code
+                ws.cell(row=i+3, column=9).value = suigai.cause_3_code
+                ws.cell(row=i+3, column=10).value = suigai.area_id
+                ws.cell(row=i+3, column=11).value = suigai.suikei_code
+                ws.cell(row=i+3, column=12).value = suigai.kasen_code
+                ws.cell(row=i+3, column=13).value = suigai.gradient_code
+                ws.cell(row=i+3, column=14).value = suigai.residential_area
+                ws.cell(row=i+3, column=15).value = suigai.agricultural_area
+                ws.cell(row=i+3, column=16).value = suigai.underground_area
+                ws.cell(row=i+3, column=17).value = suigai.kasen_kaigan_code
+                ws.cell(row=i+3, column=18).value = suigai.crop_damage
+                ws.cell(row=i+3, column=19).value = suigai.weather_id
+                ws.cell(row=i+3, column=20).value = str(suigai.deleted_at)
         
         wb.save(download_file_path)
         
         #######################################################################
         ### レスポンスセット処理(0030)
-        ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 4/4.', 'INFO')
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数が正常終了しました。', 'INFO')
@@ -2300,7 +2325,7 @@ def suigai_view(request, lock):
 
 ###############################################################################
 ### 関数名:weather_view(request, lock)
-### 7010:一般資産入力データ_異常気象
+### 7010:入力データ_異常気象
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def weather_view(request, lock):
@@ -2317,7 +2342,7 @@ def weather_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産入力データ_異常気象データを取得する。
+        ### DBにアクセスして、入力データ_異常気象データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 2/4.', 'INFO')
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
@@ -2332,18 +2357,23 @@ def weather_view(request, lock):
         download_file_path = 'static/download_weather.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '一般資産入力データ_異常気象'
+        ws.title = '入力データ_異常気象'
         ws.cell(row=1, column=1).value = '異常気象ID'
         ws.cell(row=1, column=2).value = '異常気象名'
         ws.cell(row=1, column=3).value = '開始日'
         ws.cell(row=1, column=4).value = '終了日'
+
+        ws.cell(row=2, column=1).value = 'weather_id'
+        ws.cell(row=2, column=2).value = 'weather_name'
+        ws.cell(row=2, column=3).value = 'begin_date'
+        ws.cell(row=2, column=4).value = 'end_date'
         
         if weather_list:
             for i, weather in enumerate(weather_list):
-                ws.cell(row=i+2, column=1).value = weather.weather_id
-                ws.cell(row=i+2, column=2).value = weather.weather_name
-                ws.cell(row=i+2, column=3).value = weather.begin_date
-                ws.cell(row=i+2, column=4).value = weather.end_date
+                ws.cell(row=i+3, column=1).value = weather.weather_id
+                ws.cell(row=i+3, column=2).value = weather.weather_name
+                ws.cell(row=i+3, column=3).value = weather.begin_date
+                ws.cell(row=i+3, column=4).value = weather.end_date
         
         wb.save(download_file_path)
         
@@ -2365,7 +2395,7 @@ def weather_view(request, lock):
 
 ###############################################################################
 ### 関数名:ippan_view(request, lock)
-### 7030:一般資産入力データ_一覧表部分
+### 7030:入力データ_一覧表部分
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_view(request, lock):
@@ -2382,7 +2412,7 @@ def ippan_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産入力データ_一覧表部分データを取得する。
+        ### DBにアクセスして、入力データ_一覧表部分データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 2/4.', 'INFO')
         ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
@@ -2397,9 +2427,9 @@ def ippan_view(request, lock):
         download_file_path = 'static/download_ippan.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '一般資産入力データ_一覧表部分'
-        ws.cell(row=1, column=1).value = '一般資産調査票ID'
-        ws.cell(row=1, column=2).value = '一般資産調査票名（町丁目、大字名）'
+        ws.title = '入力データ_一覧表部分'
+        ws.cell(row=1, column=1).value = '行ID'
+        ws.cell(row=1, column=2).value = '町丁目、大字名'
         ws.cell(row=1, column=3).value = '水害ID'
         ws.cell(row=1, column=4).value = '建物区分コード'
         ws.cell(row=1, column=5).value = '地上地下区分コード'
@@ -2426,37 +2456,69 @@ def ippan_view(request, lock):
         ws.cell(row=1, column=26).value = '産業分類コード'
         ws.cell(row=1, column=27).value = '地下空間の利用形態コード'
         ws.cell(row=1, column=28).value = '備考'
+        ws.cell(row=1, column=29).value = '削除日時'
+
+        ws.cell(row=2, column=1).value = 'ippan_id'
+        ws.cell(row=2, column=2).value = 'ippan_name'
+        ws.cell(row=2, column=3).value = 'suigai_id'
+        ws.cell(row=2, column=4).value = 'building_code'
+        ws.cell(row=2, column=5).value = 'underground_code'
+        ws.cell(row=2, column=6).value = 'flood_sediment_code'
+        ws.cell(row=2, column=7).value = 'building_lv00'
+        ws.cell(row=2, column=8).value = 'building_lv01_49'
+        ws.cell(row=2, column=9).value = 'building_lv50_99'
+        ws.cell(row=2, column=10).value = 'building_lv100'
+        ws.cell(row=2, column=11).value = 'building_half'
+        ws.cell(row=2, column=12).value = 'building_full'
+        ws.cell(row=2, column=13).value = 'floor_area'
+        ws.cell(row=2, column=14).value = 'family_area'
+        ws.cell(row=2, column=15).value = 'office_area'
+        ws.cell(row=2, column=16).value = 'farmer_fisher_lv00'
+        ws.cell(row=2, column=17).value = 'farmer_fisher_lv01_49'
+        ws.cell(row=2, column=18).value = 'farmer_fisher_lv50_99'
+        ws.cell(row=2, column=19).value = 'farmer_fisher_lv100'
+        ws.cell(row=2, column=20).value = 'farmer_fisher_full'
+        ws.cell(row=2, column=21).value = 'employee_lv00'
+        ws.cell(row=2, column=22).value = 'employee_lv01_49'
+        ws.cell(row=2, column=23).value = 'employee_lv50_99'
+        ws.cell(row=2, column=24).value = 'employee_lv100'
+        ws.cell(row=2, column=25).value = 'employee_full'
+        ws.cell(row=2, column=26).value = 'industry_code'
+        ws.cell(row=2, column=27).value = 'usage_code'
+        ws.cell(row=2, column=28).value = 'comment'
+        ws.cell(row=2, column=29).value = 'deleted_at'
         
         if ippan_list:
             for i, ippan in enumerate(ippan_list):
-                ws.cell(row=i+2, column=1).value = ippan.ippan_id
-                ws.cell(row=i+2, column=2).value = ippan.ippan_name
-                ws.cell(row=i+2, column=3).value = ippan.suigai_id
-                ws.cell(row=i+2, column=4).value = ippan.building_code
-                ws.cell(row=i+2, column=5).value = ippan.underground_code
-                ws.cell(row=i+2, column=6).value = ippan.flood_sediment_code
-                ws.cell(row=i+2, column=7).value = ippan.building_lv00
-                ws.cell(row=i+2, column=8).value = ippan.building_lv01_49
-                ws.cell(row=i+2, column=9).value = ippan.building_lv50_99
-                ws.cell(row=i+2, column=10).value = ippan.building_lv100
-                ws.cell(row=i+2, column=11).value = ippan.building_half
-                ws.cell(row=i+2, column=12).value = ippan.building_full
-                ws.cell(row=i+2, column=13).value = ippan.floor_area
-                ws.cell(row=i+2, column=14).value = ippan.family
-                ws.cell(row=i+2, column=15).value = ippan.office
-                ws.cell(row=i+2, column=16).value = ippan.farmer_fisher_lv00
-                ws.cell(row=i+2, column=17).value = ippan.farmer_fisher_lv01_49
-                ws.cell(row=i+2, column=18).value = ippan.farmer_fisher_lv50_99
-                ws.cell(row=i+2, column=19).value = ippan.farmer_fisher_lv100
-                ws.cell(row=i+2, column=20).value = ippan.farmer_fisher_full
-                ws.cell(row=i+2, column=21).value = ippan.employee_lv00
-                ws.cell(row=i+2, column=22).value = ippan.employee_lv01_49
-                ws.cell(row=i+2, column=23).value = ippan.employee_lv50_99
-                ws.cell(row=i+2, column=24).value = ippan.employee_lv100
-                ws.cell(row=i+2, column=25).value = ippan.employee_full
-                ws.cell(row=i+2, column=26).value = ippan.industry_code
-                ws.cell(row=i+2, column=27).value = ippan.usage_code
-                ws.cell(row=i+2, column=28).value = ippan.comment
+                ws.cell(row=i+3, column=1).value = ippan.ippan_id
+                ws.cell(row=i+3, column=2).value = ippan.ippan_name
+                ws.cell(row=i+3, column=3).value = ippan.suigai_id
+                ws.cell(row=i+3, column=4).value = ippan.building_code
+                ws.cell(row=i+3, column=5).value = ippan.underground_code
+                ws.cell(row=i+3, column=6).value = ippan.flood_sediment_code
+                ws.cell(row=i+3, column=7).value = ippan.building_lv00
+                ws.cell(row=i+3, column=8).value = ippan.building_lv01_49
+                ws.cell(row=i+3, column=9).value = ippan.building_lv50_99
+                ws.cell(row=i+3, column=10).value = ippan.building_lv100
+                ws.cell(row=i+3, column=11).value = ippan.building_half
+                ws.cell(row=i+3, column=12).value = ippan.building_full
+                ws.cell(row=i+3, column=13).value = ippan.floor_area
+                ws.cell(row=i+3, column=14).value = ippan.family
+                ws.cell(row=i+3, column=15).value = ippan.office
+                ws.cell(row=i+3, column=16).value = ippan.farmer_fisher_lv00
+                ws.cell(row=i+3, column=17).value = ippan.farmer_fisher_lv01_49
+                ws.cell(row=i+3, column=18).value = ippan.farmer_fisher_lv50_99
+                ws.cell(row=i+3, column=19).value = ippan.farmer_fisher_lv100
+                ws.cell(row=i+3, column=20).value = ippan.farmer_fisher_full
+                ws.cell(row=i+3, column=21).value = ippan.employee_lv00
+                ws.cell(row=i+3, column=22).value = ippan.employee_lv01_49
+                ws.cell(row=i+3, column=23).value = ippan.employee_lv50_99
+                ws.cell(row=i+3, column=24).value = ippan.employee_lv100
+                ws.cell(row=i+3, column=25).value = ippan.employee_full
+                ws.cell(row=i+3, column=26).value = ippan.industry_code
+                ws.cell(row=i+3, column=27).value = ippan.usage_code
+                ws.cell(row=i+3, column=28).value = ippan.comment
+                ws.cell(row=i+3, column=29).value = str(ippan.deleted_at)
 
         wb.save(download_file_path)
         
@@ -2510,9 +2572,9 @@ def ippan_view_view(request, lock):
         download_file_path = 'static/download_ippan_view.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '一般資産ビューデータ_一覧表部分'
-        ws.cell(row=1, column=1).value = '一般資産調査票ID'
-        ws.cell(row=1, column=2).value = '一般資産調査票名（町丁目、大字名）'
+        ws.title = 'ビューデータ_一覧表部分'
+        ws.cell(row=1, column=1).value = '行ID'
+        ws.cell(row=1, column=2).value = '町丁目、大字名'
         ws.cell(row=1, column=3).value = '水害ID'
         ws.cell(row=1, column=4).value = '水害名'
         ws.cell(row=1, column=5).value = '都道府県コード'
@@ -2594,96 +2656,186 @@ def ippan_view_view(request, lock):
         ws.cell(row=1, column=81).value = '産業分類名'
         ws.cell(row=1, column=82).value = '地下空間の利用形態コード'
         ws.cell(row=1, column=83).value = '地下空間の利用形態名'
+        ws.cell(row=1, column=84).value = '備考'
+        ws.cell(row=1, column=85).value = '削除日時'
+
+        ws.cell(row=2, column=1).value = 'ippan_id'
+        ws.cell(row=2, column=2).value = 'ippan_name'
+        ws.cell(row=2, column=3).value = 'suigai_id'
+        ws.cell(row=2, column=4).value = 'suigai_name'
+        ws.cell(row=2, column=5).value = 'ken_code'
+        ws.cell(row=2, column=6).value = 'ken_name'
+        ws.cell(row=2, column=7).value = 'city_code'
+        ws.cell(row=2, column=8).value = 'city_name'
+        ws.cell(row=2, column=9).value = 'cause_1_code'
+        ws.cell(row=2, column=10).value = 'cause_1_name'
+        ws.cell(row=2, column=11).value = 'cause_2_code'
+        ws.cell(row=2, column=12).value = 'cause_2_name'
+        ws.cell(row=2, column=13).value = 'cause_3_code'
+        ws.cell(row=2, column=14).value = 'cause_3_name'
+        ws.cell(row=2, column=15).value = 'area_id'
+        ws.cell(row=2, column=16).value = 'area_name'
+        ws.cell(row=2, column=17).value = 'suikei_code'
+        ws.cell(row=2, column=18).value = 'suikei_name'
+        ws.cell(row=2, column=19).value = 'kasen_code'
+        ws.cell(row=2, column=20).value = 'kasen_name'
+        ws.cell(row=2, column=21).value = 'gradient_code'
+        ws.cell(row=2, column=22).value = 'gradient_name'
+        ws.cell(row=2, column=23).value = 'residential_area'
+        ws.cell(row=2, column=24).value = 'agricultural_area'
+        ws.cell(row=2, column=25).value = 'underground_area'
+        ws.cell(row=2, column=26).value = 'kasen_kaigan_code'
+        ws.cell(row=2, column=27).value = 'kasen_kaigan_name'
+        ws.cell(row=2, column=28).value = 'crop_damage'
+        ws.cell(row=2, column=29).value = 'weather_id'
+        ws.cell(row=2, column=30).value = 'weather_name'
+        ws.cell(row=2, column=31).value = 'building_code'
+        ws.cell(row=2, column=32).value = 'building_name'
+        ws.cell(row=2, column=33).value = 'underground_code'
+        ws.cell(row=2, column=34).value = 'underground_name'
+        ws.cell(row=2, column=35).value = 'flood_sediment_code'
+        ws.cell(row=2, column=36).value = 'flood_sediment_name'
+        ws.cell(row=2, column=37).value = 'building_lv00'
+        ws.cell(row=2, column=38).value = 'building_lv01_49'
+        ws.cell(row=2, column=39).value = 'building_lv50_99'
+        ws.cell(row=2, column=40).value = 'building_lv100'
+        ws.cell(row=2, column=41).value = 'building_half'
+        ws.cell(row=2, column=42).value = 'building_full'
+        ws.cell(row=2, column=43).value = 'building_total'
+        ws.cell(row=2, column=44).value = 'floor_area'
+        ws.cell(row=2, column=45).value = 'family'
+        ws.cell(row=2, column=46).value = 'office'
+        ws.cell(row=2, column=47).value = 'floor_area_lv00'
+        ws.cell(row=2, column=48).value = 'floor_area_lv01_49'
+        ws.cell(row=2, column=49).value = 'floor_area_lv50_99'
+        ws.cell(row=2, column=50).value = 'floor_area_lv100'
+        ws.cell(row=2, column=51).value = 'floor_area_half'
+        ws.cell(row=2, column=52).value = 'floor_area_full'
+        ws.cell(row=2, column=53).value = 'floor_area_total'
+        ws.cell(row=2, column=54).value = 'family_lv00'
+        ws.cell(row=2, column=55).value = 'family_lv01_49'
+        ws.cell(row=2, column=56).value = 'family_lv50_99'
+        ws.cell(row=2, column=57).value = 'family_lv100'
+        ws.cell(row=2, column=58).value = 'family_half'
+        ws.cell(row=2, column=59).value = 'family_full'
+        ws.cell(row=2, column=60).value = 'family_total'
+        ws.cell(row=2, column=61).value = 'office_lv00'
+        ws.cell(row=2, column=62).value = 'office_lv01_49'
+        ws.cell(row=2, column=63).value = 'office_lv50_99'
+        ws.cell(row=2, column=64).value = 'office_lv100'
+        ws.cell(row=2, column=65).value = 'office_half'
+        ws.cell(row=2, column=66).value = 'office_full'
+        ws.cell(row=2, column=67).value = 'office_total'
+        ws.cell(row=2, column=68).value = 'farmer_fisher_lv00'
+        ws.cell(row=2, column=69).value = 'farmer_fisher_lv01_49'
+        ws.cell(row=2, column=70).value = 'farmer_fisher_lv50_99'
+        ws.cell(row=2, column=71).value = 'farmer_fisher_lv100'
+        ws.cell(row=2, column=72).value = 'farmer_fisher_full'
+        ws.cell(row=2, column=73).value = 'farmer_fisher_total'
+        ws.cell(row=2, column=74).value = 'employee_lv00'
+        ws.cell(row=2, column=75).value = 'employee_lv01_49'
+        ws.cell(row=2, column=76).value = 'employee_lv50_99'
+        ws.cell(row=2, column=77).value = 'employee_lv100'
+        ws.cell(row=2, column=78).value = 'employee_full'
+        ws.cell(row=2, column=79).value = 'employee_total'
+        ws.cell(row=2, column=80).value = 'industry_code'
+        ws.cell(row=2, column=81).value = 'industry_name'
+        ws.cell(row=2, column=82).value = 'usage_code'
+        ws.cell(row=2, column=83).value = 'usage_name'
+        ws.cell(row=2, column=84).value = 'comment'
+        ws.cell(row=2, column=85).value = 'deleted_at'
         
         if ippan_view_list:
             for i, ippan_view in enumerate(ippan_view_list):
-                ws.cell(row=i+2, column=1).value = ippan_view.ippan_id
-                ws.cell(row=i+2, column=2).value = ippan_view.ippan_name
-                ws.cell(row=i+2, column=3).value = ippan_view.suigai_id
-                ws.cell(row=i+2, column=4).value = ippan_view.suigai_name
-                ws.cell(row=i+2, column=5).value = ippan_view.ken_code
-                ws.cell(row=i+2, column=6).value = ippan_view.ken_name
-                ws.cell(row=i+2, column=7).value = ippan_view.city_code
-                ws.cell(row=i+2, column=8).value = ippan_view.city_name
-                ws.cell(row=i+2, column=9).value = ippan_view.cause_1_code
-                ws.cell(row=i+2, column=10).value = ippan_view.cause_1_name
-                ws.cell(row=i+2, column=11).value = ippan_view.cause_2_code
-                ws.cell(row=i+2, column=12).value = ippan_view.cause_2_name
-                ws.cell(row=i+2, column=13).value = ippan_view.cause_3_code
-                ws.cell(row=i+2, column=14).value = ippan_view.cause_3_name
-                ws.cell(row=i+2, column=15).value = ippan_view.area_id
-                ws.cell(row=i+2, column=16).value = ippan_view.area_name
-                ws.cell(row=i+2, column=17).value = ippan_view.suikei_code
-                ws.cell(row=i+2, column=18).value = ippan_view.suikei_name
-                ws.cell(row=i+2, column=19).value = ippan_view.kasen_code
-                ws.cell(row=i+2, column=20).value = ippan_view.kasen_name
-                ws.cell(row=i+2, column=21).value = ippan_view.gradient_code
-                ws.cell(row=i+2, column=22).value = ippan_view.gradient_name
-                ws.cell(row=i+2, column=23).value = ippan_view.residential_area
-                ws.cell(row=i+2, column=24).value = ippan_view.agricultural_area
-                ws.cell(row=i+2, column=25).value = ippan_view.underground_area
-                ws.cell(row=i+2, column=26).value = ippan_view.kasen_kaigan_code
-                ws.cell(row=i+2, column=27).value = ippan_view.kasen_kaigan_name
-                ws.cell(row=i+2, column=28).value = ippan_view.crop_damage
-                ws.cell(row=i+2, column=29).value = ippan_view.weather_id
-                ws.cell(row=i+2, column=30).value = ippan_view.weather_name
-                ws.cell(row=i+2, column=31).value = ippan_view.building_code
-                ws.cell(row=i+2, column=32).value = ippan_view.building_name
-                ws.cell(row=i+2, column=33).value = ippan_view.underground_code
-                ws.cell(row=i+2, column=34).value = ippan_view.underground_name
-                ws.cell(row=i+2, column=35).value = ippan_view.flood_sediment_code
-                ws.cell(row=i+2, column=36).value = ippan_view.flood_sediment_name
-                ws.cell(row=i+2, column=37).value = ippan_view.building_lv00
-                ws.cell(row=i+2, column=38).value = ippan_view.building_lv01_49
-                ws.cell(row=i+2, column=39).value = ippan_view.building_lv50_99
-                ws.cell(row=i+2, column=40).value = ippan_view.building_lv100
-                ws.cell(row=i+2, column=41).value = ippan_view.building_half
-                ws.cell(row=i+2, column=42).value = ippan_view.building_full
-                ws.cell(row=i+2, column=43).value = ippan_view.building_total
-                ws.cell(row=i+2, column=44).value = ippan_view.floor_area
-                ws.cell(row=i+2, column=45).value = ippan_view.family
-                ws.cell(row=i+2, column=46).value = ippan_view.office
-                ws.cell(row=i+2, column=47).value = ippan_view.floor_area_lv00
-                ws.cell(row=i+2, column=48).value = ippan_view.floor_area_lv01_49
-                ws.cell(row=i+2, column=49).value = ippan_view.floor_area_lv50_99
+                ws.cell(row=i+3, column=1).value = ippan_view.ippan_id
+                ws.cell(row=i+3, column=2).value = ippan_view.ippan_name
+                ws.cell(row=i+3, column=3).value = ippan_view.suigai_id
+                ws.cell(row=i+3, column=4).value = ippan_view.suigai_name
+                ws.cell(row=i+3, column=5).value = ippan_view.ken_code
+                ws.cell(row=i+3, column=6).value = ippan_view.ken_name
+                ws.cell(row=i+3, column=7).value = ippan_view.city_code
+                ws.cell(row=i+3, column=8).value = ippan_view.city_name
+                ws.cell(row=i+3, column=9).value = ippan_view.cause_1_code
+                ws.cell(row=i+3, column=10).value = ippan_view.cause_1_name
+                ws.cell(row=i+3, column=11).value = ippan_view.cause_2_code
+                ws.cell(row=i+3, column=12).value = ippan_view.cause_2_name
+                ws.cell(row=i+3, column=13).value = ippan_view.cause_3_code
+                ws.cell(row=i+3, column=14).value = ippan_view.cause_3_name
+                ws.cell(row=i+3, column=15).value = ippan_view.area_id
+                ws.cell(row=i+3, column=16).value = ippan_view.area_name
+                ws.cell(row=i+3, column=17).value = ippan_view.suikei_code
+                ws.cell(row=i+3, column=18).value = ippan_view.suikei_name
+                ws.cell(row=i+3, column=19).value = ippan_view.kasen_code
+                ws.cell(row=i+3, column=20).value = ippan_view.kasen_name
+                ws.cell(row=i+3, column=21).value = ippan_view.gradient_code
+                ws.cell(row=i+3, column=22).value = ippan_view.gradient_name
+                ws.cell(row=i+3, column=23).value = ippan_view.residential_area
+                ws.cell(row=i+3, column=24).value = ippan_view.agricultural_area
+                ws.cell(row=i+3, column=25).value = ippan_view.underground_area
+                ws.cell(row=i+3, column=26).value = ippan_view.kasen_kaigan_code
+                ws.cell(row=i+3, column=27).value = ippan_view.kasen_kaigan_name
+                ws.cell(row=i+3, column=28).value = ippan_view.crop_damage
+                ws.cell(row=i+3, column=29).value = ippan_view.weather_id
+                ws.cell(row=i+3, column=30).value = ippan_view.weather_name
+                ws.cell(row=i+3, column=31).value = ippan_view.building_code
+                ws.cell(row=i+3, column=32).value = ippan_view.building_name
+                ws.cell(row=i+3, column=33).value = ippan_view.underground_code
+                ws.cell(row=i+3, column=34).value = ippan_view.underground_name
+                ws.cell(row=i+3, column=35).value = ippan_view.flood_sediment_code
+                ws.cell(row=i+3, column=36).value = ippan_view.flood_sediment_name
+                ws.cell(row=i+3, column=37).value = ippan_view.building_lv00
+                ws.cell(row=i+3, column=38).value = ippan_view.building_lv01_49
+                ws.cell(row=i+3, column=39).value = ippan_view.building_lv50_99
+                ws.cell(row=i+3, column=40).value = ippan_view.building_lv100
+                ws.cell(row=i+3, column=41).value = ippan_view.building_half
+                ws.cell(row=i+3, column=42).value = ippan_view.building_full
+                ws.cell(row=i+3, column=43).value = ippan_view.building_total
+                ws.cell(row=i+3, column=44).value = ippan_view.floor_area
+                ws.cell(row=i+3, column=45).value = ippan_view.family
+                ws.cell(row=i+3, column=46).value = ippan_view.office
+                ws.cell(row=i+3, column=47).value = ippan_view.floor_area_lv00
+                ws.cell(row=i+3, column=48).value = ippan_view.floor_area_lv01_49
+                ws.cell(row=i+3, column=49).value = ippan_view.floor_area_lv50_99
 
-                ws.cell(row=i+2, column=50).value = ippan_view.floor_area_lv100
-                ws.cell(row=i+2, column=51).value = ippan_view.floor_area_half
-                ws.cell(row=i+2, column=52).value = ippan_view.floor_area_full
-                ws.cell(row=i+2, column=53).value = ippan_view.floor_area_total
-                ws.cell(row=i+2, column=54).value = ippan_view.family_lv00
-                ws.cell(row=i+2, column=55).value = ippan_view.family_lv01_49
-                ws.cell(row=i+2, column=56).value = ippan_view.family_lv50_99
-                ws.cell(row=i+2, column=57).value = ippan_view.family_lv100
-                ws.cell(row=i+2, column=58).value = ippan_view.family_half
-                ws.cell(row=i+2, column=59).value = ippan_view.family_full
+                ws.cell(row=i+3, column=50).value = ippan_view.floor_area_lv100
+                ws.cell(row=i+3, column=51).value = ippan_view.floor_area_half
+                ws.cell(row=i+3, column=52).value = ippan_view.floor_area_full
+                ws.cell(row=i+3, column=53).value = ippan_view.floor_area_total
+                ws.cell(row=i+3, column=54).value = ippan_view.family_lv00
+                ws.cell(row=i+3, column=55).value = ippan_view.family_lv01_49
+                ws.cell(row=i+3, column=56).value = ippan_view.family_lv50_99
+                ws.cell(row=i+3, column=57).value = ippan_view.family_lv100
+                ws.cell(row=i+3, column=58).value = ippan_view.family_half
+                ws.cell(row=i+3, column=59).value = ippan_view.family_full
 
-                ws.cell(row=i+2, column=60).value = ippan_view.family_total
-                ws.cell(row=i+2, column=61).value = ippan_view.office_lv00
-                ws.cell(row=i+2, column=62).value = ippan_view.office_lv01_49
-                ws.cell(row=i+2, column=63).value = ippan_view.office_lv50_99
-                ws.cell(row=i+2, column=64).value = ippan_view.office_lv100
-                ws.cell(row=i+2, column=65).value = ippan_view.office_half
-                ws.cell(row=i+2, column=66).value = ippan_view.office_full
-                ws.cell(row=i+2, column=67).value = ippan_view.office_total
-                ws.cell(row=i+2, column=68).value = ippan_view.farmer_fisher_lv00
-                ws.cell(row=i+2, column=69).value = ippan_view.farmer_fisher_lv01_49
+                ws.cell(row=i+3, column=60).value = ippan_view.family_total
+                ws.cell(row=i+3, column=61).value = ippan_view.office_lv00
+                ws.cell(row=i+3, column=62).value = ippan_view.office_lv01_49
+                ws.cell(row=i+3, column=63).value = ippan_view.office_lv50_99
+                ws.cell(row=i+3, column=64).value = ippan_view.office_lv100
+                ws.cell(row=i+3, column=65).value = ippan_view.office_half
+                ws.cell(row=i+3, column=66).value = ippan_view.office_full
+                ws.cell(row=i+3, column=67).value = ippan_view.office_total
+                ws.cell(row=i+3, column=68).value = ippan_view.farmer_fisher_lv00
+                ws.cell(row=i+3, column=69).value = ippan_view.farmer_fisher_lv01_49
 
-                ws.cell(row=i+2, column=70).value = ippan_view.farmer_fisher_lv50_99
-                ws.cell(row=i+2, column=71).value = ippan_view.farmer_fisher_lv100
-                ws.cell(row=i+2, column=72).value = ippan_view.farmer_fisher_full
-                ws.cell(row=i+2, column=73).value = ippan_view.farmer_fisher_total
-                ws.cell(row=i+2, column=74).value = ippan_view.employee_lv00
-                ws.cell(row=i+2, column=75).value = ippan_view.employee_lv01_49
-                ws.cell(row=i+2, column=76).value = ippan_view.employee_lv50_99
-                ws.cell(row=i+2, column=77).value = ippan_view.employee_lv100
-                ws.cell(row=i+2, column=78).value = ippan_view.employee_full
-                ws.cell(row=i+2, column=79).value = ippan_view.employee_total
+                ws.cell(row=i+3, column=70).value = ippan_view.farmer_fisher_lv50_99
+                ws.cell(row=i+3, column=71).value = ippan_view.farmer_fisher_lv100
+                ws.cell(row=i+3, column=72).value = ippan_view.farmer_fisher_full
+                ws.cell(row=i+3, column=73).value = ippan_view.farmer_fisher_total
+                ws.cell(row=i+3, column=74).value = ippan_view.employee_lv00
+                ws.cell(row=i+3, column=75).value = ippan_view.employee_lv01_49
+                ws.cell(row=i+3, column=76).value = ippan_view.employee_lv50_99
+                ws.cell(row=i+3, column=77).value = ippan_view.employee_lv100
+                ws.cell(row=i+3, column=78).value = ippan_view.employee_full
+                ws.cell(row=i+3, column=79).value = ippan_view.employee_total
 
-                ws.cell(row=i+2, column=80).value = ippan_view.industry_code
-                ws.cell(row=i+2, column=81).value = ippan_view.industry_name
-                ws.cell(row=i+2, column=82).value = ippan_view.usage_code
-                ws.cell(row=i+2, column=83).value = ippan_view.usage_name
+                ws.cell(row=i+3, column=80).value = ippan_view.industry_code
+                ws.cell(row=i+3, column=81).value = ippan_view.industry_name
+                ws.cell(row=i+3, column=82).value = ippan_view.usage_code
+                ws.cell(row=i+3, column=83).value = ippan_view.usage_name
+                ws.cell(row=i+3, column=84).value = ippan_view.comment
+                ws.cell(row=i+3, column=85).value = str(ippan_view.deleted_at)
 
         wb.save(download_file_path)
         
@@ -2705,7 +2857,7 @@ def ippan_view_view(request, lock):
 
 ###############################################################################
 ### 関数名:ippan_summary_view(request, lock)
-### 8000:一般資産集計データ_集計結果
+### 8000:集計データ_集計結果
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_summary_view(request, lock):
@@ -2722,7 +2874,7 @@ def ippan_summary_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産集計データ_集計結果データを取得する。
+        ### DBにアクセスして、集計データ_集計結果データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 2/4.', 'INFO')
         ippan_summary_list = IPPAN_SUMMARY.objects.raw("""SELECT * FROM IPPAN_SUMMARY ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
@@ -2737,8 +2889,8 @@ def ippan_summary_view(request, lock):
         download_file_path = 'static/download_ippan_summary.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
         ws = wb.active
-        ws.title = '一般資産集計データ_集計結果'
-        ws.cell(row=1, column=1).value = '一般資産調査票ID'
+        ws.title = '集計データ_集計結果'
+        ws.cell(row=1, column=1).value = '行ID'
         ws.cell(row=1, column=2).value = '水害ID'
         ws.cell(row=1, column=3).value = '家屋被害額_床下'
         ws.cell(row=1, column=4).value = '家屋被害額_01から49cm'
@@ -2806,77 +2958,149 @@ def ippan_summary_view(request, lock):
         ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_100cm以上'
         ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_半壊'
         ws.cell(row=1, column=68).value = '事業所応急対策費_代替活動費_全壊'
+        ws.cell(row=1, column=69).value = '削除日時'
+
+        ws.cell(row=2, column=1).value = 'ippan_id'
+        ws.cell(row=2, column=2).value = 'suigai_id'
+        ws.cell(row=2, column=3).value = 'house_summary_lv00'
+        ws.cell(row=2, column=4).value = 'house_summary_lv01_49'
+        ws.cell(row=2, column=5).value = 'house_summary_lv50_99'
+        ws.cell(row=2, column=6).value = 'house_summary_lv100'
+        ws.cell(row=2, column=7).value = 'house_summary_half'
+        ws.cell(row=2, column=8).value = 'house_summary_full'
+        ws.cell(row=2, column=9).value = 'household_summary_lv00'
+        ws.cell(row=2, column=10).value = 'household_summary_lv01_49'
+        ws.cell(row=2, column=11).value = 'household_summary_lv50_99'
+        ws.cell(row=2, column=12).value = 'household_summary_lv100'
+        ws.cell(row=2, column=13).value = 'household_summary_half'
+        ws.cell(row=2, column=14).value = 'household_summary_full'
+        ws.cell(row=2, column=15).value = 'car_summary_lv00'
+        ws.cell(row=2, column=16).value = 'car_summary_lv01_49'
+        ws.cell(row=2, column=17).value = 'car_summary_lv50_99'
+        ws.cell(row=2, column=18).value = 'car_summary_lv100'
+        ws.cell(row=2, column=19).value = 'car_summary_half'
+        ws.cell(row=2, column=20).value = 'car_summary_full'
+        ws.cell(row=2, column=21).value = 'house_alt_lv00'
+        ws.cell(row=2, column=22).value = 'house_alt_lv01_49'
+        ws.cell(row=2, column=23).value = 'house_alt_lv50_99'
+        ws.cell(row=2, column=24).value = 'house_alt_lv100'
+        ws.cell(row=2, column=25).value = 'house_alt_half'
+        ws.cell(row=2, column=26).value = 'house_alt_full'
+        ws.cell(row=2, column=27).value = 'house_clean_lv00'
+        ws.cell(row=2, column=28).value = 'house_clean_lv01_49'
+        ws.cell(row=2, column=29).value = 'house_clean_lv50_99'
+        ws.cell(row=2, column=30).value = 'house_clean_lv100'
+        ws.cell(row=2, column=31).value = 'house_clean_half'
+        ws.cell(row=2, column=32).value = 'house_clean_full'
+        ws.cell(row=2, column=33).value = 'office_dep_summary_lv00'
+        ws.cell(row=2, column=34).value = 'office_dep_summary_lv01_49'
+        ws.cell(row=2, column=35).value = 'office_dep_summary_lv50_99'
+        ws.cell(row=2, column=36).value = 'office_dep_summary_lv100'
+        ws.cell(row=2, column=37).value = 'office_dep_summary_full'
+        ws.cell(row=2, column=38).value = 'office_inv_summary_lv00'
+        ws.cell(row=2, column=39).value = 'office_inv_summary_lv01_49'
+        ws.cell(row=2, column=40).value = 'office_inv_summary_lv50_99'
+        ws.cell(row=2, column=41).value = 'office_inv_summary_lv100'
+        ws.cell(row=2, column=42).value = 'office_inv_summary_full'
+        ws.cell(row=2, column=43).value = 'office_sus_summary_lv00'
+        ws.cell(row=2, column=44).value = 'office_sus_summary_lv01_49'
+        ws.cell(row=2, column=45).value = 'office_sus_summary_lv50_99'
+        ws.cell(row=2, column=46).value = 'office_sus_summary_lv100'
+        ws.cell(row=2, column=47).value = 'office_sus_summary_full'
+        ws.cell(row=2, column=48).value = 'office_stg_summary_lv00'
+        ws.cell(row=2, column=49).value = 'office_stg_summary_lv01_49'
+        ws.cell(row=2, column=50).value = 'office_stg_summary_lv50_99'
+        ws.cell(row=2, column=51).value = 'office_stg_summary_lv100'
+        ws.cell(row=2, column=52).value = 'office_stg_summary_full'
+        ws.cell(row=2, column=53).value = 'farmer_fisher_dep_summary_lv00'
+        ws.cell(row=2, column=54).value = 'farmer_fisher_dep_summary_lv01_49'
+        ws.cell(row=2, column=55).value = 'farmer_fisher_dep_summary_lv50_99'
+        ws.cell(row=2, column=56).value = 'farmer_fisher_dep_summary_lv100'
+        ws.cell(row=2, column=57).value = 'farmer_fisher_dep_summary_full'
+        ws.cell(row=2, column=58).value = 'farmer_fisher_inv_summary_lv00'
+        ws.cell(row=2, column=59).value = 'farmer_fisher_inv_summary_lv01_49'
+        ws.cell(row=2, column=60).value = 'farmer_fisher_inv_summary_lv50_99'
+        ws.cell(row=2, column=61).value = 'farmer_fisher_inv_summary_lv100'
+        ws.cell(row=2, column=62).value = 'farmer_fisher_inv_summary_full'
+        ws.cell(row=2, column=63).value = 'office_alt_summary_lv00'
+        ws.cell(row=2, column=64).value = 'office_alt_summary_lv01_49'
+        ws.cell(row=2, column=65).value = 'office_alt_summary_lv50_99'
+        ws.cell(row=2, column=66).value = 'office_alt_summary_lv100'
+        ws.cell(row=2, column=67).value = 'office_alt_summary_half'
+        ws.cell(row=2, column=68).value = 'office_alt_summary_full'
+        ws.cell(row=2, column=69).value = 'deleted_at'
         
         if ippan_summary_list:
             for i, ippan_summary in enumerate(ippan_summary_list):
-                ws.cell(row=i+2, column=1).value = ippan_summary.ippan_id
-                ws.cell(row=i+2, column=2).value = ippan_summary.suigai_id
-                ws.cell(row=i+2, column=3).value = ippan_summary.house_summary_lv00
-                ws.cell(row=i+2, column=4).value = ippan_summary.house_summary_lv01_49
-                ws.cell(row=i+2, column=5).value = ippan_summary.house_summary_lv50_99
-                ws.cell(row=i+2, column=6).value = ippan_summary.house_summary_lv100
-                ws.cell(row=i+2, column=7).value = ippan_summary.house_summary_half
-                ws.cell(row=i+2, column=8).value = ippan_summary.house_summary_full
-                ws.cell(row=i+2, column=9).value = ippan_summary.household_summary_lv00
-                ws.cell(row=i+2, column=10).value = ippan_summary.household_summary_lv01_49
-                ws.cell(row=i+2, column=11).value = ippan_summary.household_summary_lv50_99
-                ws.cell(row=i+2, column=12).value = ippan_summary.household_summary_lv100
-                ws.cell(row=i+2, column=13).value = ippan_summary.household_summary_half
-                ws.cell(row=i+2, column=14).value = ippan_summary.household_summary_full
-                ws.cell(row=i+2, column=15).value = ippan_summary.car_summary_lv00
-                ws.cell(row=i+2, column=16).value = ippan_summary.car_summary_lv01_49
-                ws.cell(row=i+2, column=17).value = ippan_summary.car_summary_lv50_99
-                ws.cell(row=i+2, column=18).value = ippan_summary.car_summary_lv100
-                ws.cell(row=i+2, column=19).value = ippan_summary.car_summary_half
-                ws.cell(row=i+2, column=20).value = ippan_summary.car_summary_full
-                ws.cell(row=i+2, column=21).value = ippan_summary.house_alt_summary_lv00
-                ws.cell(row=i+2, column=22).value = ippan_summary.house_alt_summary_lv01_49
-                ws.cell(row=i+2, column=23).value = ippan_summary.house_alt_summary_lv50_99
-                ws.cell(row=i+2, column=24).value = ippan_summary.house_alt_summary_lv100
-                ws.cell(row=i+2, column=25).value = ippan_summary.house_alt_summary_half
-                ws.cell(row=i+2, column=26).value = ippan_summary.house_alt_summary_full
-                ws.cell(row=i+2, column=27).value = ippan_summary.house_clean_summary_lv00
-                ws.cell(row=i+2, column=28).value = ippan_summary.house_clean_summary_lv01_49
-                ws.cell(row=i+2, column=29).value = ippan_summary.house_clean_summary_lv50_99
-                ws.cell(row=i+2, column=30).value = ippan_summary.house_clean_summary_lv100
-                ws.cell(row=i+2, column=31).value = ippan_summary.house_clean_summary_half
-                ws.cell(row=i+2, column=32).value = ippan_summary.house_clean_summary_full
-                ws.cell(row=i+2, column=33).value = ippan_summary.office_dep_summary_lv00
-                ws.cell(row=i+2, column=34).value = ippan_summary.office_dep_summary_lv01_49
-                ws.cell(row=i+2, column=35).value = ippan_summary.office_dep_summary_lv50_99
-                ws.cell(row=i+2, column=36).value = ippan_summary.office_dep_summary_lv100
-                ws.cell(row=i+2, column=37).value = ippan_summary.office_dep_summary_full
-                ws.cell(row=i+2, column=38).value = ippan_summary.office_inv_summary_lv00
-                ws.cell(row=i+2, column=39).value = ippan_summary.office_inv_summary_lv01_49
-                ws.cell(row=i+2, column=40).value = ippan_summary.office_inv_summary_lv50_99
-                ws.cell(row=i+2, column=41).value = ippan_summary.office_inv_summary_lv100
-                ws.cell(row=i+2, column=42).value = ippan_summary.office_inv_summary_full
-                ws.cell(row=i+2, column=43).value = ippan_summary.office_sus_summary_lv00
-                ws.cell(row=i+2, column=44).value = ippan_summary.office_sus_summary_lv01_49
-                ws.cell(row=i+2, column=45).value = ippan_summary.office_sus_summary_lv50_99
-                ws.cell(row=i+2, column=46).value = ippan_summary.office_sus_summary_lv100
-                ws.cell(row=i+2, column=47).value = ippan_summary.office_sus_summary_full
-                ws.cell(row=i+2, column=48).value = ippan_summary.office_stg_summary_lv00
-                ws.cell(row=i+2, column=49).value = ippan_summary.office_stg_summary_lv01_49
-                ws.cell(row=i+2, column=50).value = ippan_summary.office_stg_summary_lv50_99
-                ws.cell(row=i+2, column=51).value = ippan_summary.office_stg_summary_lv100
-                ws.cell(row=i+2, column=52).value = ippan_summary.office_stg_summary_full
-                ws.cell(row=i+2, column=53).value = ippan_summary.farmer_fisher_dep_summary_lv00
-                ws.cell(row=i+2, column=54).value = ippan_summary.farmer_fisher_dep_summary_lv01_49
-                ws.cell(row=i+2, column=55).value = ippan_summary.farmer_fisher_dep_summary_lv50_99
-                ws.cell(row=i+2, column=56).value = ippan_summary.farmer_fisher_dep_summary_lv100
-                ws.cell(row=i+2, column=57).value = ippan_summary.farmer_fisher_dep_summary_full
-                ws.cell(row=i+2, column=58).value = ippan_summary.farmer_fisher_inv_summary_lv00
-                ws.cell(row=i+2, column=59).value = ippan_summary.farmer_fisher_inv_summary_lv01_49
-                ws.cell(row=i+2, column=60).value = ippan_summary.farmer_fisher_inv_summary_lv50_99
-                ws.cell(row=i+2, column=61).value = ippan_summary.farmer_fisher_inv_summary_lv100
-                ws.cell(row=i+2, column=62).value = ippan_summary.farmer_fisher_inv_summary_full
-                ws.cell(row=i+2, column=63).value = ippan_summary.office_alt_summary_lv00
-                ws.cell(row=i+2, column=64).value = ippan_summary.office_alt_summary_lv01_49
-                ws.cell(row=i+2, column=65).value = ippan_summary.office_alt_summary_lv50_99
-                ws.cell(row=i+2, column=66).value = ippan_summary.office_alt_summary_lv100
-                ws.cell(row=i+2, column=67).value = ippan_summary.office_alt_summary_half
-                ws.cell(row=i+2, column=68).value = ippan_summary.office_alt_summary_full
+                ws.cell(row=i+3, column=1).value = ippan_summary.ippan_id
+                ws.cell(row=i+3, column=2).value = ippan_summary.suigai_id
+                ws.cell(row=i+3, column=3).value = ippan_summary.house_summary_lv00
+                ws.cell(row=i+3, column=4).value = ippan_summary.house_summary_lv01_49
+                ws.cell(row=i+3, column=5).value = ippan_summary.house_summary_lv50_99
+                ws.cell(row=i+3, column=6).value = ippan_summary.house_summary_lv100
+                ws.cell(row=i+3, column=7).value = ippan_summary.house_summary_half
+                ws.cell(row=i+3, column=8).value = ippan_summary.house_summary_full
+                ws.cell(row=i+3, column=9).value = ippan_summary.household_summary_lv00
+                ws.cell(row=i+3, column=10).value = ippan_summary.household_summary_lv01_49
+                ws.cell(row=i+3, column=11).value = ippan_summary.household_summary_lv50_99
+                ws.cell(row=i+3, column=12).value = ippan_summary.household_summary_lv100
+                ws.cell(row=i+3, column=13).value = ippan_summary.household_summary_half
+                ws.cell(row=i+3, column=14).value = ippan_summary.household_summary_full
+                ws.cell(row=i+3, column=15).value = ippan_summary.car_summary_lv00
+                ws.cell(row=i+3, column=16).value = ippan_summary.car_summary_lv01_49
+                ws.cell(row=i+3, column=17).value = ippan_summary.car_summary_lv50_99
+                ws.cell(row=i+3, column=18).value = ippan_summary.car_summary_lv100
+                ws.cell(row=i+3, column=19).value = ippan_summary.car_summary_half
+                ws.cell(row=i+3, column=20).value = ippan_summary.car_summary_full
+                ws.cell(row=i+3, column=21).value = ippan_summary.house_alt_summary_lv00
+                ws.cell(row=i+3, column=22).value = ippan_summary.house_alt_summary_lv01_49
+                ws.cell(row=i+3, column=23).value = ippan_summary.house_alt_summary_lv50_99
+                ws.cell(row=i+3, column=24).value = ippan_summary.house_alt_summary_lv100
+                ws.cell(row=i+3, column=25).value = ippan_summary.house_alt_summary_half
+                ws.cell(row=i+3, column=26).value = ippan_summary.house_alt_summary_full
+                ws.cell(row=i+3, column=27).value = ippan_summary.house_clean_summary_lv00
+                ws.cell(row=i+3, column=28).value = ippan_summary.house_clean_summary_lv01_49
+                ws.cell(row=i+3, column=29).value = ippan_summary.house_clean_summary_lv50_99
+                ws.cell(row=i+3, column=30).value = ippan_summary.house_clean_summary_lv100
+                ws.cell(row=i+3, column=31).value = ippan_summary.house_clean_summary_half
+                ws.cell(row=i+3, column=32).value = ippan_summary.house_clean_summary_full
+                ws.cell(row=i+3, column=33).value = ippan_summary.office_dep_summary_lv00
+                ws.cell(row=i+3, column=34).value = ippan_summary.office_dep_summary_lv01_49
+                ws.cell(row=i+3, column=35).value = ippan_summary.office_dep_summary_lv50_99
+                ws.cell(row=i+3, column=36).value = ippan_summary.office_dep_summary_lv100
+                ws.cell(row=i+3, column=37).value = ippan_summary.office_dep_summary_full
+                ws.cell(row=i+3, column=38).value = ippan_summary.office_inv_summary_lv00
+                ws.cell(row=i+3, column=39).value = ippan_summary.office_inv_summary_lv01_49
+                ws.cell(row=i+3, column=40).value = ippan_summary.office_inv_summary_lv50_99
+                ws.cell(row=i+3, column=41).value = ippan_summary.office_inv_summary_lv100
+                ws.cell(row=i+3, column=42).value = ippan_summary.office_inv_summary_full
+                ws.cell(row=i+3, column=43).value = ippan_summary.office_sus_summary_lv00
+                ws.cell(row=i+3, column=44).value = ippan_summary.office_sus_summary_lv01_49
+                ws.cell(row=i+3, column=45).value = ippan_summary.office_sus_summary_lv50_99
+                ws.cell(row=i+3, column=46).value = ippan_summary.office_sus_summary_lv100
+                ws.cell(row=i+3, column=47).value = ippan_summary.office_sus_summary_full
+                ws.cell(row=i+3, column=48).value = ippan_summary.office_stg_summary_lv00
+                ws.cell(row=i+3, column=49).value = ippan_summary.office_stg_summary_lv01_49
+                ws.cell(row=i+3, column=50).value = ippan_summary.office_stg_summary_lv50_99
+                ws.cell(row=i+3, column=51).value = ippan_summary.office_stg_summary_lv100
+                ws.cell(row=i+3, column=52).value = ippan_summary.office_stg_summary_full
+                ws.cell(row=i+3, column=53).value = ippan_summary.farmer_fisher_dep_summary_lv00
+                ws.cell(row=i+3, column=54).value = ippan_summary.farmer_fisher_dep_summary_lv01_49
+                ws.cell(row=i+3, column=55).value = ippan_summary.farmer_fisher_dep_summary_lv50_99
+                ws.cell(row=i+3, column=56).value = ippan_summary.farmer_fisher_dep_summary_lv100
+                ws.cell(row=i+3, column=57).value = ippan_summary.farmer_fisher_dep_summary_full
+                ws.cell(row=i+3, column=58).value = ippan_summary.farmer_fisher_inv_summary_lv00
+                ws.cell(row=i+3, column=59).value = ippan_summary.farmer_fisher_inv_summary_lv01_49
+                ws.cell(row=i+3, column=60).value = ippan_summary.farmer_fisher_inv_summary_lv50_99
+                ws.cell(row=i+3, column=61).value = ippan_summary.farmer_fisher_inv_summary_lv100
+                ws.cell(row=i+3, column=62).value = ippan_summary.farmer_fisher_inv_summary_full
+                ws.cell(row=i+3, column=63).value = ippan_summary.office_alt_summary_lv00
+                ws.cell(row=i+3, column=64).value = ippan_summary.office_alt_summary_lv01_49
+                ws.cell(row=i+3, column=65).value = ippan_summary.office_alt_summary_lv50_99
+                ws.cell(row=i+3, column=66).value = ippan_summary.office_alt_summary_lv100
+                ws.cell(row=i+3, column=67).value = ippan_summary.office_alt_summary_half
+                ws.cell(row=i+3, column=68).value = ippan_summary.office_alt_summary_full
+                ws.cell(row=i+3, column=69).value = str(ippan_summary.deleted_at)
             
         wb.save(download_file_path)
         
@@ -2898,7 +3122,7 @@ def ippan_summary_view(request, lock):
 
 ###############################################################################
 ### 関数名:ippan_group_by_ken_view(request, lock)
-### 8010:一般資産集計データ_集計結果_都道府県別
+### 8010:集計データ_集計結果_都道府県別
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_group_by_ken_view(request, lock):
@@ -2915,7 +3139,7 @@ def ippan_group_by_ken_view(request, lock):
         
         #######################################################################
         ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産集計データ_集計結果_都道府県別データを取得する。
+        ### DBにアクセスして、集計データ_集計結果_都道府県別データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'INFO')
         ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
