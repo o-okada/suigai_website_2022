@@ -1165,6 +1165,8 @@ class TRIGGER(models.Model):
     failure_count = models.IntegerField(null=True)                             ### 失敗数 ※削除予定
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     
+    data_integrity = models.TextField(null=True)                               ### データ整合性 Row, Col, left, right, verified result, 
+    
     class Meta:
         db_table = 'trigger'
     
