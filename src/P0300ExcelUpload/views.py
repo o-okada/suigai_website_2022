@@ -541,14 +541,16 @@ def index_view(request):
         input_file_object = request.FILES['file']
         print_log('input_file_object = {}'.format(input_file_object), 'INFO')
         
-        input_file_path = 'repository/202206/ippan_chosa_input_' + datetime_now_strftime + '.xlsx'
+        ### input_file_path = 'repository/202206/ippan_chosa_input_' + datetime_now_strftime + '.xlsx'
+        input_file_path = 'static/repository/202206/ippan_chosa_input_' + datetime_now_strftime + '.xlsx'
         print_log('input_file_path = {}'.format(input_file_path), 'INFO')
         
         with open(input_file_path, 'wb+') as destination:
             for chunk in input_file_object.chunks():
                 destination.write(chunk)
 
-        output_file_path = 'repository/202206/ippan_chosa_output_' + datetime_now_strftime + '.xlsx'
+        ### output_file_path = 'repository/202206/ippan_chosa_output_' + datetime_now_strftime + '.xlsx'
+        output_file_path = 'static/repository/202206/ippan_chosa_output_' + datetime_now_strftime + '.xlsx'
         
         print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'INFO')
         print_log('[INFO] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'INFO')
