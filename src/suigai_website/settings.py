@@ -48,32 +48,24 @@ INSTALLED_APPS = [
     'P0000Common.apps.P0000CommonConfig',
     'P0000Dummy.apps.P0000DummyConfig',
     'P0100Login.apps.P0100LoginConfig',
+
+    ### File Applications
+    'P0100File.apps.P0100FileConfig',
     
     ### Excel Applications
     'P0200ExcelDownload.apps.P0200ExcelDownloadConfig',
     'P0300ExcelUpload.apps.P0300ExcelUploadConfig',
+    'P0300AreaWeatherUpdate.apps.P0300AreaWeatherUpdateConfig',
     
     ### Online Applications
     'P0400OnlineDisplay.apps.P0400OnlineDisplayConfig',
     'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
-    
-    ### Area Applications
-    'P0600CreateArea.apps.P0600CreateAreaConfig',
-
-    ### Report Applications
 
     ### Reverse Verification Applications
     'P0800Reverse.apps.P0800ReverseConfig',
     
     ### Action Applications
     'P0900Action.apps.P0900ActionConfig',
-    
-    ### File Applications
-    'P1000File.apps.P1000FileConfig',
-    
-    ### Admin Applications
-    'P9100Transact.apps.P9100TransactConfig',
-    'P9200Lock.apps.P9200LockConfig',
     
     ### See Python Django開発入門, P224
     ### 'allauth',

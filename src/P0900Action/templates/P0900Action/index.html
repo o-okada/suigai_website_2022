@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>データ一貫性、整合性の自動検証画面 | 水害統計オンラインサイト</title>
+    <title>自動集計・自動検証の状況 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -30,7 +30,12 @@
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col d-flex justify-content-start align-items-start">
-                <a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>
+                <a href="/P0100File/R4/">ファイル</a>&nbsp;&nbsp;&nbsp;
+                <strong><a href="/P0900Action">自動集計・自動検証</a></strong>&nbsp;&nbsp;&nbsp;
+                <a href="/P0800Reverse/input/">マニュアル検証</a>&nbsp;&nbsp;&nbsp;
+                <a href="/P0400OnlineDisplay">オンライン参照</a>&nbsp;&nbsp;&nbsp;
+                <a href="">グラフ</a>&nbsp;&nbsp;&nbsp;
+                <a href="">帳票</a>&nbsp;&nbsp;&nbsp;
             </div>
             <div class="col d-flex justify-content-center align-items-center">
             </div>
@@ -43,13 +48,13 @@
 
     <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
-        <h3>データ一貫性、整合性の自動検証画面</h3>
+        <h3>自動集計・自動検証の状況</h3>
     </div>
     <!-- END 画面名 -->
     
     <!-- BEGIN 検索とフィルタ -->
     <div class="row mb-3">
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-4">
             <div class="input-group">
                 <select class="form-select" id="form_select_ken" name="form_select_ken">
                     <option value="0">都道府県の絞り込み条件を選択してください。</option>
@@ -64,7 +69,7 @@
                 <button class="btn btn-secondary btn-sm" type="button" id="button_ken" name="button_ken">都道府県選択</button>
             </div>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-4">
             <div class="input-group">
                 <select class="form-select" id="form_select_city" name="form_select_city">
                     <option value="0">市区町村の絞り込み条件を選択してください。</option>
@@ -79,7 +84,7 @@
                 <button class="btn btn-secondary btn-sm" type="button" id="button_city" name="button_city">市区町村選択</button>
             </div>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-4">
             <div class="input-group">
                 <select class="form-select" id="form_select_repository" name="form_select_repository">
                     <option value="0">EXCELファイルの絞り込み条件を選択してください。</option>
@@ -105,6 +110,20 @@
     </div>
     <!-- END データ一貫性と整合性検証結果の時系列グラフ -->
 
+    <!-- BEGIN サブメニュー -->
+    <div class="row mb-3">
+        <!-- BEGIN 行 -->
+        <div class="row">
+            <!-- BEGIN 列 -->
+            <div class="col text-end">
+                <a href="">表示更新</a>
+            </div>
+            <!-- END 列 -->
+        </div>
+        <!-- END 行 -->
+    </div>
+    <!-- END サブメニュー -->
+
     <!-- BEGIN データ一貫性と整合性検証結果の一覧表示 -->
     <div class="row mb-3">
         <div class="col-12 col-xl-12">
@@ -122,7 +141,7 @@
                             <th class="text-center">消費日時</th>
                             <th class="text-center">成功数</th>
                             <th class="text-center">失敗数</th>
-                            <th class="text-center">詳細</th>
+                            <th class="text-center">自動実行の結果</th>
                             <th class="text-center">削除日時</th>
                         </tr>
                     </thead>
@@ -165,7 +184,7 @@
                             {% else %}
                             <td>{{ trigger.failure_count }}</td>
                             {% endif %}
-                            <td><a href="/P0900Action/trigger/{{ trigger.trigger_id }}">詳細</a></td>
+                            <td><a href="/P0900Action/trigger/{{ trigger.trigger_id }}">自動実行の結果</a></td>
                             {% if trigger.deleted_at is None %}
                             <td></td>
                             {% else %}

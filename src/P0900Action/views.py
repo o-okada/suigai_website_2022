@@ -692,7 +692,8 @@ def trigger_view(request, trigger_id):
             TR1.success_count AS success_count, 
             TR1.failure_count AS failure_count, 
             RE1.input_file_path AS input_file_path, 
-            TR1.data_integrity AS data_integrity 
+            TR1.data_integrity_left AS data_integrity_left, 
+            TR1.data_integrity_right AS data_integrity_right 
         FROM TRIGGER TR1 
         LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
         LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
@@ -700,7 +701,7 @@ def trigger_view(request, trigger_id):
         LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
         LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
         LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-        WHERE trigger_id=%s""", [trigger_id,])
+        WHERE trigger_id=%s""", [trigger_id, ])
 
         #######################################################################
         ### レスポンスセット処理(0020)

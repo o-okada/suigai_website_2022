@@ -23,24 +23,23 @@ from P0000Common.common import print_log                                       #
 ### 関数名：index_view
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-### def index(request):
 def index_view(request):
     try:
         #######################################################################
         ### 引数チェック処理
-        ### （１）ブラウザからのリクエストと引数をチェックする。
+        ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0100Login.index_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0100Login.index_view()関数 request = {}'.format(request.method), 'INFO')
 
-        ### （１）ログイン中、ログアウト中にかかわらずに、ログアウトする。
+        ### ログイン中、ログアウト中にかかわらずに、ログアウトする。
         logout(request)
         
         if request.method == 'GET':
             ###################################################################
             ### レスポンスセット処理
-            ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             template = loader.get_template('P0100Login/index.html')
             context = {}
@@ -48,10 +47,9 @@ def index_view(request):
             return HttpResponse(template.render(context, request))
 
         if request.method == 'POST':
-
             ###################################################################
             ### レスポンスセット処理
-            ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
             print_log('[INFO] P0100Login.index_view()関数 request.POST.username = {}'.format(request.POST['username']), 'INFO')
@@ -60,8 +58,8 @@ def index_view(request):
                 
             ###################################################################
             ### レスポンスセット処理
-            ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-            ### （１）テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+            ### (2)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             if user is not None:
                 ### 認証に成功した場合、、、
@@ -69,20 +67,17 @@ def index_view(request):
                     ### ユーザが活性（有効）の場合、、、
                     login(request, user)
                     print_log('[INFO] P0100Login.index_view()関数が正常終了しました。0', 'INFO')
-                    ### return HttpResponseRedirect('/P0200ExcelDownload/')
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect('/P0100File/R4/')
                 else:
                     ### ユーザが非活性（無効）の場合、、、
                     template = loader.get_template('P0100Login/index.html')
                     context = {'message': 'ログインに失敗しました。'}
-                    ### context = {}
                     print_log('[WARN] P0100Login.index_view()関数が警告終了しました。1', 'INFO')
                     return HttpResponse(template.render(context, request))
             else:
                 ### 認証に失敗した場合、、、
                 template = loader.get_template('P0100Login/index.html')
                 context = {'message': 'ログインに失敗しました。'}
-                ### context = {}
                 print_log('[WARN] P0100Login.index_view()関数が警告終了しました。2', 'INFO')
                 return HttpResponse(template.render(context, request))
     except:
