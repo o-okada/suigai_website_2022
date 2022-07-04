@@ -1,0 +1,186 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0100File/templates/P0100File/R4_ken.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>ファイル画面 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <!--<script src="{% static 'js/bootstrap.min.js' %}"></script>-->
+    <!--<script src="{% static 'js/popper.min.js' %}"></script>-->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+    .btn-fail    {background: #F44B25; color: #FFFFFF;}
+    .btn-running {background: #258AC4; color: #FFFFFF;}
+    .btn-cancel  {background: #6C757D; color: #FFFFFF;}
+    .btn-success {background: #54AB51; color: #FFFFFF;}
+    //a:link {color: #000000; text-decoration:none;}
+    //a:visited {color: #000000; text-decoration:none;}
+    //a:hover {color: #000000; text-decoration:none;}
+    //a:active {color: #000000; text-decoration:none;}
+    </style>
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    {% block content %}
+
+    <!-- BEGIN トップパネル -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col d-flex justify-content-start align-items-start">
+                <!--<a href="{% url 'P0000Dummy:index_view' %}">ダミーメニュー画面に戻る</a><br>-->
+                <strong><a href="/P0100File/R4/">ファイル</a></strong>&nbsp;&nbsp;&nbsp;
+                <a href="/P0900Action">自動集計・自動検証</a>&nbsp;&nbsp;&nbsp;
+                <a href="/P0800Reverse/input/">マニュアル検証</a>&nbsp;&nbsp;&nbsp;
+                <a href="/P0400OnlineDisplay">オンライン参照</a>&nbsp;&nbsp;&nbsp;
+                <a href="">グラフ</a>&nbsp;&nbsp;&nbsp;
+                <a href="">帳票</a>&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+            </div>
+            <div class="col d-flex justify-content-end align-items-end">
+                <a href="{% url 'P0100Login:index_view' %}">ログアウト</a><br>
+            </div>
+        </div>
+    </div>
+    <!-- END トップパネル -->
+
+    <!-- BEGIN 画面名 -->
+    <div class="container text-center mb-3">
+        <h3>ファイル画面</h3>
+    </div>
+    <!-- END 画面名 -->
+    
+    <!-- BEGIN コンテナ1 -->
+    <div class="container mb-3">
+        <!-- BEGIN 行1 サブメニュー -->
+        <div class="row">
+            <div class="col text-start">
+                <a href="/P0100File/R4/">R4</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /
+            </div>
+            <div class="col text-end">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">一括</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">調査員調査票</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">市区町村調査票</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">都道府県調査票</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>
+                        <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/P0300ExcelUpload/">調査員調査票</a>
+                        <a class="dropdown-item" href="/P0300ExcelUpload/">市区町村調査票</a>
+                        <a class="dropdown-item" href="/P0300ExcelUpload/">都道府県調査票</a>
+                        <!--<a class="dropdown-item" href="/P0300ExcelUpload/">水害区域図</a>-->
+                        <a class="dropdown-item" href="/P0300ExcelUpload/">公共土木調査票</a>
+                        <a class="dropdown-item" href="/P0300ExcelUpload/">公益事業調査票</a>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/P0300AreaWeatherUpdate/">水害区域図</a>
+                        <a class="dropdown-item" href="/P0300AreaWeatherUpdate/">異常気象コード付与</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END 行1 サブメニュー -->
+    </div>
+    <!-- END コンテナ1 -->
+    
+    <!-- BEGIN コンテナ2 -->
+    <div class="container mb-3">
+        <!-- BEGIN カード -->
+        <div class="card">
+            <!-- BEGIN カードヘッダ -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col text-start">
+                        o-okada
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col text-end">
+                        <a href="">更新</a>
+                    </div>
+                </div>
+            </div>
+            <!-- END カードヘッダ -->
+            
+            <!-- BEGIN カード本体 -->
+            <div class="card-body">
+                <div class="table-responsive overflow-auto" style="">
+                    <table class="table">
+                        <tr>
+                            <td colspan="8">
+                                <a style="" href="/P0100File/R4/">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        {% for repository in repository_list %}
+                        <tr>
+                            <td><a href="">{{ repository.repository_id }}</a></td>
+                            <td>{{ repository.ken_name }}:{{ repository.ken_code }}</td>
+                            <td>{{ repository.city_name }}:{{ repository.city_code }}</td>
+                            <td>{{ repository.suigai_name }}:{{ repository.suigai_id }}</td>
+                            {% if repository.begin_date is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ repository.begin_date }}</td>
+                            {% endif %}
+                            {% if repository.committed_at is None %}
+                            <td>committed on June 27</td>
+                            {% else %}
+                            <td>committed on {{ repository.committed_at }}</td>
+                            {% endif %}
+                            {% if repository.deleted_at is None %}
+                            <td></td>
+                            {% else %}
+                            <td>deleted on {{ repository.deleted_at }}</td>
+                            {% endif %}
+                            <td><a href="/P0900Action/ken/{{ repository.ken_code }}/city/{{ repository.city_code }}/repository/{{ repository.repository_id }}/">自動実行の状況</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <!-- END カード本体 -->
+        </div>
+        <!-- END カード -->
+    </div>
+    <!-- END コンテナ2 -->
+
+    <!-- BEGIN コンテナ3 -->
+    <div class="container mb-3">
+        <div class="alert alert-info" role="alert">
+            A simple info alert-check it out!
+        </div>
+    </div>
+    <!-- BEGIN コンテナ3 -->
+
+    <script type="text/javascript">
+    </script>
+    {% endblock %}
+</body>
+<!-- END Body -->
+</html>
