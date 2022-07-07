@@ -1,0 +1,315 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0100File/templates/P0100File/type.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>ファイル画面 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+    .btn-fail    {background: #F44B25; color: #FFFFFF;}
+    .btn-running {background: #258AC4; color: #FFFFFF;}
+    .btn-cancel  {background: #6C757D; color: #FFFFFF;}
+    .btn-success {background: #54AB51; color: #FFFFFF;}
+    a:link {color: #000000; text-decoration:none;}
+    a:visited {color: #000000; text-decoration:none;}
+    a:hover {color: #000000; text-decoration:none;}
+    a:active {color: #000000; text-decoration:none;}
+    </style>
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    {% block content %}
+
+    <!-- BEGIN トップパネル -->
+    <!--<div class="container-fluid mb-3">-->
+    <!--    <div class="row">-->
+    <!--        <div class="col d-flex justify-content-start align-items-start">-->
+    <!--            <strong><a href="/P0100File/" style="border-bottom: 2px solid red;" class="me-3">ファイル</a></strong>-->
+    <!--            <a href="/P0900Action" class="me-3">自動集計・自動検証</a>-->
+    <!--            <a href="/P0800Reverse/input/" class="me-3">マニュアル検証</a>-->
+    <!--            <a href="/P0400OnlineDisplay" class="me-3">オンライン参照</a>-->
+    <!--            <a href="" class="me-3">グラフ</a>-->
+    <!--            <a href="" class="me-3">帳票</a>-->
+    <!--        </div>-->
+    <!--        <div class="col d-flex justify-content-end align-items-end">-->
+    <!--            <a href="{# url 'P0100Login:index_view' #}">ログアウト</a><br>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!-- END トップパネル -->
+
+    <!-- BEGIN ナビバー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link active" style="border-bottom: 2px solid red;" aria-current="page" href="/P0100File/"><strong>ファイル</strong></a>-->
+                    <!--</li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>ファイル</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー ファイルメニュー -->
+
+                    <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                    </li>
+                    <!-- END ナビバー 自動集計・自動検証メニュー -->
+
+                    <!-- BEGIN ナビバー マニュアル検証メニュー -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>マニュアル検証</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0800Reverse/input/">入力DB内のデータ整合性検証</a></li>
+                            <li><a class="dropdown-item" href="/P0800Reverse/summary/">集計DB内のデータ整合性検証</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー マニュアル検証メニュー -->
+
+                    <!-- BEGIN ナビバー オンライン参照メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                    </li>
+                    <!-- END ナビバー オンライン参照メニュー -->
+
+                    <!-- BEGIN ナビバー グラフメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                    </li>
+                    <!-- END ナビバー グラフメニュー -->
+
+                    <!-- BEGIN ナビバー 帳票メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                    </li>
+                    <!-- END ナビバー 帳票メニュー -->
+                </ul>
+                <!--<form class="d-flex">-->
+                <!--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+                <!--    <button class="btn btn-outline-success" type="submit">Search</button>-->
+                <!--</form>-->
+                <div class="col d-flex justify-content-end align-items-end">
+                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END ナビバー -->
+
+    <!-- BEGIN 画面名 -->
+    <!--<div class="container text-center mb-3">-->
+    <!--    <h3>ファイル画面</h3>-->
+    <!--</div>-->
+    <!-- END 画面名 -->
+    
+    <!-- BEGIN コンテナ1 -->
+    <div class="container mb-3">
+        <!-- BEGIN 行1 -->
+        <div class="row">
+            <!-- BEGIN 列1 左サイドパネル -->
+            <div class="col-sm-9">
+                <!-- BEGIN 行1-1 サブメニュー -->
+                <div class="row mb-3">
+                    <div class="col-6 text-start">
+                        {% if type_code == "ippan" %}
+                        <h5>一般資産調査員調査票 /</h5>
+                        {% elif type_code == "area" %}
+                        <h5>水害区域図 /</h5>
+                        {% elif type_code == "kokyo" %}
+                        <h5>公共土木調査票 /</h5>
+                        {% elif type_code == "koeki" %}
+                        <h5>公益事業調査票 /</h5>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 text-end">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/P0200ExcelDownload/">一括ダウンロード</a>
+                                <a class="dropdown-item" href="/P0200ExcelDownload/">一般資産調査員調査票</a>
+                                <a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>
+                                <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>
+                                <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>
+                            </div>
+                        </div>
+                            
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                                <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
+                                <a class="dropdown-item" href="/P0300ExcelUpload/">公共土木調査票</a>
+                                <a class="dropdown-item" href="/P0300ExcelUpload/">公益事業調査票</a>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/P0300AreaWeatherUpdate/">水害区域番号、異常気象コード</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END 行1-1 サブメニュー -->
+                
+                <!-- BEGIN 行1-2 カード -->
+                <div class="row">
+                    <div class="col">
+                        <!-- BEGIN カード -->
+                        <div class="card">
+                            <!-- BEGIN カードヘッダ -->
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col text-start">
+                                        o-okada
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    <div class="col text-end">
+                                        <a href="">更新</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END カードヘッダ -->
+                            
+                            <!-- BEGIN カード本体 -->
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto" style="">
+                                    <table class="table">
+                                    {% for ken in ken_list %}
+                                        <tr>
+                                            <td class="text-start">
+                                                {% if type_code == "ippan" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/ippan/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
+                                                {% elif type_code == "area" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/area/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
+                                                {% elif type_code == "kokyo" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/kokyo/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
+                                                {% elif type_code == "koeki" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/koeki/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
+                                                {% endif %}
+                                            </td>
+                                            <td class="">
+                                                June 27
+                                            <td>
+                                            <td class="text-end">
+                                                yestarday
+                                            <td>
+                                        </tr>
+                                    {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- END カード本体 -->
+                        </div>
+                        <!-- END カード -->
+                    </div>
+                </div>
+                <!-- END 行1-2 カード -->
+            </div>
+            <!-- END 列1 左サイドパネル -->
+                    
+            <!-- BEGIN 列2 右サイドパネル -->
+            <div class="col-sm-3">
+                <!-- BEGIN バッジ -->
+                <button type="button" class="btn btn-danger mb-3">
+                    失敗 <div class="badge bg-light text-dark">{{ feedback_count }}</div>
+                </button>
+                <button type="button" class="btn btn-warning mb-3">
+                    警告 <div class="badge bg-light text-dark">1</div>
+                </button>
+                <button type="button" class="btn btn-success mb-3">
+                    成功 <div class="badge bg-light text-dark">{{ approval_count }}</div>
+                </button>
+                <!-- END バッジ -->
+                
+                <!-- BEGIN カード1 -->
+                <div class="card mb-3 border-0">
+                    <div class="card-header border-0 bg-white">
+                    失敗
+                    </div>
+                    <div class="card-body border-bottom bg-white">
+                        {% for feedback in feedback_list %}
+                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- END カード1 -->
+                
+                <!-- BEGIN カード2 -->
+                <div class="card mb-3 border-0">
+                    <div class="card-header border-0 bg-white">
+                    警告
+                    </div>
+                    <div class="card-body border-bottom bg-white">
+                        {% for feedback in feedback_list %}
+                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- END カード2 -->
+                
+                <!-- BEGIN カード3 -->
+                <div class="card mb-3 border-0">
+                    <div class="card-header border-0 bg-white">
+                    成功・承認待ち
+                    </div>
+                    <div class="card-body bg-white">
+                        {% for feedback in feedback_list %}
+                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- END カード3 -->
+            </div>
+            <!-- END 列2 右サイドパネル -->
+        </div>
+        <!-- END 行1 -->
+    </div>
+    <!-- END コンテナ1 -->
+
+    <!-- BEGIN コンテナ2 -->
+    <div class="container mb-3">
+        <div class="alert alert-info" role="alert">
+            A simple info alert-check it out!
+        </div>
+    </div>
+    <!-- BEGIN コンテナ2 -->
+
+    <script type="text/javascript">
+    </script>
+    {% endblock %}
+</body>
+<!-- END Body -->
+</html>
