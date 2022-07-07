@@ -678,6 +678,9 @@ class FARMER_FISHER_RATE_VIEW(models.Model):
 class AREA(models.Model):
     area_id = models.IntegerField(primary_key=True)                            ### 水害区域ID
     area_name = models.CharField(max_length=128)                               ### 水害区域名
+    input_file_path = models.CharField(max_length=128, null=True)              ### 
+    input_file_name = models.CharField(max_length=128, null=True)              ### 
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
 
     class Meta:
         db_table = 'area'
@@ -691,9 +694,9 @@ class AREA(models.Model):
 class WEATHER(models.Model):
     weather_id = models.IntegerField(primary_key=True)                         ### 異常気象ID
     weather_name = models.CharField(max_length=128)                            ### 異常気象名
-    ### weather_year = models.IntegerField()                                   ### 異常気象対象年
     begin_date = models.DateField()                                            ### 開始日
     end_date = models.DateField()                                              ### 終了日
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
 
     class Meta:
         db_table = 'weather'
@@ -752,6 +755,7 @@ class SUIGAI(models.Model):
     ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
 
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+    repository_id = models.IntegerField(null=True)                             ### レポジトリID
 
     class Meta:
         db_table = 'suigai'
@@ -1272,6 +1276,7 @@ class REPOSITORY(models.Model):
     ### failure_count = models.IntegerField(null=True)                         ### 失敗数
     
     input_file_path = models.CharField(max_length=256, null=True)              ### 
+    input_file_name = models.CharField(max_length=256, null=True)              ### 
     ### output_file_path = models.CharField(max_length=256, null=True)         ### 
 
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時

@@ -12,7 +12,8 @@ urlpatterns = [
     ### Excel Applications
     path('P0200ExcelDownload/', include('P0200ExcelDownload.urls')),
     path('P0300ExcelUpload/', include('P0300ExcelUpload.urls')),
-    path('P0300AreaWeatherUpdate/', include('P0300AreaWeatherUpdate.urls')),
+    path('P0300AreaUpload/', include('P0300AreaUpload.urls')),
+    path('P0300AreaWeather/', include('P0300AreaWeather.urls')),
 
     ### Online Applications
     path('P0400OnlineDisplay/', include('P0400OnlineDisplay.urls')),

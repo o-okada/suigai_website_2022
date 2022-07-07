@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     ### Excel Applications
     'P0200ExcelDownload.apps.P0200ExcelDownloadConfig',
     'P0300ExcelUpload.apps.P0300ExcelUploadConfig',
-    'P0300AreaWeatherUpdate.apps.P0300AreaWeatherUpdateConfig',
+    'P0300AreaUpload.apps.P0300AreaUploadConfig',
+    'P0300AreaWeather.apps.P0300AreaWeatherConfig',
     
     ### Online Applications
     'P0400OnlineDisplay.apps.P0400OnlineDisplayConfig',
