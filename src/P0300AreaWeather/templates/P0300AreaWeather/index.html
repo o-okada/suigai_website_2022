@@ -1,0 +1,519 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0300AreaWeather/templates/P0300AreaWeather/index.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>水害区域図、異常気象コード編集画面 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <style>
+    .btn-fail    {background: #F44B25; color: #FFFFFF;}
+    .btn-running {background: #258AC4; color: #FFFFFF;}
+    .btn-cancel  {background: #6C757D; color: #FFFFFF;}
+    .btn-success {background: #54AB51; color: #FFFFFF;}
+    a:link {color: #000000; text-decoration:none;}
+    a:visited {color: #000000; text-decoration:none;}
+    a:hover {color: #000000; text-decoration:none;}
+    a:active {color: #000000; text-decoration:none;}
+    </style>
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    {% block content %}
+
+    <!-- BEGIN トップパネル -->
+    <!--<div class="container-fluid">-->
+    <!--    <div class="row">-->
+    <!--        <div class="col d-flex justify-content-start align-items-start">-->
+    <!--            <strong><a href="/P0100File/" style="border-bottom: 2px solid red;" class="me-3">ファイル</a></strong>-->
+    <!--            <a href="/P0900Action" class="me-3">自動集計・自動検証</a>-->
+    <!--            <a href="/P0800Reverse/input/" class="me-3">マニュアル検証</a>-->
+    <!--            <a href="/P0400OnlineDisplay" class="me-3">オンライン参照</a>-->
+    <!--            <a href="" class="me-3">グラフ</a>-->
+    <!--            <a href="" class="me-3">帳票</a>-->
+    <!--        </div>-->
+    <!--        <div class="col d-flex justify-content-end align-items-end">-->
+    <!--            <a href="{# url 'P0100Login:index_view' #}">ログアウト</a><br>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!-- END トップパネル -->
+
+    <!-- BEGIN ナビバー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <div class="container-fluid">
+            <!--<a class="navbar-brand" href="#">Navbar</a>-->
+            <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+            <!--    <span class="navbar-toggler-icon"></span>-->
+            <!--</button>-->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link active" style="border-bottom: 2px solid red;" aria-current="page" href="/P0100File/"><strong>ファイル</strong></a>-->
+                    <!--</li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>ファイル</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー ファイルメニュー -->
+                    
+                    <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                    </li>
+                    <!-- END ナビバー 自動集計・自動検証メニュー -->
+                    
+                    <!-- BEGIN ナビバー マニュアル検証メニュー -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>マニュアル検証</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0800Reverse/input/">入力DB内のデータ整合性検証</a></li>
+                            <li><a class="dropdown-item" href="/P0800Reverse/summary/">集計DB内のデータ整合性検証</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー マニュアル検証メニュー -->
+                    
+                    <!-- BEGIN ナビバー オンライン参照メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                    </li>
+                    <!-- END ナビバー オンライン参照メニュー -->
+                    
+                    <!-- BEGIN ナビバー グラフメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                    </li>
+                    <!-- END ナビバー グラフメニュー -->
+                    
+                    <!-- BEGIN ナビバー 帳票メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                    </li>
+                    <!-- END ナビバー 帳票メニュー -->
+                </ul>
+                <!--<form class="d-flex">-->
+                <!--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+                <!--    <button class="btn btn-outline-success" type="submit">Search</button>-->
+                <!--</form>-->
+                <div class="col d-flex justify-content-end align-items-end">
+                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END ナビバー -->
+    
+    <!-- BEGIN 画面名 -->
+    <!--<div class="container text-center mb-3">-->
+    <!--    <h3>水害区域図、異常気象コード編集画面</h3>-->
+    <!--</div>-->
+    <!-- END 画面名 -->
+
+    <!-- BEGIN 検索とフィルタ -->
+    <!--<div class="row mb-3 ms-1 me-3">-->
+        <!-- 都道府県選択 -->
+    <!--    <div class="col-3">-->
+    <!--        <div class="input-group">-->
+    <!--            <select class="form-select" id="form_select_ken" name="form_select_ken">-->
+    <!--                <option value="0">都道府県の絞り込み条件を選択してください。</option>-->
+    <!--                {# for ken in ken_list #}-->
+    <!--                {# if ken.ken_code == ken_code #}-->
+    <!--                <option value="{# ken.ken_code #}" selected>{# ken.ken_name #}: {# ken.ken_code #}</option>-->
+    <!--                {# else #}-->
+    <!--                <option value="{# ken.ken_code #}">{# ken.ken_name #}: {# ken.ken_code #}</option>-->
+    <!--                {# endif #}-->
+    <!--                {# endfor #}-->
+    <!--            </select>-->
+    <!--            <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken">都道府県選択</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+        <!-- 市区町村選択 -->
+    <!--    <div class="col-3">-->
+    <!--        <div class="input-group">-->
+    <!--            <select class="form-select" id="form_select_city" name="form_select_city">-->
+    <!--                <option value="0">市区町村の絞り込み条件を選択してください。</option>-->
+    <!--                {# for city in city_list #}-->
+    <!--                {# if city.city_code == city_code #}-->
+    <!--                <option value="{# city.city_code #}" selected>{# city.city_name #}: {# city.city_code #}</option>-->
+    <!--                {# else #}-->
+    <!--                <option value="{# city.city_code #}">{# city.city_name #}: {# city.city_code #}</option>-->
+    <!--                {# endif #}-->
+    <!--                {# endfor #}-->
+    <!--            </select>-->
+    <!--            <button class="btn btn-secondary" type="button" id="button_city" name="button_city">市区町村選択</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+        <!-- 水害選択 -->
+    <!--    <div class="col-3">-->
+    <!--        <div class="input-group">-->
+    <!--            <select class="form-select" id="form_select_suigai" name="form_select_suigai">-->
+    <!--                <option value="0">水害の絞り込み条件を選択してください。</option>-->
+    <!--                {# for suigai in suigai_list #}-->
+    <!--                {# if suigai.suigai_id == suigai_id #}-->
+    <!--                <option value="{# suigai.suigai_id #}" selected>{# suigai.suigai_name #}: {# suigai.suigai_id #}</option>-->
+    <!--                {# else #}-->
+    <!--                <option value="{# suigai.suigai_id #}" >{# suigai.suigai_name #}: {# suigai.suigai_id #}</option>-->
+    <!--                {# endif #}-->
+    <!--                {# endfor #}-->
+    <!--            </select>-->
+    <!--            <button class="btn btn-secondary" type="button" id="button_suigai" name="button_suigai">水害選択</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    <div class="col-3 text-end">-->
+    <!--        <div class="btn-group">-->
+    <!--            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>-->
+    <!--            <div class="dropdown-menu">-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">一括</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">調査員調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">市区町村調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">都道府県調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="btn-group">-->
+    <!--            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>-->
+    <!--            <div class="dropdown-menu">-->
+    <!--                <a class="dropdown-item" href="/P0300ExcelUpload/">調査員調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0300ExcelUpload/">市区町村調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0300ExcelUpload/">都道府県調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0300ExcelUpload/">公共土木調査票</a>-->
+    <!--                <a class="dropdown-item" href="/P0300ExcelUpload/">公益事業調査票</a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="btn-group">-->
+    <!--            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>-->
+    <!--            <div class="dropdown-menu">-->
+    <!--                <a class="dropdown-item" href="/P0300AreaWeather/">水害区域図</a>-->
+    <!--                <a class="dropdown-item" href="/P0300AreaWeather/">異常気象コード付与</a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!-- END 検索とフィルタ -->
+
+    <!-- BEGIN コンテナ -->
+    <!--<div class="text-center mt-3 mb-3">-->
+    <!--    <button class="btn btn-success" type="submit" id="button_update1" name="button_update1">データベースに登録する</button>-->
+    <!--</div>-->
+    
+    <div class="row ms-3 me-3 mb-3">
+        <div class="col-12">
+            {% if type_code == "ippan" %}
+            <h5><a href="/P0100File/type/ippan/">一般資産調査員調査票</a> / <a href="/P0100File/type/ippan/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% elif type_code == "area" %}
+            <h5><a href="/P0100File/type/area/">水害区域図</a> / <a href="/P0100File/type/area/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% elif type_code == "kokyo" %}
+            <h5><a href="/P0100File/type/kokyo/">水害区域図</a> / <a href="/P0100File/type/kokyo/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% elif type_code == "koeki" %}
+            <h5><a href="/P0100File/type/koeki/">水害区域図</a> / <a href="/P0100File/type/koeki/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">シートID</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="suigai" name="suigai" value="{{ suigai.0.suigai_id }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">シート名</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="ken" name="ken" value="{{ suigai.0.suigai_name }}" disabled>
+                </div>
+            </div>
+        </div>    
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">都道府県</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="ken" name="ken" value="{{ suigai.0.ken_name }}: {{ suigai.0.ken_code }}" disabled>
+                </div>
+            </div>
+        </div>    
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">市区町村</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="city" name="city" value="{{ suigai.0.city_name }}: {{ suigai.0.city_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害発生年月日</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="begin_date" name="begin_date" value="{{ suigai.0.begin_date }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害終了年月日</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="end_date" name="end_date" value="{{ suigai.0.end_date }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害原因1</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="cause_1" name="cause_1" value="{{ suigai.0.cause_1_name }}: {{ suigai.0.cause_1_code }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害原因2</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="cause_2" name="cause_2" value="{{ suigai.0.cause_2_name }}: {{ suigai.0.cause_2_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害原因3</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="cause_3" name="cause_3" value="{{ suigai.0.cause_3_name }}: {{ suigai.0.cause_3_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害区域番号</label>
+                <div class="col-10">
+                    <select class="form-select" id="form_select_area" name="form_select_area">
+                        <option value="0">水害区域番号を選択してください。</option>
+                        {% for area in area_list %}
+                        {% if area.area_id == suigai.0.area_id %}
+                        <option value="{{ area.area_id }}" selected>{{ area.area_name }}: {{ area.area_id }}</option>
+                        {% else %}
+                        <option value="{{ area.area_id }}">{{ area.area_name }}: {{ area.area_id }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水系・沿岸名</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="suikei" name="suikei" value="{{ suigai.0.suikei_name }}: {{ suigai.0.suikei_code }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水系種別</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="suikei_type" name="suikei_type" value="{{ suigai.0.suikei_type_name }}: {{ suigai.0.suikei_type_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">河川・海岸名</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="kasen" name="kasen" value="{{ suigai.0.kasen_name }}: {{ suigai.0.kasen_code }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">河川種別</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="kasen_type" name="kasen_type" value="{{ suigai.0.kasen_type_name }}: {{ suigai.0.kasen_type_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">地盤勾配区分</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="gradient" name="gradient" value="{{ suigai.0.gradient_name }}: {{ suigai.0.gradient_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害区域面積宅地</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="residential_area" name="residential_area" value="{{ suigai.0.residential_area }}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害区域面積農地</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="agricultural_area" name="agricultural_area" value="{{ suigai.0.agricultural_area }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">水害区域面積地下</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="underground_area" name="underground_area" value="{{ suigai.0.underground_area }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">工種</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="kasen_kaigan" name="kasen_kaigan" value="{{ suigai.0.kasen_kaigan_name }}: {{ suigai.0.kasen_kaigan_code }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>    
+            
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">農作物被害額</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="crop_damage" name="crop_damage" value="{{ suigai.0.crop_damage }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <div class="row ms-3 me-3">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label class="col-form-label col-2">異常気象</label>
+                <div class="col-10">
+                    <select class="form-select" id="form_select_weather" name="form_select_weather">
+                        <option value="0">異常気象コードを入力してください。</option>
+                        {% for weather in weather_list %}
+                        {% if weather.weather_id == suigai.0.weather_id %}
+                        <option value="{{ weather.weather_id }}" selected>{{ weather.weather_name }}: {{ weather.weather_id }}</option>
+                        {% else %}
+                        <option value="{{ weather.weather_id }}">{{ weather.weather_name }}: {{ weather.weather_id }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mb-3">
+        <button class="btn btn-success" type="submit" id="button_update" name="button_update">データベースに登録する</button>
+    </div>
+    <!-- END コンテナ -->
+
+    <!-- BEGIN 隠しフォーム ※重要 -->
+    <form method="POST" id="form_hidden" name="form_hidden">
+        {% csrf_token %}
+        <input type="hidden" id="suigai_id_hidden" name="suigai_id_hidden" value="{{ suigai.0.suigai_id }}">
+        <input type="hidden" id="ken_code_hidden" name="ken_code_hidden" value="{{ suigai.0.ken_code }}">
+        <input type="hidden" id="city_code_hidden" name="city_code_hidden" value="{{ suigai.0.city_code }}">
+        <input type="hidden" id="area_id_hidden" name="area_id_hidden" value="{{ suigai.0.area_id }}">
+        <input type="hidden" id="weather_id_hidden" name="weather_id_hidden" value="{{ suigai.0.weather_id }}">
+    </form>
+    <!-- END 隠しフォーム ※重要 -->
+    
+    <script type="text/javascript">
+    // var button_ken = document.getElementById("button_ken"); // 都道府県選択ボタン
+    // var button_city = document.getElementById("button_city"); // 市区町村選択ボタン
+    // var button_suigai = document.getElementById("button_suigai"); // 水害選択ボタン
+    
+    var button_update = document.getElementById("button_update");
+    
+    let form_hidden = document.getElementById("form_hidden");
+    let suigai_id_hidden = document.getElementById("suigai_id_hidden");
+    let ken_code_hidden = document.getElementById("ken_code_hidden");
+    let city_code_hidden = document.getElementById("city_code_hidden");
+    let area_id_hidden = document.getElementById("area_id_hidden");
+    let weather_id_hidden = document.getElementById("weather_id_hidden");
+
+    // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
+    // button_ken.addEventListener("click", function(event) {
+    //     window.location.href = "/P0300AreaWeather/" + "ken/" + form_select_ken.value + "/city/0/suigai/0/"
+    // });
+
+    // 市区町村選択ボタンクリック時のイベントハンドラを設定する。
+    // button_city.addEventListener("click", function(event) {
+    //     window.location.href = "/P0300AreaWeather/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/suigai/0/"
+    // });
+
+    // 水害選択ボタンクリック時のイベントハンドラを設定する。
+    // button_suigai.addEventListener("click", function(event) {
+    //     window.location.href = "/P0300AreaWeather/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/suigai/" + form_select_suigai.value + "/"
+    // });
+
+    // サーバ側にポストで送信する。
+    button_update.addEventListener("click", function(event) {
+        area_id_hidden.value = document.getElementById("form_select_area").value;
+        weather_id_hidden.value = document.getElementById("form_select_weather").value;
+        form_hidden.action = '/P0300AreaWeather/';
+        form_hidden.enctype = '';
+        form_hidden.method = 'POST';
+        form_hidden.submit();
+        return true;
+    });
+    </script>
+    {% endblock %}
+</body>
+<!-- END Body -->
+</html>
