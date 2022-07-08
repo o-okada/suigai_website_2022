@@ -78,7 +78,99 @@ from P0000Common.models import REPOSITORY              ### 11000: レポジト�
 from P0000Common.common import print_log
 
 ###############################################################################
+### 関数名：get_trigger_list
+###############################################################################
+def get_trigger_list(action_code, status_code, suigai_id):
+    
+    if suigai_id == 0:
+        trigger_list = TRIGGER.objects.raw("""
+            SELECT 
+                TR1.trigger_id AS trigger_id, 
+                TR1.suigai_id AS suigai_id, 
+                SG1.suigai_name AS suigai_name, 
+                SG1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                SG1.city_code AS city_code, 
+                CT1.city_name AS city_name, 
+                TR1.repository_id AS repository_id, 
+                RE1.input_file_path AS input_file_path, 
+                RE1.input_file_name AS input_file_name, 
+                TR1.action_code AS action_code, 
+                AC1.action_name AS action_name, 
+                TR1.status_code AS status_code, 
+                ST1.status_name AS status_name, 
+                TR1.published_at AS published_at, 
+                TR1.consumed_at AS consumed_at, 
+                TR1.success_count AS success_count, 
+                TR1.failure_count AS failure_count, 
+                TR1.deleted_at AS deleted_at 
+            FROM TRIGGER TR1 
+            LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+            LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+            LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+            LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+            LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+            LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+            WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL 
+            ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [action_code, status_code, ])
+    
+    else:
+        trigger_list = TRIGGER.objects.raw("""
+            SELECT 
+                TR1.trigger_id AS trigger_id, 
+                TR1.suigai_id AS suigai_id, 
+                SG1.suigai_name AS suigai_name, 
+                SG1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                SG1.city_code AS city_code, 
+                CT1.city_name AS city_name, 
+                TR1.repository_id AS repository_id, 
+                RE1.input_file_path AS input_file_path, 
+                RE1.input_file_name AS input_file_name, 
+                TR1.action_code AS action_code, 
+                AC1.action_name AS action_name, 
+                TR1.status_code AS status_code, 
+                ST1.status_name AS status_name, 
+                TR1.published_at AS published_at, 
+                TR1.consumed_at AS consumed_at, 
+                TR1.success_count AS success_count, 
+                TR1.failure_count AS failure_count, 
+                TR1.deleted_at AS deleted_at 
+            FROM TRIGGER TR1 
+            LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+            LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+            LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+            LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+            LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+            LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+            WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL AND TR1.suigai_id=%s 
+            ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [action_code, status_code, suigai_id, ])
+    
+    return trigger_list
+
+###############################################################################
+### 関数名：get_trigger_count
+###############################################################################
+def get_trigger_count(action_code, status_code, suigai_id):
+    
+    if suigai_id == 0:
+        trigger_list = TRIGGER.objects.raw("""
+            SELECT * FROM TRIGGER 
+            WHERE action_code=%s AND status_code=%s AND deleted_at IS NULL""", [action_code, status_code, ])
+        
+    else:
+        trigger_list = TRIGGER.objects.raw("""
+            SELECT * FROM TRIGGER 
+            WHERE action_code=%s AND status_code=%s AND deleted_at IS NULL AND suigai_id=%s""", [action_code, status_code, suigai_id, ])
+
+    if trigger_list:
+        return str(len(trigger_list))
+    else:
+        return str(0)
+
+###############################################################################
 ### 関数名：index_view
+### 自動実行進捗状況一覧表示画面
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -97,6 +189,401 @@ def index_view(request):
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[INFO] P0900Action.index_view()関数 STEP 2/3.', 'INFO')
+        trigger_WF1_success_list = get_trigger_list(action_code='1', status_code='3', suigai_id=0)
+        trigger_WF2_success_list = get_trigger_list(action_code='2', status_code='3', suigai_id=0)
+        trigger_WF3_success_list = get_trigger_list(action_code='3', status_code='3', suigai_id=0)
+        trigger_WF4_success_list = get_trigger_list(action_code='4', status_code='3', suigai_id=0)
+        trigger_WF5_success_list = get_trigger_list(action_code='5', status_code='3', suigai_id=0)
+        trigger_WF6_success_list = get_trigger_list(action_code='6', status_code='3', suigai_id=0)
+        trigger_WF7_success_list = get_trigger_list(action_code='7', status_code='3', suigai_id=0)
+        trigger_WF8_success_list = get_trigger_list(action_code='8', status_code='3', suigai_id=0)
+        trigger_WF9_success_list = get_trigger_list(action_code='9', status_code='3', suigai_id=0)
+        trigger_WF10_success_list = get_trigger_list(action_code='10', status_code='3', suigai_id=0)
+        trigger_WF11_success_list = get_trigger_list(action_code='11', status_code='3', suigai_id=0)
+        trigger_WF12_success_list = get_trigger_list(action_code='12', status_code='3', suigai_id=0)
+        trigger_WF13_success_list = get_trigger_list(action_code='13', status_code='3', suigai_id=0)
+        trigger_WF1_failure_list = get_trigger_list(action_code='1', status_code='4', suigai_id=0)
+        trigger_WF2_failure_list = get_trigger_list(action_code='2', status_code='4', suigai_id=0)
+        trigger_WF3_failure_list = get_trigger_list(action_code='3', status_code='4', suigai_id=0)
+        trigger_WF4_failure_list = get_trigger_list(action_code='4', status_code='4', suigai_id=0)
+        trigger_WF5_failure_list = get_trigger_list(action_code='5', status_code='4', suigai_id=0)
+        trigger_WF6_failure_list = get_trigger_list(action_code='6', status_code='4', suigai_id=0)
+        trigger_WF7_failure_list = get_trigger_list(action_code='7', status_code='4', suigai_id=0)
+        trigger_WF8_failure_list = get_trigger_list(action_code='8', status_code='4', suigai_id=0)
+        trigger_WF9_failure_list = get_trigger_list(action_code='9', status_code='4', suigai_id=0)
+        trigger_WF10_failure_list = get_trigger_list(action_code='10', status_code='4', suigai_id=0)
+        trigger_WF11_failure_list = get_trigger_list(action_code='11', status_code='4', suigai_id=0)
+        trigger_WF12_failure_list = get_trigger_list(action_code='12', status_code='4', suigai_id=0)
+        trigger_WF13_failure_list = get_trigger_list(action_code='13', status_code='4', suigai_id=0)
+        
+        trigger_WF1_success_count = get_trigger_count(action_code='1', status_code='3', suigai_id=0)
+        trigger_WF2_success_count = get_trigger_count(action_code='2', status_code='3', suigai_id=0)
+        trigger_WF3_success_count = get_trigger_count(action_code='3', status_code='3', suigai_id=0)
+        trigger_WF4_success_count = get_trigger_count(action_code='4', status_code='3', suigai_id=0)
+        trigger_WF5_success_count = get_trigger_count(action_code='5', status_code='3', suigai_id=0)
+        trigger_WF6_success_count = get_trigger_count(action_code='6', status_code='3', suigai_id=0)
+        trigger_WF7_success_count = get_trigger_count(action_code='7', status_code='3', suigai_id=0)
+        trigger_WF8_success_count = get_trigger_count(action_code='8', status_code='3', suigai_id=0)
+        trigger_WF9_success_count = get_trigger_count(action_code='9', status_code='3', suigai_id=0)
+        trigger_WF10_success_count = get_trigger_count(action_code='10', status_code='3', suigai_id=0)
+        trigger_WF11_success_count = get_trigger_count(action_code='11', status_code='3', suigai_id=0)
+        trigger_WF12_success_count = get_trigger_count(action_code='12', status_code='3', suigai_id=0)
+        trigger_WF13_success_count = get_trigger_count(action_code='13', status_code='3', suigai_id=0)
+
+        trigger_WF1_failure_count = get_trigger_count(action_code='1', status_code='4', suigai_id=0)
+        trigger_WF2_failure_count = get_trigger_count(action_code='2', status_code='4', suigai_id=0)
+        trigger_WF3_failure_count = get_trigger_count(action_code='3', status_code='4', suigai_id=0)
+        trigger_WF4_failure_count = get_trigger_count(action_code='4', status_code='4', suigai_id=0)
+        trigger_WF5_failure_count = get_trigger_count(action_code='5', status_code='4', suigai_id=0)
+        trigger_WF6_failure_count = get_trigger_count(action_code='6', status_code='4', suigai_id=0)
+        trigger_WF7_failure_count = get_trigger_count(action_code='7', status_code='4', suigai_id=0)
+        trigger_WF8_failure_count = get_trigger_count(action_code='8', status_code='4', suigai_id=0)
+        trigger_WF9_failure_count = get_trigger_count(action_code='9', status_code='4', suigai_id=0)
+        trigger_WF10_failure_count = get_trigger_count(action_code='10', status_code='4', suigai_id=0)
+        trigger_WF11_failure_count = get_trigger_count(action_code='11', status_code='4', suigai_id=0)
+        trigger_WF12_failure_count = get_trigger_count(action_code='12', status_code='4', suigai_id=0)
+        trigger_WF13_failure_count = get_trigger_count(action_code='13', status_code='4', suigai_id=0)
+
+        #######################################################################
+        ### レスポンスセット処理(0020)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0900Action.index_view()関数 STEP 3/3.', 'INFO')
+        template = loader.get_template('P0900Action/index.html')
+        context = {
+            'trigger_WF1_success_list': trigger_WF1_success_list, 
+            'trigger_WF2_success_list': trigger_WF2_success_list, 
+            'trigger_WF3_success_list': trigger_WF3_success_list, 
+            'trigger_WF4_success_list': trigger_WF4_success_list, 
+            'trigger_WF5_success_list': trigger_WF5_success_list, 
+            'trigger_WF6_success_list': trigger_WF6_success_list, 
+            'trigger_WF7_success_list': trigger_WF7_success_list, 
+            'trigger_WF8_success_list': trigger_WF8_success_list, 
+            'trigger_WF9_success_list': trigger_WF9_success_list, 
+            'trigger_WF10_success_list': trigger_WF10_success_list, 
+            'trigger_WF11_success_list': trigger_WF11_success_list, 
+            'trigger_WF12_success_list': trigger_WF12_success_list, 
+            'trigger_WF13_success_list': trigger_WF13_success_list, 
+            'trigger_WF1_failure_list': trigger_WF1_failure_list, 
+            'trigger_WF2_failure_list': trigger_WF2_failure_list, 
+            'trigger_WF3_failure_list': trigger_WF3_failure_list, 
+            'trigger_WF4_failure_list': trigger_WF4_failure_list, 
+            'trigger_WF5_failure_list': trigger_WF5_failure_list, 
+            'trigger_WF6_failure_list': trigger_WF6_failure_list, 
+            'trigger_WF7_failure_list': trigger_WF7_failure_list, 
+            'trigger_WF8_failure_list': trigger_WF8_failure_list, 
+            'trigger_WF9_failure_list': trigger_WF9_failure_list, 
+            'trigger_WF10_failure_list': trigger_WF10_failure_list, 
+            'trigger_WF11_failure_list': trigger_WF11_failure_list, 
+            'trigger_WF12_failure_list': trigger_WF12_failure_list, 
+            'trigger_WF13_failure_list': trigger_WF13_failure_list, 
+            'trigger_WF1_success_count': trigger_WF1_success_count, 
+            'trigger_WF2_success_count': trigger_WF2_success_count, 
+            'trigger_WF3_success_count': trigger_WF3_success_count, 
+            'trigger_WF4_success_count': trigger_WF4_success_count, 
+            'trigger_WF5_success_count': trigger_WF5_success_count, 
+            'trigger_WF6_success_count': trigger_WF6_success_count, 
+            'trigger_WF7_success_count': trigger_WF7_success_count, 
+            'trigger_WF8_success_count': trigger_WF8_success_count, 
+            'trigger_WF9_success_count': trigger_WF9_success_count, 
+            'trigger_WF10_success_count': trigger_WF10_success_count, 
+            'trigger_WF11_success_count': trigger_WF11_success_count, 
+            'trigger_WF12_success_count': trigger_WF12_success_count, 
+            'trigger_WF13_success_count': trigger_WF13_success_count, 
+            'trigger_WF1_failure_count': trigger_WF1_failure_count, 
+            'trigger_WF2_failure_count': trigger_WF2_failure_count, 
+            'trigger_WF3_failure_count': trigger_WF3_failure_count, 
+            'trigger_WF4_failure_count': trigger_WF4_failure_count, 
+            'trigger_WF5_failure_count': trigger_WF5_failure_count, 
+            'trigger_WF6_failure_count': trigger_WF6_failure_count, 
+            'trigger_WF7_failure_count': trigger_WF7_failure_count, 
+            'trigger_WF8_failure_count': trigger_WF8_failure_count, 
+            'trigger_WF9_failure_count': trigger_WF9_failure_count, 
+            'trigger_WF10_failure_count': trigger_WF10_failure_count, 
+            'trigger_WF11_failure_count': trigger_WF11_failure_count, 
+            'trigger_WF12_failure_count': trigger_WF12_failure_count, 
+            'trigger_WF13_failure_count': trigger_WF13_failure_count, 
+        }
+        print_log('[INFO] P0900Action.index_view()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+    
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.index_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.index_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：suigai_view
+### 自動実行進捗状況一覧表示画面
+###############################################################################
+@login_required(None, login_url='/P0100Login/')
+def suigai_view(request, suigai_id):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0900Action.suigai_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0900Action.suigai_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0900Action.suigai_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
+        print_log('[INFO] P0900Action.suigai_view()関数 STEP 1/3.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        print_log('[INFO] P0900Action.suigai_view()関数 STEP 2/3.', 'INFO')
+        trigger_WF1_success_list = get_trigger_list(action_code='1', status_code='3', suigai_id=suigai_id)
+        trigger_WF2_success_list = get_trigger_list(action_code='2', status_code='3', suigai_id=suigai_id)
+        trigger_WF3_success_list = get_trigger_list(action_code='3', status_code='3', suigai_id=suigai_id)
+        trigger_WF4_success_list = get_trigger_list(action_code='4', status_code='3', suigai_id=suigai_id)
+        trigger_WF5_success_list = get_trigger_list(action_code='5', status_code='3', suigai_id=suigai_id)
+        trigger_WF6_success_list = get_trigger_list(action_code='6', status_code='3', suigai_id=suigai_id)
+        trigger_WF7_success_list = get_trigger_list(action_code='7', status_code='3', suigai_id=suigai_id)
+        trigger_WF8_success_list = get_trigger_list(action_code='8', status_code='3', suigai_id=suigai_id)
+        trigger_WF9_success_list = get_trigger_list(action_code='9', status_code='3', suigai_id=suigai_id)
+        trigger_WF10_success_list = get_trigger_list(action_code='10', status_code='3', suigai_id=suigai_id)
+        trigger_WF11_success_list = get_trigger_list(action_code='11', status_code='3', suigai_id=suigai_id)
+        trigger_WF12_success_list = get_trigger_list(action_code='12', status_code='3', suigai_id=suigai_id)
+        trigger_WF13_success_list = get_trigger_list(action_code='13', status_code='3', suigai_id=suigai_id)
+        trigger_WF1_failure_list = get_trigger_list(action_code='1', status_code='4', suigai_id=suigai_id)
+        trigger_WF2_failure_list = get_trigger_list(action_code='2', status_code='4', suigai_id=suigai_id)
+        trigger_WF3_failure_list = get_trigger_list(action_code='3', status_code='4', suigai_id=suigai_id)
+        trigger_WF4_failure_list = get_trigger_list(action_code='4', status_code='4', suigai_id=suigai_id)
+        trigger_WF5_failure_list = get_trigger_list(action_code='5', status_code='4', suigai_id=suigai_id)
+        trigger_WF6_failure_list = get_trigger_list(action_code='6', status_code='4', suigai_id=suigai_id)
+        trigger_WF7_failure_list = get_trigger_list(action_code='7', status_code='4', suigai_id=suigai_id)
+        trigger_WF8_failure_list = get_trigger_list(action_code='8', status_code='4', suigai_id=suigai_id)
+        trigger_WF9_failure_list = get_trigger_list(action_code='9', status_code='4', suigai_id=suigai_id)
+        trigger_WF10_failure_list = get_trigger_list(action_code='10', status_code='4', suigai_id=suigai_id)
+        trigger_WF11_failure_list = get_trigger_list(action_code='11', status_code='4', suigai_id=suigai_id)
+        trigger_WF12_failure_list = get_trigger_list(action_code='12', status_code='4', suigai_id=suigai_id)
+        trigger_WF13_failure_list = get_trigger_list(action_code='13', status_code='4', suigai_id=suigai_id)
+        
+        trigger_WF1_success_count = get_trigger_count(action_code='1', status_code='3', suigai_id=suigai_id)
+        trigger_WF2_success_count = get_trigger_count(action_code='2', status_code='3', suigai_id=suigai_id)
+        trigger_WF3_success_count = get_trigger_count(action_code='3', status_code='3', suigai_id=suigai_id)
+        trigger_WF4_success_count = get_trigger_count(action_code='4', status_code='3', suigai_id=suigai_id)
+        trigger_WF5_success_count = get_trigger_count(action_code='5', status_code='3', suigai_id=suigai_id)
+        trigger_WF6_success_count = get_trigger_count(action_code='6', status_code='3', suigai_id=suigai_id)
+        trigger_WF7_success_count = get_trigger_count(action_code='7', status_code='3', suigai_id=suigai_id)
+        trigger_WF8_success_count = get_trigger_count(action_code='8', status_code='3', suigai_id=suigai_id)
+        trigger_WF9_success_count = get_trigger_count(action_code='9', status_code='3', suigai_id=suigai_id)
+        trigger_WF10_success_count = get_trigger_count(action_code='10', status_code='3', suigai_id=suigai_id)
+        trigger_WF11_success_count = get_trigger_count(action_code='11', status_code='3', suigai_id=suigai_id)
+        trigger_WF12_success_count = get_trigger_count(action_code='12', status_code='3', suigai_id=suigai_id)
+        trigger_WF13_success_count = get_trigger_count(action_code='13', status_code='3', suigai_id=suigai_id)
+
+        trigger_WF1_failure_count = get_trigger_count(action_code='1', status_code='4', suigai_id=suigai_id)
+        trigger_WF2_failure_count = get_trigger_count(action_code='2', status_code='4', suigai_id=suigai_id)
+        trigger_WF3_failure_count = get_trigger_count(action_code='3', status_code='4', suigai_id=suigai_id)
+        trigger_WF4_failure_count = get_trigger_count(action_code='4', status_code='4', suigai_id=suigai_id)
+        trigger_WF5_failure_count = get_trigger_count(action_code='5', status_code='4', suigai_id=suigai_id)
+        trigger_WF6_failure_count = get_trigger_count(action_code='6', status_code='4', suigai_id=suigai_id)
+        trigger_WF7_failure_count = get_trigger_count(action_code='7', status_code='4', suigai_id=suigai_id)
+        trigger_WF8_failure_count = get_trigger_count(action_code='8', status_code='4', suigai_id=suigai_id)
+        trigger_WF9_failure_count = get_trigger_count(action_code='9', status_code='4', suigai_id=suigai_id)
+        trigger_WF10_failure_count = get_trigger_count(action_code='10', status_code='4', suigai_id=suigai_id)
+        trigger_WF11_failure_count = get_trigger_count(action_code='11', status_code='4', suigai_id=suigai_id)
+        trigger_WF12_failure_count = get_trigger_count(action_code='12', status_code='4', suigai_id=suigai_id)
+        trigger_WF13_failure_count = get_trigger_count(action_code='13', status_code='4', suigai_id=suigai_id)
+
+        #######################################################################
+        ### レスポンスセット処理(0020)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0900Action.suigai_view()関数 STEP 3/3.', 'INFO')
+        template = loader.get_template('P0900Action/index.html')
+        context = {
+            'trigger_WF1_success_list': trigger_WF1_success_list, 
+            'trigger_WF2_success_list': trigger_WF2_success_list, 
+            'trigger_WF3_success_list': trigger_WF3_success_list, 
+            'trigger_WF4_success_list': trigger_WF4_success_list, 
+            'trigger_WF5_success_list': trigger_WF5_success_list, 
+            'trigger_WF6_success_list': trigger_WF6_success_list, 
+            'trigger_WF7_success_list': trigger_WF7_success_list, 
+            'trigger_WF8_success_list': trigger_WF8_success_list, 
+            'trigger_WF9_success_list': trigger_WF9_success_list, 
+            'trigger_WF10_success_list': trigger_WF10_success_list, 
+            'trigger_WF11_success_list': trigger_WF11_success_list, 
+            'trigger_WF12_success_list': trigger_WF12_success_list, 
+            'trigger_WF13_success_list': trigger_WF13_success_list, 
+            'trigger_WF1_failure_list': trigger_WF1_failure_list, 
+            'trigger_WF2_failure_list': trigger_WF2_failure_list, 
+            'trigger_WF3_failure_list': trigger_WF3_failure_list, 
+            'trigger_WF4_failure_list': trigger_WF4_failure_list, 
+            'trigger_WF5_failure_list': trigger_WF5_failure_list, 
+            'trigger_WF6_failure_list': trigger_WF6_failure_list, 
+            'trigger_WF7_failure_list': trigger_WF7_failure_list, 
+            'trigger_WF8_failure_list': trigger_WF8_failure_list, 
+            'trigger_WF9_failure_list': trigger_WF9_failure_list, 
+            'trigger_WF10_failure_list': trigger_WF10_failure_list, 
+            'trigger_WF11_failure_list': trigger_WF11_failure_list, 
+            'trigger_WF12_failure_list': trigger_WF12_failure_list, 
+            'trigger_WF13_failure_list': trigger_WF13_failure_list, 
+            'trigger_WF1_success_count': trigger_WF1_success_count, 
+            'trigger_WF2_success_count': trigger_WF2_success_count, 
+            'trigger_WF3_success_count': trigger_WF3_success_count, 
+            'trigger_WF4_success_count': trigger_WF4_success_count, 
+            'trigger_WF5_success_count': trigger_WF5_success_count, 
+            'trigger_WF6_success_count': trigger_WF6_success_count, 
+            'trigger_WF7_success_count': trigger_WF7_success_count, 
+            'trigger_WF8_success_count': trigger_WF8_success_count, 
+            'trigger_WF9_success_count': trigger_WF9_success_count, 
+            'trigger_WF10_success_count': trigger_WF10_success_count, 
+            'trigger_WF11_success_count': trigger_WF11_success_count, 
+            'trigger_WF12_success_count': trigger_WF12_success_count, 
+            'trigger_WF13_success_count': trigger_WF13_success_count, 
+            'trigger_WF1_failure_count': trigger_WF1_failure_count, 
+            'trigger_WF2_failure_count': trigger_WF2_failure_count, 
+            'trigger_WF3_failure_count': trigger_WF3_failure_count, 
+            'trigger_WF4_failure_count': trigger_WF4_failure_count, 
+            'trigger_WF5_failure_count': trigger_WF5_failure_count, 
+            'trigger_WF6_failure_count': trigger_WF6_failure_count, 
+            'trigger_WF7_failure_count': trigger_WF7_failure_count, 
+            'trigger_WF8_failure_count': trigger_WF8_failure_count, 
+            'trigger_WF9_failure_count': trigger_WF9_failure_count, 
+            'trigger_WF10_failure_count': trigger_WF10_failure_count, 
+            'trigger_WF11_failure_count': trigger_WF11_failure_count, 
+            'trigger_WF12_failure_count': trigger_WF12_failure_count, 
+            'trigger_WF13_failure_count': trigger_WF13_failure_count, 
+        }
+        print_log('[INFO] P0900Action.suigai_view()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+    
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.suigai_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.suigai_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：trigger_view
+### 自動実行進捗状況詳細表示画面
+###############################################################################
+@login_required(None, login_url='/P0100Login/')
+def trigger_view(request, trigger_id):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0900Action.trigger_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0900Action.trigger_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0900Action.trigger_view()関数 trigger_id = {}'.format(trigger_id), 'INFO')
+        print_log('[INFO] P0900Action.trigger_view()関数 STEP 1/3.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        print_log('[INFO] P0900Action.trigger_view()関数 STEP 2/3.', 'INFO')
+        trigger = TRIGGER.objects.raw("""
+        SELECT 
+            TR1.trigger_id AS trigger_id, 
+            TR1.suigai_id AS suigai_id, 
+            SG1.suigai_name AS suigai_name, 
+            SG1.ken_code AS ken_code, 
+            KE1.ken_name AS ken_name, 
+            SG1.city_code AS city_code, 
+            CT1.city_name AS city_name, 
+            TR1.repository_id AS repository_id, 
+            TR1.action_code AS action_code, 
+            AC1.action_name AS action_name, 
+            TR1.status_code AS status_code, 
+            ST1.status_name AS status_name, 
+            TR1.published_at AS published_at, 
+            TR1.consumed_at AS consumed_at, 
+            TR1.success_count AS success_count, 
+            TR1.failure_count AS failure_count, 
+            RE1.input_file_path AS input_file_path, 
+            TR1.data_integrity_left AS data_integrity_left, 
+            TR1.data_integrity_right AS data_integrity_right 
+        FROM TRIGGER TR1 
+        LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+        LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+        LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+        LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+        LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+        LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+        WHERE trigger_id=%s""", [trigger_id, ])
+
+        #######################################################################
+        ### レスポンスセット処理(0020)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0900Action.trigger_view()関数 STEP 3/3.', 'INFO')
+        template = loader.get_template('P0900Action/trigger.html')
+        context = {
+            'trigger': trigger, 
+        }
+        print_log('[INFO] P0900Action.trigger_view()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+    
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.trigger_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.trigger_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：download_file_view
+### エクセルファイルダウンロード
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def download_file_view(request, repository_id):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0900Action.download_file_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0900Action.download_file_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0900Action.download_file_view()関数 STEP 1/1.', 'INFO')
+        
+        result_file_path = 'static/ippan_chosa_result2.xlsx'
+        wb = openpyxl.load_workbook(result_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0010)
+        ### コンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0900Action.download_file_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.download_file_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.download_file_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：graph_view
+### 自動実行進捗状況グラフ表示画面
+###############################################################################
+@login_required(None, login_url='/P0100Login/')
+def graph_view(request):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0900Action.graph_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0900Action.graph_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0900Action.graph_view()関数 STEP 1/3.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        print_log('[INFO] P0900Action.graph_view()関数 STEP 2/3.', 'INFO')
         ken_list = KEN.objects.raw("""
             SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         trigger_list = TRIGGER.objects.raw("""
@@ -130,23 +617,24 @@ def index_view(request):
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0900Action.index_view()関数 STEP 3/3.', 'INFO')
-        template = loader.get_template('P0900Action/index.html')
+        print_log('[INFO] P0900Action.graph_view()関数 STEP 3/3.', 'INFO')
+        template = loader.get_template('P0900Action/graph.html')
         context = {
             'ken_list': ken_list, 
             'trigger_list': trigger_list, 
         }
-        print_log('[INFO] P0900Action.index_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0900Action.graph_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0900Action.index_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0900Action.index_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.graph_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0900Action.graph_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ken_city_repository_view
+### 自動実行進捗状況グラフ表示画面
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def ken_city_repository_view(request, ken_code, city_code, repository_id):
@@ -595,161 +1083,4 @@ def ken_city_repository_view(request, ken_code, city_code, repository_id):
         print_log(sys.exc_info()[0], 'ERROR')
         print_log('[ERROR] P0900Action.ken_city_repository_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0900Action.ken_city_repository_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名：repository_view
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def repository_view(request, repository_id):
-###     try:
-###         #######################################################################
-###         ### 引数チェック処理(0000)
-###         ### ブラウザからのリクエストと引数をチェックする。
-###         #######################################################################
-###         print_log('[INFO] ########################################', 'INFO')
-###         print_log('[INFO] P0900Action.repository_view()関数が開始しました。', 'INFO')
-###         print_log('[INFO] P0900Action.repository_view()関数 request = {}'.format(request.method), 'INFO')
-###         print_log('[INFO] P0900Action.repository_view()関数 repository_id = {}'.format(repository_id), 'INFO')
-###         print_log('[INFO] P0900Action.repository_view()関数 STEP 1/3.', 'INFO')
-###         
-###         #######################################################################
-###         ### DBアクセス処理(0010)
-###         ### DBにアクセスして、データを取得する。
-###         #######################################################################
-###         print_log('[INFO] P0900Action.repository_view()関数 STEP 2/3.', 'INFO')
-###         repository = REPOSITORY.objects.raw("""
-###         SELECT 
-###             RE1.REPOSITORY_ID AS REPOSITORY_ID, 
-###             RE1.SUIGAI_ID AS SUIGAI_ID, 
-###             RE1.ACTION_CODE AS ACTION_CODE, 
-###             AC1.ACTION_NAME AS ACTION_NAME, 
-###             RE1.STATUS_CODE AS STATUS_CODE, 
-###             ST1.STATUS_NAME AS STATUS_NAME, 
-###             RE1.CREATED_AT AS CREATED_AT, 
-###             RE1.UPDATED_AT AS UPDATED_AT, 
-###             RE1.INPUT_FILE_PATH AS INPUT_FILE_PATH 
-###         FROM REPOSITORY RE1 
-###         LEFT JOIN ACTION AC1 ON RE1.ACTION_CODE=AC1.ACTION_CODE 
-###         LEFT JOIN STATUS ST1 ON RE1.STATUS_CODE=ST1.STATUS_CODE 
-###         WHERE REPOSITORY_ID=%s""", [repository_id,])
-### 
-###         #######################################################################
-###         ### レスポンスセット処理(0020)
-###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-###         #######################################################################
-###         print_log('[INFO] P0900Action.repository_view()関数 STEP 3/3.', 'INFO')
-###         template = loader.get_template('P0900Action/repository.html')
-###         context = {
-###             'repository': repository, 
-###         }
-###         print_log('[INFO] P0900Action.repository_view()関数が正常終了しました。', 'INFO')
-###         return HttpResponse(template.render(context, request))
-###     
-###     except:
-###         print_log(sys.exc_info()[0], 'ERROR')
-###         print_log('[ERROR] P0900Action.repository_view()関数でエラーが発生しました。', 'ERROR')
-###         print_log('[ERROR] P0900Action.repository_view()関数が異常終了しました。', 'ERROR')
-###         return render(request, 'error.html')
-
-###############################################################################
-### 関数名：trigger_view
-###############################################################################
-@login_required(None, login_url='/P0100Login/')
-def trigger_view(request, trigger_id):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 trigger_id = {}'.format(trigger_id), 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 1/3.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、データを取得する。
-        #######################################################################
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 2/3.', 'INFO')
-        trigger = TRIGGER.objects.raw("""
-        SELECT 
-            TR1.trigger_id AS trigger_id, 
-            TR1.suigai_id AS suigai_id, 
-            SG1.suigai_name AS suigai_name, 
-            SG1.ken_code AS ken_code, 
-            KE1.ken_name AS ken_name, 
-            SG1.city_code AS city_code, 
-            CT1.city_name AS city_name, 
-            TR1.repository_id AS repository_id, 
-            TR1.action_code AS action_code, 
-            AC1.action_name AS action_name, 
-            TR1.status_code AS status_code, 
-            ST1.status_name AS status_name, 
-            TR1.published_at AS published_at, 
-            TR1.consumed_at AS consumed_at, 
-            TR1.success_count AS success_count, 
-            TR1.failure_count AS failure_count, 
-            RE1.input_file_path AS input_file_path, 
-            TR1.data_integrity_left AS data_integrity_left, 
-            TR1.data_integrity_right AS data_integrity_right 
-        FROM TRIGGER TR1 
-        LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-        LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-        LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-        LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-        LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-        LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-        WHERE trigger_id=%s""", [trigger_id, ])
-
-        #######################################################################
-        ### レスポンスセット処理(0020)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 3/3.', 'INFO')
-        template = loader.get_template('P0900Action/trigger.html')
-        context = {
-            'trigger': trigger, 
-        }
-        print_log('[INFO] P0900Action.trigger_view()関数が正常終了しました。', 'INFO')
-        return HttpResponse(template.render(context, request))
-    
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0900Action.trigger_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0900Action.trigger_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名：download_file_view
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def download_file_view(request, repository_id):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0900Action.download_file_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.download_file_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.download_file_view()関数 STEP 1/1.', 'INFO')
-        
-        result_file_path = 'static/ippan_chosa_result2.xlsx'
-        wb = openpyxl.load_workbook(result_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0010)
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0900Action.download_file_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0900Action.download_file_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0900Action.download_file_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

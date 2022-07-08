@@ -30,32 +30,12 @@
     {% bootstrap_messages %}
     {% block content %}
 
-    <!-- BEGIN トップパネル -->
-    <!--<div class="container-fluid mb-3">-->
-    <!--    <div class="row">-->
-    <!--        <div class="col d-flex justify-content-start align-items-start">-->
-    <!--            <strong><a href="/P0100File/" style="border-bottom: 2px solid red;" class="me-3">ファイル</a></strong>-->
-    <!--            <a href="/P0900Action" class="me-3">自動集計・自動検証</a>-->
-    <!--            <a href="/P0800Reverse/input/" class="me-3">マニュアル検証</a>-->
-    <!--            <a href="/P0400OnlineDisplay" class="me-3">オンライン参照</a>-->
-    <!--            <a href="" class="me-3">グラフ</a>-->
-    <!--            <a href="" class="me-3">帳票</a>-->
-    <!--        </div>-->
-    <!--        <div class="col d-flex justify-content-end align-items-end">-->
-    <!--            <a href="{# url 'P0100Login:index_view' #}">ログアウト</a><br>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
-    <!-- END トップパネル -->
-
     <!-- BEGIN ナビバー -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!--<li class="nav-item">-->
-                    <!--    <a class="nav-link active" style="border-bottom: 2px solid red;" aria-current="page" href="/P0100File/"><strong>ファイル</strong></a>-->
-                    <!--</li>-->
+                    <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
@@ -67,9 +47,15 @@
                             <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
                         </ul>
                     </li>
+                    <!-- END ナビバー ファイルメニュー -->
+
+                    <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
                         <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
                     </li>
+                    <!-- END ナビバー 自動集計・自動検証メニュー -->
+
+                    <!-- BEGIN ナビバー マニュアル検証メニュー -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>マニュアル検証</strong>
@@ -79,20 +65,26 @@
                             <li><a class="dropdown-item" href="/P0800Reverse/summary/">集計DB内のデータ整合性検証</a></li>
                         </ul>
                     </li>
+                    <!-- END ナビバー マニュアル検証メニュー -->
+
+                    <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
                         <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
                     </li>
+                    <!-- END ナビバー オンライン参照メニュー -->
+
+                    <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
                         <a class="nav-link active" href="#"><strong>グラフ</strong></a>
                     </li>
+                    <!-- END ナビバー グラフメニュー -->
+
+                    <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
                         <a class="nav-link active" href="#"><strong>帳票</strong></a>
                     </li>
+                    <!-- END ナビバー 帳票メニュー -->
                 </ul>
-                <!--<form class="d-flex">-->
-                <!--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-                <!--    <button class="btn btn-outline-success" type="submit">Search</button>-->
-                <!--</form>-->
                 <div class="col d-flex justify-content-end align-items-end">
                     <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
@@ -112,25 +104,6 @@
         <!-- BEGIN 行1 サブメニュー -->
         <div class="row">
             <div class="col text-start">
-                <!--<div class="btn-group me-3">-->
-                <!--    {# if type_code == 'ippan' #}-->
-                <!--    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">一般資産調査員調査票</button>-->
-                <!--    {# elif type_code == 'area' #}-->
-                <!--    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">水害区域図</button>-->
-                <!--    {# elif type_code == 'kokyo' #}-->
-                <!--    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">公共土木調査票</button>-->
-                <!--    {# elif type_code == 'koeki' #}-->
-                <!--    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">公益事業調査票</button>-->
-                <!--    {# else #}-->
-                <!--    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ファイル種別</button>-->
-                <!--    {# endif #}-->
-                <!--    <div class="dropdown-menu">-->
-                <!--        <a class="dropdown-item" href="#" id="dropdown_ippan" name="dropdown_ippan">一般資産調査員調査票</a>-->
-                <!--        <a class="dropdown-item" href="#" id="dropdown_area" name="dropdown_area">水害区域図</a>-->
-                <!--        <a class="dropdown-item" href="#" id="dropdown_kokyo" name="dropdown_kokyo">公共土木調査票</a>-->
-                <!--        <a class="dropdown-item" href="#" id="dropdown_koeki" name="dropdown_koeki">公益事業調査票</a>-->
-                <!--    </div>-->
-                <!--</div>-->
                 {% if type_code == "ippan" %}
                 <h5><a href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
                 {% elif type_code == "area" %}
@@ -253,7 +226,8 @@
                             {% else %}
                             <td>コミット日 {{ suigai.committed_at }}</td>
                             {% endif %}
-                            <td><a href="/P0900Action/ken/{{ suigai.ken_code }}/city/{{ suigai.city_code }}/repository/{{ suigai.repository_id }}/">実行状況</a></td>
+                            <!--<td><a href="/P0900Action/ken/{# suigai.ken_code #}/city/{# suigai.city_code }}/repository/{# suigai.repository_id #}/">実行状況</a></td>-->
+                            <td><a href="/P0900Action/suigai/{{ suigai.suigai_id }}/">実行状況</a></td>
                         </tr>
                         {% endfor %}
                         <!-- 水害区域図 -->
@@ -280,34 +254,9 @@
             A simple info alert-check it out!
         </div>
     </div>
-    <!-- BEGIN コンテナ3 -->
+    <!-- END コンテナ3 -->
 
     <script type="text/javascript">
-    // 局所変数を定義する。
-    // var dropdown_ippan = document.getElementById("dropdown_ippan");
-    // var dropdown_area = document.getElementById("dropdown_area");
-    // var dropdown_kokyo = document.getElementById("dropdown_kokyo");
-    // var dropdown_koeki = document.getElementById("dropdown_koeki");
-    
-    // ファイル種別プルダウンクリック時のイベントハンドラを設定する。
-    // dropdown_ippan.addEventListener("click", function(event) {
-    //     window.location.href = "/P0100File/ken/{{ ken_list.0.ken_code }}/type/ippan/"
-    // });
-    
-    // ファイル種別プルダウンクリック時のイベントハンドラを設定する。
-    // dropdown_area.addEventListener("click", function(event) {
-    //     window.location.href = "/P0100File/ken/{{ ken_list.0.ken_code }}/type/area/"
-    // });
-
-    // ファイル種別プルダウンクリック時のイベントハンドラを設定する。
-    // dropdown_kokyo.addEventListener("click", function(event) {
-    //     window.location.href = "/P0100File/ken/{{ ken_list.0.ken_code }}/type/kokyo/"
-    // });
-
-    // ファイル種別プルダウンクリック時のイベントハンドラを設定する。
-    // dropdown_koeki.addEventListener("click", function(event) {
-    //     window.location.href = "/P0100File/ken/{{ ken_list.0.ken_code }}/type/koeki/"
-    // });
     </script>
     {% endblock %}
 </body>

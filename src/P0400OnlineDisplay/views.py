@@ -77,7 +77,8 @@ from P0000Common.models import REPOSITORY              ### 10050: EXCELファイ
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名： index_view
+### 関数名：index_view
+### オンライン参照画面
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -118,9 +119,9 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：category1_category2_ken_city_view
+### オンライン参照画面
 ###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def category_view2(request, category_code1, category_code2, ken_code, city_code):
+@login_required(None, login_url='/P0100Login/')
 def category1_category2_ken_city_view(request, category_code1, category_code2, ken_code, city_code):
     try:
         #######################################################################
@@ -134,13 +135,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 category_code2 = {}'.format(category_code2), 'INFO')
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 ken_code = {}'.format(ken_code), 'INFO')
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 1/4.', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 1/5.', 'INFO')
 
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 2/4.', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 2/5.', 'INFO')
         ken_list = []
         city_list = []
         
@@ -170,13 +171,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM CITY CT1 
                 LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
                 WHERE CT1.KEN_CODE=%s 
-                ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [ken_code,])
+                ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [ken_code, ])
         
         #######################################################################
         ### DBアクセス処理(0020)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 3/4.', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 3/5.', 'INFO')
         building_list = []                             ### 1000: 建物区分（マスタDB）
         ### ken_list                                   ### 1010: 都道府県（マスタDB）
         ### city_list                                  ### 1020: 市区町村（マスタDB）
@@ -191,48 +192,46 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         flood_sediment_list = []                       ### 1110: 浸水土砂区分
         gradient_list = []                             ### 1120: 地盤勾配区分
         industry_list = []                             ### 1130: 産業分類
-        
         house_asset_list = []                          ### 2000: 家屋評価額
         house_rate_list = []                           ### 2010: 家屋被害率
         house_alt_list = []                            ### 2020: 家庭応急対策費_代替活動費
         house_clean_list = []                          ### 2030: 家庭応急対策費_清掃日数
-        
         household_asset_list = []                      ### 3000: 家庭用品自動車以外所有額
         household_rate_list = []                       ### 3010: 家庭用品自動車以外被害率
-        
         car_asset_list = []                            ### 4000: 家庭用品自動車所有額
         car_rate_list = []                             ### 4010: 家庭用品自動車被害率
-        
         office_asset_list = []                         ### 5000: 事業所資産額
         office_rate_list = []                          ### 5010: 事業所被害率
         office_suspend_list = []                       ### 5020: 事業所営業停止日数
         office_stagnate_list = []                      ### 5030: 事業所営業停滞日数
         office_alt_list = []                           ### 5040: 事業所応急対策費_代替活動費
-        
         farmer_fisher_asset_list = []                  ### 6000: 農漁家資産額
         farmer_fisher_rate_list = []                   ### 6010: 農漁家被害率
-        
         area_list = []                                 ### 7000: 一般資産入力データ_水害区域
         weather_list = []                              ### 7010: 一般資産入力データ_異常気象
         suigai_list = []                               ### 7020: 一般資産入力データ_ヘッダ部分
         ippan_list = []                                ### 7030: 一般資産入力データ_一覧表部分
         ippan_view_list = []                           ### 7040: 一般資産ビューデータ_一覧表部分
-        
         ippan_summary_list = []                        ### 8000: 一般資産集計データ
         ippan_group_by_ken_list = []                   ### 8010: 
         ippan_group_by_suikei_list = []                ### 8020: 
-        
         action_list = []                               ### 10000: アクション
         status_list = []                               ### 10010: 状態
         trigger_list = []                              ### 10020: トリガーメッセージ
         approval_list = []                             ### 10030: 承認メッセージ
         feedback_list = []                             ### 10040: フィードバックメッセージ
         repository_list = []                           ### 10050: EXCELファイルレポジトリ
-        ### execute_list = []                          ### 10060: 実行管理
         
+        #######################################################################
+        ### DBアクセス処理(0030)
+        ### DBにアクセスして、データを取得する。
+        #######################################################################
+        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 4/5.', 'INFO')
+        ### 参照するデータの種別を選択してください。
         if category_code2 == "0":
             pass
         
+        ### 建物区分: BUILDING
         elif category_code2 == "1" or category_code2 == "1000":
             building_list = BUILDING.objects.raw("""
                 SELECT 
@@ -241,12 +240,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM BUILDING 
                 ORDER BY CAST(building_code AS INTEGER)""", [])
             
+        ### 都道府県: KEN
         elif category_code2 == "2" or category_code2 == "1010":
             pass
         
+        ### 市区町村: CITY
         elif category_code2 == "3" or category_code2 == "1020":
             pass
         
+        ### 水害発生地点工種（河川海岸区分）: KASEN_KAIGAN
         elif category_code2 == "4" or category_code2 == "1030":
             kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""
                 SELECT 
@@ -255,6 +257,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM KASEN_KAIGAN 
                 ORDER BY CAST(kasen_kaigan_code AS INTEGER)""", [])
             
+        ### 水系: SUIKEI
         elif category_code2 == "5" or category_code2 == "1040":
             suikei_list = SUIKEI.objects.raw("""
                 SELECT 
@@ -266,6 +269,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIKEI_TYPE ST1 ON SK1.suikei_type_code=ST1.suikei_type_code 
                 ORDER BY CAST(SK1.suikei_code AS INTEGER)""", [])
             
+        ### 水系種別: SUIKEI_TYPE
         elif category_code2 == "6" or category_code2 == "1050":
             suikei_type_list = SUIKEI_TYPE.objects.raw("""
                 SELECT 
@@ -274,6 +278,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM SUIKEI_TYPE 
                 ORDER BY CAST(suikei_type_code AS INTEGER)""", [])
             
+        ### 河川（河川・海岸）: KASEN
         elif category_code2 == "7" or category_code2 == "1060":
             kasen_list = KASEN.objects.raw("""
                 SELECT 
@@ -288,6 +293,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIKEI SK1 ON KA1.suikei_code=SK1.suikei_code 
                 ORDER BY CAST(KA1.kasen_code AS INTEGER)""", [])
             
+        ### 河川種別（河川・海岸種別）: KASEN_TYPE
         elif category_code2 == "8" or category_code2 == "1070":
             kasen_type_list = KASEN_TYPE.objects.raw("""
                 SELECT 
@@ -295,6 +301,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM KASEN_TYPE 
                 ORDER BY CAST(kasen_type_code AS INTEGER)""", [])
             
+        ### 水害原因: CAUSE
         elif category_code2 == "9" or category_code2 == "1080":
             cause_list = CAUSE.objects.raw("""
                 SELECT 
@@ -302,6 +309,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM CAUSE 
                 ORDER BY CAST(cause_code AS INTEGER)""", [])
             
+        ### 地上地下区分: UNDERGROUND
         elif category_code2 == "10" or category_code2 == "1090":
             underground_list = UNDERGROUND.objects.raw("""
                 SELECT 
@@ -309,6 +317,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM UNDERGROUND 
                 ORDER BY CAST(underground_code AS INTEGER)""", [])
             
+        ### 地下空間の利用形態: USAGE
         elif category_code2 == "11" or category_code2 == "1100":
             usage_list = USAGE.objects.raw("""
                 SELECT 
@@ -316,6 +325,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM USAGE 
                 ORDER BY CAST(usage_code AS INTEGER)""", [])
             
+        ### 浸水土砂区分: FLOOD_SEDIMENT
         elif category_code2 == "12" or category_code2 == "1110":
             flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""
                 SELECT 
@@ -323,6 +333,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM FLOOD_SEDIMENT 
                 ORDER BY CAST(flood_sediment_code AS INTEGER)""", [])
             
+        ### 地盤勾配区分: GRADIENT
         elif category_code2 == "13" or category_code2 == "1120":
             gradient_list = GRADIENT.objects.raw("""
                 SELECT 
@@ -330,15 +341,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM GRADIENT 
                 ORDER BY CAST(gradient_code AS INTEGER)""", [])
             
+        ### 産業分類: INDUSTRY
         elif category_code2 == "14" or category_code2 == "1130":
             industry_list = INDUSTRY.objects.raw("""
                 SELECT 
                     * 
                 FROM INDUSTRY 
                 ORDER BY CAST(industry_code AS INTEGER)""", [])
-
-
             
+        ### 家屋評価額: HOUSE_ASSET
         elif category_code2 == "100" or category_code2 == "2000":
             house_asset_list = HOUSE_ASSET.objects.raw("""
                 SELECT 
@@ -350,6 +361,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN KEN KE1 ON HA1.ken_code=KE1.ken_code 
                 ORDER BY CAST(HA1.house_asset_code AS INTEGER)""", [])
             
+        ### 家屋被害率: HOUSE_RATE
         elif category_code2 == "101" or category_code2 == "2010":
             house_rate_list = HOUSE_RATE.objects.raw("""
                 SELECT 
@@ -369,6 +381,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN GRADIENT GR1 ON HR1.gradient_code=GR1.gradient_code 
                 ORDER BY CAST(HR1.house_rate_code AS INTEGER)""", [])
             
+        ### 家庭応急対策費_代替活動費: HOUSE_ALT
         elif category_code2 == "102" or category_code2 == "2020":
             house_alt_list = HOUSE_ALT.objects.raw("""
                 SELECT 
@@ -376,15 +389,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM HOUSE_ALT 
                 ORDER BY CAST(house_alt_code AS INTEGER)""", [])
             
+        ### 家庭応急対策費_清掃日数_清掃労働単価: HOUSE_CLEAN
         elif category_code2 == "103" or category_code2 == "2030":
             house_clean_list = HOUSE_CLEAN.objects.raw("""
                 SELECT 
                     * 
                 FROM HOUSE_CLEAN 
                 ORDER BY CAST(house_clean_code AS INTEGER)""", [])
-
-
             
+        ### 家庭用品自動車以外所有額: HOUSEHOLD_ASSET
         elif category_code2 == "104" or category_code2 == "3000":
             household_asset_list = HOUSEHOLD_ASSET.objects.raw("""
                 SELECT 
@@ -392,6 +405,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM HOUSEHOLD_ASSET 
                 ORDER BY CAST(household_asset_code AS INTEGER)""", [])
             
+        ### 家庭用品自動車以外被害率: HOUSEHOLD_RATE
         elif category_code2 == "105" or category_code2 == "3010":
             household_rate_list = HOUSEHOLD_RATE.objects.raw("""
                 SELECT 
@@ -407,9 +421,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM HOUSEHOLD_RATE HR1 
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(HR1.household_rate_code AS INTEGER)""", [])
-
-
             
+        ### 家庭用品自動車所有額: CAR_ASSET
         elif category_code2 == "106" or category_code2 == "4000":
             car_asset_list = CAR_ASSET.objects.raw("""
                 SELECT 
@@ -417,15 +430,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM CAR_ASSET 
                 ORDER BY CAST(car_asset_code AS INTEGER)""", [])
             
+        ### 家庭用品自動車被害率: CAR_RATE
         elif category_code2 == "107" or category_code2 == "4010":
             car_rate_list = CAR_RATE.objects.raw("""
                 SELECT 
                     * 
                 FROM CAR_RATE 
                 ORDER BY CAST(car_rate_code AS INTEGER)""", [])
-
             
-            
+        ### 事業所資産額: OFFICE_ASSET
         elif category_code2 == "108" or category_code2 == "5000":
             office_asset_list = OFFICE_ASSET.objects.raw("""
                 SELECT 
@@ -439,6 +452,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN INDUSTRY ID1 ON OA1.industry_code=ID1.industry_code 
                 ORDER BY CAST(OA1.office_asset_code AS INTEGER)""", [])
 
+        ### 事業所被害率: OFFICE_RATE
         elif category_code2 == "109" or category_code2 == "5010":
             office_rate_list = OFFICE_RATE.objects.raw("""
                 SELECT 
@@ -461,13 +475,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON OR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(OR1.office_rate_code AS INTEGER)""", [])
 
+        ### 事業所営業停止日数: OFFICE_SUSPEND
         elif category_code2 == "110" or category_code2 == "5020":
             office_suspend_list = OFFICE_SUSPEND.objects.raw("""
                 SELECT 
                     * 
                 FROM OFFICE_SUSPEND 
                 ORDER BY CAST(office_sus_code AS INTEGER)""", [])
-
+            
+        ### 事業所営業停滞日数: OFFICE_STAGNATE
         elif category_code2 == "111" or category_code2 == "5030":
             office_stagnate_list = OFFICE_STAGNATE.objects.raw("""
                 SELECT 
@@ -475,15 +491,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM OFFICE_STAGNATE 
                 ORDER BY CAST(office_stg_code AS INTEGER)""", [])
 
+        ### 事業所応急対策費_代替活動費: OFFICE_ALT
         elif category_code2 == "112" or category_code2 == "5040":
             office_alt_list = OFFICE_ALT.objects.raw("""
                 SELECT 
                     * 
                 FROM OFFICE_ALT 
                 ORDER BY CAST(office_alt_code AS INTEGER)""", [])
-
-
-
+            
+        ### 農漁家資産額: FARMER_FISHER_ASSET
         elif category_code2 == "113" or category_code2 == "6000":
             farmer_fisher_asset_list = FARMER_FISHER_ASSET.objects.raw("""
                 SELECT 
@@ -491,6 +507,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM FARMER_FISHER_ASSET 
                 ORDER BY CAST(farmer_fisher_asset_code AS INTEGER)""", [])
 
+        ### 農漁家被害率: FARMER_FISHER_RATE
         elif category_code2 == "114" or category_code2 == "6010":
             farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""
                 SELECT 
@@ -513,8 +530,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON FFR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(FFR1.farmer_fisher_rate_code AS INTEGER)""", [])
 
-
-
+        ### 水害区域: AREA
         elif category_code2 == "200" or category_code2 == "7000":
             area_list = AREA.objects.raw("""
                 SELECT 
@@ -522,6 +538,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM AREA 
                 ORDER BY CAST(AREA_ID AS INTEGER)""", [])
             
+        ### 異常気象: WEATHER
         elif category_code2 == "201" or category_code2 == "7010":
             weather_list = WEATHER.objects.raw("""
                 SELECT 
@@ -529,53 +546,203 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM WEATHER 
                 ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
             
+        ### ヘッダ部分: SUIGAI
         elif category_code2 == "202" or category_code2 == "7020":
-            suigai_list = SUIGAI.objects.raw("""
-                SELECT 
-                    SG1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    SG1.begin_date AS begin_date, 
-                    SG1.end_date AS end_date, 
-                    SG1.cause_1_code AS cause_1_code, 
-                    CA1.cause_name AS cause_1_name, 
-                    SG1.cause_2_code AS cause_2_code, 
-                    CA2.cause_name AS cause_2_name, 
-                    SG1.cause_3_code AS cause_3_code, 
-                    CA3.cause_name AS cause_3_name, 
-                    SG1.area_id AS area_id, 
-                    AR1.area_name AS area_name, 
-                    SG1.suikei_code AS suikei_code, 
-                    SK1.suikei_name AS suikei_name, 
-                    SG1.kasen_code AS kasen_code, 
-                    KA1.kasen_name AS kasen_name, 
-                    SG1.gradient_code AS gradient_code, 
-                    GR1.gradient_name AS gradient_name, 
-                    SG1.residential_area AS residential_area, 
-                    SG1.agricultural_area AS agricultural_area, 
-                    SG1.underground_area AS underground_area, 
-                    SG1.kasen_kaigan_code AS kasen_kaigan_code, 
-                    KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    SG1.crop_damage AS crop_damage, 
-                    SG1.weather_id AS weather_id, 
-                    WE1.weather_name AS weather_name 
-                FROM SUIGAI SG1 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
-                LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
-                LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
-                LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
-                LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
-                LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
-                LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
-                LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
-                LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
-                ORDER BY CAST(SG1.SUIGAI_ID AS INTEGER)""", [])
-
+            if ken_code == "0" and city_code == "0": 
+                suigai_list = SUIGAI.objects.raw("""
+                    SELECT 
+                        SG1.suigai_id AS suigai_id, 
+                        SG1.suigai_name AS suigai_name, 
+                        SG1.ken_code AS ken_code, 
+                        KE1.ken_name AS ken_name, 
+                        SG1.city_code AS city_code, 
+                        CT1.city_name AS city_name, 
+                        SG1.begin_date AS begin_date, 
+                        SG1.end_date AS end_date, 
+                        SG1.cause_1_code AS cause_1_code, 
+                        CA1.cause_name AS cause_1_name, 
+                        SG1.cause_2_code AS cause_2_code, 
+                        CA2.cause_name AS cause_2_name, 
+                        SG1.cause_3_code AS cause_3_code, 
+                        CA3.cause_name AS cause_3_name, 
+                        SG1.area_id AS area_id, 
+                        AR1.area_name AS area_name, 
+                        SG1.suikei_code AS suikei_code, 
+                        SK1.suikei_name AS suikei_name, 
+                        SG1.kasen_code AS kasen_code, 
+                        KA1.kasen_name AS kasen_name, 
+                        SG1.gradient_code AS gradient_code, 
+                        GR1.gradient_name AS gradient_name, 
+                        SG1.residential_area AS residential_area, 
+                        SG1.agricultural_area AS agricultural_area, 
+                        SG1.underground_area AS underground_area, 
+                        SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                        KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                        SG1.crop_damage AS crop_damage, 
+                        SG1.weather_id AS weather_id, 
+                        WE1.weather_name AS weather_name 
+                    FROM SUIGAI SG1 
+                    LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                    LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                    LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+                    LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+                    LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+                    LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+                    LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
+                    LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+                    LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+                    LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+                    LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                    ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [])
+                
+            elif ken_code == "0" and city_code != "0":
+                suigai_list = SUIGAI.objects.raw("""
+                    SELECT 
+                        SG1.suigai_id AS suigai_id, 
+                        SG1.suigai_name AS suigai_name, 
+                        SG1.ken_code AS ken_code, 
+                        KE1.ken_name AS ken_name, 
+                        SG1.city_code AS city_code, 
+                        CT1.city_name AS city_name, 
+                        SG1.begin_date AS begin_date, 
+                        SG1.end_date AS end_date, 
+                        SG1.cause_1_code AS cause_1_code, 
+                        CA1.cause_name AS cause_1_name, 
+                        SG1.cause_2_code AS cause_2_code, 
+                        CA2.cause_name AS cause_2_name, 
+                        SG1.cause_3_code AS cause_3_code, 
+                        CA3.cause_name AS cause_3_name, 
+                        SG1.area_id AS area_id, 
+                        AR1.area_name AS area_name, 
+                        SG1.suikei_code AS suikei_code, 
+                        SK1.suikei_name AS suikei_name, 
+                        SG1.kasen_code AS kasen_code, 
+                        KA1.kasen_name AS kasen_name, 
+                        SG1.gradient_code AS gradient_code, 
+                        GR1.gradient_name AS gradient_name, 
+                        SG1.residential_area AS residential_area, 
+                        SG1.agricultural_area AS agricultural_area, 
+                        SG1.underground_area AS underground_area, 
+                        SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                        KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                        SG1.crop_damage AS crop_damage, 
+                        SG1.weather_id AS weather_id, 
+                        WE1.weather_name AS weather_name 
+                    FROM SUIGAI SG1 
+                    LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                    LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                    LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+                    LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+                    LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+                    LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+                    LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
+                    LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+                    LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+                    LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+                    LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                    WHERE SG1.city_code=%s 
+                    ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [city_code, ])
+            
+            elif ken_code != "0" and city_code == "0":
+                suigai_list = SUIGAI.objects.raw("""
+                    SELECT 
+                        SG1.suigai_id AS suigai_id, 
+                        SG1.suigai_name AS suigai_name, 
+                        SG1.ken_code AS ken_code, 
+                        KE1.ken_name AS ken_name, 
+                        SG1.city_code AS city_code, 
+                        CT1.city_name AS city_name, 
+                        SG1.begin_date AS begin_date, 
+                        SG1.end_date AS end_date, 
+                        SG1.cause_1_code AS cause_1_code, 
+                        CA1.cause_name AS cause_1_name, 
+                        SG1.cause_2_code AS cause_2_code, 
+                        CA2.cause_name AS cause_2_name, 
+                        SG1.cause_3_code AS cause_3_code, 
+                        CA3.cause_name AS cause_3_name, 
+                        SG1.area_id AS area_id, 
+                        AR1.area_name AS area_name, 
+                        SG1.suikei_code AS suikei_code, 
+                        SK1.suikei_name AS suikei_name, 
+                        SG1.kasen_code AS kasen_code, 
+                        KA1.kasen_name AS kasen_name, 
+                        SG1.gradient_code AS gradient_code, 
+                        GR1.gradient_name AS gradient_name, 
+                        SG1.residential_area AS residential_area, 
+                        SG1.agricultural_area AS agricultural_area, 
+                        SG1.underground_area AS underground_area, 
+                        SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                        KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                        SG1.crop_damage AS crop_damage, 
+                        SG1.weather_id AS weather_id, 
+                        WE1.weather_name AS weather_name 
+                    FROM SUIGAI SG1 
+                    LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                    LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                    LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+                    LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+                    LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+                    LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+                    LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
+                    LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+                    LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+                    LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+                    LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                    WHERE SG1.ken_code=%s 
+                    ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [ken_code, ])
+            
+            elif ken_code != "0" and city_code != "0":
+                suigai_list = SUIGAI.objects.raw("""
+                    SELECT 
+                        SG1.suigai_id AS suigai_id, 
+                        SG1.suigai_name AS suigai_name, 
+                        SG1.ken_code AS ken_code, 
+                        KE1.ken_name AS ken_name, 
+                        SG1.city_code AS city_code, 
+                        CT1.city_name AS city_name, 
+                        SG1.begin_date AS begin_date, 
+                        SG1.end_date AS end_date, 
+                        SG1.cause_1_code AS cause_1_code, 
+                        CA1.cause_name AS cause_1_name, 
+                        SG1.cause_2_code AS cause_2_code, 
+                        CA2.cause_name AS cause_2_name, 
+                        SG1.cause_3_code AS cause_3_code, 
+                        CA3.cause_name AS cause_3_name, 
+                        SG1.area_id AS area_id, 
+                        AR1.area_name AS area_name, 
+                        SG1.suikei_code AS suikei_code, 
+                        SK1.suikei_name AS suikei_name, 
+                        SG1.kasen_code AS kasen_code, 
+                        KA1.kasen_name AS kasen_name, 
+                        SG1.gradient_code AS gradient_code, 
+                        GR1.gradient_name AS gradient_name, 
+                        SG1.residential_area AS residential_area, 
+                        SG1.agricultural_area AS agricultural_area, 
+                        SG1.underground_area AS underground_area, 
+                        SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                        KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                        SG1.crop_damage AS crop_damage, 
+                        SG1.weather_id AS weather_id, 
+                        WE1.weather_name AS weather_name 
+                    FROM SUIGAI SG1 
+                    LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                    LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                    LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+                    LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+                    LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+                    LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+                    LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code
+                    LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+                    LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+                    LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+                    LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                    WHERE SG1.ken_code=%s AND SG1.city_code=%s 
+                    ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [ken_code, city_code, ])
+            
+            else:
+                pass
+            
+        ### 一覧表部分: IPPAN
         elif category_code2 == "203" or category_code2 == "7030":
             ippan_list = IPPAN.objects.raw("""
                 SELECT 
@@ -622,6 +789,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN USAGE US1 ON IP1.usage_code=US1.usage_code 
                 ORDER BY CAST(IP1.IPPAN_ID AS INTEGER)""", [])
 
+        ### 一覧表部分_按分データ: IPPAN_VIEW
         elif category_code2 == "204" or category_code2 == "7040":
             ippan_view_list = IPPAN_VIEW.objects.raw(""" 
                 SELECT 
@@ -686,6 +854,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM IPPAN_VIEW 
                 ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
 
+        ### 集計データ: IPPAN_SUMMARY
         elif category_code2 == "300" or category_code2 == "8000":
             ippan_summary_list = IPPAN_SUMMARY.objects.raw("""
                 SELECT 
@@ -778,6 +947,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
                 ORDER BY CAST(IS1.IPPAN_ID AS INTEGER)""", [])
 
+        ### 集計データ_都道府県別: IPPAN_GROUP_BY_KEN
         elif category_code2 == "301" or category_code2 == "8010":
             ### print_log('[INFO] SELECT * FROM IPPAN_SUMMARY GROUP BY () ORDER BY CAST(AS INTEGER)', 'INFO')
             ### ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
@@ -970,6 +1140,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN KEN KE1 ON SUB1.id=KE1.ken_code 
             """, [])
 
+        ### 集計データ_水系別: IPPAN_GROUP_BY_SUIKEI
         elif category_code2 == "302" or category_code2 == "8020":
             ### print_log('[INFO] SELECT * FROM IPPAN_SUMMARY GROUP BY () ORDER BY CAST(AS INTEGER)', 'INFO')
             ### GROUP BY に使用する水系コードをIPPAN_SUMMARYモデルのidに使用する。
@@ -1154,6 +1325,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN SUIKEI SK1 ON SUB1.id=SK1.suikei_code 
             """, [])
 
+        ### 
         elif category_code2 == "10000":
             action_list = ACTION.objects.raw("""
                 SELECT 
@@ -1161,6 +1333,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM ACTION 
                 ORDER BY CAST(ACTION_CODE AS INTEGER)""", [])
 
+        ### 
         elif category_code2 == "10010":
             status_list = STATUS.objects.raw("""
                 SELECT 
@@ -1168,6 +1341,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM STATUS 
                 ORDER BY CAST(STATUS_CODE AS INTEGER)""", [])
 
+        ### 
         elif category_code2 == "10020":
             trigger_list = TRIGGER.objects.raw("""
                 SELECT 
@@ -1175,6 +1349,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM TRIGGER 
                 ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
 
+        ### 
         elif category_code2 == "10030":
             approve_list = APPROVE.objects.raw("""
                 SELECT 
@@ -1182,6 +1357,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM APPROVE 
                 ORDER BY CAST(APPROVE_ID AS INTEGER)""", [])
 
+        ### 
         elif category_code2 == "10040":
             feedback_list = FEEDBACK.objects.raw("""
                 SELECT 
@@ -1189,6 +1365,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM FEEDBACK 
                 ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
 
+        ### 
         elif category_code2 == "10050":
             repository_list = REPOSITORY.objects.raw("""
                 SELECT 
@@ -1196,24 +1373,20 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM REPOSITORY 
                 ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
 
-        ### elif category_code2 == "10060":
-        ###     pass
-
         else:
             pass
         
         #######################################################################
-        ### レスポンスセット処理(0030)
+        ### レスポンスセット処理(0040)
         ### コンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数 STEP 5/5.', 'INFO')
         template = loader.get_template('P0400OnlineDisplay/index.html')
         context = {
             'category_code1': category_code1,
             'category_code2': category_code2,
             'ken_code': ken_code,
             'city_code': city_code,
-            
             'building_list': building_list,                                    ### 1000: 建物区分 
             'ken_list': ken_list,                                              ### 1010: 都道府県 
             'city_list': city_list,                                            ### 1020: 市区町村 
@@ -1228,45 +1401,35 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
             'flood_sediment_list': flood_sediment_list,                        ### 1110: 浸水土砂区分 
             'gradient_list': gradient_list,                                    ### 1120: 地盤勾配区分 
             'industry_list': industry_list,                                    ### 1130: 産業分類 
-            
             'house_asset_list': house_asset_list,                              ### 2000: 家屋評価額 
             'house_rate_list': house_rate_list,                                ### 2010: 家屋被害率 
             'house_alt_list': house_alt_list,                                  ### 2020: 家庭応急対策費_代替活動費 
             'house_clean_list': house_clean_list,                              ### 2030: 家庭応急対策費_清掃日数
-            
             'household_asset_list': household_asset_list,                      ### 3000: 家庭用品自動車以外所有額 
             'household_rate_list': household_rate_list,                        ### 3010: 家庭用品自動車以外被害率
-            
             'car_asset_list': car_asset_list,                                  ### 4000: 家庭用品自動車所有額 
             'car_rate_list': car_rate_list,                                    ### 4010: 家庭用品自動車被害率
-            
             'office_asset_list': office_asset_list,                            ### 5000: 事業所資産額 
             'office_rate_list': office_rate_list,                              ### 5010: 事業所被害率 
             'office_suspend_list': office_suspend_list,                        ### 5020: 事業所営業停止日数 
             'office_stagnate_list': office_stagnate_list,                      ### 5030: 事業所営業停滞日数 
             'office_alt_list': office_alt_list,                                ### 5040: 事業所応急対策費_代替活動費
-            
             'farmer_fisher_asset_list': farmer_fisher_asset_list,              ### 6000: 農漁家資産額 
             'farmer_fisher_rate_list': farmer_fisher_rate_list,                ### 6010: 農漁家被害率 
-            
             'area_list': area_list,                                            ### 7000: 一般資産入力データ_水害区域 
             'weather_list': weather_list,                                      ### 7010: 一般資産入力データ_異常気象 
             'suigai_list': suigai_list,                                        ### 7020: 一般資産入力データ_ヘッダ部分 
             'ippan_list': ippan_list,                                          ### 7030: 一般資産入力データ_一覧表部分 
             'ippan_view_list': ippan_view_list,                                ### 7040: 一般資産ビューデータ_一覧表部分 
-            
             'ippan_summary_list': ippan_summary_list,                          ### 8000: 一般資産集計データ 
             'ippan_group_by_ken_list': ippan_group_by_ken_list,                ### 8010: 
             'ippan_group_by_suikei_list': ippan_group_by_suikei_list,          ### 8020: 
-
             'action_list': action_list,                                        ### 10000: アクション 
             'status_list': status_list,                                        ### 10010: 状態 
             'trigger_list': trigger_list,                                      ### 10020: トリガーメッセージ 
             'approval_list': approval_list,                                    ### 10030: 承認メッセージ 
             'feedback_list': feedback_list,                                    ### 10040: フィードバックメッセージ 
             'repository_list': repository_list,                                ### 10050: EXCELファイルレポジトリ
-            ### 'execute_list': execute_list,                                  ### 10060: 実行管理
-            
         }
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

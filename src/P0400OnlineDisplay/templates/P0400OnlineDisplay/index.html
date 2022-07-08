@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>オンライン編集方式オンライン参照画面 | 水害統計オンラインサイト</title>
+    <title>オンライン参照画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <style>
@@ -29,37 +29,12 @@
     {% bootstrap_messages %}
     {% block content %}
 
-    <!-- BEGIN トップパネル -->
-    <!--<div class="container-fluid">-->
-    <!--    <div class="row">-->
-    <!--        <div class="col d-flex justify-content-start align-items-start">-->
-    <!--            <a href="/P0100File/" class="me-3">ファイル</a>-->
-    <!--            <a href="/P0900Action" class="me-3">自動集計・自動検証</a>-->
-    <!--            <a href="/P0800Reverse/input/" class="me-3">マニュアル検証</a>-->
-    <!--            <strong><a href="/P0400OnlineDisplay" style="border-bottom: 2px solid red;" class="me-3">オンライン参照</a></strong>-->
-    <!--            <a href="" class="me-3">グラフ</a>-->
-    <!--            <a href="" class="me-3">帳票</a>-->
-    <!--        </div>-->
-    <!--        <div class="col d-flex justify-content-end align-items-end">-->
-    <!--            <a href="{% url 'P0100Login:index_view' %}">ログアウト</a><br>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
-    <!-- END トップパネル -->
-
     <!-- BEGIN ナビバー -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div class="container-fluid">
-            <!--<a class="navbar-brand" href="#">Navbar</a>-->
-            <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-            <!--    <span class="navbar-toggler-icon"></span>-->
-            <!--</button>-->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <!--<li class="nav-item">-->
-                    <!--    <a class="nav-link active" aria-current="page" href="/P0100File/"><strong>ファイル</strong></a>-->
-                    <!--</li>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
@@ -109,10 +84,6 @@
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
-                <!--<form class="d-flex">-->
-                <!--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-                <!--    <button class="btn btn-outline-success" type="submit">Search</button>-->
-                <!--</form>-->
                 <div class="col d-flex justify-content-end align-items-end">
                     <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
@@ -122,13 +93,14 @@
     <!-- END ナビバー -->
     
     <!-- BEGIN 画面名 -->
-    <div class="container text-center mb-3">
-        <h3>定数、調査票、集計結果参照</h3>
-    </div>
+    <!--<div class="container text-center mb-3">-->
+    <!--    <h3>定数、調査票、集計結果参照</h3>-->
+    <!--</div>-->
     <!-- END 画面名 -->
     
     <!-- BEGIN 検索とフィルタ データ種別選択 -->
     <div class="container mb-3">
+    <!--<div class="mb-3 ms-2 me-2">-->
         <div class="row">
             <!-- 検索とフィルタ 動的データ種別選択 -->
             <div class="col">
@@ -450,7 +422,8 @@
     <!-- END 検索とフィルタ データ種別選択 -->
 
     <!-- BEGIN 検索とフィルタ データ種別選択、絞込選択 -->
-    <div class="mb-3 ms-2 me-2">
+    <div class="container mb-3">
+    <!--<div class="mb-3 ms-2 me-2">-->
         <div class="row">
             <!-- 検索とフィルタ 都道府県選択 -->
             <div class="col">
@@ -1366,8 +1339,8 @@
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">水害名</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
                     <th class="text-center">都道府県コード</th>
                     <th class="text-center">都道府県名</th>
                     <th class="text-center">市区町村コード</th>
@@ -2476,12 +2449,13 @@
 
     // データ種別選択ボタン2クリック時のイベントハンドラを設定する。
     button_category2.addEventListener("click", function(event) {
-        if (form_select_category1.value === "1") {
-            window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/category2/" + form_select_category2.value + "/ken/0/city/0/"
-        }
-        else {
-            window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/category2/" + form_select_category2.value + "/ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
-        }
+        // if (form_select_category1.value === "1") {
+        //     window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/category2/" + form_select_category2.value + "/ken/0/city/0/"
+        // }
+        // else {
+        //     window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/category2/" + form_select_category2.value + "/ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/"
+        // }
+        window.location.href = "/P0400OnlineDisplay/" + "category1/" + form_select_category1.value + "/category2/" + form_select_category2.value + "/ken/0/city/0/"
     });
 
     // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
@@ -2497,12 +2471,6 @@
     window.onload = function() {
         // データ種別選択1プルダウンで「参照するデータの種別を選択して下さい」が選択されているとき
         if (form_select_category1.value === "0") {
-            // document.getElementById("form_select_ken").setAttribute("disabled", true);
-            // document.getElementById("form_select_city").setAttribute("disabled", true);
-            // document.getElementById("form_select_category2").setAttribute("disabled", true);
-            // document.getElementById("button_ken").setAttribute("disabled", true);
-            // document.getElementById("button_city").setAttribute("disabled", true);
-            // document.getElementById("button_category2").setAttribute("disabled", true);
             // データ種別選択2の選択肢を非表示にする。
             master_hidden(true);
             input_hidden(true);
@@ -2513,12 +2481,6 @@
 
         // データ種別選択1プルダウンで「定数」が選択されているとき
         else if (form_select_category1.value === "1") {
-            // document.getElementById("form_select_ken").setAttribute("disabled", true);
-            // document.getElementById("form_select_city").setAttribute("disabled", true);
-            // document.getElementById("form_select_category2").removeAttribute("disabled", true);
-            // document.getElementById("button_ken").setAttribute("disabled", true);
-            // document.getElementById("button_city").setAttribute("disabled", true);
-            // document.getElementById("button_category2").removeAttribute("disabled", true);
             // データ種別選択2の「定数」に関連する選択肢を表示、「入力データ」「集計データ」「ワークフロー」「レポジトリ」に関連する選択肢を非表示にする。
             master_hidden(false);
             input_hidden(true);
@@ -2566,7 +2528,6 @@
             work_hidden(true);
             repo_hidden(false);
         }
-        
     }
     </script>
     {% endblock %}

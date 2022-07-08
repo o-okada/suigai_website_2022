@@ -29,37 +29,12 @@
     {% bootstrap_messages %}
     {% block content %}
 
-    <!-- BEGIN トップパネル -->
-    <!--<div class="container-fluid">-->
-    <!--    <div class="row">-->
-    <!--        <div class="col d-flex justify-content-start align-items-start">-->
-    <!--            <strong><a href="/P0100File/" style="border-bottom: 2px solid red;" class="me-3">ファイル</a></strong>-->
-    <!--            <a href="/P0900Action" class="me-3">自動集計・自動検証</a>-->
-    <!--            <a href="/P0800Reverse/input/" class="me-3">マニュアル検証</a>-->
-    <!--            <a href="/P0400OnlineDisplay" class="me-3">オンライン参照</a>-->
-    <!--            <a href="" class="me-3">グラフ</a>-->
-    <!--            <a href="" class="me-3">帳票</a>-->
-    <!--        </div>-->
-    <!--        <div class="col d-flex justify-content-end align-items-end">-->
-    <!--            <a href="{% url 'P0100Login:index_view' %}">ログアウト</a><br>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
-    <!-- END トップパネル -->
-
     <!-- BEGIN ナビバー -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div class="container-fluid">
-            <!--<a class="navbar-brand" href="#">Navbar</a>-->
-            <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-            <!--    <span class="navbar-toggler-icon"></span>-->
-            <!--</button>-->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <!--<li class="nav-item">-->
-                    <!--    <a class="nav-link active" style="border-bottom: 2px solid red;" aria-current="page" href="/P0100File/"><strong>ファイル</strong></a>-->
-                    <!--</li>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
@@ -109,10 +84,6 @@
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
-                <!--<form class="d-flex">-->
-                <!--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-                <!--    <button class="btn btn-outline-success" type="submit">Search</button>-->
-                <!--</form>-->
                 <div class="col d-flex justify-content-end align-items-end">
                     <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
