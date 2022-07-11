@@ -101,6 +101,30 @@ def type_view(request, type_code):
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         feedback_list = FEEDBACK.objects.raw("""SELECT * FROM FEEDBACK ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
         approval_list = APPROVAL.objects.raw("""SELECT * FROM APPROVAL ORDER BY CAST(APPROVAL_ID AS INTEGER)""", [])
+        
+        repository_list = []
+        for ken in ken_list:
+            repository_list.append(REPOSITORY.objects.raw("""
+                SELECT 
+                    RE1.repository_id AS repository_id, 
+                    RE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    RE1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    RE1.action_code AS action_code, 
+                    RE1.status_code AS status_code, 
+                    RE1.input_file_path AS input_file_path, 
+                    RE1.input_file_name AS input_file_name, 
+                    RE1.committed_at AS committed_at, 
+                    RE1.deleted_at AS deleted_at 
+                FROM REPOSITORY RE1 
+                LEFT JOIN KEN KE1 ON RE1.ken_code=KE1.ken_code 
+                LEFT JOIN CITY CT1 ON RE1.city_code=CT1.city_code 
+                WHERE 
+                    ken_code=%s AND deleted_at IS NULL
+                ORDER BY CAST(repository_id AS INTEGER ) DESC""", [ken.ken_code, ])[0])
+            
+        print_log('repository_list = {}'.format(repository_list), 'INFO')
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -115,6 +139,7 @@ def type_view(request, type_code):
             'approval_list': approval_list, 
             'feedback_count': 0, 
             'approval_count': 0, 
+            'repository_list': repository_list, 
         }
         print_log('[INFO] P0100File.type_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

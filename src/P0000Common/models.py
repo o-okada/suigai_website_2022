@@ -1249,6 +1249,8 @@ class FEEDBACK(models.Model):
 ###############################################################################
 class REPOSITORY(models.Model):
     repository_id = models.IntegerField(primary_key=True)                      ### レポジトリID
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/07/11 追加
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/07/11 追加
     action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード
     ### 1: 一般資産調査票_チェックアウト ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
     ### 2: 一般資産調査票_チェックイン ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
