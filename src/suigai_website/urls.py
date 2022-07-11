@@ -4,6 +4,7 @@ from django.urls import include, path
 urlpatterns = [
     ### Common Applications
     path('', include('P0000Dummy.urls')),
+    ### path('', include('P0100File.urls')),
     path('P0100Login/', include('P0100Login.urls')),
 
     ### File Applications

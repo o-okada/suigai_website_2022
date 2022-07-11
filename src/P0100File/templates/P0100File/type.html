@@ -99,14 +99,15 @@
     <!--</div>-->
     <!-- END 画面名 -->
     
-    <!-- BEGIN コンテナ1 -->
+    <!-- BEGIN コンテナ -->
     <div class="container mb-3">
-        <!-- BEGIN 行1 -->
+        <!-- BEGIN 行 -->
         <div class="row">
-            <!-- BEGIN 列1 左サイドパネル -->
+            <!-- BEGIN 左列 -->
             <div class="col-sm-9">
-                <!-- BEGIN 行1-1 サブメニュー -->
+                <!-- BEGIN 行 -->
                 <div class="row mb-3">
+                    <!-- BEGIN パンくずリスト -->
                     <div class="col-6 text-start">
                         {% if type_code == "ippan" %}
                         <h5>一般資産調査員調査票 /</h5>
@@ -118,7 +119,11 @@
                         <h5>公益事業調査票 /</h5>
                         {% endif %}
                     </div>
+                    <!-- END パンくずリスト -->
+                    
+                    <!-- BEGIN ドロップダウンメニュー -->
                     <div class="col-6 text-end">
+                        <!-- BEGIN ダウンロードメニュー -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                             <div class="dropdown-menu">
@@ -129,7 +134,9 @@
                                 <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>
                             </div>
                         </div>
-                            
+                        <!-- END ダウンロードメニュー -->
+                        
+                        <!-- BEGIN アップロードメニュー -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                             <div class="dropdown-menu">
@@ -139,19 +146,24 @@
                                 <a class="dropdown-item" href="/P0300ExcelUpload/">公益事業調査票</a>
                             </div>
                         </div>
+                        <!-- END アップロードメニュー -->
 
+                        <!-- BEGIN 編集メニュー -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/P0300AreaWeatherUpdate/">水害区域番号、異常気象コード</a>
                             </div>
                         </div>
+                        <!-- END 編集メニュー -->
                     </div>
+                    <!-- END ドロップダウンメニュー -->
                 </div>
-                <!-- END 行1-1 サブメニュー -->
+                <!-- END 行 -->
                 
-                <!-- BEGIN 行1-2 カード -->
+                <!-- BEGIN 行 -->
                 <div class="row">
+                    <!-- BEGIN 列 -->
                     <div class="col">
                         <!-- BEGIN カード -->
                         <div class="card">
@@ -210,12 +222,13 @@
                         </div>
                         <!-- END カード -->
                     </div>
+                    <!-- END 列 -->
                 </div>
-                <!-- END 行1-2 カード -->
+                <!-- END 行 -->
             </div>
-            <!-- END 列1 左サイドパネル -->
+            <!-- END 左列 -->
                     
-            <!-- BEGIN 列2 右サイドパネル -->
+            <!-- BEGIN 右列 -->
             <div class="col-sm-3">
                 <!-- BEGIN バッジ -->
                 <button type="button" class="btn btn-danger mb-3">
@@ -229,7 +242,7 @@
                 </button>
                 <!-- END バッジ -->
                 
-                <!-- BEGIN カード1 -->
+                <!-- BEGIN カード -->
                 <div class="card mb-3 border-0">
                     <div class="card-header border-0 bg-white">
                     失敗
@@ -240,9 +253,9 @@
                         {% endfor %}
                     </div>
                 </div>
-                <!-- END カード1 -->
+                <!-- END カード -->
                 
-                <!-- BEGIN カード2 -->
+                <!-- BEGIN カード -->
                 <div class="card mb-3 border-0">
                     <div class="card-header border-0 bg-white">
                     警告
@@ -253,9 +266,9 @@
                         {% endfor %}
                     </div>
                 </div>
-                <!-- END カード2 -->
+                <!-- END カード -->
                 
-                <!-- BEGIN カード3 -->
+                <!-- BEGIN カード -->
                 <div class="card mb-3 border-0">
                     <div class="card-header border-0 bg-white">
                     成功・承認待ち
@@ -266,21 +279,21 @@
                         {% endfor %}
                     </div>
                 </div>
-                <!-- END カード3 -->
+                <!-- END カード -->
             </div>
-            <!-- END 列2 右サイドパネル -->
+            <!-- END 右列 -->
         </div>
-        <!-- END 行1 -->
+        <!-- END 行 -->
     </div>
-    <!-- END コンテナ1 -->
+    <!-- END コンテナ -->
 
-    <!-- BEGIN コンテナ2 -->
+    <!-- BEGIN コンテナ -->
     <div class="container mb-3">
         <div class="alert alert-info" role="alert">
             A simple info alert-check it out!
         </div>
     </div>
-    <!-- END コンテナ2 -->
+    <!-- END コンテナ -->
 
     <script type="text/javascript">
     </script>

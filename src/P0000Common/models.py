@@ -754,8 +754,10 @@ class SUIGAI(models.Model):
     ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
     ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
 
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     repository_id = models.IntegerField(null=True)                             ### レポジトリID
+
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
 
     class Meta:
         db_table = 'suigai'
@@ -858,6 +860,7 @@ class IPPAN(models.Model):
     usage_code = models.CharField(max_length=10, null=True)                    ### 地下空間の利用形態コード
     comment = models.CharField(max_length=512, null=True)                      ### 備考
     
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
 
     class Meta:
@@ -999,6 +1002,7 @@ class IPPAN_VIEW(models.Model):
     usage_name = models.CharField(max_length=128)                              ### 地下空間の利用形態名 LEFT JOIN項目
     comment = models.CharField(max_length=512, null=True)                      ### 備考
 
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
 
     class Meta:
@@ -1116,6 +1120,7 @@ class IPPAN_SUMMARY(models.Model):
     office_alt_summary_half = models.FloatField(null=True)                     ### 事業所応急対策費_代替活動費_半壊（事業所数×代替活動費）
     office_alt_summary_full = models.FloatField(null=True)                     ### 事業所応急対策費_代替活動費_全壊（事業所数×代替活動費）
 
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     
     class Meta:
@@ -1160,17 +1165,19 @@ class STATUS(models.Model):
 class TRIGGER(models.Model):
     trigger_id = models.IntegerField(primary_key=True)                         ### トリガーID
     suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    repository_id = models.IntegerField(null=True)                             ### レポジトリID
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    published_at = models.DateTimeField(null=True)                             ### 発行日時
-    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     success_count = models.IntegerField(null=True)                             ### 成功数 ※削除予定
     failure_count = models.IntegerField(null=True)                             ### 失敗数 ※削除予定
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     
     data_integrity_left = models.TextField(null=True)                          ### データ整合性 Row, Col, left, right, verified result, 
     data_integrity_right = models.TextField(null=True)                         ### データ整合性 Row, Col, left, right, verified result, 
+
+    published_at = models.DateTimeField(null=True)                             ### 発行日時
+    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+
+    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID ※削除予定
     
     class Meta:
         db_table = 'trigger'
@@ -1242,8 +1249,6 @@ class FEEDBACK(models.Model):
 ###############################################################################
 class REPOSITORY(models.Model):
     repository_id = models.IntegerField(primary_key=True)                      ### レポジトリID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    
     action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード
     ### 1: 一般資産調査票_チェックアウト ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
     ### 2: 一般資産調査票_チェックイン ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
@@ -1262,25 +1267,24 @@ class REPOSITORY(models.Model):
     ### 15: 逆計算による集計データ検証 ※未実装
     ### 16: マニュアルによるデータ検証 ※未実装
     ### 17: リリース ※未実装
-
     status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード
     ### 1: 実行中: running
     ### 2: キャンセル: cancel
     ### 3: 成功: success
     ### 4: 失敗: failure
     
-    created_at = models.DateTimeField(null=True)                               ### 初期生成日
-    updated_at = models.DateTimeField(null=True)                               ### 更新日
-    
     ### success_count = models.IntegerField(null=True)                         ### 成功数
     ### failure_count = models.IntegerField(null=True)                         ### 失敗数
     
     input_file_path = models.CharField(max_length=256, null=True)              ### 
     input_file_name = models.CharField(max_length=256, null=True)              ### 
-    ### output_file_path = models.CharField(max_length=256, null=True)         ### 
 
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     committed_at = models.DateTimeField(null=True)                             ### コミット日時
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+
+    ### created_at = models.DateTimeField(null=True)                           ### 初期生成日 ※削除予定 2022/07/11
+    ### updated_at = models.DateTimeField(null=True)                           ### 更新日 ※削除予定 2022/07/11
+    ### suigai_id = models.IntegerField(null=True)                             ### 水害ID ※削除予定 2022/07/11
     
     class Meta:
         db_table = 'repository'

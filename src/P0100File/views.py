@@ -78,67 +78,6 @@ from P0000Common.models import REPOSITORY              ### 11000: レポジト�
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名：index_view
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def index_view(request):
-###     try:
-###         #######################################################################
-###         ### 引数チェック処理(0000)
-###         ### ブラウザからのリクエストと引数をチェックする。
-###         #######################################################################
-###         print_log('[INFO] ########################################', 'INFO')
-###         print_log('[INFO] P0100File.index_view()関数が開始しました。', 'INFO')
-###         print_log('[INFO] P0100File.index_view()関数 request = {}'.format(request.method), 'INFO')
-###         print_log('[INFO] P0100File.index_view()関数 STEP 1/3.', 'INFO')
-###         #######################################################################
-###         ### DBアクセス処理(0010)
-###         ### DBにアクセスして、データを取得する。
-###         #######################################################################
-###         print_log('[INFO] P0100File.index_view()関数 STEP 2/3.', 'INFO')
-###         repository_list = REPOSITORY.objects.raw("""
-###             SELECT 
-###                 RE1.repository_id AS repository_id, 
-###                 RE1.suigai_id AS suigai_id, 
-###                 SG1.suigai_name AS suigai_name, 
-###                 SG1.ken_code AS ken_code, 
-###                 KE1.ken_name AS ken_name, 
-###                 SG1.city_code AS city_code, 
-###                 CT1.city_name AS city_name, 
-###                 SG1.begin_date AS begin_date, 
-###                 SG1.end_date AS end_date, 
-###                 RE1.action_code AS action_code, 
-###                 AC1.action_name AS action_name, 
-###                 RE1.status_code AS status_code, 
-###                 ST1.status_name AS status_name, 
-###                 RE1.input_file_path AS input_file_path, 
-###                 RE1.committed_at AS committed_at, 
-###                 RE1.deleted_at AS deleted_at 
-###             FROM REPOSITORY RE1 
-###             LEFT JOIN SUIGAI SG1 ON RE1.suigai_id=SG1.suigai_id 
-###             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-###             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-###             LEFT JOIN ACTION AC1 ON RE1.action_code=AC1.action_code 
-###             LEFT JOIN STATUS ST1 ON RE1.status_code=ST1.status_code 
-###             ORDER BY CAST(RE1.repository_id AS INTEGER) DESC""", [])
-###         #######################################################################
-###         ### レスポンスセット処理(0020)
-###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-###         #######################################################################
-###         print_log('[INFO] P0100File.index_view()関数 STEP 3/3.', 'INFO')
-###         template = loader.get_template('P0100File/index.html')
-###         context = {
-###             'repository_list': repository_list, 
-###         }
-###         print_log('[INFO] P0100File.index_view()関数が正常終了しました。', 'INFO')
-###         return HttpResponse(template.render(context, request))
-###     except:
-###         print_log(sys.exc_info()[0], 'ERROR')
-###         print_log('[ERROR] P0100File.index_view()関数でエラーが発生しました。', 'ERROR')
-###         print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
-###         return render(request, 'error.html')
-
-###############################################################################
 ### 関数名：type_view
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
@@ -187,87 +126,6 @@ def type_view(request, type_code):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：R4_ken_view
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def R4_ken_view(request, ken_code):
-###     try:
-###         #######################################################################
-###         ### 引数チェック処理(0000)
-###         ### ブラウザからのリクエストと引数をチェックする。
-###         #######################################################################
-###         print_log('[INFO] ########################################', 'INFO')
-###         print_log('[INFO] P0100File.R4_ken_view()関数が開始しました。', 'INFO')
-###         print_log('[INFO] P0100File.R4_ken_view()関数 request = {}'.format(request.method), 'INFO')
-###         print_log('[INFO] P0100File.R4_ken_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-###         print_log('[INFO] P0100File.R4_ken_view()関数 STEP 1/3.', 'INFO')
-###         #######################################################################
-###         ### DBアクセス処理(0010)
-###         ### DBにアクセスして、データを取得する。
-###         #######################################################################
-###         print_log('[INFO] P0100File.R4_ken_view()関数 STEP 2/3.', 'INFO')
-###         ken_list = KEN.objects.raw("""SELECT * FROM KEN WHERE ken_code=%s ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
-###         suigai_list = SUIGAI.objects.raw("""
-###             SELECT 
-###                 * 
-###             FROM 
-###             (
-###             SELECT 
-###                 SG1.suigai_id AS suigai_id, 
-###                 SG1.suigai_name AS suigai_name, 
-###                 SG1.ken_code AS ken_code, 
-###                 KE1.ken_name AS ken_name, 
-###                 SG1.city_code AS city_code, 
-###                 CT1.city_name AS city_name, 
-###                 TO_CHAR(SG1.begin_date, 'yyyy/mm/dd') AS begin_date, 
-###                 TO_CHAR(SG1.end_date, 'yyyy/mm/dd') AS end_date, 
-###                 RE1.input_file_path AS input_file_path, 
-###                 RE1.input_file_name AS input_file_name, 
-###                 TO_CHAR(RE1.committed_at, 'yyyy/mm/dd') AS committed_at, 
-###                 TO_CHAR(RE1.deleted_at, 'yyyy/mm/dd') AS deleted_at, 
-###                 SG1.repository_id AS repository_id 
-###             FROM SUIGAI SG1 
-###             LEFT JOIN REPOSITORY RE1 ON SG1.suigai_id=RE1.suigai_id 
-###             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-###             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-###             ) SUB1 
-###             WHERE 
-###                 SUB1.ken_code=%s AND 
-###                 SUB1.deleted_at is NULL 
-###             ORDER BY CAST(SUB1.suigai_id AS INTEGER) DESC""", [ken_code, ])
-###         area_list = SUIGAI.objects.raw("""
-###             SELECT 
-###                 AR1.area_id AS area_id, 
-###                 AR1.area_name AS area_name, 
-###                 AR1.input_file_path AS input_file_path, 
-###                 AR1.input_file_name AS input_file_name, 
-###                 AR1.ken_code AS ken_code, 
-###                 KE1.ken_name AS ken_name 
-###             FROM AREA AR1 
-###             LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
-###             WHERE 
-###                 ken_code=%s 
-###             ORDER BY CAST(area_id AS INTEGER) DESC""", [ken_code, ])
-###         #######################################################################
-###         ### レスポンスセット処理(0020)
-###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-###         #######################################################################
-###         print_log('[INFO] P0100File.R4_ken_view()関数 STEP 3/3.', 'INFO')
-###         template = loader.get_template('P0100File/R4_ken.html')
-###         context = {
-###             'ken_list': ken_list, 
-###             'suigai_list': suigai_list, 
-###             'area_list': area_list, 
-###         }
-###         print_log('[INFO] P0100File.R4_ken_view()関数が正常終了しました。', 'INFO')
-###         return HttpResponse(template.render(context, request))
-###     except:
-###         print_log(sys.exc_info()[0], 'ERROR')
-###         print_log('[ERROR] P0100File.R4_ken_view()関数でエラーが発生しました。', 'ERROR')
-###         print_log('[ERROR] P0100File.R4_ken_view()関数が異常終了しました。', 'ERROR')
-###         return render(request, 'error.html')
-
-###############################################################################
 ### 関数名：type_ken_view
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
@@ -306,11 +164,11 @@ def type_ken_view(request, type_code, ken_code):
                 TO_CHAR(SG1.end_date, 'yyyy/mm/dd') AS end_date, 
                 RE1.input_file_path AS input_file_path, 
                 RE1.input_file_name AS input_file_name, 
-                TO_CHAR(RE1.committed_at, 'yyyy/mm/dd') AS committed_at, 
-                TO_CHAR(RE1.deleted_at, 'yyyy/mm/dd') AS deleted_at, 
+                TO_CHAR(SG1.committed_at, 'yyyy/mm/dd') AS committed_at, 
+                TO_CHAR(SG1.deleted_at, 'yyyy/mm/dd') AS deleted_at, 
                 SG1.repository_id AS repository_id 
             FROM SUIGAI SG1 
-            LEFT JOIN REPOSITORY RE1 ON SG1.suigai_id=RE1.suigai_id 
+            LEFT JOIN REPOSITORY RE1 ON SG1.repository_id=RE1.repository_id 
             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
             ) SUB1 
