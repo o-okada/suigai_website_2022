@@ -80,7 +80,8 @@ from P0000Common.models import REPOSITORY              ### 10050: EXCELファイ
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名： index_view
+### 関数名：index_view
+### データベースに登録するボタンクリック時のPOSTに対応する処理
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -107,10 +108,10 @@ def index_view(request):
         #######################################################################
         print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 2/7.', 'INFO')
         if request.method == 'GET':
-            ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+            ### ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
             template = loader.get_template('P0300AreaWeather/index.html')
             context = {
-                'ken_list': ken_list, 
+                ### 'ken_list': ken_list, 
             }
             print_log('[INFO] P0300AreaWeather.index_view()関数が正常終了しました。', 'INFO')
             return HttpResponse(template.render(context, request))
@@ -200,18 +201,11 @@ def index_view(request):
             connection_cursor.close()
 
         #######################################################################
-        ### DBアクセス処理(0010)
+        ### DBアクセス処理(0040)
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 6/7.', 'INFO')
-        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        if ken_code == '0':
-            city_list = []
-        else:
-            city_list = CITY.objects.raw("""
-                SELECT * FROM CITY WHERE ken_code=%s ORDER BY CAST(city_code AS INTEGER)""", [ken_code, ])
-            
-        if city_code == "0":
+        if suigai_id == "0":
             suigai_list = []
         else:
             suigai_list = SUIGAI.objects.raw("""
@@ -222,8 +216,8 @@ def index_view(request):
                     KE1.ken_name AS ken_name, 
                     SG1.city_code AS city_code, 
                     CT1.city_name AS city_name, 
-                    SG1.begin_date AS begin_date, 
-                    SG1.end_date AS end_date, 
+                    TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                    TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                     SG1.cause_1_code AS cause_1_code, 
                     CA1.cause_name AS cause_1_name, 
                     SG1.cause_2_code AS cause_2_code, 
@@ -246,7 +240,14 @@ def index_view(request):
                     SG1.crop_damage AS crop_damage, 
                     SG1.weather_id AS weather_id, 
                     WE1.weather_name AS weather_name, 
-                    SG1.deleted_at AS deleted_at 
+                    TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                    SG1.file_path AS file_path, 
+                    SG1.file_name AS file_name, 
+                    SG1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    SG1.status_code AS status_code, 
+                    ST1.status_name AS status_name 
                 FROM SUIGAI SG1 
                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -259,57 +260,8 @@ def index_view(request):
                 LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
                 LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
                 LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
-                WHERE SG1.city_code=%s AND SG1.deleted_at is NULL 
-                ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [city_code, ])
-
-        if suigai_id == "0":
-            suigai = []
-        else:
-            suigai = SUIGAI.objects.raw("""
-                SELECT 
-                    CAST(SG1.suigai_id AS text) AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    SG1.begin_date AS begin_date, 
-                    SG1.end_date AS end_date, 
-                    SG1.cause_1_code AS cause_1_code, 
-                    CA1.cause_name AS cause_1_name, 
-                    SG1.cause_2_code AS cause_2_code, 
-                    CA2.cause_name AS cause_2_name, 
-                    SG1.cause_3_code AS cause_3_code, 
-                    CA3.cause_name AS cause_3_name, 
-                    SG1.area_id AS area_id, 
-                    AR1.area_name AS area_name, 
-                    SG1.suikei_code AS suikei_code, 
-                    SK1.suikei_name AS suikei_name, 
-                    SG1.kasen_code AS kasen_code, 
-                    KA1.kasen_name AS kasen_name, 
-                    SG1.gradient_code AS gradient_code, 
-                    GR1.gradient_name AS gradient_name, 
-                    SG1.residential_area AS residential_area, 
-                    SG1.agricultural_area AS agricultural_area, 
-                    SG1.underground_area AS underground_area, 
-                    SG1.kasen_kaigan_code AS kasen_kaigan_code, 
-                    KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    SG1.crop_damage AS crop_damage, 
-                    SG1.weather_id AS weather_id, 
-                    WE1.weather_name AS weather_name, 
-                    SG1.deleted_at AS deleted_at 
-                FROM SUIGAI SG1 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
-                LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
-                LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
-                LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
-                LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code 
-                LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
-                LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
-                LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
-                LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
                 WHERE SG1.suigai_id=%s AND SG1.deleted_at is NULL 
                 ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [suigai_id, ])
 
@@ -320,14 +272,22 @@ def index_view(request):
                 SELECT 
                     AR1.area_id AS area_id, 
                     AR1.area_name AS area_name, 
-                    AR1.input_file_path AS input_file_path, 
-                    AR1.input_file_name AS input_file_name, 
                     AR1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name 
+                    KE1.ken_name AS ken_name, 
+                    TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                    AR1.file_path AS file_path, 
+                    AR1.file_name AS file_name, 
+                    AR1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    AR1.status_code AS status_code, 
+                    ST1.status_name AS status_name 
                 FROM AREA AR1 
                 LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
+                LEFT JOIN ACTION AC1 ON AR1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON AR1.status_code=ST1.status_code 
                 WHERE AR1.ken_code=%s 
-                ORDER BY CAST(AR1.area_id AS INTEGER) DESC""", [ken_code, ])
+                ORDER BY CAST(AR1.area_id AS INTEGER)""", [ken_code, ])
 
         if ken_code == "0":
             weahter_list = []
@@ -344,19 +304,16 @@ def index_view(request):
                 ORDER BY CAST(WE1.weather_id AS INTEGER)""", [ken_code, ])
         
         #######################################################################
-        ### レスポンスセット処理(0040)
+        ### レスポンスセット処理(0050)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 7/7.', 'INFO')
         template = loader.get_template('P0300AreaWeather/index.html')
         context = {
+            'type_code': 'ippan', 
             'ken_code': ken_code, 
-            'city_code': city_code, 
             'suigai_id': suigai_id, 
-            'ken_list': ken_list, 
-            'city_list': city_list, 
             'suigai_list': suigai_list, 
-            'suigai': suigai, 
             'area_list': area_list, 
             'weather_list': weather_list, 
         }
@@ -370,37 +327,28 @@ def index_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名：type_ken_city_suigai_view
+### 関数名：type_ken_suigai_view
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
-def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id):
+def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
         print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_viewvv()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 STEP 1/3.', 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 ken_code = {}'.format(ken_code), 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 1/3.', 'INFO')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 STEP 2/3.', 'INFO')
-        ken_list = KEN.objects.raw("""
-            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        if ken_code == "0":
-            city_list = []
-        else:
-            city_list = CITY.objects.raw("""
-                SELECT * FROM CITY WHERE ken_code=%s ORDER BY CAST(city_code AS INTEGER)""", [ken_code, ])
-        
-        if city_code == "0":
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 2/3.', 'INFO')
+        if suigai_id == "0":
             suigai_list = []
         else:
             suigai_list = SUIGAI.objects.raw("""
@@ -411,8 +359,8 @@ def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id
                     KE1.ken_name AS ken_name, 
                     SG1.city_code AS city_code, 
                     CT1.city_name AS city_name, 
-                    SG1.begin_date AS begin_date, 
-                    SG1.end_date AS end_date, 
+                    TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                    TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                     SG1.cause_1_code AS cause_1_code, 
                     CA1.cause_name AS cause_1_name, 
                     SG1.cause_2_code AS cause_2_code, 
@@ -435,7 +383,14 @@ def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id
                     SG1.crop_damage AS crop_damage, 
                     SG1.weather_id AS weather_id, 
                     WE1.weather_name AS weather_name, 
-                    SG1.deleted_at AS deleted_at 
+                    TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                    SG1.file_path AS file_path, 
+                    SG1.file_name AS file_name, 
+                    SG1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    SG1.status_code AS status_code, 
+                    ST1.status_name AS status_name 
                 FROM SUIGAI SG1 
                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -448,57 +403,8 @@ def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id
                 LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
                 LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
                 LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
-                WHERE SG1.city_code=%s AND SG1.deleted_at is NULL 
-                ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [city_code, ])
-
-        if suigai_id == "0":
-            suigai = []
-        else:
-            suigai = SUIGAI.objects.raw("""
-                SELECT 
-                    CAST(SG1.suigai_id AS text) AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    SG1.begin_date AS begin_date, 
-                    SG1.end_date AS end_date, 
-                    SG1.cause_1_code AS cause_1_code, 
-                    CA1.cause_name AS cause_1_name, 
-                    SG1.cause_2_code AS cause_2_code, 
-                    CA2.cause_name AS cause_2_name, 
-                    SG1.cause_3_code AS cause_3_code, 
-                    CA3.cause_name AS cause_3_name, 
-                    SG1.area_id AS area_id, 
-                    AR1.area_name AS area_name, 
-                    SG1.suikei_code AS suikei_code, 
-                    SK1.suikei_name AS suikei_name, 
-                    SG1.kasen_code AS kasen_code, 
-                    KA1.kasen_name AS kasen_name, 
-                    SG1.gradient_code AS gradient_code, 
-                    GR1.gradient_name AS gradient_name, 
-                    SG1.residential_area AS residential_area, 
-                    SG1.agricultural_area AS agricultural_area, 
-                    SG1.underground_area AS underground_area, 
-                    SG1.kasen_kaigan_code AS kasen_kaigan_code, 
-                    KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    SG1.crop_damage AS crop_damage, 
-                    SG1.weather_id AS weather_id, 
-                    WE1.weather_name AS weather_name, 
-                    SG1.deleted_at AS deleted_at 
-                FROM SUIGAI SG1 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
-                LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
-                LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
-                LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
-                LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code 
-                LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
-                LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
-                LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
-                LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+                LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
                 WHERE SG1.suigai_id=%s AND SG1.deleted_at is NULL 
                 ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [suigai_id, ])
 
@@ -509,12 +415,20 @@ def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id
                 SELECT 
                     AR1.area_id AS area_id, 
                     AR1.area_name AS area_name, 
-                    AR1.input_file_path AS input_file_path, 
-                    AR1.input_file_name AS input_file_name, 
                     AR1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name 
+                    KE1.ken_name AS ken_name, 
+                    TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                    AR1.file_path AS file_path, 
+                    AR1.file_name AS file_name, 
+                    AR1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    AR1.status_code AS status_code, 
+                    ST1.status_name AS status_name 
                 FROM AREA AR1 
                 LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
+                LEFT JOIN ACTION AC1 ON AR1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON AR1.status_code=ST1.status_code 
                 WHERE AR1.ken_code=%s 
                 ORDER BY CAST(AR1.area_id AS INTEGER)""", [ken_code, ])
 
@@ -536,25 +450,21 @@ def type_ken_city_suigai_view(request, type_code, ken_code, city_code, suigai_id
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数 STEP 3/3.', 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 3/3.', 'INFO')
         template = loader.get_template('P0300AreaWeather/index.html')
         context = {
             'type_code': type_code, 
             'ken_code': ken_code, 
-            'city_code': city_code, 
             'suigai_id': suigai_id, 
-            'ken_list': ken_list, 
-            'city_list': city_list, 
             'suigai_list': suigai_list, 
-            'suigai': suigai, 
             'area_list': area_list, 
             'weather_list': weather_list, 
         }
-        print_log('[INFO] P0300AreaWeather.type_ken_city_suigai_view()関数が正常終了しました。', 'INFO')
+        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
         print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0300AreaWeather.type_ken_city_suigai_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0300AreaWeather.type_ken_city_suigai_view()関数が異常終了しました。', 'ERROR')
+        print_log('[ERROR] P0300AreaWeather.type_ken_suigai_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0300AreaWeather.type_ken_suigai_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

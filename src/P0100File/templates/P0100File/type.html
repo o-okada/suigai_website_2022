@@ -17,10 +17,26 @@
     .btn-running {background: #258AC4; color: #FFFFFF;}
     .btn-cancel  {background: #6C757D; color: #FFFFFF;}
     .btn-success {background: #54AB51; color: #FFFFFF;}
+    
     a:link {color: #000000; text-decoration:none;}
     a:visited {color: #000000; text-decoration:none;}
     a:hover {color: #000000; text-decoration:none;}
     a:active {color: #000000; text-decoration:none;}
+    
+    .cl-nav:link {color: #000000; text-decoration:none;}
+    .cl-nav:visited {color: #000000; text-decoration:none;}
+    .cl-nav:hover {color: #000000; text-decoration:none;}
+    .cl-nav:active {color: #000000; text-decoration:none;}
+
+    .cl-bread:link {color: #0000EE; text-decoration:underline;}
+    .cl-bread:visited {color: #0000EE; text-decoration:underline;}
+    .cl-bread:hover {color: #0000EE; text-decoration:underline;}
+    .cl-bread:active {color: #0000EE; text-decoration:underline;}
+
+    .cl-table:link {color: #0000EE; text-decoration: underline;}
+    .cl-table:visited {color: #0000EE; text-decoration: underline;}
+    .cl-table:hover {color: #0000EE; text-decoration: underline;}
+    .cl-table:active {color: #0000EE; text-decoration: underline;}
     </style>
 </head>
 <!-- END Head -->
@@ -37,7 +53,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -51,13 +67,13 @@
 
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
 
                     <!-- BEGIN ナビバー マニュアル検証メニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>マニュアル検証</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -69,13 +85,13 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl-nav" href="#"><strong>グラフ</strong></a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
@@ -86,7 +102,7 @@
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
             </div>
         </div>
@@ -183,41 +199,54 @@
                             <!-- END カードヘッダ -->
                             
                             <!-- BEGIN カード本体 -->
+                            {% if type_code == "ippan" %}
                             <div class="card-body">
                                 <div class="table-responsive overflow-auto" style="">
                                     <table class="table">
-                                    {% for ken in ken_list %}
+                                    {% for suigai in suigai_list %}
                                         <tr>
                                             <td class="text-start">
-                                                {% if type_code == "ippan" %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
                                                     <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/ippan/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
-                                                {% elif type_code == "area" %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/area/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
-                                                {% elif type_code == "kokyo" %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/kokyo/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
-                                                {% elif type_code == "koeki" %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#54AFFF" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a style="" href="/P0100File/type/koeki/ken/{{ ken.ken_code }}/">{{ ken.ken_name }}: {{ ken.ken_code }}</a>
-                                                {% endif %}
+                                                </svg>&nbsp;&nbsp;<a href="/P0100File/type/ippan/ken/{{ suigai.0.ken_code }}/">{{ suigai.0.ken_name }}: {{ suigai.0.ken_code }}</a>
                                             </td>
-                                            <td class="">
-                                                June 27
-                                            <td>
                                             <td class="text-end">
-                                                yestarday
+                                                {% if suigai.0.committed_at is None %}
+                                                {% else %}
+                                                コミット日時 {{ suigai.0.committed_at }}
+                                                {% endif %}
                                             <td>
                                         </tr>
                                     {% endfor %}
                                     </table>
                                 </div>
                             </div>
+                            
+                            {% elif type_code == "area" %}
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto" style="">
+                                    <table class="table">
+                                    {% for area in area_list %}
+                                        <tr>
+                                            <td class="text-start">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                                </svg>&nbsp;&nbsp;<a href="/P0100File/type/area/ken/{{ area.0.ken_code }}/">{{ area.0.ken_name }}: {{ area.0.ken_code }}</a>
+                                            </td>
+                                            <td class="text-end">
+                                                {% if area.0.committed_at is None %}
+                                                {% else %}
+                                                コミット日時 {{ area.0.committed_at }}
+                                                {% endif %}
+                                            <td>
+                                        </tr>
+                                    {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            {% elif type_code == "kokyo" %}
+                            {% elif type_code == "koeki" %}
+                            {% endif %}
                             <!-- END カード本体 -->
                         </div>
                         <!-- END カード -->
@@ -288,11 +317,11 @@
     <!-- END コンテナ -->
 
     <!-- BEGIN コンテナ -->
-    <div class="container mb-3">
-        <div class="alert alert-info" role="alert">
-            A simple info alert-check it out!
-        </div>
-    </div>
+    <!--<div class="container mb-3">-->
+    <!--    <div class="alert alert-info" role="alert">-->
+    <!--        A simple info alert-check it out!-->
+    <!--    </div>-->
+    <!--</div>-->
     <!-- END コンテナ -->
 
     <script type="text/javascript">

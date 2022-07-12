@@ -150,24 +150,24 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         if ken_code == "0":
             city_list = CITY.objects.raw("""
                 SELECT 
-                    CT1.city_code, 
-                    CT1.city_name, 
-                    CT1.ken_code, 
-                    KE1.ken_name, 
-                    CT1.city_population, 
-                    CT1.city_area 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    CT1.city_population AS city_population, 
+                    CT1.city_area AS city_area 
                 FROM CITY CT1 
                 LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
                 ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [])
         else:
             city_list = CITY.objects.raw("""
                 SELECT 
-                    CT1.city_code, 
-                    CT1.city_name, 
-                    CT1.ken_code, 
-                    KE1.ken_name, 
-                    CT1.city_population, 
-                    CT1.city_area 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    CT1.city_population AS city_population, 
+                    CT1.city_area AS city_area 
                 FROM CITY CT1 
                 LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
                 WHERE CT1.KEN_CODE=%s 
@@ -534,16 +534,28 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "200" or category_code2 == "7000":
             area_list = AREA.objects.raw("""
                 SELECT 
-                    * 
-                FROM AREA 
+                    AR1.area_id AS area_id, 
+                    AR1.area_name AS area_name, 
+                    AR1.input_file_path AS input_file_path, 
+                    AR1.input_file_name AS input_file_name, 
+                    AR1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM AREA AR1 
+                LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
                 ORDER BY CAST(AREA_ID AS INTEGER)""", [])
             
         ### 異常気象: WEATHER
         elif category_code2 == "201" or category_code2 == "7010":
             weather_list = WEATHER.objects.raw("""
                 SELECT 
-                    * 
-                FROM WEATHER 
+                    WE1.weather_id AS weather_id, 
+                    WE1.weather_name AS weather_name, 
+                    TO_CHAR(timezone('JST', WE1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                    TO_CHAR(timezone('JST', WE1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
+                    WE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM WEATHER WE1 
+                LEFT JOIN KEN KE1 ON WE1.ken_code=KE1.ken_code 
                 ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
             
         ### ヘッダ部分: SUIGAI
@@ -557,8 +569,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KE1.ken_name AS ken_name, 
                         SG1.city_code AS city_code, 
                         CT1.city_name AS city_name, 
-                        SG1.begin_date AS begin_date, 
-                        SG1.end_date AS end_date, 
+                        TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                        TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                         SG1.cause_1_code AS cause_1_code, 
                         CA1.cause_name AS cause_1_name, 
                         SG1.cause_2_code AS cause_2_code, 
@@ -580,7 +592,10 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
                         SG1.crop_damage AS crop_damage, 
                         SG1.weather_id AS weather_id, 
-                        WE1.weather_name AS weather_name 
+                        WE1.weather_name AS weather_name, 
+                        SG1.repository_id AS repository_id, 
+                        TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                        TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                     FROM SUIGAI SG1 
                     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -604,8 +619,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KE1.ken_name AS ken_name, 
                         SG1.city_code AS city_code, 
                         CT1.city_name AS city_name, 
-                        SG1.begin_date AS begin_date, 
-                        SG1.end_date AS end_date, 
+                        TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                        TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                         SG1.cause_1_code AS cause_1_code, 
                         CA1.cause_name AS cause_1_name, 
                         SG1.cause_2_code AS cause_2_code, 
@@ -627,7 +642,10 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
                         SG1.crop_damage AS crop_damage, 
                         SG1.weather_id AS weather_id, 
-                        WE1.weather_name AS weather_name 
+                        WE1.weather_name AS weather_name, 
+                        SG1.repository_id AS repository_id, 
+                        TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                        TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                     FROM SUIGAI SG1 
                     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -652,8 +670,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KE1.ken_name AS ken_name, 
                         SG1.city_code AS city_code, 
                         CT1.city_name AS city_name, 
-                        SG1.begin_date AS begin_date, 
-                        SG1.end_date AS end_date, 
+                        TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                        TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                         SG1.cause_1_code AS cause_1_code, 
                         CA1.cause_name AS cause_1_name, 
                         SG1.cause_2_code AS cause_2_code, 
@@ -675,7 +693,10 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
                         SG1.crop_damage AS crop_damage, 
                         SG1.weather_id AS weather_id, 
-                        WE1.weather_name AS weather_name 
+                        WE1.weather_name AS weather_name, 
+                        SG1.repository_id AS repository_id, 
+                        TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                        TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                     FROM SUIGAI SG1 
                     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -700,8 +721,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KE1.ken_name AS ken_name, 
                         SG1.city_code AS city_code, 
                         CT1.city_name AS city_name, 
-                        SG1.begin_date AS begin_date, 
-                        SG1.end_date AS end_date, 
+                        TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                        TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                         SG1.cause_1_code AS cause_1_code, 
                         CA1.cause_name AS cause_1_name, 
                         SG1.cause_2_code AS cause_2_code, 
@@ -723,7 +744,10 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
                         SG1.crop_damage AS crop_damage, 
                         SG1.weather_id AS weather_id, 
-                        WE1.weather_name AS weather_name 
+                        WE1.weather_name AS weather_name, 
+                        SG1.repository_id AS repository_id, 
+                        TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                        TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                     FROM SUIGAI SG1 
                     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
@@ -1329,7 +1353,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "10000":
             action_list = ACTION.objects.raw("""
                 SELECT 
-                    * 
+                    action_code, 
+                    action_name 
                 FROM ACTION 
                 ORDER BY CAST(ACTION_CODE AS INTEGER)""", [])
 
@@ -1337,16 +1362,39 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "10010":
             status_list = STATUS.objects.raw("""
                 SELECT 
-                    * 
+                    status_code, 
+                    status_name 
                 FROM STATUS 
                 ORDER BY CAST(STATUS_CODE AS INTEGER)""", [])
 
-        ### 
+        ### トリガーメッセージ: TRIGGER
         elif category_code2 == "10020":
             trigger_list = TRIGGER.objects.raw("""
                 SELECT 
-                    * 
-                FROM TRIGGER 
+                    TR1.trigger_id AS trigger_id, 
+                    TR1.suigai_id AS suigai_id, 
+                    SG1.suigai_name AS suigai_name, 
+                    SG1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SG1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    TR1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    TR1.status_code AS status_code, 
+                    ST1.status_name AS status_name, 
+                    TR1.success_count AS success_count, 
+                    TR1.failure_count AS failure_count, 
+                    TO_CHAR(timezone('JST', TR1.published_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS published_at, 
+                    TO_CHAR(timezone('JST', TR1.consumed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS consumed_at, 
+                    TO_CHAR(timezone('JST', TR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                    TR1.data_integrity_left AS data_integrity_left, 
+                    TR1.data_integrity_right AS data_integrity_right 
+                FROM TRIGGER TR1 
+                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
                 ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
 
         ### 
@@ -1365,12 +1413,28 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 FROM FEEDBACK 
                 ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
 
-        ### 
+        ### レポジトリ: REPOSITORY
         elif category_code2 == "10050":
             repository_list = REPOSITORY.objects.raw("""
                 SELECT 
-                    * 
-                FROM REPOSITORY 
+                    RE1.repository_id AS repository_id, 
+                    RE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    RE1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    RE1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    RE1.status_code AS status_code, 
+                    ST1.status_name AS stasus_name, 
+                    RE1.input_file_path AS input_file_path, 
+                    RE1.input_file_name AS input_file_name, 
+                    TO_CHAR(timezone('JST', RE1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', RE1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM REPOSITORY RE1 
+                LEFT JOIN KEN KE1 ON RE1.ken_code=KE1.ken_code 
+                LEFT JOIN CITY CT1 ON RE1.city_code=CT1.city_code 
+                LEFT JOIN ACTION AC1 ON RE1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON RE1.status_code=ST1.status_code 
                 ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
 
         else:

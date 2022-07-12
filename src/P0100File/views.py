@@ -73,7 +73,7 @@ from P0000Common.models import APPROVAL                ### 10030: 承認メッ�
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 ### from P0000Common.models import EXECUTE             ### 10050: 実行管理
 
-from P0000Common.models import REPOSITORY              ### 11000: レポジトリ
+### from P0000Common.models import REPOSITORY          ### 11000: レポジトリ
 
 from P0000Common.common import print_log
 
@@ -102,29 +102,75 @@ def type_view(request, type_code):
         feedback_list = FEEDBACK.objects.raw("""SELECT * FROM FEEDBACK ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
         approval_list = APPROVAL.objects.raw("""SELECT * FROM APPROVAL ORDER BY CAST(APPROVAL_ID AS INTEGER)""", [])
         
-        repository_list = []
+        ### repository_list = []
+        ### for ken in ken_list:
+        ###     repository_list.append(REPOSITORY.objects.raw("""
+        ###         SELECT 
+        ###             KE1.ken_code AS ken_code, 
+        ###             KE1.ken_name AS ken_name, 
+        ###             SUB1.repository_id AS repository_id, 
+        ###             SUB1.type_code AS type_code, 
+        ###             SUB1.action_code AS action_code, 
+        ###             AC1.action_name AS action_name, 
+        ###             SUB1.status_code AS status_code, 
+        ###             ST1.status_name AS status_name, 
+        ###             SUB1.input_file_path AS input_file_path, 
+        ###             SUB1.input_file_name AS input_file_name, 
+        ###             TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+        ###             TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+        ###         FROM KEN KE1 
+        ###         LEFT JOIN (SELECT * FROM REPOSITORY WHERE ken_code=%s AND type_code=%s AND deleted_at IS NULL ORDER BY repository_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code
+        ###         LEFT JOIN ACTION AC1 ON SUB1.action_code=AC1.action_code 
+        ###         LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
+        ###         WHERE KE1.ken_code=%s""", [ken.ken_code, type_code, ken.ken_code, ]))
+
+        suigai_list = []
         for ken in ken_list:
-            repository_list.append(REPOSITORY.objects.raw("""
+            suigai_list.append(SUIGAI.objects.raw("""
                 SELECT 
-                    RE1.repository_id AS repository_id, 
-                    RE1.ken_code AS ken_code, 
+                    KE1.ken_code AS ken_code, 
                     KE1.ken_name AS ken_name, 
-                    RE1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    RE1.action_code AS action_code, 
-                    RE1.status_code AS status_code, 
-                    RE1.input_file_path AS input_file_path, 
-                    RE1.input_file_name AS input_file_name, 
-                    RE1.committed_at AS committed_at, 
-                    RE1.deleted_at AS deleted_at 
-                FROM REPOSITORY RE1 
-                LEFT JOIN KEN KE1 ON RE1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON RE1.city_code=CT1.city_code 
-                WHERE 
-                    ken_code=%s AND deleted_at IS NULL
-                ORDER BY CAST(repository_id AS INTEGER ) DESC""", [ken.ken_code, ])[0])
+                    SUB1.suigai_id AS suigai_id, 
+                    SUB1.suigai_name AS suigai_name, 
+                    SUB1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    SUB1.status_code AS status_code, 
+                    ST1.status_name AS status_name, 
+                    SUB1.file_path AS file_path, 
+                    SUB1.file_name AS file_name, 
+                    TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM KEN KE1 
+                LEFT JOIN (SELECT * FROM SUIGAI WHERE ken_code=%s AND deleted_at IS NULL ORDER BY suigai_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code
+                LEFT JOIN ACTION AC1 ON SUB1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
+                WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        print_log('repository_list = {}'.format(repository_list), 'INFO')
+        print_log('suigai_list = {}'.format(suigai_list), 'INFO')
+
+        area_list = []
+        for ken in ken_list:
+            area_list.append(AREA.objects.raw("""
+                SELECT 
+                    KE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SUB1.area_id AS area_id, 
+                    SUB1.area_name AS area_name, 
+                    SUB1.action_code AS action_code, 
+                    AC1.action_name AS action_name, 
+                    SUB1.status_code AS status_code, 
+                    ST1.status_name AS status_name, 
+                    SUB1.file_path AS file_path, 
+                    SUB1.file_name AS file_name, 
+                    TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM KEN KE1 
+                LEFT JOIN (SELECT * FROM AREA WHERE ken_code=%s AND deleted_at IS NULL ORDER BY area_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code
+                LEFT JOIN ACTION AC1 ON SUB1.action_code=AC1.action_code 
+                LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
+                WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
+            
+        print_log('area_list = {}'.format(area_list), 'INFO')
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -139,7 +185,9 @@ def type_view(request, type_code):
             'approval_list': approval_list, 
             'feedback_count': 0, 
             'approval_count': 0, 
-            'repository_list': repository_list, 
+            ### 'repository_list': repository_list, 
+            'suigai_list': suigai_list, 
+            'area_list': area_list, 
         }
         print_log('[INFO] P0100File.type_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
@@ -175,45 +223,39 @@ def type_ken_view(request, type_code, ken_code):
         ken_list = KEN.objects.raw("""SELECT * FROM KEN WHERE ken_code=%s ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
-                * 
-            FROM 
-            (
-            SELECT 
                 SG1.suigai_id AS suigai_id, 
                 SG1.suigai_name AS suigai_name, 
                 SG1.ken_code AS ken_code, 
                 KE1.ken_name AS ken_name, 
                 SG1.city_code AS city_code, 
                 CT1.city_name AS city_name, 
-                TO_CHAR(SG1.begin_date, 'yyyy/mm/dd') AS begin_date, 
-                TO_CHAR(SG1.end_date, 'yyyy/mm/dd') AS end_date, 
-                RE1.input_file_path AS input_file_path, 
-                RE1.input_file_name AS input_file_name, 
-                TO_CHAR(SG1.committed_at, 'yyyy/mm/dd') AS committed_at, 
-                TO_CHAR(SG1.deleted_at, 'yyyy/mm/dd') AS deleted_at, 
-                SG1.repository_id AS repository_id 
+                TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
+                SG1.file_path AS file_path, 
+                SG1.file_name AS file_name, 
+                TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM SUIGAI SG1 
-            LEFT JOIN REPOSITORY RE1 ON SG1.repository_id=RE1.repository_id 
             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-            ) SUB1 
             WHERE 
-                SUB1.ken_code=%s AND 
-                SUB1.deleted_at is NULL 
-            ORDER BY CAST(SUB1.suigai_id AS INTEGER) DESC""", [ken_code, ])
+                SG1.ken_code=%s AND SG1.deleted_at is NULL 
+            ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
             
-        area_list = SUIGAI.objects.raw("""
+        area_list = AREA.objects.raw("""
             SELECT 
                 AR1.area_id AS area_id, 
                 AR1.area_name AS area_name, 
-                AR1.input_file_path AS input_file_path, 
-                AR1.input_file_name AS input_file_name, 
                 AR1.ken_code AS ken_code, 
-                KE1.ken_name AS ken_name 
+                KE1.ken_name AS ken_name, 
+                AR1.file_path AS file_path, 
+                AR1.file_name AS file_name, 
+                TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM AREA AR1 
             LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
             WHERE 
-                AR1.ken_code=%s 
+                AR1.ken_code=%s AND AR1.deleted_at is NULL 
             ORDER BY CAST(AR1.area_id AS INTEGER) DESC""", [ken_code, ])
         
         ### kokyo_list = KOKYO.objects.raw("""

@@ -16,10 +16,26 @@
     .btn-running {background: #258AC4; color: #FFFFFF;}
     .btn-cancel  {background: #6C757D; color: #FFFFFF;}
     .btn-success {background: #54AB51; color: #FFFFFF;}
+    
     a:link {color: #000000; text-decoration:none;}
     a:visited {color: #000000; text-decoration:none;}
     a:hover {color: #000000; text-decoration:none;}
     a:active {color: #000000; text-decoration:none;}
+    
+    .cl-nav:link {color: #000000; text-decoration:none;}
+    .cl-nav:visited {color: #000000; text-decoration:none;}
+    .cl-nav:hover {color: #000000; text-decoration:none;}
+    .cl-nav:active {color: #000000; text-decoration:none;}
+
+    .cl-bread:link {color: #0000EE; text-decoration:underline;}
+    .cl-bread:visited {color: #0000EE; text-decoration:underline;}
+    .cl-bread:hover {color: #0000EE; text-decoration:underline;}
+    .cl-bread:active {color: #0000EE; text-decoration:underline;}
+
+    .cl-table:link {color: #0000EE; text-decoration: underline;}
+    .cl-table:visited {color: #0000EE; text-decoration: underline;}
+    .cl-table:hover {color: #0000EE; text-decoration: underline;}
+    .cl-table:active {color: #0000EE; text-decoration: underline;}
     </style>
 </head>
 <!-- END Head -->
@@ -36,7 +52,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -50,13 +66,13 @@
                     
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
 
                     <!-- BEGIN ナビバー マニュアル検証メニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>マニュアル検証</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -68,24 +84,24 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" style="border-bottom: 2px solid red;" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl-nav" style="border-bottom: 2px solid #0000EE;" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl-nav" href="#"><strong>グラフ</strong></a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl-nav" href="#"><strong>帳票</strong></a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
             </div>
         </div>
@@ -1293,13 +1309,50 @@
                 <tr>
                     <th class="text-center">水害区域ID</th>
                     <th class="text-center">水害区域名</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
+                    <th class="text-center">ファイルパス</th>
+                    <th class="text-center">ファイル名</th>
                 </tr>
             </thead>
             <tbody>
                 {% for area in area_list %}
                 <tr>
+                    {% if area.area_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ area.area_id }}</td>
+                    {% endif %}
+                    
+                    {% if area.area_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ area.area_name }}</td>
+                    {% endif %}
+                    
+                    {% if area.ken_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.ken_code }}</td>
+                    {% endif %}
+                    
+                    {% if area.ken_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if area.input_file_path is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.input_file_path }}</td>
+                    {% endif %}
+                    
+                    {% if area.input_file_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.input_file_name }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1315,6 +1368,8 @@
                 <tr>
                     <th class="text-center">異常気象ID</th>
                     <th class="text-center">異常気象名</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
                     <th class="text-center">開始日</th>
                     <th class="text-center">終了日</th>
                 </tr>
@@ -1322,10 +1377,41 @@
             <tbody>
                 {% for weather in weather_list %}
                 <tr>
+                    {% if weather.weather_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ weather.weather_id }}</td>
+                    {% endif %}
+                    
+                    {% if weather.weather_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ weather.weather_name }}</td>
+                    {% endif %}
+                    
+                    {% if weather.ken_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ weather.ken_code }}</td>
+                    {% endif %}
+                    
+                    {% if weather.ken_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ weather.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if weather.begin_date is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ weather.begin_date }}</td>
+                    {% endif %}
+                    
+                    {% if weather.end_date is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ weather.end_date }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1369,41 +1455,211 @@
                     <th class="text-center">農作物被害額（単位千円）</th>
                     <th class="text-center">異常気象ID</th>
                     <th class="text-center">異常気象名</th>
+                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">コミット日時</th>
+                    <th class="text-center">削除日時</th>
                 </tr>
             </thead>
             <tbody>
                 {% for suigai in suigai_list %}
                 <tr>
+                    {% if suigai.suigai_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.suigai_id }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.suigai_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.suigai_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.ken_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.ken_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.ken_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.city_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.city_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.city_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.city_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.begin_date is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.begin_date }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.end_date is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.end_date }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_1_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_1_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_1_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_1_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_2_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_2_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_2_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_2_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_3_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_3_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.cause_3_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.cause_3_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.area_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.area_id }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.area_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.area_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.suikei_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.suikei_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.suikei_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.suikei_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.kasen_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.kasen_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.kasen_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.kasen_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.gradient_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.gradient_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.gradient_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.gradient_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.residential_area is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.residential_area }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.agricultural_area is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.agricultural_area }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.underground_area is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.underground_area }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.kasen_kaigan_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.kasen_kaigan_code }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.kasen_kaigan_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.kasen_kaigan_name }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.crop_damage is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.crop_damage }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.weather_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.weather_id }}</td>
+                    {% endif %}
+                    
+                    {% if suigai.weather_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ suigai.weather_name }}</td>
+                    {% endif %}
+
+                    {% if suigai.repository_id is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.repository_id }}</td>
+                    {% endif %}
+
+                    {% if suigai.committed_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.committed_at }}</td>
+                    {% endif %}
+
+                    {% if suigai.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.deleted_at }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1419,8 +1675,8 @@
                 <tr>
                     <th class="text-center">行ID</th>
                     <th class="text-center">町丁名、大字名</th>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">水害名</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
                     <th class="text-center">建物区分コード</th>
                     <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
@@ -1456,40 +1712,209 @@
             <tbody>
                 {% for ippan in ippan_list %}
                 <tr>
+                    {% if ippan.ippan_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.underground_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.underground_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.underground_name is none %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.underground_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.flood_sediment_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.flood_sediment_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.flood_sediment_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.flood_sediment_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.floor_area is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.industry_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.industry_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.industry_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.industry_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.usage_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.usage_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.usage_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.usage_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.comment is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.comment }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1505,8 +1930,8 @@
                 <tr>
                     <th class="text-center">行ID</th>
                     <th class="text-center">町丁名、大字名</th>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">水害名</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
                     <th class="text-center">建物区分コード</th>
                     <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
@@ -1566,73 +1991,353 @@
             <tbody>
                 {% for ippan in ippan_view_list %}
                 <tr>
+                    {% if ippan.ippan_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
                     
+                    {% if ippan.building_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.underground_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.underground_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.underground_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.underground_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.flood_sediment_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.flood_sediment_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.flood_sediment_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.flood_sediment_name }}</td>
+                    {% endif %}
                     
+                    {% if ippan.building_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.building_total is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.building_total }}</td>
+                    {% endif %}
                     
+                    {% if ippan.floor_area is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office }}</td>
-
+                    {% endif %}
+                    
+                    {% if ippan.floor_area_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_lv00 }}</td>
+                    {% endif %}
+
+                    {% if ippan.floor_area_lv01_49 is None %}                    
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_lv01_49 }}</td>
+                    {% endif %}
+
+                    {% if ippan.floor_area_lv50_99 is None %}                    
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.floor_area_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.floor_area_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.floor_area_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.floor_area_total is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.floor_area_total }}</td>
+                    {% endif %}
 
+                    {% if ippan.family_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.family_total is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.family_total }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_total is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_total }}</td>
+                    {% endif %}
                     
+                    {% if ippan.farmer_fisher_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_total is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_total }}</td>
+                    {% endif %}
                     
+                    {% if ippan.employee_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.employee_lv00 }}</td>
-                    <td>{{ ippan.employee_lv01_49 }}</td>
-                    <td>{{ ippan.employee_lv50_99 }}</td>
-                    <td>{{ ippan.employee_lv100 }}</td>
-                    <td>{{ ippan.employee_full }}</td>
-                    <td>{{ ippan.employee_total }}</td>
+                    {% endif %}
                     
+                    {% if ippan.employee_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.employee_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.employee_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_lv100 is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.employee_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_full is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.employee_full }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.employee_total is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.employee_total }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.industry_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.industry_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.industry_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.industry_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.usage_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.usage_code }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.usage_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.usage_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.comment is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.comment }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1649,8 +2354,9 @@
                     <th class="text-center">集計ID</th>
                     <th class="text-center">行ID</th>
                     <th class="text-center">町丁名、大字名</th>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">水害名</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
+                    
                     <th class="text-center">家屋被害額_床下</th>
                     <th class="text-center">家屋被害額_01から49cm</th>
                     <th class="text-center">家屋被害額_50から99cm</th>
@@ -1733,89 +2439,431 @@
             <tbody>
                 {% for ippan in ippan_summary_list %}
                 <tr>
+                    {% if ippan.id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.ippan_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_name is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
 
+                    {% if ippan.house_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.household_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.household_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.household_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.household_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.household_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.household_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.household_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.car_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.car_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.car_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.car_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.car_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.car_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.car_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.house_alt_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_alt_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_alt_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_alt_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_alt_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_alt_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_alt_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.house_clean_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_clean_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_clean_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_clean_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_clean_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.house_clean_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.house_clean_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_dep_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_dep_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_dep_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_dep_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_dep_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_dep_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_dep_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_dep_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_dep_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_dep_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_inv_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_inv_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_inv_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_inv_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_inv_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_inv_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_inv_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_inv_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_inv_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_inv_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_sus_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_sus_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_sus_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_sus_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_sus_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_sus_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_sus_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_sus_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_sus_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_sus_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_stg_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_stg_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_stg_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_stg_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_stg_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_stg_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_stg_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_stg_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_stg_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_stg_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.farmer_fisher_dep_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_dep_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_dep_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_dep_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_dep_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_dep_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_dep_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_dep_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_dep_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_dep_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.farmer_fisher_inv_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_inv_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_inv_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_inv_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_inv_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_inv_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_inv_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_inv_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.farmer_fisher_inv_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.farmer_fisher_inv_summary_full }}</td>
+                    {% endif %}
 
+                    {% if ippan.office_alt_summary_lv00 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_lv00 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_alt_summary_lv01_49 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_lv01_49 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_alt_summary_lv50_99 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_lv50_99 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_alt_summary_lv100 is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_lv100 }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_alt_summary_half is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_half }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.office_alt_summary_full is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ ippan.office_alt_summary_full }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -2246,28 +3294,135 @@
             <thead>
                 <tr>
                     <th class="text-center">トリガーID</th>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">レポジトリID</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
+                    <th class="text-center">市区町村コード</th>
+                    <th class="text-center">市区町村名</th>
                     <th class="text-center">アクションコード</th>
+                    <th class="text-center">アクション名</th>
                     <th class="text-center">状態コード</th>
-                    <th class="text-center">発行日時</th>
-                    <th class="text-center">消費日時</th>
+                    <th class="text-center">状態名</th>
                     <th class="text-center">成功数</th>
                     <th class="text-center">失敗数</th>
+                    <th class="text-center">発行日時</th>
+                    <th class="text-center">消費日時</th>
+                    <th class="text-center">削除日時</th>
+                    <th class="text-center">データ整合性</th>
+                    <th class="text-center">データ整合性</th>
                 </tr>
             </thead>
             <tbody>
                 {% for trigger in trigger_list %}
                 <tr>
+                    {% if trigger.trigger_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.trigger_id }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.suigai_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.suigai_id }}</td>
-                    <td>{{ trigger.repository_id }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.suigai_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.suigai_name }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.ken_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.ken_code }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.ken_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.city_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.city_code }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.city_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.city_name }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.action_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.action_code }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.action_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.action_name }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.status_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.status_code }}</td>
-                    <td>{{ trigger.published_at }}</td>
-                    <td>{{ trigger.consumed_at }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.status_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.status_name }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.success_count is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.success_count }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.failure_count is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ trigger.failure_count }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.published_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.published_at }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.consumed_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.consumed_at }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.deleted_at }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.data_integrity_left is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.data_integrity_left }}</td>
+                    {% endif %}
+                    
+                    {% if trigger.data_integrity_right is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ trigger.data_integrity_right }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -2282,7 +3437,7 @@
             <thead>
                 <tr>
                     <th class="text-center">承認ID</th>
-                    <th class="text-center">水害ID</th>
+                    <th class="text-center">シートID</th>
                     <th class="text-center">レポジトリID</th>
                     <th class="text-center">アクションコード</th>
                     <th class="text-center">状態コード</th>
@@ -2314,7 +3469,7 @@
             <thead>
                 <tr>
                     <th class="text-center">フィードバックID</th>
-                    <th class="text-center">水害ID</th>
+                    <th class="text-center">シートID</th>
                     <th class="text-center">レポジトリID</th>
                     <th class="text-center">アクションコード</th>
                     <th class="text-center">状態コード</th>
@@ -2346,24 +3501,100 @@
             <thead>
                 <tr>
                     <th class="text-center">レポジトリID</th>
-                    <th class="text-center">水害ID</th>
-                    <th class="text-center">最新のアクションコード</th>
-                    <th class="text-center">最新の状態コード</th>
-                    <th class="text-center">初期生成日</th>
-                    <th class="text-center">更新日</th>
-                    <th class="text-center">入力ファイルのパス</th>
+                    <th class="text-center">都道府県コード</th>
+                    <th class="text-center">都道府県名</th>
+                    <th class="text-center">市区町村コード</th>
+                    <th class="text-center">市区町村名</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">アクション名</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">状態名</th>
+                    <th class="text-center">入力ファイルパス</th>
+                    <th class="text-center">入力ファイル名</th>
+                    <th class="text-center">コミット日時</th>
+                    <th class="text-center">削除日時</th>
                 </tr>
             </thead>
             <tbody>
                 {% for repository in repository_list %}
                 <tr>
+                    {% if repository.repository_id is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ repository.repository_id }}</td>
-                    <td>{{ repository.suigai_id }}</td>
+                    {% endif %}
+
+                    {% if repository.ken_code is None %}                    
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.ken_code }}</td>
+                    {% endif %}
+                    
+                    {% if repository.ken_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if repository.city_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.city_code }}</td>
+                    {% endif %}
+                    
+                    {% if repository.city_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.city_name }}</td>
+                    {% endif %}
+                    
+                    {% if repository.action_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ repository.action_code }}</td>
+                    {% endif %}
+                    
+                    {% if repository.action_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.action_name }}</td>
+                    {% endif %}
+                    
+                    {% if repository.status_code is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ repository.status_code }}</td>
-                    <td>{{ repository.created_at }}</td>
-                    <td>{{ repository.updated_at }}</td>
+                    {% endif %}
+                    
+                    {% if repository.status_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.status_name }}</td>
+                    {% endif %}
+                    
+                    {% if repository.input_file_path is None %}
+                    <td></td>
+                    {% else %}
                     <td>{{ repository.input_file_path }}</td>
+                    {% endif %}
+                    
+                    {% if repository.input_file_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.input_file_name }}</td>
+                    {% endif %}
+                    
+                    {% if repository.committed_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.committed_at }}</td>
+                    {% endif %}
+                    
+                    {% if repository.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ repository.deleted_at }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

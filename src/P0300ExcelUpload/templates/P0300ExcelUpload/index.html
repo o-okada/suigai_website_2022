@@ -16,10 +16,26 @@
     .btn-running {background: #258AC4; color: #FFFFFF;}
     .btn-cancel  {background: #6C757D; color: #FFFFFF;}
     .btn-success {background: #54AB51; color: #FFFFFF;}
+    
     a:link {color: #000000; text-decoration:none;}
     a:visited {color: #000000; text-decoration:none;}
     a:hover {color: #000000; text-decoration:none;}
     a:active {color: #000000; text-decoration:none;}
+    
+    .cl-nav:link {color: #000000; text-decoration:none;}
+    .cl-nav:visited {color: #000000; text-decoration:none;}
+    .cl-nav:hover {color: #000000; text-decoration:none;}
+    .cl-nav:active {color: #000000; text-decoration:none;}
+
+    .cl-bread:link {color: #0000EE; text-decoration:underline;}
+    .cl-bread:visited {color: #0000EE; text-decoration:underline;}
+    .cl-bread:hover {color: #0000EE; text-decoration:underline;}
+    .cl-bread:active {color: #0000EE; text-decoration:underline;}
+
+    .cl-table:link {color: #0000EE; text-decoration: underline;}
+    .cl-table:visited {color: #0000EE; text-decoration: underline;}
+    .cl-table:hover {color: #0000EE; text-decoration: underline;}
+    .cl-table:active {color: #0000EE; text-decoration: underline;}
     </style>
 </head>
 <!-- END Head -->
@@ -36,7 +52,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" style="border-bottom: 2px solid red;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -50,13 +66,13 @@
                     
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
                     
                     <!-- BEGIN ナビバー マニュアル検証メニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>マニュアル検証</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -68,24 +84,24 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl-nav" href="#"><strong>グラフ</strong></a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl-nav" href="#"><strong>帳票</strong></a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
             </div>
         </div>
