@@ -1002,7 +1002,8 @@ class IPPAN_SUMMARY(models.Model):
 ###############################################################################
 class ACTION(models.Model):
     action_code = models.CharField(max_length=10, primary_key=True)            ### アクションコード
-    action_name = models.CharField(max_length=128, null=True)                  ### アクション名
+    action_name = models.CharField(max_length=128, null=True)                  ### アクション名_日本語
+    action_name_en = models.CharField(max_length=128, null=True)               ### アクション名_英語
     
     class Meta:
         db_table = 'action'

@@ -220,7 +220,6 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         trigger_list = []                              ### 10020: トリガーメッセージ
         approval_list = []                             ### 10030: 承認メッセージ
         feedback_list = []                             ### 10040: フィードバックメッセージ
-        ### repository_list = []                       ### 10050: EXCELファイルレポジトリ
         
         #######################################################################
         ### DBアクセス処理(0030)
