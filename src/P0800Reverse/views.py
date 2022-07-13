@@ -59,14 +59,13 @@ from P0000Common.models import OFFICE_ALT              ### 5040: 事業所応急
 from P0000Common.models import FARMER_FISHER_ASSET     ### 6000: 農漁家資産額
 from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害率
 
-from P0000Common.models import AREA                    ### 7000: 一般資産入力データ_水害区域
-from P0000Common.models import WEATHER                 ### 7010: 一般資産入力データ_異常気象
-from P0000Common.models import SUIGAI                  ### 7020: 一般資産入力データ_ヘッダ部分
-from P0000Common.models import IPPAN                   ### 7030: 一般資産入力データ_一覧表部分
-from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビューデータ_一覧表部分
+from P0000Common.models import AREA                    ### 7000: 入力データ_水害区域
+from P0000Common.models import WEATHER                 ### 7010: 入力データ_異常気象
+from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
 
-from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
-### from P0000Common.models import REPOSITORY          ### 9000: レポジトリ
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 
 from P0000Common.common import print_log
 
@@ -368,6 +367,9 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.crop_damage AS crop_damage, 
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
+                    
+                    IV1.file_path AS file_path, 
+                    IV1.file_name AS file_name, 
                     
                     IV1.building_code AS building_code, 
                     IV1.building_name AS building_name, 
@@ -1022,6 +1024,9 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
                     
+                    IV1.file_path AS file_path, 
+                    IV1.file_name AS file_name, 
+                    
                     IV1.building_code AS building_code, 
                     IV1.building_name AS building_name, 
                     IV1.underground_code AS underground_code, 
@@ -1434,6 +1439,7 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
             'ken_code': ken_code, 
             'city_code': city_code, 
             'category_code': category_code, 
+            
             'ken_list': ken_list, 
             'city_list': city_list, 
             'ippan_reverse_list': ippan_reverse_list, 

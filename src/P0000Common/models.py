@@ -785,6 +785,9 @@ class IPPAN_VIEW(models.Model):
     weather_id = models.IntegerField(null=True)                                ### 異常気象ID ### FOR GROUP BY
     weather_name = models.CharField(max_length=128)                            ### 異常気象名 LEFT JOIN項目
 
+    file_path = models.CharField(max_length=256, null=True)                    ### ファイルパス ※2022/07/13 追加
+    file_name = models.CharField(max_length=256, null=True)                    ### ファイル名 ※2022/07/13 追加
+
     ### 帳票の繰り返し部分 行20以降
     building_code = models.CharField(max_length=10, null=True)                 ### 建物区分コード
     building_name = models.CharField(max_length=128)                           ### 建物区分名 LEFT JOIN項目

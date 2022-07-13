@@ -21,6 +21,8 @@ from P0000Common.common import print_log                                       #
 
 ###############################################################################
 ### 関数名：index_view
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0100Login/index.html
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def index_view(request):

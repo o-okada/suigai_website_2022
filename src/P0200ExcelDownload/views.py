@@ -73,7 +73,9 @@ from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名:index_view(request)
+### 関数名：index_view(request)
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0200ExcelDownload/index.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -208,8 +210,10 @@ def index_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:building_view(request, lock)
-### 1000:建物区分
+### 関数名：building_view(request, lock)
+### 1000：建物区分
+### urlpattern：path('building/', views.building_view, name='building_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def building_view(request, lock):
@@ -269,8 +273,10 @@ def building_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ken_view(request, lock)
-### 1010:都道府県
+### 関数名：ken_view(request, lock)
+### 1010：都道府県
+### urlpattern：path('ken/', views.ken_view, name='ken_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ken_view(request, lock):
@@ -330,8 +336,10 @@ def ken_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:city_view(request, lock)
-### 1020:市区町村
+### 関数名：city_view(request, lock)
+### 1020：市区町村
+### urlpattern：path('city/', views.city_view, name='city_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def city_view(request, lock):
@@ -409,8 +417,10 @@ def city_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:kasen_kaigan_view(request, lock)
-### 1030:水害発生地点工種（河川海岸区分）
+### 関数名：kasen_kaigan_view(request, lock)
+### 1030：水害発生地点工種（河川海岸区分）
+### urlpattern：path('kasen_kaigan/', views.kasen_kaigan_view, name='kasen_kaigan_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def kasen_kaigan_view(request, lock):
@@ -470,8 +480,10 @@ def kasen_kaigan_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:suikei_view(request, lock)
-### 1040:水系（水系・沿岸）
+### 関数名：suikei_view(request, lock)
+### 1040：水系（水系・沿岸）
+### urlpattern：path('suikei/', views.suikei_view, name='suikei_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def suikei_view(request, lock):
@@ -543,8 +555,10 @@ def suikei_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:suikei_type_view(request, lock)
-### 1050:水系種別（水系・沿岸種別）
+### 関数名：suikei_type_view(request, lock)
+### 1050：水系種別（水系・沿岸種別）
+### urlpattern：path('suikei_type/', views.suikei_type_view, name='suikei_type_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def suikei_type_view(request, lock):
@@ -604,8 +618,10 @@ def suikei_type_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:kasen_view(request, lock)
-### 1060:河川（河川・海岸）
+### 関数名：kasen_view(request, lock)
+### 1060：河川（河川・海岸）
+### urlpattern：path('kasen/', views.kasen_view, name='kasen_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def kasen_view(request, lock):
@@ -684,8 +700,10 @@ def kasen_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:kasen_type_view(request, lock)
-### 1070:河川種別（河川・海岸種別）
+### 関数名：kasen_type_view(request, lock)
+### 1070：河川種別（河川・海岸種別）
+### urlpattern：path('kasen_type/', views.kasen_type_view, name='kasen_type_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def kasen_type_view(request, lock):
@@ -745,8 +763,10 @@ def kasen_type_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:cause_view(request, lock)
-### 1080:水害原因
+### 関数名：cause_view(request, lock)
+### 1080：水害原因
+### urlpattern：path('cause/', views.cause_view, name='cause_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def cause_view(request, lock):
@@ -806,8 +826,10 @@ def cause_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:underground_view(request, lock)
-### 1090:地上地下区分
+### 関数名：underground_view(request, lock)
+### 1090：地上地下区分
+### urlpattern：path('underground/', views.underground_view, name='underground_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def underground_view(request, lock):
@@ -867,8 +889,10 @@ def underground_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:usage_view(request, lock)
-### 1100:地下空間の利用形態
+### 関数名：usage_view(request, lock)
+### 1100：地下空間の利用形態
+### urlpattern：path('usage/', views.usage_view, name='usage_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def usage_view(request, lock):
@@ -928,8 +952,10 @@ def usage_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:flood_sediment_view(request, lock)
-### 1110:浸水土砂区分
+### 関数名：flood_sediment_view(request, lock)
+### 1110：浸水土砂区分
+### urlpattern：path('flood_sediment/', views.flood_sediment_view, name='flood_sediment_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def flood_sediment_view(request, lock):
@@ -989,8 +1015,10 @@ def flood_sediment_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:gradient_view(request, lock)
-### 1120:地盤勾配区分
+### 関数名：gradient_view(request, lock)
+### 1120：地盤勾配区分
+### urlpattern：path('gradient/', views.gradient_view, name='gradient_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def gradient_view(request, lock):
@@ -1050,8 +1078,10 @@ def gradient_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:industry_view(request, lock)
-### 1130:産業分類
+### 関数名：industry_view(request, lock)
+### 1130：産業分類
+### urlpattern：path('industry/', views.industry_view, name='industry_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def industry_view(request, lock):
@@ -1111,8 +1141,10 @@ def industry_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:house_asset_view(request, lock)
-### 2000:家屋評価額
+### 関数名：house_asset_view(request, lock)
+### 2000：家屋評価額
+### urlpattern：path('house_asset/', views.house_asset_view, name='house_asset_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def house_asset_view(request, lock):
@@ -1184,8 +1216,10 @@ def house_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:house_rate_view(request, lock)
-### 2010:家屋被害率
+### 関数名：house_rate_view(request, lock)
+### 2010：家屋被害率
+### urlpattern：path('house_rate/', views.house_rate_view, name='house_rate_view'
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def house_rate_view(request, lock):
@@ -1278,8 +1312,10 @@ def house_rate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:house_alt_view(request, lock)
-### 2020:家庭応急対策費_代替活動費
+### 関数名：house_alt_view(request, lock)
+### 2020：家庭応急対策費_代替活動費
+### urlpattern：path('house_alt/', views.house_alt_view, name='house_alt_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def house_alt_view(request, lock):
@@ -1349,8 +1385,10 @@ def house_alt_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:house_clean_view(request, lock)
-### 2030:家庭応急対策費_清掃日数、清掃労働単価
+### 関数名：house_clean_view(request, lock)
+### 2030：家庭応急対策費_清掃日数、清掃労働単価
+### urlpattern：path('house_clean/', views.house_clean_view, name='house_clean_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def house_clean_view(request, lock):
@@ -1422,8 +1460,10 @@ def house_clean_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:household_asset_view(request, lock)
-### 3000:家庭用品自動車以外所有額
+### 関数名：household_asset_view(request, lock)
+### 3000：家庭用品自動車以外所有額
+### urlpattern：path('household_asset/', views.household_asset_view, name='household_asset_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def household_asset_view(request, lock):
@@ -1483,8 +1523,10 @@ def household_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:household_rate_view(request, lock)
-### 3010:家庭用品自動車以外被害率
+### 関数名：household_rate_view(request, lock)
+### 3010：家庭用品自動車以外被害率
+### urlpattern：path('household_rate/', views.household_rate_view, name='household_rate_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def household_rate_view(request, lock):
@@ -1571,8 +1613,10 @@ def household_rate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:car_asset_view(request, lock)
-### 4000:家庭用品自動車所有額
+### 関数名：car_asset_view(request, lock)
+### 4000：家庭用品自動車所有額
+### urlpattern：path('car_asset/', views.car_asset_view, name='car_asset_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def car_asset_view(request, lock):
@@ -1632,8 +1676,10 @@ def car_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:car_rate_view(request, lock)
-### 4010:家庭用品自動車被害率
+### 関数名：car_rate_view(request, lock)
+### 4010：家庭用品自動車被害率
+### urlpattern：path('car_rate/', views.car_rate_view, name='car_rate_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def car_rate_view(request, lock):
@@ -1657,8 +1703,8 @@ def car_rate_view(request, lock):
     
         #######################################################################
         ### EXCEL入出力処理
-        ### （１）テンプレート用のEXCELファイルを読み込む。
-        ### （２）セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 3/4.', 'INFO')
         template_file_path = 'static/template_car_rate.xlsx'
@@ -1703,8 +1749,10 @@ def car_rate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:office_asset_view(request, lock)
-### 5000:事業所資産額
+### 関数名：office_asset_view(request, lock)
+### 5000：事業所資産額
+### urlpattern：path('office_asset/', views.office_asset_view, name='office_asset_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_asset_view(request, lock):
@@ -1782,8 +1830,10 @@ def office_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:office_rate_view(request, lock)
-### 5010:事業所被害率
+### 関数名：office_rate_view(request, lock)
+### 5010：事業所被害率
+### urlpattern：path('office_rate/', views.office_rate_view, name='office_rate_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_rate_view(request, lock):
@@ -1888,8 +1938,10 @@ def office_rate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:office_suspend_view(request, lock)
-### 5020:事業所営業停止日数
+### 関数名：office_suspend_view(request, lock)
+### 5020：事業所営業停止日数
+### urlpattern：path('office_suspend/', views.office_suspend_view, name='office_suspend_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_suspend_view(request, lock):
@@ -1959,8 +2011,10 @@ def office_suspend_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:office_stagnate_view(request, lock)
-### 5030: 事業所営業停滞日数
+### 関数名：office_stagnate_view(request, lock)
+### 5030：事業所営業停滞日数
+### urlpattern：path('office_stagnate/', views.office_stagnate_view, name='office_stagnate_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_stagnate_view(request, lock):
@@ -2030,8 +2084,10 @@ def office_stagnate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:office_alt_view(request, lock)
-### 5040:事業所応急対策費_代替活動費
+### 関数名：office_alt_view(request, lock)
+### 5040：事業所応急対策費_代替活動費
+### urlpattern：
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def office_alt_view(request, lock):
@@ -2101,8 +2157,10 @@ def office_alt_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:farmer_fisher_asset_view(request, lock)
-### 6000:農漁家資産額
+### 関数名：farmer_fisher_asset_view(request, lock)
+### 6000：農漁家資産額
+### urlpattern：path('farmer_fisher_asset/', views.farmer_fisher_asset_view, name='farmer_fisher_asset_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def farmer_fisher_asset_view(request, lock):
@@ -2164,8 +2222,10 @@ def farmer_fisher_asset_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:farmer_fisher_rate_view(request, lock)
-### 6010:農漁家被害率
+### 関数名：farmer_fisher_rate_view(request, lock)
+### 6010：農漁家被害率
+### urlpattern：path('farmer_fisher_rate/', views.farmer_fisher_rate_view, name='farmer_fisher_rate_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def farmer_fisher_rate_view(request, lock):
@@ -2270,8 +2330,10 @@ def farmer_fisher_rate_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:area_view(request, lock)
-### 7000:一般資産入力データ_水害区域
+### 関数名：area_view(request, lock)
+### 7000：入力データ_水害区域
+### urlpattern：path('area/', views.area_view, name='area_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def area_view(request, lock):
@@ -2331,128 +2393,10 @@ def area_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:suigai_view(request, lock)
-### 7020:入力データ_ヘッダ部分
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-def suigai_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 1/4.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、水害データを取得する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 2/4.', 'INFO')
-        suigai_list = SUIGAI.objects.raw("""
-            SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)
-        """, [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 3/4.', 'INFO')
-        template_file_path = 'static/template_suigai.xlsx'
-        download_file_path = 'static/download_suigai.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '水害'
-        ws.cell(row=1, column=1).value = '水害ID'
-        ws.cell(row=1, column=2).value = '水害名'
-        ws.cell(row=1, column=3).value = '都道府県コード'
-        ws.cell(row=1, column=4).value = '市区町村コード'
-        ws.cell(row=1, column=5).value = '開始日'
-        ws.cell(row=1, column=6).value = '終了日'
-        ws.cell(row=1, column=7).value = '水害原因_1_コード'
-        ws.cell(row=1, column=8).value = '水害原因_2_コード'
-        ws.cell(row=1, column=9).value = '水害原因_3_コード'
-        ws.cell(row=1, column=10).value = '区域ID'
-        ws.cell(row=1, column=11).value = '水系コード'
-        ws.cell(row=1, column=12).value = '河川コード'
-        ws.cell(row=1, column=13).value = '地盤勾配区分コード'
-        ws.cell(row=1, column=14).value = '宅地面積（単位m2）'
-        ws.cell(row=1, column=15).value = '農地面積（単位m2）'
-        ws.cell(row=1, column=16).value = '地下面積（単位m2）'
-        ws.cell(row=1, column=17).value = '河川海岸（工種）コード'
-        ws.cell(row=1, column=18).value = '農作物被害額（単位千円）'
-        ws.cell(row=1, column=19).value = '異常気象ID'
-        ws.cell(row=1, column=20).value = '削除日時'
-
-        ws.cell(row=2, column=1).value = 'suigai_id'
-        ws.cell(row=2, column=2).value = 'suigai_name'
-        ws.cell(row=2, column=3).value = 'ken_code'
-        ws.cell(row=2, column=4).value = 'city_code'
-        ws.cell(row=2, column=5).value = 'begin_date'
-        ws.cell(row=2, column=6).value = 'end_date'
-        ws.cell(row=2, column=7).value = 'cause_1_code'
-        ws.cell(row=2, column=8).value = 'cause_2_code'
-        ws.cell(row=2, column=9).value = 'cause_3_code'
-        ws.cell(row=2, column=10).value = 'area_id'
-        ws.cell(row=2, column=11).value = 'suikei_code'
-        ws.cell(row=2, column=12).value = 'kasen_code'
-        ws.cell(row=2, column=13).value = 'gradient_code'
-        ws.cell(row=2, column=14).value = 'residential_area'
-        ws.cell(row=2, column=15).value = 'agricultural_area'
-        ws.cell(row=2, column=16).value = 'underground_area'
-        ws.cell(row=2, column=17).value = 'kasen_kaigan_code'
-        ws.cell(row=2, column=18).value = 'crop_damage'
-        ws.cell(row=2, column=19).value = 'weather_id'
-        ws.cell(row=2, column=20).value = 'deleted_at'
-        
-        if suigai_list:
-            for i, suigai in enumerate(suigai_list):
-                ws.cell(row=i+3, column=1).value = suigai.suigai_id
-                ws.cell(row=i+3, column=2).value = suigai.suigai_name
-                ws.cell(row=i+3, column=3).value = suigai.ken_code
-                ws.cell(row=i+3, column=4).value = suigai.city_code
-                ws.cell(row=i+3, column=5).value = suigai.begin_date
-                ws.cell(row=i+3, column=6).value = suigai.end_date
-                ws.cell(row=i+3, column=7).value = suigai.cause_1_code
-                ws.cell(row=i+3, column=8).value = suigai.cause_2_code
-                ws.cell(row=i+3, column=9).value = suigai.cause_3_code
-                ws.cell(row=i+3, column=10).value = suigai.area_id
-                ws.cell(row=i+3, column=11).value = suigai.suikei_code
-                ws.cell(row=i+3, column=12).value = suigai.kasen_code
-                ws.cell(row=i+3, column=13).value = suigai.gradient_code
-                ws.cell(row=i+3, column=14).value = suigai.residential_area
-                ws.cell(row=i+3, column=15).value = suigai.agricultural_area
-                ws.cell(row=i+3, column=16).value = suigai.underground_area
-                ws.cell(row=i+3, column=17).value = suigai.kasen_kaigan_code
-                ws.cell(row=i+3, column=18).value = suigai.crop_damage
-                ws.cell(row=i+3, column=19).value = suigai.weather_id
-                ws.cell(row=i+3, column=20).value = str(suigai.deleted_at)
-        
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 4/4.', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="suigai.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
-
-###############################################################################
-### 関数名:weather_view(request, lock)
-### 7010:入力データ_異常気象
+### 関数名：weather_view(request, lock)
+### 7010：入力データ_異常気象
+### urlpattern：path('weather/', views.weather_view, name='weather_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def weather_view(request, lock):
@@ -2472,7 +2416,17 @@ def weather_view(request, lock):
         ### DBにアクセスして、入力データ_異常気象データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 2/4.', 'INFO')
-        weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
+        weather_list = WEATHER.objects.raw("""
+            SELECT 
+                WE1.weather_id AS weather_id, 
+                WE1.weather_name AS weather_name, 
+                TO_CHAR(timezone('JST', WE1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                TO_CHAR(timezone('JST', WE1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
+                WE1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name 
+            FROM WEATHER WE1 
+            LEFT JOIN KEN KE1 ON WE1.ken_code=KE1.ken_code 
+            ORDER BY CAST(weather_id AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -2489,11 +2443,15 @@ def weather_view(request, lock):
         ws.cell(row=1, column=2).value = '異常気象名'
         ws.cell(row=1, column=3).value = '開始日'
         ws.cell(row=1, column=4).value = '終了日'
+        ws.cell(row=1, column=5).value = '都道府県コード'
+        ws.cell(row=1, column=6).value = '都道府県名'
 
         ws.cell(row=2, column=1).value = 'weather_id'
         ws.cell(row=2, column=2).value = 'weather_name'
         ws.cell(row=2, column=3).value = 'begin_date'
         ws.cell(row=2, column=4).value = 'end_date'
+        ws.cell(row=2, column=5).value = 'ken_code'
+        ws.cell(row=2, column=6).value = 'ken_name'
         
         if weather_list:
             for i, weather in enumerate(weather_list):
@@ -2501,6 +2459,8 @@ def weather_view(request, lock):
                 ws.cell(row=i+3, column=2).value = weather.weather_name
                 ws.cell(row=i+3, column=3).value = weather.begin_date
                 ws.cell(row=i+3, column=4).value = weather.end_date
+                ws.cell(row=i+3, column=5).value = weather.ken_code
+                ws.cell(row=i+3, column=6).value = weather.ken_name
         
         wb.save(download_file_path)
         
@@ -2521,8 +2481,238 @@ def weather_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_view(request, lock)
-### 7030:入力データ_一覧表部分
+### 関数名：suigai_view(request, lock)
+### 7020：入力データ_ヘッダ部分
+### urlpattern：path('suigai/', views.suigai_view, name='suigai_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def suigai_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 lock = {}'.format(lock), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 1/4.', 'INFO')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、水害データを取得する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 2/4.', 'INFO')
+        suigai_list = SUIGAI.objects.raw("""
+            SELECT 
+                SG1.suigai_id AS suigai_id, 
+                SG1.suigai_name AS suigai_name, 
+                SG1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                SG1.city_code AS city_code, 
+                CT1.city_name AS city_name, 
+                TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
+                SG1.cause_1_code AS cause_1_code, 
+                CA1.cause_name AS cause_1_name, 
+                SG1.cause_2_code AS cause_2_code, 
+                CA2.cause_name AS cause_2_name, 
+                SG1.cause_3_code AS cause_3_code, 
+                CA3.cause_name AS cause_3_name, 
+                SG1.area_id AS area_id, 
+                AR1.area_name AS area_name, 
+                SG1.suikei_code AS suikei_code, 
+                SK1.suikei_name AS suikei_name, 
+                SG1.kasen_code AS kasen_code, 
+                KA1.kasen_name AS kasen_name, 
+                SG1.gradient_code AS gradient_code, 
+                GR1.gradient_name AS gradient_name, 
+                SG1.residential_area AS residential_area, 
+                SG1.agricultural_area AS agricultural_area, 
+                SG1.underground_area AS underground_area, 
+                SG1.kasen_kaigan_code AS kasen_kaigan_code, 
+                KK1.kasen_kaigan_name AS kasen_kaigan_name, 
+                SG1.crop_damage AS crop_damage, 
+                SG1.weather_id AS weather_id, 
+                WE1.weather_name AS weather_name, 
+                TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                SG1.file_path AS file_path, 
+                SG1.file_name AS file_name, 
+                SG1.action_code AS action_code, 
+                AC1.action_name AS action_name, 
+                SG1.status_code AS status_code, 
+                ST1.status_name AS status_name 
+            FROM SUIGAI SG1 
+            LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+            LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+            LEFT JOIN CAUSE CA1 ON SG1.cause_1_code=CA1.cause_code 
+            LEFT JOIN CAUSE CA2 ON SG1.cause_2_code=CA2.cause_code 
+            LEFT JOIN CAUSE CA3 ON SG1.cause_3_code=CA3.cause_code 
+            LEFT JOIN AREA AR1 ON SG1.area_id=AR1.area_id 
+            LEFT JOIN SUIKEI SK1 ON SG1.suikei_code=SK1.suikei_code 
+            LEFT JOIN KASEN KA1 ON SG1.kasen_code=KA1.kasen_code 
+            LEFT JOIN GRADIENT GR1 ON SG1.gradient_code=GR1.gradient_code 
+            LEFT JOIN KASEN_KAIGAN KK1 ON SG1.kasen_kaigan_code=KK1.kasen_kaigan_code 
+            LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
+            LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
+            LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
+            ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 3/4.', 'INFO')
+        template_file_path = 'static/template_suigai.xlsx'
+        download_file_path = 'static/download_suigai.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = 'シート'
+        ws.cell(row=1, column=1).value = 'シートID'
+        ws.cell(row=1, column=2).value = 'シート名'
+        ws.cell(row=1, column=3).value = '都道府県コード'
+        ws.cell(row=1, column=4).value = '都道府県名'
+        ws.cell(row=1, column=5).value = '市区町村コード'
+        ws.cell(row=1, column=6).value = '市区町村名'
+        ws.cell(row=1, column=7).value = '開始日'
+        ws.cell(row=1, column=8).value = '終了日'
+        ws.cell(row=1, column=9).value = '水害原因_1_コード'
+        ws.cell(row=1, column=10).value = '水害原因_1_名'
+        ws.cell(row=1, column=11).value = '水害原因_2_コード'
+        ws.cell(row=1, column=12).value = '水害原因_2_名'
+        ws.cell(row=1, column=13).value = '水害原因_3_コード'
+        ws.cell(row=1, column=14).value = '水害原因_3_名'
+        ws.cell(row=1, column=15).value = '水害区域ID'
+        ws.cell(row=1, column=16).value = '水害区域名'
+        ws.cell(row=1, column=17).value = '水系コード'
+        ws.cell(row=1, column=18).value = '水系名'
+        ws.cell(row=1, column=19).value = '河川コード'
+        ws.cell(row=1, column=20).value = '河川名'
+        ws.cell(row=1, column=21).value = '地盤勾配区分コード'
+        ws.cell(row=1, column=22).value = '地盤勾配区分名'
+        ws.cell(row=1, column=23).value = '宅地面積（単位m2）'
+        ws.cell(row=1, column=24).value = '農地面積（単位m2）'
+        ws.cell(row=1, column=25).value = '地下面積（単位m2）'
+        ws.cell(row=1, column=26).value = '河川海岸（工種）コード'
+        ws.cell(row=1, column=27).value = '河川海岸（工種）名'
+        ws.cell(row=1, column=28).value = '農作物被害額（単位千円）'
+        ws.cell(row=1, column=29).value = '異常気象ID'
+        ws.cell(row=1, column=30).value = '異常気象名'
+        ws.cell(row=1, column=31).value = 'コミット日時'
+        ws.cell(row=1, column=32).value = '削除日時'
+        ws.cell(row=1, column=33).value = 'ファイルパス'
+        ws.cell(row=1, column=34).value = 'ファイル名'
+        ws.cell(row=1, column=35).value = 'アクションコード'
+        ws.cell(row=1, column=36).value = 'アクション名'
+        ws.cell(row=1, column=37).value = '状態コード'
+        ws.cell(row=1, column=38).value = '状態名'
+
+        ws.cell(row=2, column=1).value = 'suigai_id'
+        ws.cell(row=2, column=2).value = 'suigai_name'
+        ws.cell(row=2, column=3).value = 'ken_code'
+        ws.cell(row=2, column=4).value = 'ken_name'
+        ws.cell(row=2, column=5).value = 'city_code'
+        ws.cell(row=2, column=6).value = 'city_name'
+        ws.cell(row=2, column=7).value = 'begin_date'
+        ws.cell(row=2, column=8).value = 'end_date'
+        ws.cell(row=2, column=9).value = 'cause_1_code'
+        ws.cell(row=2, column=10).value = 'cause_1_name'
+        ws.cell(row=2, column=11).value = 'cause_2_code'
+        ws.cell(row=2, column=12).value = 'cause_2_name'
+        ws.cell(row=2, column=13).value = 'cause_3_code'
+        ws.cell(row=2, column=14).value = 'cause_3_name'
+        ws.cell(row=2, column=15).value = 'area_id'
+        ws.cell(row=2, column=16).value = 'area_name'
+        ws.cell(row=2, column=17).value = 'suikei_code'
+        ws.cell(row=2, column=18).value = 'suikei_name'
+        ws.cell(row=2, column=19).value = 'kasen_code'
+        ws.cell(row=2, column=20).value = 'kasen_name'
+        ws.cell(row=2, column=21).value = 'gradient_code'
+        ws.cell(row=2, column=22).value = 'gradient_name'
+        ws.cell(row=2, column=23).value = 'residential_area'
+        ws.cell(row=2, column=24).value = 'agricultural_area'
+        ws.cell(row=2, column=25).value = 'underground_area'
+        ws.cell(row=2, column=26).value = 'kasen_kaigan_code'
+        ws.cell(row=2, column=27).value = 'kasen_kaigan_name'
+        ws.cell(row=2, column=28).value = 'crop_damage'
+        ws.cell(row=2, column=29).value = 'weather_id'
+        ws.cell(row=2, column=30).value = 'weather_name'
+        ws.cell(row=2, column=31).value = 'committed_at'
+        ws.cell(row=2, column=32).value = 'deleted_at'
+        ws.cell(row=2, column=33).value = 'file_path'
+        ws.cell(row=2, column=34).value = 'file_name'
+        ws.cell(row=2, column=35).value = 'action_code'
+        ws.cell(row=2, column=36).value = 'action_name'
+        ws.cell(row=2, column=37).value = 'status_code'
+        ws.cell(row=2, column=38).value = 'status_name'
+        
+        if suigai_list:
+            for i, suigai in enumerate(suigai_list):
+                ws.cell(row=i+3, column=1).value = suigai.suigai_id
+                ws.cell(row=i+3, column=2).value = suigai.suigai_name
+                ws.cell(row=i+3, column=3).value = suigai.ken_code
+                ws.cell(row=i+3, column=4).value = suigai.ken_name
+                ws.cell(row=i+3, column=5).value = suigai.city_code
+                ws.cell(row=i+3, column=6).value = suigai.city_name
+                ws.cell(row=i+3, column=7).value = suigai.begin_date
+                ws.cell(row=i+3, column=8).value = suigai.end_date
+                ws.cell(row=i+3, column=9).value = suigai.cause_1_code
+                ws.cell(row=i+3, column=10).value = suigai.cause_1_name
+                ws.cell(row=i+3, column=11).value = suigai.cause_2_code
+                ws.cell(row=i+3, column=12).value = suigai.cause_2_name
+                ws.cell(row=i+3, column=13).value = suigai.cause_3_code
+                ws.cell(row=i+3, column=14).value = suigai.cause_3_name
+                ws.cell(row=i+3, column=15).value = suigai.area_id
+                ws.cell(row=i+3, column=16).value = suigai.area_name
+                ws.cell(row=i+3, column=17).value = suigai.suikei_code
+                ws.cell(row=i+3, column=18).value = suigai.suikei_name
+                ws.cell(row=i+3, column=19).value = suigai.kasen_code
+                ws.cell(row=i+3, column=20).value = suigai.kasen_name
+                ws.cell(row=i+3, column=21).value = suigai.gradient_code
+                ws.cell(row=i+3, column=22).value = suigai.gradient_name
+                ws.cell(row=i+3, column=23).value = suigai.residential_area
+                ws.cell(row=i+3, column=24).value = suigai.agricultural_area
+                ws.cell(row=i+3, column=25).value = suigai.underground_area
+                ws.cell(row=i+3, column=26).value = suigai.kasen_kaigan_code
+                ws.cell(row=i+3, column=27).value = suigai.kasen_kaigan_name
+                ws.cell(row=i+3, column=28).value = suigai.crop_damage
+                ws.cell(row=i+3, column=29).value = suigai.weather_id
+                ws.cell(row=i+3, column=30).value = suigai.weather_name
+                ws.cell(row=i+3, column=31).value = suigai.committed_at
+                ws.cell(row=i+3, column=32).value = suigai.deleted_at
+                ws.cell(row=i+3, column=33).value = suigai.file_path
+                ws.cell(row=i+3, column=34).value = suigai.file_name
+                ws.cell(row=i+3, column=35).value = suigai.action_code
+                ws.cell(row=i+3, column=36).value = suigai.action_name
+                ws.cell(row=i+3, column=37).value = suigai.status_code
+                ws.cell(row=i+3, column=38).value = suigai.status_name
+        
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 4/4.', 'INFO')
+        print_log('[INFO] P0200ExcelDownload.suigai_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="suigai.xlsx"'
+        return response
+        
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：ippan_view(request, lock)
+### 7030：入力データ_一覧表部分
+### urlpattern：path('ippan/', views.ippan_view, name='ippan_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_view(request, lock):
@@ -2666,8 +2856,10 @@ def ippan_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_view_view(request, lock)
-### 7040:一般資産ビューデータ_一覧表部分
+### 関数名：ippan_view_view(request, lock)
+### 7040：ビューデータ_一覧表部分
+### urlpattern：path('ippan_view/', views.ippan_view_view, name='ippan_view_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_view_view(request, lock):
@@ -2983,8 +3175,10 @@ def ippan_view_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_summary_view(request, lock)
-### 8000:集計データ_集計結果
+### 関数名：ippan_summary_view(request, lock)
+### 8000：集計データ_集計結果
+### urlpattern：path('ippan_summary/', views.ippan_summary_view, name='ippan_summary_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_summary_view(request, lock):
@@ -3248,8 +3442,10 @@ def ippan_summary_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_group_by_ken_view(request, lock)
-### 8010:集計データ_集計結果_都道府県別
+### 関数名：ippan_group_by_ken_view(request, lock)
+### 8010：集計データ_集計結果_都道府県別
+### urlpattern：path('ippan_group_by_ken/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_group_by_ken_view(request, lock):
@@ -3534,8 +3730,10 @@ def ippan_group_by_ken_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_group_by_suikei_view(request, lock)
-### 8020:一般資産集計データ_集計結果_水系別
+### 関数名：ippan_group_by_suikei_view(request, lock)
+### 8020：集計データ_集計結果_水系別
+### urlpattern：path('ippan_group_by_suikei/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_group_by_suikei_view(request, lock):
@@ -3820,9 +4018,11 @@ def ippan_group_by_suikei_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_chosa_view(request, lock)
+### 関数名：ippan_chosa_view(request, lock)
 ### 一般資産調査票（調査員用）
 ### ※複数EXCELファイル、複数EXCELシート対応版
+### urlpattern：path('ippan_chosa/', views.ippan_chosa_view, name='ippan_chosa_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_chosa_view(request, lock):
@@ -4170,7 +4370,7 @@ def ippan_chosa_view(request, lock):
                     ws_industry[i].cell(row=j+1, column=1).value = industry.industry_code
                     ws_industry[i].cell(row=j+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
 
-        ### 7000: 一般資産入力データ_水害区域
+        ### 7000: 入力データ_水害区域
         print("ippan_chosa_view16", flush=True)
         area_list = None
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
@@ -4180,7 +4380,7 @@ def ippan_chosa_view(request, lock):
                     ws_area[i].cell(row=j+1, column=1).value = area.area_id
                     ws_area[i].cell(row=j+1, column=2).value = str(area.area_name) + ":" + str(area.area_id)
 
-        ### 7010: 一般資産入力データ_異常気象
+        ### 7010: 入力データ_異常気象
         print("ippan_chosa_view17", flush=True)
         weather_list = None
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
@@ -4190,7 +4390,7 @@ def ippan_chosa_view(request, lock):
                     ws_weather[i].cell(row=j+1, column=1).value = weather.weather_id
                     ws_weather[i].cell(row=j+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
         
-        ### 7020: 一般資産入力データ_ヘッダ部分、水害
+        ### 7020: 入力データ_ヘッダ部分、水害
         print("ippan_chosa_view18", flush=True)
         suigai_list = None
         suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
@@ -4475,12 +4675,12 @@ def ippan_chosa_view(request, lock):
                 dv_industry.ranges = 'Y20:Y1000'
                 ws_ippan[i][j].add_data_validation(dv_industry)
 
-                ### 7000: 一般資産入力データ_水害区域
+                ### 7000: 入力データ_水害区域
                 dv_area = DataValidation(type="list", formula1="AREA!$B$1:$B$%d" % len(area_list))
                 dv_area.ranges = 'I7:I7'
                 ws_ippan[i][j].add_data_validation(dv_area)
                 
-                ### 7010: 一般資産入力データ_異常気象
+                ### 7010: 入力データ_異常気象
                 dv_weather = DataValidation(type="list", formula1="WEATHER!$B$1:$B$%d" % len(weather_list))
                 dv_weather.ranges = 'J14:J14'
                 ws_ippan[i][j].add_data_validation(dv_weather)
@@ -4492,14 +4692,14 @@ def ippan_chosa_view(request, lock):
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 10/12.', 'INFO')
 
-        ### 7020: 一般資産入力データ_ヘッダ部分、水害
+        ### 7020: 入力データ_ヘッダ部分、水害
         print("ippan_chosa_view38_1", flush=True)
         for i, _ in enumerate(city_code_request):
             for j in range(suigai_count_list[i]):
         
                 ###############################################################
                 ### DBアクセス処理(0100)
-                ### DBから一般資産入力データ_ヘッダ部分のデータを取得する。
+                ### DBから入力データ_ヘッダ部分のデータを取得する。
                 ###############################################################
                 suigai_list = None
                 suigai_list = SUIGAI.objects.raw("""
@@ -4557,7 +4757,7 @@ def ippan_chosa_view(request, lock):
         
                 ###############################################################
                 ### DBアクセス処理(0110)
-                ### DBから一般資産入力データ_一覧表部分のデータを取得する。
+                ### DBから入力データ_一覧表部分のデータを取得する。
                 ###############################################################
                 ippan_list = None
                 ippan_list = IPPAN.objects.raw("""
@@ -4619,7 +4819,7 @@ def ippan_chosa_view(request, lock):
         
                 ###############################################################
                 ### EXCEL入出力処理(0120)
-                ### EXCELのヘッダ部のセルに、DBから取得した一般資産入力データ_ヘッダ部分の値を埋め込む。
+                ### EXCELのヘッダ部のセルに、DBから取得した入力データ_ヘッダ部分の値を埋め込む。
                 ###############################################################
                 if suigai_list:
                     for k, suigai in enumerate(suigai_list):
@@ -4712,8 +4912,10 @@ def ippan_chosa_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_city_view(request, lock)
+### 関数名：ippan_city_view(request, lock)
 ### 一般資産調査票（市区町村担当者用）
+### urlpattern：path('ippan_city/', views.ippan_city_view, name='ippan_city_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_city_view(request, lock):
@@ -5030,7 +5232,7 @@ def ippan_city_view(request, lock):
                     ws_industry[i].cell(row=j+1, column=1).value = industry.industry_code
                     ws_industry[i].cell(row=j+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
 
-        ### 7000: 一般資産入力データ_水害区域
+        ### 7000: 入力データ_水害区域
         print("ippan_ken_view16", flush=True)
         area_list = None
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
@@ -5040,7 +5242,7 @@ def ippan_city_view(request, lock):
                     ws_area[i].cell(row=j+1, column=1).value = area.area_id
                     ws_area[i].cell(row=j+1, column=2).value = str(area.area_name) + ":" + str(area.area_id)
 
-        ### 7010: 一般資産入力データ_異常気象
+        ### 7010: 入力データ_異常気象
         print("ippan_ken_view17", flush=True)
         weather_list = None
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
@@ -5050,7 +5252,7 @@ def ippan_city_view(request, lock):
                     ws_weather[i].cell(row=j+1, column=1).value = weather.weather_id
                     ws_weather[i].cell(row=j+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
         
-        ### 7020: 一般資産入力データ_ヘッダ部分、水害
+        ### 7020: 入力データ_ヘッダ部分、水害
         print("ippan_ken_view18", flush=True)
         suigai_list = None
         suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
@@ -5309,8 +5511,10 @@ def ippan_city_view(request, lock):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名:ippan_ken_view(request, lock)
+### 関数名：ippan_ken_view(request, lock)
 ### 一般資産調査票（都道府県担当者用）
+### urlpattern：path('ippan_ken/', views.ippan_ken_view, name='ippan_ken_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_ken_view(request, lock):
@@ -5627,7 +5831,7 @@ def ippan_ken_view(request, lock):
                     ws_industry[i].cell(row=j+1, column=1).value = industry.industry_code
                     ws_industry[i].cell(row=j+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
 
-        ### 7000: 一般資産入力データ_水害区域
+        ### 7000: 入力データ_水害区域
         print("ippan_ken_view16", flush=True)
         area_list = None
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
@@ -5637,7 +5841,7 @@ def ippan_ken_view(request, lock):
                     ws_area[i].cell(row=j+1, column=1).value = area.area_id
                     ws_area[i].cell(row=j+1, column=2).value = str(area.area_name) + ":" + str(area.area_id)
 
-        ### 7010: 一般資産入力データ_異常気象
+        ### 7010: 入力データ_異常気象
         print("ippan_ken_view17", flush=True)
         weather_list = None
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
@@ -5647,7 +5851,7 @@ def ippan_ken_view(request, lock):
                     ws_weather[i].cell(row=j+1, column=1).value = weather.weather_id
                     ws_weather[i].cell(row=j+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
         
-        ### 7020: 一般資産入力データ_ヘッダ部分、水害
+        ### 7020: 入力データ_ヘッダ部分、水害
         print("ippan_ken_view18", flush=True)
         suigai_list = None
         suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])

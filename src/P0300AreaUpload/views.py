@@ -76,13 +76,13 @@ from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
-### from P0000Common.models import EXECUTE             ### 10050: 実行管理
-### from P0000Common.models import REPOSITORY          ### 11000: EXCELファイルレポジトリ
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0300AreaUpload/index.html
 ### (1)GETの場合、水害区域図アップロード画面を表示する。
 ### (2)POSTの場合、アップロードされた水害区域図をチェックして、正常ケースの場合、DBに登録する。
 ### (3)POSTの場合、アップロードされた水害区域図をチェックして、警告ケースの場合、DBに登録する。

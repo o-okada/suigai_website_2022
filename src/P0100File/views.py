@@ -71,14 +71,13 @@ from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
-### from P0000Common.models import EXECUTE             ### 10050: 実行管理
-
-### from P0000Common.models import REPOSITORY          ### 11000: レポジトリ
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：type_view
+### urlpattern：path('type/<slug:type_code>/', views.type_view, name='type_view')
+### template：P0100File/type.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def type_view(request, type_code):
@@ -180,12 +179,12 @@ def type_view(request, type_code):
         template = loader.get_template('P0100File/type.html')
         context = {
             'type_code': type_code, 
+            'feedback_count': 0, 
+            'approval_count': 0, 
+            
             'ken_list': ken_list, 
             'feedback_list': feedback_list, 
             'approval_list': approval_list, 
-            'feedback_count': 0, 
-            'approval_count': 0, 
-            ### 'repository_list': repository_list, 
             'suigai_list': suigai_list, 
             'area_list': area_list, 
         }
@@ -200,6 +199,8 @@ def type_view(request, type_code):
 
 ###############################################################################
 ### 関数名：type_ken_view
+### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/', views.type_ken_view, name='type_ken_view')
+### template：P0100File/ken.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def type_ken_view(request, type_code, ken_code):
@@ -283,13 +284,12 @@ def type_ken_view(request, type_code, ken_code):
         print_log('[INFO] P0100File.type_ken_view()関数 STEP 3/3.', 'INFO')
         template = loader.get_template('P0100File/ken.html')
         context = {
-            'ken_code': ken_code, 
             'type_code': type_code, 
+            'ken_code': ken_code, 
+            
             'ken_list': ken_list, 
             'suigai_list': suigai_list, 
             'area_list': area_list, 
-            ### 'kokyo_list': kokyo_list, 
-            ### 'koeki_list': koeki_list, 
         }
         print_log('[INFO] P0100File.type_ken_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

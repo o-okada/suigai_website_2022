@@ -74,13 +74,13 @@ from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
-from P0000Common.models import REPOSITORY              ### 10050: EXCELファイルレポジトリ
-### from P0000Common.models import EXECUTE             ### 10060: 実行管理
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0300AreaWeather/index.html
 ### データベースに登録するボタンクリック時のPOSTに対応する処理
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
@@ -328,6 +328,8 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：type_ken_suigai_view
+### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/suigai/<slug:suigai_id>/', views.type_ken_suigai_view, name='type_ken_suigai_view')
+### template：P0300AreaWeather/index.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def type_ken_suigai_view(request, type_code, ken_code, suigai_id):

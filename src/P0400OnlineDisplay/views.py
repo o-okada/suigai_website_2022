@@ -71,14 +71,13 @@ from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
-### from P0000Common.models import REPOSITORY          ### 10050: EXCELファイルレポジトリ
-### from P0000Common.models import EXECUTE             ### 10060: 実行管理
 
 from P0000Common.common import print_log
 
 ###############################################################################
 ### 関数名：index_view
-### オンライン参照画面
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0400OnlineDisplay/index.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -119,7 +118,8 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：category1_category2_ken_city_view
-### オンライン参照画面
+### urlpattern：path('category1/<slug:category_code1>/category2/<slug:category_code2>/ken/<slug:ken_code>/city/<slug:city_code>/', views.category1_category2_ken_city_view, name='category1_category2_ken_city_view'),
+### template：P0400OnlineDisplay/index.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def category1_category2_ken_city_view(request, category_code1, category_code2, ken_code, city_code):
