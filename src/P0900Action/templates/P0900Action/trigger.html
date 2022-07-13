@@ -17,10 +17,26 @@
     .btn-running {background: #258AC4; color: #FFFFFF;}
     .btn-cancel  {background: #6C757D; color: #FFFFFF;}
     .btn-success {background: #54AB51; color: #FFFFFF;}
+    
     a:link {color: #000000; text-decoration:none;}
     a:visited {color: #000000; text-decoration:none;}
     a:hover {color: #000000; text-decoration:none;}
     a:active {color: #000000; text-decoration:none;}
+    
+    .cl-nav:link {color: #000000; text-decoration:none;}
+    .cl-nav:visited {color: #000000; text-decoration:none;}
+    .cl-nav:hover {color: #000000; text-decoration:none;}
+    .cl-nav:active {color: #000000; text-decoration:none;}
+
+    .cl-bread:link {color: #0000EE; text-decoration:underline;}
+    .cl-bread:visited {color: #0000EE; text-decoration:underline;}
+    .cl-bread:hover {color: #0000EE; text-decoration:underline;}
+    .cl-bread:active {color: #0000EE; text-decoration:underline;}
+
+    .cl-table:link {color: #0000EE; text-decoration: underline;}
+    .cl-table:visited {color: #0000EE; text-decoration: underline;}
+    .cl-table:hover {color: #0000EE; text-decoration: underline;}
+    .cl-table:active {color: #0000EE; text-decoration: underline;}
     </style>
 </head>
 <!-- END Head -->
@@ -37,7 +53,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -51,13 +67,13 @@
                     
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" style="border-bottom: 2px solid red;" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl_nav" style="border-bottom: 2px solid #0000EE;" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
 
                     <!-- BEGIN ナビバー マニュアル検証メニュー -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active cl_nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <strong>マニュアル検証</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -69,24 +85,24 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl_nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl_nav" href="#"><strong>グラフ</strong></a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl_nav" href="#"><strong>帳票</strong></a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl_nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
             </div>
         </div>
@@ -168,22 +184,22 @@
                         <div class="table-responsive overflow-auto">
                             <table>
                                 <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start">{{ trigger.0.trigger_id }}</td></tr>
-                                <tr><td class="text-start">水害ID:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_id }}</td></tr>
-                                <tr><td class="text-start">水害名:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}</td></tr>
+                                <tr><td class="text-start">ファイル名:&nbsp;</td><td class="text-start"><a href="/P0900Action/download_file/{{ trigger.0.suigai_id }}/">{{ trigger.0.file_name }}</a></td></tr>
+                                <tr><td class="text-start">シートID:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_id }}</td></tr>
+                                <tr><td class="text-start">シート名:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}</td></tr>
                                 <tr><td class="text-start">都道府県コード:&nbsp;</td><td class="text-start">{{ trigger.0.ken_code }}</td></tr>
                                 <tr><td class="text-start">都道府県名:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}</td></tr>
                                 <tr><td class="text-start">市区町村コード:&nbsp;</td><td class="text-start">{{ trigger.0.city_code }}</td></tr>
                                 <tr><td class="text-start">市区町村名:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}</td></tr>
-                                <tr><td class="text-start">レポジトリID:&nbsp;</td><td class="text-start">{{ trigger.0.repository_id }}</td></tr>
                                 <tr><td class="text-start">アクションコード:&nbsp;</td><td class="text-start">{{ trigger.0.action_code }}</td></tr>
                                 <tr><td class="text-start">アクション名:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}</td></tr>
                                 <tr><td class="text-start">状態コード:&nbsp;</td><td class="text-start">{{ trigger.0.status_code }}</td></tr>
                                 <tr><td class="text-start">状態名:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}</td></tr>
                                 <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start">{{ trigger.0.published_at }}</td></tr>
                                 <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start">{{ trigger.0.consumed_at }}</td></tr>
+                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start">{{ trigger.0.deleted_at }}</td></tr>
                                 <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start">{{ trigger.0.success_count }}</td></tr>
                                 <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start">{{ trigger.0.failure_count }}</td></tr>
-                                <tr><td class="text-start">入力ファイル:&nbsp;</td><td class="text-start"><a href="/P0900Action/download_file/{{ trigger.0.repository_id }}">{{ trigger.0.repository_id }}</a></td></tr>
                             </table>
                         </div>
                     </div>

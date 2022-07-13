@@ -77,8 +77,7 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 ### from P0000Common.models import EXECUTE             ### 10050: 実行管理
-
-from P0000Common.models import REPOSITORY              ### 11000: EXCELファイルレポジトリ
+### from P0000Common.models import REPOSITORY          ### 11000: EXCELファイルレポジトリ
 
 from P0000Common.common import print_log
 
@@ -98,21 +97,21 @@ def index_view(request):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0300AreaUpload.index_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0300AreaUpload.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 1/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 1/9.', 'INFO')
         
         #######################################################################
         ### 局所変数セット処理(0010)
         ### チェック結果を格納するために局所変数をセットする。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 2/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 2/9.', 'INFO')
     
         #######################################################################
-        ### 条件分岐処理(0030)
+        ### 条件分岐処理(0020)
         ### (1)GETの場合、水害区域図アップロード画面を表示して関数を抜ける。
         ### (2)POSTの場合、アップロードされた水害区域図をチェックする。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 3/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 3/9.', 'INFO')
         if request.method == 'GET':
             form = AreaUploadForm()
             return render(request, 'P0300AreaUpload/index.html', {'form': form})
@@ -121,12 +120,12 @@ def index_view(request):
             form = AreaUploadForm(request.POST, request.FILES)
             
         #######################################################################
-        ### フォーム検証処理(0040)
+        ### フォーム検証処理(0030)
         ### (1)フォームが正しい場合、処理を継続する。
         ### (2)フォームが正しくない場合、ERROR画面を表示して関数を抜ける。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 4/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 4/9.', 'INFO')
         if form.is_valid():
             pass
         
@@ -134,30 +133,30 @@ def index_view(request):
             return HttpResponseRedirect('fail')
     
         #######################################################################
-        ### 水害区域図入出力処理(0050)
+        ### 水害区域図入出力処理(0040)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 5/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 5/9.', 'INFO')
         JST = timezone(timedelta(hours=9), 'JST')
         datetime_now_Ym = datetime.now(JST).strftime('%Y%m')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
         
-        input_file_object = request.FILES['file']
-        input_file_name, input_file_ext = os.path.splitext(request.FILES['file'].name)
-        input_file_path = 'static/repository/' + datetime_now_Ym + '/' + input_file_name + '_' + datetime_now_YmdHMS + '.pdf'
+        file_object = request.FILES['file']
+        file_name, file_ext = os.path.splitext(request.FILES['file'].name)
+        file_path = 'static/repository/' + datetime_now_Ym + '/' + file_name + '_' + datetime_now_YmdHMS + '.pdf'
         
-        with open(input_file_path, 'wb+') as destination:
-            for chunk in input_file_object.chunks():
+        with open(file_path, 'wb+') as destination:
+            for chunk in file_object.chunks():
                 destination.write(chunk)
         
-        print_log('[INFO] P0300AreaUpload.index_view()関数 input_file_object = {}'.format(input_file_object), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 input_file_name = {}'.format(input_file_name), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 input_file_ext = {}'.format(input_file_ext), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 file_object = {}'.format(file_object), 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 file_name = {}'.format(file_name), 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 file_ext = {}'.format(file_ext), 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 file_path = {}'.format(file_path), 'INFO')
 
         #######################################################################
-        ### 水害区域図入出力処理(0060)
+        ### 水害区域図入出力処理(0050)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 6/8.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 6/9.', 'INFO')
         area_id = request.POST.get('area_id')
         area_name = request.POST.get('area_name')
 
@@ -167,26 +166,41 @@ def index_view(request):
         #######################################################################
         ### DBアクセス処理(1000)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 6/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 7/9.', 'INFO')
         connection_cursor = connection.cursor()
         try:
             ###################################################################
             ### DBアクセス処理(1010)
             ### 水害区域テーブルにデータを登録する。
             ###################################################################
-            print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 6_1/7.', 'INFO')
+            print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 8/9.', 'INFO')
+            ### connection_cursor.execute("""
+            ###     INSERT INTO AREA (area_id, area_name, input_file_path, input_file_name) 
+            ###     VALUES (%s, %s, %s, %s) 
+            ###     ON CONFLICT (area_id) 
+            ###     DO UPDATE SET area_name=%s, input_file_path=%s, input_file_name=%s""", [
+            ###         int(area_id), 
+            ###         area_name, 
+            ###         input_file_path, 
+            ###         input_file_name, 
+            ###         area_name, 
+            ###         input_file_path, 
+            ###         input_file_name, 
+            ###     ])
             connection_cursor.execute("""
-                INSERT INTO AREA (area_id, area_name, input_file_path, input_file_name) 
-                VALUES (%s, %s, %s, %s) 
+                INSERT INTO AREA (area_id, area_name, ken_code, committed_at, deleted_at, file_path, file_name, action_code, status_code) 
+                VALUES (%s, %s, %s, CURRENT_TIMESTAMP, NULL, %s, %s, NULL, NULL) 
                 ON CONFLICT (area_id) 
-                DO UPDATE SET area_name=%s, input_file_path=%s, input_file_name=%s""", [
+                DO UPDATE SET area_name=%s, file_path=%s, file_name=%s""", [
                     int(area_id), 
                     area_name, 
-                    input_file_path, 
-                    input_file_name, 
+                    '02', 
+                    file_path, 
+                    file_name, 
+                    
                     area_name, 
-                    input_file_path, 
-                    input_file_name, 
+                    file_path, 
+                    file_name, 
                 ])
             
             transaction.commit()
@@ -196,12 +210,12 @@ def index_view(request):
             connection_cursor.close()
             
         #######################################################################
-        ### レスポンスセット処理(0070)
+        ### レスポンスセット処理(1020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         ### ※入力チェックでエラーが発見された場合、
         ### ※ネストを浅くするために、処理対象外の場合、終了させる。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 7/7.', 'INFO')
+        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 9/9.', 'INFO')
         template = loader.get_template('P0300AreaUpload/success.html')
         context = {}
         print_log('[INFO] P0300AreaUpload.index_view()関数が正常終了しました。', 'INFO')

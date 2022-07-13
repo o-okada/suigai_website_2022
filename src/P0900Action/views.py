@@ -72,8 +72,7 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 ### from P0000Common.models import EXECUTE             ### 10050: 実行管理
-
-from P0000Common.models import REPOSITORY              ### 11000: レポジトリ
+### from P0000Common.models import REPOSITORY          ### 11000: レポジトリ
 
 from P0000Common.common import print_log
 
@@ -92,25 +91,23 @@ def get_trigger_list(action_code, status_code, suigai_id):
                 KE1.ken_name AS ken_name, 
                 SG1.city_code AS city_code, 
                 CT1.city_name AS city_name, 
-                TR1.repository_id AS repository_id, 
-                RE1.input_file_path AS input_file_path, 
-                RE1.input_file_name AS input_file_name, 
+                SG1.file_path AS file_path, 
+                SG1.file_name AS file_name, 
                 TR1.action_code AS action_code, 
                 AC1.action_name AS action_name, 
                 TR1.status_code AS status_code, 
                 ST1.status_name AS status_name, 
-                TR1.published_at AS published_at, 
-                TR1.consumed_at AS consumed_at, 
                 TR1.success_count AS success_count, 
                 TR1.failure_count AS failure_count, 
-                TR1.deleted_at AS deleted_at 
+                TO_CHAR(timezone('JST', TR1.published_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS published_at, 
+                TO_CHAR(timezone('JST', TR1.consumed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS consumed_at, 
+                TO_CHAR(timezone('JST', TR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM TRIGGER TR1 
             LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
             LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
             LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-            LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
             WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL 
             ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [action_code, status_code, ])
     
@@ -124,25 +121,23 @@ def get_trigger_list(action_code, status_code, suigai_id):
                 KE1.ken_name AS ken_name, 
                 SG1.city_code AS city_code, 
                 CT1.city_name AS city_name, 
-                TR1.repository_id AS repository_id, 
-                RE1.input_file_path AS input_file_path, 
-                RE1.input_file_name AS input_file_name, 
+                SG1.file_path AS file_path, 
+                SG1.file_name AS file_name, 
                 TR1.action_code AS action_code, 
                 AC1.action_name AS action_name, 
                 TR1.status_code AS status_code, 
                 ST1.status_name AS status_name, 
-                TR1.published_at AS published_at, 
-                TR1.consumed_at AS consumed_at, 
                 TR1.success_count AS success_count, 
                 TR1.failure_count AS failure_count, 
-                TR1.deleted_at AS deleted_at 
+                TO_CHAR(timezone('JST', TR1.published_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS published_at, 
+                TO_CHAR(timezone('JST', TR1.consumed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS consumed_at, 
+                TO_CHAR(timezone('JST', TR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM TRIGGER TR1 
             LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
             LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
             LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-            LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
             WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL AND TR1.suigai_id=%s 
             ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [action_code, status_code, suigai_id, ])
     
@@ -155,12 +150,16 @@ def get_trigger_count(action_code, status_code, suigai_id):
     
     if suigai_id == 0:
         trigger_list = TRIGGER.objects.raw("""
-            SELECT * FROM TRIGGER 
+            SELECT 
+                * 
+            FROM TRIGGER 
             WHERE action_code=%s AND status_code=%s AND deleted_at IS NULL""", [action_code, status_code, ])
         
     else:
         trigger_list = TRIGGER.objects.raw("""
-            SELECT * FROM TRIGGER 
+            SELECT 
+                * 
+            FROM TRIGGER 
             WHERE action_code=%s AND status_code=%s AND deleted_at IS NULL AND suigai_id=%s""", [action_code, status_code, suigai_id, ])
 
     if trigger_list:
@@ -169,8 +168,20 @@ def get_trigger_count(action_code, status_code, suigai_id):
         return str(0)
 
 ###############################################################################
+### 関数名/画面名：index_view/index.html
+### 関数名/画面名：suigai_view/index.html
+### 関数名/画面名：trigger_view/trigger.html
+### 関数名/画面名：download_file_view/
+### 
+### 
+### 関数名/画面名：ken_city_repository_view/index.html ※削除予定
+### 関数名/画面名：graph_view/graph.html ※削除予定
+###############################################################################
+
+###############################################################################
 ### 関数名：index_view
-### 自動実行進捗状況一覧表示画面
+### urlpatterns：path('', views.index_view, name='index_view')       
+### template：P0900Action/index.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -315,7 +326,8 @@ def index_view(request):
 
 ###############################################################################
 ### 関数名：suigai_view
-### 自動実行進捗状況一覧表示画面
+### urlpatterns：path('suigai/<slug:suigai_id>/', views.suigai_view, name='suigai_view')
+### template：index.html        
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def suigai_view(request, suigai_id):
@@ -461,7 +473,8 @@ def suigai_view(request, suigai_id):
 
 ###############################################################################
 ### 関数名：trigger_view
-### 自動実行進捗状況詳細表示画面
+### urlpatterns：path('trigger/<slug:trigger_id>/', views.trigger_view, name='trigger_view')
+### template：trigger.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def trigger_view(request, trigger_id):
@@ -482,35 +495,35 @@ def trigger_view(request, trigger_id):
         #######################################################################
         print_log('[INFO] P0900Action.trigger_view()関数 STEP 2/3.', 'INFO')
         trigger = TRIGGER.objects.raw("""
-        SELECT 
-            TR1.trigger_id AS trigger_id, 
-            TR1.suigai_id AS suigai_id, 
-            SG1.suigai_name AS suigai_name, 
-            SG1.ken_code AS ken_code, 
-            KE1.ken_name AS ken_name, 
-            SG1.city_code AS city_code, 
-            CT1.city_name AS city_name, 
-            TR1.repository_id AS repository_id, 
-            TR1.action_code AS action_code, 
-            AC1.action_name AS action_name, 
-            TR1.status_code AS status_code, 
-            ST1.status_name AS status_name, 
-            TR1.published_at AS published_at, 
-            TR1.consumed_at AS consumed_at, 
-            TR1.success_count AS success_count, 
-            TR1.failure_count AS failure_count, 
-            RE1.input_file_path AS input_file_path, 
-            TR1.data_integrity_left AS data_integrity_left, 
-            TR1.data_integrity_right AS data_integrity_right 
-        FROM TRIGGER TR1 
-        LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-        LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-        LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-        LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-        LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-        LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-        WHERE trigger_id=%s""", [trigger_id, ])
-
+            SELECT 
+                TR1.trigger_id AS trigger_id, 
+                TR1.suigai_id AS suigai_id, 
+                SG1.suigai_name AS suigai_name, 
+                SG1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                SG1.city_code AS city_code, 
+                CT1.city_name AS city_name, 
+                SG1.file_path AS file_path, 
+                SG1.file_name AS file_name, 
+                TR1.action_code AS action_code, 
+                AC1.action_name AS action_name, 
+                TR1.status_code AS status_code, 
+                ST1.status_name AS status_name, 
+                TR1.success_count AS success_count, 
+                TR1.failure_count AS failure_count, 
+                TO_CHAR(timezone('JST', TR1.published_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS published_at, 
+                TO_CHAR(timezone('JST', TR1.consumed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS consumed_at, 
+                TO_CHAR(timezone('JST', TR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
+                TR1.data_integrity_left AS data_integrity_left, 
+                TR1.data_integrity_right AS data_integrity_right 
+            FROM TRIGGER TR1 
+            LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+            LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+            LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+            LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+            LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+            WHERE trigger_id=%s""", [trigger_id, ])
+    
         #######################################################################
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
@@ -531,10 +544,10 @@ def trigger_view(request, trigger_id):
 
 ###############################################################################
 ### 関数名：download_file_view
-### エクセルファイルダウンロード
+### urlpattern：path('download_file/<slug:suigai_id>/', views.download_file_view, name='download_file_view')
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def download_file_view(request, repository_id):
+def download_file_view(request, suigai_id):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -543,6 +556,7 @@ def download_file_view(request, repository_id):
         print_log('[INFO] ########################################', 'INFO')
         print_log('[INFO] P0900Action.download_file_view()関数が開始しました。', 'INFO')
         print_log('[INFO] P0900Action.download_file_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0900Action.download_file_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
         print_log('[INFO] P0900Action.download_file_view()関数 STEP 1/1.', 'INFO')
         
         result_file_path = 'static/ippan_chosa_result2.xlsx'
@@ -565,522 +579,522 @@ def download_file_view(request, repository_id):
 
 ###############################################################################
 ### 関数名：graph_view
-### 自動実行進捗状況グラフ表示画面
+### 画面名：graph.html
 ###############################################################################
-@login_required(None, login_url='/P0100Login/')
-def graph_view(request):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0900Action.graph_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.graph_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.graph_view()関数 STEP 1/3.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、データを取得する。
-        #######################################################################
-        print_log('[INFO] P0900Action.graph_view()関数 STEP 2/3.', 'INFO')
-        ken_list = KEN.objects.raw("""
-            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        trigger_list = TRIGGER.objects.raw("""
-            SELECT 
-                TR1.trigger_id AS trigger_id, 
-                TR1.suigai_id AS suigai_id, 
-                SG1.suigai_name AS suigai_name, 
-                SG1.ken_code AS ken_code, 
-                KE1.ken_name AS ken_name, 
-                SG1.city_code AS city_code, 
-                CT1.city_name AS city_name, 
-                TR1.repository_id AS repository_id, 
-                TR1.action_code AS action_code, 
-                AC1.action_name AS action_name, 
-                TR1.status_code AS status_code, 
-                ST1.status_name AS status_name, 
-                TR1.published_at AS published_at, 
-                TR1.consumed_at AS consumed_at, 
-                TR1.success_count AS success_count, 
-                TR1.failure_count AS failure_count, 
-                TR1.deleted_at AS deleted_at 
-            FROM TRIGGER TR1 
-            LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-            LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-            LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-            LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-            LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-            ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [])
-
-        #######################################################################
-        ### レスポンスセット処理(0020)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0900Action.graph_view()関数 STEP 3/3.', 'INFO')
-        template = loader.get_template('P0900Action/graph.html')
-        context = {
-            'ken_list': ken_list, 
-            'trigger_list': trigger_list, 
-        }
-        print_log('[INFO] P0900Action.graph_view()関数が正常終了しました。', 'INFO')
-        return HttpResponse(template.render(context, request))
-    
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0900Action.graph_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0900Action.graph_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### @login_required(None, login_url='/P0100Login/')
+### def graph_view(request):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         print_log('[INFO] ########################################', 'INFO')
+###         print_log('[INFO] P0900Action.graph_view()関数が開始しました。', 'INFO')
+###         print_log('[INFO] P0900Action.graph_view()関数 request = {}'.format(request.method), 'INFO')
+###         print_log('[INFO] P0900Action.graph_view()関数 STEP 1/3.', 'INFO')
+###         
+###         #######################################################################
+###         ### DBアクセス処理(0010)
+###         ### DBにアクセスして、データを取得する。
+###         #######################################################################
+###         print_log('[INFO] P0900Action.graph_view()関数 STEP 2/3.', 'INFO')
+###         ken_list = KEN.objects.raw("""
+###             SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+###         trigger_list = TRIGGER.objects.raw("""
+###             SELECT 
+###                 TR1.trigger_id AS trigger_id, 
+###                 TR1.suigai_id AS suigai_id, 
+###                 SG1.suigai_name AS suigai_name, 
+###                 SG1.ken_code AS ken_code, 
+###                 KE1.ken_name AS ken_name, 
+###                 SG1.city_code AS city_code, 
+###                 CT1.city_name AS city_name, 
+###                 TR1.repository_id AS repository_id, 
+###                 TR1.action_code AS action_code, 
+###                 AC1.action_name AS action_name, 
+###                 TR1.status_code AS status_code, 
+###                 ST1.status_name AS status_name, 
+###                 TR1.published_at AS published_at, 
+###                 TR1.consumed_at AS consumed_at, 
+###                 TR1.success_count AS success_count, 
+###                 TR1.failure_count AS failure_count, 
+###                 TR1.deleted_at AS deleted_at 
+###             FROM TRIGGER TR1 
+###             LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###             LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###             LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###             ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [])
+### 
+###         #######################################################################
+###         ### レスポンスセット処理(0020)
+###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[INFO] P0900Action.graph_view()関数 STEP 3/3.', 'INFO')
+###         template = loader.get_template('P0900Action/graph.html')
+###         context = {
+###             'ken_list': ken_list, 
+###             'trigger_list': trigger_list, 
+###         }
+###         print_log('[INFO] P0900Action.graph_view()関数が正常終了しました。', 'INFO')
+###         return HttpResponse(template.render(context, request))
+###     
+###     except:
+###         print_log(sys.exc_info()[0], 'ERROR')
+###         print_log('[ERROR] P0900Action.graph_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0900Action.graph_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ken_city_repository_view
-### 自動実行進捗状況グラフ表示画面
+### 画面名：index.html
 ###############################################################################
-@login_required(None, login_url='/P0100Login/')
-def ken_city_repository_view(request, ken_code, city_code, repository_id):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 repository_id = {}'.format(repository_id), 'INFO')
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 1/3.', 'INFO')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、データを取得する。
-        #######################################################################
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 2/3.', 'INFO')
-        ken_list = KEN.objects.raw("""
-            SELECT * FROM KEN ORDER BY CAST(ken_code AS INTEGER)""", [])
-        if ken_code == "0":
-            city_list = []
-        else:
-            city_list = CITY.objects.raw("""
-                SELECT * FROM CITY WHERE ken_code=%s ORDER BY CAST(city_code AS INTEGER)""", [ken_code, ])
-            
-        if city_code == "0": 
-            repository_list = []
-        else: 
-            repository_list = REPOSITORY.objects.raw("""
-                SELECT 
-                    RE1.repository_id AS repository_id, 
-                    RE1.suigai_id AS suigai_id, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    RE1.status_code AS status_code, 
-                    RE1.created_at AS created_at, 
-                    RE1.updated_at AS updated_at, 
-                    RE1.input_file_path AS input_file_path, 
-                    RE1.deleted_at AS deleted_at, 
-                    RE1.committed_at AS committed_at 
-                FROM REPOSITORY RE1 
-                LEFT JOIN SUIGAI SG1 ON RE1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                WHERE SG1.city_code=%s 
-                ORDER BY CAST(RE1.repository_id AS INTEGER) DESC""", [city_code, ])
-        
-        if ken_code == "0" and city_code == "0" and repository_id == "0": 
-            print_log('ken_code == "0" and city_code == "0" and repository_id == "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [])
-            
-        elif ken_code == "0" and city_code == "0" and repository_id != "0": 
-            print_log('ken_code == "0" and city_code == "0" and repository_id != "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                WHERE TR1.repository_id=%s 
-                ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [repository_id, ])
-        
-        elif ken_code == "0" and city_code != "0" and repository_id == "0": 
-            print_log('ken_code == "0" and city_code != "0" and repository_id == "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.city_code=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [city_code, ])
-        
-        elif ken_code == "0" and city_code != "0" and repository_id != "0": 
-            print_log('ken_code == "0" and city_code != "0" and repository_id != "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.city_code=%s AND SUB1.repository_id=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [city_code, repository_id, ])
-        
-        elif ken_code != "0" and city_code == "0" and repository_id == "0": 
-            print_log('ken_code != "0" and city_code == "0" and repository_id == "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.ken_code=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, ])
-        
-        elif ken_code != "0" and city_code == "0" and repository_id != "0": 
-            print_log('ken_code != "0" and city_code == "0" and repository_id != "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.ken_code=%s AND SUB1.repository_id=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, repository_id, ])
-        
-        elif ken_code != "0" and city_code != "0" and repository_id == "0": 
-            print_log('ken_code != "0" and city_code != "0" and repository_id == "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.ken_code=%s AND SUB1.city_code=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, city_code, ])
-        
-        elif ken_code != "0" and city_code != "0" and repository_id != "0": 
-            print_log('ken_code != "0" and city_code != "0" and repository_id != "0"', 'INFO')
-            trigger_list = TRIGGER.objects.raw("""
-                SELECT 
-                    SUB1.trigger_id AS trigger_id, 
-                    SUB1.suigai_id AS suigai_id, 
-                    SUB1.suigai_name AS suigai_name, 
-                    SUB1.ken_code AS ken_code, 
-                    SUB1.ken_name AS ken_name, 
-                    SUB1.city_code AS city_code, 
-                    SUB1.city_name AS city_name, 
-                    SUB1.repository_id AS repository_id, 
-                    SUB1.action_code AS action_code, 
-                    SUB1.action_name AS action_name, 
-                    SUB1.status_code AS status_code, 
-                    SUB1.status_name AS status_name, 
-                    SUB1.published_at AS published_at, 
-                    SUB1.consumed_at AS consumed_at, 
-                    SUB1.success_count AS success_count, 
-                    SUB1.failure_count AS failure_count, 
-                    SUB1.input_file_path AS input_file_path 
-                FROM 
-                (
-                SELECT 
-                    TR1.trigger_id AS trigger_id, 
-                    TR1.suigai_id AS suigai_id, 
-                    SG1.suigai_name AS suigai_name, 
-                    SG1.ken_code AS ken_code, 
-                    KE1.ken_name AS ken_name, 
-                    SG1.city_code AS city_code, 
-                    CT1.city_name AS city_name, 
-                    TR1.repository_id AS repository_id, 
-                    TR1.action_code AS action_code, 
-                    AC1.action_name AS action_name, 
-                    TR1.status_code AS status_code, 
-                    ST1.status_name AS status_name, 
-                    TR1.published_at AS published_at, 
-                    TR1.consumed_at AS consumed_at, 
-                    TR1.success_count AS success_count, 
-                    TR1.failure_count AS failure_count, 
-                    RE1.input_file_path AS input_file_path 
-                FROM TRIGGER TR1 
-                LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
-                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-                LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
-                LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
-                LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
-                ) SUB1 
-                WHERE SUB1.ken_code=%s AND SUB1.city_code=%s AND SUB1.repository_id=%s 
-                ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, city_code, repository_id, ])
-                    
-        #######################################################################
-        ### レスポンスセット処理(0020)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 3/3.', 'INFO')
-        template = loader.get_template('P0900Action/index.html')
-        context = {
-            'ken_code': ken_code, 
-            'city_code': city_code, 
-            'repository_id': int(repository_id), 
-            'ken_list': ken_list, 
-            'city_list': city_list, 
-            'trigger_list': trigger_list, 
-            'repository_list': repository_list, 
-        }
-        print_log('[INFO] P0900Action.ken_city_repository_view()関数が正常終了しました。', 'INFO')
-        return HttpResponse(template.render(context, request))
-    
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0900Action.ken_city_repository_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0900Action.ken_city_repository_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### @login_required(None, login_url='/P0100Login/')
+### def ken_city_repository_view(request, ken_code, city_code, repository_id):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         print_log('[INFO] ########################################', 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数が開始しました。', 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 request = {}'.format(request.method), 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 ken_code = {}'.format(ken_code), 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 city_code = {}'.format(city_code), 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 repository_id = {}'.format(repository_id), 'INFO')
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 1/3.', 'INFO')
+###         
+###         #######################################################################
+###         ### DBアクセス処理(0010)
+###         ### DBにアクセスして、データを取得する。
+###         #######################################################################
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 2/3.', 'INFO')
+###         ken_list = KEN.objects.raw("""
+###             SELECT * FROM KEN ORDER BY CAST(ken_code AS INTEGER)""", [])
+###         if ken_code == "0":
+###             city_list = []
+###         else:
+###             city_list = CITY.objects.raw("""
+###                 SELECT * FROM CITY WHERE ken_code=%s ORDER BY CAST(city_code AS INTEGER)""", [ken_code, ])
+###             
+###         if city_code == "0": 
+###             repository_list = []
+###         else: 
+###             repository_list = REPOSITORY.objects.raw("""
+###                 SELECT 
+###                     RE1.repository_id AS repository_id, 
+###                     RE1.suigai_id AS suigai_id, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     RE1.status_code AS status_code, 
+###                     RE1.created_at AS created_at, 
+###                     RE1.updated_at AS updated_at, 
+###                     RE1.input_file_path AS input_file_path, 
+###                     RE1.deleted_at AS deleted_at, 
+###                     RE1.committed_at AS committed_at 
+###                 FROM REPOSITORY RE1 
+###                 LEFT JOIN SUIGAI SG1 ON RE1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 WHERE SG1.city_code=%s 
+###                 ORDER BY CAST(RE1.repository_id AS INTEGER) DESC""", [city_code, ])
+###         
+###         if ken_code == "0" and city_code == "0" and repository_id == "0": 
+###             print_log('ken_code == "0" and city_code == "0" and repository_id == "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [])
+###             
+###         elif ken_code == "0" and city_code == "0" and repository_id != "0": 
+###             print_log('ken_code == "0" and city_code == "0" and repository_id != "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 WHERE TR1.repository_id=%s 
+###                 ORDER BY CAST(TR1.trigger_id AS INTEGER) DESC""", [repository_id, ])
+###         
+###         elif ken_code == "0" and city_code != "0" and repository_id == "0": 
+###             print_log('ken_code == "0" and city_code != "0" and repository_id == "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.city_code=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [city_code, ])
+###         
+###         elif ken_code == "0" and city_code != "0" and repository_id != "0": 
+###             print_log('ken_code == "0" and city_code != "0" and repository_id != "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.city_code=%s AND SUB1.repository_id=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [city_code, repository_id, ])
+###         
+###         elif ken_code != "0" and city_code == "0" and repository_id == "0": 
+###             print_log('ken_code != "0" and city_code == "0" and repository_id == "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.ken_code=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, ])
+###         
+###         elif ken_code != "0" and city_code == "0" and repository_id != "0": 
+###             print_log('ken_code != "0" and city_code == "0" and repository_id != "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.ken_code=%s AND SUB1.repository_id=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, repository_id, ])
+###         
+###         elif ken_code != "0" and city_code != "0" and repository_id == "0": 
+###             print_log('ken_code != "0" and city_code != "0" and repository_id == "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.ken_code=%s AND SUB1.city_code=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, city_code, ])
+###         
+###         elif ken_code != "0" and city_code != "0" and repository_id != "0": 
+###             print_log('ken_code != "0" and city_code != "0" and repository_id != "0"', 'INFO')
+###             trigger_list = TRIGGER.objects.raw("""
+###                 SELECT 
+###                     SUB1.trigger_id AS trigger_id, 
+###                     SUB1.suigai_id AS suigai_id, 
+###                     SUB1.suigai_name AS suigai_name, 
+###                     SUB1.ken_code AS ken_code, 
+###                     SUB1.ken_name AS ken_name, 
+###                     SUB1.city_code AS city_code, 
+###                     SUB1.city_name AS city_name, 
+###                     SUB1.repository_id AS repository_id, 
+###                     SUB1.action_code AS action_code, 
+###                     SUB1.action_name AS action_name, 
+###                     SUB1.status_code AS status_code, 
+###                     SUB1.status_name AS status_name, 
+###                     SUB1.published_at AS published_at, 
+###                     SUB1.consumed_at AS consumed_at, 
+###                     SUB1.success_count AS success_count, 
+###                     SUB1.failure_count AS failure_count, 
+###                     SUB1.input_file_path AS input_file_path 
+###                 FROM 
+###                 (
+###                 SELECT 
+###                     TR1.trigger_id AS trigger_id, 
+###                     TR1.suigai_id AS suigai_id, 
+###                     SG1.suigai_name AS suigai_name, 
+###                     SG1.ken_code AS ken_code, 
+###                     KE1.ken_name AS ken_name, 
+###                     SG1.city_code AS city_code, 
+###                     CT1.city_name AS city_name, 
+###                     TR1.repository_id AS repository_id, 
+###                     TR1.action_code AS action_code, 
+###                     AC1.action_name AS action_name, 
+###                     TR1.status_code AS status_code, 
+###                     ST1.status_name AS status_name, 
+###                     TR1.published_at AS published_at, 
+###                     TR1.consumed_at AS consumed_at, 
+###                     TR1.success_count AS success_count, 
+###                     TR1.failure_count AS failure_count, 
+###                     RE1.input_file_path AS input_file_path 
+###                 FROM TRIGGER TR1 
+###                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
+###                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+###                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+###                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
+###                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
+###                 LEFT JOIN REPOSITORY RE1 ON TR1.repository_id=RE1.repository_id 
+###                 ) SUB1 
+###                 WHERE SUB1.ken_code=%s AND SUB1.city_code=%s AND SUB1.repository_id=%s 
+###                 ORDER BY CAST(SUB1.trigger_id AS INTEGER) DESC""", [ken_code, city_code, repository_id, ])
+###                     
+###         #######################################################################
+###         ### レスポンスセット処理(0020)
+###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数 STEP 3/3.', 'INFO')
+###         template = loader.get_template('P0900Action/index.html')
+###         context = {
+###             'ken_code': ken_code, 
+###             'city_code': city_code, 
+###             'repository_id': int(repository_id), 
+###             'ken_list': ken_list, 
+###             'city_list': city_list, 
+###             'trigger_list': trigger_list, 
+###             'repository_list': repository_list, 
+###         }
+###         print_log('[INFO] P0900Action.ken_city_repository_view()関数が正常終了しました。', 'INFO')
+###         return HttpResponse(template.render(context, request))
+###     
+###     except:
+###         print_log(sys.exc_info()[0], 'ERROR')
+###         print_log('[ERROR] P0900Action.ken_city_repository_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0900Action.ken_city_repository_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')

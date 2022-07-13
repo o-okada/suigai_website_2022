@@ -152,11 +152,11 @@
                         <option value="4">ワークフロー: 4</option>
                         {% endif %}
 
-                        {% if category_code1 == "5" %}
-                        <option value="5" selected>レポジトリ: 5</option>
-                        {% else %}
-                        <option value="5">レポジトリ: 5</option>
-                        {% endif %}
+                        {# if category_code1 == "5" #}
+                        <!--<option value="5" selected>レポジトリ: 5</option>-->
+                        {# else #}
+                        <!--<option value="5">レポジトリ: 5</option>-->
+                        {# endif #}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category1" name="button_category1">データ種別選択</button>
                 </div>
@@ -424,11 +424,11 @@
                         <option value="10040" id="option_10040" name="option_10040">フィードバックメッセージ: feedback</option>
                         {% endif %}
 
-                        {% if category_code2 == "10050" %}
-                        <option value="10050" id="option_10050" name="option_10050" selected>EXCELファイルレポジトリ: repository</option>
-                        {% else %}
-                        <option value="10050" id="option_10050" name="option_10050">EXCELファイルレポジトリ: repository</option>
-                        {% endif %}
+                        {# if category_code2 == "10050" #}
+                        <!--<option value="10050" id="option_10050" name="option_10050" selected>EXCELファイルレポジトリ: repository</option>-->
+                        {# else #}
+                        <!--<option value="10050" id="option_10050" name="option_10050">EXCELファイルレポジトリ: repository</option>-->
+                        {# endif #}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
                 </div>
@@ -1311,8 +1311,14 @@
                     <th class="text-center">水害区域名</th>
                     <th class="text-center">都道府県コード</th>
                     <th class="text-center">都道府県名</th>
+                    <th class="text-center">コミット日時</th>
+                    <th class="text-center">削除日時</th>
                     <th class="text-center">ファイルパス</th>
                     <th class="text-center">ファイル名</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">アクション名</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">状態名</th>
                 </tr>
             </thead>
             <tbody>
@@ -1341,17 +1347,53 @@
                     {% else %}
                     <td>{{ area.ken_name }}</td>
                     {% endif %}
-                    
-                    {% if area.input_file_path is None %}
+
+                    {% if area.committed_at is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ area.input_file_path }}</td>
+                    <td>{{ area.committed_at }}</td>
+
+                    {% endif %}
+                    {% if area.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.deleted_at }}</td>
                     {% endif %}
                     
-                    {% if area.input_file_name is None %}
+                    {% if area.file_path is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ area.input_file_name }}</td>
+                    <td>{{ area.file_path }}</td>
+                    {% endif %}
+                    
+                    {% if area.file_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.file_name }}</td>
+                    {% endif %}
+                    
+                    {% if area.action_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.action_code }}</td>
+                    {% endif %}
+                    
+                    {% if area.action_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.action_name }}</td>
+                    {% endif %}
+                    
+                    {% if area.status_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.status_code }}</td>
+                    {% endif %}
+                    
+                    {% if area.status_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ area.status_name }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -1455,9 +1497,14 @@
                     <th class="text-center">農作物被害額（単位千円）</th>
                     <th class="text-center">異常気象ID</th>
                     <th class="text-center">異常気象名</th>
-                    <th class="text-center">レポジトリID</th>
                     <th class="text-center">コミット日時</th>
                     <th class="text-center">削除日時</th>
+                    <th class="text-center">ファイルパス</th>
+                    <th class="text-center">ファイル名</th>
+                    <th class="text-center">アクションコード</th>
+                    <th class="text-center">アクション名</th>
+                    <th class="text-center">状態コード</th>
+                    <th class="text-center">状態名</th>
                 </tr>
             </thead>
             <tbody>
@@ -1643,12 +1690,6 @@
                     <td>{{ suigai.weather_name }}</td>
                     {% endif %}
 
-                    {% if suigai.repository_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ suigai.repository_id }}</td>
-                    {% endif %}
-
                     {% if suigai.committed_at is None %}
                     <td></td>
                     {% else %}
@@ -1659,6 +1700,42 @@
                     <td></td>
                     {% else %}
                     <td>{{ suigai.deleted_at }}</td>
+                    {% endif %}
+
+                    {% if suigai.file_path is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.file_path }}</td>
+                    {% endif %}
+
+                    {% if suigai.file_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.file_name }}</td>
+                    {% endif %}
+
+                    {% if suigai.action_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.action_code }}</td>
+                    {% endif %}
+
+                    {% if suigai.action_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.action_name }}</td>
+                    {% endif %}
+
+                    {% if suigai.status_code is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.status_code }}</td>
+                    {% endif %}
+
+                    {% if suigai.status_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.status_name }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -1673,10 +1750,10 @@
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">行ID</th>
-                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">シートID</th>
                     <th class="text-center">シート名</th>
+                    <th class="text-center">行ID</th>
+                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">建物区分コード</th>
                     <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
@@ -1707,23 +1784,13 @@
                     <th class="text-center">地下空間の利用形態コード</th>
                     <th class="text-center">地下空間の利用形態名</th>
                     <th class="text-center">備考</th>
+                    <th class="text-center">コミット日時</th>
+                    <th class="text-center">削除日時</th>
                 </tr>
             </thead>
             <tbody>
                 {% for ippan in ippan_list %}
                 <tr>
-                    {% if ippan.ippan_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_id }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.ippan_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_name }}</td>
-                    {% endif %}
-                    
                     {% if ippan.suigai_id is None %}
                     <td></td>
                     {% else %}
@@ -1734,6 +1801,18 @@
                     <td></td>
                     {% else %}
                     <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
+                
+                    {% if ippan.ippan_id is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.ippan_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.ippan_name }}</td>
                     {% endif %}
                     
                     {% if ippan.building_code is None %}
@@ -1915,6 +1994,18 @@
                     {% else %}
                     <td>{{ ippan.comment }}</td>
                     {% endif %}
+                    
+                    {% if ippan.committed_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.committed_at }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.deleted_at }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1928,10 +2019,10 @@
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
-                    <th class="text-center">行ID</th>
-                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">シートID</th>
                     <th class="text-center">シート名</th>
+                    <th class="text-center">行ID</th>
+                    <th class="text-center">町丁名、大字名</th>
                     <th class="text-center">建物区分コード</th>
                     <th class="text-center">建物区分名</th>
                     <th class="text-center">地上地下区分コード</th>
@@ -1986,23 +2077,13 @@
                     <th class="text-center">地下空間の利用形態コード</th>
                     <th class="text-center">地下空間の利用形態名</th>
                     <th class="text-center">備考</th>
+                    <th class="text-center">コミット日時</th>
+                    <th class="text-center">削除日時</th>
                 </tr>
             </thead>
             <tbody>
                 {% for ippan in ippan_view_list %}
                 <tr>
-                    {% if ippan.ippan_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_id }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.ippan_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_name }}</td>
-                    {% endif %}
-                    
                     {% if ippan.suigai_id is None %}
                     <td></td>
                     {% else %}
@@ -2013,6 +2094,18 @@
                     <td></td>
                     {% else %}
                     <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
+
+                    {% if ippan.ippan_id is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.ippan_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.ippan_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.ippan_name }}</td>
                     {% endif %}
                     
                     {% if ippan.building_code is None %}
@@ -2337,6 +2430,18 @@
                     <td></td>
                     {% else %}
                     <td>{{ ippan.comment }}</td>
+                    {% endif %}
+
+                    {% if ippan.committed_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.committed_at }}</td>
+                    {% endif %}
+
+                    {% if ippan.deleted_at is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.deleted_at }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -3493,114 +3598,6 @@
         </table>
     </div>
     {% endif %}
-
-    <!-- EXCELファイルレポジトリ: 10050 -->
-    {% if category_code2 == "10050" %}
-    <div class="mb-3 table-responsive">
-        <table class="table table-bordered table-striped text-nowrap">
-            <thead>
-                <tr>
-                    <th class="text-center">レポジトリID</th>
-                    <th class="text-center">都道府県コード</th>
-                    <th class="text-center">都道府県名</th>
-                    <th class="text-center">市区町村コード</th>
-                    <th class="text-center">市区町村名</th>
-                    <th class="text-center">アクションコード</th>
-                    <th class="text-center">アクション名</th>
-                    <th class="text-center">状態コード</th>
-                    <th class="text-center">状態名</th>
-                    <th class="text-center">入力ファイルパス</th>
-                    <th class="text-center">入力ファイル名</th>
-                    <th class="text-center">コミット日時</th>
-                    <th class="text-center">削除日時</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for repository in repository_list %}
-                <tr>
-                    {% if repository.repository_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.repository_id }}</td>
-                    {% endif %}
-
-                    {% if repository.ken_code is None %}                    
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.ken_code }}</td>
-                    {% endif %}
-                    
-                    {% if repository.ken_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.ken_name }}</td>
-                    {% endif %}
-                    
-                    {% if repository.city_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.city_code }}</td>
-                    {% endif %}
-                    
-                    {% if repository.city_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.city_name }}</td>
-                    {% endif %}
-                    
-                    {% if repository.action_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.action_code }}</td>
-                    {% endif %}
-                    
-                    {% if repository.action_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.action_name }}</td>
-                    {% endif %}
-                    
-                    {% if repository.status_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.status_code }}</td>
-                    {% endif %}
-                    
-                    {% if repository.status_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.status_name }}</td>
-                    {% endif %}
-                    
-                    {% if repository.input_file_path is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.input_file_path }}</td>
-                    {% endif %}
-                    
-                    {% if repository.input_file_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.input_file_name }}</td>
-                    {% endif %}
-                    
-                    {% if repository.committed_at is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.committed_at }}</td>
-                    {% endif %}
-                    
-                    {% if repository.deleted_at is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ repository.deleted_at }}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
     <!-- END 一覧表示 -->
     
     <script>
@@ -3669,9 +3666,9 @@
     }
 
     // 「レポジトリ」に関連する選択肢を非表示にする。
-    function repo_hidden(hidden) {
-        document.getElementById("option_10050").hidden = hidden;
-    }
+    // function repo_hidden(hidden) {
+    //     document.getElementById("option_10050").hidden = hidden;
+    // }
     
     // データ種別選択ボタン1クリック時のイベントハンドラを設定する。
     button_category1.addEventListener("click", function(event) {
@@ -3707,7 +3704,7 @@
             input_hidden(true);
             sum_hidden(true);
             work_hidden(true);
-            repo_hidden(true);
+            // repo_hidden(true);
         }
 
         // データ種別選択1プルダウンで「定数」が選択されているとき
@@ -3717,7 +3714,7 @@
             input_hidden(true);
             sum_hidden(true);
             work_hidden(true);
-            repo_hidden(true);
+            // repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「入力データ」が選択されているとき
@@ -3727,7 +3724,7 @@
             input_hidden(false);
             sum_hidden(true);
             work_hidden(true);
-            repo_hidden(true);
+            // repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「集計データ」が選択されているとき
@@ -3737,7 +3734,7 @@
             input_hidden(true);
             sum_hidden(false);
             work_hidden(true);
-            repo_hidden(true);
+            // repo_hidden(true);
         }
         
         // データ種別選択1プルダウンで「ワークフロー」が選択されているとき
@@ -3747,7 +3744,7 @@
             input_hidden(true);
             sum_hidden(true);
             work_hidden(false);
-            repo_hidden(true);
+            // repo_hidden(true);
         }
 
         // データ種別選択1プルダウンで「レポジトリ」が選択されているとき
@@ -3757,7 +3754,7 @@
             input_hidden(true);
             sum_hidden(true);
             work_hidden(true);
-            repo_hidden(false);
+            // repo_hidden(false);
         }
     }
     </script>

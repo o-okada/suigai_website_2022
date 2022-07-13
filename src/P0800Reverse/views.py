@@ -66,24 +66,16 @@ from P0000Common.models import IPPAN                   ### 7030: 一般資産入
 from P0000Common.models import IPPAN_VIEW              ### 7040: 一般資産ビューデータ_一覧表部分
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集計データ
-
-from P0000Common.models import REPOSITORY              ### 9000: レポジトリ
-
-from P0000Common.models import HOUSE_DAMAGE            ### ---: 家屋被害率
-from P0000Common.models import HOUSE_COST              ### ---: 家庭応急対策費
-from P0000Common.models import HOUSEHOLD_DAMAGE        ### ---: 家庭用品自動車以外被害率
-from P0000Common.models import CAR_DAMAGE              ### ---: 家庭用品自動車被害率
-from P0000Common.models import OFFICE_DAMAGE           ### ---: 事業所被害率
-from P0000Common.models import OFFICE_COST             ### ---: 事業所営業停止損失
-from P0000Common.models import FARMER_FISHER_DAMAGE    ### ---: 農漁家被害率
+### from P0000Common.models import REPOSITORY          ### 9000: レポジトリ
 
 from P0000Common.common import print_log
 
 ###############################################################################
-### 関数名： input_view
+### 関数名：input_view
+### urlpattern：path('input/', views.input_view, name='input_view')
+### template：P0800Reverse/input.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
-### def index_view(request):
 def input_view(request):
     try:
         #######################################################################
@@ -101,7 +93,6 @@ def input_view(request):
         #######################################################################
         print_log('[INFO] P0800Reverse.input_view()関数 STEP 2/2.', 'INFO')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        ### template = loader.get_template('P0800Reverse/index.html')
         template = loader.get_template('P0800Reverse/input.html')
         context = {
             'ken_list': ken_list, 
@@ -116,10 +107,11 @@ def input_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名： summary_view
+### 関数名：summary_view
+### urlpattern：path('summary/', views.summary_view, name='summary_view')
+### template：P0800Reverse/summary.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
-### def index_view(request):
 def summary_view(request):
     try:
         #######################################################################
@@ -151,11 +143,11 @@ def summary_view(request):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名： input_ken_city_category_view
+### 関数名：input_ken_city_category_view
+### urlpattern：path('input/ken/<slug:ken_code>/city/<slug:city_code>/category/<slug:category_code>/', views.input_ken_city_category_view, name='input_ken_city_category_view')
+### template：P0800Reverse/input.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
-### def category_view(request, category_code):
-### def input_category_view(request, category_code):
 def input_ken_city_category_view(request, ken_code, city_code, category_code):
     try:
         #######################################################################
@@ -482,6 +474,7 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
             'ken_code': ken_code, 
             'city_code': city_code, 
             'category_code': category_code, 
+            
             'ken_list': ken_list, 
             'city_list': city_list, 
             'ippan_reverse_list': ippan_reverse_list, 
@@ -496,11 +489,11 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         return render(request, 'error.html')
 
 ###############################################################################
-### 関数名： summary_ken_city_category_view
+### 関数名：summary_ken_city_category_view
+### urlpattern：path('summary/ken/<slug:ken_code>/city/<slug:city_code>/category/<slug:category_code>/', views.summary_ken_city_category_view, name='summary_ken_city_category_view')
+### template：P0800Reverse/summary.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
-### def category_view(request, category_code):
-### def summary_category_view(request, category_code):
 def summary_ken_city_category_view(request, ken_code, city_code, category_code):
     try:
         #######################################################################

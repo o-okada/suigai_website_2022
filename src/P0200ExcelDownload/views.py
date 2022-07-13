@@ -27,13 +27,13 @@ from openpyxl.formatting.rule import FormulaRule
 from P0000Common.models import BUILDING                ### 1000: 建物区分
 from P0000Common.models import KEN                     ### 1010: 都道府県
 from P0000Common.models import CITY                    ### 1020: 市区町村
-from P0000Common.models import CITY_VIEW               ### 1025: 市区町村
+### from P0000Common.models import CITY_VIEW           ### 1025: 市区町村
 from P0000Common.models import KASEN_KAIGAN            ### 1030: 水害発生地点工種（河川海岸区分）
 from P0000Common.models import SUIKEI                  ### 1040: 水系（水系・沿岸）
-from P0000Common.models import SUIKEI_VIEW             ### 1045: 水系（水系・沿岸）
+### from P0000Common.models import SUIKEI_VIEW         ### 1045: 水系（水系・沿岸）
 from P0000Common.models import SUIKEI_TYPE             ### 1050: 水系種別（水系・沿岸種別）
 from P0000Common.models import KASEN                   ### 1060: 河川（河川・海岸）
-from P0000Common.models import KASEN_VIEW              ### 1065: 河川（河川・海岸）
+### from P0000Common.models import KASEN_VIEW          ### 1065: 河川（河川・海岸）
 from P0000Common.models import KASEN_TYPE              ### 1070: 河川種別（河川・海岸種別）
 from P0000Common.models import CAUSE                   ### 1080: 水害原因
 from P0000Common.models import UNDERGROUND             ### 1090: 地上地下区分
@@ -351,7 +351,17 @@ def city_view(request, lock):
         ### DBにアクセスして、市区町村データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 2/4.', 'INFO')
-        city_list = CITY_VIEW.objects.raw("""SELECT * FROM CITY_VIEW ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
+        city_list = CITY.objects.raw("""
+            SELECT 
+                CT1.city_code AS city_code, 
+                CT1.city_name AS city_name, 
+                CT1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                CT1.city_population AS city_population, 
+                CT1.city_area AS city_area 
+            FROM CITY CT1 
+            LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+            ORDER BY CAST(CT1.city_code AS INTEGER)""", [])
         
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -481,7 +491,15 @@ def suikei_view(request, lock):
         ### DBにアクセスして、水系（水系・沿岸）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 2/4.', 'INFO')
-        suikei_list = SUIKEI_VIEW.objects.raw("""SELECT * FROM SUIKEI_VIEW ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
+        suikei_list = SUIKEI.objects.raw("""
+            SELECT 
+                SK1.suikei_code AS suikei_code, 
+                SK1.suikei_name AS suikei_name, 
+                SK1.suikei_type_code AS suikei_type_code, 
+                ST1.suikei_type_name AS suikei_type_name 
+            FROM SUIKEI SK1 
+            LEFT JOIN SUIKEI_TYPE ST1 ON SK1.suikei_type_code=ST1.suikei_type_code 
+            ORDER BY CAST(SK1.suikei_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -607,7 +625,18 @@ def kasen_view(request, lock):
         ### DBにアクセスして、河川（河川・海岸）データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 2/4.', 'INFO')
-        kasen_list = KASEN_VIEW.objects.raw("""SELECT * FROM KASEN_VIEW ORDER BY CAST(KASEN_CODE AS INTEGER)""", [])
+        kasen_list = KASEN.objects.raw("""
+            SELECT 
+                KA1.kasen_code AS kasen_code, 
+                KA1.kasen_name AS kasen_name, 
+                KA1.kasen_type_code AS kasen_type_code, 
+                KT1.kasen_type_name AS kasen_type_name, 
+                KA1.suikei_code AS suikei_code, 
+                SK1.suikei_name AS suikei_name 
+            FROM KASEN KA1 
+            LEFT JOIN KASEN_TYPE KT1 ON KA1.kasen_type_code=KT1.kasen_type_code 
+            LEFT JOIN SUIKEI SK1 ON KA1.suikei_code=SK1.suikei_code 
+            ORDER BY CAST(KA1.kasen_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1103,7 +1132,15 @@ def house_asset_view(request, lock):
         ### DBにアクセスして、県別家屋評価額データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 2/4.', 'INFO')
-        house_asset_list = HOUSE_ASSET.objects.raw("""SELECT * FROM HOUSE_ASSET ORDER BY CAST(HOUSE_ASSET_CODE AS INTEGER)""", [])
+        house_asset_list = HOUSE_ASSET.objects.raw("""
+            SELECT 
+                HA1.house_asset_code AS house_asset_code, 
+                HA1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                HA1.house_asset AS house_asset 
+            FROM HOUSE_ASSET HA1 
+            LEFT JOIN KEN KE1 ON HA1.ken_code=KE1.ken_code 
+            ORDER BY CAST(HA1.house_asset_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1118,13 +1155,15 @@ def house_asset_view(request, lock):
         ws.title = '家屋被害'
         ws.cell(row=1, column=1).value = '家屋被害コード'
         ws.cell(row=1, column=2).value = '都道府県コード'
-        ws.cell(row=1, column=3).value = '家屋評価額'
+        ws.cell(row=1, column=3).value = '都道府県名'
+        ws.cell(row=1, column=4).value = '家屋評価額'
         
         if house_asset_list:
             for i, house_asset in enumerate(house_asset_list):
                 ws.cell(row=i+2, column=1).value = house_asset.house_asset_code
                 ws.cell(row=i+2, column=2).value = house_asset.ken_code
-                ws.cell(row=i+2, column=3).value = house_asset.house_asset
+                ws.cell(row=i+2, column=3).value = house_asset.ken_name
+                ws.cell(row=i+2, column=4).value = house_asset.house_asset
         
         wb.save(download_file_path)
         
@@ -1166,7 +1205,22 @@ def house_rate_view(request, lock):
         ### DBにアクセスして、家屋被害率データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 2/4.', 'INFO')
-        house_rate_list = HOUSE_RATE.objects.raw("""SELECT * FROM HOUSE_RATE ORDER BY CAST(HOUSE_RATE_CODE AS INTEGER)""", [])
+        house_rate_list = HOUSE_RATE.objects.raw("""
+            SELECT 
+                HR1.house_rate_code AS house_rate_code, 
+                HR1.flood_sediment_code AS flood_sediment_code, 
+                flood_sediment_name AS flood_sediment_name, 
+                HR1.gradient_code AS gradient_code, 
+                gradient_name AS gradient_name, 
+                HR1.house_rate_lv00 AS house_rate_lv00, 
+                HR1.house_rate_lv00_50 AS house_rate_lv00_50, 
+                HR1.house_rate_lv50_100 AS house_rate_lv50_100, 
+                HR1.house_rate_lv100_200 AS house_rate_lv100_200, 
+                HR1.house_rate_lv200_300 AS house_rate_lv200_300 
+            FROM HOUSE_RATE HR1 
+            LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
+            LEFT JOIN GRADIENT GR1 ON HR1.gradient_code=GR1.gradient_code 
+            ORDER BY CAST(HR1.house_rate_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1181,25 +1235,29 @@ def house_rate_view(request, lock):
         ws.title = '家屋被害率'
         ws.cell(row=1, column=1).value = '家屋被害率コード'
         ws.cell(row=1, column=2).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=3).value = '地盤勾配区分コード'
-        ws.cell(row=1, column=4).value = '家屋被害率_床下'
-        ws.cell(row=1, column=5).value = '家屋被害率_0から50cm未満'
-        ws.cell(row=1, column=6).value = '家屋被害率_50から100cm未満'
-        ws.cell(row=1, column=7).value = '家屋被害率_100から200cm未満'
-        ws.cell(row=1, column=8).value = '家屋被害率_200から300cm未満'
-        ws.cell(row=1, column=9).value = '家屋被害率_300cm以上'
+        ws.cell(row=1, column=3).value = '浸水土砂区分名'
+        ws.cell(row=1, column=4).value = '地盤勾配区分コード'
+        ws.cell(row=1, column=5).value = '地盤勾配区分名'
+        ws.cell(row=1, column=6).value = '家屋被害率_床下'
+        ws.cell(row=1, column=7).value = '家屋被害率_0から50cm未満'
+        ws.cell(row=1, column=8).value = '家屋被害率_50から100cm未満'
+        ws.cell(row=1, column=9).value = '家屋被害率_100から200cm未満'
+        ws.cell(row=1, column=10).value = '家屋被害率_200から300cm未満'
+        ws.cell(row=1, column=11).value = '家屋被害率_300cm以上'
         
         if house_rate_list:
             for i, house_rate in enumerate(house_rate_list):
                 ws.cell(row=i+2, column=1).value = house_rate.house_rate_code
                 ws.cell(row=i+2, column=2).value = house_rate.flood_sediment_code
-                ws.cell(row=i+2, column=3).value = house_rate.gradient_code
-                ws.cell(row=i+2, column=4).value = house_rate.house_rate_lv00
-                ws.cell(row=i+2, column=5).value = house_rate.house_rate_lv00_50
-                ws.cell(row=i+2, column=6).value = house_rate.house_rate_lv50_100
-                ws.cell(row=i+2, column=7).value = house_rate.house_rate_lv100_200
-                ws.cell(row=i+2, column=8).value = house_rate.house_rate_lv200_300
-                ws.cell(row=i+2, column=9).value = house_rate.house_rate_lv300
+                ws.cell(row=i+2, column=3).value = house_rate.flood_sediment_name
+                ws.cell(row=i+2, column=4).value = house_rate.gradient_code
+                ws.cell(row=i+2, column=5).value = house_rate.gradient_name
+                ws.cell(row=i+2, column=6).value = house_rate.house_rate_lv00
+                ws.cell(row=i+2, column=7).value = house_rate.house_rate_lv00_50
+                ws.cell(row=i+2, column=8).value = house_rate.house_rate_lv50_100
+                ws.cell(row=i+2, column=9).value = house_rate.house_rate_lv100_200
+                ws.cell(row=i+2, column=10).value = house_rate.house_rate_lv200_300
+                ws.cell(row=i+2, column=11).value = house_rate.house_rate_lv300
         
         wb.save(download_file_path)
         
@@ -1446,7 +1504,20 @@ def household_rate_view(request, lock):
         ### DBにアクセスして、家庭用品自動車以外被害率データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 2/4.', 'INFO')
-        household_rate_list = HOUSEHOLD_RATE.objects.raw("""SELECT * FROM HOUSEHOLD_RATE ORDER BY CAST(HOUSEHOLD_RATE_CODE AS INTEGER)""", [])
+        household_rate_list = HOUSEHOLD_RATE.objects.raw("""
+            SELECT 
+                HR1.househole_rate_code AS household_rate_code, 
+                HR1.flood_sediment_code AS flood_sediment_code, 
+                FS1.flood_sediment_name AS flood_sediment_name, 
+                HR1.household_rate_lv00 AS household_rate_lv00, 
+                HR1.household_rate_lv00_50 AS household_rate_lv00_50, 
+                HR1.household_rate_lv50_100 AS household_rate_lv50_100, 
+                HR1.household_rate_lv100_200 AS household_rate_lv100_200, 
+                HR1.household_rate_lv200_300 AS household_rate_lv200_300, 
+                HR1.household_rate_lv300 AS household_rate_lv300 
+            FROM HOUSEHOLD_RATE HR1 
+            LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
+            ORDER BY CAST(HR1.household_rate_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1461,23 +1532,25 @@ def household_rate_view(request, lock):
         ws.title = '家庭用品自動車以外被害率'
         ws.cell(row=1, column=1).value = '家庭用品自動車以外被害率コード'
         ws.cell(row=1, column=2).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=3).value = '家庭用品自動車以外被害率_床下'
-        ws.cell(row=1, column=4).value = '家庭用品自動車以外被害率_0から50cm未満'
-        ws.cell(row=1, column=5).value = '家庭用品自動車以外被害率_50から100cm未満'
-        ws.cell(row=1, column=6).value = '家庭用品自動車以外被害率_100から200cm未満'
-        ws.cell(row=1, column=7).value = '家庭用品自動車以外被害率_200から300cm未満'
-        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害率_300cm以上'
+        ws.cell(row=1, column=3).value = '浸水土砂区分名'
+        ws.cell(row=1, column=4).value = '家庭用品自動車以外被害率_床下'
+        ws.cell(row=1, column=5).value = '家庭用品自動車以外被害率_0から50cm未満'
+        ws.cell(row=1, column=6).value = '家庭用品自動車以外被害率_50から100cm未満'
+        ws.cell(row=1, column=7).value = '家庭用品自動車以外被害率_100から200cm未満'
+        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害率_200から300cm未満'
+        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害率_300cm以上'
         
         if household_rate_list:
             for i, household_rate in enumerate(household_rate_list):
                 ws.cell(row=i+2, column=1).value = household_rate.household_rate_code
                 ws.cell(row=i+2, column=2).value = household_rate.flood_sediment_code
-                ws.cell(row=i+2, column=3).value = household_rate.household_rate_lv00
-                ws.cell(row=i+2, column=4).value = household_rate.household_rate_lv00_50
-                ws.cell(row=i+2, column=5).value = household_rate.household_rate_lv50_100
-                ws.cell(row=i+2, column=6).value = household_rate.household_rate_lv100_200
-                ws.cell(row=i+2, column=7).value = household_rate.household_rate_lv200_300
-                ws.cell(row=i+2, column=8).value = household_rate.household_rate_lv300
+                ws.cell(row=i+2, column=3).value = household_rate.flood_sediment_name
+                ws.cell(row=i+2, column=4).value = household_rate.household_rate_lv00
+                ws.cell(row=i+2, column=5).value = household_rate.household_rate_lv00_50
+                ws.cell(row=i+2, column=6).value = household_rate.household_rate_lv50_100
+                ws.cell(row=i+2, column=7).value = household_rate.household_rate_lv100_200
+                ws.cell(row=i+2, column=8).value = household_rate.household_rate_lv200_300
+                ws.cell(row=i+2, column=9).value = household_rate.household_rate_lv300
         
         wb.save(download_file_path)
         
@@ -1651,7 +1724,17 @@ def office_asset_view(request, lock):
         ### DBにアクセスして、事業所資産額データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 2/4.', 'INFO')
-        office_asset_list = OFFICE_ASSET.objects.raw("""SELECT * FROM OFFICE_ASSET ORDER BY CAST(OFFICE_ASSET_CODE AS INTEGER)""", [])
+        office_asset_list = OFFICE_ASSET.objects.raw("""
+            SELECT 
+                OA1.office_asset_code AS office_asset_code, 
+                OA1.industry_code AS industry_code, 
+                IN1.industry_name AS industry_name, 
+                OA1.office_dep_asset AS office_dep_asset, 
+                OA1.office_inv_asset AS office_inv_asset, 
+                OA1.office_va_asset AS office_va_asset 
+            FROM OFFICE_ASSET OA1 
+            LEFT JOIN INDUSTRY IN1 ON OA1.industry_code=IN1.industry_code 
+            ORDER BY CAST(OA1.office_asset_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1666,17 +1749,19 @@ def office_asset_view(request, lock):
         ws.title = '事業所資産額'
         ws.cell(row=1, column=1).value = '事業所資産額コード'
         ws.cell(row=1, column=2).value = '産業分類コード'
-        ws.cell(row=1, column=3).value = '事業所資産額_償却資産額'
-        ws.cell(row=1, column=4).value = '事業所資産額_在庫資産額'
-        ws.cell(row=1, column=5).value = '事業所資産額_付加価値額'
+        ws.cell(row=1, column=3).value = '産業分類名'
+        ws.cell(row=1, column=4).value = '事業所資産額_償却資産額'
+        ws.cell(row=1, column=5).value = '事業所資産額_在庫資産額'
+        ws.cell(row=1, column=6).value = '事業所資産額_付加価値額'
         
         if office_asset_list:
             for i, office_asset in enumerate(office_asset_list):
                 ws.cell(row=i+2, column=1).value = office_asset.office_asset_code
                 ws.cell(row=i+2, column=2).value = office_asset.industry_code
-                ws.cell(row=i+2, column=3).value = office_asset.office_dep_asset
-                ws.cell(row=i+2, column=4).value = office_asset.office_inv_asset
-                ws.cell(row=i+2, column=5).value = office_asset.office_va_asset
+                ws.cell(row=i+2, column=3).value = office_asset.industry_name
+                ws.cell(row=i+2, column=4).value = office_asset.office_dep_asset
+                ws.cell(row=i+2, column=5).value = office_asset.office_inv_asset
+                ws.cell(row=i+2, column=6).value = office_asset.office_va_asset
         
         wb.save(download_file_path)
         
@@ -1718,7 +1803,26 @@ def office_rate_view(request, lock):
         ### DBにアクセスして、事業所被害率データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 2/4.', 'INFO')
-        office_rate_list = OFFICE_RATE.objects.raw("""SELECT * FROM OFFICE_RATE ORDER BY CAST(OFFICE_RATE_CODE AS INTEGER)""", [])
+        office_rate_list = OFFICE_RATE.objects.raw("""
+            SELECT 
+                OR1.office_rate_code AS office_rate_code, 
+                OR1.flood_sediment_code AS flood_sediment_code, 
+                FS1.flood_sediment_name AS flood_sediment_name, 
+                OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
+                OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
+                OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
+                OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
+                OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
+                OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
+                OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
+                OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
+                OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
+                OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
+                OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
+                OR1.office_inv_rate_lv300 AS office_inv_rate_lv300 
+            FROM OFFICE_RATE OR1 
+            LEFT JOIN FLOOD_SEDIMENT FS1 ON OR1.flood_sediment_code=FS1.flood_sediment_code 
+            ORDER BY CAST(OR1.office_rate_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -1733,35 +1837,37 @@ def office_rate_view(request, lock):
         ws.title = '事業所被害率'
         ws.cell(row=1, column=1).value = '事業所被害率コード'
         ws.cell(row=1, column=2).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=3).value = '事業所被害率_償却資産被害率_床下'
-        ws.cell(row=1, column=4).value = '事業所被害率_償却資産被害率_0から50cm未満'
-        ws.cell(row=1, column=5).value = '事業所被害率_償却資産被害率_50から100cm未満'
-        ws.cell(row=1, column=6).value = '事業所被害率_償却資産被害率_100から200cm未満'
-        ws.cell(row=1, column=7).value = '事業所被害率_償却資産被害率_200から300cm未満'
-        ws.cell(row=1, column=8).value = '事業所被害率_償却資産被害率数_300cm以上'
-        ws.cell(row=1, column=9).value = '事業所被害率_在庫資産被害率_床下'
-        ws.cell(row=1, column=10).value = '事業所被害率_在庫資産被害率_0から50cm未満'
-        ws.cell(row=1, column=11).value = '事業所被害率_在庫資産被害率_50から100cm未満'
-        ws.cell(row=1, column=12).value = '事業所被害率_在庫資産被害率_100から200cm未満'
-        ws.cell(row=1, column=13).value = '事業所被害率_在庫資産被害率_200から300cm未満'
-        ws.cell(row=1, column=14).value = '事業所被害率_在庫資産被害率数_300cm以上'
+        ws.cell(row=1, column=3).value = '浸水土砂区分名'
+        ws.cell(row=1, column=4).value = '事業所被害率_償却資産被害率_床下'
+        ws.cell(row=1, column=5).value = '事業所被害率_償却資産被害率_0から50cm未満'
+        ws.cell(row=1, column=6).value = '事業所被害率_償却資産被害率_50から100cm未満'
+        ws.cell(row=1, column=7).value = '事業所被害率_償却資産被害率_100から200cm未満'
+        ws.cell(row=1, column=8).value = '事業所被害率_償却資産被害率_200から300cm未満'
+        ws.cell(row=1, column=9).value = '事業所被害率_償却資産被害率数_300cm以上'
+        ws.cell(row=1, column=10).value = '事業所被害率_在庫資産被害率_床下'
+        ws.cell(row=1, column=11).value = '事業所被害率_在庫資産被害率_0から50cm未満'
+        ws.cell(row=1, column=12).value = '事業所被害率_在庫資産被害率_50から100cm未満'
+        ws.cell(row=1, column=13).value = '事業所被害率_在庫資産被害率_100から200cm未満'
+        ws.cell(row=1, column=14).value = '事業所被害率_在庫資産被害率_200から300cm未満'
+        ws.cell(row=1, column=15).value = '事業所被害率_在庫資産被害率数_300cm以上'
         
         if office_rate_list:
             for i, office_rate in enumerate(office_rate_list):
                 ws.cell(row=i+2, column=1).value = office_rate.office_rate_code
                 ws.cell(row=i+2, column=2).value = office_rate.flood_sediment_code
-                ws.cell(row=i+2, column=3).value = office_rate.office_dep_rate_lv00
-                ws.cell(row=i+2, column=4).value = office_rate.office_dep_rate_lv00_50
-                ws.cell(row=i+2, column=5).value = office_rate.office_dep_rate_lv50_100
-                ws.cell(row=i+2, column=6).value = office_rate.office_dep_rate_lv100_200
-                ws.cell(row=i+2, column=7).value = office_rate.office_dep_rate_lv200_300
-                ws.cell(row=i+2, column=8).value = office_rate.office_dep_rate_lv300
-                ws.cell(row=i+2, column=9).value = office_rate.office_inv_rate_lv00
-                ws.cell(row=i+2, column=10).value = office_rate.office_inv_rate_lv00_50
-                ws.cell(row=i+2, column=11).value = office_rate.office_inv_rate_lv50_100
-                ws.cell(row=i+2, column=12).value = office_rate.office_inv_rate_lv100_200
-                ws.cell(row=i+2, column=13).value = office_rate.office_inv_rate_lv200_300
-                ws.cell(row=i+2, column=14).value = office_rate.office_inv_rate_lv300
+                ws.cell(row=i+2, column=3).value = office_rate.flood_sediment_name
+                ws.cell(row=i+2, column=4).value = office_rate.office_dep_rate_lv00
+                ws.cell(row=i+2, column=5).value = office_rate.office_dep_rate_lv00_50
+                ws.cell(row=i+2, column=6).value = office_rate.office_dep_rate_lv50_100
+                ws.cell(row=i+2, column=7).value = office_rate.office_dep_rate_lv100_200
+                ws.cell(row=i+2, column=8).value = office_rate.office_dep_rate_lv200_300
+                ws.cell(row=i+2, column=9).value = office_rate.office_dep_rate_lv300
+                ws.cell(row=i+2, column=10).value = office_rate.office_inv_rate_lv00
+                ws.cell(row=i+2, column=11).value = office_rate.office_inv_rate_lv00_50
+                ws.cell(row=i+2, column=12).value = office_rate.office_inv_rate_lv50_100
+                ws.cell(row=i+2, column=13).value = office_rate.office_inv_rate_lv100_200
+                ws.cell(row=i+2, column=14).value = office_rate.office_inv_rate_lv200_300
+                ws.cell(row=i+2, column=15).value = office_rate.office_inv_rate_lv300
         
         wb.save(download_file_path)
         
@@ -2079,7 +2185,26 @@ def farmer_fisher_rate_view(request, lock):
         ### DBにアクセスして、農漁家被害率データを取得する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 2/4.', 'INFO')
-        farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""SELECT * FROM FARMER_FISHER_RATE ORDER BY CAST(FARMER_FISHER_RATE_CODE AS INTEGER)""", [])
+        farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""
+            SELECT 
+                FF1.farmer_fisher_rate_code AS farmer_fisher_rate_code, 
+                FF1.flood_sediment_code AS flood_sediment_code, 
+                FS1.flood_sediment_name AS flood_sediment_name, 
+                FF1.farmer_fisher_dep_rate_lv00 AS farmer_fisher_dep_lv00, 
+                FF1.farmer_fisher_dep_rate_lv00_50 AS farmer_fisher_dep_lv00_50, 
+                FF1.farmer_fisher_dep_rate_lv50_100 AS farmer_fisher_dep_lv50_100, 
+                FF1.farmer_fisher_dep_rate_lv100_200 AS farmer_fisher_dep_lv100_200, 
+                FF1.farmer_fisher_dep_rate_lv200_300 AS farmer_fisher_dep_lv200_300, 
+                FF1.farmer_fisher_dep_rate_lv300 AS farmer_fisher_dep_lv300, 
+                FF1.farmer_fisher_inv_rate_lv00 AS farmer_fisher_inv_lv00, 
+                FF1.farmer_fisher_inv_rate_lv00_50 AS farmer_fisher_inv_lv00_50, 
+                FF1.farmer_fisher_inv_rate_lv50_100 AS farmer_fisher_inv_lv50_100, 
+                FF1.farmer_fisher_inv_rate_lv100_200 AS farmer_fisher_inv_lv100_200, 
+                FF1.farmer_fisher_inv_rate_lv200_300 AS farmer_fisher_inv_lv200_300, 
+                FF1.farmer_fisher_inv_rate_lv300 AS farmer_fisher_inv_lv300 
+            FROM FARMER_FISHER_RATE FF1 
+            LEFT JOIN FLOOD_SEDIMENT FS1 ON FF1.flood_sediment_code=FS1.flood_sediment_code 
+            ORDER BY CAST(FF1.farmer_fisher_rate_code AS INTEGER)""", [])
     
         #######################################################################
         ### EXCEL入出力処理(0020)
@@ -2094,11 +2219,12 @@ def farmer_fisher_rate_view(request, lock):
         ws.title = '農漁家被害率'
         ws.cell(row=1, column=1).value = '農漁家被害率コード'
         ws.cell(row=1, column=2).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=3).value = '農漁家被害率_償却資産被害率_床下'
-        ws.cell(row=1, column=4).value = '農漁家被害率_償却資産被害率_0から50cm未満'
-        ws.cell(row=1, column=5).value = '農漁家被害率_償却資産被害率_50から100cm未満'
-        ws.cell(row=1, column=6).value = '農漁家被害率_償却資産被害率_100から200cm未満'
-        ws.cell(row=1, column=7).value = '農漁家被害率_償却資産被害率_200から300cm未満'
+        ws.cell(row=1, column=3).value = '浸水土砂区分名'
+        ws.cell(row=1, column=4).value = '農漁家被害率_償却資産被害率_床下'
+        ws.cell(row=1, column=5).value = '農漁家被害率_償却資産被害率_0から50cm未満'
+        ws.cell(row=1, column=6).value = '農漁家被害率_償却資産被害率_50から100cm未満'
+        ws.cell(row=1, column=7).value = '農漁家被害率_償却資産被害率_100から200cm未満'
+        ws.cell(row=1, column=8).value = '農漁家被害率_償却資産被害率_200から300cm未満'
         ws.cell(row=1, column=9).value = '農漁家被害率_償却資産被害率_300cm以上'
         ws.cell(row=1, column=10).value = '農漁家被害率_在庫資産被害率_床下'
         ws.cell(row=1, column=11).value = '農漁家被害率_在庫資産被害率_0から50cm未満'
@@ -2111,18 +2237,19 @@ def farmer_fisher_rate_view(request, lock):
             for i, farmer_fisher_rate in enumerate(farmer_fisher_rate_list):
                 ws.cell(row=i+2, column=1).value = farmer_fisher_rate.farmer_fisher_rate_code
                 ws.cell(row=i+2, column=2).value = farmer_fisher_rate.flood_sediment_code
-                ws.cell(row=i+2, column=3).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00
-                ws.cell(row=i+2, column=4).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50
-                ws.cell(row=i+2, column=5).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100
-                ws.cell(row=i+2, column=6).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv100_200
-                ws.cell(row=i+2, column=7).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv200_300
-                ws.cell(row=i+2, column=8).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv300
-                ws.cell(row=i+2, column=9).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00
-                ws.cell(row=i+2, column=10).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00_50
-                ws.cell(row=i+2, column=11).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv50_100
-                ws.cell(row=i+2, column=12).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv100_200
-                ws.cell(row=i+2, column=13).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv200_300
-                ws.cell(row=i+2, column=14).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv300
+                ws.cell(row=i+2, column=3).value = farmer_fisher_rate.flood_sediment_name
+                ws.cell(row=i+2, column=4).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00
+                ws.cell(row=i+2, column=5).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50
+                ws.cell(row=i+2, column=6).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100
+                ws.cell(row=i+2, column=7).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv100_200
+                ws.cell(row=i+2, column=8).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv200_300
+                ws.cell(row=i+2, column=9).value = farmer_fisher_rate.farmer_fisher_dep_rate_lv300
+                ws.cell(row=i+2, column=10).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00
+                ws.cell(row=i+2, column=11).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv00_50
+                ws.cell(row=i+2, column=12).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv50_100
+                ws.cell(row=i+2, column=13).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv100_200
+                ws.cell(row=i+2, column=14).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv200_300
+                ws.cell(row=i+2, column=15).value = farmer_fisher_rate.farmer_fisher_inv_rate_lv300
         
         wb.save(download_file_path)
         

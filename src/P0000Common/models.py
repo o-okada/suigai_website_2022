@@ -12,7 +12,9 @@ from django.db import models
 ###     pass
 
 ###############################################################################
+###############################################################################
 ### マスタDB
+###############################################################################
 ###############################################################################
 
 ###############################################################################
@@ -60,21 +62,6 @@ class CITY(models.Model):
     def __str__(self):
         return '<CITY: ' + self.city_code + '>'
 
-class CITY_VIEW(models.Model):
-    city_code = models.CharField(max_length=10, primary_key=True)              ### 市区町村コード
-    city_name = models.CharField(max_length=128)                               ### 市区町村名
-    ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
-    ken_name = models.CharField(max_length=128)                                ### 都道府県名 LEFT JOIN項目
-    city_population = models.IntegerField()                                    ### 市区町村人口
-    city_area = models.IntegerField()                                          ### 市区町村面積
-
-    class Meta:
-        db_table = 'city_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-    
-    def __str__(self):
-        return '<CITY_VIEW: ' + self.city_code + '>'
-
 ###############################################################################
 ### 1030: 水害発生地点工種（河川海岸区分）（マスタDB）
 ### 入力用コード、集計用コード
@@ -103,19 +90,6 @@ class SUIKEI(models.Model):
 
     def __str__(self):
         return '<SUIKEI: ' + self.suikei_code + '>'
-
-class SUIKEI_VIEW(models.Model):
-    suikei_code = models.CharField(max_length=10, primary_key=True)            ### 水系コード
-    suikei_name = models.CharField(max_length=128)                             ### 水系名
-    suikei_type_code = models.CharField(max_length=10)                         ### 水系種別コード
-    suikei_type_name = models.CharField(max_length=128)                        ### 水系種別名 LEFT JOIN項目
-    
-    class Meta:
-        db_table = 'suikei_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-    
-    def __str__(self):
-        return '<SUIKEI_VIEW: ' + self.suikei_code + '>'
 
 ###############################################################################
 ### 1050: 水系種別（水系・沿岸種別）（マスタDB）
@@ -146,21 +120,6 @@ class KASEN(models.Model):
 
     def __str__(self):
         return '<KASEN: ' + self.kasen_code + '>'
-
-class KASEN_VIEW(models.Model):
-    kasen_code = models.CharField(max_length=10, primary_key=True)             ### 河川コード
-    kasen_name = models.CharField(max_length=128)                              ### 河川名
-    kasen_type_code = models.CharField(max_length=10)                          ### 河川種別コード
-    kasen_type_name = models.CharField(max_length=128)                         ### 河川種別名 LEFT JOIN項目
-    suikei_code = models.CharField(max_length=10)                              ### 水系コード
-    suikei_name = models.CharField(max_length=128)                             ### 水系名 LEFT JOIN項目
-
-    class Meta:
-        db_table = 'kasen_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<KASEN_VIEW: ' + self.kasen_code + '>'
 
 ###############################################################################
 ### 1070: 河川種別（河川・海岸種別）（マスタDB）
@@ -275,19 +234,6 @@ class HOUSE_ASSET(models.Model):
     def __str__(self):
         return '<HOUSE_ASSET: ' + self.house_asset_code + '>'
 
-class HOUSE_ASSET_VIEW(models.Model):
-    house_asset_code = models.CharField(max_length=10, primary_key=True)       ### 家屋評価額コード
-    ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
-    ken_name = models.CharField(max_length=128)                                ### 都道府県名 LEFT JOIN項目
-    house_asset = models.FloatField(null=True)                                 ### 家屋評価額
-
-    class Meta:
-        db_table = 'house_asset_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<HOUSE_ASSET_VIEW: ' + self.house_asset_code + '>'
-
 ###############################################################################
 ### 2010: 家屋被害率（マスタDB）
 ### 集計用資産額、集計用被害率
@@ -308,26 +254,6 @@ class HOUSE_RATE(models.Model):
 
     def __str__(self):
         return '<HOUSE_RATE: ' + self.house_rate_code + '>'
-
-class HOUSE_RATE_VIEW(models.Model):
-    house_rate_code = models.CharField(max_length=10, primary_key=True)        ### 家屋被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名 LEFT JOIN項目
-    gradient_code = models.CharField(max_length=10)                            ### 地盤勾配区分コード
-    gradient_name = models.CharField(max_length=128)                           ### 地盤勾配区分名 LEFT JOIN項目
-    house_rate_lv00 = models.FloatField()                                      ### 家屋被害率_床下
-    house_rate_lv00_50 = models.FloatField()                                   ### 家屋被害率_0から50cm未満
-    house_rate_lv50_100 = models.FloatField()                                  ### 家屋被害率_50から100cm未満
-    house_rate_lv100_200 = models.FloatField()                                 ### 家屋被害率_100から200cm未満
-    house_rate_lv200_300 = models.FloatField()                                 ### 家屋被害率_200から300cm未満
-    house_rate_lv300 = models.FloatField()                                     ### 家屋被害率_300cm以上
-
-    class Meta:
-        db_table = 'house_rate_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<HOUSE_RATE_VIEW: ' + self.house_rate_code + '>'
     
 ###############################################################################
 ### 2020: 家庭応急対策費_代替活動費（マスタDB）
@@ -403,26 +329,6 @@ class HOUSEHOLD_RATE(models.Model):
     def __str__(self):
         return '<HOUSEHOLD_RATE: ' + self.household_rate_code + '>'
 
-class HOUSEHOLD_RATE_VIEW(models.Model):
-    household_rate_code = models.CharField(max_length=10, primary_key=True)    ### 家庭用品自動車以外被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名 LEFT JOIN項目
-    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    ### gradient_name = models.CharField(max_length=128)                       ### 地盤勾配区分名 LEFT JOIN項目
-    household_rate_lv00 = models.FloatField()                                  ### 家庭用品自動車以外被害率_床下
-    household_rate_lv00_50 = models.FloatField()                               ### 家庭用品自動車以外被害率_0から50cm未満
-    household_rate_lv50_100 = models.FloatField()                              ### 家庭用品自動車以外被害率_50から100cm未満
-    household_rate_lv100_200 = models.FloatField()                             ### 家庭用品自動車以外被害率_100から200cm未満
-    household_rate_lv200_300 = models.FloatField()                             ### 家庭用品自動車以外被害率_200から300cm未満
-    household_rate_lv300 = models.FloatField()                                 ### 家庭用品自動車以外被害率_300cm以上
-
-    class Meta:
-        db_table = 'household_rate_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<HOUSEHOLD_RATE_VIEW: ' + self.household_rate_code + '>'
-
 ###############################################################################
 ### 4000: 家庭用品自動車所有額（マスタDB）
 ### 集計用資産額、集計用被害率
@@ -475,21 +381,6 @@ class OFFICE_ASSET(models.Model):
     def __str__(self):
         return '<OFFICE_ASSET: ' + self.office_asset_code + '>'
 
-class OFFICE_ASSET_VIEW(models.Model):
-    office_asset_code = models.CharField(max_length=10, primary_key=True)      ### 事業所資産額コード
-    industry_code = models.CharField(max_length=10)                            ### 産業分類コード
-    industry_name = models.CharField(max_length=128)                           ### 産業分類名 LEFT JOIN項目
-    office_dep_asset = models.FloatField(null=True)                            ### 事業所資産額_償却資産額
-    office_inv_asset = models.FloatField(null=True)                            ### 事業所資産額_在庫資産額
-    office_va_asset = models.FloatField(null=True)                             ### 事業所資産額_付加価値額
-
-    class Meta:
-        db_table = 'office_asset_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<OFFICE_ASSET_VIEW: ' + self.office_asset_code + '>'
-
 ###############################################################################
 ### 5010: 事業所被害率（マスタDB）
 ### 集計用資産額、集計用被害率
@@ -516,32 +407,6 @@ class OFFICE_RATE(models.Model):
 
     def __str__(self):
         return '<OFFICE_RATE: ' + self.office_rate_code + '>'
-
-class OFFICE_RATE_VIEW(models.Model):
-    office_rate_code = models.CharField(max_length=10, primary_key=True)       ### 事業所被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                      ### 浸水土砂区分コード
-    flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名 LEFT JOIN項目
-    ### gradient_code = models.CharField(max_length=10)                        ### 地盤勾配区分コード
-    ### gradient_name = models.CharField(max_length=128)                       ### 地盤勾配区分名 LEFT JOIN項目
-    office_dep_rate_lv00 = models.FloatField()                                 ### 事業所被害率_償却資産被害率_床下
-    office_dep_rate_lv00_50 = models.FloatField()                              ### 事業所被害率_償却資産被害率_0から50cm未満
-    office_dep_rate_lv50_100 = models.FloatField()                             ### 事業所被害率_償却資産被害率_50から100cm未満
-    office_dep_rate_lv100_200 = models.FloatField()                            ### 事業所被害率_償却資産被害率_100から200cm未満
-    office_dep_rate_lv200_300 = models.FloatField()                            ### 事業所被害率_償却資産被害率_200から300cm未満
-    office_dep_rate_lv300 = models.FloatField()                                ### 事業所被害率_償却資産被害率_300cm以上
-    office_inv_rate_lv00 = models.FloatField()                                 ### 事業所被害率_在庫資産被害率_床下
-    office_inv_rate_lv00_50 = models.FloatField()                              ### 事業所被害率_在庫資産被害率_0から50cm未満
-    office_inv_rate_lv50_100 = models.FloatField()                             ### 事業所被害率_在庫資産被害率_50から100cm未満
-    office_inv_rate_lv100_200 = models.FloatField()                            ### 事業所被害率_在庫資産被害率_100から200cm未満
-    office_inv_rate_lv200_300 = models.FloatField()                            ### 事業所被害率_在庫資産被害率_200から300cm未満
-    office_inv_rate_lv300 = models.FloatField()                                ### 事業所被害率_在庫資産被害率_300cm以上
-
-    class Meta:
-        db_table = 'office_rate_view'
-        managed = False                                                        ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<OFFICE_RATE_VIEW: ' + self.office_rate_code + '>'
 
 ###############################################################################
 ### 5020: 事業所営業停止日数（マスタDB）
@@ -642,34 +507,10 @@ class FARMER_FISHER_RATE(models.Model):
     def __str__(self):
         return '<FARMER_FISHER_RATE: ' + self.farmer_fisher_rate_code + '>'
 
-class FARMER_FISHER_RATE_VIEW(models.Model):
-    farmer_fisher_rate_code = models.CharField(max_length=10, primary_key=True)     ### 農漁家被害率コード
-    flood_sediment_code = models.CharField(max_length=10)                           ### 浸水土砂区分コード
-    flood_sediment_name = models.CharField(max_length=128)                          ### 浸水土砂区分名 LEFT JOIN項目
-    ### gradient_code = models.CharField(max_length=10)                             ### 地盤勾配区分コード
-    ### gradient_name = models.CharField(max_length=128)                            ### 地盤勾配区分名 LEFT JOIN項目
-    farmer_fisher_dep_rate_lv00 = models.FloatField()                               ### 農漁家被害率_償却資産被害率_床下
-    farmer_fisher_dep_rate_lv00_50 = models.FloatField()                            ### 農漁家被害率_償却資産被害率_0から50cm未満
-    farmer_fisher_dep_rate_lv50_100 = models.FloatField()                           ### 農漁家被害率_償却資産被害率_50から100cm未満
-    farmer_fisher_dep_rate_lv100_200 = models.FloatField()                          ### 農漁家被害率_償却資産被害率_100から200cm未満
-    farmer_fisher_dep_rate_lv200_300 = models.FloatField()                          ### 農漁家被害率_償却資産被害率_200から300cm未満
-    farmer_fisher_dep_rate_lv300 = models.FloatField()                              ### 農漁家被害率_償却資産被害率_300cm以上
-    farmer_fisher_inv_rate_lv00 = models.FloatField()                               ### 農漁家被害率_在庫資産被害率_床下
-    farmer_fisher_inv_rate_lv00_50 = models.FloatField()                            ### 農漁家被害率_在庫資産被害率_0から50cm未満
-    farmer_fisher_inv_rate_lv50_100 = models.FloatField()                           ### 農漁家被害率_在庫資産被害率_50から100cm未満
-    farmer_fisher_inv_rate_lv100_200 = models.FloatField()                          ### 農漁家被害率_在庫資産被害率_100から200cm未満
-    farmer_fisher_inv_rate_lv200_300 = models.FloatField()                          ### 農漁家被害率_在庫資産被害率_200から300cm未満
-    farmer_fisher_inv_rate_lv300 = models.FloatField()                              ### 農漁家被害率_在庫資産被害率_300cm以上
-
-    class Meta:
-        db_table = 'farmer_fisher_rate_view'
-        managed = False                                                             ### マイグレーションの対象外とする。
-
-    def __str__(self):
-        return '<FARMER_FISHER_RATE_VIEW: ' + self.farmer_fisher_rate_code + '>'
-
+###############################################################################
 ###############################################################################
 ### 入力DB
+###############################################################################
 ###############################################################################
 
 ###############################################################################
@@ -727,8 +568,8 @@ class WEATHER(models.Model):
 ### 水害（発生年月日）と水害区域番号との関係が１対１であるのか？異なる水害（発生年月日）で水害区域（番号）の使い回しがあるのか？疑問。
 ###############################################################################
 class SUIGAI(models.Model):
-    suigai_id = models.IntegerField(primary_key=True)                          ### 水害ID
-    suigai_name = models.CharField(max_length=128, null=True)                  ### 水害名
+    suigai_id = models.IntegerField(primary_key=True)                          ### シートID
+    suigai_name = models.CharField(max_length=128, null=True)                  ### シート名
     
     ### 帳票のヘッダ部分 行7
     ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
@@ -811,7 +652,7 @@ class IPPAN(models.Model):
     ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
     ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
     ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    suigai_id = models.IntegerField(null=True)                                 ### シートID
 
     ### 帳票の繰り返し部分 行20以降
     building_code = models.CharField(max_length=10, null=True)                 ### 建物区分コード
@@ -898,8 +739,8 @@ class IPPAN_VIEW(models.Model):
     ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
     ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
     ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    suigai_name = models.CharField(max_length=128, null=True)                  ### 水害名
+    suigai_id = models.IntegerField(null=True)                                 ### シートID
+    suigai_name = models.CharField(max_length=128, null=True)                  ### シート名
     
     ### 帳票のヘッダ部分 行7
     ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
@@ -1019,7 +860,7 @@ class IPPAN_VIEW(models.Model):
     comment = models.CharField(max_length=512, null=True)                      ### 備考
 
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
 
     class Meta:
         db_table = 'ippan_view'
@@ -1029,7 +870,9 @@ class IPPAN_VIEW(models.Model):
         return '<IPPAN_VIEW: ' + self.ippan_id + '>'
 
 ###############################################################################
+###############################################################################
 ### 集計DB
+###############################################################################
 ###############################################################################
         
 ###############################################################################
@@ -1038,7 +881,7 @@ class IPPAN_VIEW(models.Model):
 class IPPAN_SUMMARY(models.Model):
     ### ippan_summary_id = models.IntegerField(primary_key=True)               ### postgresの自動インクリメントを使用する。 ※一般資産調査票の複数行の集計計算を１個のSQLで行うため ※MAX(*_ID+1)の場合、FORループが必要となる。
     ippan_id = models.IntegerField(null=True)                                  ### 行ID
-    suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+    suigai_id = models.IntegerField(null=True)                                 ### シートID
     
     ### 家屋被害額(集計DB)
     house_summary_lv00 = models.FloatField(null=True)                          ### 家屋被害額_床下（延床面積×家屋評価額×浸水または土砂ごとの勾配差による被害率）
@@ -1146,7 +989,9 @@ class IPPAN_SUMMARY(models.Model):
         return '<IPPAN_SUMMARY: ' + self.ippan_summary_id + '>'
 
 ###############################################################################
+###############################################################################
 ### 自動化DB
+###############################################################################
 ###############################################################################
 
 ###############################################################################
@@ -1309,360 +1154,6 @@ class REPOSITORY(models.Model):
     def __str__(self):
          return '<REPOSITORY: ' + self.repository_id + '>'
 
-###############################################################################
-### 10060: 実行管理（自動化DB）
-### ※アルファ版、ベータ版、初期リリース版では使用しない。
-### ※JP1のような高機能版で使用する。
-### ※アルファ版、ベータ版、初期リリース版ではトリガーテーブルで代用する。
-###############################################################################
-### class EXECUTE(models.Model):
-###     execute_id = models.IntegerField(primary_key=True)                     ### 実行ID
-###     execute_name = models.CharField(max_length=128, null=True)             ### 実行名
-###     suigai_id = models.IntegerField(null=True)                             ### 水害ID
-###     repository_id = models.IntegerField(null=True)                         ### レポジトリID
-###     action_code = models.CharField(max_length=10, null=True)               ### アクションコード
-###     status_code = models.CharField(max_length=10, null=True)               ### 状態コード
-###     success_count = models.IntegerField(null=True)                         ### 成功数
-###     failure_count = models.IntegerField(null=True)                         ### 失敗数
-###     created_at = models.DateTimeField(null=True)                           ### 生成日時
-###     scheduled_at = models.DateTimeField(null=True)                         ### 計画日時
-###     started_at = models.DateTimeField(null=True)                           ### 開始日時
-###     finished_at = models.DateTimeField(null=True)                          ### 終了日時
-###     canceled_at = models.DateTimeField(null=True)                          ### キャンセル日時
-###     stopped_at = models.DateTimeField(null=True)                           ### 停止日時
-###     restarted_at = models.DateTimeField(null=True)                         ### 再実行日時
-###     class Meta:
-###         db_table = 'execute'
-###     def __str__(self):
-###         return '<ACTION: ' + self.action_id + '>'
-    
-###############################################################################
-### 9010: 一般資産調査票（管理DB）
-###############################################################################
-class IPPAN_REPORT(models.Model):
-    ippan_report_id = models.CharField(max_length=10, primary_key=True)
-    
-    class Meta:
-        db_table = 'ippan_report'
-        
-    def __str__(self):
-        return '<IPPAN_REPORT: ' + self.ippan_report_id + '>'
-
-###############################################################################
-### その他DB、未使用DB
-###############################################################################
-### ---: 家庭応急対策費（マスタDB） ※削除予定
-class HOUSE_COST(models.Model):
-    house_cost_code = models.CharField(max_length=10, primary_key=True)        ### 家庭応急対策費コード
-    house_cost_year = models.IntegerField()                                    ### 家庭応急対策費対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    alt_lv00 = models.FloatField()                                             ### 代替活動費_床下
-    alt_lv00_50 = models.FloatField()                                          ### 代替活動費_0から50cm未満
-    alt_lv50_100 = models.FloatField()                                         ### 代替活動費_50から100cm未満
-    alt_lv100_200 = models.FloatField()                                        ### 代替活動費_100から200cm未満
-    alt_lv200_300 = models.FloatField()                                        ### 代替活動費_200から300cm未満
-    alt_lv300 = models.FloatField()                                            ### 代替活動費_300cm以上
-    clean_lv00 = models.FloatField()                                           ### 清掃費_床下
-    clean_lv00_50 = models.FloatField()                                        ### 清掃費_0から50cm未満
-    clean_lv50_100 = models.FloatField()                                       ### 清掃費_50から100cm未満
-    clean_lv100_200 = models.FloatField()                                      ### 清掃費_100から200cm未満
-    clean_lv200_300 = models.FloatField()                                      ### 清掃費_200から300cm未満
-    clean_lv300 = models.FloatField()                                          ### 清掃費_300cm以上
-    house_cost = models.FloatField()                                           ### 清掃労働単価
-
-    class Meta:
-        db_table = 'house_cost'
-
-    def __str__(self):
-        return '<HOUSE_COST: ' + self.house_cost_code + '>'
-
-### ---: 事業所営業停止損失（マスタDB） ※削除予定
-class OFFICE_COST(models.Model):
-    office_cost_code = models.CharField(max_length=10, primary_key=True)       ### 事業所営業損失コード
-    office_cost_year = models.IntegerField()                                   ### 事業所営業損失対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    suspend_lv00 = models.FloatField()                                         ### 営業停止日数_床下
-    suspend_lv00_50 = models.FloatField()                                      ### 営業停止日数_0から50cm未満
-    suspend_lv50_100 = models.FloatField()                                     ### 営業停止日数_50から100cm未満
-    suspend_lv100_200 = models.FloatField()                                    ### 営業停止日数_100から200cm未満
-    suspend_lv200_300 = models.FloatField()                                    ### 営業停止日数_200から300cm未満
-    suspend_lv300 = models.FloatField()                                        ### 営業停止日数_300cm以上
-    stagnate_lv00 = models.FloatField()                                        ### 営業停滞日数_床下
-    stagnate_lv00_50 = models.FloatField()                                     ### 営業停滞日数_0から50cm未満
-    stagnate_lv50_100 = models.FloatField()                                    ### 営業停滞日数_50から100cm未満
-    stagnate_lv100_200 = models.FloatField()                                   ### 営業停滞日数_100から200cm未満
-    stagnate_lv200_300 = models.FloatField()                                   ### 営業停滞日数_200から300cm未満
-    stagnate_lv300 = models.FloatField()                                       ### 営業停滞日数_300cm以上
-    alt_lv00 = models.FloatField(null=True)                                    ### 代替活動費_床下
-    alt_lv00_50 = models.FloatField(null=True)                                 ### 代替活動費_0から50cm未満
-    alt_lv50_100 = models.FloatField(null=True)                                ### 代替活動費_50から100cm未満
-    alt_lv100_200 = models.FloatField(null=True)                               ### 代替活動費_100から200cm未満
-    alt_lv200_300 = models.FloatField(null=True)                               ### 代替活動費_200から300cm未満
-    alt_lv300 = models.FloatField(null=True)                                   ### 代替活動費_300cm以上
-
-    class Meta:
-        db_table = 'office_cost'
-
-    def __str__(self):
-        return '<OFFICE_COST: ' + self.office_cost_code + '>'
-    
-### ---: 家屋被害率（マスタDB） ※削除予定
-class HOUSE_DAMAGE(models.Model):
-    house_damage_code = models.CharField(max_length=10, primary_key=True)      ### 家屋被害率コード
-    house_damage_year = models.IntegerField()                                  ### 家屋被害率対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    fl_gr1_lv00 = models.FloatField()                                          ### 被害率_浸水_勾配1_床下
-    fl_gr1_lv00_50 = models.FloatField()                                       ### 被害率_浸水_勾配1_0から50cm未満
-    fl_gr1_lv50_100 = models.FloatField()                                      ### 被害率_浸水_勾配1_50から100cm未満
-    fl_gr1_lv100_200 = models.FloatField()                                     ### 被害率_浸水_勾配1_100から200cm未満
-    fl_gr1_lv200_300 = models.FloatField()                                     ### 被害率_浸水_勾配1_200から300cm未満
-    fl_gr1_lv300 = models.FloatField()                                         ### 被害率_浸水_勾配1_300cm以上
-    fl_gr2_lv00 = models.FloatField()                                          ### 被害率_浸水_勾配2_床下
-    fl_gr2_lv00_50 = models.FloatField()                                       ### 被害率_浸水_勾配2_0から50cm未満
-    fl_gr2_lv50_100 = models.FloatField()                                      ### 被害率_浸水_勾配2_50から100cm未満
-    fl_gr2_lv100_200 = models.FloatField()                                     ### 被害率_浸水_勾配2_100から200cm未満
-    fl_gr2_lv200_300 = models.FloatField()                                     ### 被害率_浸水_勾配2_200から300cm未満
-    fl_gr2_lv300 = models.FloatField()                                         ### 被害率_浸水_勾配2_300cm以上
-    fl_gr3_lv00 = models.FloatField()                                          ### 被害率_浸水_勾配3_床下
-    fl_gr3_lv00_50 = models.FloatField()                                       ### 被害率_浸水_勾配3_0から50cm未満
-    fl_gr3_lv50_100 = models.FloatField()                                      ### 被害率_浸水_勾配3_50から100cm未満
-    fl_gr3_lv100_200 = models.FloatField()                                     ### 被害率_浸水_勾配3_100から200cm未満
-    fl_gr3_lv200_300 = models.FloatField()                                     ### 被害率_浸水_勾配3_200から300cm未満
-    fl_gr3_lv300 = models.FloatField()                                         ### 被害率_浸水_勾配3_300cm以上
-    sd_gr1_lv00 = models.FloatField()                                          ### 被害率_土砂_勾配1_床下
-    sd_gr1_lv00_50 = models.FloatField()                                       ### 被害率_土砂_勾配1_0から50cm未満
-    sd_gr1_lv50_100 = models.FloatField()                                      ### 被害率_土砂_勾配1_50から100cm未満
-    sd_gr1_lv100_200 = models.FloatField()                                     ### 被害率_土砂_勾配1_100から200cm未満
-    sd_gr1_lv200_300 = models.FloatField()                                     ### 被害率_土砂_勾配1_200から300cm未満
-    sd_gr1_lv300 = models.FloatField()                                         ### 被害率_土砂_勾配1_300cm以上
-    sd_gr2_lv00 = models.FloatField()                                          ### 被害率_土砂_勾配2_床下
-    sd_gr2_lv00_50 = models.FloatField()                                       ### 被害率_土砂_勾配2_0から50cm未満
-    sd_gr2_lv50_100 = models.FloatField()                                      ### 被害率_土砂_勾配2_50から100cm未満
-    sd_gr2_lv100_200 = models.FloatField()                                     ### 被害率_土砂_勾配2_100から200cm未満
-    sd_gr2_lv200_300 = models.FloatField()                                     ### 被害率_土砂_勾配2_200から300cm未満
-    sd_gr2_lv300 = models.FloatField()                                         ### 被害率_土砂_勾配2_300cm以上
-    sd_gr3_lv00 = models.FloatField()                                          ### 被害率_土砂_勾配3_床下
-    sd_gr3_lv00_50 = models.FloatField()                                       ### 被害率_土砂_勾配3_0から50cm未満
-    sd_gr3_lv50_100 = models.FloatField()                                      ### 被害率_土砂_勾配3_50から100cm未満
-    sd_gr3_lv100_200 = models.FloatField()                                     ### 被害率_土砂_勾配3_100から200cm未満
-    sd_gr3_lv200_300 = models.FloatField()                                     ### 被害率_土砂_勾配3_200から300cm未満
-    sd_gr3_lv300 = models.FloatField()                                         ### 被害率_土砂_勾配3_300cm以上
-
-    class Meta:
-        db_table = 'house_damage'
-
-    def __str__(self):
-        return '<HOUSE_DAMAGE: ' + self.house_damage_code + '>'
-
-### ---: 家庭用品自動車以外被害率（マスタDB） ※削除予定
-class HOUSEHOLD_DAMAGE(models.Model):
-    household_damage_code = models.CharField(max_length=10, primary_key=True)  ### 家庭用品自動車以外被害率コード
-    household_damage_year = models.IntegerField()                              ### 家庭用品自動車以外被害率対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    fl_lv00 = models.FloatField()                                              ### 被害率_浸水_床下
-    fl_lv00_50 = models.FloatField()                                           ### 被害率_浸水_0から50cm未満
-    fl_lv50_100 = models.FloatField()                                          ### 被害率_浸水_50から100cm未満
-    fl_lv100_200 = models.FloatField()                                         ### 被害率_浸水_100から200cm未満
-    fl_lv200_300 = models.FloatField()                                         ### 被害率_浸水_200から300cm未満
-    fl_lv300 = models.FloatField()                                             ### 被害率_浸水_300cm以上
-    sd_lv00 = models.FloatField()                                              ### 被害率_土砂_床下
-    sd_lv00_50 = models.FloatField()                                           ### 被害率_土砂_0から50cm未満
-    sd_lv50_100 = models.FloatField()                                          ### 被害率_土砂_50から100cm未満
-    sd_lv100_200 = models.FloatField()                                         ### 被害率_土砂_100から200cm未満
-    sd_lv200_300 = models.FloatField()                                         ### 被害率_土砂_200から300cm未満
-    sd_lv300 = models.FloatField()                                             ### 被害率_土砂_300cm以上
-    household_asset = models.FloatField()                                      ### 家庭用品自動車以外所有額
-
-    class Meta:
-        db_table = 'household_damage'
-
-    def __str__(self):
-        return '<HOUSEHOLD_DAMAGE: ' + self.household_damage_code + '>'
-
-### ---: 家庭用品自動車被害率（マスタDB） ※削除予定
-class CAR_DAMAGE(models.Model):
-    car_damage_code = models.CharField(max_length=10, primary_key=True)        ### 自動車被害率コード
-    car_damage_year = models.IntegerField()                                    ### 自動車被害率対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    fl_lv00 = models.FloatField()                                              ### 被害率_浸水_床下
-    fl_lv00_50 = models.FloatField()                                           ### 被害率_浸水_0から50cm未満
-    fl_lv50_100 = models.FloatField()                                          ### 被害率_浸水_50から100cm未満
-    fl_lv100_200 = models.FloatField()                                         ### 被害率_浸水_100から200cm未満
-    fl_lv200_300 = models.FloatField()                                         ### 被害率_浸水_200から300cm未満
-    fl_lv300 = models.FloatField()                                             ### 被害率_浸水_300cm以上
-    car_asset = models.FloatField()                                            ### 家庭用品自動車所有額
-
-    class Meta:
-        db_table = 'car_damage'
-
-    def __str__(self):
-        return '<CAR_DAMAGE: ' + self.car_damage_code + '>'
-
-### ---: 事業所被害率（マスタDB） ※削除予定
-class OFFICE_DAMAGE(models.Model):
-    office_damage_code = models.CharField(max_length=10, primary_key=True)     ### 事業所被害率コード
-    office_damage_year = models.IntegerField()                                 ### 事業所被害率対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    dep_fl_lv00 = models.FloatField()                                          ### 償却資産率_浸水_床下
-    dep_fl_lv00_50 = models.FloatField()                                       ### 償却資産率_浸水_0から50cm未満
-    dep_fl_lv50_100 = models.FloatField()                                      ### 償却資産率_浸水_50から100cm未満
-    dep_fl_lv100_200 = models.FloatField()                                     ### 償却資産率_浸水_100から200cm未満
-    dep_fl_lv200_300 = models.FloatField()                                     ### 償却資産率_浸水_200から300cm未満
-    dep_fl_lv300 = models.FloatField()                                         ### 償却資産率_浸水_300cm以上
-    dep_sd_lv00 = models.FloatField()                                          ### 償却資産率_土砂_床下
-    dep_sd_lv00_50 = models.FloatField()                                       ### 償却資産率_土砂_0から50cm未満
-    dep_sd_lv50_100 = models.FloatField()                                      ### 償却資産率_土砂_50から100cm未満
-    dep_sd_lv100_200 = models.FloatField()                                     ### 償却資産率_土砂_100から200cm未満
-    dep_sd_lv200_300 = models.FloatField()                                     ### 償却資産率_土砂_200から300cm未満
-    dep_sd_lv300 = models.FloatField()                                         ### 償却資産率_土砂_300cm以上
-    inv_fl_lv00 = models.FloatField()                                          ### 在庫資産率_浸水_床下
-    inv_fl_lv00_50 = models.FloatField()                                       ### 在庫資産率_浸水_0から50cm未満
-    inv_fl_lv50_100 = models.FloatField()                                      ### 在庫資産率_浸水_50から100cm未満
-    inv_fl_lv100_200 = models.FloatField()                                     ### 在庫資産率_浸水_100から200cm未満
-    inv_fl_lv200_300 = models.FloatField()                                     ### 在庫資産率_浸水_200から300cm未満
-    inv_fl_lv300 = models.FloatField()                                         ### 在庫資産率_浸水_300cm以上
-    inv_sd_lv00 = models.FloatField()                                          ### 在庫資産率_土砂_床下
-    inv_sd_lv00_50 = models.FloatField()                                       ### 在庫資産率_土砂_0から50cm未満
-    inv_sd_lv50_100 = models.FloatField()                                      ### 在庫資産率_土砂_50から100cm未満
-    inv_sd_lv100_200 = models.FloatField()                                     ### 在庫資産率_土砂_100から200cm未満
-    inv_sd_lv200_300 = models.FloatField()                                     ### 在庫資産率_土砂_200から300cm未満
-    inv_sd_lv300 = models.FloatField()                                         ### 在庫資産率_土砂_300cm以上
-
-    class Meta:
-        db_table = 'office_damage'
-
-    def __str__(self):
-        return '<OFFICE_DAMAGE: ' + self.office_damage_code + '>'
-
-### ---: 農漁家被害率（マスタDB） ※削除予定
-class FARMER_FISHER_DAMAGE(models.Model):
-    farmer_fisher_damage_code = models.CharField(max_length=10, primary_key=True)   ### 農漁家被害率コード
-    farmer_fisher_damage_year = models.IntegerField()                          ### 農漁家被害率対象年
-    begin_date = models.DateField()                                            ### 開始日
-    end_date = models.DateField()                                              ### 終了日
-    dep_fl_lv00 = models.FloatField()                                          ### 償却資産被害率_浸水_床下
-    dep_fl_lv00_50 = models.FloatField()                                       ### 償却資産被害率_浸水_0から50cm未満
-    dep_fl_lv50_100 = models.FloatField()                                      ### 償却資産被害率_浸水_50から100cm未満
-    dep_fl_lv100_200 = models.FloatField()                                     ### 償却資産被害率_浸水_100から200cm未満
-    dep_fl_lv200_300 = models.FloatField()                                     ### 償却資産被害率_浸水_200から300cm未満
-    dep_fl_lv300 = models.FloatField()                                         ### 償却資産被害率_浸水_300cm以上
-    dep_sd_lv00 = models.FloatField()                                          ### 償却資産被害率_土砂_床下
-    dep_sd_lv00_50 = models.FloatField()                                       ### 償却資産被害率_土砂_0から50cm未満
-    dep_sd_lv50_100 = models.FloatField()                                      ### 償却資産被害率_土砂_50から100cm未満
-    dep_sd_lv100_200 = models.FloatField()                                     ### 償却資産被害率_土砂_100から200cm未満
-    dep_sd_lv200_300 = models.FloatField()                                     ### 償却資産被害率_土砂_200から300cm未満
-    dep_sd_lv300 = models.FloatField()                                         ### 償却資産被害率_土砂_300cm以上
-    inv_fl_lv00 = models.FloatField()                                          ### 在庫資産被害率_浸水_床下
-    inv_fl_lv00_50 = models.FloatField()                                       ### 在庫資産被害率_浸水_0から50cm未満
-    inv_fl_lv50_100 = models.FloatField()                                      ### 在庫資産被害率_浸水_50から100cm未満
-    inv_fl_lv100_200 = models.FloatField()                                     ### 在庫資産被害率_浸水_100から200cm未満
-    inv_fl_lv200_300 = models.FloatField()                                     ### 在庫資産被害率_浸水_200から300cm未満
-    inv_fl_lv300 = models.FloatField()                                         ### 在庫資産被害率_浸水_300cm以上
-    inv_sd_lv00 = models.FloatField()                                          ### 在庫資産被害率_土砂_床下
-    inv_sd_lv00_50 = models.FloatField()                                       ### 在庫資産被害率_土砂_0から50cm未満
-    inv_sd_lv50_100 = models.FloatField()                                      ### 在庫資産被害率_土砂_50から100cm未満
-    inv_sd_lv100_200 = models.FloatField()                                     ### 在庫資産被害率_土砂_100から200cm未満
-    inv_sd_lv200_300 = models.FloatField()                                     ### 在庫資産被害率_土砂_200から300cm未満
-    inv_sd_lv300 = models.FloatField()                                         ### 在庫資産被害率_土砂_300cm以上
-    depreciable_asset = models.IntegerField()                                  ### 農漁家償却資産額
-    inventory_asset = models.IntegerField()                                    ### 農漁家在庫資産額
-
-    class Meta:
-        db_table = 'farmer_fisher_damage'
-
-    def __str__(self):
-        return '<FARMER_FISHER_DAMAGE: ' + self.farmer_fisher_damage_code + '>'
-        
-### ---: 公共土木レポート
-class KOKYO_REPORT(models.Model):
-    kokyo_report_id = models.CharField(max_length=10, primary_key=True)        
-    
-    class Meta:
-        db_table = 'kokyo_report'
-        
-    def __str__(self):
-        return '<KOKYO_REPORT: ' + self.kokyo_report_id + '>'
-    
-### ---: 公益事業レポート
-class KOEKI_REPORT(models.Model):
-    koeki_report_id = models.CharField(max_length=10, primary_key=True)
-    
-    class Meta:
-        db_table = 'koeki_report'
-        
-    def __str__(self):
-        return '<KOEKI_REPORT: ' + self.koeki_report_id + '>'
-
-### ---: 承認履歴
-class APPROVE_HISTORY(models.Model):
-    approve_history_id = models.CharField(max_length=10, primary_key=True)
-    
-    class Meta:
-        db_table = 'approve_history'
-        
-    def __str__(self):
-        return '<APPROVE_HISTORY: ' + self.approve_history_id + '>'
-
-### ---: 集計履歴
-class REPORT_HISTORY(models.Model):
-    report_history_id = models.CharField(max_length=10, primary_key=True)
-    
-    class Meta:
-        db_table = 'report_history'
-        
-    def __str__(self):
-        return '<REPORT_HISTORY: ' + self.report_history_id + '>'
-
-### ---: 配布履歴
-class DISTRIBUTE_HISTORY(models.Model):
-    distribute_history_id = models.CharField(max_length=10, primary_key=True)
-    
-    class Meta:
-        db_table = 'distribute_history'
-        
-    def __str__(self):
-        return '<DISTRIBUTE_HISTORY: ' + self.distribute_history_id + '>'
-
-### ---: 
-class TRANSACT(models.Model):
-    transact_id = models.IntegerField(primary_key=True)
-    download_date = models.DateTimeField()
-    upload_date = models.DateTimeField()
-    transact_date = models.DateTimeField()
-    schedule_date = models.DateTimeField()
-    download_user_id = models.CharField(max_length=10)
-    upload_user_id = models.CharField(max_length=10)
-    transact_user_id = models.CharField(max_length=10)
-    ken_code = models.CharField(max_length=10)
-    city_code = models.CharField(max_length=10)
-    approve_disapprove_undetermin_code = models.CharField(max_length=10)
-    ippan_kokyo_koeki_code = models.CharField(max_length=10)
-    ippan_kokyo_koeki_id = models.CharField(max_length=10)
-    comment = models.CharField(max_length=256)
-    
-    class Meta:
-        db_table = 'transact'
-        
-    def __str__(self):
-        return '<TRANSACT: ' + self.transact_id + '>'
-
-### ---: 
-class IPPAN_KOKYO_KOEKI(models.Model):
-    ippan_kokyo_koeki_code = models.CharField(max_length=10)
-    ippan_kokyo_koeki_name = models.CharField(max_length=128)
-    
-    class Meta:
-        db_table = 'ippan_kokyo_koeki'
-        
-    def __str__(self):
-        return '<IPPAN_KOKYO_KOEKI: ' + self.ippan_kokyo_koeki_code + '>'
-
 ### ---: 復旧事業工種
 class RESTORATION(models.Model):
     restoration_code = models.CharField(max_length=10, primary_key=True)
@@ -1707,13 +1198,3 @@ class KOEKI(models.Model):
 
     def __str__(self):
         return '<KOEKI: ' + self.koeki_id + ', ' + self.koeki_name + '>'
-
-### ---: 
-class TEST_20220614(models.Model):    
-    test_name = models.FloatField(null=True)
-    
-    class Meta:
-        db_table = 'test_20220614'
-        
-    def __str__(self):
-        return '<TEST_20220614: ' + self.test_name + '>'
