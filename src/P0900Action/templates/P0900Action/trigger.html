@@ -138,19 +138,83 @@
                     <div class="card-body border-0 bg-white">
                         <div class="table-responsive overflow-auto">
                             <table>
+                                {% if trigger.0.trigger_id is None %}
+                                <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start">{{ trigger.0.trigger_id }}</td></tr>
-                                <tr><td class="text-start">ダウンロードファイル名:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.download_file_path }}/">{{ trigger.0.download_file_name }}</a></td></tr>
-                                <tr><td class="text-start">アップロードファイル名:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.upload_file_path }}/">{{ trigger.0.upload_file_name }}</a></td></tr>
-                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}: {{ trigger.0.suigai_id }}</td></tr>
-                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}: {{ trigger.0.ken_code }}</td></tr>
-                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}: {{ trigger.0.city_code }}</td></tr>
-                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}: {{ trigger.0.action_code }}</td></tr>
-                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}: {{ trigger.0.status_code }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.download_file_name is None %}
+                                <tr><td class="text-start">ダウンロードファイル:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">ダウンロードファイル:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.download_file_path }}/">{{ trigger.0.download_file_name }}</a></td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.upload_file_name is None %}
+                                <tr><td class="text-start">アップロードファイル:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">アップロードファイル:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.upload_file_path }}/">{{ trigger.0.upload_file_name }}</a></td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.suigai_name is None %}
+                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.ken_name is None %}
+                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.city_name is None %}
+                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.action_name is None %}
+                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.status_name is None %}
+                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
+                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.published_at is None %}
+                                <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start">{{ trigger.0.published_at }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.consumed_at is None %}
+                                <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start">{{ trigger.0.consumed_at }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.deleted_at is None %}
+                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start">{{ trigger.0.deleted_at }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.success_count is None %}
+                                <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start">{{ trigger.0.success_count }}</td></tr>
+                                {% endif %}
+                                
+                                {% if trigger.0.failure_count is None %}
+                                <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start"></td></tr>
+                                {% else %}
                                 <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start">{{ trigger.0.failure_count }}</td></tr>
+                                {% endif %}
                             </table>
                         </div>
                     </div>

@@ -123,19 +123,19 @@
                     <thead>
                         <tr>
                             <th class="text-center text-truncate" style="width: 12rem;"></th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF1<br>ダウンロード &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF2<br>アップロード &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF3<br>データ検証 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF4<br>差分検証 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF5<br>按分処理 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF6<br>データ検証 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF7<br>集計処理 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF8<br>データ検証 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF9<br>水害区域図 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF10<br>水害区域図貼付け &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF11<br>集計処理 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF12<br>データ検証 &gt;&gt;</th>
-                            <th class="text-center text-truncate" style="width: 12rem;">WF13<br>マニュアル検証待ち</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF1<br>ダウンロード &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF2<br>アップロード &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF3<br>データ検証 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF4<br>差分検証 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF5<br>按分処理 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF6<br>データ検証 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF7<br>集計処理 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF8<br>データ検証 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF9<br>水害区域図 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF10<br>水害区域図貼付け &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF11<br>集計処理 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF12<br>データ検証 &gt;&gt;</th>
+                            <th class="text-center text-truncate" style="width: 24rem;">WF13<br>マニュアル検証待ち</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,7 +145,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF1_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} 最終 {{ trigger.published_at }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -153,7 +153,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF2_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -161,7 +161,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF3_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -169,7 +169,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF4_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -177,7 +177,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF5_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -185,7 +185,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF6_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -193,7 +193,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF7_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -201,7 +201,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF8_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -209,7 +209,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF9_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -217,7 +217,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF10_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -225,7 +225,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF11_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -233,7 +233,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF12_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -241,7 +241,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF13_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} {{ trigger.suigai_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -252,7 +252,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_W1_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -260,7 +260,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF2_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -268,7 +268,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF3_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -276,7 +276,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF4_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -284,7 +284,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF5_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -292,7 +292,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF6_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -300,7 +300,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF7_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -308,7 +308,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF8_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_tablevvvv">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_tablevvvv">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -316,7 +316,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF9_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -324,7 +324,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF10_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -332,7 +332,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF11_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -340,7 +340,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF12_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -348,7 +348,7 @@
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF13_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
+                                    <li class="text-truncate" style="width: 24rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
