@@ -9,6 +9,9 @@
 ###############################################################################
 import sys
 from django.contrib.auth.decorators import login_required
+from django.db import connection
+from django.db import transaction
+from django.db.models import Max
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -23,6 +26,8 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.formatting.rule import FormulaRule
+
+import hashlib
 
 from P0000Common.models import BUILDING                ### 1000: 建物区分
 from P0000Common.models import KEN                     ### 1010: 都道府県
@@ -4112,9 +4117,33 @@ def ippan_chosa_view(request, lock):
         for city_code in city_code_request:
             suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI WHERE city_code=%s ORDER BY CAST(suigai_id AS INTEGER)""", [city_code, ])
             suigai_id_list.append([suigai.suigai_id for suigai in suigai_list])
-                
+            
+        ken_code_list = []
+        ken_name_list = []
+        city_code_list = []
+        city_name_list = []
+        for city_code in city_code_request:
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                WHERE CT1.city_code=%s""", [city_code, ])
+            
+            ken_code_list.append([city.ken_code for city in city_list][0])
+            ken_name_list.append([city.ken_name for city in city_list][0])
+            city_code_list.append([city.city_code for city in city_list][0])
+            city_name_list.append([city.city_name for city in city_list][0])
+            
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 suigai_count_list = {}'.format(suigai_count_list), 'INFO')
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 suigai_id_list = {}'.format(suigai_id_list), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 ken_code_list = {}'.format(ken_code_list), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 ken_name_list = {}'.format(ken_name_list), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 city_code_list = {}'.format(city_code_list), 'INFO')
+        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 city_name_list = {}'.format(city_name_list), 'INFO')
         
         #######################################################################
         ### EXCEL入出力処理(0030)
@@ -4125,9 +4154,12 @@ def ippan_chosa_view(request, lock):
         ### ※0件の場合、入力用にIPPANシートを10枚作成する。
         ### ※5件の場合、既存データ用にIPPANシートを5枚作成する。
         ### ※5件の場合、入力用にIPPANシートを10枚作成する。（合計15枚作成する。）
+        ### i ループの回数＝EXCELファイルの数
+        ### ※新規追加用に10シート分余分に生成する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 4/12.', 'INFO')
         download_file_path = []
+        download_file_name = []
         
         wb = []
         
@@ -4156,12 +4188,13 @@ def ippan_chosa_view(request, lock):
         ws_kasen_type_vlook = []
         
         ### len(city_code_request)=ワークブックの数=EXCELファイルの数
-        ### 一般資産テーブルを除き、EXCELファイル毎に、テーブル毎に１シートとする。
-        ### 一般資産テーブルについては、EXCELファイル毎に、一般資産入力データ_ヘッダ部分、水害毎に1シートとする。
-        ### 上記に加えて、新規入力用に空欄のシート10シートとする。
+        ### EXCELファイル毎に、1テーブルに1シートとする。
+        ### 一般資産については、EXCELファイル毎に、1一般資産入力データ_ヘッダ部分に1シートとする。
+        ### 一般資産については、上記に加えて、新規入力用に空欄のシート10シートとする。
         for i, city_code in enumerate(city_code_request):
             template_file_path = 'static/template_ippan_chosa.xlsx'
-            download_file_path.append('static/ippan_chosa_' + city_code + '.xlsx')
+            download_file_path.append('static/ippan_chosa_' + str(ken_name_list[i]) + '_' + str(city_name_list[i]) + '.xlsx')
+            download_file_name.append('ippan_chosa_' + str(ken_name_list[i]) + '_' + str(city_name_list[i]) + '.xlsx')
             
             wb.append(openpyxl.load_workbook(template_file_path, keep_vba=False))
             
@@ -4187,7 +4220,7 @@ def ippan_chosa_view(request, lock):
             ws_suikei_type_vlook.append(wb[i]["SUIKEI_TYPE_VLOOK"])
             ws_kasen_type_vlook.append(wb[i]["KASEN_TYPE_VLOOK"])
             
-            ### 上記に加えて、新規入力用に空欄のシート10シートとする。
+            ### 一般資産については、上記に加えて、新規入力用に空欄のシート10シートとする。
             ws_copy = []
             ws_copy.append(wb[i]["IPPAN"])
             for j in range(suigai_count_list[i] + 10):
@@ -4196,17 +4229,44 @@ def ippan_chosa_view(request, lock):
                 
             ws_ippan.append(ws_copy)
 
+        ### openpyxlsを使用して、枠線をエクセルから消す。
+        for i, _ in enumerate(city_code_request):
+            ws_building[i].sheet_view.showGridLines = False
+            ws_ken[i].sheet_view.showGridLines = False
+            ws_city[i].sheet_view.showGridLines = False
+            ws_kasen_kaigan[i].sheet_view.showGridLines = False
+            ws_suikei[i].sheet_view.showGridLines = False
+            ws_suikei_type[i].sheet_view.showGridLines = False
+            ws_kasen[i].sheet_view.showGridLines = False
+            ws_kasen_type[i].sheet_view.showGridLines = False
+            ws_cause[i].sheet_view.showGridLines = False
+            ws_underground[i].sheet_view.showGridLines = False
+            ws_usage[i].sheet_view.showGridLines = False
+            ws_flood_sediment[i].sheet_view.showGridLines = False
+            ws_gradient[i].sheet_view.showGridLines = False
+            ws_industry[i].sheet_view.showGridLines = False
+            ws_suigai[i].sheet_view.showGridLines = False
+            ws_weather[i].sheet_view.showGridLines = False
+            ws_area[i].sheet_view.showGridLines = False
+            ws_city_vlook[i].sheet_view.showGridLines = False
+            ws_kasen_vlook[i].sheet_view.showGridLines = False
+            ws_suikei_type_vlook[i].sheet_view.showGridLines = False
+            ws_kasen_type_vlook[i].sheet_view.showGridLines = False
+
+            for j in range(suigai_count_list[i] + 10 + 1):
+                ws_ippan[i][j].sheet_view.showGridLines = False
+                
         #######################################################################
         ### DBアクセス処理(0040)
         ### EXCEL入出力処理(0040)
         ### (1)DBから建物区分等のマスタデータを取得する。
         ### (2)EXCELのマスタ用のシートのセルに、DBから取得した建物区分等のマスタデータを埋め込む。
         ### =VLOOKUP(B10,SUIKEI_TYPE_VLOOKUP!A:B,2,0)
+        ### i ループの回数＝EXCELファイルの数
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 5/12.', 'INFO')
-        
         ### 1000: 建物区分シート
-        print("ippan_chosa_view2", flush=True)
+        print("ippan_chosa_view5_0", flush=True)
         building_list = None
         building_list = BUILDING.objects.raw("""SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4216,7 +4276,7 @@ def ippan_chosa_view(request, lock):
                     ws_building[i].cell(row=j+1, column=2).value = str(building.building_name) + ":" + str(building.building_code)
 
         ### 1010: 都道府県シート
-        print("ippan_chosa_view3", flush=True)
+        print("ippan_chosa_view5_1", flush=True)
         ken_list = None
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4226,13 +4286,13 @@ def ippan_chosa_view(request, lock):
                     ws_ken[i].cell(row=j+1, column=2).value = str(ken.ken_name) + ":" + str(ken.ken_code)
         
         ### 1020: 市区町村シート
-        print("ippan_chosa_view4_1", flush=True)
+        print("ippan_chosa_view5_2", flush=True)
         cities_list = []
         if ken_list:
             for i, ken in enumerate(ken_list):
                 cities_list.append(CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken.ken_code, ]))
         
-        print("ippan_chosa_view4_3", flush=True)
+        print("ippan_chosa_view5_3", flush=True)
         for i, _ in enumerate(city_code_request):
             if cities_list:
                 for j, cities in enumerate(cities_list):
@@ -4245,17 +4305,17 @@ def ippan_chosa_view(request, lock):
                             ws_city[i].cell(row=k+1, column=j*5+5).value = city.city_area
 
         ### 1030: 水害発生地点工種（河川海岸区分）
-        print("ippan_chosa_view5", flush=True)
+        print("ippan_chosa_view5_4", flush=True)
         kasen_kaigan_list = None
         kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
             if kasen_kaigan_list:
                 for j, kasen_kaigan in enumerate(kasen_kaigan_list):
                     ws_kasen_kaigan[i].cell(row=j+1, column=1).value = kasen_kaigan.kasen_kaigan_code
-                    ws_kasen_kaigan[i].cell(row=j+1, column=2).value = kasen_kaigan.kasen_kaigan_name + ":" + kasen_kaigan.kasen_kaigan_code
+                    ws_kasen_kaigan[i].cell(row=j+1, column=2).value = str(kasen_kaigan.kasen_kaigan_name) + ":" + str(kasen_kaigan.kasen_kaigan_code)
 
         ### 1040: 水系（水系・沿岸）
-        print("ippan_chosa_view6", flush=True)
+        print("ippan_chosa_view5_5", flush=True)
         suikei_list = None
         suikei_list = SUIKEI.objects.raw("""SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4266,7 +4326,7 @@ def ippan_chosa_view(request, lock):
                     ws_suikei[i].cell(row=j+1, column=3).value = suikei.suikei_type_code
 
         ### 1050: 水系種別（水系・沿岸種別）
-        print("ippan_chosa_view7", flush=True)
+        print("ippan_chosa_view5_6", flush=True)
         suikei_type_list = None
         suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4276,13 +4336,13 @@ def ippan_chosa_view(request, lock):
                     ws_suikei_type[i].cell(row=j+1, column=2).value = str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code)
 
         ### 1060: 河川（河川・海岸）、連動プルダウン用
-        print("ippan_chosa_view8_1", flush=True)
+        print("ippan_chosa_view5_7", flush=True)
         kasens_list = []
         if suikei_list:
             for i, suikei in enumerate(suikei_list):
                 kasens_list.append(KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", [suikei.suikei_code, ]))
 
-        print("ippan_chosa_view8_3", flush=True)
+        print("ippan_chosa_view5_8", flush=True)
         for i, _ in enumerate(city_code_request):
             if kasens_list:
                 for j, kasens in enumerate(kasens_list):
@@ -4294,7 +4354,7 @@ def ippan_chosa_view(request, lock):
                             ws_kasen[i].cell(row=k+1, column=j*5+4).value = kasen.suikei_code
 
         ### 1070: 河川種別（河川・海岸種別）
-        print("ippan_chosa_view9", flush=True)
+        print("ippan_chosa_view5_9", flush=True)
         kasen_type_list = None
         kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4304,7 +4364,7 @@ def ippan_chosa_view(request, lock):
                     ws_kasen_type[i].cell(row=j+1, column=2).value = str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code)
         
         ### 1080: 水害原因
-        print("ippan_chosa_view10", flush=True)
+        print("ippan_chosa_view5_10", flush=True)
         cause_list = None
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4314,7 +4374,7 @@ def ippan_chosa_view(request, lock):
                     ws_cause[i].cell(row=j+1, column=2).value = str(cause.cause_name) + ":" + str(cause.cause_code)
                 
         ### 1090: 地上地下区分
-        print("ippan_chosa_view11", flush=True)
+        print("ippan_chosa_view5_11", flush=True)
         underground_list = None
         underground_list = UNDERGROUND.objects.raw("""SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4324,7 +4384,7 @@ def ippan_chosa_view(request, lock):
                     ws_underground[i].cell(row=j+1, column=2).value = str(underground.underground_name) + ":" + str(underground.underground_code)
         
         ### 1100: 地下空間の利用形態
-        print("ippan_chosa_view12", flush=True)
+        print("ippan_chosa_view5_12", flush=True)
         usage_list = None
         usage_list = USAGE.objects.raw("""SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4334,7 +4394,7 @@ def ippan_chosa_view(request, lock):
                     ws_usage[i].cell(row=j+1, column=2).value = str(usage.usage_name) + ":" + str(usage.usage_code)
         
         ### 1110: 浸水土砂区分
-        print("ippan_chosa_view13", flush=True)
+        print("ippan_chosa_view5_13", flush=True)
         flood_sediment_list = None
         flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4344,7 +4404,7 @@ def ippan_chosa_view(request, lock):
                     ws_flood_sediment[i].cell(row=j+1, column=2).value = str(flood_sediment.flood_sediment_name) + ":" + str(flood_sediment.flood_sediment_code)
         
         ### 1120: 地盤勾配区分
-        print("ippan_chosa_view14", flush=True)
+        print("ippan_chosa_view5_14", flush=True)
         gradient_list = None
         gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4354,7 +4414,7 @@ def ippan_chosa_view(request, lock):
                     ws_gradient[i].cell(row=j+1, column=2).value = str(gradient.gradient_name) + ":" + str(gradient.gradient_code)
         
         ### 1130: 産業分類
-        print("ippan_chosa_view15", flush=True)
+        print("ippan_chosa_view5_15", flush=True)
         industry_list = None
         industry_list = INDUSTRY.objects.raw("""SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4364,7 +4424,7 @@ def ippan_chosa_view(request, lock):
                     ws_industry[i].cell(row=j+1, column=2).value = str(industry.industry_name) + ":" + str(industry.industry_code)
 
         ### 7000: 入力データ_水害区域
-        print("ippan_chosa_view16", flush=True)
+        print("ippan_chosa_view5_16", flush=True)
         area_list = None
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4374,7 +4434,7 @@ def ippan_chosa_view(request, lock):
                     ws_area[i].cell(row=j+1, column=2).value = str(area.area_name) + ":" + str(area.area_id)
 
         ### 7010: 入力データ_異常気象
-        print("ippan_chosa_view17", flush=True)
+        print("ippan_chosa_view5_17", flush=True)
         weather_list = None
         weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4384,7 +4444,7 @@ def ippan_chosa_view(request, lock):
                     ws_weather[i].cell(row=j+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
         
         ### 7020: 入力データ_ヘッダ部分、水害
-        print("ippan_chosa_view18", flush=True)
+        print("ippan_chosa_view5_18", flush=True)
         suigai_list = None
         suigai_list = SUIGAI.objects.raw("""SELECT * FROM SUIGAI ORDER BY CAST(SUIGAI_ID AS INTEGER)""", [])
         for i, _ in enumerate(city_code_request):
@@ -4416,20 +4476,20 @@ def ippan_chosa_view(request, lock):
         ### (1)DBから建物区分等のマスタデータを取得する。
         ### (2)EXCELのVLOKUP用のシートのセルに、DBから取得した都道府県等のマスタデータを埋め込む。
         ### =VLOOKUP(B10,SUIKEI_TYPE_VLOOKUP!A:B,2,0)
+        ### i ループの回数＝EXCELファイルの数
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 6/12.', 'INFO')
-        
         ### 1020: 市区町村VLOOKUP
         ken_list = None
         cities_list = []
 
-        print("ippan_chosa_view19", flush=True)
+        print("ippan_chosa_view6_0", flush=True)
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_list:
             for i, ken in enumerate(ken_list):
                 cities_list.append(CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", [ken.ken_code,]))
         
-        print("ippan_chosa_view20", flush=True)
+        print("ippan_chosa_view6_1", flush=True)
         for i, _ in enumerate(city_code_request):
             if ken_list and cities_list:
                 for j, ken in enumerate(ken_list):
@@ -4442,13 +4502,13 @@ def ippan_chosa_view(request, lock):
         suikei_list = None
         kasens_list = []
         
-        print("ippan_chosa_view21", flush=True)
+        print("ippan_chosa_view6_2", flush=True)
         suikei_list = SUIKEI.objects.raw("""SELECT * FROM SUIKEI ORDER BY CAST(SUIKEI_CODE AS INTEGER)""", [])
         if suikei_list:
             for i, suikei in enumerate(suikei_list):
                 kasens_list.append(KASEN.objects.raw("""SELECT * FROM KASEN WHERE SUIKEI_CODE=%s ORDER BY CAST(KASEN_CODE AS INTEGER)""", [suikei.suikei_code,]))
 
-        print("ippan_chosa_view22", flush=True)
+        print("ippan_chosa_view6_3", flush=True)
         for i, _ in enumerate(city_code_request):
             if suikei_list and kasens_list:
                 for j, suikei in enumerate(suikei_list):
@@ -4461,9 +4521,12 @@ def ippan_chosa_view(request, lock):
         ### EXCEL入出力処理(0060)
         ### (1)EXCELのヘッダ部のセルに、キャプションのテキストを埋め込む。
         ### (2)EXCELの一覧部のセルに、キャプションのテキストを埋め込む。
+        ### i ループの回数＝EXCELファイルの数
+        ### j ループの回数＝EXCELシートの数
+        ### ※新規追加用に10シート分余分に生成する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 7/12.', 'INFO')
-        print("ippan_chosa_view19", flush=True)
+        print("ippan_chosa_view7_0", flush=True)
         for i, _ in enumerate(city_code_request):
             for j in range(suigai_count_list[i] + 10 + 1):
                 ws_ippan[i][j].cell(row=5, column=2).value = '都道府県'
@@ -4564,16 +4627,17 @@ def ippan_chosa_view(request, lock):
         ### EXCEL入出力処理(0070)
         ### (1)EXCELのセルに、建物区分に応じて、背景灰色、背景白色を変化させる条件付き形式を埋め込む。
         ### (2)ダウンロード用のEXCELファイルを保存する。
+        ### i ループの回数＝EXCELファイルの数
+        ### j ループの回数＝EXCELシートの数
+        ### ※新規追加用に10シート分余分に生成する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 8/12.', 'INFO')
-        print("ippan_chosa_view20", flush=True)
+        print("ippan_chosa_view8_0", flush=True)
         gray_fill = PatternFill(bgColor='C0C0C0', fill_type='solid')
         white_fill = PatternFill(bgColor='FFFFFF', fill_type='solid')
         
-        ### i ループの回数＝EXCELファイルの数
         for i, _ in enumerate(city_code_request):
-            ### j ループの回数＝EXCELシートの数
-            for j in range(suigai_count_list[i] + 10):
+            for j in range(suigai_count_list[i] + 10 + 1):
                 ws_ippan[i][j].conditional_formatting.add('N20:Y1000', FormulaRule(formula=['$C20="戸建住宅:1"'], fill=gray_fill))
                 ws_ippan[i][j].conditional_formatting.add('N20:Y1000', FormulaRule(formula=['$C20="共同住宅:2"'], fill=gray_fill))
                 ws_ippan[i][j].conditional_formatting.add('N20:Y1000', FormulaRule(formula=['$C20="事業所併用住宅:3"'], fill=white_fill))
@@ -4586,14 +4650,13 @@ def ippan_chosa_view(request, lock):
         ### EXCEL入出力処理(0080)
         ### (1)EXCELのヘッダ部のセルに、単純プルダウン、連動プルダウンの設定を埋め込む。
         ### (2)EXCELの一覧部のセルに、単純プルダウンの設定を埋め込む。
+        ### i ループの回数＝EXCELファイルの数
+        ### j ループの回数＝EXCELシートの数
+        ### ※新規追加用に10シート分余分に生成する。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 9/12.', 'INFO')
-        ### i ループの回数＝EXCELファイルの数
-        ### ※ _ は city_code がセットされているが、使わないため _ としている。
         for i, _ in enumerate(city_code_request):
-            ### j ループの回数＝EXCELシートの数
-            ### ※新規追加用に10シート分余分に生成する。
-            for j in range(suigai_count_list[i] + 10):
+            for j in range(suigai_count_list[i] + 10 + 1):
                 
                 ### 1000: 建物区分
                 dv_building = DataValidation(type="list", formula1="BUILDING!$B$1:$B$%d" % len(building_list))
@@ -4683,14 +4746,18 @@ def ippan_chosa_view(request, lock):
         ### DBアクセス処理(0090)
         ### (1)DBから水害のデータを取得する。
         ### (2)DBから一般資産調査票（調査員）のデータを取得する。
+        ### i ループの回数＝EXCELファイルの数
+        ### j ループの回数＝EXCELシートの数
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 10/12.', 'INFO')
+        for i, _ in enumerate(city_code_request):
+            for j in range(suigai_count_list[i] + 10 + 1):
+                ws_ippan[i][j].cell(row=7, column=2).value = str(ken_name_list[i]) + ":" + str(ken_code_list[i])
+                ws_ippan[i][j].cell(row=7, column=3).value = str(city_name_list[i]) + ":" + str(city_code_list[i])
 
         ### 7020: 入力データ_ヘッダ部分、水害
-        print("ippan_chosa_view38_1", flush=True)
-        ### i ループの回数＝EXCELファイルの数
+        print("ippan_chosa_view10_0", flush=True)
         for i, _ in enumerate(city_code_request):
-            ### j ループの回数＝EXCELシートの数
             for j in range(suigai_count_list[i]):
         
                 ###############################################################
@@ -4814,9 +4881,11 @@ def ippan_chosa_view(request, lock):
                 ###############################################################
                 ### EXCEL入出力処理(0120)
                 ### EXCELのヘッダ部のセルに、DBから取得した入力データ_ヘッダ部分の値を埋め込む。
+                ### k ループの回数＝1
                 ###############################################################
+                ws_ippan[i][j].cell(row=7, column=2).value = str(ken_name_list[i]) + ":" + str(ken_code_list[i])
+                ws_ippan[i][j].cell(row=7, column=3).value = str(city_name_list[i]) + ":" + str(city_code_list[i])
                 if suigai_list:
-                    ### k ループの回数＝1
                     for k, suigai in enumerate(suigai_list):
                         ws_ippan[i][j].cell(row=7, column=2).value = str(suigai.ken_name) + ":" + str(suigai.ken_code)
                         ws_ippan[i][j].cell(row=7, column=3).value = str(suigai.city_name) + ":" + str(suigai.city_code)
@@ -4839,13 +4908,15 @@ def ippan_chosa_view(request, lock):
                         ws_ippan[i][j].cell(row=14, column=10).value = str(suigai.weather_name) + ":" + str(suigai.weather_id)
 
                         ws_ippan[i][j].cell(row=3, column=28).value = suigai.suigai_id
+                else:
+                    pass
                         
                 ###############################################################
                 ### EXCEL入出力処理(0130)
                 ### EXCELの一覧部のセルに、DBから取得した一般資産調査票（調査員）の値を埋め込む。
+                ### k ループの回数＝行数
                 ###############################################################
                 if ippan_list:
-                    ### k ループの回数＝行数
                     for k, ippan in enumerate(ippan_list):
                         ws_ippan[i][j].cell(row=k+20, column=2).value = str(ippan.ippan_name) + ":" + str(ippan.ippan_id)
                         ws_ippan[i][j].cell(row=k+20, column=3).value = str(ippan.building_name) + ":" + str(ippan.building_code)
@@ -4879,28 +4950,154 @@ def ippan_chosa_view(request, lock):
         #######################################################################
         ### EXCEL入出力処理(0140)
         ### ダウンロード用のEXCELファイルを保存する。
+        ### i ループの回数＝EXCELファイルの数
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 11/13.', 'INFO')
-        print("ippan_chosa_view38_2", flush=True)
-        ### i ループの回数＝EXCELファイルの数
+        print("ippan_chosa_view11_0", flush=True)
         for i, _ in enumerate(city_code_request):
             wb[i].save(download_file_path[i])
 
         #######################################################################
-        ### EXCEL入出力処理(0150)
-        ### 複数のEXCELファイルを1つに固めて保存する。
+        ### DBアクセス処理(0150)
+        ### i ループの回数＝EXCELファイルの数
+        ### j ループの回数＝EXCELシートの数
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 12/13.', 'INFO')
-        
+        connection_cursor = connection.cursor()
+        print("ippan_chosa_view12_0", flush=True)
+        try:
+            for i, city_code in enumerate(city_code_request):
+                print("ippan_chosa_view12_1", flush=True)
+                ### print(str(city_code), flush=True)
+                ### print(hashlib.md5((str(city_code)).encode()).hexdigest(), flush=True)
+
+                ### 自動集計、自動検証のワークフローに利用者がファイルをダウンロードしたアクションを表示したい。
+                ### SUIGAIはアップロードされた以降のファイルを管理するものとする。
+                ### そのため、TRIGGERに都道府県コード、市区町村コード、ダウンロードファイルパス等を追加した。
+                if suigai_count_list[i] == 0:
+                    connection_cursor.execute("""
+                        INSERT INTO TRIGGER (
+                            trigger_id, 
+                            suigai_id, 
+                            action_code, 
+                            status_code, 
+                            success_count, 
+                            failure_count, 
+                            published_at, 
+                            consumed_at, 
+                            deleted_at, 
+                            integrity_ok, 
+                            integrity_ng, 
+                            ken_code, 
+                            city_code, 
+                            download_file_path, 
+                            download_file_name, 
+                            upload_file_path, 
+                            upload_file_name 
+                        ) VALUES (
+                            (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                            %s, -- suigai_id 
+                            %s, -- action_code 
+                            %s, -- status_code 
+                            %s, -- success_count 
+                            %s, -- failure_count 
+                            CURRENT_TIMESTAMP, -- published_at 
+                            %s, -- consumed_at 
+                            %s, -- deleted_at 
+                            %s, -- integrity_ok 
+                            %s, -- integrity_ng 
+                            %s, -- ken_code 
+                            %s, -- city_code 
+                            %s, -- download_file_path 
+                            %s, -- download_file_name 
+                            %s, -- upload_file_path 
+                            %s  -- upload_file_name 
+                        )""", [
+                            None, ### suigai_id 
+                            '1',  ### action_code 
+                            '3',  ### status_code 
+                            1,    ### success_count 
+                            0,    ### failure_count 
+                            None, ### consumed_at 
+                            None, ### deleted_at 
+                            None, ### integrity_ok 
+                            None, ### integrity_ng 
+                            ken_code_list[i],  ### ken_code 
+                            city_code_list[i], ### city_code 
+                            download_file_path[i], ### download_file_path 
+                            download_file_name[i], ### download_file_name 
+                            None, ### upload_file_path 
+                            None, ### upload_file_name 
+                        ])
+                        
+                if suigai_count_list[i] > 0: 
+                    for j in range(suigai_count_list[i] + 1):
+                        connection_cursor.execute("""
+                            INSERT INTO TRIGGER (
+                                trigger_id, 
+                                suigai_id, 
+                                action_code, 
+                                status_code, 
+                                success_count, 
+                                failure_count, 
+                                published_at, 
+                                consumed_at, 
+                                deleted_at, 
+                                data_integrity_left, 
+                                data_integrity_right, 
+                                ken_code, 
+                                city_code, 
+                                download_file_path, 
+                                download_file_name, 
+                                upload_file_path, 
+                                upload_file_name 
+                            ) VALUES (
+                                (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                                %s, -- suigai_id 
+                                %s, -- action_code 
+                                %s, -- status_code 
+                                %s, -- success_count 
+                                %s, -- failure_count 
+                                CURRENT_TIMESTAMP, -- published_at 
+                                %s, -- consumed_at 
+                                %s, -- deleted_at 
+                                %s, -- data_integrity_left 
+                                %s, -- data_integrity_right 
+                                %s, -- ken_code 
+                                %s, -- city_code 
+                                %s, -- download_file_path 
+                                %s, -- download_file_name 
+                                %s, -- upload_file_path 
+                                %s  -- upload_file_name 
+                            )""", [
+                                suigai_id_list[i][j], ### suigai_id 
+                                '1',  ### action_code 
+                                '3',  ### status_code 
+                                1,    ### success_count 
+                                0,    ### failure_count 
+                                None, ### consumed_at 
+                                None, ### deleted_at 
+                                None, ### integrity_ok 
+                                None, ### integrity_ng 
+                                ken_code_list[i],  ### ken_code 
+                                city_code_list[i], ### city_code 
+                                download_file_path[i], ### download_file_path 
+                                download_file_name[i], ### download_file_name 
+                                None, ### upload_file_path 
+                                None, ### upload_file_name 
+                            ])
+                
+            transaction.commit()
+        except:
+            connection_cursor.rollback()
+        finally:
+            connection_cursor.close()
+            
         #######################################################################
         ### レスポンスセット処理(0160)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 13/13.', 'INFO')
-        ### response = HttpResponse(content=save_virtual_workbook(wb[0]), content_type='application/vnd.ms-excel')
-        ### response['Content-Disposition'] = 'attachment; filename="ippan_chosa.xlsx"'
-        ### return response
-        
         template = loader.get_template('P0200ExcelDownload/ippan_chosa.html')
         context = {
             'download_file_path': download_file_path, 

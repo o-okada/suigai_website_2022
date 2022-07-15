@@ -111,7 +111,7 @@
 
     <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
-        <h3>{{ trigger.0.action_name }}の結果</h3>
+        <h3>{{ trigger.0.action_name }}</h3>
     </div>
     <!-- END 画面名 -->
 
@@ -119,8 +119,48 @@
     <div class="container mb-3">
         <!-- BEGIN 行 -->
         <div class="row mb-3">
+            <!-- BEGIN 列2 -->
+            <div class="col-sm-6">
+                <!--<button type="button" class="btn btn-danger mb-3">-->
+                <!--    失敗 <div class="badge bg-light text-dark">0</div>-->
+                <!--</button>-->
+                <!--<button type="button" class="btn btn-warning mb-3">-->
+                <!--    警告 <div class="badge bg-light text-dark">1</div>-->
+                <!--</button>-->
+                <!--<button type="button" class="btn btn-success mb-3">-->
+                <!--    成功 <div class="badge bg-light text-dark">0</div>-->
+                <!--</button>-->
+                
+                <!-- BEGIN カード -->
+                <div class="card mb-3 border-0">
+                    <div class="card-header border-0 bg-white">
+                    </div>
+                    <div class="card-body border-0 bg-white">
+                        <div class="table-responsive overflow-auto">
+                            <table>
+                                <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start">{{ trigger.0.trigger_id }}</td></tr>
+                                <tr><td class="text-start">ダウンロードファイル名:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.download_file_path }}/">{{ trigger.0.download_file_name }}</a></td></tr>
+                                <tr><td class="text-start">アップロードファイル名:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.upload_file_path }}/">{{ trigger.0.upload_file_name }}</a></td></tr>
+                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}: {{ trigger.0.suigai_id }}</td></tr>
+                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}: {{ trigger.0.ken_code }}</td></tr>
+                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}: {{ trigger.0.city_code }}</td></tr>
+                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}: {{ trigger.0.action_code }}</td></tr>
+                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}: {{ trigger.0.status_code }}</td></tr>
+                                <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start">{{ trigger.0.published_at }}</td></tr>
+                                <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start">{{ trigger.0.consumed_at }}</td></tr>
+                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start">{{ trigger.0.deleted_at }}</td></tr>
+                                <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start">{{ trigger.0.success_count }}</td></tr>
+                                <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start">{{ trigger.0.failure_count }}</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END カード -->
+            </div>
+            <!-- END 列2 -->
+
             <!-- BEGIN 列1 -->
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <!-- BEGIN カード -->
                 <div class="card">
                     <!-- BEGIN カードヘッダ -->
@@ -150,10 +190,10 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 text-start border-end">
-                                {{ trigger.0.data_integrity_left | linebreaksbr }}
+                                {{ trigger.0.integrity_ok | linebreaksbr }}
                             </div>
                             <div class="col-sm-6 text-start">
-                                {{ trigger.0.data_integrity_left | linebreaksbr }}
+                                {{ trigger.0.integrity_ng | linebreaksbr }}
                             </div>
                         </div>
                     </div>
@@ -162,51 +202,6 @@
                 <!-- END カード -->
             </div>
             <!-- END 列1 -->
-            
-            <!-- BEGIN 列2 -->
-            <div class="col-sm-4">
-                <button type="button" class="btn btn-danger mb-3">
-                    失敗 <div class="badge bg-light text-dark">0</div>
-                </button>
-                <button type="button" class="btn btn-warning mb-3">
-                    警告 <div class="badge bg-light text-dark">1</div>
-                </button>
-                <button type="button" class="btn btn-success mb-3">
-                    成功 <div class="badge bg-light text-dark">0</div>
-                </button>
-                
-                <!-- BEGIN カード -->
-                <div class="card mb-3 border-0">
-                    <div class="card-header border-0 bg-white">
-                        test
-                    </div>
-                    <div class="card-body border-0 bg-white">
-                        <div class="table-responsive overflow-auto">
-                            <table>
-                                <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start">{{ trigger.0.trigger_id }}</td></tr>
-                                <tr><td class="text-start">ファイル名:&nbsp;</td><td class="text-start"><a href="/P0900Action/download_file/{{ trigger.0.suigai_id }}/">{{ trigger.0.file_name }}</a></td></tr>
-                                <tr><td class="text-start">シートID:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_id }}</td></tr>
-                                <tr><td class="text-start">シート名:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}</td></tr>
-                                <tr><td class="text-start">都道府県コード:&nbsp;</td><td class="text-start">{{ trigger.0.ken_code }}</td></tr>
-                                <tr><td class="text-start">都道府県名:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}</td></tr>
-                                <tr><td class="text-start">市区町村コード:&nbsp;</td><td class="text-start">{{ trigger.0.city_code }}</td></tr>
-                                <tr><td class="text-start">市区町村名:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}</td></tr>
-                                <tr><td class="text-start">アクションコード:&nbsp;</td><td class="text-start">{{ trigger.0.action_code }}</td></tr>
-                                <tr><td class="text-start">アクション名:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}</td></tr>
-                                <tr><td class="text-start">状態コード:&nbsp;</td><td class="text-start">{{ trigger.0.status_code }}</td></tr>
-                                <tr><td class="text-start">状態名:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}</td></tr>
-                                <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start">{{ trigger.0.published_at }}</td></tr>
-                                <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start">{{ trigger.0.consumed_at }}</td></tr>
-                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start">{{ trigger.0.deleted_at }}</td></tr>
-                                <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start">{{ trigger.0.success_count }}</td></tr>
-                                <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start">{{ trigger.0.failure_count }}</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!-- END カード -->
-            </div>
-            <!-- END 列2 -->
         </div>
         <!-- END 行 -->
     </div>

@@ -1039,10 +1039,20 @@ class TRIGGER(models.Model):
     consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
 
-    data_integrity_left = models.TextField(null=True)                          ### データ整合性 Row, Col, left, right, verified result, 
-    data_integrity_right = models.TextField(null=True)                         ### データ整合性 Row, Col, left, right, verified result, 
+    ### data_integrity_left = models.TextField(null=True)                      ### データ整合性 Row, Col, left, right, verified result, 
+    ### data_integrity_right = models.TextField(null=True)                     ### データ整合性 Row, Col, left, right, verified result, 
+    integrity_ok = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
+    integrity_ng = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
 
     ### repository_id = models.IntegerField(null=True)                         ### レポジトリID ※削除予定
+    
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード
+
+    download_file_path = models.CharField(max_length=256, null=True)           ### ファイルパス ※2022/07/14 追加
+    download_file_name = models.CharField(max_length=256, null=True)           ### ファイル名 ※2022/07/14 追加
+    upload_file_path = models.CharField(max_length=256, null=True)             ### ファイルパス ※2022/07/14 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### ファイル名 ※2022/07/14 追加
     
     class Meta:
         db_table = 'trigger'

@@ -115,9 +115,33 @@
     <!-- END 画面名 -->
 
     <div class="container mb-3">
-    {% for file_path in download_file_path %}
-    <a href="{{ file_path }}">{{ file_path }}</a>
-    {% endfor %}
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col text-start">
+                        o-okada
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col text-end">
+                        <a href="">更新</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive overflow-auto">
+                    <table class="table">
+                    {% for file_path in download_file_path %}
+                        <tr>
+                            <td class="text-start">
+                                <a href="/{{ file_path }}">{{ file_path }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script type="text/javascript">

@@ -102,7 +102,7 @@
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a class=" cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
                 </div>
             </div>
         </div>
@@ -143,105 +143,105 @@
                             <td class="text-center">成功</td>
                             <!-- WF1: ダウンロード -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF1_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }} 最終 {{ trigger.published_at }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF2: アップロード -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF2_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF3: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF3_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF4: 差分検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF4_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF5: 按分処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF5_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF6: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF6_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF7: 集計処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF7_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF8: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF8_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF9: 水害区域図 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF9_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF10: 水害区域図貼付け -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF10_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF11: 集計処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF11_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF12: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF12_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF13: マニュアル検証待ち -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF13_success_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
@@ -250,105 +250,105 @@
                             <td class="text-center">失敗</td>
                             <!-- WF1: ダウンロード -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_W1_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF2: アップロード -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF2_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF3: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF3_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF4: 差分検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF4_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF5: 按分処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF5_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF6: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF6_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF7: 集計処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF7_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF8: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF8_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_tablevvvv">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_tablevvvv">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF9: 水害区域図 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF9_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF10: 水害区域図貼付け -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF10_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF11: 集計処理 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF11_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF12: データ検証 -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF12_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <!-- WF13: マニュアル検証待ち -->
                             <td>
-                                <ul class="list-unstyled text-center">
+                                <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_WF13_failure_list %}
-                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.file_name }}</a></li>
+                                    <li class="text-truncate" style="width: 12rem;"><a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">{{ trigger.city_name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </td>
