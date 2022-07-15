@@ -1,0 +1,297 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<!-- P0900Action/templates/P0900Action/graph.html -->
+<!-- BEGIN Head -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <title>自動集計・自動検証の状況 | 水害統計オンラインサイト</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <style>
+    .btn-fail    {background: #F44B25; color: #FFFFFF;}
+    .btn-running {background: #258AC4; color: #FFFFFF;}
+    .btn-cancel  {background: #6C757D; color: #FFFFFF;}
+    .btn-success {background: #54AB51; color: #FFFFFF;}
+    a:link {color: #000000; text-decoration:none;}
+    a:visited {color: #000000; text-decoration:none;}
+    a:hover {color: #000000; text-decoration:none;}
+    a:active {color: #000000; text-decoration:none;}
+    </style>
+</head>
+<!-- END Head -->
+
+<!-- BEGIN Body -->
+<body>
+    {% bootstrap_messages %}
+    {% block content %}
+
+    <!-- BEGIN ナビバー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>ファイル</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
+                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー ファイルメニュー -->
+                    
+                    <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" style="border-bottom: 2px solid red;" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                    </li>
+                    <!-- END ナビバー 自動集計・自動検証メニュー -->
+
+                    <!-- BEGIN ナビバー マニュアル検証メニュー -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>マニュアル検証</strong>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0800Reverse/input/">入力DB内のデータ整合性検証</a></li>
+                            <li><a class="dropdown-item" href="/P0800Reverse/summary/">集計DB内のデータ整合性検証</a></li>
+                        </ul>
+                    </li>
+                    <!-- END ナビバー マニュアル検証メニュー -->
+
+                    <!-- BEGIN ナビバー オンライン参照メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                    </li>
+                    <!-- END ナビバー オンライン参照メニュー -->
+
+                    <!-- BEGIN ナビバー グラフメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>グラフ</strong></a>
+                    </li>
+                    <!-- END ナビバー グラフメニュー -->
+
+                    <!-- BEGIN ナビバー 帳票メニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><strong>帳票</strong></a>
+                    </li>
+                    <!-- END ナビバー 帳票メニュー -->
+                </ul>
+                <div class="col d-flex justify-content-end align-items-end">
+                    <a href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END ナビバー -->
+
+    <!-- BEGIN 画面名 -->
+    <div class="container text-center mb-3">
+        <h3>自動集計・自動検証の状況</h3>
+    </div>
+    <!-- END 画面名 -->
+    
+    <!-- BEGIN 検索とフィルタ -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_ken" name="form_select_ken">
+                    <option value="0">都道府県の絞り込み条件を選択してください。</option>
+                    {% for ken in ken_list %}
+                    {% if ken.ken_code == ken_code %}
+                    <option value="{{ ken.ken_code }}" selected>{{ ken.ken_name }}: {{ ken.ken_code }}</option>
+                    {% else %}
+                    <option value="{{ ken.ken_code }}">{{ ken.ken_name }}: {{ ken.ken_code }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary" type="button" id="button_ken" name="button_ken">都道府県選択</button>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_city" name="form_select_city">
+                    <option value="0">市区町村の絞り込み条件を選択してください。</option>
+                    {% for city in city_list %}
+                    {% if city.city_code == city_code %}
+                    <option value="{{ city.city_code }}" selected>{{ city.city_name }}: {{ city.city_code }}</option>
+                    {% else %}
+                    <option value="{{ city.city_code }}">{{ city.city_name }}: {{ city.city_code }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary" type="button" id="button_city" name="button_city">市区町村選択</button>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="input-group">
+                <select class="form-select" id="form_select_repository" name="form_select_repository">
+                    <option value="0">EXCELファイルの絞り込み条件を選択してください。</option>
+                    {% for repository in repository_list %}
+                        {% if repository.repository_id == repository_id %}
+                        <option value="{{ repository.repository_id }}" selected>{{ repository.input_file_path }}: {{ repository.repository_id }}: {{ repository_id }}</option>
+                        {% else %}
+                        <option value="{{ repository.repository_id }}">{{ repository.input_file_path }}: {{ repository.repository_id }}: {{ repository_id }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary" type="button" id="button_repository" name="button_repository">EXCELファイル選択</button>
+            </div>
+        </div>
+    </div>
+    <!-- END 検索とフィルタ -->
+
+    <!-- BEGIN データ一貫性と整合性検証結果の時系列グラフ -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-12">
+            <div id="columnchart"></div>
+        </div>
+    </div>
+    <!-- END データ一貫性と整合性検証結果の時系列グラフ -->
+
+    <!-- BEGIN サブメニュー -->
+    <div class="row mb-3">
+        <!-- BEGIN 行 -->
+        <div class="row">
+            <!-- BEGIN 列 -->
+            <div class="col text-end">
+                <a href="">表示更新</a>
+            </div>
+            <!-- END 列 -->
+        </div>
+        <!-- END 行 -->
+    </div>
+    <!-- END サブメニュー -->
+
+    <!-- BEGIN データ一貫性と整合性検証結果の一覧表示 -->
+    <div class="row mb-3">
+        <div class="col-12 col-xl-12">
+            <div class="table-responsive overflow-auto" style="">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">トリガー</th>
+                            <th class="text-center">水害</th>
+                            <th class="text-center">都道府県</th>
+                            <th class="text-center">市区町村</th>
+                            <th class="text-center">アクション</th>
+                            <th class="text-center">状態</th>
+                            <th class="text-center">発行日時</th>
+                            <th class="text-center">消費日時</th>
+                            <th class="text-center">成功数</th>
+                            <th class="text-center">失敗数</th>
+                            <th class="text-center">自動実行の結果</th>
+                            <th class="text-center">削除日時</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trigger in trigger_list %}
+                        <tr>
+                            <td>{{ trigger.trigger_id }}</td>
+                            <td>{{ trigger.suigai_name }}:{{ trigger.suigai_id }}</td>
+                            <td>{{ trigger.ken_name }}:{{ trigger.ken_code }}</td>
+                            <td>{{ trigger.city_name }}:{{ trigger.city_code }}</td>
+                            <td>{{ trigger.action_name }}:{{ trigger.action_code }}</td>
+                            {% if trigger.status_code == '1' %}
+                            <td><button class="btn btn-running col-10" type="button">{{ trigger.status_name }}</button></td>
+                            {% elif trigger.status_code == '2' %}
+                            <td><button class="btn btn-cancel col-10" type="button">{{ trigger.status_name }}</button></td>
+                            {% elif trigger.status_code == '3' %}
+                            <td><button class="btn btn-success col-10" type="button">{{ trigger.status_name }}</button></td>
+                            {% elif trigger.status_code == '4' %}
+                            <td><button class="btn btn-fail col-10" type="button">{{ trigger.status_name }}</button></td>
+                            {% else %}
+                            <td><button class="btn btn-secondary col-10" type="button">未実行</button></td>
+                            {% endif %}
+                            {% if trigger.published_at is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ trigger.published_at }}</td>
+                            {% endif %}
+                            {% if trigger.consumed_at is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ trigger.consumed_at }}</td>
+                            {% endif %}
+                            {% if trigger.success_count is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ trigger.success_count }}</td>
+                            {% endif %}
+                            {% if trigger.failure_count is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ trigger.failure_count }}</td>
+                            {% endif %}
+                            <td><a href="/P0900Action/trigger/{{ trigger.trigger_id }}">自動実行の結果</a></td>
+                            {% if trigger.deleted_at is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ trigger.deleted_at }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- END データ一貫性と整合性検証結果の一覧表示 -->
+
+    <script type="text/javascript">
+    var button_ken = document.getElementById("button_ken"); // 都道府県選択ボタン
+    var button_city = document.getElementById("button_city"); // 市区町村選択ボタン
+    // var button_status = document.getElementById("button_status"); // 状態選択ボタン
+    var button_repository = document.getElementById("button_repository"); // EXCELファイル選択ボタン
+    
+    // 都道府県選択ボタンクリック時のイベントハンドラを設定する。
+    button_ken.addEventListener("click", function(event) {
+        window.location.href = "/P0900Action/" + "ken/" + form_select_ken.value + "/city/0" + "/repository/" + form_select_repository.value + "/"
+    });
+
+    // 市区町村選択ボタンクリック時のイベントハンドラを設定する。
+    button_city.addEventListener("click", function(event) {
+        window.location.href = "/P0900Action/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/repository/" + form_select_repository.value + "/"
+    });
+    
+    // EXCELファイル選択ボタンクリック時のイベントハンドラを設定する。
+    button_repository.addEventListener("click", function(event) {
+        window.location.href = "/P0900Action/" + "ken/" + form_select_ken.value + "/city/" + form_select_city.value + "/repository/" + form_select_repository.value + "/"
+    });
+
+    
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['', '成功', '失敗', {role: 'style'}],
+            {% for trigger in trigger_list %}
+            {% if trigger.success_count != None %}
+            ['{{ trigger.published_at }}', {{ trigger.success_count }}, {{ trigger.failure_count }}, ''], 
+            {% endif %}
+            {% endfor %}
+        ]);
+        var view = new google.visualization.DataView(data);
+        var options = {
+            legend: 'none', 
+            bar: {groupWidth: '75%'}, 
+            isStacked: true, 
+            colors: ['#54AB51', '#F44B25'], 
+            backgroundColor: '#f7f7f7' 
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart"));
+        chart.draw(view, options); 
+    }
+    </script>
+    {% endblock %}
+</body>
+<!-- END Body -->
+</html>
