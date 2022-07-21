@@ -79,6 +79,7 @@ from P0000Common.models import APPROVAL                ### 10030: 承認メッ�
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
 from P0000Common.common import print_log
+from P0000Common.common import get_info_log, get_warn_log, get_error_log
 
 VLOOK_VALUE = [
     'B', 'G', 'L', 'Q', 'V', 'AA', 'AF', 'AK', 'AP', 'AU', 
@@ -157,7 +158,7 @@ def create_ippan_chosa_workbook(suigai_count, suigai_id_list, suigai_name_list, 
         #######################################################################
         print_log('[INFO] P0900Action.action_01_download_ippan.create_ippan_chosa_workbook()関数 STEP 2/10.', 'INFO')
         template_file_path = 'static/template_ippan_chosa.xlsx'
-        download_file_path = 'static/ippan_chosa_' + str(ken_name) + '_' + str(city_name) + '.xlsx'
+        download_file_path = 'static/ippan_chosa_' + str(city_code) + '_' + str(ken_name) + '_' + str(city_name) + '.xlsx'
         
         wb = openpyxl.load_workbook(template_file_path, keep_vba=False)
         
@@ -859,6 +860,10 @@ class Command(BaseCommand):
             print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数が開始しました。', 'INFO')
             print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 STEP 1/8.', 'INFO')
 
+            ### print(get_info_log(), flush=True)
+            ### print(warn_log_list, flush=True)
+            ### print(error_log_list, flush=True)
+
             ###################################################################
             ### DBアクセス処理(0010)
             ###################################################################
@@ -881,12 +886,12 @@ class Command(BaseCommand):
                 print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数が正常終了しました。', 'INFO')
                 return 0
             
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].trigger_id={}'.format(trigger_list[0].trigger_id), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].suigai_id={}'.format(trigger_list[0].suigai_id), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].city_code={}'.format(trigger_list[0].city_code), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].ken_code={}'.format(trigger_list[0].ken_code), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].download_file_path={}'.format(trigger_list[0].download_file_path), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].download_file_name={}'.format(trigger_list[0].download_file_name), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].trigger_id = {}'.format(trigger_list[0].trigger_id), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].suigai_id = {}'.format(trigger_list[0].suigai_id), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].city_code = {}'.format(trigger_list[0].city_code), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].ken_code = {}'.format(trigger_list[0].ken_code), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].download_file_path = {}'.format(trigger_list[0].download_file_path), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 trigger_list[0].download_file_name = {}'.format(trigger_list[0].download_file_name), 'INFO')
     
             ###################################################################
             ### DBアクセス処理(0020)
@@ -913,8 +918,8 @@ class Command(BaseCommand):
             ### suigai_id_request.append([suigai.suigai_id for suigai in suigai_list])
             suigai_id_request = [suigai.suigai_id for suigai in suigai_list]
                 
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 suigai_count_request={}'.format(suigai_count_request), 'INFO')
-            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 suigai_id_request={}'.format(suigai_id_request), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 suigai_count_request = {}'.format(suigai_count_request), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 suigai_id_request = {}'.format(suigai_id_request), 'INFO')
     
             ###################################################################
             ### DBアクセス処理(0030)
@@ -1004,8 +1009,8 @@ class Command(BaseCommand):
             ### download_file_name = 'ippan_chosa_' + str(ken_name_request) + '_' + str(city_name_request) + '.xlsx'
             download_file_path = trigger_list[0].download_file_path
             download_file_name = trigger_list[0].download_file_name
-            print_log('download_file_path={}'.format(download_file_path), 'INFO')
-            print_log('download_file_name={}'.format(download_file_name), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 download_file_path = {}'.format(download_file_path), 'INFO')
+            print_log('[INFO] P0900Action.action_01_download_ippan.handle()関数 download_file_name = {}'.format(download_file_name), 'INFO')
             
             wb = create_ippan_chosa_workbook(
                 suigai_count=suigai_count_request, 
@@ -1058,8 +1063,8 @@ class Command(BaseCommand):
                             trigger_id=%s""", [
                             1, 
                             0, 
-                            None, 
-                            None, 
+                            '\n'.join(get_info_log()), 
+                            '\n'.join(get_error_log()), 
                             trigger_list[0].trigger_id, ])
                         
                 else: 
@@ -1076,8 +1081,8 @@ class Command(BaseCommand):
                             trigger_id=%s""", [
                             1, 
                             0, 
-                            None, 
-                            None, 
+                            '\n'.join(get_info_log()), 
+                            '\n'.join(get_error_log()), 
                             trigger_list[0].trigger_id, ])
                     
             except:

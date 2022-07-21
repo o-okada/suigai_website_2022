@@ -57,6 +57,7 @@
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
@@ -126,13 +127,13 @@
                     <!-- BEGIN パンくずリスト -->
                     <div class="col-6 text-start">
                         {% if type_code == "ippan" %}
-                        <h5>一般資産調査員調査票 /</h5>
+                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>
                         {% elif type_code == "area" %}
-                        <h5>水害区域図 /</h5>
+                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 水害区域図 /</h5>
                         {% elif type_code == "kokyo" %}
-                        <h5>公共土木調査票 /</h5>
+                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公共土木調査票 /</h5>
                         {% elif type_code == "koeki" %}
-                        <h5>公益事業調査票 /</h5>
+                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公益事業調査票 /</h5>
                         {% endif %}
                     </div>
                     <!-- END パンくずリスト -->
@@ -143,8 +144,8 @@
                         <div class="btn-group">
                             <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>
-                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">一般資産調査員調査票</a>-->
+                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
+                                <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
                                 <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
                                 <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
                                 <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
@@ -163,15 +164,6 @@
                             </div>
                         </div>
                         <!-- END アップロードメニュー -->
-
-                        <!-- BEGIN 編集メニュー -->
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/P0300AreaWeatherUpdate/">水害区域番号、異常気象コード</a>
-                            </div>
-                        </div>
-                        <!-- END 編集メニュー -->
                     </div>
                     <!-- END ドロップダウンメニュー -->
                 </div>
@@ -192,7 +184,7 @@
                                     <div class="col">
                                     </div>
                                     <div class="col text-end">
-                                        <a href="">更新</a>
+                                        <a href="#" onclick="location.reload();">表示更新</a>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +195,16 @@
                             <div class="card-body">
                                 <div class="table-responsive overflow-auto" style="">
                                     <table class="table">
-                                    {% for suigai in suigai_list %}
+                                        <tr>
+                                            <td colspan="8">
+                                                <a href="/P0100File/">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% for suigai in suigai_list %}
                                         <tr>
                                             <td class="text-start">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
@@ -217,7 +218,7 @@
                                                 {% endif %}
                                             <td>
                                         </tr>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </table>
                                 </div>
                             </div>
@@ -226,7 +227,16 @@
                             <div class="card-body">
                                 <div class="table-responsive overflow-auto" style="">
                                     <table class="table">
-                                    {% for area in area_list %}
+                                        <tr>
+                                            <td colspan="8">
+                                                <a href="/P0100File/">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% for area in area_list %}
                                         <tr>
                                             <td class="text-start">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
@@ -240,7 +250,7 @@
                                                 {% endif %}
                                             <td>
                                         </tr>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </table>
                                 </div>
                             </div>

@@ -75,6 +75,40 @@ from P0000Common.models import FEEDBACK                ### 10040: フィード�
 from P0000Common.common import print_log
 
 ###############################################################################
+### 関数名：index_view
+### urlpattern：path('', views.index_view, name='index_view')
+### template：P0100File/type.html
+###############################################################################
+@login_required(None, login_url='/P0100Login/')
+def index_view(request):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        print_log('[INFO] ########################################', 'INFO')
+        print_log('[INFO] P0100File.index_view()関数が開始しました。', 'INFO')
+        print_log('[INFO] P0100File.index_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[INFO] P0100File.index_view()関数 STEP 1/2.', 'INFO')
+
+        #######################################################################
+        ### レスポンスセット処理(0010)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[INFO] P0100File.index_view()関数 STEP 2/2.', 'INFO')
+        template = loader.get_template('P0100File/index.html')
+        context = {
+        }
+        print_log('[INFO] P0100File.index_view()関数が正常終了しました。', 'INFO')
+        return HttpResponse(template.render(context, request))
+    
+    except:
+        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0100File.index_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
 ### 関数名：type_view
 ### urlpattern：path('type/<slug:type_code>/', views.type_view, name='type_view')
 ### template：P0100File/type.html

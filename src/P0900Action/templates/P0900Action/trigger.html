@@ -57,6 +57,7 @@
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
@@ -67,7 +68,9 @@
                     
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl_nav" style="border-bottom: 2px solid #0000EE;" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl_nav" style="border-bottom: 2px solid #0000EE;" href="/P0900Action/">
+                            <strong>自動集計・自動検証</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
 
@@ -85,24 +88,32 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl_nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl_nav" href="/P0400OnlineDisplay/">
+                            <strong>オンライン参照</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl_nav" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl_nav" href="#">
+                            <strong>グラフ</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl_nav" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl_nav" href="#">
+                            <strong>帳票</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a class="cl_nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl_nav" href="/P0100Login/">
+                        <strong>ログアウト</strong>
+                    </a><br>
                 </div>
             </div>
         </div>
@@ -111,7 +122,65 @@
 
     <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
-        <h3>{{ trigger.0.action_name }}</h3>
+        {% if trigger.0.failure_count|floatformat:"0" == "0" %}
+            {% if trigger.0.action_code == "1" %}
+            <h3>WF1 ダウンロード 成功</h3>
+            {% elif trigger.0.action_code == "2" %}
+            <h3>WF2 アップロード 成功</h3>
+            {% elif trigger.0.action_code == "3" %}
+            <h3>WF3 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "4" %}
+            <h3>WF4 差分検証 成功</h3>
+            {% elif trigger.0.action_code == "5" %}
+            <h3>WF5 按分処理 成功</h3>
+            {% elif trigger.0.action_code == "6" %}
+            <h3>WF6 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "7" %}
+            <h3>WF7 集計処理 成功</h3>
+            {% elif trigger.0.action_code == "8" %}
+            <h3>WF8 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "9" %}
+            <h3>WF9 水害区域図 成功</h3>
+            {% elif trigger.0.action_code == "10" %}
+            <h3>WF10 水害区域図貼付け 成功</h3>
+            {% elif trigger.0.action_code == "11" %}
+            <h3>WF11 集計処理 成功</h3>
+            {% elif trigger.0.action_code == "12" %}
+            <h3>WF12 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "13" %}
+            <h3>WF13 マニュアル検証待ち 成功</h3>
+            {% else %}
+            {% endif %}
+        {% else %}
+            {% if trigger.0.action_code == "1" %}
+            <h3>WF1 ダウンロード 失敗</h3>
+            {% elif trigger.0.action_code == "2" %}
+            <h3>WF2 アップロード 失敗</h3>
+            {% elif trigger.0.action_code == "3" %}
+            <h3>WF3 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "4" %}
+            <h3>WF4 差分検証 失敗</h3>
+            {% elif trigger.0.action_code == "5" %}
+            <h3>WF5 按分処理 失敗</h3>
+            {% elif trigger.0.action_code == "6" %}
+            <h3>WF6 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "7" %}
+            <h3>WF7 集計処理 失敗</h3>
+            {% elif trigger.0.action_code == "8" %}
+            <h3>WF8 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "9" %}
+            <h3>WF9 水害区域図 失敗</h3>
+            {% elif trigger.0.action_code == "10" %}
+            <h3>WF10 水害区域図貼付け 失敗</h3>
+            {% elif trigger.0.action_code == "11" %}
+            <h3>WF11 集計処理 失敗</h3>
+            {% elif trigger.0.action_code == "12" %}
+            <h3>WF12 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "13" %}
+            <h3>WF13 マニュアル検証待ち 失敗</h3>
+            {% else %}
+            {% endif %}
+        {% endif %}
     </div>
     <!-- END 画面名 -->
 
@@ -119,111 +188,133 @@
     <div class="container mb-3">
         <!-- BEGIN 行 -->
         <div class="row mb-3">
-            <!-- BEGIN 列2 -->
+            <!-- BEGIN 列 -->
             <div class="col-sm-6">
-                <!--<button type="button" class="btn btn-danger mb-3">-->
-                <!--    失敗 <div class="badge bg-light text-dark">0</div>-->
-                <!--</button>-->
-                <!--<button type="button" class="btn btn-warning mb-3">-->
-                <!--    警告 <div class="badge bg-light text-dark">1</div>-->
-                <!--</button>-->
-                <!--<button type="button" class="btn btn-success mb-3">-->
-                <!--    成功 <div class="badge bg-light text-dark">0</div>-->
-                <!--</button>-->
-                
-                <!-- BEGIN カード -->
-                <div class="card mb-3 border-0">
-                    <div class="card-header border-0 bg-white">
-                    </div>
-                    <div class="card-body border-0 bg-white">
-                        <div class="table-responsive overflow-auto">
-                            <table>
-                                {% if trigger.0.trigger_id is None %}
-                                <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">トリガーID:&nbsp;</td><td class="text-start">{{ trigger.0.trigger_id }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.download_file_name is None %}
-                                <tr><td class="text-start">ダウンロードファイル:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">ダウンロードファイル:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.download_file_path }}/">{{ trigger.0.download_file_name }}</a></td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.upload_file_name is None %}
-                                <tr><td class="text-start">アップロードファイル:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">アップロードファイル:&nbsp;</td><td class="text-start"><a href="/{{ trigger.0.upload_file_path }}/">{{ trigger.0.upload_file_name }}</a></td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.suigai_name is None %}
-                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">シート:&nbsp;</td><td class="text-start">{{ trigger.0.suigai_name }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.ken_name is None %}
-                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">都道府県:&nbsp;</td><td class="text-start">{{ trigger.0.ken_name }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.city_name is None %}
-                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">市区町村:&nbsp;</td><td class="text-start">{{ trigger.0.city_name }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.action_name is None %}
-                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">アクション:&nbsp;</td><td class="text-start">{{ trigger.0.action_name }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.status_name is None %}
-                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">状態:&nbsp;</td><td class="text-start">{{ trigger.0.status_name }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.published_at is None %}
-                                <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">発行日時:&nbsp;</td><td class="text-start">{{ trigger.0.published_at }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.consumed_at is None %}
-                                <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">消費日時:&nbsp;</td><td class="text-start">{{ trigger.0.consumed_at }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.deleted_at is None %}
-                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">削除日時:&nbsp;</td><td class="text-start">{{ trigger.0.deleted_at }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.success_count is None %}
-                                <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">成功数:&nbsp;</td><td class="text-start">{{ trigger.0.success_count }}</td></tr>
-                                {% endif %}
-                                
-                                {% if trigger.0.failure_count is None %}
-                                <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start"></td></tr>
-                                {% else %}
-                                <tr><td class="text-start">失敗数:&nbsp;</td><td class="text-start">{{ trigger.0.failure_count }}</td></tr>
-                                {% endif %}
-                            </table>
-                        </div>
+            
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">トリガーメッセージ</label>
+                    <div class="col-9">
+                        {% if trigger.0.trigger_id is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.trigger_id }}" disabled>
+                        {% endif %}
                     </div>
                 </div>
-                <!-- END カード -->
-            </div>
-            <!-- END 列2 -->
 
-            <!-- BEGIN 列1 -->
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">ダウンロードファイル</label>
+                    <div class="col-9">
+                        {% if trigger.0.download_file_name is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.download_file_name }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">アップロードファイル</label>
+                    <div class="col-9">
+                        {% if trigger.0.upload_file_name is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.upload_file_name }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">シート</label>
+                    <div class="col-9">
+                        {% if trigger.0.suigai_id is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.suigai_name }}: {{ trigger.0.suigai_id }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">都道府県</label>
+                    <div class="col-9">
+                        {% if trigger.0.ken_code is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.ken_name }}: {{ trigger.0.ken_code }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">市区町村</label>
+                    <div class="col-9">
+                        {% if trigger.0.city_code is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.city_name }}: {{ trigger.0.city_code }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">発行日時</label>
+                    <div class="col-9">
+                        {% if trigger.0.published_at is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.published_at }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">実行日時</label>
+                    <div class="col-9">
+                        {% if trigger.0.consumed_at is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.consumed_at }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">削除日時</label>
+                    <div class="col-9">
+                        {% if trigger.0.deleted_at is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.deleted_at }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">成功数</label>
+                    <div class="col-9">
+                        {% if trigger.0.success_count is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.success_count }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="col-form-label col-3">失敗数</label>
+                    <div class="col-9">
+                        {% if trigger.0.failure_count is None %}
+                        <input class="form-control" type="text" value="" disabled>
+                        {% else %}
+                        <input class="form-control" type="text" value="{{ trigger.0.failure_count }}" disabled>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- END 列 -->
+
+            <!-- BEGIN 列 -->
             <div class="col-sm-6">
                 <!-- BEGIN カード -->
                 <div class="card">
@@ -236,7 +327,7 @@
                             <div class="col">
                             </div>
                             <div class="col text-end">
-                                <a href="">更新</a>
+                                <a href="#" onclick="location.reload();">表示更新</a>
                             </div>
                         </div>
                     </div>
@@ -246,10 +337,10 @@
                     <div class="card-body">
                         <div class="row border-bottom">
                             <div class="col-sm-6 text-center">
-                                成功
+                                情報ログ
                             </div>
                             <div class="col-sm-6 text-center">
-                                失敗
+                                エラーログ
                             </div>
                         </div>
                         <div class="row">
@@ -265,7 +356,7 @@
                 </div>
                 <!-- END カード -->
             </div>
-            <!-- END 列1 -->
+            <!-- END 列 -->
         </div>
         <!-- END 行 -->
     </div>

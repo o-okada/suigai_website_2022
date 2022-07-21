@@ -56,6 +56,7 @@
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
@@ -66,7 +67,9 @@
                     
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0900Action/">
+                            <strong>自動集計・自動検証</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
                     
@@ -84,24 +87,32 @@
                     
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/">
+                            <strong>オンライン参照</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
                     
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl-nav" href="#">
+                            <strong>グラフ</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
                     
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl-nav" href="#">
+                            <strong>帳票</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/">
+                        <strong>ログアウト</strong>
+                    </a><br>
                 </div>
             </div>
         </div>
@@ -117,18 +128,47 @@
     <!-- BEGIN 行 -->
     <div class="row ms-3 me-3 mb-3">
         <!-- BEGIN パンくずリスト -->
-        <div class="col-12">
+        <div class="col-6">
             {% if type_code == "ippan" %}
-            <h5><a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / <a class="cl-bread" href="/P0100File/type/ippan/ken/{{ suigai_list.0.ken_code }}/">{{ suigai_list.0.ken_name }}: {{ suigai_list.0.ken_code }}</a> / {{ suigai_list.0.file_name }}</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / <a class="cl-bread" href="/P0100File/type/ippan/ken/{{ suigai_list.0.ken_code }}/">{{ suigai_list.0.ken_name }}: {{ suigai_list.0.ken_code }}</a> / {{ suigai_list.0.file_name }}</h5>
             {% elif type_code == "area" %}
-            <h5><a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/area/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/area/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
             {% elif type_code == "kokyo" %}
-            <h5><a class="cl-bread" href="/P0100File/type/kokyo/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/kokyo/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/kokyo/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
             {% elif type_code == "koeki" %}
-            <h5><a class="cl-bread" href="/P0100File/type/koeki/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/koeki/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/koeki/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
             {% endif %}
         </div>
         <!-- END パンくずリスト -->
+
+        <!-- BEGIN ドロップダウンメニュー -->
+        <div class="col-6 text-end">
+            <!-- BEGIN ダウンロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                <div class="dropdown-menu">
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+                </div>
+            </div>
+            <!-- END ダウンロードメニュー -->
+            
+            <!-- BEGIN アップロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
+                    <a class="dropdown-item" href="">公共土木調査票</a>
+                    <a class="dropdown-item" href="">公益事業調査票</a>
+                </div>
+            </div>
+            <!-- END アップロードメニュー -->
+        </div>
+        <!-- END ドロップダウンメニュー -->
     </div>
     <!-- END 行 -->
 
@@ -259,7 +299,7 @@
             <div class="input-group mb-3">
                 <label class="col-form-label col-2">水害区域番号</label>
                 <div class="col-10">
-                    <select class="form-select" id="form_select_area" name="form_select_area">
+                    <select class="form-select border border-5 border-danger" id="form_select_area" name="form_select_area">
                         <option value="0">水害区域番号を選択してください。</option>
                         {% for area in area_list %}
                         {% if area.area_id == suigai_list.0.area_id %}
@@ -436,7 +476,7 @@
             <div class="input-group mb-3">
                 <label class="col-form-label col-2">異常気象</label>
                 <div class="col-10">
-                    <select class="form-select" id="form_select_weather" name="form_select_weather">
+                    <select class="form-select border border-5 border-danger" id="form_select_weather" name="form_select_weather">
                         <option value="0">異常気象コードを入力してください。</option>
                         {% for weather in weather_list %}
                         {% if weather.weather_id == suigai_list.0.weather_id %}

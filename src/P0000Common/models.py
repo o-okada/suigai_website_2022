@@ -523,8 +523,6 @@ class AREA(models.Model):
     ### input_file_name = models.CharField(max_length=128, null=True)          ### ファイル名
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
 
-    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID ※2022/07/12 追加
-
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/12 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/12 追加
 
@@ -606,8 +604,6 @@ class SUIGAI(models.Model):
     ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
     ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
 
-    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID
-
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
     file_path = models.CharField(max_length=256, null=True)                    ### ファイルパス ※2022/07/12 追加
@@ -641,11 +637,8 @@ class IPPAN(models.Model):
     ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
     ### https://torazuka.hatenablog.com/entry/20110713/pk
     ### https://oss-db.jp/dojo/dojo_info_04
-
     ### 帳票のヘッダ部分 行10
-
     ### 帳票のヘッダ部分 行14
-
     ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
     ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
     ### 別テーブル（水害テーブル）の主キーは単純な連番とする。
@@ -998,7 +991,7 @@ class IPPAN_SUMMARY(models.Model):
 ###############################################################################
 
 ###############################################################################
-### 10000: アクション（マスタDB）
+### 10000: アクション（自動化DB）
 ###############################################################################
 class ACTION(models.Model):
     action_code = models.CharField(max_length=10, primary_key=True)            ### アクションコード
@@ -1012,7 +1005,7 @@ class ACTION(models.Model):
         return '<ACTION: ' + self.action_code + '>'
 
 ###############################################################################
-### 10010: 状態（マスタDB）
+### 10010: 状態（自動化DB）
 ###############################################################################
 class STATUS(models.Model):
     status_code = models.CharField(max_length=10, primary_key=True)            ### 状態コード
@@ -1032,20 +1025,18 @@ class TRIGGER(models.Model):
     suigai_id = models.IntegerField(null=True)                                 ### シートID
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
-    success_count = models.IntegerField(null=True)                             ### 成功数 ※削除予定
-    failure_count = models.IntegerField(null=True)                             ### 失敗数 ※削除予定
+    success_count = models.IntegerField(null=True)                             ### 成功数
+    failure_count = models.IntegerField(null=True)                             ### 失敗数
     
     published_at = models.DateTimeField(null=True)                             ### 発行日時
     consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
 
-    ### data_integrity_left = models.TextField(null=True)                      ### データ整合性 Row, Col, left, right, verified result, 
-    ### data_integrity_right = models.TextField(null=True)                     ### データ整合性 Row, Col, left, right, verified result, 
     integrity_ok = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
     integrity_ng = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
+    info_log = models.TextField(null=True)                                     ### データ整合性 Row, Col, left, right, verified result, 
+    error_log = models.TextField(null=True)                                    ### データ整合性 Row, Col, left, right, verified result, 
 
-    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID ※削除予定
-    
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
     city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード
 
@@ -1066,7 +1057,6 @@ class TRIGGER(models.Model):
 class APPROVAL(models.Model):
     approval_id = models.IntegerField(primary_key=True)                        ### 承認ID
     suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
     published_at = models.DateTimeField(null=True)                             ### 発行日時
@@ -1085,7 +1075,6 @@ class APPROVAL(models.Model):
 class FEEDBACK(models.Model):
     feedback_id = models.IntegerField(primary_key=True)                        ### フィードバックID
     suigai_id = models.IntegerField(null=True)                                 ### 水害ID
-    ### repository_id = models.IntegerField(null=True)                         ### レポジトリID
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
     published_at = models.DateTimeField(null=True)                             ### 発行日時
@@ -1098,71 +1087,19 @@ class FEEDBACK(models.Model):
     def __str__(self):
         return '<FEEDBACK: ' + self.feedback_id + '>'
 
-###############################################################################
-### 10050: レポジトリ（自動化DB）
-### ※詳細リンククリックで表示される詳細画面に使用する。
-### ※自動化画面の一覧には、EXECUTEのデータを表示する。
-### CI/CD Automatic Test, Automatic Quality Assurance, Insight
-### circleci
-### 出力データ_一般資産調査票_チェックアウト: P0200ExcelDownload
-### 入力データ_一般資産調査票_チェックイン: P0300ExcelUpload
-###   入力データ検証: Automated Acceptance Test
-###   按分計算: Proportional Calculation
-###   逆計算による按分データ検証: Automated Reverse Verification
-###   集計計算: Summary Calculation
-###   逆計算による集計データ検証: Automated Reverse Verification
-### 入力データ_水害区域図_チェックイン: P0310AreaUpload
-###   入力データ検証: Automated Acceptance Test
-###   集計計算: Summary Calculation, Group By Area
-###   逆計算による集計データ検証: Automated Reverse Verification
-### 入力データ_異常気象コード_チェックイン: P0320WeatherUpload
-###   入力データ検証: Automated Acceptance Test
-###   集計計算: Summary Calculation, Group By Weather
-###   逆計算による集計データ検証: Automated Reverse Verification
-### マニュアルによるデータ検証: Manual Verification
-### リリース: Release
-###############################################################################
+### ---: レポジトリ
 class REPOSITORY(models.Model):
     repository_id = models.IntegerField(primary_key=True)                      ### レポジトリID
     type_code = models.CharField(max_length=10, null=True)                     ### ファイル種別コード ※2022/07/12 追加
-    ### 1: 一般資産調査員調査表
-    ### 2: 水害区域図
-    ### 3: 公共土木調査票
-    ### 4: 公益事業調査票
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/07/11 追加
     city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/07/11 追加
     action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード
-    ### 1: 一般資産調査票_チェックアウト ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
-    ### 2: 一般資産調査票_チェックイン ※ここは管理しないため、REPOSITORY、TRIGGERデータも存在しない。
-    ### 3: 入力データ検証 ※一般資産調査票アップロード時の処理である。※ここでREPOSITORY、TRIGGERデータが作成される。
-    ### 4: 按分計算 ※ビュー表のため自動で計算される。
-    ### 5: 逆計算による按分データ検証
-    ### 6: 集計計算
-    ### 7: 逆計算による集計データ検証 ※とりあえずここまで実装する。
-    ### 8: 水害区域図_チェックイン ※未実装
-    ### 9: 入力データ検証 ※未実装
-    ### 10: 集計計算 ※未実装
-    ### 11: 逆計算による集計データ検証 ※未実装
-    ### 12: 異常気象コード_チェックイン ※未実装
-    ### 13: 入力データ検証 ※未実装
-    ### 14: 集計計算 ※未実装
-    ### 15: 逆計算による集計データ検証 ※未実装
-    ### 16: マニュアルによるデータ検証 ※未実装
-    ### 17: リリース ※未実装
     status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード
-    ### 1: 実行中: running
-    ### 2: キャンセル: cancel
-    ### 3: 成功: success
-    ### 4: 失敗: failure
-    ### success_count = models.IntegerField(null=True)                         ### 成功数
-    ### failure_count = models.IntegerField(null=True)                         ### 失敗数
     input_file_path = models.CharField(max_length=256, null=True)              ### ファイルパス
     input_file_name = models.CharField(max_length=256, null=True)              ### ファイル名
     committed_at = models.DateTimeField(null=True)                             ### コミット日時
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
-    ### created_at = models.DateTimeField(null=True)                           ### 初期生成日 ※削除予定 2022/07/11
-    ### updated_at = models.DateTimeField(null=True)                           ### 更新日 ※削除予定 2022/07/11
-    ### suigai_id = models.IntegerField(null=True)                             ### 水害ID ※削除予定 2022/07/11
+
     class Meta:
         db_table = 'repository'
     def __str__(self):

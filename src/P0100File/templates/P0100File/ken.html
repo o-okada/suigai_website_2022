@@ -57,6 +57,7 @@
                             <strong>ファイル</strong>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
                             <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
@@ -67,7 +68,9 @@
 
                     <!-- BEGIN ナビバー 自動集計・自動検証メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="/P0900Action/"><strong>自動集計・自動検証</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0900Action/">
+                            <strong>自動集計・自動検証</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 自動集計・自動検証メニュー -->
 
@@ -85,24 +88,32 @@
 
                     <!-- BEGIN ナビバー オンライン参照メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/"><strong>オンライン参照</strong></a>
+                        <a class="nav-link active cl-nav" href="/P0400OnlineDisplay/">
+                            <strong>オンライン参照</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー オンライン参照メニュー -->
 
                     <!-- BEGIN ナビバー グラフメニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="#"><strong>グラフ</strong></a>
+                        <a class="nav-link active cl-nav" href="#">
+                            <strong>グラフ</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー グラフメニュー -->
 
                     <!-- BEGIN ナビバー 帳票メニュー -->
                     <li class="nav-item">
-                        <a class="nav-link active cl-nav" href="#"><strong>帳票</strong></a>
+                        <a class="nav-link active cl-nav" href="#">
+                            <strong>帳票</strong>
+                        </a>
                     </li>
                     <!-- END ナビバー 帳票メニュー -->
                 </ul>
                 <div class="col d-flex justify-content-end align-items-end">
-                    <a class="cl-nav" href="/P0100Login/"><strong>ログアウト</strong></a><br>
+                    <a class="cl-nav" href="/P0100Login/">
+                        <strong>ログアウト</strong>
+                    </a><br>
                 </div>
             </div>
         </div>
@@ -117,18 +128,19 @@
     
     <!-- BEGIN コンテナ -->
     <div class="container mb-3">
+    <!--<div class="row ms-3 me-3 mb-3">-->
         <!-- BEGIN 行 -->
         <div class="row">
             <!-- BEGIN パンくずリスト -->
             <div class="col text-start">
                 {% if type_code == "ippan" %}
-                <h5><a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+                <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
                 {% elif type_code == "area" %}
-                <h5><a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+                <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
                 {% elif type_code == "kokyo" %}
-                <h5><a class="cl-bread" href="/P0100File/type/kokyo/">公共土木調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+                <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
                 {% elif type_code == "koeki" %}
-                <h5><a class="cl-bread" href="/P0100File/type/koeki/">公益事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+                <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">公益事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
                 {% endif %}
             </div>
             <!-- END パンくずリスト -->
@@ -139,8 +151,8 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>
-                        <!--<a class="dropdown-item" href="/P0200ExcelDownload/">一般資産調査員調査票</a>-->
+                        <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
+                        <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
                         <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
                         <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
                         <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
@@ -159,15 +171,6 @@
                     </div>
                 </div>
                 <!-- END アップロードメニュー -->
-                
-                <!-- BEGIN 編集メニュー -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">編集</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/P0300AreaWeather/">水害区域番号、異常気象コード</a>
-                    </div>
-                </div>
-                <!-- END 編集メニュー -->
             </div>
             <!-- END ドロップダウンメニュー -->
         </div>
@@ -177,6 +180,7 @@
     
     <!-- BEGIN コンテナ -->
     <div class="container mb-3">
+    <!--<div class="row ms-3 me-3 mb-3">-->
         <!-- BEGIN カード -->
         <div class="card">
             <!-- BEGIN カードヘッダ -->
@@ -188,7 +192,7 @@
                     <div class="col">
                     </div>
                     <div class="col text-end">
-                        <a href="">更新</a>
+                        <a href="#" onclick="location.reload();">表示更新</a>
                     </div>
                 </div>
             </div>
@@ -234,16 +238,23 @@
                         {% if type_code == 'ippan' %}
                         {% for suigai in suigai_list %}
                         <tr>
-                            <td>{{ suigai.ken_name }}: {{ suigai.ken_code }}</td>
-                            <td>{{ suigai.city_name }}: {{ suigai.city_code }}</td>
-
-                            {% if suigai.input_file_name is None %}
+                            {% if suigai.city_code is None and suigai.city_name is None %}
                             <td></td>
                             {% else %}
-                            <td>{{ suigai.input_file_name }}</td>
+                            <td>{{ suigai.city_name|truncatechars:20 }}: {{ suigai.city_code }}</td>
+                            {% endif %}
+
+                            {% if suigai.file_name is None %}
+                            <td></td>
+                            {% else %}
+                            <td>{{ suigai.file_name|truncatechars:20 }}</td>
                             {% endif %}
                             
-                            <td>{{ suigai.suigai_name }}: {{ suigai.suigai_id }}</td>
+                            {% if suigai.suigai_name is None %}
+                            <td></td>
+                            {% else %}
+                            <td>シート名 {{ suigai.suigai_name|truncatechars:20 }}</td>
+                            {% endif %}
                             
                             {% if suigai.begin_date is None %}
                             <td></td>
@@ -256,8 +267,9 @@
                             {% else %}
                             <td>コミット日時 {{ suigai.committed_at }}</td>
                             {% endif %}
-                            <td><a class="cl-table" href="/P0300AreaWeather/type/ippan/ken/{{ suigai.ken_code }}/suigai/{{ suigai.suigai_id }}/">詳細</a></td>
-                            <td><a class="cl-table" href="/P0900Action/suigai/{{ suigai.suigai_id }}/">実行状況</a></td>
+                            
+                            <td><a class="cl-table" href="/P0300AreaWeather/type/ippan/ken/{{ suigai.ken_code }}/suigai/{{ suigai.suigai_id }}/">編集</a></td>
+                            <td><a class="cl-table" href="/P0900Action/suigai/{{ suigai.suigai_id }}/">自動</a></td>
                         </tr>
                         {% endfor %}
                         <!-- END 一般資産調査員調査票 -->
@@ -270,8 +282,8 @@
                             <td>{{ area.input_file_name }}</td>
                             <td>{{ area.area_name }}: {{ area.area_id }}</td>
                             <td>コミット日時 {{ area.committed_at }}</td>
-                            <td><a class="cl-table" href="">詳細</a></td>
-                            <td><a class="cl-table" href="">実行状況</a></td>
+                            <td><a class="cl-table" href="">編集</a></td>
+                            <td><a class="cl-table" href="">自動集計・自動検証</a></td>
                         </tr>
                         {% endfor %}
                         <!-- END 水害区域図 -->

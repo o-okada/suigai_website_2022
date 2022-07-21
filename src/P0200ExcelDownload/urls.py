@@ -3,7 +3,8 @@ from . import views
 
 app_name = 'P0200ExcelDownload'
 urlpatterns = [
-    path('', views.index_view, name='index_view'), 
+    ### path('', views.index_view, name='index_view'), 
+    path('data_type/<slug:data_type>/', views.index_view, name='index_view'), 
 
     path('building/', views.building_view, name='building_view'), 
     path('ken/', views.ken_view, name='ken_view'), 
@@ -89,5 +90,5 @@ urlpatterns = [
     path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view'), 
     path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view'), 
     
-    path('download/<slug:hash_code>/', views.download_view, name='download_view'), 
+    path('download/<slug:hash_code>/<slug:count>/', views.download_view, name='download_view'), 
 ]

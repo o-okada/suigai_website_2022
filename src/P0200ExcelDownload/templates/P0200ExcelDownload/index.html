@@ -388,7 +388,7 @@
     <!-- BEGIN 検索とフィルタ -->    
     <div class="container mb-3">
         <select class="form-select" id="form_select_category" name="form_select_category">
-            <option value="1">建物区分: building</option>
+            <option value="1" selected>建物区分: building</option>
             <option value="2">都道府県: ken</option>
             <option value="3">市区町村: city</option>
             <option value="4">水害発生地点工種（河川海岸区分）: kasen_kaigan</option>
@@ -428,7 +428,11 @@
             <option value="301">集計データ_集計結果_都道府県別: ippan_group_by_ken</option>
             <option value="302">集計データ_集計結果_水系別: ippan_group_by_suikei</option>
 
+            {% if data_type == "400" %}
+            <option value="400" selected>調査票_調査員用: suigai+ippan</option>
+            {% else %}
             <option value="400">調査票_調査員用: suigai+ippan</option>
+            {% endif %}
             <option value="401">調査票_市区町村担当者用: suigai+ippan</option>
             <option value="402">調査票_都道府県担当者用: suigai+ippan</option>
             

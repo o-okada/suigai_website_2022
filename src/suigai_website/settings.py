@@ -176,18 +176,46 @@ STATICFILES_DIRS = (
 ### Default primary key field type
 ### https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+### LOGGING = {
+###     "version": 1,
+###     "disable_existing_loggers": False,
+###     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+###     "handlers": {
+###         "mail_admins": {
+###             "level": "ERROR",
+###             "filters": ["require_debug_false"],
+###             "class": "django.utils.log.AdminEmailHandler",
+###         }
+###     },
+###     "loggers": {
+###         "django.request": {
+###             "handlers": ["mail_admins"], "level": "ERROR", "propagate": True}},
+### }
+LOG_BASE_DIR = os.path.join("/var", "log")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {"simple": {"format": "%(asctime)s [%(levelname)s] %(message)s"}},
     "handlers": {
-        "mail_admins": {
+        "info": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "info.log"),
+            "formatter": "simple",
+        }, 
+        "warning": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "warning.log"),
+            "formatter": "simple",
+        }, 
+        "error": {
             "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler",
-        }
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "error.log"),
+            "formatter": "simple",
+        },
     },
-    "loggers": {"django.request": {"handlers": ["mail_admins"], "level": "ERROR", "propagate": True}},
 }
 
 ### Settings for django-bootstrap5
@@ -228,4 +256,3 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 ### ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
 ### デフォルトのメール送信元を設定する
 ### DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
-
