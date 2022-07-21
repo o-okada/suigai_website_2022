@@ -88,4 +88,6 @@ urlpatterns = [
     path('ippan_chosa/lock/<slug:lock>/', views.ippan_chosa_view, name='ippan_chosa_view'), 
     path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view'), 
     path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view'), 
+    
+    path('download/<slug:hash_code>/', views.download_view, name='download_view'), 
 ]

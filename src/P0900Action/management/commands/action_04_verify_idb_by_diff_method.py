@@ -190,7 +190,8 @@ class Command(BaseCommand):
                 LEFT JOIN WEATHER WE1 ON SG1.weather_id = WE1.weather_id 
                 LEFT JOIN ACTION AC1 ON SG1.action_code = AC1.action_code 
                 LEFT JOIN STATUS ST1 ON SG1.status_code = ST1.status_code 
-                WHERE SG1.suigai_id = %s""", [trigger_list[0].suigai_id, ])
+                WHERE 
+                    SG1.suigai_id = %s""", [trigger_list[0].suigai_id, ])
 
             ###################################################################
             ### DBアクセス処理(0030)
@@ -288,7 +289,8 @@ class Command(BaseCommand):
                     TO_CHAR(timezone('JST', IV1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', IV1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                 FROM IPPAN_VIEW IV1 
-                WHERE IV1.suigai_id=%s
+                WHERE 
+                    IV1.suigai_id=%s
                 ORDER BY CAST (IV1.ippan_id AS INTEGER)""", [trigger_list[0].suigai_id, ])
 
             ###################################################################
@@ -584,7 +586,13 @@ class Command(BaseCommand):
                         consumed_at=CURRENT_TIMESTAMP, 
                         integrity_ok=%s, 
                         integrity_ng=%s 
-                    WHERE trigger_id=%s""", [len(OK_list), len(NG_list), OK_str, None, trigger_list[0].trigger_id, ])
+                    WHERE 
+                        trigger_id=%s""", [
+                        len(OK_list), 
+                        len(NG_list), 
+                        OK_str, 
+                        None, 
+                        trigger_list[0].trigger_id, ])
             else:
                 connection_cursor.execute("""
                     UPDATE TRIGGER SET 
@@ -594,7 +602,13 @@ class Command(BaseCommand):
                         consumed_at=CURRENT_TIMESTAMP, 
                         integrity_ok=%s, 
                         integrity_ng=%s 
-                    WHERE trigger_id=%s""", [len(OK_list), len(NG_list), OK_str, NG_str, trigger_list[0].trigger_id, ])
+                    WHERE 
+                        trigger_id=%s""", [
+                        len(OK_list), 
+                        len(NG_list), 
+                        OK_str, 
+                        NG_str, 
+                        trigger_list[0].trigger_id, ])
 
             ################################################################### 
             ### DBアクセス処理(0110)
@@ -630,47 +644,6 @@ class Command(BaseCommand):
                     )""", [
                         trigger_list[0].suigai_id, ### suigai_id 
                         '5',  ### action_code 
-                        None, ### status_code 
-                        None, ### success_count 
-                        None, ### failure_count 
-                        None, ### consumed_at 
-                        None, ### deleted_at 
-                        None, ### integrity_ok 
-                        None, ### integrity_ng 
-                        trigger_list[0].ken_code,  ### ken_code 
-                        trigger_list[0].city_code, ### city_code 
-                        trigger_list[0].download_file_path, ### download_file_path 
-                        trigger_list[0].download_file_name, ### download_file_name 
-                        trigger_list[0].upload_file_path, ### upload_file_path 
-                        trigger_list[0].upload_file_name, ### upload_file_name
-                    ])
-
-                connection_cursor.execute("""
-                    INSERT INTO TRIGGER (
-                        trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
-                        published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
-                        download_file_path, download_file_name, upload_file_path, upload_file_name 
-                    ) VALUES (
-                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
-                        %s, -- suigai_id 
-                        %s, -- action_code 
-                        %s, -- status_code 
-                        %s, -- success_count 
-                        %s, -- failure_count 
-                        CURRENT_TIMESTAMP, -- published_at 
-                        %s, -- consumed_at 
-                        %s, -- deleted_at 
-                        %s, -- integrity_ok 
-                        %s, -- integrity_ng 
-                        %s, -- ken_code 
-                        %s, -- city_code 
-                        %s, -- download_file_path 
-                        %s, -- download_file_name 
-                        %s, -- upload_file_path 
-                        %s  -- upload_file_name 
-                    )""", [
-                        trigger_list[0].suigai_id, ### suigai_id 
-                        '6',  ### action_code 
                         None, ### status_code 
                         None, ### success_count 
                         None, ### failure_count 

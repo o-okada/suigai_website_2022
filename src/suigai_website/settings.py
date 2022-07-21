@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'P0400OnlineDisplay.apps.P0400OnlineDisplayConfig',
     'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
 
-    ### Reverse Verification Applications
+    ### Reverse Applications
     'P0800Reverse.apps.P0800ReverseConfig',
     
     ### Action Applications

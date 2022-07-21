@@ -516,7 +516,7 @@ class Command(BaseCommand):
                         trigger_list[0].download_file_path, ### download_file_path 
                         trigger_list[0].download_file_name, ### download_file_name 
                         trigger_list[0].upload_file_path, ### upload_file_path 
-                        trigger_list[0].upload_file_name ### upload_file_name 
+                        trigger_list[0].upload_file_name, ### upload_file_name 
                     ])
 
             ###################################################################

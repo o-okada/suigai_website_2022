@@ -94,7 +94,7 @@ class Command(BaseCommand):
             ###################################################################
             print_log('[INFO] ########################################', 'INFO')
             print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が開始しました。', 'INFO')
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 1/10.', 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 1/7.', 'INFO')
     
             ###################################################################
             ### DBアクセス処理(0010)
@@ -115,54 +115,29 @@ class Command(BaseCommand):
             ### トリガーメッセージにアクションが発行されていなければ、処理を終了する。
             ### ※ネストを浅くするために、処理対象外の場合、処理を終了させる。
             ###################################################################
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 2/10.', 'INFO')
-            trigger_list = None
-            trigger_id_list = None
-            suigai_id_list = None
-            repository_id_list = None
-            ippan_reverse_list = None
-            
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 2/7.', 'INFO')
             trigger_list = TRIGGER.objects.raw("""
                 SELECT 
                     * 
                 FROM TRIGGER 
                 WHERE 
-                    action_code='7' AND 
+                    action_code='8' AND 
                     consumed_at IS NULL AND 
                     deleted_at IS NULL 
                 ORDER BY CAST(trigger_id AS INTEGER) LIMIT 1""", [])
-
-            print_log('trigger_list = {}'.format(trigger_list), 'INFO')
 
             if trigger_list is None:
                 print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が正常終了しました。', 'INFO')
                 return 0
 
-            ###################################################################
-            ### 計算処理(0020)
-            ### トリガーメッセージにアクションが発行されていなければ、処理を終了する。
-            ### ※ネストを浅くするために、処理対象外の場合、処理を終了させる。
-            ###################################################################
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 3/10.', 'INFO')
-            trigger_id_list = [trigger.trigger_id for trigger in trigger_list]
-
-            print_log('trigger_id_list = {}'.format(trigger_id_list), 'INFO')
-
-            if len(trigger_id_list) <= 0:
+            if len(trigger_list) == 0:
                 print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が正常終了しました。', 'INFO')
                 return 0
             
-            suigai_id_list = [trigger.suigai_id for trigger in trigger_list]
-            repository_id_list = [trigger.repository_id for trigger in trigger_list]
-            
-            print_log('suigai_id_list = {}'.format(suigai_id_list), 'INFO')
-            print_log('repository_id_list = {}'.format(repository_id_list), 'INFO')
-            
             ###################################################################
-            ### DBアクセス処理(0030)
+            ### DBアクセス処理(0020)
             ###################################################################
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4/10.', 'INFO')
-            print_log('suigai_id_list[0] = {}'.format(suigai_id_list[0]), 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 3/7.', 'INFO')
             ippan_reverse_list = IPPAN_VIEW.objects.raw("""
                 SELECT 
                     IV1.ippan_id AS ippan_id, 
@@ -598,21 +573,17 @@ class Command(BaseCommand):
                 WHERE 
                     IV1.SUIGAI_ID=%s AND 
                     IV1.deleted_at IS NULL 
-                ORDER BY CAST(IV1.ippan_id AS INTEGER)
-                """, [suigai_id_list[0],])
-
-            print_log('ippan_reverse_list'.format(ippan_reverse_list), 'INFO')
+                ORDER BY CAST(IV1.ippan_id AS INTEGER)""", [trigger_list[0].suigai_id, ])
 
             if ippan_reverse_list is None:
                 print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が警告終了しました。', 'INFO')
                 return 4
     
             ###################################################################
-            ### 計算処理(0040)
+            ### 計算処理(0030)
             ### 成功、失敗の数、レコード数をカウントする。
             ###################################################################
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 5/10.', 'INFO')
-            print_log('ippan_reverse_list'.format(ippan_reverse_list), 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4/7.', 'INFO')
             success_count = 0
             failure_count = 0
             epsilon = 0.0000001
@@ -620,9 +591,10 @@ class Command(BaseCommand):
             for ippan in ippan_reverse_list:
                 print_log('suigai_id = {}'.format(ippan.suigai_id), 'INFO')
                 ###############################################################
-                ### 計算処理(0050)
+                ### 計算処理(0040)
                 ### 家屋被害額(集計DB)から逆計算により延床面積を求めた結果 
                 ###############################################################
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_1/7.', 'INFO')
                 if ippan.floor_area_lv00_reverse_house_summary is not None:
                     if float(ippan.floor_area_lv00_reverse_house_summary) - float(ippan.floor_area_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -667,9 +639,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ###############################################################
-                ### 計算処理(0060)
+                ### 計算処理(0050)
                 ### 家庭用品自動車以外被害額(集計DB)から逆計算により被災世帯数を求めた結果 
                 ###############################################################
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_2/7.', 'INFO')
                 if ippan.family_lv00_reverse_household_summary is not None:
                     if float(ippan.family_lv00_reverse_household_summary) - float(ippan.family_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -714,9 +687,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ###############################################################
-                ### 計算処理(0070)
+                ### 計算処理(0060)
                 ### 家庭用品自動車被害額(集計DB)から逆計算により被災世帯数を求めた結果 
                 ###############################################################
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_3/7.', 'INFO')
                 if ippan.family_lv00_reverse_car_summary is not None: 
                     if float(ippan.family_lv00_reverse_car_summary) - float(ippan.family_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -761,9 +735,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0080)
+                ### 計算処理(0070)
                 ### 家庭応急対策費_代替活動費(集計DB)から逆計算により被災世帯数を求めた結果 
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_4/7.', 'INFO')
                 if ippan.family_lv00_reverse_house_alt_summary is not None: 
                     if float(ippan.family_lv00_reverse_house_alt_summary) - float(ippan.family_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -808,9 +783,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0090)
+                ### 計算処理(0080)
                 ### 家庭応急対策費_清掃費(集計DB)から逆計算により被災世帯数を求めた結果 
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_5/7.', 'INFO')
                 if ippan.family_lv00_reverse_house_clean_summary is not None: 
                     if float(ippan.family_lv00_reverse_house_clean_summary) - float(ippan.family_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -855,9 +831,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0100)
+                ### 計算処理(0090)
                 ### 事業所被害額_償却資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_6/7.', 'INFO')
                 if ippan.employee_lv00_reverse_office_dep_summary is not None: 
                     if float(ippan.employee_lv00_reverse_office_dep_summary) - float(ippan.employee_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -902,9 +879,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0110)
+                ### 計算処理(0100)
                 ### 事業所被害額_在庫資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_7/7.', 'INFO')
                 if ippan.employee_lv00_reverse_office_inv_summary is not None: 
                     if float(ippan.employee_lv00_reverse_office_inv_summary) - float(ippan.employee_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -949,9 +927,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0120)
+                ### 計算処理(0110)
                 ### 事業所被害額_営業停止に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_8/7.', 'INFO')
                 if ippan.employee_lv00_reverse_office_sus_summary is not None: 
                     if float(ippan.employee_lv00_reverse_office_sus_summary) - float(ippan.employee_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -996,9 +975,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0130)
+                ### 計算処理(0120)
                 ### 事業所被害額_営業停滞に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_9/7.', 'INFO')
                 if ippan.employee_lv00_reverse_office_stg_summary is not None: 
                     if float(ippan.employee_lv00_reverse_office_stg_summary) - float(ippan.employee_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -1043,9 +1023,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ###############################################################
-                ### 計算処理(0140)
+                ### 計算処理(0130)
                 ### 農漁家被害額_償却資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
                 ###############################################################
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_10/7.', 'INFO')
                 if ippan.farmer_fisher_lv00_reverse_farmer_fisher_dep_summary is not None: 
                     if float(ippan.farmer_fisher_lv00_reverse_farmer_fisher_dep_summary) - float(ippan.farmer_fisher_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -1090,9 +1071,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0150)
+                ### 計算処理(0140)
                 ### 農漁家被害額_在庫資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_11/7.', 'INFO')
                 if ippan.farmer_fisher_lv00_reverse_farmer_fisher_inv_summary is not None: 
                     if float(ippan.farmer_fisher_lv00_reverse_farmer_fisher_inv_summary) - float(ippan.farmer_fisher_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -1137,9 +1119,10 @@ class Command(BaseCommand):
                         failure_count = failure_count + 1
 
                 ############################################################### 
-                ### 計算処理(0160)
+                ### 計算処理(0150)
                 ### 事業所応急対策費_代替活動費(集計DB)から逆計算により被災事業所数を求めた結果 
                 ############################################################### 
+                print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 4_12/7.', 'INFO')
                 if ippan.office_lv00_reverse_office_alt_summary is not None: 
                     if float(ippan.office_lv00_reverse_office_alt_summary) - float(ippan.office_lv00) <= 0.0000001:
                         success_count = success_count + 1
@@ -1187,11 +1170,10 @@ class Command(BaseCommand):
             print_log('failure_count = {}'.format(failure_count), 'INFO')
                     
             ################################################################### 
-            ### DBアクセス処理(0170)
+            ### DBアクセス処理(0160)
             ### 当該トリガーの実行が終了したため、当該トリガーの状態、成功数、失敗数等を更新する。
             ################################################################### 
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 6/10.', 'INFO')
-            print_log('trigger_id_list[0] = {}'.format(trigger_id_list[0]), 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 5/7.', 'INFO')
             if failure_count == 0:
                 connection_cursor.execute("""
                     UPDATE TRIGGER SET 
@@ -1203,7 +1185,7 @@ class Command(BaseCommand):
                         trigger_id=%s""", [
                         success_count, 
                         failure_count, 
-                        trigger_id_list[0],])
+                        trigger_list[0].trigger_id, ])
             else:
                 connection_cursor.execute("""
                     UPDATE TRIGGER SET 
@@ -1215,78 +1197,65 @@ class Command(BaseCommand):
                         trigger_id=%s""", [
                         success_count, 
                         failure_count, 
-                        trigger_id_list[0],])
+                        trigger_list[0].trigger_id, ])
 
             ################################################################### 
-            ### DBアクセス処理(0180)
+            ### DBアクセス処理(0170)
             ### 当該トリガーの実行が終了したため、
             ### (1)成功の場合は、次のトリガーを発行する。
             ### (2)失敗の場合は、次のトリガーを発行しない。
             ################################################################### 
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 7/10.', 'INFO')
-            print_log('suigai_id_list[0] = {}'.format(suigai_id_list[0]), 'INFO')
-            print_log('repository_id_list[0] = {}'.format(repository_id_list[0]), 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 6/7.', 'INFO')
             if failure_count == 0:
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
-                        trigger_id, 
-                        suigai_id, 
-                        repository_id, 
-                        action_code, 
-                        published_at
+                        trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                        published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
+                        download_file_path, download_file_name, upload_file_path, upload_file_name 
                     ) VALUES (
-                        (SELECT MAX(TRIGGER_ID) + 1 FROM TRIGGER), 
-                        %s, 
-                        %s, 
-                        '8', 
-                        CURRENT_TIMESTAMP
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                        %s, -- suigai_id 
+                        %s, -- action_code 
+                        %s, -- status_code 
+                        %s, -- success_count 
+                        %s, -- failure_count 
+                        CURRENT_TIMESTAMP, -- published_at 
+                        %s, -- consumed_at 
+                        %s, -- deleted_at 
+                        %s, -- integrity_ok 
+                        %s, -- integrity_ng 
+                        %s, -- ken_code 
+                        %s, -- city_code 
+                        %s, -- download_file_path 
+                        %s, -- download_file_name 
+                        %s, -- upload_file_path 
+                        %s  -- upload_file_name 
                     )""", [
-                        suigai_id_list[0], 
-                        repository_id_list[0],])
-
-            ################################################################### 
-            ### DBアクセス処理(0190)
-            ### 当該トリガーの実行が終了したため、当該レポジトリの状態、成功数、失敗数等を更新する。
-            ### (1)成功の場合は、ステータスを 3 に更新する。
-            ### (2)失敗の場合は、ステータスを 4 に更新する。
-            ################################################################### 
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 8/10.', 'INFO')
-            print_log('repository_id_list[0] = {}'.format(repository_id_list[0]), 'INFO')
-            if failure_count == 0: 
-                connection_cursor.execute("""
-                    UPDATE REPOSITORY SET 
-                        action_code='7', 
-                        status_code='3', 
-                        updated_at=CURRENT_TIMESTAMP 
-                    WHERE 
-                        repository_id=%s AND 
-                        deleted_at IS NULL""", [
-                        repository_id_list[0],])
-            else:
-                connection_cursor.execute("""
-                    UPDATE REPOSITORY SET 
-                        action_code='7', 
-                        status_code='4', 
-                        updated_at=CURRENT_TIMESTAMP 
-                    WHERE 
-                        repository_id=%s""", [
-                        repository_id_list[0],])
-
-            ################################################################### 
-            ### DBアクセス処理(0200)
-            ################################################################### 
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 9/10.', 'INFO')
-            transaction.commit()
+                        trigger_list[0].suigai_id, ### suigai_id 
+                        '9', ### action_code 
+                        None, ### status_code 
+                        None, ### success_count 
+                        None, ### failure_count 
+                        None, ### consumed_at 
+                        None, ### deleted_at 
+                        None, ### integrity_ok 
+                        None, ### integrity_ng 
+                        trigger_list[0].ken_code, ### ken_code 
+                        trigger_list[0].city_code, ### city_code 
+                        trigger_list[0].download_file_path, ### download_file_path 
+                        trigger_list[0].download_file_name, ### download_file_name 
+                        trigger_list[0].upload_file_path, ### upload_file_path 
+                        trigger_list[0].upload_file_name, ### upload_file_name 
+                    ])
 
             ###################################################################
-            ### 戻り値セット処理(0210)
+            ### 戻り値セット処理(0180)
             ###################################################################
-            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 10/10.', 'INFO')
+            print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数 STEP 7/7.', 'INFO')
             print_log('[INFO] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が正常終了しました。', 'INFO')
             return 0
         
         except:
-            transaction.rollback()
             print_log(sys.exc_info()[0], 'ERROR')
             print_log('[ERROR] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数でエラーが発生しました。', 'ERROR')
             print_log('[ERROR] P0900Action.action_08_verify_sdb_by_reverse_method.handle()関数が異常終了しました。', 'ERROR')

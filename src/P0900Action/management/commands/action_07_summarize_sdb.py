@@ -94,7 +94,7 @@ class Command(BaseCommand):
             ###################################################################
             print_log('[INFO] ########################################', 'INFO')
             print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数が開始しました。', 'INFO')
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 1/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 1/6.', 'INFO')
     
             ###################################################################
             ### DBアクセス処理(0010)
@@ -104,7 +104,7 @@ class Command(BaseCommand):
             ### トリガーメッセージにアクションが発行されていなければ、処理を終了する。
             ### ※ネストを浅くするために、処理対象外の場合、処理を終了させる。
             ###################################################################
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 2/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 2/6.', 'INFO')
             trigger_list = TRIGGER.objects.raw("""
                 SELECT 
                     * 
@@ -127,7 +127,7 @@ class Command(BaseCommand):
             ### DBアクセス処理(0020)
             ### 集計データから集計データを1件削除する。
             ###################################################################
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 3/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 2/9.', 'INFO')
             connection_cursor.execute("""
                 UPDATE IPPAN_SUMMARY SET 
                     deleted_at=CURRENT_TIMESTAMP 
@@ -139,7 +139,7 @@ class Command(BaseCommand):
             ### DBアクセス処理(0030)
             ### 集計データに集計データを1件登録する。
             ###################################################################
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 4/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 3/6.', 'INFO')
             connection_cursor.execute("""
                 INSERT INTO IPPAN_SUMMARY (
                     ippan_id, 
@@ -319,18 +319,23 @@ class Command(BaseCommand):
             ### DBアクセス処理(0040)
             ### 当該トリガーの実行が終了したため、当該トリガーの状態、成功数、失敗数等を更新する。
             ################################################################### 
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 5/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 4/6.', 'INFO')
             connection_cursor.execute("""
                 UPDATE TRIGGER SET 
                     status_code='3', 
-                    consumed_at=CURRENT_TIMESTAMP, 
                     success_count=%s, 
-                    failure_count=%s 
+                    failure_count=%s, 
+                    consumed_at=CURRENT_TIMESTAMP, 
+                    integrity_ok=%s, 
+                    integrity_ng=%s 
                 WHERE 
                     trigger_id=%s""", [
-                    1, 
-                    0, 
-                    trigger_list[0].trigger_id, ])
+                    1, ### success_count 
+                    0, ### failure_count 
+                    None, ### integrity_ok 
+                    None, ### integrity_ng 
+                    trigger_list[0].trigger_id, ### trigger_id 
+                ])
 
             ################################################################### 
             ### DBアクセス処理(0050)
@@ -338,14 +343,14 @@ class Command(BaseCommand):
             ### (1)成功の場合は、次のトリガーを発行する。
             ### (2)失敗の場合は、次のトリガーを発行しない。
             ################################################################### 
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 6/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 5/6.', 'INFO')
             connection_cursor.execute("""
                 INSERT INTO TRIGGER (
                     trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
                     published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
                     download_file_path, download_file_name, upload_file_path, upload_file_name 
                 ) VALUES (
-                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                    (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
                     %s, -- suigai_id 
                     %s, -- action_code 
                     %s, -- status_code 
@@ -364,50 +369,26 @@ class Command(BaseCommand):
                     %s  -- upload_file_name 
                 )""", [
                     trigger_list[0].suigai_id, ### suigai_id 
-                    ### action_code 
-                    ### status_code 
-                    ### success_count 
-                    ### failure_count 
-                    ### consumed_at 
-                    ### deleted_at 
-                    ### integrity_ok 
-                    ### integrity_ng 
-                    ### ken_code 
-                    ### city_code 
-                    ### download_file_path 
-                    ### download_file_name  
-                    ### upload_file_path 
-                    ### upload_file_name 
+                    '8', ### action_code 
+                    None, ### status_code 
+                    None, ### success_count 
+                    None, ### failure_count 
+                    None, ### consumed_at 
+                    None, ### deleted_at 
+                    None, ### integrity_ok 
+                    None, ### integrity_ng 
+                    trigger_list[0].ken_code, ### ken_code 
+                    trigger_list[0].city_code, ### city_code 
+                    trigger_list[0].download_file_path, ### download_file_path 
+                    trigger_list[0].download_file_name, ### download_file_name  
+                    trigger_list[0].upload_file_path, ### upload_file_path 
+                    trigger_list[0].upload_file_name, ### upload_file_name 
                 ])
-
-            ################################################################### 
-            ### DBアクセス処理(0060)
-            ### 当該トリガーの実行が終了したため、当該レポジトリの状態、成功数、失敗数等を更新する。
-            ### (1)成功の場合は、ステータスを 3 に更新する。
-            ### (2)失敗の場合は、ステータスを 4 に更新する。
-            ################################################################### 
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 7/9.', 'INFO')
-            print_log('repository_id_list[0] = {}'.format(repository_id_list[0]), 'INFO')
-            connection_cursor.execute("""
-                UPDATE REPOSITORY SET 
-                    action_code='6', 
-                    status_code='3', 
-                    updated_at=CURRENT_TIMESTAMP 
-                WHERE 
-                    repository_id=%s AND 
-                    deleted_at IS NULL""", [
-                    repository_id_list[0],])
-
-            ################################################################### 
-            ### DBアクセス処理(0070)
-            ################################################################### 
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 8/9.', 'INFO')
-            transaction.commit()
             
             ###################################################################
-            ### 戻り値セット処理(0080)
+            ### 戻り値セット処理(0060)
             ###################################################################
-            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 9/9.', 'INFO')
+            print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数 STEP 6/6.', 'INFO')
             print_log('[INFO] P0900Action.action_07_summarize_sdb.handle()関数が正常終了しました。', 'INFO')
             return 0
         

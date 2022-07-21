@@ -20,7 +20,7 @@ urlpatterns = [
     path('P0400OnlineDisplay/', include('P0400OnlineDisplay.urls')),
     path('P0500OnlineUpdate/', include('P0500OnlineUpdate.urls')),
 
-    ### Reverse Verification Applications
+    ### Reverse Applications
     path('P0800Reverse/', include('P0800Reverse.urls')),
     
     ### Action Applications
