@@ -123,61 +123,67 @@
     <!-- BEGIN 画面名 -->
     <div class="container text-center mb-3">
         {% if trigger.0.failure_count|floatformat:"0" == "0" %}
-            {% if trigger.0.action_code == "1" %}
-            <h3>WF1 ダウンロード 成功</h3>
-            {% elif trigger.0.action_code == "2" %}
-            <h3>WF2 アップロード 成功</h3>
-            {% elif trigger.0.action_code == "3" %}
-            <h3>WF3 データ検証 成功</h3>
-            {% elif trigger.0.action_code == "4" %}
-            <h3>WF4 差分検証 成功</h3>
-            {% elif trigger.0.action_code == "5" %}
-            <h3>WF5 按分処理 成功</h3>
-            {% elif trigger.0.action_code == "6" %}
-            <h3>WF6 データ検証 成功</h3>
-            {% elif trigger.0.action_code == "7" %}
-            <h3>WF7 集計処理 成功</h3>
-            {% elif trigger.0.action_code == "8" %}
-            <h3>WF8 データ検証 成功</h3>
-            {% elif trigger.0.action_code == "9" %}
-            <h3>WF9 水害区域図 成功</h3>
-            {% elif trigger.0.action_code == "10" %}
-            <h3>WF10 水害区域図貼付け 成功</h3>
-            {% elif trigger.0.action_code == "11" %}
-            <h3>WF11 集計処理 成功</h3>
-            {% elif trigger.0.action_code == "12" %}
-            <h3>WF12 データ検証 成功</h3>
-            {% elif trigger.0.action_code == "13" %}
-            <h3>WF13 マニュアル検証待ち 成功</h3>
+            {% if trigger.0.action_code == "A01" %}
+            <h3>A01 ダウンロード 成功</h3>
+            {% elif trigger.0.action_code == "A02" %}
+            <h3>A02 アップロード 成功</h3>
+            {% elif trigger.0.action_code == "A03" %}
+            <h3>A03 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "A04" %}
+            <h3>A04 差分検証 成功</h3>
+            {% elif trigger.0.action_code == "A05" %}
+            <h3>A05 按分処理 成功</h3>
+            {% elif trigger.0.action_code == "A06" %}
+            <h3>A06 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "A07" %}
+            <h3>A07 集計処理 成功</h3>
+            {% elif trigger.0.action_code == "A08" %}
+            <h3>A08 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "A99" %}
+            <h3>A99 マニュアル検証待ち 成功</h3>
+            
+            {% elif trigger.0.action_code == "B01" %}
+            <h3>B01 水害区域図 成功</h3>
+            {% elif trigger.0.action_code == "B02" %}
+            <h3>B02 水害区域図貼付け 成功</h3>
+            {% elif trigger.0.action_code == "B03" %}
+            <h3>B03 集計処理 成功</h3>
+            {% elif trigger.0.action_code == "B04" %}
+            <h3>B04 データ検証 成功</h3>
+            {% elif trigger.0.action_code == "B99" %}
+            <h3>B99 マニュアル検証待ち 成功</h3>
             {% else %}
             {% endif %}
         {% else %}
-            {% if trigger.0.action_code == "1" %}
-            <h3>WF1 ダウンロード 失敗</h3>
-            {% elif trigger.0.action_code == "2" %}
-            <h3>WF2 アップロード 失敗</h3>
-            {% elif trigger.0.action_code == "3" %}
-            <h3>WF3 データ検証 失敗</h3>
-            {% elif trigger.0.action_code == "4" %}
-            <h3>WF4 差分検証 失敗</h3>
-            {% elif trigger.0.action_code == "5" %}
-            <h3>WF5 按分処理 失敗</h3>
-            {% elif trigger.0.action_code == "6" %}
-            <h3>WF6 データ検証 失敗</h3>
-            {% elif trigger.0.action_code == "7" %}
-            <h3>WF7 集計処理 失敗</h3>
-            {% elif trigger.0.action_code == "8" %}
-            <h3>WF8 データ検証 失敗</h3>
-            {% elif trigger.0.action_code == "9" %}
-            <h3>WF9 水害区域図 失敗</h3>
-            {% elif trigger.0.action_code == "10" %}
-            <h3>WF10 水害区域図貼付け 失敗</h3>
-            {% elif trigger.0.action_code == "11" %}
-            <h3>WF11 集計処理 失敗</h3>
-            {% elif trigger.0.action_code == "12" %}
-            <h3>WF12 データ検証 失敗</h3>
-            {% elif trigger.0.action_code == "13" %}
-            <h3>WF13 マニュアル検証待ち 失敗</h3>
+            {% if trigger.0.action_code == "A01" %}
+            <h3>A01 ダウンロード 失敗</h3>
+            {% elif trigger.0.action_code == "A02" %}
+            <h3>A02 アップロード 失敗</h3>
+            {% elif trigger.0.action_code == "A03" %}
+            <h3>A03 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "A04" %}
+            <h3>A04 差分検証 失敗</h3>
+            {% elif trigger.0.action_code == "A05" %}
+            <h3>A05 按分処理 失敗</h3>
+            {% elif trigger.0.action_code == "A06" %}
+            <h3>A06 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "A07" %}
+            <h3>A07 集計処理 失敗</h3>
+            {% elif trigger.0.action_code == "A08" %}
+            <h3>A08 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "A99" %}
+            <h3>A99 マニュアル検証待ち 失敗</h3>
+            
+            {% elif trigger.0.action_code == "B01" %}
+            <h3>B01 水害区域図 失敗</h3>
+            {% elif trigger.0.action_code == "B02" %}
+            <h3>B02 水害区域図貼付け 失敗</h3>
+            {% elif trigger.0.action_code == "B03" %}
+            <h3>B03 集計処理 失敗</h3>
+            {% elif trigger.0.action_code == "B04" %}
+            <h3>B04 データ検証 失敗</h3>
+            {% elif trigger.0.action_code == "B99" %}
+            <h3>B99 マニュアル検証待ち 失敗</h3>
             {% else %}
             {% endif %}
         {% endif %}
@@ -340,7 +346,7 @@
                                 情報ログ
                             </div>
                             <div class="col-sm-6 text-center">
-                                エラーログ
+                                警告ログ
                             </div>
                         </div>
                         <div class="row">

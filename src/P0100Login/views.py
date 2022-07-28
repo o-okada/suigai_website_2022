@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0100Login/views.py
+### ログイン
 ###############################################################################
 
 ###############################################################################
@@ -17,7 +18,13 @@ from django.http import HttpResponseRedirect                                   #
 from django.shortcuts import render                                            ### レンダリングモジュール
 from django.template import loader                                             ### テンプレート読み込みモジュール
 from django.views import generic                                               ### モジュール
-from P0000Common.common import print_log                                       ### ログ出力モジュール
+
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
+from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -31,9 +38,9 @@ def index_view(request):
         ### 引数チェック処理
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0100Login.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0100Login.index_view()関数 request = {}'.format(request.method), 'INFO')
+        print_log('[DEBUG] P0100Login.index_view()関数 request = {}'.format(request.method), 'DEBUG')
 
         ### ログイン中、ログアウト中にかかわらずに、ログアウトする。
         logout(request)
@@ -54,9 +61,9 @@ def index_view(request):
             ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
             ###################################################################
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
-            print_log('[INFO] P0100Login.index_view()関数 request.POST.username = {}'.format(request.POST['username']), 'INFO')
-            print_log('[INFO] P0100Login.index_view()関数 request.POST.password = {}'.format(request.POST['password']), 'INFO')
-            print_log('[INFO] P0100Login.index_view()関数 user = {}'.format(user), 'INFO')
+            print_log('[DEBUG] P0100Login.index_view()関数 request.POST.username = {}'.format(request.POST['username']), 'DEBUG')
+            print_log('[DEBUG] P0100Login.index_view()関数 request.POST.password = {}'.format(request.POST['password']), 'DEBUG')
+            print_log('[DEBUG] P0100Login.index_view()関数 user = {}'.format(user), 'DEBUG')
                 
             ###################################################################
             ### レスポンスセット処理
@@ -68,23 +75,23 @@ def index_view(request):
                 if user.is_active:
                     ### ユーザが活性（有効）の場合、、、
                     login(request, user)
-                    print_log('[INFO] P0100Login.index_view()関数が正常終了しました。0', 'INFO')
+                    print_log('[INFO] P0100Login.index_view()関数が正常終了しました。', 'INFO')
                     ### return HttpResponseRedirect('/P0100File/R4/')
                     return HttpResponseRedirect('/P0100File/type/ippan/')
                 else:
                     ### ユーザが非活性（無効）の場合、、、
                     template = loader.get_template('P0100Login/index.html')
                     context = {'message': 'ログインに失敗しました。'}
-                    print_log('[WARN] P0100Login.index_view()関数が警告終了しました。1', 'INFO')
+                    print_log('[WARN] P0100Login.index_view()関数が警告終了しました。', 'WARN')
                     return HttpResponse(template.render(context, request))
             else:
                 ### 認証に失敗した場合、、、
                 template = loader.get_template('P0100Login/index.html')
                 context = {'message': 'ログインに失敗しました。'}
-                print_log('[WARN] P0100Login.index_view()関数が警告終了しました。2', 'INFO')
+                print_log('[WARN] P0100Login.index_view()関数が警告終了しました。', 'WARN')
                 return HttpResponse(template.render(context, request))
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0100Login.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100Login.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0100Login.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

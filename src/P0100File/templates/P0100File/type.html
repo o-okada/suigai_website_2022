@@ -8,7 +8,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>ファイル画面 | 水害統計オンラインサイト</title>
+    {% if type_code == "ippan" %}
+    <title>一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    {% elif type_code == "area" %}
+    <title>水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
+    {% elif type_code == "kokyo" %}
+    <title>公共土木調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    {% elif type_code == "koeki" %}
+    <title>公益事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -121,7 +129,8 @@
         <!-- BEGIN 行 -->
         <div class="row">
             <!-- BEGIN 左列 -->
-            <div class="col-sm-9">
+            <!--<div class="col-sm-9">-->
+            <div class="col-12">
                 <!-- BEGIN 行 -->
                 <div class="row mb-3">
                     <!-- BEGIN パンくずリスト -->
@@ -268,58 +277,55 @@
             <!-- END 左列 -->
                     
             <!-- BEGIN 右列 -->
-            <div class="col-sm-3">
+            <!--<div class="col-sm-3">-->
                 <!-- BEGIN バッジ -->
-                <button type="button" class="btn btn-danger mb-3">
-                    失敗 <div class="badge bg-light text-dark">{{ feedback_count }}</div>
-                </button>
-                <button type="button" class="btn btn-warning mb-3">
-                    警告 <div class="badge bg-light text-dark">1</div>
-                </button>
-                <button type="button" class="btn btn-success mb-3">
-                    成功 <div class="badge bg-light text-dark">{{ approval_count }}</div>
-                </button>
+            <!--    <button type="button" class="btn btn-danger mb-3">-->
+            <!--        失敗 <div class="badge bg-light text-dark">{{ feedback_count }}</div>-->
+            <!--    </button>-->
+            <!--    <button type="button" class="btn btn-warning mb-3">-->
+            <!--        警告 <div class="badge bg-light text-dark">1</div>-->
+            <!--    </button>-->
+            <!--    <button type="button" class="btn btn-success mb-3">-->
+            <!--        成功 <div class="badge bg-light text-dark">{{ approval_count }}</div>-->
+            <!--    </button>-->
                 <!-- END バッジ -->
-                
                 <!-- BEGIN カード -->
-                <div class="card mb-3 border-0">
-                    <div class="card-header border-0 bg-white">
-                    失敗
-                    </div>
-                    <div class="card-body border-bottom bg-white">
-                        {% for feedback in feedback_list %}
-                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
+            <!--    <div class="card mb-3 border-0">-->
+            <!--        <div class="card-header border-0 bg-white">-->
+            <!--        失敗-->
+            <!--        </div>-->
+            <!--        <div class="card-body border-bottom bg-white">-->
+            <!--            {% for feedback in feedback_list %}-->
+            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
+            <!--            {% endfor %}-->
+            <!--        </div>-->
+            <!--    </div>-->
                 <!-- END カード -->
-                
                 <!-- BEGIN カード -->
-                <div class="card mb-3 border-0">
-                    <div class="card-header border-0 bg-white">
-                    警告
-                    </div>
-                    <div class="card-body border-bottom bg-white">
-                        {% for feedback in feedback_list %}
-                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
+            <!--    <div class="card mb-3 border-0">-->
+            <!--        <div class="card-header border-0 bg-white">-->
+            <!--        警告-->
+            <!--        </div>-->
+            <!--        <div class="card-body border-bottom bg-white">-->
+            <!--            {% for feedback in feedback_list %}-->
+            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
+            <!--            {% endfor %}-->
+            <!--        </div>-->
+            <!--    </div>-->
                 <!-- END カード -->
-                
                 <!-- BEGIN カード -->
-                <div class="card mb-3 border-0">
-                    <div class="card-header border-0 bg-white">
-                    成功・承認待ち
-                    </div>
-                    <div class="card-body bg-white">
-                        {% for feedback in feedback_list %}
-                        <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
+            <!--    <div class="card mb-3 border-0">-->
+            <!--        <div class="card-header border-0 bg-white">-->
+            <!--        成功・承認待ち-->
+            <!--        </div>-->
+            <!--        <div class="card-body bg-white">-->
+            <!--            {% for feedback in feedback_list %}-->
+            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
+            <!--            {% endfor %}-->
+            <!--        </div>-->
+            <!--    </div>-->
                 <!-- END カード -->
-            </div>
+            <!--</div>-->
             <!-- END 右列 -->
         </div>
         <!-- END 行 -->

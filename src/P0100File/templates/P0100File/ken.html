@@ -8,7 +8,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>ファイル画面 | 水害統計オンラインサイト</title>
+    {% if type_code == "ippan" %}
+    <title>一般資産調査員調査票 | 水害統計オンラインサイト</title>
+    {% elif type_code == "area" %}
+    <title>水害区域図 | 水害統計オンラインサイト</title>
+    {% elif type_code == "kokyo" %}
+    <title>公共土木調査票 | 水害統計オンラインサイト</title>
+    {% elif type_code == "koeki" %}
+    <title>公益事業調査票 | 水害統計オンラインサイト</title>
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

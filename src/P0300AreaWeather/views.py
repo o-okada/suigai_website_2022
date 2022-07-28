@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0300AreaWeather/views.py
+### 水害区域図、異常気象
 ###############################################################################
 
 ###############################################################################
@@ -75,7 +76,12 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -90,15 +96,15 @@ def index_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0300AreaWeather.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request.ken_code_hidden = {}'.format(request.POST.get('ken_code_hidden')), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request.city_code_hidden = {}'.format(request.POST.get('city_code_hidden')), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request.suigai_id_hidden = {}'.format(request.POST.get('suigai_id_hidden')), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request.area_id_hidden = {}'.format(request.POST.get('area_id_hidden')), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 request.weather_id_hidden = {}'.format(request.POST.get('weather_id_hidden')), 'INFO')
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 1/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request.ken_code_hidden = {}'.format(request.POST.get('ken_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request.city_code_hidden = {}'.format(request.POST.get('city_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request.suigai_id_hidden = {}'.format(request.POST.get('suigai_id_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request.area_id_hidden = {}'.format(request.POST.get('area_id_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 request.weather_id_hidden = {}'.format(request.POST.get('weather_id_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 1/6.', 'DEBUG')
 
         #######################################################################
         ### 条件分岐処理(0010)
@@ -106,7 +112,7 @@ def index_view(request):
         ### (2)POSTの場合、水害区域番号、異常気象コードをDBの水害テーブルに更新で登録する。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 2/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 2/6.', 'DEBUG')
         if request.method == 'GET':
             ### ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
             template = loader.get_template('P0300AreaWeather/index.html')
@@ -123,7 +129,7 @@ def index_view(request):
         ### フォーム検証処理(0020)
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 3/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 3/6.', 'DEBUG')
         if request.POST.get('suigai_id_hidden') is None:
             print_log('[ERROR] P0300AreaWeather.index_view()関数でエラーが発生しました。', 'ERROR')
             return render(request, 'error.html')
@@ -157,11 +163,13 @@ def index_view(request):
         ### DBアクセス処理(0030)
         ### DBにアクセスして、データを登録する。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 4/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4/6.', 'DEBUG')
         connection_cursor = connection.cursor()
         try:
+            connection_cursor.execute("""BEGIN""", [])
+            
             if request.POST.get('area_id_hidden') is None and request.POST.get('weather_id_hidden') is None:
-                print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 4_1/7.', 'INFO')
+                print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_1/6.', 'DEBUG')
                 connection_cursor.execute("""
                     UPDATE SUIGAI SET 
                         area_id=NULL, 
@@ -169,7 +177,7 @@ def index_view(request):
                     WHERE suigai_id=%s""", [suigai_id, ])
                 
             elif request.POST.get('area_id_hidden') is None and request.POST.get('weather_id_hidden') is not None:
-                print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 4_2/7.', 'INFO')
+                print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_2/6.', 'DEBUG')
                 connection_cursor.execute("""
                     UPDATE SUIGAI SET 
                         area_id=NULL, 
@@ -177,7 +185,7 @@ def index_view(request):
                     WHERE suigai_id=%s""", [weather_id, suigai_id, ])
                 
             elif request.POST.get('area_id_hidden') is not None and request.POST.get('weather_id_hidden') is None:
-                print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 4_3/7.', 'INFO')
+                print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_3/6.', 'DEBUG')
                 connection_cursor.execute("""
                     UPDATE SUIGAI SET 
                         area_id=%s, 
@@ -185,18 +193,100 @@ def index_view(request):
                     WHERE suigai_id=%s""", [area_id, suigai_id, ])
                 
             elif request.POST.get('area_id_hidden') is not None and request.POST.get('weather_id_hidden') is not None:
-                print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 4_4/7.', 'INFO')
+                print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_4/6.', 'DEBUG')
                 connection_cursor.execute("""
                     UPDATE SUIGAI SET 
                         area_id=%s, 
                         weather_id=%s 
                     WHERE suigai_id=%s""", [area_id, weather_id, suigai_id, ])
-        
-            print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 5/7.', 'INFO')
-            transaction.commit()
-                    
+
+            ### トリガーテーブルにWF10水害区域図貼付けトリガーを実行済、成功として登録する。
+            connection_cursor.execute("""
+                INSERT INTO TRIGGER (
+                    trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, 
+                    city_code, download_file_path, download_file_name, upload_file_path, upload_file_name 
+                ) VALUES (
+                    (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                    %s, -- suigai_id 
+                    %s, -- action_code 
+                    %s, -- status_code 
+                    %s, -- success_count 
+                    %s, -- failure_count 
+                    CURRENT_TIMESTAMP, -- published_at 
+                    CURRENT_TIMESTAMP, -- consumed_at 
+                    %s, -- deleted_at 
+                    %s, -- integrity_ok 
+                    %s, -- integrity_ng 
+                    %s, -- ken_code 
+                    %s, -- city_code 
+                    %s, -- download_file_path 
+                    %s, -- download_file_name 
+                    %s, -- upload_file_path 
+                    %s  -- upload_file_name 
+                )""", [
+                    suigai_id, ### suigai_id 
+                    'B02', ### action_code 
+                    'SUCCESS', ### status_code 
+                    1, ### success_count
+                    0, ### failure_count
+                    None, ### deleted_at 
+                    '\n'.join(get_info_log()), ### integrity_ok 
+                    '\n'.join(get_warn_log()), ### integrity_ng 
+                    ken_code, ### ken_code 
+                    ciy_code, ### city_code 
+                    None, ### download_file_path 
+                    None, ### download_file_name 
+                    None, ### upload_file_path 
+                    None, ### upload_file_name 
+                ])
+            ### トリガーテーブルにWF11集計処理トリガーを未実行＝次回実行対象として登録する。
+            connection_cursor.execute("""
+                INSERT INTO TRIGGER (
+                    trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, 
+                    city_code, download_file_path, download_file_name, upload_file_path, upload_file_name 
+                ) VALUES (
+                    (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                    %s, -- suigai_id 
+                    %s, -- action_code 
+                    %s, -- status_code 
+                    %s, -- success_count 
+                    %s, -- failure_count 
+                    CURRENT_TIMESTAMP, -- published_at 
+                    %s, -- consumed_at 
+                    %s, -- deleted_at 
+                    %s, -- integrity_ok 
+                    %s, -- integrity_ng 
+                    %s, -- ken_code 
+                    %s, -- city_code 
+                    %s, -- download_file_path 
+                    %s, -- download_file_name 
+                    %s, -- upload_file_path 
+                    %s  -- upload_file_name 
+                )""", [
+                    suigai_id, ### suigai_id 
+                    'B03', ### action_code 
+                    None, ### status_code 
+                    None, ### success_count
+                    None, ### failure_count
+                    None, ### consumed_at
+                    None, ### deleted_at 
+                    None, ### integrity_ok 
+                    None, ### integrity_ng 
+                    ken_code, ### ken_code 
+                    city_code, ### city_code 
+                    None, ### download_file_path 
+                    None, ### download_file_name 
+                    None, ### upload_file_path 
+                    None, ### upload_file_name 
+                ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])                    
         except:
-            connection_cursor.rollback()
+            print_log('[ERROR] P0300AreaWeather.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
         finally:
             connection_cursor.close()
 
@@ -204,7 +294,7 @@ def index_view(request):
         ### DBアクセス処理(0040)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 6/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 5/6.', 'DEBUG')
         if suigai_id == "0":
             suigai_list = []
         else:
@@ -307,7 +397,7 @@ def index_view(request):
         ### レスポンスセット処理(0050)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.index_view()関数 STEP 7/7.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 6/6.', 'DEBUG')
         template = loader.get_template('P0300AreaWeather/index.html')
         context = {
             'type_code': 'ippan', 
@@ -319,9 +409,8 @@ def index_view(request):
         }
         print_log('[INFO] P0300AreaWeather.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
-    
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300AreaWeather.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0300AreaWeather.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0300AreaWeather.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -338,18 +427,18 @@ def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 ken_code = {}'.format(ken_code), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 suigai_id = {}'.format(suigai_id), 'DEBUG')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 2/3.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 STEP 2/3.', 'DEBUG')
         if suigai_id == "0":
             suigai_list = []
         else:
@@ -452,7 +541,7 @@ def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0300AreaWeather.type_ken_suigai_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0300AreaWeather.type_ken_suigai_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0300AreaWeather/index.html')
         context = {
             'type_code': type_code, 
@@ -466,7 +555,7 @@ def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300AreaWeather.type_ken_suigai_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0300AreaWeather.type_ken_suigai_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0300AreaWeather.type_ken_suigai_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

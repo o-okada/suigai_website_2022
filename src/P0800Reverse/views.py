@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0800Reverse/views.py
+### データ整合性検証
 ###############################################################################
 
 ###############################################################################
@@ -67,7 +68,12 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデー
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：input_view
@@ -81,16 +87,16 @@ def input_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0800Reverse.input_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0800Reverse.input_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0800Reverse.input_view()関数 STEP 1/2.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.input_view()関数 STEP 1/2.', 'DEBUG')
 
         #######################################################################
         ### レスポンスセット処理(0010)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0800Reverse.input_view()関数 STEP 2/2.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_view()関数 STEP 2/2.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         template = loader.get_template('P0800Reverse/input.html')
         context = {
@@ -100,7 +106,7 @@ def input_view(request):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0800Reverse.input_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0800Reverse.input_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0800Reverse.input_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -117,16 +123,16 @@ def summary_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0800Reverse.summary_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0800Reverse.summary_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0800Reverse.summary_view()関数 STEP 1/2.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.summary_view()関数 STEP 1/2.', 'DEBUG')
 
         #######################################################################
         ### レスポンスセット処理(0010)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0800Reverse.summary_view()関数 STEP 2/2.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_view()関数 STEP 2/2.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         template = loader.get_template('P0800Reverse/summary.html')
         context = {
@@ -136,7 +142,7 @@ def summary_view(request):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0800Reverse.summary_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0800Reverse.summary_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0800Reverse.summary_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -153,13 +159,13 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 category_code = {}'.format(category_code), 'INFO')
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 STEP 1/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 ken_code = {}'.format(ken_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 city_code = {}'.format(city_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 category_code = {}'.format(category_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 STEP 1/5.', 'DEBUG')
 
         #######################################################################
         ### DBアクセス処理(0010)
@@ -175,13 +181,13 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         ###                   農漁家戸数 x 農漁家の在庫資産 x 浸水または土砂ごとの被害率
         ### (8)事業所応急対策費 = 事業所数 x 代替活動費
         #######################################################################
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 STEP 2/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 STEP 2/5.', 'DEBUG')
 
         #######################################################################
         ### DBアクセス処理(0020)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 STEP 3/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 STEP 3/5.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_code == '0':
             city_list = []
@@ -194,144 +200,14 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         ### DBにアクセスして、データを取得する。
         ### 延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
         ####################################################################### 
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 STEP 4/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 STEP 4/5.', 'DEBUG')
         ippan_reverse_list = None
-        ### ippan_reverse_list = IPPAN_VIEW.objects.raw("""
-        ###     SELECT 
-        ###         IV1.ippan_id AS ippan_id, 
-        ###         IV1.ippan_name AS ippan_name, 
-        ###         IV1.suigai_id AS suigai_id, 
-        ###         IV1.suigai_name AS suigai_name, 
-        ###         IV1.ken_code AS ken_code, 
-        ###         IV1.ken_name AS ken_name, 
-        ###         IV1.city_code AS city_code, 
-        ###         IV1.city_name AS city_name, 
-        ###         IV1.cause_1_code AS cause_1_code, 
-        ###         IV1.cause_1_name AS cause_1_name, 
-        ###         IV1.cause_2_code AS cause_2_code, 
-        ###         IV1.cause_2_name AS cause_2_name, 
-        ###         IV1.cause_3_code AS cause_3_code, 
-        ###         IV1.cause_3_name AS cause_3_name, 
-        ###         IV1.area_id AS area_id, 
-        ###         IV1.area_name AS area_name, 
-                
-        ###         IV1.suikei_code AS suikei_code, 
-        ###         IV1.suikei_name AS suikei_name, 
-        ###         IV1.kasen_code AS kasen_code, 
-        ###         IV1.kasen_name AS kasen_name, 
-        ###         IV1.gradient_code AS gradient_code, 
-        ###         IV1.gradient_name AS gradient_name, 
-
-        ###         IV1.residential_area AS residential_area, 
-        ###         IV1.agricultural_area AS agricultural_area, 
-        ###         IV1.underground_area AS underground_area, 
-        ###         IV1.kasen_kaigan_code AS kasen_kaigan_code, 
-        ###         IV1.kasen_kaigan_name AS kasen_kaigan_name, 
-        ###         IV1.crop_damage AS crop_damage, 
-        ###         IV1.weather_id AS weather_id, 
-        ###         IV1.weather_name AS weather_name, 
-                
-        ###         IV1.building_code AS building_code, 
-        ###         IV1.building_name AS building_name, 
-        ###         IV1.underground_code AS underground_code, 
-        ###         IV1.underground_name AS underground_name, 
-        ###         IV1.flood_sediment_code AS flood_sediment_code, 
-        ###         IV1.flood_sediment_name AS flood_sediment_name, 
-                
-        ###         IV1.building_lv00 AS building_lv00, 
-        ###         IV1.building_lv01_49 AS building_lv01_49, 
-        ###         IV1.building_lv50_99 AS building_lv50_99, 
-        ###         IV1.building_lv100 AS building_lv100, 
-        ###         IV1.building_half AS building_half, 
-        ###         IV1.building_full AS building_full, 
-        ###         IV1.building_total AS building_total, 
- 
-        ###         IV1.floor_area AS floor_area, 
-        ###         IV1.family AS family, 
-        ###         IV1.office AS office, 
-
-        ###         IV1.floor_area_lv00 AS floor_area_lv00, 
-        ###         IV1.floor_area_lv01_49 AS floor_area_lv01_49, 
-        ###         IV1.floor_area_lv50_99 AS floor_area_lv50_99, 
-        ###         IV1.floor_area_lv100 AS floor_area_lv100, 
-        ###         IV1.floor_area_half AS floor_area_half, 
-        ###         IV1.floor_area_full AS floor_area_full, 
-        ###         IV1.floor_area_total AS floor_area_total, 
-                
-        ###         IV1.family_lv00 AS family_lv00, 
-        ###         IV1.family_lv01_49 AS family_lv01_49, 
-        ###         IV1.family_lv50_99 AS family_lv50_99, 
-        ###         IV1.family_lv100 AS family_lv100, 
-        ###         IV1.family_half AS family_half, 
-        ###         IV1.family_full AS family_full, 
-        ###         IV1.family_total AS family_total, 
-               
-        ###         IV1.office_lv00 AS office_lv00, 
-        ###         IV1.office_lv01_49 AS office_lv01_49, 
-        ###         IV1.office_lv50_99 AS office_lv50_99, 
-        ###         IV1.office_lv100 AS office_lv100, 
-        ###         IV1.office_half AS office_half, 
-        ###         IV1.office_full AS office_full, 
-        ###         IV1.office_total AS office_total, 
-
-        ###         IV1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
-        ###         IV1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
-        ###         IV1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
-        ###         IV1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
-        ###         -- IV1.farmer_fisher_half AS farmer_fisher_half, 
-        ###         IV1.farmer_fisher_full AS farmer_fisher_full, 
-        ###         IV1.farmer_fisher_total AS farmer_fisher_total, 
-
-        ###         IV1.employee_lv00 AS employee_lv00, 
-        ###         IV1.employee_lv01_49 AS employee_lv01_49, 
-        ###         IV1.employee_lv50_99 AS employee_lv50_99, 
-        ###         IV1.employee_lv100 AS employee_lv100, 
-        ###         -- IV1.employee_half AS employee_half, 
-        ###         IV1.employee_full AS employee_full,
-        ###         IV1.employee_total AS employee_total, 
-
-        ###         IV1.industry_code AS industry_code, 
-        ###         IV1.industry_name AS industry_name, 
-        ###         IV1.usage_code AS usage_code,
-        ###         IV1.usage_name AS usage_name, 
-
-        ###         -- 被害建物の延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv00 / IV1.floor_area_total) END AS building_lv00_reverse_floor_area, 
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv01_49 / IV1.floor_area_total) END AS building_lv01_49_reverse_floor_area, 
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv50_99 / IV1.floor_area_total) END AS building_lv50_99_reverse_floor_area, 
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv100 / IV1.floor_area_total) END AS building_lv100_reverse_floor_area, 
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_half / IV1.floor_area_total) END AS building_half_reverse_floor_area, 
-        ###         CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_full / IV1.floor_area_total) END AS building_full_reverse_floor_area, 
-
-        ###         -- 被災世帯数(入力DB)から逆計算により被害建物棟数を求めた結果
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv00 / IV1.family_total) END AS building_lv00_reverse_family, 
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv01_49 / IV1.family_total) END AS building_lv01_49_reverse_family, 
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv50_99 / IV1.family_total) END AS building_lv50_99_reverse_family, 
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv100 / IV1.family_total) END AS building_lv100_reverse_family, 
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_half / IV1.family_total) END AS building_half_reverse_family, 
-        ###         CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_full / IV1.family_total) END AS building_full_reverse_family, 
-
-        ###         -- 被災事業所数(入力DB)から逆計算により被害建物棟数を求めた結果
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv00 / IV1.office_total) END AS building_lv00_reverse_office, 
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv01_49 / IV1.office_total) END AS building_lv01_49_reverse_office, 
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv50_99 / IV1.office_total) END AS building_lv50_99_reverse_office, 
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv100 / IV1.office_total) END AS building_lv100_reverse_office, 
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_half / IV1.office_total) END AS building_half_reverse_office, 
-        ###         CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_full / IV1.office_total) END AS building_full_reverse_office 
-                
-        ###     FROM IPPAN_VIEW IV1 
-        ###     WHERE IV1.ken_code=%s AND IV1.city_code=%s 
-        ###     ORDER BY CAST(IV1.ippan_id AS INTEGER)""", [ken_code, city_code, ])
-
         if ken_code == "0" and city_code == "0":
             pass
-        
         elif ken_code == "0" and city_code != "0":
             pass
-        
         elif ken_code != "0" and city_code == "0":
             pass
-        
         elif ken_code != "0" and city_code != "0":
             ippan_reverse_list = IPPAN_VIEW.objects.raw("""
                 SELECT 
@@ -343,6 +219,8 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.ken_name AS ken_name, 
                     IV1.city_code AS city_code, 
                     IV1.city_name AS city_name, 
+                    TO_CHAR(timezone('JST', IV1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+                    TO_CHAR(timezone('JST', IV1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
                     IV1.cause_1_code AS cause_1_code, 
                     IV1.cause_1_name AS cause_1_name, 
                     IV1.cause_2_code AS cause_2_code, 
@@ -359,15 +237,14 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.gradient_code AS gradient_code, 
                     IV1.gradient_name AS gradient_name, 
     
-                    IV1.residential_area AS residential_area, 
-                    IV1.agricultural_area AS agricultural_area, 
-                    IV1.underground_area AS underground_area, 
+                    CASE WHEN (IV1.residential_area) IS NULL THEN 0.0 ELSE CAST(IV1.residential_area AS NUMERIC(20,10)) END AS residential_area, 
+                    CASE WHEN (IV1.agricultural_area) IS NULL THEN 0.0 ELSE CAST(IV1.agricultural_area AS NUMERIC(20,10)) END AS agricultural_area, 
+                    CASE WHEN (IV1.underground_area) IS NULL THEN 0.0 ELSE CAST(IV1.underground_area AS NUMERIC(20,10)) END AS underground_area, 
                     IV1.kasen_kaigan_code AS kasen_kaigan_code, 
                     IV1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    IV1.crop_damage AS crop_damage, 
+                    CASE WHEN (IV1.crop_damage) IS NULL THEN 0.0 ELSE CAST(IV1.crop_damage AS NUMERIC(20,10)) END AS crop_damage, 
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
-                    
                     IV1.file_path AS file_path, 
                     IV1.file_name AS file_name, 
                     
@@ -378,91 +255,96 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.flood_sediment_code AS flood_sediment_code, 
                     IV1.flood_sediment_name AS flood_sediment_name, 
                     
-                    IV1.building_lv00 AS building_lv00, 
-                    IV1.building_lv01_49 AS building_lv01_49, 
-                    IV1.building_lv50_99 AS building_lv50_99, 
-                    IV1.building_lv100 AS building_lv100, 
-                    IV1.building_half AS building_half, 
-                    IV1.building_full AS building_full, 
-                    IV1.building_total AS building_total, 
+                    CASE WHEN (IV1.building_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv00 AS NUMERIC(20,10)) END AS building_lv00, 
+                    CASE WHEN (IV1.building_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv01_49 AS NUMERIC(20,10)) END AS building_lv01_49, 
+                    CASE WHEN (IV1.building_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv50_99 AS NUMERIC(20,10)) END AS building_lv50_99, 
+                    CASE WHEN (IV1.building_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv100 AS NUMERIC(20,10)) END AS building_lv100, 
+                    CASE WHEN (IV1.building_half) IS NULL THEN 0.0 ELSE CAST(IV1.building_half AS NUMERIC(20,10)) END AS building_half, 
+                    CASE WHEN (IV1.building_full) IS NULL THEN 0.0 ELSE CAST(IV1.building_full AS NUMERIC(20,10)) END AS building_full, 
+                    CASE WHEN (IV1.building_total) IS NULL THEN 0.0 ELSE CAST(IV1.building_total AS NUMERIC(20,10)) END AS building_total, 
      
-                    IV1.floor_area AS floor_area, 
-                    IV1.family AS family, 
-                    IV1.office AS office, 
+                    CASE WHEN (IV1.floor_area) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area AS NUMERIC(20,10)) END AS floor_area, 
+                    CASE WHEN (IV1.family) IS NULL THEN 0.0 ELSE CAST(IV1.family AS NUMERIC(20,10)) END AS family, 
+                    CASE WHEN (IV1.office) IS NULL THEN 0.0 ELSE CAST(IV1.office AS NUMERIC(20,10)) END AS office, 
     
-                    IV1.floor_area_lv00 AS floor_area_lv00, 
-                    IV1.floor_area_lv01_49 AS floor_area_lv01_49, 
-                    IV1.floor_area_lv50_99 AS floor_area_lv50_99, 
-                    IV1.floor_area_lv100 AS floor_area_lv100, 
-                    IV1.floor_area_half AS floor_area_half, 
-                    IV1.floor_area_full AS floor_area_full, 
-                    IV1.floor_area_total AS floor_area_total, 
+                    CASE WHEN (IV1.floor_area_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv00 AS NUMERIC(20,10)) END AS floor_area_lv00, 
+                    CASE WHEN (IV1.floor_area_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv01_49 AS NUMERIC(20,10)) END AS floor_area_lv01_49, 
+                    CASE WHEN (IV1.floor_area_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv50_99 AS NUMERIC(20,10)) END AS floor_area_lv50_99, 
+                    CASE WHEN (IV1.floor_area_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv100 AS NUMERIC(20,10)) END AS floor_area_lv100, 
+                    CASE WHEN (IV1.floor_area_half) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_half AS NUMERIC(20,10)) END AS floor_area_half, 
+                    CASE WHEN (IV1.floor_area_full) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_full AS NUMERIC(20,10)) END AS floor_area_full, 
+                    CASE WHEN (IV1.floor_area_total) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_total AS NUMERIC(20,10)) END AS floor_area_total, 
                     
-                    IV1.family_lv00 AS family_lv00, 
-                    IV1.family_lv01_49 AS family_lv01_49, 
-                    IV1.family_lv50_99 AS family_lv50_99, 
-                    IV1.family_lv100 AS family_lv100, 
-                    IV1.family_half AS family_half, 
-                    IV1.family_full AS family_full, 
-                    IV1.family_total AS family_total, 
+                    CASE WHEN (IV1.family_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv00 AS NUMERIC(20,10)) END AS family_lv00, 
+                    CASE WHEN (IV1.family_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv01_49 AS NUMERIC(20,10)) END AS family_lv01_49, 
+                    CASE WHEN (IV1.family_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv50_99 AS NUMERIC(20,10)) END AS family_lv50_99, 
+                    CASE WHEN (IV1.family_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv100 AS NUMERIC(20,10)) END AS family_lv100, 
+                    CASE WHEN (IV1.family_half) IS NULL THEN 0.0 ELSE CAST(IV1.family_half AS NUMERIC(20,10)) END AS family_half, 
+                    CASE WHEN (IV1.family_full) IS NULL THEN 0.0 ELSE CAST(IV1.family_full AS NUMERIC(20,10)) END AS family_full, 
+                    CASE WHEN (IV1.family_total) IS NULL THEN 0.0 ELSE CAST(IV1.family_total AS NUMERIC(20,10)) END AS family_total, 
                    
-                    IV1.office_lv00 AS office_lv00, 
-                    IV1.office_lv01_49 AS office_lv01_49, 
-                    IV1.office_lv50_99 AS office_lv50_99, 
-                    IV1.office_lv100 AS office_lv100, 
-                    IV1.office_half AS office_half, 
-                    IV1.office_full AS office_full, 
-                    IV1.office_total AS office_total, 
+                    CASE WHEN (IV1.office_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv00 AS NUMERIC(20,10)) END AS office_lv00, 
+                    CASE WHEN (IV1.office_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv01_49 AS NUMERIC(20,10)) END AS office_lv01_49, 
+                    CASE WHEN (IV1.office_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv50_99 AS NUMERIC(20,10)) END AS office_lv50_99, 
+                    CASE WHEN (IV1.office_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv100 AS NUMERIC(20,10)) END AS office_lv100, 
+                    CASE WHEN (IV1.office_half) IS NULL THEN 0.0 ELSE CAST(IV1.office_half AS NUMERIC(20,10)) END AS office_half, 
+                    CASE WHEN (IV1.office_full) IS NULL THEN 0.0 ELSE CAST(IV1.office_full AS NUMERIC(20,10)) END AS office_full, 
+                    CASE WHEN (IV1.office_total) IS NULL THEN 0.0 ELSE CAST(IV1.office_total AS NUMERIC(20,10)) END AS office_total, 
     
-                    IV1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
-                    IV1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
-                    IV1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
-                    IV1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
-                    -- IV1.farmer_fisher_half AS farmer_fisher_half, 
-                    IV1.farmer_fisher_full AS farmer_fisher_full, 
-                    IV1.farmer_fisher_total AS farmer_fisher_total, 
+                    CASE WHEN (IV1.farmer_fisher_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_lv00, 
+                    CASE WHEN (IV1.farmer_fisher_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv01_49 AS NUMERIC(20,10)) END AS farmer_fisher_lv01_49, 
+                    CASE WHEN (IV1.farmer_fisher_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv50_99 AS NUMERIC(20,10)) END AS farmer_fisher_lv50_99, 
+                    CASE WHEN (IV1.farmer_fisher_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv100 AS NUMERIC(20,10)) END AS farmer_fisher_lv100, 
+                    -- CASE WHEN (IV1.farmer_fisher_half) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_half AS NUMERIC(20,10)) END AS farmer_fisher_half, 
+                    CASE WHEN (IV1.farmer_fisher_full) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_full AS NUMERIC(20,10)) END AS farmer_fisher_full, 
+                    CASE WHEN (IV1.farmer_fisher_total) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_total AS NUMERIC(20,10)) END AS farmer_fisher_total, 
     
-                    IV1.employee_lv00 AS employee_lv00, 
-                    IV1.employee_lv01_49 AS employee_lv01_49, 
-                    IV1.employee_lv50_99 AS employee_lv50_99, 
-                    IV1.employee_lv100 AS employee_lv100, 
-                    -- IV1.employee_half AS employee_half, 
-                    IV1.employee_full AS employee_full,
-                    IV1.employee_total AS employee_total, 
+                    CASE WHEN (IV1.employee_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv00 AS NUMERIC(20,10)) END AS employee_lv00, 
+                    CASE WHEN (IV1.employee_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv01_49 AS NUMERIC(20,10)) END AS employee_lv01_49, 
+                    CASE WHEN (IV1.employee_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv50_99 AS NUMERIC(20,10)) END AS employee_lv50_99, 
+                    CASE WHEN (IV1.employee_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv100 AS NUMERIC(20,10)) END AS employee_lv100, 
+                    -- CASE WHEN (IV1.employee_half) IS NULL THEN 0.0 ELSE CAST(IV1.employee_half AS NUMERIC(20,10)) END AS employee_half, 
+                    CASE WHEN (IV1.employee_full) IS NULL THEN 0.0 ELSE CAST(IV1.employee_full AS NUMERIC(20,10)) END AS employee_full,
+                    CASE WHEN (IV1.employee_total) IS NULL THEN 0.0 ELSE CAST(IV1.employee_total AS NUMERIC(20,10)) END AS employee_total, 
     
                     IV1.industry_code AS industry_code, 
                     IV1.industry_name AS industry_name, 
                     IV1.usage_code AS usage_code,
                     IV1.usage_name AS usage_name, 
+
+                    TO_CHAR(timezone('JST', IV1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', IV1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
     
                     -- 被害建物の延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv00 / IV1.floor_area_total) END AS building_lv00_reverse_floor_area, 
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv01_49 / IV1.floor_area_total) END AS building_lv01_49_reverse_floor_area, 
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv50_99 / IV1.floor_area_total) END AS building_lv50_99_reverse_floor_area, 
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_lv100 / IV1.floor_area_total) END AS building_lv100_reverse_floor_area, 
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_half / IV1.floor_area_total) END AS building_half_reverse_floor_area, 
-                    CASE WHEN (IV1.floor_area_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.floor_area_full / IV1.floor_area_total) END AS building_full_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_lv00 / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_lv00_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_lv01_49 / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_lv01_49_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_lv50_99 / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_lv50_99_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_lv100 / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_lv100_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_half / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_half_reverse_floor_area, 
+                    CASE WHEN ABS(IV1.floor_area_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.floor_area_full / IV1.floor_area_total AS NUMERIC(20,10)) END AS building_full_reverse_floor_area, 
     
                     -- 被災世帯数(入力DB)から逆計算により被害建物棟数を求めた結果
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv00 / IV1.family_total) END AS building_lv00_reverse_family, 
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv01_49 / IV1.family_total) END AS building_lv01_49_reverse_family, 
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv50_99 / IV1.family_total) END AS building_lv50_99_reverse_family, 
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_lv100 / IV1.family_total) END AS building_lv100_reverse_family, 
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_half / IV1.family_total) END AS building_half_reverse_family, 
-                    CASE WHEN (IV1.family_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.family_full / IV1.family_total) END AS building_full_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_lv00 / IV1.family_total AS NUMERIC(20,10)) END AS building_lv00_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_lv01_49 / IV1.family_total AS NUMERIC(20,10)) END AS building_lv01_49_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_lv50_99 / IV1.family_total AS NUMERIC(20,10)) END AS building_lv50_99_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_lv100 / IV1.family_total AS NUMERIC(20,10)) END AS building_lv100_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_half / IV1.family_total AS NUMERIC(20,10)) END AS building_half_reverse_family, 
+                    CASE WHEN ABS(IV1.family_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.family_full / IV1.family_total AS NUMERIC(20,10)) END AS building_full_reverse_family, 
     
                     -- 被災事業所数(入力DB)から逆計算により被害建物棟数を求めた結果
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv00 / IV1.office_total) END AS building_lv00_reverse_office, 
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv01_49 / IV1.office_total) END AS building_lv01_49_reverse_office, 
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv50_99 / IV1.office_total) END AS building_lv50_99_reverse_office, 
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_lv100 / IV1.office_total) END AS building_lv100_reverse_office, 
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_half / IV1.office_total) END AS building_half_reverse_office, 
-                    CASE WHEN (IV1.office_total) <= 0 THEN NULL ELSE ((IV1.building_total) * IV1.office_full / IV1.office_total) END AS building_full_reverse_office 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_lv00 / IV1.office_total AS NUMERIC(20,10)) END AS building_lv00_reverse_office, 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_lv01_49 / IV1.office_total AS NUMERIC(20,10)) END AS building_lv01_49_reverse_office, 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_lv50_99 / IV1.office_total AS NUMERIC(20,10)) END AS building_lv50_99_reverse_office, 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_lv100 / IV1.office_total AS NUMERIC(20,10)) END AS building_lv100_reverse_office, 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_half / IV1.office_total AS NUMERIC(20,10)) END AS building_half_reverse_office, 
+                    CASE WHEN ABS(IV1.office_total) <= 0.0000001 THEN 0.0 ELSE CAST(IV1.building_total * IV1.office_full / IV1.office_total AS NUMERIC(20,10)) END AS building_full_reverse_office 
                     
                 FROM IPPAN_VIEW IV1 
-                WHERE IV1.ken_code=%s AND IV1.city_code=%s AND IV1.deleted_at is NULL 
+                WHERE 
+                    IV1.ken_code=%s AND 
+                    IV1.city_code=%s AND 
+                    IV1.deleted_at is NULL 
                 ORDER BY CAST(IV1.ippan_id AS INTEGER)""", [ken_code, city_code, ])
-        
         else:
             pass
 
@@ -470,7 +352,7 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         ### レスポンスセット処理(0040)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0800Reverse.input_ken_city_category_view()関数 STEP 5/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.input_ken_city_category_view()関数 STEP 5/5.', 'DEBUG')
         template = loader.get_template('P0800Reverse/input.html')
         context = {
             'ken_code': ken_code, 
@@ -485,7 +367,7 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0800Reverse.input_ken_city_category_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0800Reverse.input_ken_city_category_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0800Reverse.input_ken_city_category_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -502,13 +384,13 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 city_code = {}'.format(city_code), 'INFO')
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 category_code = {}'.format(category_code), 'INFO')
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 STEP 1/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 ken_code = {}'.format(ken_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 city_code = {}'.format(city_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 category_code = {}'.format(category_code), 'DEBUG')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 STEP 1/5.', 'DEBUG')
 
         #######################################################################
         ### DBアクセス処理(0010)
@@ -524,13 +406,13 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
         ###                   農漁家戸数 x 農漁家の在庫資産 x 浸水または土砂ごとの被害率
         ### (8)事業所応急対策費 = 事業所数 x 代替活動費
         #######################################################################
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 STEP 2/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 STEP 2/5.', 'DEBUG')
 
         #######################################################################
         ### DBアクセス処理(0020)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 STEP 3/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 STEP 3/5.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         if ken_code == '0':
             city_list = []
@@ -543,451 +425,14 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
         ### DBにアクセスして、データを取得する。
         ### 延床面積(入力DB)から逆計算により被害建物棟数を求めた結果
         ####################################################################### 
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 STEP 4/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 STEP 4/5.', 'DEBUG')
         ippan_reverse_list = None
-        ### ippan_reverse_list = IPPAN_VIEW.objects.raw("""
-        ###     SELECT 
-        ###         IV1.ippan_id AS ippan_id, 
-        ###         IV1.ippan_name AS ippan_name, 
-        ###         IV1.suigai_id AS suigai_id, 
-        ###         IV1.suigai_name AS suigai_name, 
-        ###         IV1.ken_code AS ken_code, 
-        ###         IV1.ken_name AS ken_name, 
-        ###         IV1.city_code AS city_code, 
-        ###         IV1.city_name AS city_name, 
-        ###         IV1.cause_1_code AS cause_1_code, 
-        ###         IV1.cause_1_name AS cause_1_name, 
-        ###         IV1.cause_2_code AS cause_2_code, 
-        ###         IV1.cause_2_name AS cause_2_name, 
-        ###         IV1.cause_3_code AS cause_3_code, 
-        ###         IV1.cause_3_name AS cause_3_name, 
-        ###         IV1.area_id AS area_id, 
-        ###         IV1.area_name AS area_name, 
-                
-        ###         IV1.suikei_code AS suikei_code, 
-        ###         IV1.suikei_name AS suikei_name, 
-        ###         IV1.kasen_code AS kasen_code, 
-        ###         IV1.kasen_name AS kasen_name, 
-        ###         IV1.gradient_code AS gradient_code, 
-        ###         IV1.gradient_name AS gradient_name, 
-
-        ###         IV1.residential_area AS residential_area, 
-        ###         IV1.agricultural_area AS agricultural_area, 
-        ###         IV1.underground_area AS underground_area, 
-        ###         IV1.kasen_kaigan_code AS kasen_kaigan_code, 
-        ###         IV1.kasen_kaigan_name AS kasen_kaigan_name, 
-        ###         IV1.crop_damage AS crop_damage, 
-        ###         IV1.weather_id AS weather_id, 
-        ###         IV1.weather_name AS weather_name, 
-                
-        ###         IV1.building_code AS building_code, 
-        ###         IV1.building_name AS building_name, 
-        ###         IV1.underground_code AS underground_code, 
-        ###         IV1.underground_name AS underground_name, 
-        ###         IV1.flood_sediment_code AS flood_sediment_code, 
-        ###         IV1.flood_sediment_name AS flood_sediment_name, 
-                
-        ###         IV1.building_lv00 AS building_lv00, 
-        ###         IV1.building_lv01_49 AS building_lv01_49, 
-        ###         IV1.building_lv50_99 AS building_lv50_99, 
-        ###         IV1.building_lv100 AS building_lv100, 
-        ###         IV1.building_half AS building_half, 
-        ###         IV1.building_full AS building_full, 
-        ###         IV1.building_total AS building_total, 
- 
-        ###         IV1.floor_area AS floor_area, 
-        ###         IV1.family AS family, 
-        ###         IV1.office AS office, 
-
-        ###         IV1.floor_area_lv00 AS floor_area_lv00, 
-        ###         IV1.floor_area_lv01_49 AS floor_area_lv01_49, 
-        ###         IV1.floor_area_lv50_99 AS floor_area_lv50_99, 
-        ###         IV1.floor_area_lv100 AS floor_area_lv100, 
-        ###         IV1.floor_area_half AS floor_area_half, 
-        ###         IV1.floor_area_full AS floor_area_full, 
-        ###         IV1.floor_area_total AS floor_area_total, 
-                
-        ###         IV1.family_lv00 AS family_lv00, 
-        ###         IV1.family_lv01_49 AS family_lv01_49, 
-        ###         IV1.family_lv50_99 AS family_lv50_99, 
-        ###         IV1.family_lv100 AS family_lv100, 
-        ###         IV1.family_half AS family_half, 
-        ###         IV1.family_full AS family_full, 
-        ###         IV1.family_total AS family_total, 
-               
-        ###         IV1.office_lv00 AS office_lv00, 
-        ###         IV1.office_lv01_49 AS office_lv01_49, 
-        ###         IV1.office_lv50_99 AS office_lv50_99, 
-        ###         IV1.office_lv100 AS office_lv100, 
-        ###         IV1.office_half AS office_half, 
-        ###         IV1.office_full AS office_full, 
-        ###         IV1.office_total AS office_total, 
-
-        ###         IV1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
-        ###         IV1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
-        ###         IV1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
-        ###         IV1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
-        ###         -- IV1.farmer_fisher_half AS farmer_fisher_half, 
-        ###         IV1.farmer_fisher_full AS farmer_fisher_full, 
-        ###         IV1.farmer_fisher_total AS farmer_fisher_total, 
-
-        ###         IV1.employee_lv00 AS employee_lv00, 
-        ###         IV1.employee_lv01_49 AS employee_lv01_49, 
-        ###         IV1.employee_lv50_99 AS employee_lv50_99, 
-        ###         IV1.employee_lv100 AS employee_lv100, 
-        ###         -- IV1.employee_half AS employee_half, 
-        ###         IV1.employee_full AS employee_full,
-        ###         IV1.employee_total AS employee_total, 
-
-        ###         IV1.industry_code AS industry_code, 
-        ###         IV1.industry_name AS industry_name, 
-        ###         IV1.usage_code AS usage_code,
-        ###         IV1.usage_name AS usage_name, 
-                
-        ###         -- 県別家屋評価額(マスタDB) 
-        ###         HA1.house_asset AS house_asset, 
-                
-        ###         -- 家屋被害率(マスタDB) 
-        ###         HR1.house_rate_lv00 AS house_rate_lv00, 
-        ###         HR1.house_rate_lv00_50 AS house_rate_lv00_50, 
-        ###         HR1.house_rate_lv50_100 AS house_rate_lv50_100, 
-        ###         HR1.house_rate_lv100_200 AS house_rate_lv100_200, 
-        ###         HR1.house_rate_lv200_300 AS house_rate_lv200_300, 
-        ###         HR1.house_rate_lv300 AS house_rate_lv300, 
-                
-        ###         -- 家庭用品自動車以外所有額(マスタDB) 
-        ###         HHA1.household_asset AS household_asset, 
-                
-        ###         -- 家庭用品自動車以外被害率(マスタDB) 
-        ###         HHR1.household_rate_lv00 AS household_rate_lv00, 
-        ###         HHR1.household_rate_lv00_50 AS household_rate_lv00_50, 
-        ###         HHR1.household_rate_lv50_100 AS household_rate_lv50_100, 
-        ###         HHR1.household_rate_lv100_200 AS household_rate_lv100_200, 
-        ###         HHR1.household_rate_lv200_300 AS household_rate_lv200_300, 
-        ###         HHR1.household_rate_lv300 AS household_rate_lv300, 
-                
-        ###         -- 家庭用品自動車所有額(マスタDB) 
-        ###         CA1.car_asset AS car_asset, 
-
-        ###         -- 家庭用品自動車被害率(マスタDB) 
-        ###         CR1.car_rate_lv00 AS car_rate_lv00, 
-        ###         CR1.car_rate_lv00_50 AS car_rate_lv00_50, 
-        ###         CR1.car_rate_lv50_100 AS car_rate_lv50_100, 
-        ###         CR1.car_rate_lv100_200 AS car_rate_lv100_200, 
-        ###         CR1.car_rate_lv200_300 AS car_rate_lv200_300, 
-        ###         CR1.car_rate_lv300 AS car_rate_lv300, 
-                
-        ###         -- 家庭応急対策費_代替活動費(マスタDB)
-        ###         HALT1.house_alt_lv00 AS house_alt_lv00, 
-        ###         HALT1.house_alt_lv00_50 AS house_alt_lv00_50, 
-        ###         HALT1.house_alt_lv50_100 AS house_alt_lv50_100, 
-        ###         HALT1.house_alt_lv100_200 AS house_alt_lv100_200, 
-        ###         HALT1.house_alt_lv200_300 AS house_alt_lv200_300, 
-        ###         HALT1.house_alt_lv300 AS house_alt_lv300, 
-
-        ###         -- 家庭応急対策費_清掃労働単価(マスタDB) 
-        ###         HCL1.house_clean_unit_cost AS house_clean_unit_cost, 
-
-        ###         -- 家庭応急対策費_清掃日数(マスタDB) 
-        ###         HCL1.house_clean_days_lv00 AS house_clean_days_lv00, 
-        ###         HCL1.house_clean_days_lv00_50 AS house_clean_days_lv00_50, 
-        ###         HCL1.house_clean_days_lv50_100 AS house_clean_days_lv50_100, 
-        ###         HCL1.house_clean_days_lv100_200 AS house_clean_days_lv100_200, 
-        ###         HCL1.house_clean_days_lv200_300 AS house_clean_days_lv200_300, 
-        ###         HCL1.house_clean_days_lv300 AS house_clean_days_lv300, 
-                
-        ###         -- 事業所資産額_償却資産額(マスタDB) 
-        ###         OA1.office_dep_asset AS office_dep_asset, 
-                
-        ###         -- 事業所被害率_償却資産被害率(マスタDB) 
-        ###         OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
-        ###         OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
-        ###         OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
-        ###         OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
-        ###         -- OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
-        ###         OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
-
-        ###         -- 事業所資産額_在庫資産額(マスタDB) 
-        ###         OA1.office_inv_asset AS office_inv_asset, 
-
-        ###         -- 事業所被害率_在庫資産被害率(マスタDB) 
-        ###         OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
-        ###         OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
-        ###         OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
-        ###         OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
-        ###         -- OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
-        ###         OR1.office_inv_rate_lv300 AS office_inv_rate_lv300, 
-
-        ###         -- 事業所資産額_付加価値額(マスタDB) 
-        ###         OA1.office_va_asset AS office_va_asset, 
-
-        ###         -- 事業所被害額_営業停止に伴う被害額(マスタDB) 
-        ###         OSUS1.office_sus_days_lv00 AS office_sus_days_lv00, 
-        ###         OSUS1.office_sus_days_lv00_50 AS office_sus_days_lv00_50, 
-        ###         OSUS1.office_sus_days_lv50_100 AS office_sus_days_lv50_100, 
-        ###         OSUS1.office_sus_days_lv100_200 AS office_sus_days_lv100_200, 
-        ###         -- OSUS1.office_sus_days_lv200_300 AS office_sus_days_lv200_300, 
-        ###         OSUS1.office_sus_days_lv300 AS office_sus_days_lv300, 
-
-        ###         -- 事業所被害額_営業停滞に伴う被害額(マスタDB) 
-        ###         OSTG1.office_stg_days_lv00 AS office_stg_days_lv00, 
-        ###         OSTG1.office_stg_days_lv00_50 AS office_stg_days_lv00_50, 
-        ###         OSTG1.office_stg_days_lv50_100 AS office_stg_days_lv50_100, 
-        ###         OSTG1.office_stg_days_lv100_200 AS office_stg_days_lv100_200, 
-        ###         -- OSTG1.office_stg_days_lv200_300 AS office_stg_days_lv200_300, 
-        ###         OSTG1.office_stg_days_lv300 AS office_stg_days_lv300, 
-                
-        ###         -- 農漁家資産額_償却資産額(マスタDB) 
-        ###         FFA1.farmer_fisher_dep_asset AS farmer_fisher_dep_asset, 
-                
-        ###         -- 農漁家被害率_償却資産被害率(マスタDB) 
-        ###         FFR1.farmer_fisher_dep_rate_lv00 AS farmer_fisher_dep_rate_lv00, 
-        ###         FFR1.farmer_fisher_dep_rate_lv00_50 AS farmer_fisher_dep_rate_lv00_50, 
-        ###         FFR1.farmer_fisher_dep_rate_lv50_100 AS farmer_fisher_dep_rate_lv50_100, 
-        ###         FFR1.farmer_fisher_dep_rate_lv100_200 AS farmer_fisher_dep_rate_lv100_200, 
-        ###         -- FFR1.farmer_fisher_dep_rate_lv200_300 AS farmer_fisher_dep_rate_lv200_300, 
-        ###         FFR1.farmer_fisher_dep_rate_lv300 AS farmer_fisher_dep_rate_lv300, 
-
-        ###         -- 農漁家資産額_在庫資産額(マスタDB) 
-        ###         FFA1.farmer_fisher_inv_asset AS farmer_fisher_inv_asset, 
-                
-        ###         -- 農漁家被害率_在庫資産被害率(マスタDB) 
-        ###         FFR1.farmer_fisher_inv_rate_lv00 AS farmer_fisher_inv_rate_lv00, 
-        ###         FFR1.farmer_fisher_inv_rate_lv00_50 AS farmer_fisher_inv_rate_lv00_50, 
-        ###         FFR1.farmer_fisher_inv_rate_lv50_100 AS farmer_fisher_inv_rate_lv50_100, 
-        ###         FFR1.farmer_fisher_inv_rate_lv100_200 AS farmer_fisher_inv_rate_lv100_200, 
-        ###         -- FFR1.farmer_fisher_inv_rate_lv200_300 AS farmer_fisher_inv_rate_lv200_300, 
-        ###         FFR1.farmer_fisher_inv_rate_lv300 AS farmer_fisher_inv_rate_lv300, 
-                
-        ###         -- 事業所応急対策費_代替活動費(マスタDB) 
-        ###         OALT1.office_alt_lv00 AS office_alt_lv00, 
-        ###         OALT1.office_alt_lv00_50 AS office_alt_lv00_50, 
-        ###         OALT1.office_alt_lv50_100 AS office_alt_lv50_100, 
-        ###         OALT1.office_alt_lv100_200 AS office_alt_lv100_200, 
-        ###         OALT1.office_alt_lv200_300 AS office_alt_lv200_300, 
-        ###         OALT1.office_alt_lv300 AS office_alt_lv300, 
-                
-        ###         -- 家屋被害額(集計DB) 
-        ###         IS1.house_summary_lv00 AS house_summary_lv00, 
-        ###         IS1.house_summary_lv01_49 AS house_summary_lv01_49, 
-        ###         IS1.house_summary_lv50_99 AS house_summary_lv50_99, 
-        ###         IS1.house_summary_lv100 AS house_summary_lv100, 
-        ###         IS1.house_summary_half AS house_summary_half, 
-        ###         IS1.house_summary_full AS house_summary_full, 
-                
-        ###         -- 家屋被害額(集計DB)から逆計算により延床面積を求めた結果 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv00) <= 0 THEN NULL ELSE (IS1.house_summary_lv00 / (HA1.house_asset * HR1.house_rate_lv00)) END AS floor_area_lv00_reverse_house_summary, 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.house_summary_lv01_49 / (HA1.house_asset * HR1.house_rate_lv00_50)) END AS floor_area_lv01_49_reverse_house_summary, 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.house_summary_lv50_99 / (HA1.house_asset * HR1.house_rate_lv50_100)) END AS floor_area_lv50_99_reverse_house_summary, 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.house_summary_lv100 / (HA1.house_asset * HR1.house_rate_lv100_200)) END AS floor_area_lv100_reverse_house_summary, 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.house_summary_half / (HA1.house_asset * HR1.house_rate_lv200_300)) END AS floor_area_half_reverse_house_summary, 
-        ###         CASE WHEN (HA1.house_asset * HR1.house_rate_lv300) <= 0 THEN NULL ELSE (IS1.house_summary_full / (HA1.house_asset * HR1.house_rate_lv300)) END AS floor_area_full_reverse_house_summary, 
-                
-        ###         -- 家庭用品自動車以外被害額(集計DB) 
-        ###         IS1.household_summary_lv00 AS household_summary_lv00,
-        ###         IS1.household_summary_lv01_49 AS household_summary_lv01_49, 
-        ###         IS1.household_summary_lv50_99 AS household_summary_lv50_99, 
-        ###         IS1.household_summary_lv100 AS household_summary_lv100, 
-        ###         IS1.household_summary_half AS household_summary_half, 
-        ###         IS1.household_summary_full AS household_summary_full, 
-
-        ###         -- 家庭用品自動車以外被害額(集計DB)から逆計算により被災世帯数を求めた結果 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv00) <= 0 THEN NULL ELSE (IS1.household_summary_lv00 / (HHA1.household_asset * HHR1.household_rate_lv00)) END AS family_lv00_reverse_household_summary, 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.household_summary_lv01_49 / (HHA1.household_asset * HHR1.household_rate_lv00_50)) END AS family_lv01_49_reverse_household_summary, 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.household_summary_lv50_99 / (HHA1.household_asset * HHR1.household_rate_lv50_100)) END AS family_lv50_99_reverse_household_summary, 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.household_summary_lv100 / (HHA1.household_asset * HHR1.household_rate_lv100_200)) END AS family_lv100_reverse_household_summary, 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.household_summary_half / (HHA1.household_asset * HHR1.household_rate_lv200_300)) END AS family_half_reverse_household_summary, 
-        ###         CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv300) <= 0 THEN NULL ELSE (IS1.household_summary_full / (HHA1.household_asset * HHR1.household_rate_lv300)) END AS family_full_reverse_household_summary, 
-                
-        ###         -- 家庭用品自動車被害額(集計DB) 
-        ###         IS1.car_summary_lv00 AS car_summary_lv00, 
-        ###         IS1.car_summary_lv01_49 AS car_summary_lv01_49, 
-        ###         IS1.car_summary_lv50_99 AS car_summary_lv50_99, 
-        ###         IS1.car_summary_lv100 AS car_summary_lv100, 
-        ###         IS1.car_summary_half AS car_summary_half, 
-        ###         IS1.car_summary_full AS car_summary_full, 
-
-        ###         -- 家庭用品自動車被害額(集計DB)から逆計算により被災世帯数を求めた結果 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv00) <= 0 THEN NULL ELSE (IS1.car_summary_lv00 / (CA1.car_asset * CR1.car_rate_lv00)) END AS family_lv00_reverse_car_summary, 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.car_summary_lv01_49 / (CA1.car_asset * CR1.car_rate_lv00_50)) END AS family_lv01_49_reverse_car_summary, 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.car_summary_lv50_99 / (CA1.car_asset * CR1.car_rate_lv50_100)) END AS family_lv50_99_reverse_car_summary, 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.car_summary_lv100 / (CA1.car_asset * CR1.car_rate_lv100_200)) END AS family_lv100_reverse_car_summary, 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.car_summary_half / (CA1.car_asset * CR1.car_rate_lv200_300)) END AS family_half_reverse_car_summary, 
-        ###         CASE WHEN (CA1.car_asset * CR1.car_rate_lv300) <= 0 THEN NULL ELSE (IS1.car_summary_full / (CA1.car_asset * CR1.car_rate_lv300)) END AS family_full_reverse_car_summary, 
-
-        ###         -- 家庭応急対策費_代替活動費(集計DB) 
-        ###         IS1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
-        ###         IS1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
-        ###         IS1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
-        ###         IS1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
-        ###         IS1.house_alt_summary_half AS house_alt_summary_half, 
-        ###         IS1.house_alt_summary_full AS house_alt_summary_full, 
-
-        ###         -- 家庭応急対策費_代替活動費(集計DB)から逆計算により被災世帯数を求めた結果 
-        ###         CASE WHEN (HALT1.house_alt_lv00) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv00 / HALT1.house_alt_lv00) END AS family_lv00_reverse_house_alt_summary, 
-        ###         CASE WHEN (HALT1.house_alt_lv00_50) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv01_49 / HALT1.house_alt_lv00_50) END AS family_lv01_49_reverse_house_alt_summary, 
-        ###         CASE WHEN (HALT1.house_alt_lv50_100) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv50_99 / HALT1.house_alt_lv50_100) END AS family_lv50_99_reverse_house_alt_summary, 
-        ###         CASE WHEN (HALT1.house_alt_lv100_200) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv100 / HALT1.house_alt_lv100_200) END AS family_lv100_reverse_house_alt_summary, 
-        ###         CASE WHEN (HALT1.house_alt_lv200_300) <= 0 THEN NULL ELSE (IS1.house_alt_summary_half / HALT1.house_alt_lv200_300) END AS family_half_reverse_house_alt_summary, 
-        ###         CASE WHEN (HALT1.house_alt_lv300) <= 0 THEN NULL ELSE (IS1.house_alt_summary_full / HALT1.house_alt_lv300) END AS family_full_reverse_house_alt_summary, 
-
-        ###         -- 家庭応急対策費_清掃費(集計DB) 
-        ###         IS1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
-        ###         IS1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
-        ###         IS1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
-        ###         IS1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
-        ###         IS1.house_clean_summary_half AS house_clean_summary_half, 
-        ###         IS1.house_clean_summary_full AS house_clean_summary_full, 
-
-        ###         -- 家庭応急対策費_清掃費(集計DB)から逆計算により被災世帯数を求めた結果 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv00 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00)) END AS family_lv00_reverse_house_clean_summary, 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv01_49 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50)) END AS family_lv01_49_reverse_house_clean_summary, 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv50_99 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100)) END AS family_lv50_99_reverse_house_clean_summary, 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv100 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200)) END AS family_lv100_reverse_house_clean_summary, 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300) <= 0 THEN NULL ELSE (IS1.house_clean_summary_half / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300)) END AS family_half_reverse_house_clean_summary, 
-        ###         CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300) <= 0 THEN NULL ELSE (IS1.house_clean_summary_full / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300)) END AS family_full_reverse_house_clean_summary, 
-
-        ###         -- 事業所被害額_償却資産被害額(集計DB) 
-        ###         IS1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
-        ###         IS1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
-        ###         IS1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
-        ###         IS1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
-        ###         -- IS1.office_dep_summary_half AS office_dep_summary_half, 
-        ###         IS1.office_dep_summary_full AS office_dep_summary_full, 
-                
-        ###         -- 事業所被害額_償却資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-        ###         CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv00) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv00 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00)) END AS employee_lv00_reverse_office_dep_summary, 
-        ###         CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv01_49 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00_50)) END AS employee_lv01_49_reverse_office_dep_summary, 
-        ###         CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv50_99 / (OA1.office_dep_asset * OR1.office_dep_rate_lv50_100)) END AS employee_lv50_99_reverse_office_dep_summary, 
-        ###         CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv100 / (OA1.office_dep_asset * OR1.office_dep_rate_lv100_200)) END AS employee_lv100_reverse_office_dep_summary, 
-        ###         -- CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.office_dep_summary_half / (OA1.office_dep_asset * OR1.office_dep_rate_lv200_300)) END AS employee_half_reverse_office_dep_summary, 
-        ###         CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv300) <= 0 THEN NULL ELSE (IS1.office_dep_summary_full / (OA1.office_dep_asset * OR1.office_dep_rate_lv300)) END AS employee_full_reverse_office_dep_summary, 
-
-        ###         -- 事業所被害額_在庫資産被害額(集計DB) 
-        ###         IS1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
-        ###         IS1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
-        ###         IS1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
-        ###         IS1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
-        ###         -- IS1.office_inv_summary_half AS office_inv_summary_half, 
-        ###         IS1.office_inv_summary_full AS office_inv_summary_full, 
-                
-        ###         -- 事業所被害額_在庫資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-        ###         CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv00) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv00 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00)) END AS employee_lv00_reverse_office_inv_summary, 
-        ###         CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv01_49 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00_50)) END AS employee_lv01_49_reverse_office_inv_summary, 
-        ###         CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv50_99 / (OA1.office_inv_asset * OR1.office_inv_rate_lv50_100)) END AS employee_lv50_99_reverse_office_inv_summary, 
-        ###         CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv100 / (OA1.office_inv_asset * OR1.office_inv_rate_lv100_200)) END AS employee_lv100_reverse_office_inv_summary, 
-        ###         -- CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.office_inv_summary_half / (OA1.office_inv_asset * OR1.office_inv_rate_lv200_300)) END AS employee_half_reverse_office_inv_summary, 
-        ###         CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv300) <= 0 THEN NULL ELSE (IS1.office_inv_summary_full / (OA1.office_inv_asset * OR1.office_inv_rate_lv300)) END AS employee_full_reverse_office_inv_summary, 
-
-        ###         -- 事業所被害額_営業停止に伴う被害額(集計DB) 
-        ###         IS1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
-        ###         IS1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
-        ###         IS1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
-        ###         IS1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
-        ###         -- IS1.office_sus_summary_half AS office_sus_summary_half, 
-        ###         IS1.office_sus_summary_full AS office_sus_summary_full, 
-
-        ###         -- 事業所被害額_営業停止に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-        ###         CASE WHEN (OSUS1.office_sus_days_lv00 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv00 / (OSUS1.office_sus_days_lv00 * OA1.office_va_asset)) END AS employee_lv00_reverse_office_sus_summary, 
-        ###         CASE WHEN (OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv01_49 / (OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset)) END AS employee_lv01_49_reverse_office_sus_summary, 
-        ###         CASE WHEN (OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv50_99 / (OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset)) END AS employee_lv50_99_reverse_office_sus_summary, 
-        ###         CASE WHEN (OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv100 / (OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset)) END AS employee_lv100_reverse_office_sus_summary, 
-        ###         -- CASE WHEN (OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_half / (OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset)) END AS employee_half_reverse_office_sus_summary, 
-        ###         CASE WHEN (OSUS1.office_sus_days_lv300 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_full / (OSUS1.office_sus_days_lv300 * OA1.office_va_asset)) END AS employee_full_reverse_office_sus_summary, 
-
-        ###         -- 事業所被害額_営業停滞に伴う被害額(集計DB) 
-        ###         IS1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
-        ###         IS1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
-        ###         IS1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
-        ###         IS1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
-        ###         -- IS1.office_stg_summary_half AS office_stg_summary_half, 
-        ###         IS1.office_stg_summary_full AS office_stg_summary_full, 
-
-        ###         -- 事業所被害額_営業停滞に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-        ###         CASE WHEN (OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv00 / (OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset)) END AS employee_lv00_reverse_office_stg_summary, 
-        ###         CASE WHEN (OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv01_49 / (OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset)) END AS employee_lv01_49_reverse_office_stg_summary, 
-        ###         CASE WHEN (OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv50_99 / (OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset)) END AS employee_lv50_99_reverse_office_stg_summary, 
-        ###         CASE WHEN (OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv100 / (OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset)) END AS employee_lv100_reverse_office_stg_summary, 
-        ###         -- CASE WHEN (OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_half / (OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset)) END AS employee_half_reverse_office_stg_summary, 
-        ###         CASE WHEN (OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_full / (OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset)) END AS employee_full_reverse_office_stg_summary, 
-
-        ###         -- 農漁家被害額_償却資産被害額(集計DB) 
-        ###         IS1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
-        ###         IS1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
-        ###         IS1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
-        ###         IS1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
-        ###         -- IS1.farmer_fisher_dep_summary_half AS farmer_fisher_dep_summary_half, 
-        ###         IS1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
-
-        ###         -- 農漁家被害額_償却資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
-        ###         CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv00 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00)) END AS farmer_fisher_lv00_reverse_farmer_fisher_dep_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv01_49 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv50_99 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv100 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200)) END AS farmer_fisher_lv100_reverse_farmer_fisher_dep_summary, 
-        ###         -- CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_half / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300)) END AS farmer_fisher_half_reverse_farmer_fisher_dep_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_full / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300)) END AS farmer_fisher_full_reverse_farmer_fisher_dep_summary, 
-
-        ###         -- 農漁家被害額_在庫資産被害額(集計DB) 
-        ###         IS1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
-        ###         IS1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
-        ###         IS1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
-        ###         IS1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
-        ###         -- IS1.farmer_fisher_inv_summary_half AS farmer_fisher_inv_summary_half, 
-        ###         IS1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
-
-        ###         -- 農漁家被害額_在庫資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
-        ###         CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv00 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00)) END AS farmer_fisher_lv00_reverse_farmer_fisher_inv_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv01_49 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv50_99 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv100 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200)) END AS farmer_fisher_lv100_reverse_farmer_fisher_inv_summary, 
-        ###         -- CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_half / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300)) END AS farmer_fisher_half_reverse_farmer_fisher_inv_summary, 
-        ###         CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_full / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300)) END AS farmer_fisher_full_reverse_farmer_fisher_inv_summary, 
-
-        ###         -- 事業所応急対策費_代替活動費(集計DB) 
-        ###         IS1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
-        ###         IS1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
-        ###         IS1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
-        ###         IS1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
-        ###         IS1.office_alt_summary_half AS office_alt_summary_half, 
-        ###         IS1.office_alt_summary_full AS office_alt_summary_full, 
-
-        ###         -- 事業所応急対策費_代替活動費(集計DB)から逆計算により被災事業所数を求めた結果 
-        ###         CASE WHEN (OALT1.office_alt_lv00) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv00 / OALT1.office_alt_lv00) END AS office_lv00_reverse_office_alt_summary, 
-        ###         CASE WHEN (OALT1.office_alt_lv00_50) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv01_49 / OALT1.office_alt_lv00_50) END AS office_lv01_49_reverse_office_alt_summary, 
-        ###         CASE WHEN (OALT1.office_alt_lv50_100) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv50_99 / OALT1.office_alt_lv50_100) END AS office_lv50_99_reverse_office_alt_summary, 
-        ###         CASE WHEN (OALT1.office_alt_lv100_200) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv100 / OALT1.office_alt_lv100_200) END AS office_lv100_reverse_office_alt_summary, 
-        ###         CASE WHEN (OALT1.office_alt_lv200_300) <= 0 THEN NULL ELSE (IS1.office_alt_summary_half / OALT1.office_alt_lv200_300) END AS office_half_reverse_office_alt_summary, 
-        ###         CASE WHEN (OALT1.office_alt_lv300) <= 0 THEN NULL ELSE (IS1.office_alt_summary_full / OALT1.office_alt_lv300) END AS office_full_reverse_office_alt_summary 
-                
-        ###     FROM IPPAN_VIEW IV1 
-        ###     LEFT JOIN IPPAN_SUMMARY IS1 ON IV1.ippan_id = IS1.ippan_id 
-        ###     LEFT JOIN HOUSE_ASSET HA1 ON IV1.ken_code = HA1.ken_code 
-        ###     LEFT JOIN HOUSE_RATE HR1 ON IV1.flood_sediment_code = HR1.flood_sediment_code AND IV1.gradient_code = HR1.gradient_code 
-        ###     LEFT JOIN HOUSEHOLD_RATE HHR1 ON IV1.flood_sediment_code = HHR1.flood_sediment_code 
-        ###     LEFT JOIN OFFICE_ASSET OA1 ON IV1.industry_code = OA1.industry_code 
-        ###     LEFT JOIN OFFICE_RATE OR1 ON IV1.flood_sediment_code = OR1.flood_sediment_code, 
-        ###     HOUSEHOLD_ASSET HHA1, 
-        ###     CAR_ASSET CA1, 
-        ###     CAR_RATE CR1, 
-        ###     HOUSE_ALT HALT1, 
-        ###     HOUSE_CLEAN HCL1, 
-        ###     OFFICE_SUSPEND OSUS1, 
-        ###     OFFICE_STAGNATE OSTG1, 
-        ###     FARMER_FISHER_ASSET FFA1, 
-        ###     FARMER_FISHER_RATE FFR1, 
-        ###     OFFICE_ALT OALT1 
-        ###     WHERE IV1.ken_code=%s AND IV1.city_code=%s 
-        ###     ORDER BY CAST(IV1.IPPAN_ID AS INTEGER)""", [ken_code, city_code, ])
-
         if ken_code == "0" and city_code == "0":
             pass
-
         elif ken_code == "0" and city_code != "0":
             pass
-
         elif ken_code != "0" and city_code == "0":
             pass
-
         elif ken_code != "0" and city_code != "0":
             ippan_reverse_list = IPPAN_VIEW.objects.raw("""
                 SELECT 
@@ -1015,12 +460,12 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.gradient_code AS gradient_code, 
                     IV1.gradient_name AS gradient_name, 
     
-                    IV1.residential_area AS residential_area, 
-                    IV1.agricultural_area AS agricultural_area, 
-                    IV1.underground_area AS underground_area, 
+                    CASE WHEN (IV1.residential_area) IS NULL THEN 0.0 ELSE CAST(IV1.residential_area AS NUMERIC(20,10)) END AS residential_area, 
+                    CASE WHEN (IV1.agricultural_area) IS NULL THEN 0.0 ELSE CAST(IV1.agricultural_area AS NUMERIC(20,10)) END AS agricultural_area, 
+                    CASE WHEN (IV1.underground_area) IS NULL THEN 0.0 ELSE CAST(IV1.underground_area AS NUMERIC(20,10)) END AS underground_area, 
                     IV1.kasen_kaigan_code AS kasen_kaigan_code, 
                     IV1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    IV1.crop_damage AS crop_damage, 
+                    CASE WHEN (IV1.crop_damage) IS NULL THEN 0.0 ELSE CAST(IV1.crop_damage AS NUMERIC(20,10)) END AS crop_damage, 
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
                     
@@ -1034,57 +479,57 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.flood_sediment_code AS flood_sediment_code, 
                     IV1.flood_sediment_name AS flood_sediment_name, 
                     
-                    IV1.building_lv00 AS building_lv00, 
-                    IV1.building_lv01_49 AS building_lv01_49, 
-                    IV1.building_lv50_99 AS building_lv50_99, 
-                    IV1.building_lv100 AS building_lv100, 
-                    IV1.building_half AS building_half, 
-                    IV1.building_full AS building_full, 
-                    IV1.building_total AS building_total, 
+                    CASE WHEN (IV1.building_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv00 AS NUMERIC(20,10)) END AS building_lv00, 
+                    CASE WHEN (IV1.building_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv01_49 AS NUMERIC(20,10)) END AS building_lv01_49, 
+                    CASE WHEN (IV1.building_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv50_99 AS NUMERIC(20,10)) END AS building_lv50_99, 
+                    CASE WHEN (IV1.building_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.building_lv100 AS NUMERIC(20,10)) END AS building_lv100, 
+                    CASE WHEN (IV1.building_half) IS NULL THEN 0.0 ELSE CAST(IV1.building_half AS NUMERIC(20,10)) END AS building_half, 
+                    CASE WHEN (IV1.building_full) IS NULL THEN 0.0 ELSE CAST(IV1.building_full AS NUMERIC(20,10)) END AS building_full, 
+                    CASE WHEN (IV1.building_total) IS NULL THEN 0.0 ELSE CAST(IV1.building_total AS NUMERIC(20,10)) END AS building_total, 
      
-                    IV1.floor_area AS floor_area, 
-                    IV1.family AS family, 
-                    IV1.office AS office, 
+                    CASE WHEN (IV1.floor_area) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area AS NUMERIC(20,10)) END AS floor_area, 
+                    CASE WHEN (IV1.family) IS NULL THEN 0.0 ELSE CAST(IV1.family AS NUMERIC(20,10)) END AS family, 
+                    CASE WHEN (IV1.office) IS NULL THEN 0.0 ELSE CAST(IV1.office AS NUMERIC(20,10)) END AS office, 
     
-                    IV1.floor_area_lv00 AS floor_area_lv00, 
-                    IV1.floor_area_lv01_49 AS floor_area_lv01_49, 
-                    IV1.floor_area_lv50_99 AS floor_area_lv50_99, 
-                    IV1.floor_area_lv100 AS floor_area_lv100, 
-                    IV1.floor_area_half AS floor_area_half, 
-                    IV1.floor_area_full AS floor_area_full, 
-                    IV1.floor_area_total AS floor_area_total, 
+                    CASE WHEN (IV1.floor_area_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv00 AS NUMERIC(20,10)) END AS floor_area_lv00, 
+                    CASE WHEN (IV1.floor_area_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv01_49 AS NUMERIC(20,10)) END AS floor_area_lv01_49, 
+                    CASE WHEN (IV1.floor_area_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv50_99 AS NUMERIC(20,10)) END AS floor_area_lv50_99, 
+                    CASE WHEN (IV1.floor_area_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_lv100 AS NUMERIC(20,10)) END AS floor_area_lv100, 
+                    CASE WHEN (IV1.floor_area_half) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_half AS NUMERIC(20,10)) END AS floor_area_half, 
+                    CASE WHEN (IV1.floor_area_full) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_full AS NUMERIC(20,10)) END AS floor_area_full, 
+                    CASE WHEN (IV1.floor_area_total) IS NULL THEN 0.0 ELSE CAST(IV1.floor_area_total AS NUMERIC(20,10)) END AS floor_area_total, 
                     
-                    IV1.family_lv00 AS family_lv00, 
-                    IV1.family_lv01_49 AS family_lv01_49, 
-                    IV1.family_lv50_99 AS family_lv50_99, 
-                    IV1.family_lv100 AS family_lv100, 
-                    IV1.family_half AS family_half, 
-                    IV1.family_full AS family_full, 
-                    IV1.family_total AS family_total, 
+                    CASE WHEN (IV1.family_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv00 AS NUMERIC(20,10)) END AS family_lv00, 
+                    CASE WHEN (IV1.family_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv01_49 AS NUMERIC(20,10)) END AS family_lv01_49, 
+                    CASE WHEN (IV1.family_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv50_99 AS NUMERIC(20,10)) END AS family_lv50_99, 
+                    CASE WHEN (IV1.family_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.family_lv100 AS NUMERIC(20,10)) END AS family_lv100, 
+                    CASE WHEN (IV1.family_half) IS NULL THEN 0.0 ELSE CAST(IV1.family_half AS NUMERIC(20,10)) END AS family_half, 
+                    CASE WHEN (IV1.family_full) IS NULL THEN 0.0 ELSE CAST(IV1.family_full AS NUMERIC(20,10)) END AS family_full, 
+                    CASE WHEN (IV1.family_total) IS NULL THEN 0.0 ELSE CAST(IV1.family_total AS NUMERIC(20,10)) END AS family_total, 
                    
-                    IV1.office_lv00 AS office_lv00, 
-                    IV1.office_lv01_49 AS office_lv01_49, 
-                    IV1.office_lv50_99 AS office_lv50_99, 
-                    IV1.office_lv100 AS office_lv100, 
-                    IV1.office_half AS office_half, 
-                    IV1.office_full AS office_full, 
-                    IV1.office_total AS office_total, 
+                    CASE WHEN (IV1.office_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv00 AS NUMERIC(20,10)) END AS office_lv00, 
+                    CASE WHEN (IV1.office_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv01_49 AS NUMERIC(20,10)) END AS office_lv01_49, 
+                    CASE WHEN (IV1.office_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv50_99 AS NUMERIC(20,10)) END AS office_lv50_99, 
+                    CASE WHEN (IV1.office_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.office_lv100 AS NUMERIC(20,10)) END AS office_lv100, 
+                    CASE WHEN (IV1.office_half) IS NULL THEN 0.0 ELSE CAST(IV1.office_half AS NUMERIC(20,10)) END AS office_half, 
+                    CASE WHEN (IV1.office_full) IS NULL THEN 0.0 ELSE CAST(IV1.office_full AS NUMERIC(20,10)) END AS office_full, 
+                    CASE WHEN (IV1.office_total) IS NULL THEN 0.0 ELSE CAST(IV1.office_total AS NUMERIC(20,10)) END AS office_total, 
     
-                    IV1.farmer_fisher_lv00 AS farmer_fisher_lv00, 
-                    IV1.farmer_fisher_lv01_49 AS farmer_fisher_lv01_49, 
-                    IV1.farmer_fisher_lv50_99 AS farmer_fisher_lv50_99, 
-                    IV1.farmer_fisher_lv100 AS farmer_fisher_lv100, 
-                    -- IV1.farmer_fisher_half AS farmer_fisher_half, 
-                    IV1.farmer_fisher_full AS farmer_fisher_full, 
-                    IV1.farmer_fisher_total AS farmer_fisher_total, 
+                    CASE WHEN (IV1.farmer_fisher_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_lv00, 
+                    CASE WHEN (IV1.farmer_fisher_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv01_49 AS NUMERIC(20,10)) END AS farmer_fisher_lv01_49, 
+                    CASE WHEN (IV1.farmer_fisher_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv50_99 AS NUMERIC(20,10)) END AS farmer_fisher_lv50_99, 
+                    CASE WHEN (IV1.farmer_fisher_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_lv100 AS NUMERIC(20,10)) END AS farmer_fisher_lv100, 
+                    -- CASE WHEN (IV1.farmer_fisher_half) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_half AS NUMERIC(20,10)) END AS farmer_fisher_half, 
+                    CASE WHEN (IV1.farmer_fisher_full) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_full AS NUMERIC(20,10)) END AS farmer_fisher_full, 
+                    CASE WHEN (IV1.farmer_fisher_total) IS NULL THEN 0.0 ELSE CAST(IV1.farmer_fisher_total AS NUMERIC(20,10)) END AS farmer_fisher_total, 
     
-                    IV1.employee_lv00 AS employee_lv00, 
-                    IV1.employee_lv01_49 AS employee_lv01_49, 
-                    IV1.employee_lv50_99 AS employee_lv50_99, 
-                    IV1.employee_lv100 AS employee_lv100, 
-                    -- IV1.employee_half AS employee_half, 
-                    IV1.employee_full AS employee_full,
-                    IV1.employee_total AS employee_total, 
+                    CASE WHEN (IV1.employee_lv00) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv00 AS NUMERIC(20,10)) END AS employee_lv00, 
+                    CASE WHEN (IV1.employee_lv01_49) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv01_49 AS NUMERIC(20,10)) END AS employee_lv01_49, 
+                    CASE WHEN (IV1.employee_lv50_99) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv50_99 AS NUMERIC(20,10)) END AS employee_lv50_99, 
+                    CASE WHEN (IV1.employee_lv100) IS NULL THEN 0.0 ELSE CAST(IV1.employee_lv100 AS NUMERIC(20,10)) END AS employee_lv100, 
+                    -- CASE WHEN (IV1.employee_half) IS NULL THEN 0.0 ELSE CAST(IV1.employee_half AS NUMERIC(20,10)) END AS employee_half, 
+                    CASE WHEN (IV1.employee_full) IS NULL THEN 0.0 ELSE CAST(IV1.employee_full AS NUMERIC(20,10)) END AS employee_full,
+                    CASE WHEN (IV1.employee_total) IS NULL THEN 0.0 ELSE CAST(IV1.employee_total AS NUMERIC(20,10)) END AS employee_total, 
     
                     IV1.industry_code AS industry_code, 
                     IV1.industry_name AS industry_name, 
@@ -1092,319 +537,319 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.usage_name AS usage_name, 
                     
                     -- 県別家屋評価額(マスタDB) 
-                    HA1.house_asset AS house_asset, 
+                    CASE WHEN (HA1.house_asset) IS NULL THEN 0.0 ELSE CAST(HA1.house_asset AS NUMERIC(20,10)) END AS house_asset, 
                     
                     -- 家屋被害率(マスタDB) 
-                    HR1.house_rate_lv00 AS house_rate_lv00, 
-                    HR1.house_rate_lv00_50 AS house_rate_lv00_50, 
-                    HR1.house_rate_lv50_100 AS house_rate_lv50_100, 
-                    HR1.house_rate_lv100_200 AS house_rate_lv100_200, 
-                    HR1.house_rate_lv200_300 AS house_rate_lv200_300, 
-                    HR1.house_rate_lv300 AS house_rate_lv300, 
+                    CASE WHEN (HR1.house_rate_lv00) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv00 AS NUMERIC(20,10)) END AS house_rate_lv00, 
+                    CASE WHEN (HR1.house_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv00_50 AS NUMERIC(20,10)) END AS house_rate_lv00_50, 
+                    CASE WHEN (HR1.house_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv50_100 AS NUMERIC(20,10)) END AS house_rate_lv50_100, 
+                    CASE WHEN (HR1.house_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv100_200 AS NUMERIC(20,10)) END AS house_rate_lv100_200, 
+                    CASE WHEN (HR1.house_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv200_300 AS NUMERIC(20,10)) END AS house_rate_lv200_300, 
+                    CASE WHEN (HR1.house_rate_lv300) IS NULL THEN 0.0 ELSE CAST(HR1.house_rate_lv300 AS NUMERIC(20,10)) END AS house_rate_lv300, 
                     
                     -- 家庭用品自動車以外所有額(マスタDB) 
-                    HHA1.household_asset AS household_asset, 
+                    CASE WHEN (HHA1.household_asset) IS NULL THEN 0.0 ELSE CAST(HHA1.household_asset AS NUMERIC(20,10)) END AS household_asset, 
                     
                     -- 家庭用品自動車以外被害率(マスタDB) 
-                    HHR1.household_rate_lv00 AS household_rate_lv00, 
-                    HHR1.household_rate_lv00_50 AS household_rate_lv00_50, 
-                    HHR1.household_rate_lv50_100 AS household_rate_lv50_100, 
-                    HHR1.household_rate_lv100_200 AS household_rate_lv100_200, 
-                    HHR1.household_rate_lv200_300 AS household_rate_lv200_300, 
-                    HHR1.household_rate_lv300 AS household_rate_lv300, 
+                    CASE WHEN (HHR1.household_rate_lv00) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv00 AS NUMERIC(20,10)) END AS household_rate_lv00, 
+                    CASE WHEN (HHR1.household_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv00_50 AS NUMERIC(20,10)) END AS household_rate_lv00_50, 
+                    CASE WHEN (HHR1.household_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv50_100 AS NUMERIC(20,10)) END AS household_rate_lv50_100, 
+                    CASE WHEN (HHR1.household_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv100_200 AS NUMERIC(20,10)) END AS household_rate_lv100_200, 
+                    CASE WHEN (HHR1.household_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv200_300 AS NUMERIC(20,10)) END AS household_rate_lv200_300, 
+                    CASE WHEN (HHR1.household_rate_lv300) IS NULL THEN 0.0 ELSE CAST(HHR1.household_rate_lv300 AS NUMERIC(20,10)) END AS household_rate_lv300, 
                     
                     -- 家庭用品自動車所有額(マスタDB) 
-                    CA1.car_asset AS car_asset, 
+                    CASE WHEN (CA1.car_asset) IS NULL THEN 0.0 ELSE CAST(CA1.car_asset AS NUMERIC(20,10)) END AS car_asset, 
     
                     -- 家庭用品自動車被害率(マスタDB) 
-                    CR1.car_rate_lv00 AS car_rate_lv00, 
-                    CR1.car_rate_lv00_50 AS car_rate_lv00_50, 
-                    CR1.car_rate_lv50_100 AS car_rate_lv50_100, 
-                    CR1.car_rate_lv100_200 AS car_rate_lv100_200, 
-                    CR1.car_rate_lv200_300 AS car_rate_lv200_300, 
-                    CR1.car_rate_lv300 AS car_rate_lv300, 
+                    CASE WHEN (CR1.car_rate_lv00) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv00 AS NUMERIC(20,10)) END AS car_rate_lv00, 
+                    CASE WHEN (CR1.car_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv00_50 AS NUMERIC(20,10)) END AS car_rate_lv00_50, 
+                    CASE WHEN (CR1.car_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv50_100 AS NUMERIC(20,10)) END AS car_rate_lv50_100, 
+                    CASE WHEN (CR1.car_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv100_200 AS NUMERIC(20,10)) END AS car_rate_lv100_200, 
+                    CASE WHEN (CR1.car_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv200_300 AS NUMERIC(20,10)) END AS car_rate_lv200_300, 
+                    CASE WHEN (CR1.car_rate_lv300) IS NULL THEN 0.0 ELSE CAST(CR1.car_rate_lv300 AS NUMERIC(20,10)) END AS car_rate_lv300, 
                     
                     -- 家庭応急対策費_代替活動費(マスタDB)
-                    HALT1.house_alt_lv00 AS house_alt_lv00, 
-                    HALT1.house_alt_lv00_50 AS house_alt_lv00_50, 
-                    HALT1.house_alt_lv50_100 AS house_alt_lv50_100, 
-                    HALT1.house_alt_lv100_200 AS house_alt_lv100_200, 
-                    HALT1.house_alt_lv200_300 AS house_alt_lv200_300, 
-                    HALT1.house_alt_lv300 AS house_alt_lv300, 
+                    CASE WHEN (HALT1.house_alt_lv00) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv00 AS NUMERIC(20,10)) END AS house_alt_lv00, 
+                    CASE WHEN (HALT1.house_alt_lv00_50) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv00_50 AS NUMERIC(20,10)) END AS house_alt_lv00_50, 
+                    CASE WHEN (HALT1.house_alt_lv50_100) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv50_100 AS NUMERIC(20,10)) END AS house_alt_lv50_100, 
+                    CASE WHEN (HALT1.house_alt_lv100_200) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv100_200 AS NUMERIC(20,10)) END AS house_alt_lv100_200, 
+                    CASE WHEN (HALT1.house_alt_lv200_300) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv200_300 AS NUMERIC(20,10)) END AS house_alt_lv200_300, 
+                    CASE WHEN (HALT1.house_alt_lv300) IS NULL THEN 0.0 ELSE CAST(HALT1.house_alt_lv300 AS NUMERIC(20,10)) END AS house_alt_lv300, 
     
                     -- 家庭応急対策費_清掃労働単価(マスタDB) 
-                    HCL1.house_clean_unit_cost AS house_clean_unit_cost, 
+                    CASE WHEN (HCL1.house_clean_unit_cost) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_unit_cost AS NUMERIC(20,10)) END AS house_clean_unit_cost, 
     
                     -- 家庭応急対策費_清掃日数(マスタDB) 
-                    HCL1.house_clean_days_lv00 AS house_clean_days_lv00, 
-                    HCL1.house_clean_days_lv00_50 AS house_clean_days_lv00_50, 
-                    HCL1.house_clean_days_lv50_100 AS house_clean_days_lv50_100, 
-                    HCL1.house_clean_days_lv100_200 AS house_clean_days_lv100_200, 
-                    HCL1.house_clean_days_lv200_300 AS house_clean_days_lv200_300, 
-                    HCL1.house_clean_days_lv300 AS house_clean_days_lv300, 
+                    CASE WHEN (HCL1.house_clean_days_lv00) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv00 AS NUMERIC(20,10)) END AS house_clean_days_lv00, 
+                    CASE WHEN (HCL1.house_clean_days_lv00_50) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv00_50 AS NUMERIC(20,10)) END AS house_clean_days_lv00_50, 
+                    CASE WHEN (HCL1.house_clean_days_lv50_100) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv50_100 AS NUMERIC(20,10)) END AS house_clean_days_lv50_100, 
+                    CASE WHEN (HCL1.house_clean_days_lv100_200) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv100_200 AS NUMERIC(20,10)) END AS house_clean_days_lv100_200, 
+                    CASE WHEN (HCL1.house_clean_days_lv200_300) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv200_300 AS NUMERIC(20,10)) END AS house_clean_days_lv200_300, 
+                    CASE WHEN (HCL1.house_clean_days_lv300) IS NULL THEN 0.0 ELSE CAST(HCL1.house_clean_days_lv300 AS NUMERIC(20,10)) END AS house_clean_days_lv300, 
                     
                     -- 事業所資産額_償却資産額(マスタDB) 
-                    OA1.office_dep_asset AS office_dep_asset, 
+                    CASE WHEN (OA1.office_dep_asset) IS NULL THEN 0.0 ELSE CAST(OA1.office_dep_asset AS NUMERIC(20,10)) END AS office_dep_asset, 
                     
                     -- 事業所被害率_償却資産被害率(マスタDB) 
-                    OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
-                    OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
-                    OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
-                    OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
-                    -- OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
-                    OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
+                    CASE WHEN (OR1.office_dep_rate_lv00) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv00 AS NUMERIC(20,10)) END AS office_dep_rate_lv00, 
+                    CASE WHEN (OR1.office_dep_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv00_50 AS NUMERIC(20,10)) END AS office_dep_rate_lv00_50, 
+                    CASE WHEN (OR1.office_dep_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv50_100 AS NUMERIC(20,10)) END AS office_dep_rate_lv50_100, 
+                    CASE WHEN (OR1.office_dep_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv100_200 AS NUMERIC(20,10)) END AS office_dep_rate_lv100_200, 
+                    -- CASE WHEN (OR1.office_dep_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv200_300 AS NUMERIC(20,10)) END AS office_dep_rate_lv200_300, 
+                    CASE WHEN (OR1.office_dep_rate_lv300) IS NULL THEN 0.0 ELSE CAST(OR1.office_dep_rate_lv300 AS NUMERIC(20,10)) END AS office_dep_rate_lv300, 
     
                     -- 事業所資産額_在庫資産額(マスタDB) 
-                    OA1.office_inv_asset AS office_inv_asset, 
+                    CASE WHEN (OA1.office_inv_asset) IS NULL THEN 0.0 ELSE CAST(OA1.office_inv_asset AS NUMERIC(20,10)) END AS office_inv_asset, 
     
                     -- 事業所被害率_在庫資産被害率(マスタDB) 
-                    OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
-                    OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
-                    OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
-                    OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
-                    -- OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
-                    OR1.office_inv_rate_lv300 AS office_inv_rate_lv300, 
+                    CASE WHEN (OR1.office_inv_rate_lv00) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv00 AS NUMERIC(20,10)) END AS office_inv_rate_lv00, 
+                    CASE WHEN (OR1.office_inv_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv00_50 AS NUMERIC(20,10)) END AS office_inv_rate_lv00_50, 
+                    CASE WHEN (OR1.office_inv_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv50_100 AS NUMERIC(20,10)) END AS office_inv_rate_lv50_100, 
+                    CASE WHEN (OR1.office_inv_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv100_200 AS NUMERIC(20,10)) END AS office_inv_rate_lv100_200, 
+                    -- CASE WHEN (OR1.office_inv_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv200_300 AS NUMERIC(20,10)) END AS office_inv_rate_lv200_300, 
+                    CASE WHEN (OR1.office_inv_rate_lv300) IS NULL THEN 0.0 ELSE CAST(OR1.office_inv_rate_lv300 AS NUMERIC(20,10)) END AS office_inv_rate_lv300, 
     
                     -- 事業所資産額_付加価値額(マスタDB) 
-                    OA1.office_va_asset AS office_va_asset, 
+                    CASE WHEN (OA1.office_va_asset) IS NULL THEN 0.0 ELSE CAST(OA1.office_va_asset AS NUMERIC(20,10)) END AS office_va_asset, 
     
                     -- 事業所被害額_営業停止に伴う被害額(マスタDB) 
-                    OSUS1.office_sus_days_lv00 AS office_sus_days_lv00, 
-                    OSUS1.office_sus_days_lv00_50 AS office_sus_days_lv00_50, 
-                    OSUS1.office_sus_days_lv50_100 AS office_sus_days_lv50_100, 
-                    OSUS1.office_sus_days_lv100_200 AS office_sus_days_lv100_200, 
-                    -- OSUS1.office_sus_days_lv200_300 AS office_sus_days_lv200_300, 
-                    OSUS1.office_sus_days_lv300 AS office_sus_days_lv300, 
+                    CASE WHEN (OSUS1.office_sus_days_lv00) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv00 AS NUMERIC(20,10)) END AS office_sus_days_lv00, 
+                    CASE WHEN (OSUS1.office_sus_days_lv00_50) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv00_50 AS NUMERIC(20,10)) END AS office_sus_days_lv00_50, 
+                    CASE WHEN (OSUS1.office_sus_days_lv50_100) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv50_100 AS NUMERIC(20,10)) END AS office_sus_days_lv50_100, 
+                    CASE WHEN (OSUS1.office_sus_days_lv100_200) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv100_200 AS NUMERIC(20,10)) END AS office_sus_days_lv100_200, 
+                    -- CASE WHEN (OSUS1.office_sus_days_lv200_300) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv200_300 AS NUMERIC(20,10)) END AS office_sus_days_lv200_300, 
+                    CASE WHEN (OSUS1.office_sus_days_lv300) IS NULL THEN 0.0 ELSE CAST(OSUS1.office_sus_days_lv300 AS NUMERIC(20,10)) END AS office_sus_days_lv300, 
     
                     -- 事業所被害額_営業停滞に伴う被害額(マスタDB) 
-                    OSTG1.office_stg_days_lv00 AS office_stg_days_lv00, 
-                    OSTG1.office_stg_days_lv00_50 AS office_stg_days_lv00_50, 
-                    OSTG1.office_stg_days_lv50_100 AS office_stg_days_lv50_100, 
-                    OSTG1.office_stg_days_lv100_200 AS office_stg_days_lv100_200, 
-                    -- OSTG1.office_stg_days_lv200_300 AS office_stg_days_lv200_300, 
-                    OSTG1.office_stg_days_lv300 AS office_stg_days_lv300, 
+                    CASE WHEN (OSTG1.office_stg_days_lv00) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv00 AS NUMERIC(20,10)) END AS office_stg_days_lv00, 
+                    CASE WHEN (OSTG1.office_stg_days_lv00_50) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv00_50 AS NUMERIC(20,10)) END AS office_stg_days_lv00_50, 
+                    CASE WHEN (OSTG1.office_stg_days_lv50_100) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv50_100 AS NUMERIC(20,10)) END AS office_stg_days_lv50_100, 
+                    CASE WHEN (OSTG1.office_stg_days_lv100_200) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv100_200 AS NUMERIC(20,10)) END AS office_stg_days_lv100_200, 
+                    -- CASE WHEN (OSTG1.office_stg_days_lv200_300) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv200_300 AS NUMERIC(20,10)) END AS office_stg_days_lv200_300, 
+                    CASE WHEN (OSTG1.office_stg_days_lv300) IS NULL THEN 0.0 ELSE CAST(OSTG1.office_stg_days_lv300 AS NUMERIC(20,10)) END AS office_stg_days_lv300, 
                     
                     -- 農漁家資産額_償却資産額(マスタDB) 
-                    FFA1.farmer_fisher_dep_asset AS farmer_fisher_dep_asset, 
+                    CASE WHEN (FFA1.farmer_fisher_dep_asset) IS NULL THEN 0.0 ELSE CAST(FFA1.farmer_fisher_dep_asset AS NUMERIC(20,10)) END AS farmer_fisher_dep_asset, 
                     
                     -- 農漁家被害率_償却資産被害率(マスタDB) 
-                    FFR1.farmer_fisher_dep_rate_lv00 AS farmer_fisher_dep_rate_lv00, 
-                    FFR1.farmer_fisher_dep_rate_lv00_50 AS farmer_fisher_dep_rate_lv00_50, 
-                    FFR1.farmer_fisher_dep_rate_lv50_100 AS farmer_fisher_dep_rate_lv50_100, 
-                    FFR1.farmer_fisher_dep_rate_lv100_200 AS farmer_fisher_dep_rate_lv100_200, 
-                    -- FFR1.farmer_fisher_dep_rate_lv200_300 AS farmer_fisher_dep_rate_lv200_300, 
-                    FFR1.farmer_fisher_dep_rate_lv300 AS farmer_fisher_dep_rate_lv300, 
+                    CASE WHEN (FFR1.farmer_fisher_dep_rate_lv00) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv00, 
+                    CASE WHEN (FFR1.farmer_fisher_dep_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv00_50 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv00_50, 
+                    CASE WHEN (FFR1.farmer_fisher_dep_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv50_100 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv50_100, 
+                    CASE WHEN (FFR1.farmer_fisher_dep_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv100_200 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv100_200, 
+                    -- CASE WHEN (FFR1.farmer_fisher_dep_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv200_300 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv200_300, 
+                    CASE WHEN (FFR1.farmer_fisher_dep_rate_lv300) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_dep_rate_lv300 AS NUMERIC(20,10)) END AS farmer_fisher_dep_rate_lv300, 
     
                     -- 農漁家資産額_在庫資産額(マスタDB) 
-                    FFA1.farmer_fisher_inv_asset AS farmer_fisher_inv_asset, 
+                    CASE WHEN (FFA1.farmer_fisher_inv_asset) IS NULL THEN 0.0 ELSE CAST(FFA1.farmer_fisher_inv_asset AS NUMERIC(20,10)) END AS farmer_fisher_inv_asset, 
                     
                     -- 農漁家被害率_在庫資産被害率(マスタDB) 
-                    FFR1.farmer_fisher_inv_rate_lv00 AS farmer_fisher_inv_rate_lv00, 
-                    FFR1.farmer_fisher_inv_rate_lv00_50 AS farmer_fisher_inv_rate_lv00_50, 
-                    FFR1.farmer_fisher_inv_rate_lv50_100 AS farmer_fisher_inv_rate_lv50_100, 
-                    FFR1.farmer_fisher_inv_rate_lv100_200 AS farmer_fisher_inv_rate_lv100_200, 
-                    -- FFR1.farmer_fisher_inv_rate_lv200_300 AS farmer_fisher_inv_rate_lv200_300, 
-                    FFR1.farmer_fisher_inv_rate_lv300 AS farmer_fisher_inv_rate_lv300, 
+                    CASE WHEN (FFR1.farmer_fisher_inv_rate_lv00) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv00, 
+                    CASE WHEN (FFR1.farmer_fisher_inv_rate_lv00_50) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv00_50 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv00_50, 
+                    CASE WHEN (FFR1.farmer_fisher_inv_rate_lv50_100) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv50_100 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv50_100, 
+                    CASE WHEN (FFR1.farmer_fisher_inv_rate_lv100_200) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv100_200 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv100_200, 
+                    -- CASE WHEN (FFR1.farmer_fisher_inv_rate_lv200_300) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv200_300 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv200_300, 
+                    CASE WHEN (FFR1.farmer_fisher_inv_rate_lv300) IS NULL THEN 0.0 ELSE CAST(FFR1.farmer_fisher_inv_rate_lv300 AS NUMERIC(20,10)) END AS farmer_fisher_inv_rate_lv300, 
                     
                     -- 事業所応急対策費_代替活動費(マスタDB) 
-                    OALT1.office_alt_lv00 AS office_alt_lv00, 
-                    OALT1.office_alt_lv00_50 AS office_alt_lv00_50, 
-                    OALT1.office_alt_lv50_100 AS office_alt_lv50_100, 
-                    OALT1.office_alt_lv100_200 AS office_alt_lv100_200, 
-                    OALT1.office_alt_lv200_300 AS office_alt_lv200_300, 
-                    OALT1.office_alt_lv300 AS office_alt_lv300, 
+                    CASE WHEN (OALT1.office_alt_lv00) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv00 AS NUMERIC(20,10)) END AS office_alt_lv00, 
+                    CASE WHEN (OALT1.office_alt_lv00_50) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv00_50 AS NUMERIC(20,10)) END AS office_alt_lv00_50, 
+                    CASE WHEN (OALT1.office_alt_lv50_100) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv50_100 AS NUMERIC(20,10)) END AS office_alt_lv50_100, 
+                    CASE WHEN (OALT1.office_alt_lv100_200) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv100_200 AS NUMERIC(20,10)) END AS office_alt_lv100_200, 
+                    CASE WHEN (OALT1.office_alt_lv200_300) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv200_300 AS NUMERIC(20,10)) END AS office_alt_lv200_300, 
+                    CASE WHEN (OALT1.office_alt_lv300) IS NULL THEN 0.0 ELSE CAST(OALT1.office_alt_lv300 AS NUMERIC(20,10)) END AS office_alt_lv300, 
                     
                     -- 家屋被害額(集計DB) 
-                    IS1.house_summary_lv00 AS house_summary_lv00, 
-                    IS1.house_summary_lv01_49 AS house_summary_lv01_49, 
-                    IS1.house_summary_lv50_99 AS house_summary_lv50_99, 
-                    IS1.house_summary_lv100 AS house_summary_lv100, 
-                    IS1.house_summary_half AS house_summary_half, 
-                    IS1.house_summary_full AS house_summary_full, 
+                    CASE WHEN (IS1.house_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_lv00 AS NUMERIC(20,10)) END AS house_summary_lv00, 
+                    CASE WHEN (IS1.house_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_lv01_49 AS NUMERIC(20,10)) END AS house_summary_lv01_49, 
+                    CASE WHEN (IS1.house_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_lv50_99 AS NUMERIC(20,10)) END AS house_summary_lv50_99, 
+                    CASE WHEN (IS1.house_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_lv100 AS NUMERIC(20,10)) END AS house_summary_lv100, 
+                    CASE WHEN (IS1.house_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_half AS NUMERIC(20,10)) END AS house_summary_half, 
+                    CASE WHEN (IS1.house_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.house_summary_full AS NUMERIC(20,10)) END AS house_summary_full, 
                     
                     -- 家屋被害額(集計DB)から逆計算により延床面積を求めた結果 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv00) <= 0 THEN NULL ELSE (IS1.house_summary_lv00 / (HA1.house_asset * HR1.house_rate_lv00)) END AS floor_area_lv00_reverse_house_summary, 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.house_summary_lv01_49 / (HA1.house_asset * HR1.house_rate_lv00_50)) END AS floor_area_lv01_49_reverse_house_summary, 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.house_summary_lv50_99 / (HA1.house_asset * HR1.house_rate_lv50_100)) END AS floor_area_lv50_99_reverse_house_summary, 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.house_summary_lv100 / (HA1.house_asset * HR1.house_rate_lv100_200)) END AS floor_area_lv100_reverse_house_summary, 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.house_summary_half / (HA1.house_asset * HR1.house_rate_lv200_300)) END AS floor_area_half_reverse_house_summary, 
-                    CASE WHEN (HA1.house_asset * HR1.house_rate_lv300) <= 0 THEN NULL ELSE (IS1.house_summary_full / (HA1.house_asset * HR1.house_rate_lv300)) END AS floor_area_full_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_lv00 / (HA1.house_asset * HR1.house_rate_lv00) AS NUMERIC(20,10)) END AS floor_area_lv00_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_lv01_49 / (HA1.house_asset * HR1.house_rate_lv00_50) AS NUMERIC(20,10)) END AS floor_area_lv01_49_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_lv50_99 / (HA1.house_asset * HR1.house_rate_lv50_100) AS NUMERIC(20,10)) END AS floor_area_lv50_99_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_lv100 / (HA1.house_asset * HR1.house_rate_lv100_200) AS NUMERIC(20,10)) END AS floor_area_lv100_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_half / (HA1.house_asset * HR1.house_rate_lv200_300) AS NUMERIC(20,10)) END AS floor_area_half_reverse_house_summary, 
+                    CASE WHEN ABS(HA1.house_asset * HR1.house_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_summary_full / (HA1.house_asset * HR1.house_rate_lv300) AS NUMERIC(20,10)) END AS floor_area_full_reverse_house_summary, 
                     
                     -- 家庭用品自動車以外被害額(集計DB) 
-                    IS1.household_summary_lv00 AS household_summary_lv00,
-                    IS1.household_summary_lv01_49 AS household_summary_lv01_49, 
-                    IS1.household_summary_lv50_99 AS household_summary_lv50_99, 
-                    IS1.household_summary_lv100 AS household_summary_lv100, 
-                    IS1.household_summary_half AS household_summary_half, 
-                    IS1.household_summary_full AS household_summary_full, 
+                    CASE WHEN (IS1.household_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_lv00 AS NUMERIC(20,10)) END AS household_summary_lv00,
+                    CASE WHEN (IS1.household_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_lv01_49 AS NUMERIC(20,10)) END AS household_summary_lv01_49, 
+                    CASE WHEN (IS1.household_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_lv50_99 AS NUMERIC(20,10)) END AS household_summary_lv50_99, 
+                    CASE WHEN (IS1.household_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_lv100 AS NUMERIC(20,10)) END AS household_summary_lv100, 
+                    CASE WHEN (IS1.household_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_half AS NUMERIC(20,10)) END AS household_summary_half, 
+                    CASE WHEN (IS1.household_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.household_summary_full AS NUMERIC(20,10)) END AS household_summary_full, 
     
                     -- 家庭用品自動車以外被害額(集計DB)から逆計算により被災世帯数を求めた結果 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv00) <= 0 THEN NULL ELSE (IS1.household_summary_lv00 / (HHA1.household_asset * HHR1.household_rate_lv00)) END AS family_lv00_reverse_household_summary, 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.household_summary_lv01_49 / (HHA1.household_asset * HHR1.household_rate_lv00_50)) END AS family_lv01_49_reverse_household_summary, 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.household_summary_lv50_99 / (HHA1.household_asset * HHR1.household_rate_lv50_100)) END AS family_lv50_99_reverse_household_summary, 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.household_summary_lv100 / (HHA1.household_asset * HHR1.household_rate_lv100_200)) END AS family_lv100_reverse_household_summary, 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.household_summary_half / (HHA1.household_asset * HHR1.household_rate_lv200_300)) END AS family_half_reverse_household_summary, 
-                    CASE WHEN (HHA1.household_asset * HHR1.household_rate_lv300) <= 0 THEN NULL ELSE (IS1.household_summary_full / (HHA1.household_asset * HHR1.household_rate_lv300)) END AS family_full_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_lv00 / (HHA1.household_asset * HHR1.household_rate_lv00) AS NUMERIC(20,10)) END AS family_lv00_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_lv01_49 / (HHA1.household_asset * HHR1.household_rate_lv00_50) AS NUMERIC(20,10)) END AS family_lv01_49_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_lv50_99 / (HHA1.household_asset * HHR1.household_rate_lv50_100) AS NUMERIC(20,10)) END AS family_lv50_99_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_lv100 / (HHA1.household_asset * HHR1.household_rate_lv100_200) AS NUMERIC(20,10)) END AS family_lv100_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_half / (HHA1.household_asset * HHR1.household_rate_lv200_300) AS NUMERIC(20,10)) END AS family_half_reverse_household_summary, 
+                    CASE WHEN ABS(HHA1.household_asset * HHR1.household_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.household_summary_full / (HHA1.household_asset * HHR1.household_rate_lv300) AS NUMERIC(20,10)) END AS family_full_reverse_household_summary, 
                     
                     -- 家庭用品自動車被害額(集計DB) 
-                    IS1.car_summary_lv00 AS car_summary_lv00, 
-                    IS1.car_summary_lv01_49 AS car_summary_lv01_49, 
-                    IS1.car_summary_lv50_99 AS car_summary_lv50_99, 
-                    IS1.car_summary_lv100 AS car_summary_lv100, 
-                    IS1.car_summary_half AS car_summary_half, 
-                    IS1.car_summary_full AS car_summary_full, 
+                    CASE WHEN (IS1.car_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_lv00 AS NUMERIC(20,10)) END AS car_summary_lv00, 
+                    CASE WHEN (IS1.car_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_lv01_49 AS NUMERIC(20,10)) END AS car_summary_lv01_49, 
+                    CASE WHEN (IS1.car_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_lv50_99 AS NUMERIC(20,10)) END AS car_summary_lv50_99, 
+                    CASE WHEN (IS1.car_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_lv100 AS NUMERIC(20,10)) END AS car_summary_lv100, 
+                    CASE WHEN (IS1.car_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_half AS NUMERIC(20,10)) END AS car_summary_half, 
+                    CASE WHEN (IS1.car_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.car_summary_full AS NUMERIC(20,10)) END AS car_summary_full, 
     
                     -- 家庭用品自動車被害額(集計DB)から逆計算により被災世帯数を求めた結果 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv00) <= 0 THEN NULL ELSE (IS1.car_summary_lv00 / (CA1.car_asset * CR1.car_rate_lv00)) END AS family_lv00_reverse_car_summary, 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.car_summary_lv01_49 / (CA1.car_asset * CR1.car_rate_lv00_50)) END AS family_lv01_49_reverse_car_summary, 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.car_summary_lv50_99 / (CA1.car_asset * CR1.car_rate_lv50_100)) END AS family_lv50_99_reverse_car_summary, 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.car_summary_lv100 / (CA1.car_asset * CR1.car_rate_lv100_200)) END AS family_lv100_reverse_car_summary, 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.car_summary_half / (CA1.car_asset * CR1.car_rate_lv200_300)) END AS family_half_reverse_car_summary, 
-                    CASE WHEN (CA1.car_asset * CR1.car_rate_lv300) <= 0 THEN NULL ELSE (IS1.car_summary_full / (CA1.car_asset * CR1.car_rate_lv300)) END AS family_full_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_lv00 / (CA1.car_asset * CR1.car_rate_lv00) AS NUMERIC(20,10)) END AS family_lv00_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_lv01_49 / (CA1.car_asset * CR1.car_rate_lv00_50) AS NUMERIC(20,10)) END AS family_lv01_49_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_lv50_99 / (CA1.car_asset * CR1.car_rate_lv50_100) AS NUMERIC(20,10)) END AS family_lv50_99_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_lv100 / (CA1.car_asset * CR1.car_rate_lv100_200) AS NUMERIC(20,10)) END AS family_lv100_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_half / (CA1.car_asset * CR1.car_rate_lv200_300) AS NUMERIC(20,10)) END AS family_half_reverse_car_summary, 
+                    CASE WHEN ABS(CA1.car_asset * CR1.car_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.car_summary_full / (CA1.car_asset * CR1.car_rate_lv300) AS NUMERIC(20,10)) END AS family_full_reverse_car_summary, 
     
                     -- 家庭応急対策費_代替活動費(集計DB) 
-                    IS1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
-                    IS1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
-                    IS1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
-                    IS1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
-                    IS1.house_alt_summary_half AS house_alt_summary_half, 
-                    IS1.house_alt_summary_full AS house_alt_summary_full, 
+                    CASE WHEN (IS1.house_alt_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_lv00 AS NUMERIC(20,10)) END AS house_alt_summary_lv00, 
+                    CASE WHEN (IS1.house_alt_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_lv01_49 AS NUMERIC(20,10)) END AS house_alt_summary_lv01_49, 
+                    CASE WHEN (IS1.house_alt_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_lv50_99 AS NUMERIC(20,10)) END AS house_alt_summary_lv50_99, 
+                    CASE WHEN (IS1.house_alt_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_lv100 AS NUMERIC(20,10)) END AS house_alt_summary_lv100, 
+                    CASE WHEN (IS1.house_alt_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_half AS NUMERIC(20,10)) END AS house_alt_summary_half, 
+                    CASE WHEN (IS1.house_alt_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.house_alt_summary_full AS NUMERIC(20,10)) END AS house_alt_summary_full, 
     
                     -- 家庭応急対策費_代替活動費(集計DB)から逆計算により被災世帯数を求めた結果 
-                    CASE WHEN (HALT1.house_alt_lv00) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv00 / HALT1.house_alt_lv00) END AS family_lv00_reverse_house_alt_summary, 
-                    CASE WHEN (HALT1.house_alt_lv00_50) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv01_49 / HALT1.house_alt_lv00_50) END AS family_lv01_49_reverse_house_alt_summary, 
-                    CASE WHEN (HALT1.house_alt_lv50_100) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv50_99 / HALT1.house_alt_lv50_100) END AS family_lv50_99_reverse_house_alt_summary, 
-                    CASE WHEN (HALT1.house_alt_lv100_200) <= 0 THEN NULL ELSE (IS1.house_alt_summary_lv100 / HALT1.house_alt_lv100_200) END AS family_lv100_reverse_house_alt_summary, 
-                    CASE WHEN (HALT1.house_alt_lv200_300) <= 0 THEN NULL ELSE (IS1.house_alt_summary_half / HALT1.house_alt_lv200_300) END AS family_half_reverse_house_alt_summary, 
-                    CASE WHEN (HALT1.house_alt_lv300) <= 0 THEN NULL ELSE (IS1.house_alt_summary_full / HALT1.house_alt_lv300) END AS family_full_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_lv00 / HALT1.house_alt_lv00 AS NUMERIC(20,10)) END AS family_lv00_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_lv01_49 / HALT1.house_alt_lv00_50 AS NUMERIC(20,10)) END AS family_lv01_49_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_lv50_99 / HALT1.house_alt_lv50_100 AS NUMERIC(20,10)) END AS family_lv50_99_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_lv100 / HALT1.house_alt_lv100_200 AS NUMERIC(20,10)) END AS family_lv100_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_half / HALT1.house_alt_lv200_300 AS NUMERIC(20,10)) END AS family_half_reverse_house_alt_summary, 
+                    CASE WHEN ABS(HALT1.house_alt_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_alt_summary_full / HALT1.house_alt_lv300 AS NUMERIC(20,10)) END AS family_full_reverse_house_alt_summary, 
     
                     -- 家庭応急対策費_清掃費(集計DB) 
-                    IS1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
-                    IS1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
-                    IS1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
-                    IS1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
-                    IS1.house_clean_summary_half AS house_clean_summary_half, 
-                    IS1.house_clean_summary_full AS house_clean_summary_full, 
+                    CASE WHEN (IS1.house_clean_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_lv00 AS NUMERIC(20,10)) END AS house_clean_summary_lv00, 
+                    CASE WHEN (IS1.house_clean_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_lv01_49 AS NUMERIC(20,10)) END AS house_clean_summary_lv01_49, 
+                    CASE WHEN (IS1.house_clean_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_lv50_99 AS NUMERIC(20,10)) END AS house_clean_summary_lv50_99, 
+                    CASE WHEN (IS1.house_clean_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_lv100 AS NUMERIC(20,10)) END AS house_clean_summary_lv100, 
+                    CASE WHEN (IS1.house_clean_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_half AS NUMERIC(20,10)) END AS house_clean_summary_half, 
+                    CASE WHEN (IS1.house_clean_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.house_clean_summary_full AS NUMERIC(20,10)) END AS house_clean_summary_full, 
     
                     -- 家庭応急対策費_清掃費(集計DB)から逆計算により被災世帯数を求めた結果 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv00 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00)) END AS family_lv00_reverse_house_clean_summary, 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv01_49 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50)) END AS family_lv01_49_reverse_house_clean_summary, 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv50_99 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100)) END AS family_lv50_99_reverse_house_clean_summary, 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200) <= 0 THEN NULL ELSE (IS1.house_clean_summary_lv100 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200)) END AS family_lv100_reverse_house_clean_summary, 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300) <= 0 THEN NULL ELSE (IS1.house_clean_summary_half / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300)) END AS family_half_reverse_house_clean_summary, 
-                    CASE WHEN (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300) <= 0 THEN NULL ELSE (IS1.house_clean_summary_full / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300)) END AS family_full_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_lv00 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00) AS NUMERIC(20,10)) END AS family_lv00_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_lv01_49 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv00_50) AS NUMERIC(20,10)) END AS family_lv01_49_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_lv50_99 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv50_100) AS NUMERIC(20,10)) END AS family_lv50_99_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_lv100 / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv100_200) AS NUMERIC(20,10)) END AS family_lv100_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_half / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv200_300) AS NUMERIC(20,10)) END AS family_half_reverse_house_clean_summary, 
+                    CASE WHEN ABS(HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.house_clean_summary_full / (HCL1.house_clean_unit_cost * HCL1.house_clean_days_lv300) AS NUMERIC(20,10)) END AS family_full_reverse_house_clean_summary, 
     
                     -- 事業所被害額_償却資産被害額(集計DB) 
-                    IS1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
-                    IS1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
-                    IS1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
-                    IS1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
-                    -- IS1.office_dep_summary_half AS office_dep_summary_half, 
-                    IS1.office_dep_summary_full AS office_dep_summary_full, 
+                    CASE WHEN (IS1.office_dep_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_lv00 AS NUMERIC(20,10)) END AS office_dep_summary_lv00, 
+                    CASE WHEN (IS1.office_dep_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_lv01_49 AS NUMERIC(20,10)) END AS office_dep_summary_lv01_49, 
+                    CASE WHEN (IS1.office_dep_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_lv50_99 AS NUMERIC(20,10)) END AS office_dep_summary_lv50_99, 
+                    CASE WHEN (IS1.office_dep_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_lv100 AS NUMERIC(20,10)) END AS office_dep_summary_lv100, 
+                    -- CASE WHEN (IS1.office_dep_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_half AS NUMERIC(20,10)) END AS office_dep_summary_half, 
+                    CASE WHEN (IS1.office_dep_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.office_dep_summary_full AS NUMERIC(20,10)) END AS office_dep_summary_full, 
                     
                     -- 事業所被害額_償却資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-                    CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv00) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv00 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00)) END AS employee_lv00_reverse_office_dep_summary, 
-                    CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv01_49 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00_50)) END AS employee_lv01_49_reverse_office_dep_summary, 
-                    CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv50_99 / (OA1.office_dep_asset * OR1.office_dep_rate_lv50_100)) END AS employee_lv50_99_reverse_office_dep_summary, 
-                    CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.office_dep_summary_lv100 / (OA1.office_dep_asset * OR1.office_dep_rate_lv100_200)) END AS employee_lv100_reverse_office_dep_summary, 
-                    -- CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.office_dep_summary_half / (OA1.office_dep_asset * OR1.office_dep_rate_lv200_300)) END AS employee_half_reverse_office_dep_summary, 
-                    CASE WHEN (OA1.office_dep_asset * OR1.office_dep_rate_lv300) <= 0 THEN NULL ELSE (IS1.office_dep_summary_full / (OA1.office_dep_asset * OR1.office_dep_rate_lv300)) END AS employee_full_reverse_office_dep_summary, 
+                    CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_lv00 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00) AS NUMERIC(20,10)) END AS employee_lv00_reverse_office_dep_summary, 
+                    CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_lv01_49 / (OA1.office_dep_asset * OR1.office_dep_rate_lv00_50) AS NUMERIC(20,10)) END AS employee_lv01_49_reverse_office_dep_summary, 
+                    CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_lv50_99 / (OA1.office_dep_asset * OR1.office_dep_rate_lv50_100) AS NUMERIC(20,10)) END AS employee_lv50_99_reverse_office_dep_summary, 
+                    CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_lv100 / (OA1.office_dep_asset * OR1.office_dep_rate_lv100_200) AS NUMERIC(20,10)) END AS employee_lv100_reverse_office_dep_summary, 
+                    -- CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_half / (OA1.office_dep_asset * OR1.office_dep_rate_lv200_300) AS NUMERIC(20,10)) END AS employee_half_reverse_office_dep_summary, 
+                    CASE WHEN ABS(OA1.office_dep_asset * OR1.office_dep_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_dep_summary_full / (OA1.office_dep_asset * OR1.office_dep_rate_lv300) AS NUMERIC(20,10)) END AS employee_full_reverse_office_dep_summary, 
     
                     -- 事業所被害額_在庫資産被害額(集計DB) 
-                    IS1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
-                    IS1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
-                    IS1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
-                    IS1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
-                    -- IS1.office_inv_summary_half AS office_inv_summary_half, 
-                    IS1.office_inv_summary_full AS office_inv_summary_full, 
+                    CASE WHEN (IS1.office_inv_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_lv00 AS NUMERIC(20,10)) END AS office_inv_summary_lv00, 
+                    CASE WHEN (IS1.office_inv_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_lv01_49 AS NUMERIC(20,10)) END AS office_inv_summary_lv01_49, 
+                    CASE WHEN (IS1.office_inv_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_lv50_99 AS NUMERIC(20,10)) END AS office_inv_summary_lv50_99, 
+                    CASE WHEN (IS1.office_inv_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_lv100 AS NUMERIC(20,10)) END AS office_inv_summary_lv100, 
+                    -- CASE WHEN (IS1.office_inv_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_half AS NUMERIC(20,10)) END AS office_inv_summary_half, 
+                    CASE WHEN (IS1.office_inv_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.office_inv_summary_full AS NUMERIC(20,10)) END AS office_inv_summary_full, 
                     
                     -- 事業所被害額_在庫資産被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-                    CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv00) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv00 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00)) END AS employee_lv00_reverse_office_inv_summary, 
-                    CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv01_49 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00_50)) END AS employee_lv01_49_reverse_office_inv_summary, 
-                    CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv50_99 / (OA1.office_inv_asset * OR1.office_inv_rate_lv50_100)) END AS employee_lv50_99_reverse_office_inv_summary, 
-                    CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.office_inv_summary_lv100 / (OA1.office_inv_asset * OR1.office_inv_rate_lv100_200)) END AS employee_lv100_reverse_office_inv_summary, 
-                    -- CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.office_inv_summary_half / (OA1.office_inv_asset * OR1.office_inv_rate_lv200_300)) END AS employee_half_reverse_office_inv_summary, 
-                    CASE WHEN (OA1.office_inv_asset * OR1.office_inv_rate_lv300) <= 0 THEN NULL ELSE (IS1.office_inv_summary_full / (OA1.office_inv_asset * OR1.office_inv_rate_lv300)) END AS employee_full_reverse_office_inv_summary, 
+                    CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_lv00 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00) AS NUMERIC(20,10)) END AS employee_lv00_reverse_office_inv_summary, 
+                    CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_lv01_49 / (OA1.office_inv_asset * OR1.office_inv_rate_lv00_50) AS NUMERIC(20,10)) END AS employee_lv01_49_reverse_office_inv_summary, 
+                    CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_lv50_99 / (OA1.office_inv_asset * OR1.office_inv_rate_lv50_100) AS NUMERIC(20,10)) END AS employee_lv50_99_reverse_office_inv_summary, 
+                    CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_lv100 / (OA1.office_inv_asset * OR1.office_inv_rate_lv100_200) AS NUMERIC(20,10)) END AS employee_lv100_reverse_office_inv_summary, 
+                    -- CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_half / (OA1.office_inv_asset * OR1.office_inv_rate_lv200_300) AS NUMERIC(20,10)) END AS employee_half_reverse_office_inv_summary, 
+                    CASE WHEN ABS(OA1.office_inv_asset * OR1.office_inv_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_inv_summary_full / (OA1.office_inv_asset * OR1.office_inv_rate_lv300) AS NUMERIC(20,10)) END AS employee_full_reverse_office_inv_summary, 
     
                     -- 事業所被害額_営業停止に伴う被害額(集計DB) 
-                    IS1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
-                    IS1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
-                    IS1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
-                    IS1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
-                    -- IS1.office_sus_summary_half AS office_sus_summary_half, 
-                    IS1.office_sus_summary_full AS office_sus_summary_full, 
+                    CASE WHEN (IS1.office_sus_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_lv00 AS NUMERIC(20,10)) END AS office_sus_summary_lv00, 
+                    CASE WHEN (IS1.office_sus_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_lv01_49 AS NUMERIC(20,10)) END AS office_sus_summary_lv01_49, 
+                    CASE WHEN (IS1.office_sus_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_lv50_99 AS NUMERIC(20,10)) END AS office_sus_summary_lv50_99, 
+                    CASE WHEN (IS1.office_sus_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_lv100 AS NUMERIC(20,10)) END AS office_sus_summary_lv100, 
+                    -- CASE WHEN (IS1.office_sus_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_half AS NUMERIC(20,10)) END AS office_sus_summary_half, 
+                    CASE WHEN (IS1.office_sus_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.office_sus_summary_full AS NUMERIC(20,10)) END AS office_sus_summary_full, 
     
                     -- 事業所被害額_営業停止に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-                    CASE WHEN (OSUS1.office_sus_days_lv00 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv00 / (OSUS1.office_sus_days_lv00 * OA1.office_va_asset)) END AS employee_lv00_reverse_office_sus_summary, 
-                    CASE WHEN (OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv01_49 / (OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset)) END AS employee_lv01_49_reverse_office_sus_summary, 
-                    CASE WHEN (OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv50_99 / (OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset)) END AS employee_lv50_99_reverse_office_sus_summary, 
-                    CASE WHEN (OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_lv100 / (OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset)) END AS employee_lv100_reverse_office_sus_summary, 
-                    -- CASE WHEN (OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_half / (OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset)) END AS employee_half_reverse_office_sus_summary, 
-                    CASE WHEN (OSUS1.office_sus_days_lv300 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_sus_summary_full / (OSUS1.office_sus_days_lv300 * OA1.office_va_asset)) END AS employee_full_reverse_office_sus_summary, 
+                    CASE WHEN ABS(OSUS1.office_sus_days_lv00 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_lv00 / (OSUS1.office_sus_days_lv00 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv00_reverse_office_sus_summary, 
+                    CASE WHEN ABS(OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_lv01_49 / (OSUS1.office_sus_days_lv00_50 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv01_49_reverse_office_sus_summary, 
+                    CASE WHEN ABS(OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_lv50_99 / (OSUS1.office_sus_days_lv50_100 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv50_99_reverse_office_sus_summary, 
+                    CASE WHEN ABS(OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_lv100 / (OSUS1.office_sus_days_lv100_200 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv100_reverse_office_sus_summary, 
+                    -- CASE WHEN ABS(OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_half / (OSUS1.office_sus_days_lv200_300 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_half_reverse_office_sus_summary, 
+                    CASE WHEN ABS(OSUS1.office_sus_days_lv300 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_sus_summary_full / (OSUS1.office_sus_days_lv300 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_full_reverse_office_sus_summary, 
     
                     -- 事業所被害額_営業停滞に伴う被害額(集計DB) 
-                    IS1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
-                    IS1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
-                    IS1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
-                    IS1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
-                    -- IS1.office_stg_summary_half AS office_stg_summary_half, 
-                    IS1.office_stg_summary_full AS office_stg_summary_full, 
+                    CASE WHEN (IS1.office_stg_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_lv00 AS NUMERIC(20,10)) END AS office_stg_summary_lv00, 
+                    CASE WHEN (IS1.office_stg_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_lv01_49 AS NUMERIC(20,10)) END AS office_stg_summary_lv01_49, 
+                    CASE WHEN (IS1.office_stg_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_lv50_99 AS NUMERIC(20,10)) END AS office_stg_summary_lv50_99, 
+                    CASE WHEN (IS1.office_stg_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_lv100 AS NUMERIC(20,10)) END AS office_stg_summary_lv100, 
+                    -- CASE WHEN (IS1.office_stg_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_half AS NUMERIC(20,10)) END AS office_stg_summary_half, 
+                    CASE WHEN (IS1.office_stg_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.office_stg_summary_full AS NUMERIC(20,10)) END AS office_stg_summary_full, 
     
                     -- 事業所被害額_営業停滞に伴う被害額(集計DB)から逆計算により被災従業者数を求めた結果 
-                    CASE WHEN (OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv00 / (OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset)) END AS employee_lv00_reverse_office_stg_summary, 
-                    CASE WHEN (OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv01_49 / (OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset)) END AS employee_lv01_49_reverse_office_stg_summary, 
-                    CASE WHEN (OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv50_99 / (OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset)) END AS employee_lv50_99_reverse_office_stg_summary, 
-                    CASE WHEN (OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_lv100 / (OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset)) END AS employee_lv100_reverse_office_stg_summary, 
-                    -- CASE WHEN (OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_half / (OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset)) END AS employee_half_reverse_office_stg_summary, 
-                    CASE WHEN (OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset) <= 0 THEN NULL ELSE (IS1.office_stg_summary_full / (OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset)) END AS employee_full_reverse_office_stg_summary, 
+                    CASE WHEN ABS(OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_lv00 / (OSTG1.office_stg_days_lv00 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv00_reverse_office_stg_summary, 
+                    CASE WHEN ABS(OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_lv01_49 / (OSTG1.office_stg_days_lv00_50 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv01_49_reverse_office_stg_summary, 
+                    CASE WHEN ABS(OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_lv50_99 / (OSTG1.office_stg_days_lv50_100 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv50_99_reverse_office_stg_summary, 
+                    CASE WHEN ABS(OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_lv100 / (OSTG1.office_stg_days_lv100_200 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_lv100_reverse_office_stg_summary, 
+                    -- CASE WHEN ABS(OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_half / (OSTG1.office_stg_days_lv200_300 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_half_reverse_office_stg_summary, 
+                    CASE WHEN ABS(OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_stg_summary_full / (OSTG1.office_stg_days_lv300 * 0.5 * OA1.office_va_asset) AS NUMERIC(20,10)) END AS employee_full_reverse_office_stg_summary, 
     
                     -- 農漁家被害額_償却資産被害額(集計DB) 
-                    IS1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
-                    IS1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
-                    IS1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
-                    IS1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
-                    -- IS1.farmer_fisher_dep_summary_half AS farmer_fisher_dep_summary_half, 
-                    IS1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+                    CASE WHEN (IS1.farmer_fisher_dep_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_lv00, 
+                    CASE WHEN (IS1.farmer_fisher_dep_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_lv01_49 AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_lv01_49, 
+                    CASE WHEN (IS1.farmer_fisher_dep_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_lv50_99 AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_lv50_99, 
+                    CASE WHEN (IS1.farmer_fisher_dep_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_lv100 AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_lv100, 
+                    -- CASE WHEN (IS1.farmer_fisher_dep_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_half AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_half, 
+                    CASE WHEN (IS1.farmer_fisher_dep_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_dep_summary_full AS NUMERIC(20,10)) END AS farmer_fisher_dep_summary_full, 
     
                     -- 農漁家被害額_償却資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
-                    CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv00 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00)) END AS farmer_fisher_lv00_reverse_farmer_fisher_dep_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv01_49 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv50_99 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_lv100 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200)) END AS farmer_fisher_lv100_reverse_farmer_fisher_dep_summary, 
-                    -- CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_half / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300)) END AS farmer_fisher_half_reverse_farmer_fisher_dep_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_dep_summary_full / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300)) END AS farmer_fisher_full_reverse_farmer_fisher_dep_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_lv00 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00) AS NUMERIC(20,10)) END AS farmer_fisher_lv00_reverse_farmer_fisher_dep_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_lv01_49 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv00_50) AS NUMERIC(20,10)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_lv50_99 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv50_100) AS NUMERIC(20,10)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_lv100 / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv100_200) AS NUMERIC(20,10)) END AS farmer_fisher_lv100_reverse_farmer_fisher_dep_summary, 
+                    -- CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_half / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv200_300) AS NUMERIC(20,10)) END AS farmer_fisher_half_reverse_farmer_fisher_dep_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_dep_summary_full / (FFA1.farmer_fisher_dep_asset * FFR1.farmer_fisher_dep_rate_lv300) AS NUMERIC(20,10)) END AS farmer_fisher_full_reverse_farmer_fisher_dep_summary, 
     
                     -- 農漁家被害額_在庫資産被害額(集計DB) 
-                    IS1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
-                    IS1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
-                    IS1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
-                    IS1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
-                    -- IS1.farmer_fisher_inv_summary_half AS farmer_fisher_inv_summary_half, 
-                    IS1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+                    CASE WHEN (IS1.farmer_fisher_inv_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_lv00 AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_lv00, 
+                    CASE WHEN (IS1.farmer_fisher_inv_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_lv01_49 AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_lv01_49, 
+                    CASE WHEN (IS1.farmer_fisher_inv_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_lv50_99 AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_lv50_99, 
+                    CASE WHEN (IS1.farmer_fisher_inv_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_lv100 AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_lv100, 
+                    -- CASE WHEN (IS1.farmer_fisher_inv_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_half AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_half, 
+                    CASE WHEN (IS1.farmer_fisher_inv_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.farmer_fisher_inv_summary_full AS NUMERIC(20,10)) END AS farmer_fisher_inv_summary_full, 
     
                     -- 農漁家被害額_在庫資産被害額(集計DB)から逆計算により農漁家戸数を求めた結果 
-                    CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv00 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00)) END AS farmer_fisher_lv00_reverse_farmer_fisher_inv_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv01_49 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv50_99 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_lv100 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200)) END AS farmer_fisher_lv100_reverse_farmer_fisher_inv_summary, 
-                    -- CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_half / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300)) END AS farmer_fisher_half_reverse_farmer_fisher_inv_summary, 
-                    CASE WHEN (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300) <= 0 THEN NULL ELSE (IS1.farmer_fisher_inv_summary_full / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300)) END AS farmer_fisher_full_reverse_farmer_fisher_inv_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_lv00 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00) AS NUMERIC(20,10)) END AS farmer_fisher_lv00_reverse_farmer_fisher_inv_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_lv01_49 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv00_50) AS NUMERIC(20,10)) END AS farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_lv50_99 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv50_100) AS NUMERIC(20,10)) END AS farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_lv100 / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv100_200) AS NUMERIC(20,10)) END AS farmer_fisher_lv100_reverse_farmer_fisher_inv_summary, 
+                    -- CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_half / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv200_300) AS NUMERIC(20,10)) END AS farmer_fisher_half_reverse_farmer_fisher_inv_summary, 
+                    CASE WHEN ABS(FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.farmer_fisher_inv_summary_full / (FFA1.farmer_fisher_inv_asset * FFR1.farmer_fisher_inv_rate_lv300) AS NUMERIC(20,10)) END AS farmer_fisher_full_reverse_farmer_fisher_inv_summary, 
     
                     -- 事業所応急対策費_代替活動費(集計DB) 
-                    IS1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
-                    IS1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
-                    IS1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
-                    IS1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
-                    IS1.office_alt_summary_half AS office_alt_summary_half, 
-                    IS1.office_alt_summary_full AS office_alt_summary_full, 
+                    CASE WHEN (IS1.office_alt_summary_lv00) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_lv00 AS NUMERIC(20,10)) END AS office_alt_summary_lv00, 
+                    CASE WHEN (IS1.office_alt_summary_lv01_49) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_lv01_49 AS NUMERIC(20,10)) END AS office_alt_summary_lv01_49, 
+                    CASE WHEN (IS1.office_alt_summary_lv50_99) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_lv50_99 AS NUMERIC(20,10)) END AS office_alt_summary_lv50_99, 
+                    CASE WHEN (IS1.office_alt_summary_lv100) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_lv100 AS NUMERIC(20,10)) END AS office_alt_summary_lv100, 
+                    CASE WHEN (IS1.office_alt_summary_half) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_half AS NUMERIC(20,10)) END AS office_alt_summary_half, 
+                    CASE WHEN (IS1.office_alt_summary_full) IS NULL THEN 0.0 ELSE CAST(IS1.office_alt_summary_full AS NUMERIC(20,10)) END AS office_alt_summary_full, 
     
                     -- 事業所応急対策費_代替活動費(集計DB)から逆計算により被災事業所数を求めた結果 
-                    CASE WHEN (OALT1.office_alt_lv00) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv00 / OALT1.office_alt_lv00) END AS office_lv00_reverse_office_alt_summary, 
-                    CASE WHEN (OALT1.office_alt_lv00_50) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv01_49 / OALT1.office_alt_lv00_50) END AS office_lv01_49_reverse_office_alt_summary, 
-                    CASE WHEN (OALT1.office_alt_lv50_100) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv50_99 / OALT1.office_alt_lv50_100) END AS office_lv50_99_reverse_office_alt_summary, 
-                    CASE WHEN (OALT1.office_alt_lv100_200) <= 0 THEN NULL ELSE (IS1.office_alt_summary_lv100 / OALT1.office_alt_lv100_200) END AS office_lv100_reverse_office_alt_summary, 
-                    CASE WHEN (OALT1.office_alt_lv200_300) <= 0 THEN NULL ELSE (IS1.office_alt_summary_half / OALT1.office_alt_lv200_300) END AS office_half_reverse_office_alt_summary, 
-                    CASE WHEN (OALT1.office_alt_lv300) <= 0 THEN NULL ELSE (IS1.office_alt_summary_full / OALT1.office_alt_lv300) END AS office_full_reverse_office_alt_summary 
+                    CASE WHEN ABS(OALT1.office_alt_lv00) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_lv00 / OALT1.office_alt_lv00 AS NUMERIC(20,10)) END AS office_lv00_reverse_office_alt_summary, 
+                    CASE WHEN ABS(OALT1.office_alt_lv00_50) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_lv01_49 / OALT1.office_alt_lv00_50 AS NUMERIC(20,10)) END AS office_lv01_49_reverse_office_alt_summary, 
+                    CASE WHEN ABS(OALT1.office_alt_lv50_100) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_lv50_99 / OALT1.office_alt_lv50_100 AS NUMERIC(20,10)) END AS office_lv50_99_reverse_office_alt_summary, 
+                    CASE WHEN ABS(OALT1.office_alt_lv100_200) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_lv100 / OALT1.office_alt_lv100_200 AS NUMERIC(20,10)) END AS office_lv100_reverse_office_alt_summary, 
+                    CASE WHEN ABS(OALT1.office_alt_lv200_300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_half / OALT1.office_alt_lv200_300 AS NUMERIC(20,10)) END AS office_half_reverse_office_alt_summary, 
+                    CASE WHEN ABS(OALT1.office_alt_lv300) <= 0.0000001 THEN NULL ELSE CAST(IS1.office_alt_summary_full / OALT1.office_alt_lv300 AS NUMERIC(20,10)) END AS office_full_reverse_office_alt_summary 
                     
                 FROM IPPAN_VIEW IV1 
                 LEFT JOIN IPPAN_SUMMARY IS1 ON IV1.ippan_id = IS1.ippan_id 
@@ -1412,7 +857,8 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                 LEFT JOIN HOUSE_RATE HR1 ON IV1.flood_sediment_code = HR1.flood_sediment_code AND IV1.gradient_code = HR1.gradient_code 
                 LEFT JOIN HOUSEHOLD_RATE HHR1 ON IV1.flood_sediment_code = HHR1.flood_sediment_code 
                 LEFT JOIN OFFICE_ASSET OA1 ON IV1.industry_code = OA1.industry_code 
-                LEFT JOIN OFFICE_RATE OR1 ON IV1.flood_sediment_code = OR1.flood_sediment_code, 
+                LEFT JOIN OFFICE_RATE OR1 ON IV1.flood_sediment_code = OR1.flood_sediment_code 
+                LEFT JOIN FARMER_FISHER_RATE FFR1 ON IV1.flood_sediment_code = FFR1.flood_sediment_code, -- why left join ? see below comment
                 HOUSEHOLD_ASSET HHA1, 
                 CAR_ASSET CA1, 
                 CAR_RATE CR1, 
@@ -1421,10 +867,16 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                 OFFICE_SUSPEND OSUS1, 
                 OFFICE_STAGNATE OSTG1, 
                 FARMER_FISHER_ASSET FFA1, 
-                FARMER_FISHER_RATE FFR1, 
                 OFFICE_ALT OALT1 
-                WHERE IV1.ken_code=%s AND IV1.city_code=%s AND IV1.deleted_at is NULL 
+                WHERE 
+                    IV1.ken_code=%s AND 
+                    IV1.city_code=%s AND 
+                    IV1.deleted_at is NULL 
                 ORDER BY CAST(IV1.IPPAN_ID AS INTEGER)""", [ken_code, city_code, ])
+
+            ### 複数レコードあるテーブルは単純に結合しないこと。
+            ### 複数レコードあるテーブルはLEFT JOINにすること。
+            ### 理由は、検索結果の件数がメインのテーブルの件数ではなく、結合したテーブルの複数レコード分となるため。
             
         else:
             pass
@@ -1433,7 +885,7 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
         ### レスポンスセット処理(0040)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0800Reverse.summary_ken_city_category_view()関数 STEP 5/5.', 'INFO')
+        print_log('[DEBUG] P0800Reverse.summary_ken_city_category_view()関数 STEP 5/5.', 'DEBUG')
         template = loader.get_template('P0800Reverse/summary.html')
         context = {
             'ken_code': ken_code, 
@@ -1448,7 +900,7 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0800Reverse.summary_ken_city_category_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0800Reverse.summary_ken_city_category_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0800Reverse.summary_ken_city_category_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

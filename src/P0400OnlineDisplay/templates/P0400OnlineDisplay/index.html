@@ -2456,11 +2456,15 @@
         <table class="table table-bordered table-striped text-nowrap">
             <thead>
                 <tr>
+                    <th class="text-center">都道府県</th>
+                    <th class="text-center">市区町村</th>
+                    <th class="text-center">シートID</th>
+                    <th class="text-center">シート名</th>
                     <th class="text-center">集計ID</th>
                     <th class="text-center">行ID</th>
                     <th class="text-center">町丁名、大字名</th>
-                    <th class="text-center">シートID</th>
-                    <th class="text-center">シート名</th>
+                    <!--<th class="text-center">シートID</th>-->
+                    <!--<th class="text-center">シート名</th>-->
                     
                     <th class="text-center">家屋被害額_床下</th>
                     <th class="text-center">家屋被害額_01から49cm</th>
@@ -2544,6 +2548,31 @@
             <tbody>
                 {% for ippan in ippan_summary_list %}
                 <tr>
+                    {% if ippan.ken_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.ken_name }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.city_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.city_name }}</td>
+                    {% endif %}
+                
+
+                    {% if ippan.suigai_id is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.suigai_id }}</td>
+                    {% endif %}
+                    
+                    {% if ippan.suigai_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ ippan.suigai_name }}</td>
+                    {% endif %}
+                
                     {% if ippan.id is None %}
                     <td></td>
                     {% else %}
@@ -2562,17 +2591,17 @@
                     <td>{{ ippan.ippan_name }}</td>
                     {% endif %}
                     
-                    {% if ippan.suigai_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.suigai_id }}</td>
-                    {% endif %}
+                    {# if ippan.suigai_id is None #}
+                    <!--<td></td>-->
+                    {# else #}
+                    <!--<td>{# ippan.suigai_id #}</td>-->
+                    {# endif #}
                     
-                    {% if ippan.suigai_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.suigai_name }}</td>
-                    {% endif %}
+                    {# if ippan.suigai_name is None #}
+                    <!--<td></td>-->
+                    {# else #}
+                    <!--<td>{# ippan.suigai_name #}</td>-->
+                    {# endif #}
 
                     {% if ippan.house_summary_lv00 is None %}
                     <td></td>
@@ -3412,7 +3441,7 @@
                     <th class="text-center">成功数</th>
                     <th class="text-center">失敗数</th>
                     <th class="text-center">発行日時</th>
-                    <th class="text-center">消費日時</th>
+                    <th class="text-center">実行日時</th>
                     <th class="text-center">削除日時</th>
                     <th class="text-center">データ整合性</th>
                     <th class="text-center">データ整合性</th>
@@ -3517,16 +3546,16 @@
                     <td>{{ trigger.deleted_at }}</td>
                     {% endif %}
                     
-                    {% if trigger.data_integrity_left is None %}
+                    {% if trigger.integrity_ok is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ trigger.data_integrity_left }}</td>
+                    <td>{{ trigger.integrity_ok }}</td>
                     {% endif %}
                     
-                    {% if trigger.data_integrity_right is None %}
+                    {% if trigger.integrity_ng is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ trigger.data_integrity_right }}</td>
+                    <td>{{ trigger.integrity_ng }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -3547,7 +3576,7 @@
                     <th class="text-center">アクションコード</th>
                     <th class="text-center">状態コード</th>
                     <th class="text-center">発行日時</th>
-                    <th class="text-center">消費日時</th>
+                    <th class="text-center">実行日時</th>
                 </tr>
             </thead>
             <tbody>
@@ -3579,7 +3608,7 @@
                     <th class="text-center">アクションコード</th>
                     <th class="text-center">状態コード</th>
                     <th class="text-center">発行日時</th>
-                    <th class="text-center">消費日時</th>
+                    <th class="text-center">実行日時</th>
                 </tr>
             </thead>
             <tbody>

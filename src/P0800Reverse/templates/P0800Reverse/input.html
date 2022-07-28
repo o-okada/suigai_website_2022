@@ -171,30 +171,30 @@
                     
                     <!-- 家屋被害額 -->
                     {% if category_code == "1" %}
-                    <option value="1" selected>家屋被害額: 被害建物棟数の逆計算手法を用いた延床面積の整合性チェック: 1</option>
+                    <option value="1" selected>被害建物棟数の逆計算手法を用いた延床面積の整合性検証: 1</option>
                     {% else %}
-                    <option value="1">家屋被害額: 被害建物棟数の逆計算手法を用いた延床面積の整合性チェック: 1</option>
+                    <option value="1">被害建物棟数の逆計算手法を用いた延床面積の整合性検証: 1</option>
                     {% endif %}
 
                     <!-- 家庭用品自動車以外被害額 -->
                     {% if category_code == "3" %}
-                    <option value="3" selected>家庭用品自動車以外被害額: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 3</option>
+                    <option value="3" selected>被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 3</option>
                     {% else %}
-                    <option value="3">家庭用品自動車以外被害額: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 3</option>
+                    <option value="3">被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 3</option>
                     {% endif %}
 
                     <!-- 家庭用品自動車被害額 -->
                     {% if category_code == "5" %}
-                    <option value="5" selected>家庭用品自動車被害額: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 5</option>
+                    <option value="5" selected>被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 5</option>
                     {% else %}
-                    <option value="5">家庭用品自動車被害額: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 5</option>
+                    <option value="5">被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 5</option>
                     {% endif %}
 
                     <!-- 家庭応急対策費 -->
                     {% if category_code == "7" %}
-                    <option value="7" selected>家庭応急対策費: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 7</option>
+                    <option value="7" selected>被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 7</option>
                     {% else %}
-                    <option value="7">家庭応急対策費: 被害建物棟数の逆計算手法を用いた被災世帯数の整合性チェック: 7</option>
+                    <option value="7">被害建物棟数の逆計算手法を用いた被災世帯数の整合性検証: 7</option>
                     {% endif %}
 
                     <!-- 事業所被害額 -->
@@ -203,9 +203,9 @@
 
                     <!-- 事業所応急対策費 -->
                     {% if category_code == "16" %}
-                    <option value="16" selected>事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16</option>
+                    <option value="16" selected>被害建物棟数の逆計算手法を用いた被災事業所数の整合性検証: 16</option>
                     {% else %}
-                    <option value="16">事業所応急対策費: 被害建物棟数の逆計算手法を用いた被災事業所数の整合性チェック: 16</option>
+                    <option value="16">被害建物棟数の逆計算手法を用いた被災事業所数の整合性検証: 16</option>
                     {% endif %}
                 </select>
                 <button class="btn btn-secondary" type="button" id="button_category" name="button_category">検証方法選択</button>
@@ -221,7 +221,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    当該浸水深の被害建物棟数(逆計算) = 被害建物棟数の合計(入力DB) &times; (当該浸水深の延床面積(入力DB) &divide; 延床面積の合計(入力DB))
+                    <strong>被害建物棟数(逆計算)</strong>&nbsp;&nbsp;[ = 被害建物棟数の合計(入力DB) &times; (延床面積(入力DB) &divide; 延床面積の合計(入力DB)) ]
                 </div>
                 <div class="card-body" id="collapse_three">
                     <div class="table-responsive">
@@ -237,8 +237,8 @@
                                     <th class="text-center">地上・地下被害の区分</th>
                                     <th class="text-center">浸水土砂被害の区分</th>
                                     <th class="text-center">浸水深</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（入力DB）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（入力DB）</th>
                                     <th class="text-center">整合性検証結果</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -255,14 +255,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td>{{ ippan.building_lv00_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv00 }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_lv00 }}</td>
-                                    {% if ippan.building_lv00_reverse_floor_area == ippan.building_lv00 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv00_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv00 }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv00 }}</strong></td>
+                                    {% if ippan.building_lv00_reverse_floor_area == None or ippan.building_lv00 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv00_reverse_floor_area == ippan.building_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -275,14 +280,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td>{{ ippan.building_lv01_49_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv01_49 }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_lv01_49 }}</td>
-                                    {% if ippan.building_lv01_49_reverse_floor_area == ippan.building_lv01_49 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv01_49_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv01_49 }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv01_49 }}</strong></td>
+                                    {% if ippan.building_lv01_49_reverse_floor_area == None or ippan.building_lv01_49 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv01_49_reverse_floor_area == ippan.building_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -295,14 +305,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td>{{ ippan.building_lv50_99_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv50_99 }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_lv50_99 }}</td>
-                                    {% if ippan.building_lv50_99_reverse_floor_area == ippan.building_lv50_99 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv50_99_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv50_99 }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv50_99 }}</strong></td>
+                                    {% if ippan.building_lv50_99_reverse_floor_area == None or ippan.building_lv50_99 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv50_99_reverse_floor_area == ippan.building_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -314,15 +329,20 @@
                                     <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
-                                    <td>100m以上</td>
-                                    <td>{{ ippan.building_lv100_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv100 }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_lv100 }}</td>
-                                    {% if ippan.building_lv100_reverse_floor_area == ippan.building_lv100 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td>100cm以上</td>
+                                    <td><strong>{{ ippan.building_lv100_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_lv100 }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv100 }}</strong></td>
+                                    {% if ippan.building_lv100_reverse_floor_area == None or ippan.building_lv100 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv100_reverse_floor_area == ippan.building_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -335,14 +355,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td>{{ ippan.building_half_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_half }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_half }}</td>
-                                    {% if ippan.building_half_reverse_floor_area == ippan.building_half %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_half_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_half }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_half }}</strong></td>
+                                    {% if ippan.building_half_reverse_floor_area == None or ippan.building_half == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_half_reverse_floor_area == ippan.building_half %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -355,14 +380,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td>{{ ippan.building_full_reverse_floor_area }} = {{ ippan.building_total }} &times; ({{ ippan.floor_area_full }} &divide; {{ ippan.floor_area_total }})</td>
-                                    <td>{{ ippan.building_full }}</td>
-                                    {% if ippan.building_full_reverse_floor_area == ippan.building_full %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_full_reverse_floor_area }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.floor_area_full }} &divide; {{ ippan.floor_area_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_full }}</strong></td>
+                                    {% if ippan.building_full_reverse_floor_area == None or ippan.building_full == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_full_reverse_floor_area == ippan.building_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>                                    
                                 {% endfor %}
@@ -384,7 +414,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    当該浸水深の被害建物棟数(逆計算) = 被害建物棟数の合計(入力DB) &times; (当該浸水深の被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB))
+                    <strong>被害建物棟数(逆計算)</strong>&nbsp;&nbsp;[ = 被害建物棟数の合計(入力DB) &times; (被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -400,8 +430,8 @@
                                     <th class="text-center">地上・地下被害の区分</th>
                                     <th class="text-center">浸水土砂被害の区分</th>
                                     <th class="text-center">浸水深</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（入力DB）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（入力DB）</th>
                                     <th class="text-center">整合性検証結果</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -418,14 +448,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td>{{ ippan.building_lv00_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv00 }}</td>
-                                    {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv00_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv00 }}</strong></td>
+                                    {% if ippan.building_lv00_reverse_family == None or ippan.building_lv00 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -438,14 +473,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td>{{ ippan.building_lv01_49_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv01_49 }}</td>
-                                    {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv01_49_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv01_49 }}</strong></td>
+                                    {% if ippan.building_lv01_49_reverse_family == None or ippan.building_lv01_49 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -458,14 +498,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td>{{ ippan.building_lv50_99_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv50_99 }}</td>
-                                    {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv50_99_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv50_99 }}</strong></td>
+                                    {% if ippan.building_lv50_99_reverse_family == None or ippan.building_lv50_99 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -477,15 +522,20 @@
                                     <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
-                                    <td>100m以上</td>
-                                    <td>{{ ippan.building_lv100_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv100 }}</td>
-                                    {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td>100cm以上</td>
+                                    <td><strong>{{ ippan.building_lv100_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv100 }}</strong></td>
+                                    {% if ippan.building_lv100_reverse_family == None or ippan.building_lv100 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -498,14 +548,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td>{{ ippan.building_half_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_half }}</td>
-                                    {% if ippan.building_half_reverse_family == ippan.building_half %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_half_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_half }}</strong></td>
+                                    {% if ippan.building_half_reverse_family == None or ippan.building_half == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_half_reverse_family == ippan.building_half %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -518,14 +573,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td>{{ ippan.building_full_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_full }}</td>
-                                    {% if ippan.building_full_reverse_family == ippan.building_full %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_full_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_full }}</strong></td>
+                                    {% if ippan.building_full_reverse_family == None or ippan.building_full == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_full_reverse_family == ippan.building_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 {% endfor %}
@@ -547,7 +607,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    当該浸水深の被害建物棟数(逆計算) = 被害建物棟数の合計(入力DB) &times; (当該浸水深の被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB))
+                    <strong>被害建物棟数(逆計算)</strong>&nbsp;&nbsp;[ = 被害建物棟数の合計(入力DB) &times; (被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -563,8 +623,8 @@
                                     <th class="text-center">地上・地下被害の区分</th>
                                     <th class="text-center">浸水土砂被害の区分</th>
                                     <th class="text-center">浸水深</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
                                     <th class="text-center">整合性検証結果</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -581,14 +641,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td>{{ ippan.building_lv00_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv00 }}</td>
-                                    {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv00_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv00 }}</strong></td>
+                                    {% if ippan.building_lv00_reverse_family == None or ippan.building_lv00 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -601,14 +666,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td>{{ ippan.building_lv01_49_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv01_49 }}</td>
-                                    {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv01_49_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv01_49 }}</strong></td>
+                                    {% if ippan.building_lv01_49_reverse_family == None or ippan.building_lv01_49 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -621,14 +691,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td>{{ ippan.building_lv50_99_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv50_99 }}</td>
-                                    {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv50_99_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv50_99 }}</strong></td>
+                                    {% if ippan.building_lv50_99_reverse_family == None or ippan.building_lv50_99 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -640,15 +715,20 @@
                                     <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
-                                    <td>100m以上</td>
-                                    <td>{{ ippan.building_lv100_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv100 }}</td>
-                                    {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td>100cm以上</td>
+                                    <td><strong>{{ ippan.building_lv100_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv100 }}</strong></td>
+                                    {% if ippan.building_lv100_reverse_family == None or ippan.building_lv100 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -661,14 +741,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td>{{ ippan.building_half_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_half }}</td>
-                                    {% if ippan.building_half_reverse_family == ippan.building_half %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_half_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_half }}</strong></td>
+                                    {% if ippan.building_half_reverse_family == None or ippan.building_half == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_half_reverse_family == ippan.building_half %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -681,14 +766,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td>{{ ippan.building_full_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_full }}</td>
-                                    {% if ippan.building_full_reverse_family == ippan.building_full %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_full_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_full }}</strong></td>
+                                    {% if ippan.building_full_reverse_family == None or ippan.building_full == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_full_reverse_family == ippan.building_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 {% endfor %}
@@ -710,7 +800,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    当該浸水深の被害建物棟数(逆計算) = 被害建物棟数の合計(入力DB) &times; (当該浸水深の被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB))
+                    <strong>被害建物棟数(逆計算)</strong>&nbsp;&nbsp;[ = 被害建物棟数の合計(入力DB) &times; (被災世帯数(入力DB) &divide; 被災世帯数の合計(入力DB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -726,8 +816,8 @@
                                     <th class="text-center">地上・地下被害の区分</th>
                                     <th class="text-center">浸水土砂被害の区分</th>
                                     <th class="text-center">浸水深</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（入力DB）</th>
                                     <th class="text-center">整合性検証結果</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -744,14 +834,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td>{{ ippan.building_lv00_reverse_family }} = {{ ippan.building_building }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv00 }}</td>
-                                    {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv00_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv00 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv00 }}</strong></td>
+                                    {% if ippan.building_lv00_reverse_family == None or ippan.building_lv00 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv00_reverse_family == ippan.building_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -764,14 +859,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td>{{ ippan.building_lv01_49_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv01_49 }}</td>
-                                    {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv01_49_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv01_49 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv01_49 }}</strong></td>
+                                    {% if ippan.building_lv01_49_reverse_family == None or ippan.building_lv01_49 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv01_49_reverse_family == ippan.building_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -784,14 +884,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td>{{ ippan.building_lv50_99_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv50_99 }}</td>
-                                    {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv50_99_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv50_99 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv50_99 }}</strong></td>
+                                    {% if ippan.building_lv50_99_reverse_family == None or ippan.building_lv50_99 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv50_99_reverse_family == ippan.building_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -803,15 +908,20 @@
                                     <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
-                                    <td>100m以上</td>
-                                    <td>{{ ippan.building_lv100_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_lv100 }}</td>
-                                    {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td>100cm以上</td>
+                                    <td><strong>{{ ippan.building_lv100_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_lv100 }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv100 }}</strong></td>
+                                    {% if ippan.building_lv100_reverse_family == None or ippan.building_lv100 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv100_reverse_family == ippan.building_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -824,14 +934,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td>{{ ippan.building_half_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_half }}</td>
-                                    {% if ippan.building_half_reverse_family == ippan.building_half %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_half_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_half }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_half }}</strong></td>
+                                    {% if ippan.building_half_reverse_family == None or ippan.building_half == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_half_reverse_family == ippan.building_half %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -844,14 +959,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td>{{ ippan.building_full_reverse_family }} = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }})</td>
-                                    <td>{{ ippan.building_full }}</td>
-                                    {% if ippan.building_full_reverse_family == ippan.building_full %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_full_reverse_family }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.family_full }} &divide; {{ ippan.family_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_full }}</strong></td>
+                                    {% if ippan.building_full_reverse_family == None or ippan.building_full == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_full_reverse_family == ippan.building_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 {% endfor %}
@@ -873,7 +993,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    当該浸水深の被害建物棟数(逆計算) = 被害建物棟数の合計(入力DB) &times; (当該浸水深の被災事業所数(入力DB) &divide; 被災事業所数の合計(入力DB))
+                    <strong>被害建物棟数(逆計算)</strong>&nbsp;&nbsp;[ = 被害建物棟数の合計(入力DB) &times; (被災事業所数(入力DB) &divide; 被災事業所数の合計(入力DB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -889,8 +1009,8 @@
                                     <th class="text-center">地上・地下被害の区分</th>
                                     <th class="text-center">浸水土砂被害の区分</th>
                                     <th class="text-center">浸水深</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（逆計算）</th>
-                                    <th class="text-center">当該浸水深の被害建物棟数（入力DB）</th>
+                                    <th class="text-center">被害建物棟数（逆計算）</th>
+                                    <th class="text-center">被害建物棟数（入力DB）</th>
                                     <th class="text-center">整合性検証結果</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -907,14 +1027,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td>{{ ippan.building_lv00_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_lv00 }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_lv00 }}</td>
-                                    {% if ippan.building_lv00_reverse_office == ippan.building_lv00 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv00_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_lv00 }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv00 }}</strong></td>
+                                    {% if ippan.building_lv00_reverse_office == None or ippan.building_lv00 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv00_reverse_office == ippan.building_lv00 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -927,14 +1052,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td>{{ ippan.building_lv01_49_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_lv01_49 }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_lv01_49 }}</td>
-                                    {% if ippan.building_lv01_49_reverse_office == ippan.building_lv01_49 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv01_49_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_lv01_49 }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv01_49 }}</strong></td>
+                                    {% if ippan.building_lv01_49_reverse_office == None or ippan.building_lv01_49 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv01_49_reverse_office == ippan.building_lv01_49 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -947,14 +1077,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td>{{ ippan.building_lv50_99_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_lv50_99 }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_lv50_99 }}</td>
-                                    {% if ippan.building_lv50_99_reverse_office == ippan.building_lv50_99 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_lv50_99_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_lv50_99 }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv50_99 }}</strong></td>
+                                    {% if ippan.building_lv50_99_reverse_office == None or ippan.building_lv50_99 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv50_99_reverse_office == ippan.building_lv50_99 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -966,15 +1101,20 @@
                                     <td>{{ ippan.building_name }}:{{ ippan.building_code }}</td>
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
-                                    <td>100m以上</td>
-                                    <td>{{ ippan.building_lv100_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_lv100 }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_lv100 }}</td>
-                                    {% if ippan.building_lv100_reverse_office == ippan.building_lv100 %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td>100cm以上</td>
+                                    <td><strong>{{ ippan.building_lv100_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_lv100 }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_lv100 }}</strong></td>
+                                    {% if ippan.building_lv100_reverse_office == None or ippan.building_lv100 == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_lv100_reverse_office == ippan.building_lv100 %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -987,14 +1127,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td>{{ ippan.building_half_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_half }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_half }}</td>
-                                    {% if ippan.building_half_reverse_office == ippan.building_half %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_half_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_half }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_half }}</strong></td>
+                                    {% if ippan.building_half_reverse_office == None or ippan.building_half == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_half_reverse_office == ippan.building_half %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -1007,14 +1152,19 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td>{{ ippan.building_full_reverse_office }} = {{ ippan.building_total }} &times; ({{ ippan.office_full }} &divide; {{ ippan.office_total }})</td>
-                                    <td>{{ ippan.building_full }}</td>
-                                    {% if ippan.building_full_reverse_office == ippan.building_full %}
-                                    <td><label class="form-check-label" for="check_1">OK</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                    <td><strong>{{ ippan.building_full_reverse_office }}</strong>&nbsp;&nbsp;[ = {{ ippan.building_total }} &times; ({{ ippan.office_full }} &divide; {{ ippan.office_total }}) ]</td>
+                                    <td><strong>{{ ippan.building_full }}</strong></td>
+                                    {% if ippan.building_full_reverse_office == None or ippan.building_full == None %}
+                                        <td><label class="form-check-label" for="check_1">NA</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
                                     {% else %}
-                                    <td><label class="form-check-label" for="check_1">NG</label></td>
-                                    <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% if ippan.building_full_reverse_office == ippan.building_full %}
+                                        <td><label class="form-check-label" for="check_1">OK</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% else %}
+                                        <td><label class="form-check-label" for="check_1">NG</label></td>
+                                        <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                                 {% endfor %}

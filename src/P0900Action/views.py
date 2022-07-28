@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0900Action/views.py
+### 自動実行・自動検証
 ###############################################################################
 
 ###############################################################################
@@ -72,7 +73,12 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：get_trigger_list
@@ -109,7 +115,7 @@ def get_trigger_list(action_code, status_code, suigai_id):
             LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
             LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
             WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL 
-            ORDER BY CAST(TR1.ken_code AS INTEGER), CAST(TR1.city_code AS INTEGER)""", [action_code, status_code, ])
+            ORDER BY CAST(TR1.ken_code AS INTEGER), CAST(TR1.city_code AS INTEGER), CAST(TR1.trigger_id AS INTEGER)""", [action_code, status_code, ])
     
     else:
         trigger_list = TRIGGER.objects.raw("""
@@ -141,7 +147,7 @@ def get_trigger_list(action_code, status_code, suigai_id):
             LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
             LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
             WHERE TR1.action_code=%s AND TR1.status_code=%s AND TR1.deleted_at IS NULL AND TR1.suigai_id=%s 
-            ORDER BY CAST(TR1.ken_code AS INTEGER), CAST(TR1.city_code AS INTEGER)""", [action_code, status_code, suigai_id, ])
+            ORDER BY CAST(TR1.ken_code AS INTEGER), CAST(TR1.city_code AS INTEGER), CAST(TR1.trigger_id AS INTEGER)""", [action_code, status_code, suigai_id, ])
     
     return trigger_list
 
@@ -192,136 +198,268 @@ def index_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0900Action.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.index_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0900Action.index_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0900Action.index_view()関数 STEP 2/3.', 'INFO')
-        trigger_WF1_success_list = get_trigger_list(action_code='1', status_code='3', suigai_id=0)
-        trigger_WF2_success_list = get_trigger_list(action_code='2', status_code='3', suigai_id=0)
-        trigger_WF3_success_list = get_trigger_list(action_code='3', status_code='3', suigai_id=0)
-        trigger_WF4_success_list = get_trigger_list(action_code='4', status_code='3', suigai_id=0)
-        trigger_WF5_success_list = get_trigger_list(action_code='5', status_code='3', suigai_id=0)
-        trigger_WF6_success_list = get_trigger_list(action_code='6', status_code='3', suigai_id=0)
-        trigger_WF7_success_list = get_trigger_list(action_code='7', status_code='3', suigai_id=0)
-        trigger_WF8_success_list = get_trigger_list(action_code='8', status_code='3', suigai_id=0)
-        trigger_WF9_success_list = get_trigger_list(action_code='9', status_code='3', suigai_id=0)
-        trigger_WF10_success_list = get_trigger_list(action_code='10', status_code='3', suigai_id=0)
-        trigger_WF11_success_list = get_trigger_list(action_code='11', status_code='3', suigai_id=0)
-        trigger_WF12_success_list = get_trigger_list(action_code='12', status_code='3', suigai_id=0)
-        trigger_WF13_success_list = get_trigger_list(action_code='13', status_code='3', suigai_id=0)
-        trigger_WF1_failure_list = get_trigger_list(action_code='1', status_code='4', suigai_id=0)
-        trigger_WF2_failure_list = get_trigger_list(action_code='2', status_code='4', suigai_id=0)
-        trigger_WF3_failure_list = get_trigger_list(action_code='3', status_code='4', suigai_id=0)
-        trigger_WF4_failure_list = get_trigger_list(action_code='4', status_code='4', suigai_id=0)
-        trigger_WF5_failure_list = get_trigger_list(action_code='5', status_code='4', suigai_id=0)
-        trigger_WF6_failure_list = get_trigger_list(action_code='6', status_code='4', suigai_id=0)
-        trigger_WF7_failure_list = get_trigger_list(action_code='7', status_code='4', suigai_id=0)
-        trigger_WF8_failure_list = get_trigger_list(action_code='8', status_code='4', suigai_id=0)
-        trigger_WF9_failure_list = get_trigger_list(action_code='9', status_code='4', suigai_id=0)
-        trigger_WF10_failure_list = get_trigger_list(action_code='10', status_code='4', suigai_id=0)
-        trigger_WF11_failure_list = get_trigger_list(action_code='11', status_code='4', suigai_id=0)
-        trigger_WF12_failure_list = get_trigger_list(action_code='12', status_code='4', suigai_id=0)
-        trigger_WF13_failure_list = get_trigger_list(action_code='13', status_code='4', suigai_id=0)
-        
-        trigger_WF1_success_count = get_trigger_count(action_code='1', status_code='3', suigai_id=0)
-        trigger_WF2_success_count = get_trigger_count(action_code='2', status_code='3', suigai_id=0)
-        trigger_WF3_success_count = get_trigger_count(action_code='3', status_code='3', suigai_id=0)
-        trigger_WF4_success_count = get_trigger_count(action_code='4', status_code='3', suigai_id=0)
-        trigger_WF5_success_count = get_trigger_count(action_code='5', status_code='3', suigai_id=0)
-        trigger_WF6_success_count = get_trigger_count(action_code='6', status_code='3', suigai_id=0)
-        trigger_WF7_success_count = get_trigger_count(action_code='7', status_code='3', suigai_id=0)
-        trigger_WF8_success_count = get_trigger_count(action_code='8', status_code='3', suigai_id=0)
-        trigger_WF9_success_count = get_trigger_count(action_code='9', status_code='3', suigai_id=0)
-        trigger_WF10_success_count = get_trigger_count(action_code='10', status_code='3', suigai_id=0)
-        trigger_WF11_success_count = get_trigger_count(action_code='11', status_code='3', suigai_id=0)
-        trigger_WF12_success_count = get_trigger_count(action_code='12', status_code='3', suigai_id=0)
-        trigger_WF13_success_count = get_trigger_count(action_code='13', status_code='3', suigai_id=0)
+        print_log('[DEBUG] P0900Action.index_view()関数 STEP 2/3.', 'DEBUG')
+        trigger_A01_running_list = get_trigger_list(action_code='A01', status_code='RUNNING', suigai_id=0)
+        trigger_A02_running_list = get_trigger_list(action_code='A02', status_code='RUNNING', suigai_id=0)
+        trigger_A03_running_list = get_trigger_list(action_code='A03', status_code='RUNNING', suigai_id=0)
+        trigger_A04_running_list = get_trigger_list(action_code='A04', status_code='RUNNING', suigai_id=0)
+        trigger_A05_running_list = get_trigger_list(action_code='A05', status_code='RUNNING', suigai_id=0)
+        trigger_A06_running_list = get_trigger_list(action_code='A06', status_code='RUNNING', suigai_id=0)
+        trigger_A07_running_list = get_trigger_list(action_code='A07', status_code='RUNNING', suigai_id=0)
+        trigger_A08_running_list = get_trigger_list(action_code='A08', status_code='RUNNING', suigai_id=0)
+        trigger_A99_running_list = get_trigger_list(action_code='A99', status_code='RUNNING', suigai_id=0)
+        trigger_B01_running_list = get_trigger_list(action_code='B01', status_code='RUNNING', suigai_id=0)
+        trigger_B02_running_list = get_trigger_list(action_code='B02', status_code='RUNNING', suigai_id=0)
+        trigger_B03_running_list = get_trigger_list(action_code='B03', status_code='RUNNING', suigai_id=0)
+        trigger_B04_running_list = get_trigger_list(action_code='B04', status_code='RUNNING', suigai_id=0)
+        trigger_B99_running_list = get_trigger_list(action_code='B99', status_code='RUNNING', suigai_id=0)
 
-        trigger_WF1_failure_count = get_trigger_count(action_code='1', status_code='4', suigai_id=0)
-        trigger_WF2_failure_count = get_trigger_count(action_code='2', status_code='4', suigai_id=0)
-        trigger_WF3_failure_count = get_trigger_count(action_code='3', status_code='4', suigai_id=0)
-        trigger_WF4_failure_count = get_trigger_count(action_code='4', status_code='4', suigai_id=0)
-        trigger_WF5_failure_count = get_trigger_count(action_code='5', status_code='4', suigai_id=0)
-        trigger_WF6_failure_count = get_trigger_count(action_code='6', status_code='4', suigai_id=0)
-        trigger_WF7_failure_count = get_trigger_count(action_code='7', status_code='4', suigai_id=0)
-        trigger_WF8_failure_count = get_trigger_count(action_code='8', status_code='4', suigai_id=0)
-        trigger_WF9_failure_count = get_trigger_count(action_code='9', status_code='4', suigai_id=0)
-        trigger_WF10_failure_count = get_trigger_count(action_code='10', status_code='4', suigai_id=0)
-        trigger_WF11_failure_count = get_trigger_count(action_code='11', status_code='4', suigai_id=0)
-        trigger_WF12_failure_count = get_trigger_count(action_code='12', status_code='4', suigai_id=0)
-        trigger_WF13_failure_count = get_trigger_count(action_code='13', status_code='4', suigai_id=0)
+        trigger_A01_cancel_list = get_trigger_list(action_code='A01', status_code='CANCEL', suigai_id=0)
+        trigger_A02_cancel_list = get_trigger_list(action_code='A02', status_code='CANCEL', suigai_id=0)
+        trigger_A03_cancel_list = get_trigger_list(action_code='A03', status_code='CANCEL', suigai_id=0)
+        trigger_A04_cancel_list = get_trigger_list(action_code='A04', status_code='CANCEL', suigai_id=0)
+        trigger_A05_cancel_list = get_trigger_list(action_code='A05', status_code='CANCEL', suigai_id=0)
+        trigger_A06_cancel_list = get_trigger_list(action_code='A06', status_code='CANCEL', suigai_id=0)
+        trigger_A07_cancel_list = get_trigger_list(action_code='A07', status_code='CANCEL', suigai_id=0)
+        trigger_A08_cancel_list = get_trigger_list(action_code='A08', status_code='CANCEL', suigai_id=0)
+        trigger_A99_cancel_list = get_trigger_list(action_code='A99', status_code='CANCEL', suigai_id=0)
+        trigger_B01_cancel_list = get_trigger_list(action_code='B01', status_code='CANCEL', suigai_id=0)
+        trigger_B02_cancel_list = get_trigger_list(action_code='B02', status_code='CANCEL', suigai_id=0)
+        trigger_B03_cancel_list = get_trigger_list(action_code='B03', status_code='CANCEL', suigai_id=0)
+        trigger_B04_cancel_list = get_trigger_list(action_code='B04', status_code='CANCEL', suigai_id=0)
+        trigger_B99_cancel_list = get_trigger_list(action_code='B99', status_code='CANCEL', suigai_id=0)
+
+        trigger_A01_success_list = get_trigger_list(action_code='A01', status_code='SUCCESS', suigai_id=0)
+        trigger_A02_success_list = get_trigger_list(action_code='A02', status_code='SUCCESS', suigai_id=0)
+        trigger_A03_success_list = get_trigger_list(action_code='A03', status_code='SUCCESS', suigai_id=0)
+        trigger_A04_success_list = get_trigger_list(action_code='A04', status_code='SUCCESS', suigai_id=0)
+        trigger_A05_success_list = get_trigger_list(action_code='A05', status_code='SUCCESS', suigai_id=0)
+        trigger_A06_success_list = get_trigger_list(action_code='A06', status_code='SUCCESS', suigai_id=0)
+        trigger_A07_success_list = get_trigger_list(action_code='A07', status_code='SUCCESS', suigai_id=0)
+        trigger_A08_success_list = get_trigger_list(action_code='A08', status_code='SUCCESS', suigai_id=0)
+        trigger_A99_success_list = get_trigger_list(action_code='A99', status_code='SUCCESS', suigai_id=0)
+        trigger_B01_success_list = get_trigger_list(action_code='B01', status_code='SUCCESS', suigai_id=0)
+        trigger_B02_success_list = get_trigger_list(action_code='B02', status_code='SUCCESS', suigai_id=0)
+        trigger_B03_success_list = get_trigger_list(action_code='B03', status_code='SUCCESS', suigai_id=0)
+        trigger_B04_success_list = get_trigger_list(action_code='B04', status_code='SUCCESS', suigai_id=0)
+        trigger_B99_success_list = get_trigger_list(action_code='B99', status_code='SUCCESS', suigai_id=0)
+        
+        trigger_A01_failure_list = get_trigger_list(action_code='A01', status_code='FAILURE', suigai_id=0)
+        trigger_A02_failure_list = get_trigger_list(action_code='A02', status_code='FAILURE', suigai_id=0)
+        trigger_A03_failure_list = get_trigger_list(action_code='A03', status_code='FAILURE', suigai_id=0)
+        trigger_A04_failure_list = get_trigger_list(action_code='A04', status_code='FAILURE', suigai_id=0)
+        trigger_A05_failure_list = get_trigger_list(action_code='A05', status_code='FAILURE', suigai_id=0)
+        trigger_A06_failure_list = get_trigger_list(action_code='A06', status_code='FAILURE', suigai_id=0)
+        trigger_A07_failure_list = get_trigger_list(action_code='A07', status_code='FAILURE', suigai_id=0)
+        trigger_A08_failure_list = get_trigger_list(action_code='A08', status_code='FAILURE', suigai_id=0)
+        trigger_A99_failure_list = get_trigger_list(action_code='A99', status_code='FAILURE', suigai_id=0)
+        trigger_B01_failure_list = get_trigger_list(action_code='B01', status_code='FAILURE', suigai_id=0)
+        trigger_B02_failure_list = get_trigger_list(action_code='B02', status_code='FAILURE', suigai_id=0)
+        trigger_B03_failure_list = get_trigger_list(action_code='B03', status_code='FAILURE', suigai_id=0)
+        trigger_B04_failure_list = get_trigger_list(action_code='B04', status_code='FAILURE', suigai_id=0)
+        trigger_B99_failure_list = get_trigger_list(action_code='B99', status_code='FAILURE', suigai_id=0)
+
+        trigger_A01_waiting_list = get_trigger_list(action_code='A01', status_code='WAITING', suigai_id=0)
+        trigger_A02_waiting_list = get_trigger_list(action_code='A02', status_code='WAITING', suigai_id=0)
+        trigger_A03_waiting_list = get_trigger_list(action_code='A03', status_code='WAITING', suigai_id=0)
+        trigger_A04_waiting_list = get_trigger_list(action_code='A04', status_code='WAITING', suigai_id=0)
+        trigger_A05_waiting_list = get_trigger_list(action_code='A05', status_code='WAITING', suigai_id=0)
+        trigger_A06_waiting_list = get_trigger_list(action_code='A06', status_code='WAITING', suigai_id=0)
+        trigger_A07_waiting_list = get_trigger_list(action_code='A07', status_code='WAITING', suigai_id=0)
+        trigger_A08_waiting_list = get_trigger_list(action_code='A08', status_code='WAITING', suigai_id=0)
+        trigger_A99_waiting_list = get_trigger_list(action_code='A99', status_code='WAITING', suigai_id=0)
+        trigger_B01_waiting_list = get_trigger_list(action_code='B01', status_code='WAITING', suigai_id=0)
+        trigger_B02_waiting_list = get_trigger_list(action_code='B02', status_code='WAITING', suigai_id=0)
+        trigger_B03_waiting_list = get_trigger_list(action_code='B03', status_code='WAITING', suigai_id=0)
+        trigger_B04_waiting_list = get_trigger_list(action_code='B04', status_code='WAITING', suigai_id=0)
+        trigger_B99_waiting_list = get_trigger_list(action_code='B99', status_code='WAITING', suigai_id=0)
+
+        trigger_A01_running_count = get_trigger_count(action_code='A01', status_code='RUNNING', suigai_id=0)
+        trigger_A02_running_count = get_trigger_count(action_code='A02', status_code='RUNNING', suigai_id=0)
+        trigger_A03_running_count = get_trigger_count(action_code='A03', status_code='RUNNING', suigai_id=0)
+        trigger_A04_running_count = get_trigger_count(action_code='A04', status_code='RUNNING', suigai_id=0)
+        trigger_A05_running_count = get_trigger_count(action_code='A05', status_code='RUNNING', suigai_id=0)
+        trigger_A06_running_count = get_trigger_count(action_code='A06', status_code='RUNNING', suigai_id=0)
+        trigger_A07_running_count = get_trigger_count(action_code='A07', status_code='RUNNING', suigai_id=0)
+        trigger_A08_running_count = get_trigger_count(action_code='A08', status_code='RUNNING', suigai_id=0)
+        trigger_A99_running_count = get_trigger_count(action_code='A99', status_code='RUNNING', suigai_id=0)
+        trigger_B01_running_count = get_trigger_count(action_code='B01', status_code='RUNNING', suigai_id=0)
+        trigger_B02_running_count = get_trigger_count(action_code='B02', status_code='RUNNING', suigai_id=0)
+        trigger_B03_running_count = get_trigger_count(action_code='B03', status_code='RUNNING', suigai_id=0)
+        trigger_B04_running_count = get_trigger_count(action_code='B04', status_code='RUNNING', suigai_id=0)
+        trigger_B99_running_count = get_trigger_count(action_code='B99', status_code='RUNNING', suigai_id=0)
+
+        trigger_A01_cancel_count = get_trigger_count(action_code='A01', status_code='CANCEL', suigai_id=0)
+        trigger_A02_cancel_count = get_trigger_count(action_code='A02', status_code='CANCEL', suigai_id=0)
+        trigger_A03_cancel_count = get_trigger_count(action_code='A03', status_code='CANCEL', suigai_id=0)
+        trigger_A04_cancel_count = get_trigger_count(action_code='A04', status_code='CANCEL', suigai_id=0)
+        trigger_A05_cancel_count = get_trigger_count(action_code='A05', status_code='CANCEL', suigai_id=0)
+        trigger_A06_cancel_count = get_trigger_count(action_code='A06', status_code='CANCEL', suigai_id=0)
+        trigger_A07_cancel_count = get_trigger_count(action_code='A07', status_code='CANCEL', suigai_id=0)
+        trigger_A08_cancel_count = get_trigger_count(action_code='A08', status_code='CANCEL', suigai_id=0)
+        trigger_A99_cancel_count = get_trigger_count(action_code='A99', status_code='CANCEL', suigai_id=0)
+        trigger_B01_cancel_count = get_trigger_count(action_code='B01', status_code='CANCEL', suigai_id=0)
+        trigger_B02_cancel_count = get_trigger_count(action_code='B02', status_code='CANCEL', suigai_id=0)
+        trigger_B03_cancel_count = get_trigger_count(action_code='B03', status_code='CANCEL', suigai_id=0)
+        trigger_B04_cancel_count = get_trigger_count(action_code='B04', status_code='CANCEL', suigai_id=0)
+        trigger_B99_cancel_count = get_trigger_count(action_code='B99', status_code='CANCEL', suigai_id=0)
+        
+        trigger_A01_success_count = get_trigger_count(action_code='A01', status_code='SUCCESS', suigai_id=0)
+        trigger_A02_success_count = get_trigger_count(action_code='A02', status_code='SUCCESS', suigai_id=0)
+        trigger_A03_success_count = get_trigger_count(action_code='A03', status_code='SUCCESS', suigai_id=0)
+        trigger_A04_success_count = get_trigger_count(action_code='A04', status_code='SUCCESS', suigai_id=0)
+        trigger_A05_success_count = get_trigger_count(action_code='A05', status_code='SUCCESS', suigai_id=0)
+        trigger_A06_success_count = get_trigger_count(action_code='A06', status_code='SUCCESS', suigai_id=0)
+        trigger_A07_success_count = get_trigger_count(action_code='A07', status_code='SUCCESS', suigai_id=0)
+        trigger_A08_success_count = get_trigger_count(action_code='A08', status_code='SUCCESS', suigai_id=0)
+        trigger_A99_success_count = get_trigger_count(action_code='A99', status_code='SUCCESS', suigai_id=0)
+        trigger_B01_success_count = get_trigger_count(action_code='B01', status_code='SUCCESS', suigai_id=0)
+        trigger_B02_success_count = get_trigger_count(action_code='B02', status_code='SUCCESS', suigai_id=0)
+        trigger_B03_success_count = get_trigger_count(action_code='B03', status_code='SUCCESS', suigai_id=0)
+        trigger_B04_success_count = get_trigger_count(action_code='B04', status_code='SUCCESS', suigai_id=0)
+        trigger_B99_success_count = get_trigger_count(action_code='B99', status_code='SUCCESS', suigai_id=0)
+
+        trigger_A01_failure_count = get_trigger_count(action_code='A01', status_code='FAILURE', suigai_id=0)
+        trigger_A02_failure_count = get_trigger_count(action_code='A02', status_code='FAILURE', suigai_id=0)
+        trigger_A03_failure_count = get_trigger_count(action_code='A03', status_code='FAILURE', suigai_id=0)
+        trigger_A04_failure_count = get_trigger_count(action_code='A04', status_code='FAILURE', suigai_id=0)
+        trigger_A05_failure_count = get_trigger_count(action_code='A05', status_code='FAILURE', suigai_id=0)
+        trigger_A06_failure_count = get_trigger_count(action_code='A06', status_code='FAILURE', suigai_id=0)
+        trigger_A07_failure_count = get_trigger_count(action_code='A07', status_code='FAILURE', suigai_id=0)
+        trigger_A08_failure_count = get_trigger_count(action_code='A08', status_code='FAILURE', suigai_id=0)
+        trigger_A99_failure_count = get_trigger_count(action_code='A99', status_code='FAILURE', suigai_id=0)
+        trigger_B01_failure_count = get_trigger_count(action_code='B01', status_code='FAILURE', suigai_id=0)
+        trigger_B02_failure_count = get_trigger_count(action_code='B02', status_code='FAILURE', suigai_id=0)
+        trigger_B03_failure_count = get_trigger_count(action_code='B03', status_code='FAILURE', suigai_id=0)
+        trigger_B04_failure_count = get_trigger_count(action_code='B04', status_code='FAILURE', suigai_id=0)
+        trigger_B99_failure_count = get_trigger_count(action_code='B99', status_code='FAILURE', suigai_id=0)
+
+        trigger_A01_waiting_count = get_trigger_count(action_code='A01', status_code='WAITING', suigai_id=0)
+        trigger_A02_waiting_count = get_trigger_count(action_code='A02', status_code='WAITING', suigai_id=0)
+        trigger_A03_waiting_count = get_trigger_count(action_code='A03', status_code='WAITING', suigai_id=0)
+        trigger_A04_waiting_count = get_trigger_count(action_code='A04', status_code='WAITING', suigai_id=0)
+        trigger_A05_waiting_count = get_trigger_count(action_code='A05', status_code='WAITING', suigai_id=0)
+        trigger_A06_waiting_count = get_trigger_count(action_code='A06', status_code='WAITING', suigai_id=0)
+        trigger_A07_waiting_count = get_trigger_count(action_code='A07', status_code='WAITING', suigai_id=0)
+        trigger_A08_waiting_count = get_trigger_count(action_code='A08', status_code='WAITING', suigai_id=0)
+        trigger_A99_waiting_count = get_trigger_count(action_code='A99', status_code='WAITING', suigai_id=0)
+        trigger_B01_waiting_count = get_trigger_count(action_code='B01', status_code='WAITING', suigai_id=0)
+        trigger_B02_waiting_count = get_trigger_count(action_code='B02', status_code='WAITING', suigai_id=0)
+        trigger_B03_waiting_count = get_trigger_count(action_code='B03', status_code='WAITING', suigai_id=0)
+        trigger_B04_waiting_count = get_trigger_count(action_code='B04', status_code='WAITING', suigai_id=0)
+        trigger_B99_waiting_count = get_trigger_count(action_code='B99', status_code='WAITING', suigai_id=0)
 
         #######################################################################
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0900Action.index_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.index_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0900Action/index.html')
         context = {
-            'trigger_WF1_success_list': trigger_WF1_success_list, 
-            'trigger_WF2_success_list': trigger_WF2_success_list, 
-            'trigger_WF3_success_list': trigger_WF3_success_list, 
-            'trigger_WF4_success_list': trigger_WF4_success_list, 
-            'trigger_WF5_success_list': trigger_WF5_success_list, 
-            'trigger_WF6_success_list': trigger_WF6_success_list, 
-            'trigger_WF7_success_list': trigger_WF7_success_list, 
-            'trigger_WF8_success_list': trigger_WF8_success_list, 
-            'trigger_WF9_success_list': trigger_WF9_success_list, 
-            'trigger_WF10_success_list': trigger_WF10_success_list, 
-            'trigger_WF11_success_list': trigger_WF11_success_list, 
-            'trigger_WF12_success_list': trigger_WF12_success_list, 
-            'trigger_WF13_success_list': trigger_WF13_success_list, 
-            'trigger_WF1_failure_list': trigger_WF1_failure_list, 
-            'trigger_WF2_failure_list': trigger_WF2_failure_list, 
-            'trigger_WF3_failure_list': trigger_WF3_failure_list, 
-            'trigger_WF4_failure_list': trigger_WF4_failure_list, 
-            'trigger_WF5_failure_list': trigger_WF5_failure_list, 
-            'trigger_WF6_failure_list': trigger_WF6_failure_list, 
-            'trigger_WF7_failure_list': trigger_WF7_failure_list, 
-            'trigger_WF8_failure_list': trigger_WF8_failure_list, 
-            'trigger_WF9_failure_list': trigger_WF9_failure_list, 
-            'trigger_WF10_failure_list': trigger_WF10_failure_list, 
-            'trigger_WF11_failure_list': trigger_WF11_failure_list, 
-            'trigger_WF12_failure_list': trigger_WF12_failure_list, 
-            'trigger_WF13_failure_list': trigger_WF13_failure_list, 
-            'trigger_WF1_success_count': trigger_WF1_success_count, 
-            'trigger_WF2_success_count': trigger_WF2_success_count, 
-            'trigger_WF3_success_count': trigger_WF3_success_count, 
-            'trigger_WF4_success_count': trigger_WF4_success_count, 
-            'trigger_WF5_success_count': trigger_WF5_success_count, 
-            'trigger_WF6_success_count': trigger_WF6_success_count, 
-            'trigger_WF7_success_count': trigger_WF7_success_count, 
-            'trigger_WF8_success_count': trigger_WF8_success_count, 
-            'trigger_WF9_success_count': trigger_WF9_success_count, 
-            'trigger_WF10_success_count': trigger_WF10_success_count, 
-            'trigger_WF11_success_count': trigger_WF11_success_count, 
-            'trigger_WF12_success_count': trigger_WF12_success_count, 
-            'trigger_WF13_success_count': trigger_WF13_success_count, 
-            'trigger_WF1_failure_count': trigger_WF1_failure_count, 
-            'trigger_WF2_failure_count': trigger_WF2_failure_count, 
-            'trigger_WF3_failure_count': trigger_WF3_failure_count, 
-            'trigger_WF4_failure_count': trigger_WF4_failure_count, 
-            'trigger_WF5_failure_count': trigger_WF5_failure_count, 
-            'trigger_WF6_failure_count': trigger_WF6_failure_count, 
-            'trigger_WF7_failure_count': trigger_WF7_failure_count, 
-            'trigger_WF8_failure_count': trigger_WF8_failure_count, 
-            'trigger_WF9_failure_count': trigger_WF9_failure_count, 
-            'trigger_WF10_failure_count': trigger_WF10_failure_count, 
-            'trigger_WF11_failure_count': trigger_WF11_failure_count, 
-            'trigger_WF12_failure_count': trigger_WF12_failure_count, 
-            'trigger_WF13_failure_count': trigger_WF13_failure_count, 
+            'trigger_A01_success_list': trigger_A01_success_list, 
+            'trigger_A02_success_list': trigger_A02_success_list, 
+            'trigger_A03_success_list': trigger_A03_success_list, 
+            'trigger_A04_success_list': trigger_A04_success_list, 
+            'trigger_A05_success_list': trigger_A05_success_list, 
+            'trigger_A06_success_list': trigger_A06_success_list, 
+            'trigger_A07_success_list': trigger_A07_success_list, 
+            'trigger_A08_success_list': trigger_A08_success_list, 
+            'trigger_A99_success_list': trigger_A99_success_list, 
+            'trigger_B01_success_list': trigger_B01_success_list, 
+            'trigger_B02_success_list': trigger_B02_success_list, 
+            'trigger_B03_success_list': trigger_B03_success_list, 
+            'trigger_B04_success_list': trigger_B04_success_list, 
+            'trigger_B99_success_list': trigger_B99_success_list, 
+            
+            'trigger_A01_failure_list': trigger_A01_failure_list, 
+            'trigger_A02_failure_list': trigger_A02_failure_list, 
+            'trigger_A03_failure_list': trigger_A03_failure_list, 
+            'trigger_A04_failure_list': trigger_A04_failure_list, 
+            'trigger_A05_failure_list': trigger_A05_failure_list, 
+            'trigger_A06_failure_list': trigger_A06_failure_list, 
+            'trigger_A07_failure_list': trigger_A07_failure_list, 
+            'trigger_A08_failure_list': trigger_A08_failure_list, 
+            'trigger_A99_failure_list': trigger_A99_failure_list, 
+            'trigger_B01_failure_list': trigger_B01_failure_list, 
+            'trigger_B02_failure_list': trigger_B02_failure_list, 
+            'trigger_B03_failure_list': trigger_B03_failure_list, 
+            'trigger_B04_failure_list': trigger_B04_failure_list, 
+            'trigger_B99_failure_list': trigger_B99_failure_list, 
+
+            'trigger_A01_waiting_list': trigger_A01_waiting_list, 
+            'trigger_A02_waiting_list': trigger_A02_waiting_list, 
+            'trigger_A03_waiting_list': trigger_A03_waiting_list, 
+            'trigger_A04_waiting_list': trigger_A04_waiting_list, 
+            'trigger_A05_waiting_list': trigger_A05_waiting_list, 
+            'trigger_A06_waiting_list': trigger_A06_waiting_list, 
+            'trigger_A07_waiting_list': trigger_A07_waiting_list, 
+            'trigger_A08_waiting_list': trigger_A08_waiting_list, 
+            'trigger_A99_waiting_list': trigger_A99_waiting_list, 
+            'trigger_B01_waiting_list': trigger_B01_waiting_list, 
+            'trigger_B02_waiting_list': trigger_B02_waiting_list, 
+            'trigger_B03_waiting_list': trigger_B03_waiting_list, 
+            'trigger_B04_waiting_list': trigger_B04_waiting_list, 
+            'trigger_B99_waiting_list': trigger_B99_waiting_list, 
+            
+            'trigger_A01_success_count': trigger_A01_success_count, 
+            'trigger_A02_success_count': trigger_A02_success_count, 
+            'trigger_A03_success_count': trigger_A03_success_count, 
+            'trigger_A04_success_count': trigger_A04_success_count, 
+            'trigger_A05_success_count': trigger_A05_success_count, 
+            'trigger_A06_success_count': trigger_A06_success_count, 
+            'trigger_A07_success_count': trigger_A07_success_count, 
+            'trigger_A08_success_count': trigger_A08_success_count, 
+            'trigger_A99_success_count': trigger_A99_success_count, 
+            'trigger_B01_success_count': trigger_B01_success_count, 
+            'trigger_B02_success_count': trigger_B02_success_count, 
+            'trigger_B03_success_count': trigger_B03_success_count, 
+            'trigger_B04_success_count': trigger_B04_success_count, 
+            'trigger_B99_success_count': trigger_B99_success_count, 
+            
+            'trigger_A01_failure_count': trigger_A01_failure_count, 
+            'trigger_A02_failure_count': trigger_A02_failure_count, 
+            'trigger_A03_failure_count': trigger_A03_failure_count, 
+            'trigger_A04_failure_count': trigger_A04_failure_count, 
+            'trigger_A05_failure_count': trigger_A05_failure_count, 
+            'trigger_A06_failure_count': trigger_A06_failure_count, 
+            'trigger_A07_failure_count': trigger_A07_failure_count, 
+            'trigger_A08_failure_count': trigger_A08_failure_count, 
+            'trigger_A99_failure_count': trigger_A99_failure_count, 
+            'trigger_B01_failure_count': trigger_B01_failure_count, 
+            'trigger_B02_failure_count': trigger_B02_failure_count, 
+            'trigger_B03_failure_count': trigger_B03_failure_count, 
+            'trigger_B04_failure_count': trigger_B04_failure_count, 
+            'trigger_B99_failure_count': trigger_B99_failure_count, 
+
+            'trigger_A01_waiting_count': trigger_A01_waiting_count, 
+            'trigger_A02_waiting_count': trigger_A02_waiting_count, 
+            'trigger_A03_waiting_count': trigger_A03_waiting_count, 
+            'trigger_A04_waiting_count': trigger_A04_waiting_count, 
+            'trigger_A05_waiting_count': trigger_A05_waiting_count, 
+            'trigger_A06_waiting_count': trigger_A06_waiting_count, 
+            'trigger_A07_waiting_count': trigger_A07_waiting_count, 
+            'trigger_A08_waiting_count': trigger_A08_waiting_count, 
+            'trigger_A99_waiting_count': trigger_A99_waiting_count, 
+            'trigger_B01_waiting_count': trigger_B01_waiting_count, 
+            'trigger_B02_waiting_count': trigger_B02_waiting_count, 
+            'trigger_B03_waiting_count': trigger_B03_waiting_count, 
+            'trigger_B04_waiting_count': trigger_B04_waiting_count, 
+            'trigger_B99_waiting_count': trigger_B99_waiting_count, 
         }
         print_log('[INFO] P0900Action.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0900Action.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0900Action.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -338,137 +476,269 @@ def suigai_view(request, suigai_id):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0900Action.suigai_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.suigai_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.suigai_view()関数 suigai_id = {}'.format(suigai_id), 'INFO')
-        print_log('[INFO] P0900Action.suigai_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.suigai_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0900Action.suigai_view()関数 suigai_id = {}'.format(suigai_id), 'DEBUG')
+        print_log('[DEBUG] P0900Action.suigai_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0900Action.suigai_view()関数 STEP 2/3.', 'INFO')
-        trigger_WF1_success_list = get_trigger_list(action_code='1', status_code='3', suigai_id=suigai_id)
-        trigger_WF2_success_list = get_trigger_list(action_code='2', status_code='3', suigai_id=suigai_id)
-        trigger_WF3_success_list = get_trigger_list(action_code='3', status_code='3', suigai_id=suigai_id)
-        trigger_WF4_success_list = get_trigger_list(action_code='4', status_code='3', suigai_id=suigai_id)
-        trigger_WF5_success_list = get_trigger_list(action_code='5', status_code='3', suigai_id=suigai_id)
-        trigger_WF6_success_list = get_trigger_list(action_code='6', status_code='3', suigai_id=suigai_id)
-        trigger_WF7_success_list = get_trigger_list(action_code='7', status_code='3', suigai_id=suigai_id)
-        trigger_WF8_success_list = get_trigger_list(action_code='8', status_code='3', suigai_id=suigai_id)
-        trigger_WF9_success_list = get_trigger_list(action_code='9', status_code='3', suigai_id=suigai_id)
-        trigger_WF10_success_list = get_trigger_list(action_code='10', status_code='3', suigai_id=suigai_id)
-        trigger_WF11_success_list = get_trigger_list(action_code='11', status_code='3', suigai_id=suigai_id)
-        trigger_WF12_success_list = get_trigger_list(action_code='12', status_code='3', suigai_id=suigai_id)
-        trigger_WF13_success_list = get_trigger_list(action_code='13', status_code='3', suigai_id=suigai_id)
-        trigger_WF1_failure_list = get_trigger_list(action_code='1', status_code='4', suigai_id=suigai_id)
-        trigger_WF2_failure_list = get_trigger_list(action_code='2', status_code='4', suigai_id=suigai_id)
-        trigger_WF3_failure_list = get_trigger_list(action_code='3', status_code='4', suigai_id=suigai_id)
-        trigger_WF4_failure_list = get_trigger_list(action_code='4', status_code='4', suigai_id=suigai_id)
-        trigger_WF5_failure_list = get_trigger_list(action_code='5', status_code='4', suigai_id=suigai_id)
-        trigger_WF6_failure_list = get_trigger_list(action_code='6', status_code='4', suigai_id=suigai_id)
-        trigger_WF7_failure_list = get_trigger_list(action_code='7', status_code='4', suigai_id=suigai_id)
-        trigger_WF8_failure_list = get_trigger_list(action_code='8', status_code='4', suigai_id=suigai_id)
-        trigger_WF9_failure_list = get_trigger_list(action_code='9', status_code='4', suigai_id=suigai_id)
-        trigger_WF10_failure_list = get_trigger_list(action_code='10', status_code='4', suigai_id=suigai_id)
-        trigger_WF11_failure_list = get_trigger_list(action_code='11', status_code='4', suigai_id=suigai_id)
-        trigger_WF12_failure_list = get_trigger_list(action_code='12', status_code='4', suigai_id=suigai_id)
-        trigger_WF13_failure_list = get_trigger_list(action_code='13', status_code='4', suigai_id=suigai_id)
-        
-        trigger_WF1_success_count = get_trigger_count(action_code='1', status_code='3', suigai_id=suigai_id)
-        trigger_WF2_success_count = get_trigger_count(action_code='2', status_code='3', suigai_id=suigai_id)
-        trigger_WF3_success_count = get_trigger_count(action_code='3', status_code='3', suigai_id=suigai_id)
-        trigger_WF4_success_count = get_trigger_count(action_code='4', status_code='3', suigai_id=suigai_id)
-        trigger_WF5_success_count = get_trigger_count(action_code='5', status_code='3', suigai_id=suigai_id)
-        trigger_WF6_success_count = get_trigger_count(action_code='6', status_code='3', suigai_id=suigai_id)
-        trigger_WF7_success_count = get_trigger_count(action_code='7', status_code='3', suigai_id=suigai_id)
-        trigger_WF8_success_count = get_trigger_count(action_code='8', status_code='3', suigai_id=suigai_id)
-        trigger_WF9_success_count = get_trigger_count(action_code='9', status_code='3', suigai_id=suigai_id)
-        trigger_WF10_success_count = get_trigger_count(action_code='10', status_code='3', suigai_id=suigai_id)
-        trigger_WF11_success_count = get_trigger_count(action_code='11', status_code='3', suigai_id=suigai_id)
-        trigger_WF12_success_count = get_trigger_count(action_code='12', status_code='3', suigai_id=suigai_id)
-        trigger_WF13_success_count = get_trigger_count(action_code='13', status_code='3', suigai_id=suigai_id)
+        print_log('[DEBUG] P0900Action.suigai_view()関数 STEP 2/3.', 'DEBUG')
+        trigger_A01_running_list = get_trigger_list(action_code='A01', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A02_running_list = get_trigger_list(action_code='A02', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A03_running_list = get_trigger_list(action_code='A03', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A04_running_list = get_trigger_list(action_code='A04', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A05_running_list = get_trigger_list(action_code='A05', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A06_running_list = get_trigger_list(action_code='A06', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A07_running_list = get_trigger_list(action_code='A07', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A08_running_list = get_trigger_list(action_code='A08', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A99_running_list = get_trigger_list(action_code='A99', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B01_running_list = get_trigger_list(action_code='B01', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B02_running_list = get_trigger_list(action_code='B02', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B03_running_list = get_trigger_list(action_code='B03', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B04_running_list = get_trigger_list(action_code='B04', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B99_running_list = get_trigger_list(action_code='B99', status_code='RUNNING', suigai_id=suigai_id)
 
-        trigger_WF1_failure_count = get_trigger_count(action_code='1', status_code='4', suigai_id=suigai_id)
-        trigger_WF2_failure_count = get_trigger_count(action_code='2', status_code='4', suigai_id=suigai_id)
-        trigger_WF3_failure_count = get_trigger_count(action_code='3', status_code='4', suigai_id=suigai_id)
-        trigger_WF4_failure_count = get_trigger_count(action_code='4', status_code='4', suigai_id=suigai_id)
-        trigger_WF5_failure_count = get_trigger_count(action_code='5', status_code='4', suigai_id=suigai_id)
-        trigger_WF6_failure_count = get_trigger_count(action_code='6', status_code='4', suigai_id=suigai_id)
-        trigger_WF7_failure_count = get_trigger_count(action_code='7', status_code='4', suigai_id=suigai_id)
-        trigger_WF8_failure_count = get_trigger_count(action_code='8', status_code='4', suigai_id=suigai_id)
-        trigger_WF9_failure_count = get_trigger_count(action_code='9', status_code='4', suigai_id=suigai_id)
-        trigger_WF10_failure_count = get_trigger_count(action_code='10', status_code='4', suigai_id=suigai_id)
-        trigger_WF11_failure_count = get_trigger_count(action_code='11', status_code='4', suigai_id=suigai_id)
-        trigger_WF12_failure_count = get_trigger_count(action_code='12', status_code='4', suigai_id=suigai_id)
-        trigger_WF13_failure_count = get_trigger_count(action_code='13', status_code='4', suigai_id=suigai_id)
+        trigger_A01_cancel_list = get_trigger_list(action_code='A01', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A02_cancel_list = get_trigger_list(action_code='A02', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A03_cancel_list = get_trigger_list(action_code='A03', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A04_cancel_list = get_trigger_list(action_code='A04', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A05_cancel_list = get_trigger_list(action_code='A05', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A06_cancel_list = get_trigger_list(action_code='A06', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A07_cancel_list = get_trigger_list(action_code='A07', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A08_cancel_list = get_trigger_list(action_code='A08', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A99_cancel_list = get_trigger_list(action_code='A99', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B01_cancel_list = get_trigger_list(action_code='B01', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B02_cancel_list = get_trigger_list(action_code='B02', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B03_cancel_list = get_trigger_list(action_code='B03', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B04_cancel_list = get_trigger_list(action_code='B04', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B99_cancel_list = get_trigger_list(action_code='B99', status_code='CANCEL', suigai_id=suigai_id)
+
+        trigger_A01_success_list = get_trigger_list(action_code='A01', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A02_success_list = get_trigger_list(action_code='A02', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A03_success_list = get_trigger_list(action_code='A03', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A04_success_list = get_trigger_list(action_code='A04', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A05_success_list = get_trigger_list(action_code='A05', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A06_success_list = get_trigger_list(action_code='A06', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A07_success_list = get_trigger_list(action_code='A07', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A08_success_list = get_trigger_list(action_code='A08', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A99_success_list = get_trigger_list(action_code='A99', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B01_success_list = get_trigger_list(action_code='B01', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B02_success_list = get_trigger_list(action_code='B02', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B03_success_list = get_trigger_list(action_code='B03', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B04_success_list = get_trigger_list(action_code='B04', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B99_success_list = get_trigger_list(action_code='B99', status_code='SUCCESS', suigai_id=suigai_id)
+        
+        trigger_A01_failure_list = get_trigger_list(action_code='A01', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A02_failure_list = get_trigger_list(action_code='A02', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A03_failure_list = get_trigger_list(action_code='A03', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A04_failure_list = get_trigger_list(action_code='A04', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A05_failure_list = get_trigger_list(action_code='A05', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A06_failure_list = get_trigger_list(action_code='A06', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A07_failure_list = get_trigger_list(action_code='A07', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A08_failure_list = get_trigger_list(action_code='A08', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A99_failure_list = get_trigger_list(action_code='A99', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B01_failure_list = get_trigger_list(action_code='B01', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B02_failure_list = get_trigger_list(action_code='B02', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B03_failure_list = get_trigger_list(action_code='B03', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B04_failure_list = get_trigger_list(action_code='B04', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B99_failure_list = get_trigger_list(action_code='B99', status_code='FAILURE', suigai_id=suigai_id)
+
+        trigger_A01_waiting_list = get_trigger_list(action_code='A01', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A02_waiting_list = get_trigger_list(action_code='A02', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A03_waiting_list = get_trigger_list(action_code='A03', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A04_waiting_list = get_trigger_list(action_code='A04', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A05_waiting_list = get_trigger_list(action_code='A05', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A06_waiting_list = get_trigger_list(action_code='A06', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A07_waiting_list = get_trigger_list(action_code='A07', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A08_waiting_list = get_trigger_list(action_code='A08', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A99_waiting_list = get_trigger_list(action_code='A99', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B01_waiting_list = get_trigger_list(action_code='B01', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B02_waiting_list = get_trigger_list(action_code='B02', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B03_waiting_list = get_trigger_list(action_code='B03', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B04_waiting_list = get_trigger_list(action_code='B04', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B99_waiting_list = get_trigger_list(action_code='B99', status_code='WAITING', suigai_id=suigai_id)
+        
+        trigger_A01_running_count = get_trigger_count(action_code='A01', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A02_running_count = get_trigger_count(action_code='A02', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A03_running_count = get_trigger_count(action_code='A03', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A04_running_count = get_trigger_count(action_code='A04', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A05_running_count = get_trigger_count(action_code='A05', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A06_running_count = get_trigger_count(action_code='A06', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A07_running_count = get_trigger_count(action_code='A07', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A08_running_count = get_trigger_count(action_code='A08', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_A99_running_count = get_trigger_count(action_code='A99', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B01_running_count = get_trigger_count(action_code='B01', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B02_running_count = get_trigger_count(action_code='B02', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B03_running_count = get_trigger_count(action_code='B03', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B04_running_count = get_trigger_count(action_code='B04', status_code='RUNNING', suigai_id=suigai_id)
+        trigger_B99_running_count = get_trigger_count(action_code='B99', status_code='RUNNING', suigai_id=suigai_id)
+
+        trigger_A01_cancel_count = get_trigger_count(action_code='A01', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A02_cancel_count = get_trigger_count(action_code='A02', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A03_cancel_count = get_trigger_count(action_code='A03', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A04_cancel_count = get_trigger_count(action_code='A04', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A05_cancel_count = get_trigger_count(action_code='A05', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A06_cancel_count = get_trigger_count(action_code='A06', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A07_cancel_count = get_trigger_count(action_code='A07', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A08_cancel_count = get_trigger_count(action_code='A08', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_A99_cancel_count = get_trigger_count(action_code='A99', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B01_cancel_count = get_trigger_count(action_code='B01', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B02_cancel_count = get_trigger_count(action_code='B02', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B03_cancel_count = get_trigger_count(action_code='B03', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B04_cancel_count = get_trigger_count(action_code='B04', status_code='CANCEL', suigai_id=suigai_id)
+        trigger_B99_cancel_count = get_trigger_count(action_code='B99', status_code='CANCEL', suigai_id=suigai_id)
+
+        trigger_A01_success_count = get_trigger_count(action_code='A01', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A02_success_count = get_trigger_count(action_code='A02', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A03_success_count = get_trigger_count(action_code='A03', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A04_success_count = get_trigger_count(action_code='A04', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A05_success_count = get_trigger_count(action_code='A05', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A06_success_count = get_trigger_count(action_code='A06', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A07_success_count = get_trigger_count(action_code='A07', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A08_success_count = get_trigger_count(action_code='A08', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_A99_success_count = get_trigger_count(action_code='A99', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B01_success_count = get_trigger_count(action_code='B01', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B02_success_count = get_trigger_count(action_code='B02', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B03_success_count = get_trigger_count(action_code='B03', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B04_success_count = get_trigger_count(action_code='B04', status_code='SUCCESS', suigai_id=suigai_id)
+        trigger_B99_success_count = get_trigger_count(action_code='B99', status_code='SUCCESS', suigai_id=suigai_id)
+
+        trigger_A01_failure_count = get_trigger_count(action_code='A01', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A02_failure_count = get_trigger_count(action_code='A02', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A03_failure_count = get_trigger_count(action_code='A03', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A04_failure_count = get_trigger_count(action_code='A04', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A05_failure_count = get_trigger_count(action_code='A05', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A06_failure_count = get_trigger_count(action_code='A06', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A07_failure_count = get_trigger_count(action_code='A07', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A08_failure_count = get_trigger_count(action_code='A08', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_A99_failure_count = get_trigger_count(action_code='A99', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B01_failure_count = get_trigger_count(action_code='B01', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B02_failure_count = get_trigger_count(action_code='B02', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B03_failure_count = get_trigger_count(action_code='B03', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B04_failure_count = get_trigger_count(action_code='B04', status_code='FAILURE', suigai_id=suigai_id)
+        trigger_B99_failure_count = get_trigger_count(action_code='B99', status_code='FAILURE', suigai_id=suigai_id)
+
+        trigger_A01_waiting_count = get_trigger_count(action_code='A01', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A02_waiting_count = get_trigger_count(action_code='A02', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A03_waiting_count = get_trigger_count(action_code='A03', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A04_waiting_count = get_trigger_count(action_code='A04', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A05_waiting_count = get_trigger_count(action_code='A05', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A06_waiting_count = get_trigger_count(action_code='A06', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A07_waiting_count = get_trigger_count(action_code='A07', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A08_waiting_count = get_trigger_count(action_code='A08', status_code='WAITING', suigai_id=suigai_id)
+        trigger_A99_waiting_count = get_trigger_count(action_code='A99', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B01_waiting_count = get_trigger_count(action_code='B01', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B02_waiting_count = get_trigger_count(action_code='B02', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B03_waiting_count = get_trigger_count(action_code='B03', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B04_waiting_count = get_trigger_count(action_code='B04', status_code='WAITING', suigai_id=suigai_id)
+        trigger_B99_waiting_count = get_trigger_count(action_code='B99', status_code='WAITING', suigai_id=suigai_id)
 
         #######################################################################
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0900Action.suigai_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.suigai_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0900Action/index.html')
         context = {
-            'trigger_WF1_success_list': trigger_WF1_success_list, 
-            'trigger_WF2_success_list': trigger_WF2_success_list, 
-            'trigger_WF3_success_list': trigger_WF3_success_list, 
-            'trigger_WF4_success_list': trigger_WF4_success_list, 
-            'trigger_WF5_success_list': trigger_WF5_success_list, 
-            'trigger_WF6_success_list': trigger_WF6_success_list, 
-            'trigger_WF7_success_list': trigger_WF7_success_list, 
-            'trigger_WF8_success_list': trigger_WF8_success_list, 
-            'trigger_WF9_success_list': trigger_WF9_success_list, 
-            'trigger_WF10_success_list': trigger_WF10_success_list, 
-            'trigger_WF11_success_list': trigger_WF11_success_list, 
-            'trigger_WF12_success_list': trigger_WF12_success_list, 
-            'trigger_WF13_success_list': trigger_WF13_success_list, 
-            'trigger_WF1_failure_list': trigger_WF1_failure_list, 
-            'trigger_WF2_failure_list': trigger_WF2_failure_list, 
-            'trigger_WF3_failure_list': trigger_WF3_failure_list, 
-            'trigger_WF4_failure_list': trigger_WF4_failure_list, 
-            'trigger_WF5_failure_list': trigger_WF5_failure_list, 
-            'trigger_WF6_failure_list': trigger_WF6_failure_list, 
-            'trigger_WF7_failure_list': trigger_WF7_failure_list, 
-            'trigger_WF8_failure_list': trigger_WF8_failure_list, 
-            'trigger_WF9_failure_list': trigger_WF9_failure_list, 
-            'trigger_WF10_failure_list': trigger_WF10_failure_list, 
-            'trigger_WF11_failure_list': trigger_WF11_failure_list, 
-            'trigger_WF12_failure_list': trigger_WF12_failure_list, 
-            'trigger_WF13_failure_list': trigger_WF13_failure_list, 
-            'trigger_WF1_success_count': trigger_WF1_success_count, 
-            'trigger_WF2_success_count': trigger_WF2_success_count, 
-            'trigger_WF3_success_count': trigger_WF3_success_count, 
-            'trigger_WF4_success_count': trigger_WF4_success_count, 
-            'trigger_WF5_success_count': trigger_WF5_success_count, 
-            'trigger_WF6_success_count': trigger_WF6_success_count, 
-            'trigger_WF7_success_count': trigger_WF7_success_count, 
-            'trigger_WF8_success_count': trigger_WF8_success_count, 
-            'trigger_WF9_success_count': trigger_WF9_success_count, 
-            'trigger_WF10_success_count': trigger_WF10_success_count, 
-            'trigger_WF11_success_count': trigger_WF11_success_count, 
-            'trigger_WF12_success_count': trigger_WF12_success_count, 
-            'trigger_WF13_success_count': trigger_WF13_success_count, 
-            'trigger_WF1_failure_count': trigger_WF1_failure_count, 
-            'trigger_WF2_failure_count': trigger_WF2_failure_count, 
-            'trigger_WF3_failure_count': trigger_WF3_failure_count, 
-            'trigger_WF4_failure_count': trigger_WF4_failure_count, 
-            'trigger_WF5_failure_count': trigger_WF5_failure_count, 
-            'trigger_WF6_failure_count': trigger_WF6_failure_count, 
-            'trigger_WF7_failure_count': trigger_WF7_failure_count, 
-            'trigger_WF8_failure_count': trigger_WF8_failure_count, 
-            'trigger_WF9_failure_count': trigger_WF9_failure_count, 
-            'trigger_WF10_failure_count': trigger_WF10_failure_count, 
-            'trigger_WF11_failure_count': trigger_WF11_failure_count, 
-            'trigger_WF12_failure_count': trigger_WF12_failure_count, 
-            'trigger_WF13_failure_count': trigger_WF13_failure_count, 
+            'trigger_A01_success_list': trigger_A01_success_list, 
+            'trigger_A02_success_list': trigger_A02_success_list, 
+            'trigger_A03_success_list': trigger_A03_success_list, 
+            'trigger_A04_success_list': trigger_A04_success_list, 
+            'trigger_A05_success_list': trigger_A05_success_list, 
+            'trigger_A06_success_list': trigger_A06_success_list, 
+            'trigger_A07_success_list': trigger_A07_success_list, 
+            'trigger_A08_success_list': trigger_A08_success_list, 
+            'trigger_A99_success_list': trigger_A99_success_list, 
+            'trigger_B01_success_list': trigger_B01_success_list, 
+            'trigger_B02_success_list': trigger_B02_success_list, 
+            'trigger_B03_success_list': trigger_B03_success_list, 
+            'trigger_B04_success_list': trigger_B04_success_list, 
+            'trigger_B99_success_list': trigger_B99_success_list, 
+            
+            'trigger_A01_failure_list': trigger_A01_failure_list, 
+            'trigger_A02_failure_list': trigger_A02_failure_list, 
+            'trigger_A03_failure_list': trigger_A03_failure_list, 
+            'trigger_A04_failure_list': trigger_A04_failure_list, 
+            'trigger_A05_failure_list': trigger_A05_failure_list, 
+            'trigger_A06_failure_list': trigger_A06_failure_list, 
+            'trigger_A07_failure_list': trigger_A07_failure_list, 
+            'trigger_A08_failure_list': trigger_A08_failure_list, 
+            'trigger_A99_failure_list': trigger_A99_failure_list, 
+            'trigger_B01_failure_list': trigger_B01_failure_list, 
+            'trigger_B02_failure_list': trigger_B02_failure_list, 
+            'trigger_B03_failure_list': trigger_B03_failure_list, 
+            'trigger_B04_failure_list': trigger_B04_failure_list, 
+            'trigger_B99_failure_list': trigger_B99_failure_list, 
+            
+            'trigger_A01_waiting_list': trigger_A01_waiting_list, 
+            'trigger_A02_waiting_list': trigger_A02_waiting_list, 
+            'trigger_A03_waiting_list': trigger_A03_waiting_list, 
+            'trigger_A04_waiting_list': trigger_A04_waiting_list, 
+            'trigger_A05_waiting_list': trigger_A05_waiting_list, 
+            'trigger_A06_waiting_list': trigger_A06_waiting_list, 
+            'trigger_A07_waiting_list': trigger_A07_waiting_list, 
+            'trigger_A08_waiting_list': trigger_A08_waiting_list, 
+            'trigger_A99_waiting_list': trigger_A99_waiting_list, 
+            'trigger_B01_waiting_list': trigger_B01_waiting_list, 
+            'trigger_B02_waiting_list': trigger_B02_waiting_list, 
+            'trigger_B03_waiting_list': trigger_B03_waiting_list, 
+            'trigger_B04_waiting_list': trigger_B04_waiting_list, 
+            'trigger_B99_waiting_list': trigger_B99_waiting_list, 
+            
+            'trigger_A01_success_count': trigger_A01_success_count, 
+            'trigger_A02_success_count': trigger_A02_success_count, 
+            'trigger_A03_success_count': trigger_A03_success_count, 
+            'trigger_A04_success_count': trigger_A04_success_count, 
+            'trigger_A05_success_count': trigger_A05_success_count, 
+            'trigger_A06_success_count': trigger_A06_success_count, 
+            'trigger_A07_success_count': trigger_A07_success_count, 
+            'trigger_A08_success_count': trigger_A08_success_count, 
+            'trigger_A99_success_count': trigger_A99_success_count, 
+            'trigger_B01_success_count': trigger_B01_success_count, 
+            'trigger_B02_success_count': trigger_B02_success_count, 
+            'trigger_B03_success_count': trigger_B03_success_count, 
+            'trigger_B04_success_count': trigger_B04_success_count, 
+            'trigger_B99_success_count': trigger_B99_success_count, 
+            
+            'trigger_A01_failure_count': trigger_A01_failure_count, 
+            'trigger_A02_failure_count': trigger_A02_failure_count, 
+            'trigger_A03_failure_count': trigger_A03_failure_count, 
+            'trigger_A04_failure_count': trigger_A04_failure_count, 
+            'trigger_A05_failure_count': trigger_A05_failure_count, 
+            'trigger_A06_failure_count': trigger_A06_failure_count, 
+            'trigger_A07_failure_count': trigger_A07_failure_count, 
+            'trigger_A08_failure_count': trigger_A08_failure_count, 
+            'trigger_A99_failure_count': trigger_A99_failure_count, 
+            'trigger_B01_failure_count': trigger_B01_failure_count, 
+            'trigger_B02_failure_count': trigger_B02_failure_count, 
+            'trigger_B03_failure_count': trigger_B03_failure_count, 
+            'trigger_B04_failure_count': trigger_B04_failure_count, 
+            'trigger_B99_failure_count': trigger_B99_failure_count, 
+
+            'trigger_A01_waiting_count': trigger_A01_waiting_count, 
+            'trigger_A02_waiting_count': trigger_A02_waiting_count, 
+            'trigger_A03_waiting_count': trigger_A03_waiting_count, 
+            'trigger_A04_waiting_count': trigger_A04_waiting_count, 
+            'trigger_A05_waiting_count': trigger_A05_waiting_count, 
+            'trigger_A06_waiting_count': trigger_A06_waiting_count, 
+            'trigger_A07_waiting_count': trigger_A07_waiting_count, 
+            'trigger_A08_waiting_count': trigger_A08_waiting_count, 
+            'trigger_A99_waiting_count': trigger_A99_waiting_count, 
+            'trigger_B01_waiting_count': trigger_B01_waiting_count, 
+            'trigger_B02_waiting_count': trigger_B02_waiting_count, 
+            'trigger_B03_waiting_count': trigger_B03_waiting_count, 
+            'trigger_B04_waiting_count': trigger_B04_waiting_count, 
+            'trigger_B99_waiting_count': trigger_B99_waiting_count, 
         }
         print_log('[INFO] P0900Action.suigai_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.suigai_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0900Action.suigai_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0900Action.suigai_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -485,17 +755,17 @@ def trigger_view(request, trigger_id):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0900Action.trigger_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 trigger_id = {}'.format(trigger_id), 'INFO')
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.trigger_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0900Action.trigger_view()関数 trigger_id = {}'.format(trigger_id), 'DEBUG')
+        print_log('[DEBUG] P0900Action.trigger_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 2/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.trigger_view()関数 STEP 2/3.', 'DEBUG')
         trigger = TRIGGER.objects.raw("""
             SELECT 
                 TR1.trigger_id AS trigger_id, 
@@ -532,7 +802,7 @@ def trigger_view(request, trigger_id):
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0900Action.trigger_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0900Action.trigger_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0900Action/trigger.html')
         context = {
             'trigger': trigger, 
@@ -541,7 +811,7 @@ def trigger_view(request, trigger_id):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0900Action.trigger_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0900Action.trigger_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0900Action.trigger_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

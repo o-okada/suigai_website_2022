@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0100File/views.py
+### ファイル管理
 ###############################################################################
 
 ###############################################################################
@@ -72,7 +73,12 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -86,16 +92,16 @@ def index_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0100File.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0100File.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0100File.index_view()関数 STEP 1/2.', 'INFO')
+        print_log('[DEBUG] P0100File.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0100File.index_view()関数 STEP 1/2.', 'DEBUG')
 
         #######################################################################
         ### レスポンスセット処理(0010)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0100File.index_view()関数 STEP 2/2.', 'INFO')
+        print_log('[DEBUG] P0100File.index_view()関数 STEP 2/2.', 'DEBUG')
         template = loader.get_template('P0100File/index.html')
         context = {
         }
@@ -103,7 +109,7 @@ def index_view(request):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0100File.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -120,43 +126,21 @@ def type_view(request, type_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0100File.type_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0100File.type_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0100File.type_view()関数 type_code = {}'.format(type_code), 'INFO')
-        print_log('[INFO] P0100File.type_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0100File.type_view()関数 type_code = {}'.format(type_code), 'DEBUG')
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0100File.type_view()関数 STEP 2/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2/3.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         feedback_list = FEEDBACK.objects.raw("""SELECT * FROM FEEDBACK ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
         approval_list = APPROVAL.objects.raw("""SELECT * FROM APPROVAL ORDER BY CAST(APPROVAL_ID AS INTEGER)""", [])
         
-        ### repository_list = []
-        ### for ken in ken_list:
-        ###     repository_list.append(REPOSITORY.objects.raw("""
-        ###         SELECT 
-        ###             KE1.ken_code AS ken_code, 
-        ###             KE1.ken_name AS ken_name, 
-        ###             SUB1.repository_id AS repository_id, 
-        ###             SUB1.type_code AS type_code, 
-        ###             SUB1.action_code AS action_code, 
-        ###             AC1.action_name AS action_name, 
-        ###             SUB1.status_code AS status_code, 
-        ###             ST1.status_name AS status_name, 
-        ###             SUB1.input_file_path AS input_file_path, 
-        ###             SUB1.input_file_name AS input_file_name, 
-        ###             TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-        ###             TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-        ###         FROM KEN KE1 
-        ###         LEFT JOIN (SELECT * FROM REPOSITORY WHERE ken_code=%s AND type_code=%s AND deleted_at IS NULL ORDER BY repository_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code
-        ###         LEFT JOIN ACTION AC1 ON SUB1.action_code=AC1.action_code 
-        ###         LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
-        ###         WHERE KE1.ken_code=%s""", [ken.ken_code, type_code, ken.ken_code, ]))
-
         suigai_list = []
         for ken in ken_list:
             suigai_list.append(SUIGAI.objects.raw("""
@@ -180,7 +164,7 @@ def type_view(request, type_code):
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        print_log('suigai_list = {}'.format(suigai_list), 'INFO')
+        print_log('[DEBUG] P0100File.type_view()関数 suigai_list = {}'.format(suigai_list), 'DEBUG')
 
         area_list = []
         for ken in ken_list:
@@ -205,13 +189,13 @@ def type_view(request, type_code):
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        print_log('area_list = {}'.format(area_list), 'INFO')
+        print_log('[DEBUG] P0100File.type_view()関数 area_list = {}'.format(area_list), 'DEBUG')
 
         #######################################################################
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0100File.type_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0100File/type.html')
         context = {
             'type_code': type_code, 
@@ -228,7 +212,7 @@ def type_view(request, type_code):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0100File.type_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.type_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0100File.type_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -245,18 +229,18 @@ def type_ken_view(request, type_code, ken_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### ssssssssssreset_log()
         print_log('[INFO] P0100File.type_ken_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0100File.type_ken_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0100File.type_ken_view()関数 type_code = {}'.format(type_code), 'INFO')
-        print_log('[INFO] P0100File.type_ken_view()関数 ken_code = {}'.format(ken_code), 'INFO')
-        print_log('[INFO] P0100File.type_ken_view()関数 STEP 1/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 type_code = {}'.format(type_code), 'DEBUG')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 ken_code = {}'.format(ken_code), 'DEBUG')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、データを取得する。
         #######################################################################
-        print_log('[INFO] P0100File.type_ken_view()関数 STEP 2/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2/3.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN WHERE ken_code=%s ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
@@ -317,7 +301,7 @@ def type_ken_view(request, type_code, ken_code):
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0100File.type_ken_view()関数 STEP 3/3.', 'INFO')
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0100File/ken.html')
         context = {
             'type_code': type_code, 
@@ -331,7 +315,7 @@ def type_ken_view(request, type_code, ken_code):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0100File.type_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.type_ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0100File.type_ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

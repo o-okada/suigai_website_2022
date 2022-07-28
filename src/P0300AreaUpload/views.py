@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0300AreaUpload/views.py
+### 水害区域図アップロード
 ###############################################################################
 
 ###############################################################################
@@ -77,7 +78,12 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view
@@ -94,48 +100,50 @@ def index_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0300AreaUpload.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 1/9.', 'INFO')
-        
-        #######################################################################
-        ### 局所変数セット処理(0010)
-        ### チェック結果を格納するために局所変数をセットする。
-        #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 2/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 1/8.', 'DEBUG')
+
+        ken_list = KEN.objects.raw("""
+            SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)
+            """, [])
     
         #######################################################################
-        ### 条件分岐処理(0020)
+        ### 条件分岐処理(0010)
         ### (1)GETの場合、水害区域図アップロード画面を表示して関数を抜ける。
         ### (2)POSTの場合、アップロードされた水害区域図をチェックする。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 3/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 2/8.', 'DEBUG')
         if request.method == 'GET':
             form = AreaUploadForm()
-            return render(request, 'P0300AreaUpload/index.html', {'form': form})
+            context = {
+                'form': form, 
+                'ken_list': ken_list, 
+            }
+            ### return render(request, 'P0300AreaUpload/index.html', {'form': form})
+            return render(request, 'P0300AreaUpload/index.html', context)
         
         elif request.method == 'POST':
             form = AreaUploadForm(request.POST, request.FILES)
             
         #######################################################################
-        ### フォーム検証処理(0030)
+        ### フォーム検証処理(0020)
         ### (1)フォームが正しい場合、処理を継続する。
         ### (2)フォームが正しくない場合、ERROR画面を表示して関数を抜ける。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 4/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 3/8.', 'DEBUG')
         if form.is_valid():
             pass
-        
         else:
             return HttpResponseRedirect('fail')
     
         #######################################################################
-        ### 水害区域図入出力処理(0040)
+        ### 水害区域図入出力処理(0030)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 5/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 4/8.', 'DEBUG')
         JST = timezone(timedelta(hours=9), 'JST')
         datetime_now_Ym = datetime.now(JST).strftime('%Y%m')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
@@ -148,64 +156,155 @@ def index_view(request):
             for chunk in file_object.chunks():
                 destination.write(chunk)
         
-        print_log('[INFO] P0300AreaUpload.index_view()関数 file_object = {}'.format(file_object), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 file_name = {}'.format(file_name), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 file_ext = {}'.format(file_ext), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 file_path = {}'.format(file_path), 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_object = {}'.format(file_object), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_name = {}'.format(file_name), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_ext = {}'.format(file_ext), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_path = {}'.format(file_path), 'DEBUG')
 
         #######################################################################
-        ### 水害区域図入出力処理(0050)
+        ### 水害区域図入出力処理(0040)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 6/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 5/8.', 'DEBUG')
         area_id = request.POST.get('area_id')
         area_name = request.POST.get('area_name')
-
-        print_log('[INFO] P0300AreaUpload.index_view()関数 area_id = {}'.format(area_id), 'INFO')
-        print_log('[INFO] P0300AreaUpload.index_view()関数 area_name = {}'.format(area_name), 'INFO')
+        ken_code = request.POST.get('ken_code')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 area_id = {}'.format(area_id), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 area_name = {}'.format(area_name), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 ken_code = {}'.format(ken_code), 'DEBUG')
 
         #######################################################################
         ### DBアクセス処理(1000)
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 7/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 6/8.', 'DEBUG')
         connection_cursor = connection.cursor()
         try:
+            connection_cursor.execute("""BEGIN""", []);
             ###################################################################
             ### DBアクセス処理(1010)
             ### 水害区域テーブルにデータを登録する。
+            ### TO-DO TODO TO_DO
             ###################################################################
-            print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 8/9.', 'INFO')
-            ### connection_cursor.execute("""
-            ###     INSERT INTO AREA (area_id, area_name, input_file_path, input_file_name) 
-            ###     VALUES (%s, %s, %s, %s) 
-            ###     ON CONFLICT (area_id) 
-            ###     DO UPDATE SET area_name=%s, input_file_path=%s, input_file_name=%s""", [
-            ###         int(area_id), 
-            ###         area_name, 
-            ###         input_file_path, 
-            ###         input_file_name, 
-            ###         area_name, 
-            ###         input_file_path, 
-            ###         input_file_name, 
-            ###     ])
+            print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 7/8.', 'DEBUG')
             connection_cursor.execute("""
-                INSERT INTO AREA (area_id, area_name, ken_code, committed_at, deleted_at, file_path, file_name, action_code, status_code) 
-                VALUES (%s, %s, %s, CURRENT_TIMESTAMP, NULL, %s, %s, NULL, NULL) 
-                ON CONFLICT (area_id) 
-                DO UPDATE SET area_name=%s, file_path=%s, file_name=%s""", [
-                    int(area_id), 
-                    area_name, 
-                    '02', 
-                    file_path, 
-                    file_name, 
-                    
-                    area_name, 
-                    file_path, 
-                    file_name, 
+                INSERT INTO AREA (
+                    area_id, area_name, ken_code, committed_at, deleted_at, file_path, file_name, action_code, status_code
+                ) VALUES (
+                    %s, -- area_id
+                    %s, -- area_name
+                    %s, -- ken_code
+                    CURRENT_TIMESTAMP, -- committed_at
+                    %s, -- deleted_at
+                    %s, -- file_path
+                    %s, -- file_name
+                    %s, -- action_code
+                    %s  -- status_code
+                ) ON CONFLICT (
+                    area_id
+                ) DO UPDATE SET 
+                    area_name=%s, -- area_name
+                    file_path=%s, -- file_path
+                    file_name=%s  -- file_name
+                """, [
+                    int(area_id), ### area_id
+                    area_name, ### area_name
+                    ken_code, ### ken_code
+                    None, ### deleted_at
+                    file_path, ### file_path
+                    file_name, ### file_name
+                    None, ### action_code
+                    None, ### status_code
+                    area_name, ### area_name
+                    file_path, ### file_path
+                    file_name, ### file_name
                 ])
-            
-            transaction.commit()
+    
+            ### トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
+            connection_cursor.execute("""
+                INSERT INTO TRIGGER (
+                    trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, 
+                    city_code, download_file_path, download_file_name, upload_file_path, upload_file_name 
+                ) VALUES (
+                    (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                    %s, -- suigai_id 
+                    %s, -- action_code 
+                    %s, -- status_code 
+                    %s, -- success_count 
+                    %s, -- failure_count 
+                    CURRENT_TIMESTAMP, -- published_at 
+                    CURRENT_TIMESTAMP, -- consumed_at 
+                    %s, -- deleted_at 
+                    %s, -- integrity_ok 
+                    %s, -- integrity_ng 
+                    %s, -- ken_code 
+                    %s, -- city_code 
+                    %s, -- download_file_path 
+                    %s, -- download_file_name 
+                    %s, -- upload_file_path 
+                    %s  -- upload_file_name 
+                )""", [
+                    None, ### suigai_id 
+                    'B01', ### action_code 
+                    'SUCCESS', ### status_code 
+                    1, ### success_count
+                    0, ### failure_count
+                    None, ### deleted_at 
+                    '\n'.join(get_info_log()), ### integrity_ok 
+                    '\n'.join(get_warn_log()), ### integrity_ng 
+                    ken_code, ### ken_code 
+                    None, ### city_code 
+                    None, ### download_file_path 
+                    None, ### download_file_name 
+                    file_path, ### upload_file_path 
+                    file_name, ### upload_file_name 
+                ])
+            ### トリガーテーブルにWF10水害区域図貼付けトリガーを未実行＝次回実行対象として登録する。
+            connection_cursor.execute("""
+                INSERT INTO TRIGGER (
+                    trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, 
+                    city_code, download_file_path, download_file_name, upload_file_path, upload_file_name 
+                ) VALUES (
+                    (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                    %s, -- suigai_id 
+                    %s, -- action_code 
+                    %s, -- status_code 
+                    %s, -- success_count 
+                    %s, -- failure_count 
+                    CURRENT_TIMESTAMP, -- published_at 
+                    %s, -- consumed_at 
+                    %s, -- deleted_at 
+                    %s, -- integrity_ok 
+                    %s, -- integrity_ng 
+                    %s, -- ken_code 
+                    %s, -- city_code 
+                    %s, -- download_file_path 
+                    %s, -- download_file_name 
+                    %s, -- upload_file_path 
+                    %s  -- upload_file_name 
+                )""", [
+                    None, ### suigai_id 
+                    'B02', ### action_code 
+                    None, ### status_code 
+                    None, ### success_count
+                    None, ### failure_count
+                    None, ### consumed_at
+                    None, ### deleted_at 
+                    None, ### integrity_ok 
+                    None, ### integrity_ng 
+                    ken_code, ### ken_code 
+                    None, ### city_code 
+                    None, ### download_file_path 
+                    None, ### download_file_name 
+                    file_path, ### upload_file_path 
+                    file_name, ### upload_file_name 
+                ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", []);
         except:
-            connection_cursor.rollback()
+            print_log('[ERROR] P0300AreaUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
         finally:
             connection_cursor.close()
             
@@ -215,14 +314,13 @@ def index_view(request):
         ### ※入力チェックでエラーが発見された場合、
         ### ※ネストを浅くするために、処理対象外の場合、終了させる。
         #######################################################################
-        print_log('[INFO] P0300AreaUpload.index_view()関数 STEP 9/9.', 'INFO')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 8/8.', 'DEBUG')
         template = loader.get_template('P0300AreaUpload/success.html')
         context = {}
         print_log('[INFO] P0300AreaUpload.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
-        
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300AreaUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0300AreaUpload.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0300AreaUpload.index_viwe()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

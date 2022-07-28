@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0300ExcelUpload/views.py
+### EXCELアップロード
 ###############################################################################
 
 ###############################################################################
@@ -79,7 +80,12 @@ from P0000Common.models import TRIGGER                 ### 10020: トリガー�
 from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
 from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 処理名：定数定義
@@ -473,21 +479,19 @@ def add_fill(ws_ippan, ws_result, row, column, fill):
 def index_view(request):
     try:
         #######################################################################
-        #######################################################################
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0300ExcelUpload.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 1/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 1/35.', 'DEBUG')
         
         #######################################################################
         ### 局所変数セット処理(0010)
         ### チェック結果を格納するために局所変数をセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 2/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 2/35.', 'DEBUG')
         require_OK_list = []
         require_OK_grid = []
         format_OK_list = []
@@ -516,7 +520,7 @@ def index_view(request):
         ### (2)POSTの場合、アップロードされたEXCELファイルをチェックする。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 3/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 3/35.', 'DEBUG')
         if request.method == 'GET':
             form = ExcelUploadForm()
             return render(request, 'P0300ExcelUpload/index.html', {'form': form})
@@ -530,10 +534,9 @@ def index_view(request):
         ### (2)フォームが正しくない場合、ERROR画面を表示して関数を抜ける。
         ### ※関数の内部のネスト数を浅くするため。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 4/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 4/35.', 'DEBUG')
         if form.is_valid():
             pass
-        
         else:
             return HttpResponseRedirect('fail')
     
@@ -542,7 +545,7 @@ def index_view(request):
         ### (1)局所変数に値をセットする。
         ### (2)アップロードされたEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 5/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 5/35.', 'DEBUG')
         JST = timezone(timedelta(hours=9), 'JST')
         datetime_now_Ym = datetime.now(JST).strftime('%Y%m')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
@@ -558,11 +561,11 @@ def index_view(request):
         output_file_path = 'static/repository/'+ datetime_now_Ym +'/ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
         output_file_name = 'ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
         
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_object = {}'.format(input_file_object), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 input_file_name = {}'.format(input_file_name), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 output_file_name = {}'.format(output_file_name), 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_object = {}'.format(input_file_object), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_name = {}'.format(input_file_name), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 output_file_name = {}'.format(output_file_name), 'DEBUG')
                 
         #######################################################################
         ### EXCELファイル入出力処理(0050)
@@ -577,7 +580,7 @@ def index_view(request):
         ### wx_max_row: ワークシートの最大行数
         ### fill: 背景赤色の塗りつぶし
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 6/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 6/35.', 'DEBUG')
         wb = openpyxl.load_workbook(input_file_path)
         ws_ippan = []
         ws_result = []
@@ -605,7 +608,7 @@ def index_view(request):
         ### (1)EXCELシート毎に最大行を探索する。
         ### (2)局所変数のmax_rowリストに追加する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 7/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 7/35.', 'DEBUG')
         max_row = []
         
         for ws_temp in ws_ippan:
@@ -623,7 +626,7 @@ def index_view(request):
         ### EXCELファイル入出力処理(0070)
         ### EXCELセルの背景赤色を局所変数のfillに設定する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 8/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 8/35.', 'DEBUG')
         fill = openpyxl.styles.PatternFill(patternType='solid', fgColor='FF0000', bgColor='FF0000')
 
         #######################################################################
@@ -631,7 +634,7 @@ def index_view(request):
         ### (1)DBから突合せチェック用のデータを取得する。
         ### (2)突合せチェック用のリストを生成する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 9/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 9/35.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         city_list = CITY.objects.raw("""SELECT * FROM CITY ORDER BY CAST(CITY_CODE AS INTEGER)""", [])
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
@@ -706,7 +709,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 10/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 10/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県に値がセットされていることをチェックする。
@@ -760,7 +763,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 11/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 11/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名に値がセットされていることをチェックする。
@@ -809,7 +812,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 12/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 12/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地に値がセットされていることをチェックする。
@@ -825,7 +828,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 13/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 13/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             if max_row[i] >= 20:
                 for j in range(20, max_row[i] + 1):
@@ -895,7 +898,7 @@ def index_view(request):
         ### 必須チェックは別途必須チェックで行うためである。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 14/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 14/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県について形式が正しいことをチェックする。
@@ -993,7 +996,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 15/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 15/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名について形式が正しいことをチェックする。
@@ -1058,7 +1061,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 16/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 16/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地について形式が正しいことをチェックする。
@@ -1138,7 +1141,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 17/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 17/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             if max_row[i] >= 20:
                 for j in range(20, max_row[i] + 1):
@@ -1446,7 +1449,7 @@ def index_view(request):
         ### 範囲チェックの例は値が正であることである。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 18/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 18/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県について範囲が正しいことをチェックする。
@@ -1464,7 +1467,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 19/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 19/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名について範囲が正しいことをチェックする。
@@ -1479,7 +1482,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 20/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 20/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地について範囲が正しいことをチェックする。
@@ -1544,7 +1547,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 21/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 21/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             if max_row[i] >= 20:
                 for j in range(20, max_row[i] + 1):
@@ -1812,7 +1815,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 22/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 22/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県が何かの値のときに、相関する市区町村名は正しく選択されているか。
@@ -2086,7 +2089,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 23/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 23/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名が何かの値のときに、相関する水系種別は正しく選択されているか。
@@ -2277,7 +2280,7 @@ def index_view(request):
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 24/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 24/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルC14: 水害区域面積の農地 vs セルH14: 農作物被害額
@@ -2337,7 +2340,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。相関チェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 25/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 25/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             if max_row[i] >= 20:
                 for j in range(20, max_row[i] + 1):
@@ -2619,7 +2622,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 26/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 26/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 7行目
             ### セルB7: 都道府県についてデータベースに登録されている値と突合せチェックする。
@@ -2710,7 +2713,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 27/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 27/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 10行目
             ### セルB10: 水系・沿岸名についてデータベースに登録されている値と突合せチェックする。
@@ -2785,7 +2788,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 28/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 28/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             ### 14行目
             ### セルB14: 水害区域面積の宅地についてデータベースに登録されている値と突合せチェックする。
@@ -2827,7 +2830,7 @@ def index_view(request):
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 29/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 29/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
             if max_row[i] >= 20:
                 for j in range(20, max_row[i] + 1):
@@ -2921,62 +2924,154 @@ def index_view(request):
                     ### セルAA20: 備考についてデータベースに登録されている値と突合せチェックする。
 
         #######################################################################
-        #######################################################################
         ### ファイル入出力処理(6000)
         ### チェック結果ファイルを保存する。
         #######################################################################
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 30/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 30/35.', 'DEBUG')
         wb.save(output_file_path)
 
         #######################################################################
-        #######################################################################
         ### ログ出力処理(7000)
         #######################################################################
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 31/35.', 'INFO')
-        if len(require_NG_list) > 0 or len(require_NG_grid) > 0 or \
-            len(format_NG_list) > 0 or len(format_NG_grid) > 0 or \
-            len(range_NG_list) > 0 or len(range_NG_grid) > 0 or \
-            len(correlate_NG_list) > 0 or len(correlate_NG_grid) > 0 or \
-            len(compare_NG_list) > 0 or len(compare_NG_grid) > 0:
-            
-            print_log('False', 'INFO')
-
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 31/35.', 'DEBUG')
+        if len(require_NG_list) > 0 or \
+            len(require_NG_grid) > 0 or \
+            len(format_NG_list) > 0 or \
+            len(format_NG_grid) > 0 or \
+            len(range_NG_list) > 0 or \
+            len(range_NG_grid) > 0 or \
+            len(correlate_NG_list) > 0 or \
+            len(correlate_NG_grid) > 0 or \
+            len(compare_NG_list) > 0 or \
+            len(compare_NG_grid) > 0:
+            print_log('[DEBUG] P0300ExcelUpload.index_view()関数 False', 'DEBUG')
         else:
-            print_log('True', 'INFO')
+            print_log('[DEBUG] P0300ExcelUpload.index_view()関数 True', 'DEBUG')
             
-        print_log('max_row = {}'.format(max_row), 'INFO')
-        print_log('len(require_NG_list) = {}'.format(len(require_NG_list)), 'INFO')
-        print_log('len(format_NG_list) = {}'.format(len(format_NG_list)), 'INFO')
-        print_log('len(range_NG_list) = {}'.format(len(range_NG_list)), 'INFO')
-        print_log('len(correlate_NG_list) = {}'.format(len(correlate_NG_list)), 'INFO')
-        print_log('len(compare_NG_list) = {}'.format(len(compare_NG_list)), 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 max_row = {}'.format(max_row), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(require_NG_list) = {}'.format(len(require_NG_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(format_NG_list) = {}'.format(len(format_NG_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(range_NG_list) = {}'.format(len(range_NG_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(correlate_NG_list) = {}'.format(len(correlate_NG_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(compare_NG_list) = {}'.format(len(compare_NG_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(require_OK_list) = {}'.format(len(require_OK_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(format_OK_list) = {}'.format(len(format_OK_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(range_OK_list) = {}'.format(len(range_OK_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(correlate_OK_list) = {}'.format(len(correlate_OK_list)), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 len(compare_OK_list) = {}'.format(len(compare_OK_list)), 'DEBUG')
+        
+        success_str = ''
+        if len(require_OK_list) > 0:
+            for i in range(len(require_OK_list)):
+                success_str = success_str+str(require_OK_list[i][0])+','+str(require_OK_list[i][1])+','+str(require_OK_list[i][2])+','+str(require_OK_list[i][3])+','+str(require_OK_list[i][4])+','+str(require_OK_list[i][5])+'\n'        
+        
+        if len(format_OK_list) > 0:
+            for i in range(len(format_OK_list)):
+                success_str = success_str+str(format_OK_list[i][0])+','+str(format_OK_list[i][1])+','+str(format_OK_list[i][2])+','+str(format_OK_list[i][3])+','+str(format_OK_list[i][4])+','+str(format_OK_list[i][5])+'\n'        
 
-        print_log('len(require_OK_list) = {}'.format(len(require_OK_list)), 'INFO')
-        print_log('len(format_OK_list) = {}'.format(len(format_OK_list)), 'INFO')
-        print_log('len(range_OK_list) = {}'.format(len(range_OK_list)), 'INFO')
-        print_log('len(correlate_OK_list) = {}'.format(len(correlate_OK_list)), 'INFO')
-        print_log('len(compare_OK_list) = {}'.format(len(compare_OK_list)), 'INFO')
+        if len(range_OK_list) > 0:
+            for i in range(len(range_OK_list)):
+                success_str = success_str+str(range_OK_list[i][0])+','+str(range_OK_list[i][1])+','+str(range_OK_list[i][2])+','+str(range_OK_list[i][3])+','+str(range_OK_list[i][4])+','+str(range_OK_list[i][5])+'\n'        
+
+        if len(correlate_OK_list) > 0:
+            for i in range(len(correlate_OK_list)):
+                success_str = success_str+str(correlate_OK_list[i][0])+','+str(correlate_OK_list[i][1])+','+str(correlate_OK_list[i][2])+','+str(correlate_OK_list[i][3])+','+str(correlate_OK_list[i][4])+','+str(correlate_OK_list[i][5])+'\n'        
+
+        if len(compare_OK_list) > 0:
+            for i in range(len(compare_OK_list)):
+                success_str = success_str+str(compare_OK_list[i][0])+','+str(compare_OK_list[i][1])+','+str(compare_OK_list[i][2])+','+str(compare_OK_list[i][3])+','+str(compare_OK_list[i][4])+','+str(compare_OK_list[i][5])+'\n'        
+
+        failure_str = ''
+        if len(require_NG_list) > 0:
+            for i in range(len(require_NG_list)):
+                failure_str = failure_str+str(require_NG_list[i][0])+','+str(require_NG_list[i][1])+','+str(require_NG_list[i][2])+','+str(require_NG_list[i][3])+','+str(require_NG_list[i][4])+','+str(require_NG_list[i][5])+'\n'        
+        
+        if len(format_NG_list) > 0:
+            for i in range(len(format_NG_list)):
+                failure_str = failure_str+str(format_NG_list[i][0])+','+str(format_NG_list[i][1])+','+str(format_NG_list[i][2])+','+str(format_NG_list[i][3])+','+str(format_NG_list[i][4])+','+str(format_NG_list[i][5])+'\n'        
+
+        if len(range_NG_list) > 0:
+            for i in range(len(range_NG_list)):
+                failure_str = failure_str+str(range_NG_list[i][0])+','+str(range_NG_list[i][1])+','+str(range_NG_list[i][2])+','+str(range_NG_list[i][3])+','+str(range_NG_list[i][4])+','+str(range_NG_list[i][5])+'\n'        
+
+        if len(correlate_NG_list) > 0:
+            for i in range(len(correlate_NG_list)):
+                failure_str = failure_str+str(correlate_NG_list[i][0])+','+str(correlate_NG_list[i][1])+','+str(correlate_NG_list[i][2])+','+str(correlate_NG_list[i][3])+','+str(correlate_NG_list[i][4])+','+str(correlate_NG_list[i][5])+'\n'        
+
+        if len(compare_NG_list) > 0:
+            for i in range(len(compare_NG_list)):
+                failure_str = failure_str+str(compare_NG_list[i][0])+','+str(compare_NG_list[i][1])+','+str(compare_NG_list[i][2])+','+str(compare_NG_list[i][3])+','+str(compare_NG_list[i][4])+','+str(compare_NG_list[i][5])+'\n'        
             
-        #######################################################################
         #######################################################################
         ### レスポンスセット処理(8000)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         ### ※入力チェックでエラーが発見された場合、
         ### ※ネストを浅くするために、処理対象外の場合、終了させる。
         #######################################################################
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 32/35.', 'INFO')
-        if len(require_NG_list) > 0 or len(require_NG_grid) > 0 or \
-            len(format_NG_list) > 0 or len(format_NG_grid) > 0 or \
-            len(range_NG_list) > 0 or len(range_NG_grid) > 0 or \
-            len(correlate_NG_list) > 0 or len(correlate_NG_grid) > 0 or \
-            len(compare_NG_list) > 0 or len(compare_NG_grid) > 0:
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 32/35.', 'DEBUG')
+        if len(require_NG_list) > 0 or \
+            len(require_NG_grid) > 0 or \
+            len(format_NG_list) > 0 or \
+            len(format_NG_grid) > 0 or \
+            len(range_NG_list) > 0 or \
+            len(range_NG_grid) > 0 or \
+            len(correlate_NG_list) > 0 or \
+            len(correlate_NG_grid) > 0 or \
+            len(compare_NG_list) > 0 or \
+            len(compare_NG_grid) > 0:
 
             connection_cursor = connection.cursor()
             try:
-                ### (1)トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
+                connection_cursor.execute("""BEGIN""", []);
+                ###############################################################
+                ### 市区町村をアップロード処理の単位とする。
+                ### 当該市区町村の全データを入れ替える。
+                ### 既存の市区町村のSUIGAI、IPPAN、IPPAN_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
+                ### ※入力チェックでエラーが発見された場合、
+                ###############################################################
+                connection_cursor.execute("""
+                    UPDATE SUIGAI SET 
+                        deleted_at=CURRENT_TIMESTAMP 
+                    WHERE suigai_id IN (SELECT suigai_id FROM SUIGAI WHERE city_code=%s AND deleted_at IS NULL)
+                    """, [
+                        split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                    ])
+        
+                connection_cursor.execute("""
+                    UPDATE IPPAN SET 
+                        deleted_at=CURRENT_TIMESTAMP 
+                    WHERE ippan_id IN (SELECT ippan_id FROM IPPAN_VIEW WHERE city_code=%s AND deleted_at IS NULL)
+                    """, [
+                        split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                    ])
+    
+                connection_cursor.execute("""
+                    UPDATE IPPAN_SUMMARY SET 
+                        deleted_at=CURRENT_TIMESTAMP 
+                    WHERE ippan_id IN (
+                    SELECT 
+                        IS1.ippan_id AS ippan_id 
+                    FROM IPPAN_SUMMARY IS1 
+                    LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
+                    WHERE 
+                        SG1.city_code=%s AND 
+                        IS1.deleted_at IS NULL)
+                    """, [
+                        split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                    ])
+    
+                connection_cursor.execute("""
+                    UPDATE TRIGGER SET 
+                        deleted_at=CURRENT_TIMESTAMP 
+                    WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code <> 'A01')
+                    """, [
+                        split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                    ])
+                
+                ###############################################################
+                ### トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
+                ### ※入力チェックでエラーが発見された場合、
+                ###############################################################
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3002,13 +3097,13 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        '2', ### action_code 
-                        '3', ### status_code 
+                        'A02', ### action_code 
+                        'SUCCESS', ### status_code 
                         1,  ### success_count
                         0,  ### failure_count
                         None, ### deleted_at 
-                        None, ### integrity_ok 
-                        None, ### integrity_ng 
+                        '\n'.join(get_info_log()), ### integrity_ok 
+                        '\n'.join(get_warn_log()), ### integrity_ng 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=2).value)[-1]), ### ken_code 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
@@ -3016,8 +3111,11 @@ def index_view(request):
                         input_file_path, ### upload_file_path 
                         input_file_name, ### upload_file_name 
                     ])
-
-                ### (2)トリガーテーブルにWF3データ検証トリガーを実行済、失敗として登録する。
+                    
+                ###############################################################
+                ### トリガーテーブルにWF3データ検証トリガーを実行済、失敗として登録する。
+                ### ※入力チェックでエラーが発見された場合、
+                ###############################################################
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3043,13 +3141,13 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        '3', ### action_code 
-                        '4', ### status_code 
+                        'A03', ### action_code 
+                        'FAILURE', ### status_code 
                         0,  ### success_count
                         len(ws_ippan),  ### failure_count
                         None, ### deleted_at 
-                        None, ### integrity_ok 
-                        None, ### integrity_ng 
+                        success_str, ### integrity_ok 
+                        failure_str, ### integrity_ng 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=2).value)[-1]), ### ken_code 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
@@ -3057,16 +3155,16 @@ def index_view(request):
                         input_file_path, ### upload_file_path 
                         input_file_name, ### upload_file_name 
                     ])
-                
-                transaction.commit()
-                    
+                ### transaction.commit()
+                connection_cursor.execute("""COMMIT""", []);
             except:
-                connection_cursor.rollback()
+                print_log('[ERROR] P0300ExcelUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+                ### connection_cursor.rollback()
+                connection_cursor.execute("""ROLLBACK""", [])
             finally:
                 connection_cursor.close()
                 
             ### src/P0300ExcelUpload/templates/P0300ExcelUpload/fail.htmlを使用する。
-            ### 上記はテンプレートファイルの場所がわからなくなることがあるためのメモである。
             template = loader.get_template('P0300ExcelUpload/fail.html')
             context = {
                 'require_NG_list': require_NG_list,
@@ -3079,12 +3177,11 @@ def index_view(request):
                 'correlate_NG_grid': correlate_NG_grid,
                 'compare_NG_list': compare_NG_list,
                 'compare_NG_grid': compare_NG_grid,
-                'excel_id': 1,
+                'output_file_path': output_file_path,
             }
             print_log('[INFO] P0300ExcelUpload.index_view()関数が正常終了しました。', 'INFO')
             return HttpResponse(template.render(context, request))
         
-        #######################################################################
         #######################################################################
         ### DBアクセス処理(9000)
         ### (1)入力データ_ヘッダ部分テーブルにデータを登録する。
@@ -3092,52 +3189,32 @@ def index_view(request):
         ### (3)レポジトリテーブルにデータを登録する。
         ### ※入力チェックでエラーが発見されなかった場合、
         #######################################################################
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 33/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 33/35.', 'DEBUG')
         connection_cursor = connection.cursor()
         try:
-            ###############################################################
-            ### DBアクセス処理(9010)
-            ### 入力データ_ヘッダ部分テーブルのデータを削除する。
-            ### 入力データ_一覧表部分テーブルのデータを削除する。
-            ### ※入力チェックでエラーが発見されなかった場合、
-            ### ※二重登録防止のため、同じ市区町村のデータを削除する。
-            ###############################################################
-            print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34/35.', 'INFO')
-            ### 以下、delete_ はデバッグ時のログ用のため、削除しないが、コメントアウトする。
-            ### SUIGAI
-            ### del_suigai_list = SUIGAI.objects.raw("""
-            ###     SELECT suigai_id FROM SUIGAI WHERE city_code=%s AND deleted_at IS NULL""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
-            ### del_suigai_id_list = [del_suigai.suigai_id for del_suigai in del_suigai_list]
-            ### del_suigai_id_str = ",".join([str(i) for i in del_suigai_id_list])
-            ### print_log('del_suigai_id_str = {}'.format(del_suigai_id_str), 'INFO')
+            connection_cursor.execute("""BEGIN""", [])
             
-            ### IPPAN
-            ### del_ippan_list = IPPAN_VIEW.objects.raw("""
-            ###     SELECT ippan_id FROM IPPAN_VIEW WHERE city_code=%s AND deleted_at IS NULL""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
-            ### del_ippan_id_list = [del_ippan.ippan_id for del_ippan in del_ippan_list]
-            ### del_ippan_id_str = ",".join([str(i) for i in del_ippan_id_list])
-            ### print_log('del_ippan_id_str = {}'.format(del_ippan_id_str), 'INFO')
-
-            ### TRIGGER
-            ### del_trigger_list = TRIGGER.objects.raw("""
-            ###     SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
-            ### del_trigger_id_list = [del_trigger.trigger_id for del_trigger in del_trigger_list]
-            ### del_trigger_id_str = ",".join([str(i) for i in del_trigger_id_list])
-            ### print_log('del_trigger_id_str = {}'.format(del_trigger_id_str), 'INFO')
-
+            ###################################################################
             ### 市区町村をアップロード処理の単位とする。
             ### 当該市区町村の全データを入れ替える。
             ### 既存の市区町村のSUIGAI、IPPAN、IPPAN_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
+            ### ※入力チェックでエラーが発見されなかった場合、
+            ###################################################################
             connection_cursor.execute("""
                 UPDATE SUIGAI SET 
                     deleted_at=CURRENT_TIMESTAMP 
-                WHERE suigai_id IN (SELECT suigai_id FROM SUIGAI WHERE city_code=%s AND deleted_at IS NULL)""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
+                WHERE suigai_id IN (SELECT suigai_id FROM SUIGAI WHERE city_code=%s AND deleted_at IS NULL)
+                """, [
+                    split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                ])
     
             connection_cursor.execute("""
                 UPDATE IPPAN SET 
                     deleted_at=CURRENT_TIMESTAMP 
-                WHERE ippan_id IN (SELECT ippan_id FROM IPPAN_VIEW WHERE city_code=%s AND deleted_at IS NULL)""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
+                WHERE ippan_id IN (SELECT ippan_id FROM IPPAN_VIEW WHERE city_code=%s AND deleted_at IS NULL)
+                """, [
+                    split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                ])
 
             connection_cursor.execute("""
                 UPDATE IPPAN_SUMMARY SET 
@@ -3149,35 +3226,39 @@ def index_view(request):
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
                 WHERE 
                     SG1.city_code=%s AND 
-                    IS1.deleted_at IS NULL)""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
+                    IS1.deleted_at IS NULL)
+                """, [
+                    split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                ])
 
             connection_cursor.execute("""
                 UPDATE TRIGGER SET 
                     deleted_at=CURRENT_TIMESTAMP 
-                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL)""", [split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], ])
+                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code <> 'A01')
+                """, [
+                    split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
+                ])
 
-            ###############################################################
-            ### DBアクセス処理(9020)
-            ### SUIGAI_ID、REPOSITORY_IDはSUIGAI、REPOSITORY以外のテーブルでも外部キーとして使用する。
-            ### このため、SQLのMAX関数ではなく、明示的にSUIGAI_ID、REPOSITORY_IDを取得する。
-            ###############################################################
+            ###################################################################
+            ### ※入力チェックでエラーが発見されなかった場合、
+            ###################################################################
             for i, _ in enumerate(ws_ippan):
-                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_1/35.', 'INFO')
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 34_1/35.', 'DEBUG')
                 ### suigai_id__max で正しい。
                 suigai_id = SUIGAI.objects.all().aggregate(Max('suigai_id'))['suigai_id__max']
                 if suigai_id is None:
-                    suigai_id = 0
+                    suigai_id = 1
                 else:
                     suigai_id = suigai_id + 1
                     
-                print_log('suigai_id = {}'.format(suigai_id), 'INFO')
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 suigai_id = {}'.format(suigai_id), 'DEBUG')
                 
                 ###############################################################
                 ### DBアクセス処理(9030)
                 ### 一般資産入力データ_ヘッダ部分テーブルにデータを登録する。
                 ### ※入力チェックでエラーが発見されなかった場合、
                 ###############################################################
-                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_2/35.', 'INFO')
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 34_2/35.', 'DEBUG')
                 connection_cursor.execute("""
                     INSERT INTO SUIGAI (
                         suigai_id, suigai_name, ken_code, city_code, begin_date, end_date, 
@@ -3234,8 +3315,8 @@ def index_view(request):
                         None, ### deleted_at 
                         input_file_path, ### file_path 
                         input_file_name, ### file_name 
-                        '4',  ### action_code 
-                        '1',  ### status_code 
+                        None,  ### action_code 
+                        None,  ### status_code 
                     ])
                     
                 ###############################################################
@@ -3243,11 +3324,11 @@ def index_view(request):
                 ### 一般資産入力データ_一覧表部分テーブルにデータを登録する。
                 ### ※入力チェックでエラーが発見されなかった場合、
                 ###############################################################
-                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_3/35.', 'INFO')
-                print_log('max_row[i] = {}'.format(max_row[i]), 'INFO')
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 34_3/35.', 'DEBUG')
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 max_row[i] = {}'.format(max_row[i]), 'DEBUG')
                 if max_row[i] >= 20:
                     for j in range(20, max_row[i] + 1):
-                        print_log('j = {}'.format(j), 'INFO')
+                        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 j = {}'.format(j), 'DEBUG')
                         connection_cursor.execute(""" 
                             INSERT INTO IPPAN (
                                 ippan_id, ippan_name, suigai_id, building_code, underground_code, flood_sediment_code, 
@@ -3318,23 +3399,14 @@ def index_view(request):
                             ])
 
                 ###############################################################
-                ### DBアクセス処理(9050)
-                ### レポジトリテーブルにデータを登録する。
-                ### ※入力チェックでエラーが発見されなかった場合、
-                ### SUIGAI_ID、REPOSITORY_IDはSUIGAI、REPOSITORY以外のテーブルでも外部キーとして使用する。
-                ### このため、SQLのMAX関数ではなく、明示的にSUIGAI_ID、REPOSITORY_IDを取得する。
-                ###############################################################
-                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_4/35.', 'INFO')
-                
-                ###############################################################
                 ### DBアクセス処理(9060)
                 ### (1)トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
                 ### (2)トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
                 ### (3)トリガーテーブルにWF4差分検証トリガーを未実行＝次回実行対象として登録する。
                 ### ※入力チェックでエラーが発見されなかった場合、
                 ###############################################################
-                print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_5/35.', 'INFO')
-                ### (1)トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
+                print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 34_5/35.', 'DEBUG')
+                ### トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3360,13 +3432,13 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        '2', ### action_code 
-                        '3', ### status_code 
+                        'A02', ### action_code 
+                        'SUCCESS', ### status_code 
                         1, ### success_count
                         0, ### failure_count
                         None, ### deleted_at 
-                        None, ### integrity_ok 
-                        None, ### integrity_ng 
+                        '\n'.join(get_info_log()), ### integrity_ok 
+                        '\n'.join(get_warn_log()), ### integrity_ng 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=2).value)[-1]), ### ken_code 
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
@@ -3375,7 +3447,7 @@ def index_view(request):
                         input_file_name, ### upload_file_name 
                     ])
 
-                ### (2)トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
+                ### トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3401,13 +3473,13 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        '3', ### action_code 
-                        '3', ### status_code 
+                        'A03', ### action_code 
+                        'SUCCESS', ### status_code 
                         1, ### success_count
                         0, ### failure_count
                         None, ### deleted_at 
-                        None, ### integrity_ok 
-                        None, ### integrity_ng 
+                        success_str, ### integrity_ok 
+                        failure_str, ### integrity_ng 
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=7, column=2).value)[-1]), ### ken_code 
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
@@ -3416,7 +3488,7 @@ def index_view(request):
                         input_file_name, ### upload_file_name 
                     ])
             
-                ### (3)トリガーテーブルにWF4差分検証トリガーを未実行＝次回実行対象として登録する。
+                ### トリガーテーブルにWF4差分検証トリガーを未実行＝次回実行対象として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3442,8 +3514,8 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        '4', ### action_code 
-                        None, ### status_code 
+                        'A04', ### action_code 
+                        'RUNNING', ### status_code 
                         None, ### success_count
                         None, ### failure_count
                         None, ### consumed_at 
@@ -3457,25 +3529,21 @@ def index_view(request):
                         input_file_path, ### upload_file_path 
                         input_file_name, ### upload_file_name 
                     ])
-
-            print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 34_6/35.', 'INFO')
-            transaction.commit()
-                    
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])        
         except:
-            print_log(sys.exc_info()[0], 'ERROR')
-            connection_cursor.rollback()
+            print_log('[ERROR] P0300ExcelUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
         finally:
-            print_log(sys.exc_info()[0], 'ERROR')
             connection_cursor.close()
         
-        #######################################################################
         #######################################################################
         ### レスポンスセット処理(10000)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         ### ※入力チェックでエラーが発見されなかった場合、
         #######################################################################
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.index_view()関数 STEP 35/35.', 'INFO')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 35/35.', 'DEBUG')
         ### src/P0300ExcelUpload/templates/P0300ExcelUpload/success.htmlを使用する。
         ### 上記はテンプレートファイルの場所がわからなくなることがあるためのメモである。
         template = loader.get_template('P0300ExcelUpload/success.html')
@@ -3484,7 +3552,7 @@ def index_view(request):
         return HttpResponse(template.render(context, request))
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0300ExcelUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0300ExcelUpload.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0300ExcelUpload.index_viwe()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -3495,32 +3563,29 @@ def index_view(request):
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def ippan_chosa_result_view(request, excel_id):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
-        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数 STEP 1/1.', 'INFO')
-        
-        result_file_path = 'static/ippan_chosa_result2.xlsx'
-        wb = openpyxl.load_workbook(result_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0010)
-        ### コンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
-        return response
-        
-    except:
-        print_log(sys.exc_info()[0], 'ERROR')
-        print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### def ippan_chosa_result_view(request, excel_id):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         reset_log()
+###         print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が開始しました。', 'INFO')
+###         print_log('[DEBUG] P0300ExcelUpload.ippan_chosa_result_view()関数 request = {}'.format(request.method), 'DEBUG')
+###         print_log('[DEBUG] P0300ExcelUpload.ippan_chosa_result_view()関数 STEP 1/1.', 'DEBUG')
+###         result_file_path = 'static/ippan_chosa_result2.xlsx'
+###         wb = openpyxl.load_workbook(result_file_path)
+###         #######################################################################
+###         ### レスポンスセット処理(0010)
+###         ### コンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[INFO] P0300ExcelUpload.ippan_chosa_result_view()関数が正常終了しました。', 'INFO')
+###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+###         response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
+###         return response
+###     except:
+###         print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+###         print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0300ExcelUpload.ippan_chosa_result_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')
     

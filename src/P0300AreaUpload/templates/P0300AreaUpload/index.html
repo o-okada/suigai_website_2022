@@ -129,6 +129,19 @@
             </div>
             <div class="row mb-3">
                 <div class="input-group">
+                    <label class="col-form-label col-2">都道府県</label>
+                    <div class="col-10">
+                        <select class="form-select border" id="ken_code" name="ken_code">
+                            <option value="0">都道府県を選択してください。</option>
+                            {% for ken in ken_list %}
+                            <option value="{{ ken.ken_code }}">{{ ken.ken_name }}: {{ ken.ken_code }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="input-group">
                 <label class="col-form-label col-2">水害区域番号</label>
                 <input class="form-control col-10" type="text" id="area_id" name="area_id" required>
                 </div>

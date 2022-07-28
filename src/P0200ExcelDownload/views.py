@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0200ExcelDownload/views.py
+### EXCELダウンロード
 ###############################################################################
 
 ###############################################################################
@@ -78,7 +79,12 @@ from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデー
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_集計結果
 
+from P0000Common.common import get_debug_log
+from P0000Common.common import get_error_log
+from P0000Common.common import get_info_log
+from P0000Common.common import get_warn_log
 from P0000Common.common import print_log
+from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view(request)
@@ -93,18 +99,18 @@ def index_view(request, data_type):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.index_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.index_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.index_view()関数 data_type = {}'.format(data_type), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.index_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.index_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.index_view()関数 data_type = {}'.format(data_type), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.index_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### (1)DBにアクセスして、都道府県データを取得する。
         ### (2)DBにアクセスして、市区町村データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.index_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.index_view()関数 STEP 2/4.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         city_list01 = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['01', ])
         city_list02 = CITY.objects.raw("""SELECT * FROM CITY WHERE KEN_CODE=%s ORDER BY CAST(CITY_CODE AS INTEGER)""", ['02', ])
@@ -158,7 +164,7 @@ def index_view(request, data_type):
         ### レスポンスセット処理(0020)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.index_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.index_view()関数 STEP 3/4.', 'DEBUG')
         template = loader.get_template('P0200ExcelDownload/index.html')
         context = {
             'ken_list': ken_list,
@@ -215,7 +221,7 @@ def index_view(request, data_type):
         return HttpResponse(template.render(context, request))
     
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.index_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -233,17 +239,17 @@ def building_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.building_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、建物区分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 STEP 2/4.', 'DEBUG')
         building_list = BUILDING.objects.raw("""SELECT * FROM BUILDING ORDER BY CAST(BUILDING_CODE AS INTEGER)""", [])
         
         #######################################################################
@@ -251,7 +257,7 @@ def building_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_building.xlsx'
         download_file_path = 'static/download_building.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -271,14 +277,14 @@ def building_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.building_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.building_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.building_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="building.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.building_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.building_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.building_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -296,17 +302,17 @@ def ken_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ken_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、都道府県データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 STEP 2/4.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
         
         #######################################################################
@@ -314,7 +320,7 @@ def ken_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ken.xlsx'
         download_file_path = 'static/download_ken.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -334,14 +340,14 @@ def ken_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ken_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ken_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ken_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ken.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -359,17 +365,17 @@ def city_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.city_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、市区町村データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 STEP 2/4.', 'DEBUG')
         city_list = CITY.objects.raw("""
             SELECT 
                 CT1.city_code AS city_code, 
@@ -387,7 +393,7 @@ def city_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_city.xlsx'
         download_file_path = 'static/download_city.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -415,14 +421,14 @@ def city_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.city_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.city_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.city_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="city.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.city_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.city_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.city_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -440,17 +446,17 @@ def kasen_kaigan_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、水害発生地点工種（河川海岸区分）データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 2/4.', 'DEBUG')
         kasen_kaigan_list = KASEN_KAIGAN.objects.raw("""SELECT * FROM KASEN_KAIGAN ORDER BY CAST(KASEN_KAIGAN_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -458,7 +464,7 @@ def kasen_kaigan_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_kasen_kaigan.xlsx'
         download_file_path = 'static/download_kasen_kaigan.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -478,14 +484,14 @@ def kasen_kaigan_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_kaigan_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.kasen_kaigan_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_kaigan.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_kaigan_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_kaigan_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_kaigan_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -503,17 +509,17 @@ def suikei_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、水系（水系・沿岸）データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 STEP 2/4.', 'DEBUG')
         suikei_list = SUIKEI.objects.raw("""
             SELECT 
                 SK1.suikei_code AS suikei_code, 
@@ -529,7 +535,7 @@ def suikei_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_suikei.xlsx'
         download_file_path = 'static/download_suikei.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -553,14 +559,14 @@ def suikei_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.suikei_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suikei_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suikei_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -578,17 +584,17 @@ def suikei_type_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、水系種別（水系・沿岸種別）データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 STEP 2/4.', 'DEBUG')
         suikei_type_list = SUIKEI_TYPE.objects.raw("""SELECT * FROM SUIKEI_TYPE ORDER BY CAST(SUIKEI_TYPE_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -596,7 +602,7 @@ def suikei_type_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_suikei_type.xlsx'
         download_file_path = 'static/download_suikei_type.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -616,14 +622,14 @@ def suikei_type_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suikei_type_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.suikei_type_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suikei_type.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suikei_type_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suikei_type_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suikei_type_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -641,17 +647,17 @@ def kasen_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、河川（河川・海岸）データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 STEP 2/4.', 'DEBUG')
         kasen_list = KASEN.objects.raw("""
             SELECT 
                 KA1.kasen_code AS kasen_code, 
@@ -670,7 +676,7 @@ def kasen_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_kasen.xlsx'
         download_file_path = 'static/download_kasen.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -698,14 +704,14 @@ def kasen_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.kasen_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -723,17 +729,17 @@ def kasen_type_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、河川種別（河川・海岸種別）データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 STEP 2/4.', 'DEBUG')
         kasen_type_list = KASEN_TYPE.objects.raw("""SELECT * FROM KASEN_TYPE ORDER BY CAST(KASEN_TYPE_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -741,7 +747,7 @@ def kasen_type_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_kasen_type.xlsx'
         download_file_path = 'static/download_kasen_type.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -761,14 +767,14 @@ def kasen_type_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.kasen_type_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.kasen_type_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="kasen_type.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.kasen_type_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_type_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.kasen_type_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -786,17 +792,17 @@ def cause_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.cause_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、水害原因データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 STEP 2/4.', 'DEBUG')
         cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -804,7 +810,7 @@ def cause_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_cause.xlsx'
         download_file_path = 'static/download_cause.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -824,14 +830,14 @@ def cause_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.cause_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.cause_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.cause_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="cause.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.cause_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.cause_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.cause_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -849,17 +855,17 @@ def underground_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.underground_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、地上地下区分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 STEP 2/4.', 'DEBUG')
         underground_list = UNDERGROUND.objects.raw("""SELECT * FROM UNDERGROUND ORDER BY CAST(UNDERGROUND_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -867,7 +873,7 @@ def underground_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_underground.xlsx'
         download_file_path = 'static/download_underground.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -887,14 +893,14 @@ def underground_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.underground_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.underground_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.underground_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="underground.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.underground_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.underground_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.underground_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -912,17 +918,17 @@ def usage_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.usage_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、地下空間の利用形態データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 STEP 2/4.', 'DEBUG')
         usage_list = USAGE.objects.raw("""SELECT * FROM USAGE ORDER BY CAST(USAGE_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -930,7 +936,7 @@ def usage_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_usage.xlsx'
         download_file_path = 'static/download_usage.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -950,14 +956,14 @@ def usage_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.usage_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.usage_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.usage_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="usage.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.usage_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.usage_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.usage_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -975,17 +981,17 @@ def flood_sediment_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.flood_sediment()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.flood_sediment()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、浸水土砂区分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment_view()関数 STEP 2/4.', 'DEBUG')
         flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""SELECT * FROM FLOOD_SEDIMENT ORDER BY CAST(FLOOD_SEDIMENT_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -993,7 +999,7 @@ def flood_sediment_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_flood_sediment.xlsx'
         download_file_path = 'static/download_flood_sediment.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1013,14 +1019,14 @@ def flood_sediment_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.flood_sediment_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.flood_sediment_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="flood_sediment.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.flood_sediment_view()関数 '.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.flood_sediment_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.flood_sediment_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1038,17 +1044,17 @@ def gradient_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、地盤勾配区分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 STEP 2/4.', 'DEBUG')
         gradient_list = GRADIENT.objects.raw("""SELECT * FROM GRADIENT ORDER BY CAST(GRADIENT_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1056,7 +1062,7 @@ def gradient_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_gradient.xlsx'
         download_file_path = 'static/download_gradient.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1076,14 +1082,14 @@ def gradient_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.gradient_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.gradient_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.gradient_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="gradient.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.gradient_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.gradient_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.gradient_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1101,17 +1107,17 @@ def industry_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.industry_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、産業分類データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 STEP 2/4.', 'DEBUG')
         industry_list = INDUSTRY.objects.raw("""SELECT * FROM INDUSTRY ORDER BY CAST(INDUSTRY_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1119,7 +1125,7 @@ def industry_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_industry.xlsx'
         download_file_path = 'static/download_industry.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1139,14 +1145,14 @@ def industry_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.industry_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.industry_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.industry_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="industry.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.industry_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.industry_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.industry_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1164,17 +1170,17 @@ def house_asset_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、県別家屋評価額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 STEP 2/4.', 'DEBUG')
         house_asset_list = HOUSE_ASSET.objects.raw("""
             SELECT 
                 HA1.house_asset_code AS house_asset_code, 
@@ -1190,7 +1196,7 @@ def house_asset_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_house_asset.xlsx'
         download_file_path = 'static/download_house_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1214,14 +1220,14 @@ def house_asset_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_asset_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.house_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_asset.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_asset_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_asset_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1239,17 +1245,17 @@ def house_rate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.house_rate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家屋被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 STEP 2/4.', 'DEBUG')
         house_rate_list = HOUSE_RATE.objects.raw("""
             SELECT 
                 HR1.house_rate_code AS house_rate_code, 
@@ -1272,7 +1278,7 @@ def house_rate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_house_rate.xlsx'
         download_file_path = 'static/download_house_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1310,14 +1316,14 @@ def house_rate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_rate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.house_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_rate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_rate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_rate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1335,17 +1341,17 @@ def house_alt_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.house_alt_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家庭応急対策費データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 STEP 2/4.', 'DEBUG')
         house_alt_list = HOUSE_ALT.objects.raw("""SELECT * FROM HOUSE_ALT ORDER BY CAST(HOUSE_ALT_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1353,7 +1359,7 @@ def house_alt_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_house_alt.xlsx'
         download_file_path = 'static/download_house_alt.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1383,14 +1389,14 @@ def house_alt_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_alt_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_alt_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.house_alt_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="household_alt.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_alt_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_alt_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_alt_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1408,17 +1414,17 @@ def house_clean_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.house_clean_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家庭応急対策費_清掃日数、清掃労働単価データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 STEP 2/4.', 'DEBUG')
         house_clean_list = HOUSE_CLEAN.objects.raw("""SELECT * FROM HOUSE_CLEAN ORDER BY CAST(HOUSE_CLEAN_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1426,7 +1432,7 @@ def house_clean_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_house_clean.xlsx'
         download_file_path = 'static/download_house_clean.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1458,14 +1464,14 @@ def house_clean_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.house_clean_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.house_clean_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.house_clean_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="house_clean.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.house_clean_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_clean_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.house_clean_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1483,17 +1489,17 @@ def household_asset_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.household_asset_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家庭用品自動車以外所有額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 STEP 2/4.', 'DEBUG')
         household_asset_list = HOUSEHOLD_ASSET.objects.raw("""SELECT * FROM HOUSEHOLD_ASSET ORDER BY CAST(HOUSEHOLD_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1501,7 +1507,7 @@ def household_asset_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_household_asset.xlsx'
         download_file_path = 'static/download_household_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1521,14 +1527,14 @@ def household_asset_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_asset_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.household_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="household_asset.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_asset_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.household_asset_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.household_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1546,17 +1552,17 @@ def household_rate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.household_rate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家庭用品自動車以外被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 STEP 2/4.', 'DEBUG')
         household_rate_list = HOUSEHOLD_RATE.objects.raw("""
             SELECT 
                 HR1.househole_rate_code AS household_rate_code, 
@@ -1577,7 +1583,7 @@ def household_rate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_household_rate.xlsx'
         download_file_path = 'static/download_household_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1611,14 +1617,14 @@ def household_rate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.household_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.household_rate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.household_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="household_rate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.household_rate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.household_rate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.household_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1636,17 +1642,17 @@ def car_asset_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.car_asset_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、家庭用品自動車所有額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 STEP 2/4.', 'DEBUG')
         car_asset_list = CAR_ASSET.objects.raw("""SELECT * FROM CAR_ASSET ORDER BY CAST(CAR_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1654,7 +1660,7 @@ def car_asset_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_car_asset.xlsx'
         download_file_path = 'static/download_car_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1674,14 +1680,14 @@ def car_asset_view(request, lock):
         ### レスポンスセット処理(0000)
         ### (1)テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_asset_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.car_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="car_asset.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_asset_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.car_asset_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.car_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1699,17 +1705,17 @@ def car_rate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.car_rate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所営業停止損失データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 STEP 2/4.', 'DEBUG')
         car_rate_list = CAR_RATE.objects.raw("""SELECT * FROM CAR_RATE ORDER BY CAST(CAR_RATE_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1717,7 +1723,7 @@ def car_rate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_car_rate.xlsx'
         download_file_path = 'static/download_car_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1747,14 +1753,14 @@ def car_rate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.car_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.car_rate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.car_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="car_rate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.car_rate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.car_rate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.car_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1772,17 +1778,17 @@ def office_asset_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所資産額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 STEP 2/4.', 'DEBUG')
         office_asset_list = OFFICE_ASSET.objects.raw("""
             SELECT 
                 OA1.office_asset_code AS office_asset_code, 
@@ -1800,7 +1806,7 @@ def office_asset_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_office_asset.xlsx'
         download_file_path = 'static/download_office_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1828,14 +1834,14 @@ def office_asset_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_asset_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.office_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_asset.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_asset_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_asset_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1853,17 +1859,17 @@ def office_rate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.office_rate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 STEP 2/4.', 'DEBUG')
         office_rate_list = OFFICE_RATE.objects.raw("""
             SELECT 
                 OR1.office_rate_code AS office_rate_code, 
@@ -1890,7 +1896,7 @@ def office_rate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_office_rate.xlsx'
         download_file_path = 'static/download_office_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -1936,14 +1942,14 @@ def office_rate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_rate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.office_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_rate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_rate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_rate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -1961,17 +1967,17 @@ def office_suspend_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所営業停止日数データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 STEP 2/4.', 'DEBUG')
         office_suspend_list = OFFICE_SUSPEND.objects.raw("""SELECT * FROM OFFICE_SUSPEND ORDER BY CAST(OFFICE_SUS_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -1979,7 +1985,7 @@ def office_suspend_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_office_suspend.xlsx'
         download_file_path = 'static/download_office_suspend.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2009,14 +2015,14 @@ def office_suspend_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_suspend_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.office_suspend_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_suspend.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_suspend_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_suspend_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_suspend_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2034,17 +2040,17 @@ def office_stagnate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所営業停滞日数データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 STEP 2/4.', 'DEBUG')
         office_stagnate_list = OFFICE_STAGNATE.objects.raw("""SELECT * FROM OFFICE_STAGNATE ORDER BY CAST(OFFICE_STG_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -2052,7 +2058,7 @@ def office_stagnate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_office_stagnate.xlsx'
         download_file_path = 'static/download_office_stagnate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2082,14 +2088,14 @@ def office_stagnate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_stagnate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.office_stagnate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_stagnate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_stagnate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_stagnate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_stagnate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2107,17 +2113,17 @@ def office_alt_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.office_alt_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、事業所応急対策費_代替活動費データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 STEP 2/4.', 'DEBUG')
         office_alt_list = OFFICE_ALT.objects.raw("""SELECT * FROM OFFICE_ALT ORDER BY CAST(OFFICE_ALT_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -2125,7 +2131,7 @@ def office_alt_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_office_alt.xlsx'
         download_file_path = 'static/download_office_alt.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2155,14 +2161,14 @@ def office_alt_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.office_alt_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.office_alt_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.office_alt_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="office_alt.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.office_alt_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_alt_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.office_alt_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2180,17 +2186,17 @@ def farmer_fisher_asset_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、農漁家資産額データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 2/4.', 'DEBUG')
         farmer_fisher_asset_list = FARMER_FISHER_ASSET.objects.raw("""SELECT * FROM FARMER_FISHER_ASSET ORDER BY CAST(FARMER_FISHER_ASSET_CODE AS INTEGER)""", [])
     
         #######################################################################
@@ -2198,7 +2204,7 @@ def farmer_fisher_asset_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_farmer_fisher_asset.xlsx'
         download_file_path = 'static/download_farmer_fisher_asset.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2220,14 +2226,14 @@ def farmer_fisher_asset_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_asset_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_asset_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="farmer_fisher_asset.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_asset_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.farmer_fisher_asset_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.farmer_fisher_asset_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2245,17 +2251,17 @@ def farmer_fisher_rate_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、農漁家被害率データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 2/4.', 'DEBUG')
         farmer_fisher_rate_list = FARMER_FISHER_RATE.objects.raw("""
             SELECT 
                 FF1.farmer_fisher_rate_code AS farmer_fisher_rate_code, 
@@ -2282,7 +2288,7 @@ def farmer_fisher_rate_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_farmer_fisher_rate.xlsx'
         download_file_path = 'static/download_farmer_fisher_rate.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2328,14 +2334,14 @@ def farmer_fisher_rate_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.farmer_fisher_rate_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.farmer_fisher_rate_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="farmer_fisher_rate.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.farmer_fisher_rate_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.farmer_fisher_rate_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.farmer_fisher_rate_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2353,17 +2359,17 @@ def area_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.area_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、一般資産入力データ_水害区域データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 STEP 2/4.', 'DEBUG')
         area_list = AREA.objects.raw("""SELECT * FROM AREA ORDER BY CAST(AREA_ID AS INTEGER)""", [])
     
         #######################################################################
@@ -2371,7 +2377,7 @@ def area_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_area.xlsx'
         download_file_path = 'static/download_area.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2391,14 +2397,14 @@ def area_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.area_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.area_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.area_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="area.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.area_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.area_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.area_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2416,17 +2422,17 @@ def weather_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.weather_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、入力データ_異常気象データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 STEP 2/4.', 'DEBUG')
         weather_list = WEATHER.objects.raw("""
             SELECT 
                 WE1.weather_id AS weather_id, 
@@ -2444,7 +2450,7 @@ def weather_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_weather.xlsx'
         download_file_path = 'static/download_weather.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2479,14 +2485,14 @@ def weather_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.weather_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.weather_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.weather_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="weather.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.weather_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.weather_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.weather_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2504,17 +2510,17 @@ def suigai_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、水害データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 STEP 2/4.', 'DEBUG')
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
                 SG1.suigai_id AS suigai_id, 
@@ -2577,7 +2583,7 @@ def suigai_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_suigai.xlsx'
         download_file_path = 'static/download_suigai.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2708,14 +2714,14 @@ def suigai_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.suigai_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.suigai_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.suigai_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="suigai.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.suigai_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suigai_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.suigai_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2733,17 +2739,17 @@ def ippan_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、入力データ_一覧表部分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 STEP 2/4.', 'DEBUG')
         ippan_list = IPPAN.objects.raw("""SELECT * FROM IPPAN ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
@@ -2751,7 +2757,7 @@ def ippan_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ippan.xlsx'
         download_file_path = 'static/download_ippan.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -2855,14 +2861,14 @@ def ippan_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -2880,17 +2886,17 @@ def ippan_view_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、一般資産ビューデータ一覧表部分データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 2/4.', 'DEBUG')
         ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
@@ -2898,7 +2904,7 @@ def ippan_view_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ippan_view.xlsx'
         download_file_path = 'static/download_ippan_view.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -3174,14 +3180,14 @@ def ippan_view_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_view.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -3199,17 +3205,17 @@ def ippan_summary_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、集計データ_集計結果データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 STEP 2/4.', 'DEBUG')
         ippan_summary_list = IPPAN_SUMMARY.objects.raw("""SELECT * FROM IPPAN_SUMMARY ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
     
         #######################################################################
@@ -3217,7 +3223,7 @@ def ippan_summary_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ippan_summary.xlsx'
         download_file_path = 'static/download_ippan_summary.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -3441,14 +3447,14 @@ def ippan_summary_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_summary_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_summary_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_summary.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_summary_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_summary_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_summary_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -3466,17 +3472,17 @@ def ippan_group_by_ken_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、集計データ_集計結果_都道府県別データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'DEBUG')
         ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
             SELECT 
                 SG1.ken_code AS id, 
@@ -3575,7 +3581,7 @@ def ippan_group_by_ken_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ippan_group_by_ken.xlsx'
         download_file_path = 'static/download_ippan_group_by_ken.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -3729,14 +3735,14 @@ def ippan_group_by_ken_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_group_by_ken.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -3754,17 +3760,17 @@ def ippan_group_by_suikei_view(request, lock):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 1/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 1/4.', 'DEBUG')
         
         #######################################################################
         ### DBアクセス処理(0010)
         ### DBにアクセスして、一般資産集計データ_集計結果_水系別データを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 2/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 2/4.', 'DEBUG')
         ippan_group_by_suikei_list = IPPAN_SUMMARY.objects.raw("""
             SELECT 
                 SG1.suikei_code AS id, 
@@ -3863,7 +3869,7 @@ def ippan_group_by_suikei_view(request, lock):
         ### (1)テンプレート用のEXCELファイルを読み込む。
         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 3/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 3/4.', 'DEBUG')
         template_file_path = 'static/template_ippan_group_by_suikei.xlsx'
         download_file_path = 'static/download_ippan_group_by_suikei.xlsx'
         wb = openpyxl.load_workbook(template_file_path)
@@ -4017,14 +4023,14 @@ def ippan_group_by_suikei_view(request, lock):
         ### レスポンスセット処理(0030)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 4/4.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 4/4.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_group_by_suikei.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -5357,12 +5363,12 @@ def ippan_chosa_view(request, lock):
         #######################################################################
         ### 引数チェック処理(0000)
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 city_code_hidden= {}'.format(request.POST.get('city_code_hidden')), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 1/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 city_code_hidden= {}'.format(request.POST.get('city_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 1/6.', 'DEBUG')
 
         if request.method == 'GET':
             print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数でエラーが発生しました。', 'ERROR')
@@ -5385,7 +5391,7 @@ def ippan_chosa_view(request, lock):
         #######################################################################
         ### DBアクセス処理(0010)
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 2/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 2/6.', 'DEBUG')
         ken_code_request = []
         ken_name_request = []
         ### city_code_request = []
@@ -5407,27 +5413,27 @@ def ippan_chosa_view(request, lock):
             ### city_code_request.append([city.city_code for city in city_list][0])
             city_name_request.append([city.city_name for city in city_list][0])
             
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 ken_code_request = {}'.format(ken_code_request), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 ken_name_request = {}'.format(ken_name_request), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 city_code_request = {}'.format(city_code_request), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 city_name_request = {}'.format(city_name_request), 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 ken_code_request = {}'.format(ken_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 ken_name_request = {}'.format(ken_name_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 city_code_request = {}'.format(city_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 city_name_request = {}'.format(city_name_request), 'DEBUG')
 
         #######################################################################
         ### 局所変数セット処理(0020)
         ### ハッシュコードを生成する。
         ### ※リクエスト固有のディレクトリ名を生成するため等に使用する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 3/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 3/6.', 'DEBUG')
         JST = timezone(timedelta(hours=9), 'JST')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
         hash_code = hashlib.md5((str(datetime_now_YmdHMS)).encode()).hexdigest()[0:10]
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 hash_code = {}'.format(hash_code), 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 hash_code = {}'.format(hash_code), 'DEBUG')
 
         #######################################################################
         ### 局所変数セット処理(0030)
         ### ダウンロードファイルパス、ダウンロードファイル名に値をセットする。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 4/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 4/6.', 'DEBUG')
         download_file_path = []
         download_file_name = []
         for i, city_code in enumerate(city_code_request):
@@ -5440,9 +5446,11 @@ def ippan_chosa_view(request, lock):
         #######################################################################
         ### DBアクセス処理(0040)
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 5/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 5/6.', 'DEBUG')
         connection_cursor = connection.cursor()
         try:
+            connection_cursor.execute("""BEGIN""", [])
+            
             for i, city_code in enumerate(city_code_request):
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
@@ -5469,11 +5477,11 @@ def ippan_chosa_view(request, lock):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        '1',  ### action_code 
+                        'A01',  ### action_code 
                         None, ### status_code 
                         None, ### success_count 
                         None, ### failure_count 
-                        None, ### consumed_at 
+                        None, ### consumed_at
                         None, ### deleted_at 
                         None, ### integrity_ok 
                         None, ### integrity_ng 
@@ -5484,8 +5492,12 @@ def ippan_chosa_view(request, lock):
                         None, ### upload_file_path 
                         None, ### upload_file_name
                     ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])        
         except:
-            connection_cursor.rollback()
+            print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
         finally:
             connection_cursor.close()
 
@@ -5498,7 +5510,7 @@ def ippan_chosa_view(request, lock):
         ### "Post/Redirect/Get": see http://en.wikipedia.org/wiki/Post/Redirect/Get
         ### for a high-level description.
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_chosa_view()関数 STEP 6/6.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_chosa_view()関数 STEP 6/6.', 'DEBUG')
         ### template = loader.get_template('P0200ExcelDownload/ippan_chosa.html')
         ### context = {
         ###     'download_file_path': download_file_path, 
@@ -5509,7 +5521,7 @@ def ippan_chosa_view(request, lock):
         return redirect('/P0200ExcelDownload/download/' + str(hash_code) + '/' + str(len(city_code_request)) + '/')
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_chosa_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -5526,25 +5538,25 @@ def download_view(request, hash_code, count):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.download_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 hash_code = {}'.format(hash_code), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 count = {}'.format(count), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 STEP 1/.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 hash_code = {}'.format(hash_code), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 count = {}'.format(count), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 STEP 1/3.', 'DEBUG')
         
         #######################################################################
         ### レスポンスセット処理(0000)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 STEP /.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 STEP 2/3.', 'DEBUG')
         download_file_path = sorted(glob.glob('static/' + str(hash_code) + '/*.xlsx'), key=os.path.getmtime)
         
         #######################################################################
         ### レスポンスセット処理(0000)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.download_view()関数 STEP /.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.download_view()関数 STEP 3/3.', 'DEBUG')
         template = loader.get_template('P0200ExcelDownload/download.html')
         context = {
             'hash_code': hash_code, 
@@ -5555,7 +5567,7 @@ def download_view(request, hash_code, count):
         return HttpResponse(template.render(context, request))
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.download_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.download_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.download_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -5575,12 +5587,12 @@ def ippan_city_view(request, lock):
         ### (2)GETメソッドの場合、関数を抜ける。
         ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 ken_code_hidden= {}'.format(request.POST.get('ken_code_hidden')), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 1/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 ken_code_hidden= {}'.format(request.POST.get('ken_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 1/12.', 'DEBUG')
 
         if request.method == 'GET':
             print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数でエラーが発生しました。', 'ERROR')
@@ -5601,7 +5613,7 @@ def ippan_city_view(request, lock):
         ### 局所定数セット処理(0010)
         ### VLOOKUP用の局所定数をセットする。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 2/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 2/12.', 'DEBUG')
         VLOOK_VALUE = [
             'B', 'G', 'L', 'Q', 'V', 'AA', 'AF', 'AK', 'AP', 'AU', 
             'AZ', 'BE', 'BJ', 'BO', 'BT', 'BY', 'CD', 'CI', 'CN', 'CS', 
@@ -5638,7 +5650,7 @@ def ippan_city_view(request, lock):
         ### DBから都道府県コード毎の水害データの件数を取得する。
         ### ※関数のメインの処理の前に、EXCELのファイル数、シート数を確定するため。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 3/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 3/12.', 'DEBUG')
         
         #######################################################################
         ### EXCEL入出力処理(0030)
@@ -5650,7 +5662,7 @@ def ippan_city_view(request, lock):
         ### ※5件の場合、既存データ用にIPPANシートを5枚作成する。
         ### ※5件の場合、入力用にIPPANシートを10枚作成する。（合計15枚作成する。）
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 4/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 4/12.', 'DEBUG')
         download_file_path = []
         wb = []
         ws_ippan = []
@@ -5710,7 +5722,7 @@ def ippan_city_view(request, lock):
         ### (2)EXCELのマスタ用のシートのセルに、DBから取得した建物区分等のマスタデータを埋め込む。
         ### (3)EXCELのVLOKUP用のシートのセルに、DBから取得した都道府県等のマスタデータを埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 5/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 5/12.', 'DEBUG')
 
         ### 1000: 建物区分
         print("ippan_ken_view2", flush=True)
@@ -5933,7 +5945,7 @@ def ippan_city_view(request, lock):
         ### (1)EXCELのヘッダ部のセルに、キャプションのテキストを埋め込む。
         ### (2)EXCELの一覧部のセルに、キャプションのテキストを埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 6/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 6/12.', 'DEBUG')
         ### len(ken_code_request)=ワークブックの数=EXCELファイルの数
         ### for i, _ in enumerate(ken_code_request):
         ###     ws_ippan[i].cell(row=6, column=1).value = 'NO.'
@@ -6053,14 +6065,14 @@ def ippan_city_view(request, lock):
         ### (1)EXCELのセルに、建物区分に応じて、背景灰色、背景白色を変化させる条件付き形式を埋め込む。
         ### (2)ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 7/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 7/12.', 'DEBUG')
 
         #######################################################################
         ### EXCEL入出力処理(0070)
         ### (1)EXCELのヘッダ部のセルに、単純プルダウン、連動プルダウンの設定を埋め込む。
         ### (2)EXCELの一覧部のセルに、単純プルダウンの設定を埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 8/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 8/12.', 'DEBUG')
         for i, ken_code in enumerate(ken_code_request):
             ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW WHERE ken_code=%s ORDER BY CAST(suigai_id AS INTEGER), CAST(ippan_id AS INTEGER)""", [ken_code,])
             
@@ -6127,13 +6139,13 @@ def ippan_city_view(request, lock):
         ### (1)DBから水害のデータを取得する。
         ### (2)DBから一般資産調査票（調査員）のデータを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 9/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 9/12.', 'DEBUG')
 
         #######################################################################
         ### EXCEL入出力処理(0090)
         ### ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 10/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 10/12.', 'DEBUG')
         for i, _ in enumerate(ken_code_request):
             wb[i].save(download_file_path[i])
 
@@ -6141,20 +6153,20 @@ def ippan_city_view(request, lock):
         ### EXCEL入出力処理(0100)
         ### 複数のEXCELファイルを1つに固めて保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 11/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 11/12.', 'DEBUG')
         
         #######################################################################
         ### レスポンスセット処理(0110)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数 STEP 12/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_city_view()関数 STEP 12/12.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_city_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb[0]), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_city.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_city_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
@@ -6174,12 +6186,12 @@ def ippan_ken_view(request, lock):
         ### (2)GETメソッドの場合、関数を抜ける。
         ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
         #######################################################################
-        print_log('[INFO] ########################################', 'INFO')
+        ### reset_log()
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が開始しました。', 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 request = {}'.format(request.method), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 lock = {}'.format(lock), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 ken_code_hidden= {}'.format(request.POST.get('ken_code_hidden')), 'INFO')
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 1/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 ken_code_hidden= {}'.format(request.POST.get('ken_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 1/12.', 'DEBUG')
 
         if request.method == 'GET':
             print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
@@ -6200,7 +6212,7 @@ def ippan_ken_view(request, lock):
         ### 局所定数セット処理(0010)
         ### VLOOKUP用の局所定数をセットする。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 2/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 2/12.', 'DEBUG')
         VLOOK_VALUE = [
             'B', 'G', 'L', 'Q', 'V', 'AA', 'AF', 'AK', 'AP', 'AU', 
             'AZ', 'BE', 'BJ', 'BO', 'BT', 'BY', 'CD', 'CI', 'CN', 'CS', 
@@ -6237,7 +6249,7 @@ def ippan_ken_view(request, lock):
         ### DBから都道府県コード毎の水害データの件数を取得する。
         ### ※関数のメインの処理の前に、EXCELのファイル数、シート数を確定するため。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 3/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 3/12.', 'DEBUG')
         
         #######################################################################
         ### EXCEL入出力処理(0030)
@@ -6249,7 +6261,7 @@ def ippan_ken_view(request, lock):
         ### ※5件の場合、既存データ用にIPPANシートを5枚作成する。
         ### ※5件の場合、入力用にIPPANシートを10枚作成する。（合計15枚作成する。）
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 4/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 4/12.', 'DEBUG')
         download_file_path = []
         wb = []
         ws_ippan = []
@@ -6309,7 +6321,7 @@ def ippan_ken_view(request, lock):
         ### (2)EXCELのマスタ用のシートのセルに、DBから取得した建物区分等のマスタデータを埋め込む。
         ### (3)EXCELのVLOKUP用のシートのセルに、DBから取得した都道府県等のマスタデータを埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 5/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 5/12.', 'DEBUG')
 
         ### 1000: 建物区分
         print("ippan_ken_view2", flush=True)
@@ -6532,7 +6544,7 @@ def ippan_ken_view(request, lock):
         ### (1)EXCELのヘッダ部のセルに、キャプションのテキストを埋め込む。
         ### (2)EXCELの一覧部のセルに、キャプションのテキストを埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 6/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 6/12.', 'DEBUG')
         ### len(ken_code_request)=ワークブックの数=EXCELファイルの数
         ### for i, _ in enumerate(ken_code_request):
         ###     ws_ippan[i].cell(row=6, column=1).value = 'NO.'
@@ -6660,14 +6672,14 @@ def ippan_ken_view(request, lock):
         ### (1)EXCELのセルに、建物区分に応じて、背景灰色、背景白色を変化させる条件付き形式を埋め込む。
         ### (2)ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 7/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 7/12.', 'DEBUG')
 
         #######################################################################
         ### EXCEL入出力処理(0070)
         ### (1)EXCELのヘッダ部のセルに、単純プルダウン、連動プルダウンの設定を埋め込む。
         ### (2)EXCELの一覧部のセルに、単純プルダウンの設定を埋め込む。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 8/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 8/12.', 'DEBUG')
         for i, ken_code in enumerate(ken_code_request):
             ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW WHERE ken_code=%s ORDER BY CAST(suigai_id AS INTEGER), CAST(ippan_id AS INTEGER)""", [ken_code,])
             
@@ -6738,13 +6750,13 @@ def ippan_ken_view(request, lock):
         ### (1)DBから水害のデータを取得する。
         ### (2)DBから一般資産調査票（調査員）のデータを取得する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 9/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 9/12.', 'DEBUG')
 
         #######################################################################
         ### EXCEL入出力処理(0090)
         ### ダウンロード用のEXCELファイルを保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 10/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 10/12.', 'DEBUG')
         for i, _ in enumerate(ken_code_request):
             wb[i].save(download_file_path[i])
 
@@ -6752,20 +6764,20 @@ def ippan_ken_view(request, lock):
         ### EXCEL入出力処理(0100)
         ### 複数のEXCELファイルを1つに固めて保存する。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 11/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 11/12.', 'DEBUG')
         
         #######################################################################
         ### レスポンスセット処理(0110)
         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
         #######################################################################
-        print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数 STEP 12/12.', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.ippan_ken_view()関数 STEP 12/12.', 'DEBUG')
         print_log('[INFO] P0200ExcelDownload.ippan_ken_view()関数が正常終了しました。', 'INFO')
         response = HttpResponse(content=save_virtual_workbook(wb[0]), content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="ippan_ken.xlsx"'
         return response
         
     except:
-        print_log(sys.exc_info()[0], 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

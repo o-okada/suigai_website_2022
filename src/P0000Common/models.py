@@ -55,6 +55,8 @@ class CITY(models.Model):
     ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
     city_population = models.IntegerField()                                    ### 市区町村人口
     city_area = models.IntegerField()                                          ### 市区町村面積
+    ### city_population = models.DecimalField(max_digits=15, decimal_places=2) ### 市区町村人口
+    ### city_area = models.DecimalField(max_digits=15, decimal_places=2)       ### 市区町村面積
 
     class Meta:
         db_table = 'city'
@@ -548,6 +550,9 @@ class WEATHER(models.Model):
     end_date = models.DateField()                                              ### 終了日
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
 
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/27 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/27 追加
+
     class Meta:
         db_table = 'weather'
     
@@ -653,17 +658,17 @@ class IPPAN(models.Model):
     flood_sediment_code = models.CharField(max_length=10, null=True)           ### 浸水土砂区分コード ### FOR SUM PARAM
     
     ### 入力データ
-    building_lv00 = models.IntegerField(null=True)                             ### 被害建物棟数_床下
-    building_lv01_49 = models.IntegerField(null=True)                          ### 被害建物棟数_01から49cm
-    building_lv50_99 = models.IntegerField(null=True)                          ### 被害建物棟数_50から99cm
-    building_lv100 = models.IntegerField(null=True)                            ### 被害建物棟数_100cm以上
-    building_half = models.IntegerField(null=True)                             ### 被害建物棟数_半壊
-    building_full = models.IntegerField(null=True)                             ### 被害建物棟数_全壊
+    building_lv00 = models.FloatField(null=True)                               ### 被害建物棟数_床下
+    building_lv01_49 = models.FloatField(null=True)                            ### 被害建物棟数_01から49cm
+    building_lv50_99 = models.FloatField(null=True)                            ### 被害建物棟数_50から99cm
+    building_lv100 = models.FloatField(null=True)                              ### 被害建物棟数_100cm以上
+    building_half = models.FloatField(null=True)                               ### 被害建物棟数_半壊
+    building_full = models.FloatField(null=True)                               ### 被害建物棟数_全壊
     
     ### 入力データ
     floor_area = models.FloatField(null=True)                                  ### 延床面積
-    family = models.IntegerField(null=True)                                    ### 被災世帯数
-    office = models.IntegerField(null=True)                                    ### 被災事業所数
+    family = models.FloatField(null=True)                                      ### 被災世帯数
+    office = models.FloatField(null=True)                                      ### 被災事業所数
     
     ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
     floor_area_lv00 = models.FloatField(null=True)                             ### 延床面積_床下
@@ -674,36 +679,36 @@ class IPPAN(models.Model):
     floor_area_full = models.FloatField(null=True)                             ### 延床面積_全壊
     
     ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
-    family_lv00 = models.IntegerField(null=True)                               ### 被災世帯数_床下
-    family_lv01_49 = models.IntegerField(null=True)                            ### 被災世帯数_01から49cm
-    family_lv50_99 = models.IntegerField(null=True)                            ### 被災世帯数_50から99cm
-    family_lv100 = models.IntegerField(null=True)                              ### 被災世帯数_100cm以上
-    family_half = models.IntegerField(null=True)                               ### 被災世帯数_半壊
-    family_full = models.IntegerField(null=True)                               ### 被災世帯数_全壊
+    family_lv00 = models.FloatField(null=True)                                 ### 被災世帯数_床下
+    family_lv01_49 = models.FloatField(null=True)                              ### 被災世帯数_01から49cm
+    family_lv50_99 = models.FloatField(null=True)                              ### 被災世帯数_50から99cm
+    family_lv100 = models.FloatField(null=True)                                ### 被災世帯数_100cm以上
+    family_half = models.FloatField(null=True)                                 ### 被災世帯数_半壊
+    family_full = models.FloatField(null=True)                                 ### 被災世帯数_全壊
     
     ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
-    office_lv00 = models.IntegerField(null=True)                               ### 被災事業所数_床下
-    office_lv01_49 = models.IntegerField(null=True)                            ### 被災事業所数_01から49cm
-    office_lv50_99 = models.IntegerField(null=True)                            ### 被災事業所数_50から99cm
-    office_lv100 = models.IntegerField(null=True)                              ### 被災事業所数_100cm以上
-    office_half = models.IntegerField(null=True)                               ### 被災事業所数_半壊
-    office_full = models.IntegerField(null=True)                               ### 被災事業所数_全壊
+    office_lv00 = models.FloatField(null=True)                                 ### 被災事業所数_床下
+    office_lv01_49 = models.FloatField(null=True)                              ### 被災事業所数_01から49cm
+    office_lv50_99 = models.FloatField(null=True)                              ### 被災事業所数_50から99cm
+    office_lv100 = models.FloatField(null=True)                                ### 被災事業所数_100cm以上
+    office_half = models.FloatField(null=True)                                 ### 被災事業所数_半壊
+    office_full = models.FloatField(null=True)                                 ### 被災事業所数_全壊
     
     ### 入力データ
-    farmer_fisher_lv00 = models.IntegerField(null=True)                        ### 農漁家戸数_床下
-    farmer_fisher_lv01_49 = models.IntegerField(null=True)                     ### 農漁家戸数_01から49cm
-    farmer_fisher_lv50_99 = models.IntegerField(null=True)                     ### 農漁家戸数_50から99cm
-    farmer_fisher_lv100 = models.IntegerField(null=True)                       ### 農漁家戸数_100cm以上
-    ### farmer_fisher_half = models.IntegerField(null=True)
-    farmer_fisher_full = models.IntegerField(null=True)                        ### 農漁家戸数_全壊
+    farmer_fisher_lv00 = models.FloatField(null=True)                          ### 農漁家戸数_床下
+    farmer_fisher_lv01_49 = models.FloatField(null=True)                       ### 農漁家戸数_01から49cm
+    farmer_fisher_lv50_99 = models.FloatField(null=True)                       ### 農漁家戸数_50から99cm
+    farmer_fisher_lv100 = models.FloatField(null=True)                         ### 農漁家戸数_100cm以上
+    ### farmer_fisher_half = models.FloatField(null=True)
+    farmer_fisher_full = models.FloatField(null=True)                          ### 農漁家戸数_全壊
 
     ### 入力データ
-    employee_lv00 = models.IntegerField(null=True)                             ### 被災従業者数_床下
-    employee_lv01_49 = models.IntegerField(null=True)                          ### 被災従業者数_01から49cm
-    employee_lv50_99 = models.IntegerField(null=True)                          ### 被災従業者数_50から99cm
-    employee_lv100 = models.IntegerField(null=True)                            ### 被災従業者数_100cm以上
-    ### employee_half = models.IntegerField(null=True)
-    employee_full = models.IntegerField(null=True)                             ### 被災従業者数_全壊
+    employee_lv00 = models.FloatField(null=True)                               ### 被災従業者数_床下
+    employee_lv01_49 = models.FloatField(null=True)                            ### 被災従業者数_01から49cm
+    employee_lv50_99 = models.FloatField(null=True)                            ### 被災従業者数_50から99cm
+    employee_lv100 = models.FloatField(null=True)                              ### 被災従業者数_100cm以上
+    ### employee_half = models.FloatField(null=True)
+    employee_full = models.FloatField(null=True)                               ### 被災従業者数_全壊
 
     ### 入力データ
     industry_code = models.CharField(max_length=10, null=True)                 ### 産業分類コード ### FOR SUM PARAM
@@ -790,13 +795,13 @@ class IPPAN_VIEW(models.Model):
     flood_sediment_name = models.CharField(max_length=128)                     ### 浸水土砂区分名 LEFT JOIN項目
     
     ### 入力データ
-    building_lv00 = models.IntegerField(null=True)                             ### 被害建物棟数_床下
-    building_lv01_49 = models.IntegerField(null=True)                          ### 被害建物棟数_01から49cm
-    building_lv50_99 = models.IntegerField(null=True)                          ### 被害建物棟数_50から99cm
-    building_lv100 = models.IntegerField(null=True)                            ### 被害建物棟数_100cm以上
-    building_half = models.IntegerField(null=True)                             ### 被害建物棟数_半壊
-    building_full = models.IntegerField(null=True)                             ### 被害建物棟数_全壊
-    building_total = models.IntegerField(null=True)                            ### 被害建物棟数_合計
+    building_lv00 = models.FloatField(null=True)                               ### 被害建物棟数_床下
+    building_lv01_49 = models.FloatField(null=True)                            ### 被害建物棟数_01から49cm
+    building_lv50_99 = models.FloatField(null=True)                            ### 被害建物棟数_50から99cm
+    building_lv100 = models.FloatField(null=True)                              ### 被害建物棟数_100cm以上
+    building_half = models.FloatField(null=True)                               ### 被害建物棟数_半壊
+    building_full = models.FloatField(null=True)                               ### 被害建物棟数_全壊
+    building_total = models.FloatField(null=True)                              ### 被害建物棟数_合計
     
     ### 入力データ
     floor_area = models.FloatField(null=True)                                  ### 延床面積
@@ -813,40 +818,40 @@ class IPPAN_VIEW(models.Model):
     floor_area_total = models.FloatField(null=True)                            ### 延床面積_合計
     
     ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
-    family_lv00 = models.IntegerField(null=True)                               ### 被災世帯数_床下
-    family_lv01_49 = models.IntegerField(null=True)                            ### 被災世帯数_01から49cm
-    family_lv50_99 = models.IntegerField(null=True)                            ### 被災世帯数_50から99cm
-    family_lv100 = models.IntegerField(null=True)                              ### 被災世帯数_100cm以上
-    family_half = models.IntegerField(null=True)                               ### 被災世帯数_半壊
-    family_full = models.IntegerField(null=True)                               ### 被災世帯数_全壊
-    family_total = models.IntegerField(null=True)                              ### 被災世帯数_合計
+    family_lv00 = models.FloatField(null=True)                                 ### 被災世帯数_床下
+    family_lv01_49 = models.FloatField(null=True)                              ### 被災世帯数_01から49cm
+    family_lv50_99 = models.FloatField(null=True)                              ### 被災世帯数_50から99cm
+    family_lv100 = models.FloatField(null=True)                                ### 被災世帯数_100cm以上
+    family_half = models.FloatField(null=True)                                 ### 被災世帯数_半壊
+    family_full = models.FloatField(null=True)                                 ### 被災世帯数_全壊
+    family_total = models.FloatField(null=True)                                ### 被災世帯数_合計
     
     ### 導出データ 第1正規形の考え方からは他のカラムから導出可能な項目は削除する
-    office_lv00 = models.IntegerField(null=True)                               ### 被災事業所数_床下
-    office_lv01_49 = models.IntegerField(null=True)                            ### 被災事業所数_01から49cm
-    office_lv50_99 = models.IntegerField(null=True)                            ### 被災事業所数_50から99cm
-    office_lv100 = models.IntegerField(null=True)                              ### 被災事業所数_100cm以上
-    office_half = models.IntegerField(null=True)                               ### 被災事業所数_半壊
-    office_full = models.IntegerField(null=True)                               ### 被災事業所数_全壊
-    office_total = models.IntegerField(null=True)                              ### 被災事業所数_合計
+    office_lv00 = models.FloatField(null=True)                                 ### 被災事業所数_床下
+    office_lv01_49 = models.FloatField(null=True)                              ### 被災事業所数_01から49cm
+    office_lv50_99 = models.FloatField(null=True)                              ### 被災事業所数_50から99cm
+    office_lv100 = models.FloatField(null=True)                                ### 被災事業所数_100cm以上
+    office_half = models.FloatField(null=True)                                 ### 被災事業所数_半壊
+    office_full = models.FloatField(null=True)                                 ### 被災事業所数_全壊
+    office_total = models.FloatField(null=True)                                ### 被災事業所数_合計
     
     ### 入力データ
-    farmer_fisher_lv00 = models.IntegerField(null=True)                        ### 農漁家戸数_床下
-    farmer_fisher_lv01_49 = models.IntegerField(null=True)                     ### 農漁家戸数_01から49cm
-    farmer_fisher_lv50_99 = models.IntegerField(null=True)                     ### 農漁家戸数_50から99cm
-    farmer_fisher_lv100 = models.IntegerField(null=True)                       ### 農漁家戸数_100cm以上
-    ### farmer_fisher_half = models.IntegerField(null=True)
-    farmer_fisher_full = models.IntegerField(null=True)                        ### 農漁家戸数_全壊
-    farmer_fisher_total = models.IntegerField(null=True)                       ### 農漁家戸数_合計
+    farmer_fisher_lv00 = models.FloatField(null=True)                          ### 農漁家戸数_床下
+    farmer_fisher_lv01_49 = models.FloatField(null=True)                       ### 農漁家戸数_01から49cm
+    farmer_fisher_lv50_99 = models.FloatField(null=True)                       ### 農漁家戸数_50から99cm
+    farmer_fisher_lv100 = models.FloatField(null=True)                         ### 農漁家戸数_100cm以上
+    ### farmer_fisher_half = models.FloatField(null=True)
+    farmer_fisher_full = models.FloatField(null=True)                          ### 農漁家戸数_全壊
+    farmer_fisher_total = models.FloatField(null=True)                         ### 農漁家戸数_合計
 
     ### 入力データ
-    employee_lv00 = models.IntegerField(null=True)                             ### 被災従業者数_床下
-    employee_lv01_49 = models.IntegerField(null=True)                          ### 被災従業者数_01から49cm
-    employee_lv50_99 = models.IntegerField(null=True)                          ### 被災従業者数_50から99cm
-    employee_lv100 = models.IntegerField(null=True)                            ### 被災従業者数_100cm以上
-    ### employee_half = models.IntegerField(null=True)
-    employee_full = models.IntegerField(null=True)                             ### 被災従業者数_全壊
-    employee_total = models.IntegerField(null=True)                            ### 被災従業者数_合計
+    employee_lv00 = models.FloatField(null=True)                               ### 被災従業者数_床下
+    employee_lv01_49 = models.FloatField(null=True)                            ### 被災従業者数_01から49cm
+    employee_lv50_99 = models.FloatField(null=True)                            ### 被災従業者数_50から99cm
+    employee_lv100 = models.FloatField(null=True)                              ### 被災従業者数_100cm以上
+    ### employee_half = models.FloatField(null=True)
+    employee_full = models.FloatField(null=True)                               ### 被災従業者数_全壊
+    employee_total = models.FloatField(null=True)                              ### 被災従業者数_合計
 
     ### 入力データ
     industry_code = models.CharField(max_length=10, null=True)                 ### 産業分類コード ### FOR SUM PARAM
@@ -1034,8 +1039,10 @@ class TRIGGER(models.Model):
 
     integrity_ok = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
     integrity_ng = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
-    info_log = models.TextField(null=True)                                     ### データ整合性 Row, Col, left, right, verified result, 
-    error_log = models.TextField(null=True)                                    ### データ整合性 Row, Col, left, right, verified result, 
+    ### info_log = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
+    ### error_log = models.TextField(null=True)                                ### データ整合性 Row, Col, left, right, verified result, 
+    success_log = models.TextField(null=True)                                  ### データ整合性 Row, Col, left, right, verified result, 
+    failure_log = models.TextField(null=True)                                  ### データ整合性 Row, Col, left, right, verified result, 
 
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
     city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード

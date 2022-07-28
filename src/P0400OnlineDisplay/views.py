@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 ### ファイル名：P0400OnlineDisplay/views.py
+### オンライン表示
 ###############################################################################
 
 ###############################################################################
@@ -154,8 +155,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     CT1.city_name AS city_name, 
                     CT1.ken_code AS ken_code, 
                     KE1.ken_name AS ken_name, 
-                    CT1.city_population AS city_population, 
-                    CT1.city_area AS city_area 
+                    CAST(CT1.city_population AS NUMERIC(14,2)) AS city_population, 
+                    CAST(CT1.city_area AS NUMERIC(14,2)) AS city_area 
                 FROM CITY CT1 
                 LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
                 ORDER BY CAST(CT1.CITY_CODE AS INTEGER)""", [])
@@ -166,8 +167,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     CT1.city_name AS city_name, 
                     CT1.ken_code AS ken_code, 
                     KE1.ken_name AS ken_name, 
-                    CT1.city_population AS city_population, 
-                    CT1.city_area AS city_area 
+                    CAST(CT1.city_population AS NUMERIC(14,2)) AS city_population, 
+                    CAST(CT1.city_area AS NUMERIC(14,2)) AS city_area 
                 FROM CITY CT1 
                 LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
                 WHERE CT1.KEN_CODE=%s 
@@ -296,7 +297,10 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "8" or category_code2 == "1070":
             kasen_type_list = KASEN_TYPE.objects.raw("""
                 SELECT 
-                    * 
+                    kasen_code, 
+                    kasen_name, 
+                    kasen_type_code, 
+                    suikei_code 
                 FROM KASEN_TYPE 
                 ORDER BY CAST(kasen_type_code AS INTEGER)""", [])
             
@@ -304,7 +308,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "9" or category_code2 == "1080":
             cause_list = CAUSE.objects.raw("""
                 SELECT 
-                    * 
+                    cause_code, 
+                    cause_name 
                 FROM CAUSE 
                 ORDER BY CAST(cause_code AS INTEGER)""", [])
             
@@ -312,7 +317,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "10" or category_code2 == "1090":
             underground_list = UNDERGROUND.objects.raw("""
                 SELECT 
-                    * 
+                    underground_code, 
+                    underground_name 
                 FROM UNDERGROUND 
                 ORDER BY CAST(underground_code AS INTEGER)""", [])
             
@@ -320,7 +326,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "11" or category_code2 == "1100":
             usage_list = USAGE.objects.raw("""
                 SELECT 
-                    * 
+                    usage_code, 
+                    usage_name 
                 FROM USAGE 
                 ORDER BY CAST(usage_code AS INTEGER)""", [])
             
@@ -328,7 +335,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "12" or category_code2 == "1110":
             flood_sediment_list = FLOOD_SEDIMENT.objects.raw("""
                 SELECT 
-                    * 
+                    flood_sediment_code, 
+                    flood_sediment_name 
                 FROM FLOOD_SEDIMENT 
                 ORDER BY CAST(flood_sediment_code AS INTEGER)""", [])
             
@@ -336,7 +344,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "13" or category_code2 == "1120":
             gradient_list = GRADIENT.objects.raw("""
                 SELECT 
-                    * 
+                    gradient_code, 
+                    gradient_name 
                 FROM GRADIENT 
                 ORDER BY CAST(gradient_code AS INTEGER)""", [])
             
@@ -344,7 +353,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "14" or category_code2 == "1130":
             industry_list = INDUSTRY.objects.raw("""
                 SELECT 
-                    * 
+                    industry_code, 
+                    industry_name 
                 FROM INDUSTRY 
                 ORDER BY CAST(industry_code AS INTEGER)""", [])
             
@@ -355,7 +365,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     HA1.house_asset_code AS house_asset_code, 
                     HA1.ken_code AS ken_code, 
                     KE1.ken_name AS ken_name, 
-                    HA1.house_asset AS house_asset 
+                    CAST(HA1.house_asset AS NUMERIC(14,2)) AS house_asset 
                 FROM HOUSE_ASSET HA1 
                 LEFT JOIN KEN KE1 ON HA1.ken_code=KE1.ken_code 
                 ORDER BY CAST(HA1.house_asset_code AS INTEGER)""", [])
@@ -369,12 +379,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     FS1.flood_sediment_name AS flood_sediment_name, 
                     HR1.gradient_code AS gradient_code, 
                     GR1.gradient_name AS gradient_name, 
-                    HR1.house_rate_lv00 AS house_rate_lv00, 
-                    HR1.house_rate_lv00_50 AS house_rate_lv00_50, 
-                    HR1.house_rate_lv50_100 AS house_rate_lv50_100, 
-                    HR1.house_rate_lv100_200 AS house_rate_lv100_200, 
-                    HR1.house_rate_lv200_300 AS house_rate_lv200_300, 
-                    HR1.house_rate_lv300 AS house_rate_lv300 
+                    CAST(HR1.house_rate_lv00 AS NUMERIC(14,2)) AS house_rate_lv00, 
+                    CAST(HR1.house_rate_lv00_50 AS NUMERIC(14,2)) AS house_rate_lv00_50, 
+                    CAST(HR1.house_rate_lv50_100 AS NUMERIC(14,2)) AS house_rate_lv50_100, 
+                    CAST(HR1.house_rate_lv100_200 AS NUMERIC(14,2)) AS house_rate_lv100_200, 
+                    CAST(HR1.house_rate_lv200_300 AS NUMERIC(14,2)) AS house_rate_lv200_300, 
+                    CAST(HR1.house_rate_lv300 AS NUMERIC(14,2)) AS house_rate_lv300 
                 FROM HOUSE_RATE HR1 
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
                 LEFT JOIN GRADIENT GR1 ON HR1.gradient_code=GR1.gradient_code 
@@ -384,7 +394,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "102" or category_code2 == "2020":
             house_alt_list = HOUSE_ALT.objects.raw("""
                 SELECT 
-                    * 
+                    house_alt_code, 
+                    CAST(house_alt_lv00 AS NUMERIC(14,2)) AS house_alt_lv00, 
+                    CAST(house_alt_lv00_50 AS NUMERIC(14,2)) AS house_alt_lv00_50, 
+                    CAST(house_alt_lv50_100 AS NUMERIC(14,2)) AS house_alt_lv50_100, 
+                    CAST(house_alt_lv100_200 AS NUMERIC(14,2)) AS house_alt_lv100_200, 
+                    CAST(house_alt_lv200_300 AS NUMERIC(14,2)) AS house_alt_lv200_300, 
+                    CAST(house_alt_lv300 AS NUMERIC(14,2)) AS house_alt_lv300 
                 FROM HOUSE_ALT 
                 ORDER BY CAST(house_alt_code AS INTEGER)""", [])
             
@@ -392,7 +408,14 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "103" or category_code2 == "2030":
             house_clean_list = HOUSE_CLEAN.objects.raw("""
                 SELECT 
-                    * 
+                    house_clean_code, 
+                    CAST(house_clean_days_lv00 AS NUMERIC(14,2)) AS house_clean_days_lv00, 
+                    CAST(house_clean_days_lv00_50 AS NUMERIC(14,2)) AS house_clean_days_lv00_50, 
+                    CAST(house_clean_days_lv50_100 AS NUMERIC(14,2)) AS house_clean_days_lv50_100, 
+                    CAST(house_clean_days_lv100_200 AS NUMERIC(14,2)) AS house_clean_days_lv100_200, 
+                    CAST(house_clean_days_lv200_300 AS NUMERIC(14,2)) AS house_clean_days_lv200_300, 
+                    CAST(house_clean_days_lv300 AS NUMERIC(14,2)) AS house_clean_days_lv300, 
+                    CAST(house_clean_unit_cost  AS NUMERIC(14,2)) AS house_clean_unit_cost
                 FROM HOUSE_CLEAN 
                 ORDER BY CAST(house_clean_code AS INTEGER)""", [])
             
@@ -400,7 +423,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "104" or category_code2 == "3000":
             household_asset_list = HOUSEHOLD_ASSET.objects.raw("""
                 SELECT 
-                    * 
+                    household_asset_code, 
+                    CAST(household_asset AS NUMERIC(14,2)) AS household_asset  
                 FROM HOUSEHOLD_ASSET 
                 ORDER BY CAST(household_asset_code AS INTEGER)""", [])
             
@@ -411,12 +435,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     HR1.household_rate_code AS household_rate_code, 
                     HR1.flood_sediment_code AS flood_sediment_code, 
                     FS1.flood_sediment_name AS flood_sediment_name, 
-                    HR1.household_rate_lv00 AS household_rate_lv00, 
-                    HR1.household_rate_lv00_50 AS household_rate_lv00_50, 
-                    HR1.household_rate_lv50_100 AS household_rate_lv50_100, 
-                    HR1.household_rate_lv100_200 AS household_rate_lv100_200, 
-                    HR1.household_rate_lv200_300 AS household_rate_lv200_300, 
-                    HR1.household_rate_lv300 AS household_rate_lv300 
+                    CAST(HR1.household_rate_lv00 AS NUMERIC(14,2)) AS household_rate_lv00, 
+                    CAST(HR1.household_rate_lv00_50 AS NUMERIC(14,2)) AS household_rate_lv00_50, 
+                    CAST(HR1.household_rate_lv50_100 AS NUMERIC(14,2)) AS household_rate_lv50_100, 
+                    CAST(HR1.household_rate_lv100_200 AS NUMERIC(14,2)) AS household_rate_lv100_200, 
+                    CAST(HR1.household_rate_lv200_300 AS NUMERIC(14,2)) AS household_rate_lv200_300, 
+                    CAST(HR1.household_rate_lv300 AS NUMERIC(14,2)) AS household_rate_lv300 
                 FROM HOUSEHOLD_RATE HR1 
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON HR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(HR1.household_rate_code AS INTEGER)""", [])
@@ -425,7 +449,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "106" or category_code2 == "4000":
             car_asset_list = CAR_ASSET.objects.raw("""
                 SELECT 
-                    * 
+                    car_asset_code, 
+                    CAST(car_asset AS NUMERIC(14,2)) AS car_asset 
                 FROM CAR_ASSET 
                 ORDER BY CAST(car_asset_code AS INTEGER)""", [])
             
@@ -433,7 +458,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "107" or category_code2 == "4010":
             car_rate_list = CAR_RATE.objects.raw("""
                 SELECT 
-                    * 
+                    car_rate_code, 
+                    CAST(car_rate_lv00 AS NUMERIC(14,2)) AS car_rate_lv00, 
+                    CAST(car_rate_lv00_50 AS NUMERIC(14,2)) AS car_rate_lv00_50, 
+                    CAST(car_rate_lv50_100 AS NUMERIC(14,2)) AS car_rate_lv50_100, 
+                    CAST(car_rate_lv100_200 AS NUMERIC(14,2)) AS car_rate_lv100_200, 
+                    CAST(car_rate_lv200_300 AS NUMERIC(14,2)) AS car_rate_lv200_300, 
+                    CAST(car_rate_lv300 AS NUMERIC(14,2)) AS car_rate_lv300 
                 FROM CAR_RATE 
                 ORDER BY CAST(car_rate_code AS INTEGER)""", [])
             
@@ -444,9 +475,9 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     OA1.office_asset_code AS office_asset_code, 
                     OA1.industry_code AS industry_code, 
                     ID1.industry_name AS industry_name, 
-                    OA1.office_dep_asset AS office_dep_asset, 
-                    OA1.office_inv_asset AS office_inv_asset, 
-                    OA1.office_va_asset AS office_va_asset 
+                    CAST(OA1.office_dep_asset AS NUMERIC(14,2)) AS office_dep_asset, 
+                    CAST(OA1.office_inv_asset AS NUMERIC(14,2)) AS office_inv_asset, 
+                    CAST(OA1.office_va_asset AS NUMERIC(14,2)) AS office_va_asset 
                 FROM OFFICE_ASSET OA1 
                 LEFT JOIN INDUSTRY ID1 ON OA1.industry_code=ID1.industry_code 
                 ORDER BY CAST(OA1.office_asset_code AS INTEGER)""", [])
@@ -458,18 +489,18 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     OR1.office_rate_code AS office_rate_code, 
                     OR1.flood_sediment_code AS flood_sediment_code, 
                     FS1.flood_sediment_name AS flood_sediment_name, 
-                    OR1.office_dep_rate_lv00 AS office_dep_rate_lv00, 
-                    OR1.office_dep_rate_lv00_50 AS office_dep_rate_lv00_50, 
-                    OR1.office_dep_rate_lv50_100 AS office_dep_rate_lv50_100, 
-                    OR1.office_dep_rate_lv100_200 AS office_dep_rate_lv100_200, 
-                    OR1.office_dep_rate_lv200_300 AS office_dep_rate_lv200_300, 
-                    OR1.office_dep_rate_lv300 AS office_dep_rate_lv300, 
-                    OR1.office_inv_rate_lv00 AS office_inv_rate_lv00, 
-                    OR1.office_inv_rate_lv00_50 AS office_inv_rate_lv00_50, 
-                    OR1.office_inv_rate_lv50_100 AS office_inv_rate_lv50_100, 
-                    OR1.office_inv_rate_lv100_200 AS office_inv_rate_lv100_200, 
-                    OR1.office_inv_rate_lv200_300 AS office_inv_rate_lv200_300, 
-                    OR1.office_inv_rate_lv300 AS office_inv_rate_lv300 
+                    CAST(OR1.office_dep_rate_lv00 AS NUMERIC(14,2)) AS office_dep_rate_lv00, 
+                    CAST(OR1.office_dep_rate_lv00_50 AS NUMERIC(14,2)) AS office_dep_rate_lv00_50, 
+                    CAST(OR1.office_dep_rate_lv50_100 AS NUMERIC(14,2)) AS office_dep_rate_lv50_100, 
+                    CAST(OR1.office_dep_rate_lv100_200 AS NUMERIC(14,2)) AS office_dep_rate_lv100_200, 
+                    CAST(OR1.office_dep_rate_lv200_300 AS NUMERIC(14,2)) AS office_dep_rate_lv200_300, 
+                    CAST(OR1.office_dep_rate_lv300 AS NUMERIC(14,2)) AS office_dep_rate_lv300, 
+                    CAST(OR1.office_inv_rate_lv00 AS NUMERIC(14,2)) AS office_inv_rate_lv00, 
+                    CAST(OR1.office_inv_rate_lv00_50 AS NUMERIC(14,2)) AS office_inv_rate_lv00_50, 
+                    CAST(OR1.office_inv_rate_lv50_100 AS NUMERIC(14,2)) AS office_inv_rate_lv50_100, 
+                    CAST(OR1.office_inv_rate_lv100_200 AS NUMERIC(14,2)) AS office_inv_rate_lv100_200, 
+                    CAST(OR1.office_inv_rate_lv200_300 AS NUMERIC(14,2)) AS office_inv_rate_lv200_300, 
+                    CAST(OR1.office_inv_rate_lv300 AS NUMERIC(14,2)) AS office_inv_rate_lv300 
                 FROM OFFICE_RATE OR1 
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON OR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(OR1.office_rate_code AS INTEGER)""", [])
@@ -478,7 +509,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "110" or category_code2 == "5020":
             office_suspend_list = OFFICE_SUSPEND.objects.raw("""
                 SELECT 
-                    * 
+                    office_sus_code, 
+                    CAST(office_sus_days_lv00 AS NUMERIC(14,2)) AS office_sus_days_lv00, 
+                    CAST(office_sus_days_lv00_50 AS NUMERIC(14,2)) AS office_sus_days_lv00_50, 
+                    CAST(office_sus_days_lv50_100 AS NUMERIC(14,2)) AS office_sus_days_lv50_100, 
+                    CAST(office_sus_days_lv100_200 AS NUMERIC(14,2)) AS office_sus_days_lv100_200, 
+                    CAST(office_sus_days_lv200_300 AS NUMERIC(14,2)) AS office_sus_days_lv200_300, 
+                    CAST(office_sus_days_lv300 AS NUMERIC(14,2)) AS office_sus_days_lv300 
                 FROM OFFICE_SUSPEND 
                 ORDER BY CAST(office_sus_code AS INTEGER)""", [])
             
@@ -486,7 +523,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "111" or category_code2 == "5030":
             office_stagnate_list = OFFICE_STAGNATE.objects.raw("""
                 SELECT 
-                    * 
+                    office_stg_code, 
+                    CAST(office_stg_days_lv00 AS NUMERIC(14,2)) AS office_stg_days_lv00, 
+                    CAST(office_stg_days_lv00_50 AS NUMERIC(14,2)) AS office_stg_days_lv00_50, 
+                    CAST(office_stg_days_lv50_100 AS NUMERIC(14,2)) AS office_stg_days_lv50_100, 
+                    CAST(office_stg_days_lv100_200 AS NUMERIC(14,2)) AS office_stg_days_lv100_200, 
+                    CAST(office_stg_days_lv200_300 AS NUMERIC(14,2)) AS office_stg_days_lv200_300, 
+                    CAST(office_stg_days_lv300 AS NUMERIC(14,2)) AS office_stg_days_lv300 
                 FROM OFFICE_STAGNATE 
                 ORDER BY CAST(office_stg_code AS INTEGER)""", [])
 
@@ -494,7 +537,13 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "112" or category_code2 == "5040":
             office_alt_list = OFFICE_ALT.objects.raw("""
                 SELECT 
-                    * 
+                    office_alt_code, 
+                    CAST(office_alt_lv00 AS NUMERIC(14,2)) AS office_alt_lv00, 
+                    CAST(office_alt_lv00_50 AS NUMERIC(14,2)) AS office_alt_lv00_50, 
+                    CAST(office_alt_lv50_100 AS NUMERIC(14,2)) AS office_alt_lv50_100, 
+                    CAST(office_alt_lv100_200 AS NUMERIC(14,2)) AS office_alt_lv100_200, 
+                    CAST(office_alt_lv200_300 AS NUMERIC(14,2)) AS office_alt_lv200_300, 
+                    CAST(office_alt_lv300 AS NUMERIC(14,2)) AS office_alt_lv300 
                 FROM OFFICE_ALT 
                 ORDER BY CAST(office_alt_code AS INTEGER)""", [])
             
@@ -502,7 +551,9 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         elif category_code2 == "113" or category_code2 == "6000":
             farmer_fisher_asset_list = FARMER_FISHER_ASSET.objects.raw("""
                 SELECT 
-                    * 
+                    farmer_fisher_asset_code, 
+                    CAST(farmer_fisher_dep_asset AS NUMERIC(14,2)) AS farmer_fisher_dep_asset, 
+                    CAST(farmer_fisher_inv_asset AS NUMERIC(14,2)) AS farmer_fisher_inv_asset 
                 FROM FARMER_FISHER_ASSET 
                 ORDER BY CAST(farmer_fisher_asset_code AS INTEGER)""", [])
 
@@ -513,18 +564,18 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     FFR1.farmer_fisher_rate_code AS farmer_fisher_rate_code, 
                     FFR1.flood_sediment_code AS flood_sediment_code, 
                     FS1.flood_sediment_name AS flood_sediment_name, 
-                    FFR1.farmer_fisher_dep_rate_lv00 AS farmer_fisher_dep_rate_lv00, 
-                    FFR1.farmer_fisher_dep_rate_lv00_50 AS farmer_fisher_dep_rate_lv00_50, 
-                    FFR1.farmer_fisher_dep_rate_lv50_100 AS farmer_fisher_dep_rate_lv50_100, 
-                    FFR1.farmer_fisher_dep_rate_lv100_200 AS farmer_fisher_dep_rate_lv100_200, 
-                    FFR1.farmer_fisher_dep_rate_lv200_300 AS farmer_fisher_dep_rate_lv200_300, 
-                    FFR1.farmer_fisher_dep_rate_lv300 AS farmer_fisher_dep_rate_lv300, 
-                    FFR1.farmer_fisher_inv_rate_lv00 AS farmer_fisher_inv_rate_lv00, 
-                    FFR1.farmer_fisher_inv_rate_lv00_50 AS farmer_fisher_inv_rate_lv00_50, 
-                    FFR1.farmer_fisher_inv_rate_lv50_100 AS farmer_fisher_inv_rate_lv50_100, 
-                    FFR1.farmer_fisher_inv_rate_lv100_200 AS farmer_fisher_inv_rate_lv100_200, 
-                    FFR1.farmer_fisher_inv_rate_lv200_300 ASfarmer_fisher_inv_rate_lv200_300, 
-                    FFR1.farmer_fisher_inv_rate_lv300 AS farmer_fisher_inv_rate_lv300 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv00 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv00, 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv00_50 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv00_50, 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv50_100 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv50_100, 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv100_200 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv100_200, 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv200_300 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv200_300, 
+                    CAST(FFR1.farmer_fisher_dep_rate_lv300 AS NUMERIC(14,2)) AS farmer_fisher_dep_rate_lv300, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv00 AS NUMERIC(14,2)) AS farmer_fisher_inv_rate_lv00, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv00_50 AS NUMERIC(14,2)) AS farmer_fisher_inv_rate_lv00_50, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv50_100 AS NUMERIC(14,2)) AS farmer_fisher_inv_rate_lv50_100, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv100_200 AS NUMERIC(14,2)) AS farmer_fisher_inv_rate_lv100_200, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv200_300 AS NUMERIC(14,2)) ASfarmer_fisher_inv_rate_lv200_300, 
+                    CAST(FFR1.farmer_fisher_inv_rate_lv300 AS NUMERIC(14,2)) AS farmer_fisher_inv_rate_lv300 
                 FROM FARMER_FISHER_RATE FFR1 
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON FFR1.flood_sediment_code=FS1.flood_sediment_code 
                 ORDER BY CAST(FFR1.farmer_fisher_rate_code AS INTEGER)""", [])
@@ -549,6 +600,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
                 LEFT JOIN ACTION AC1 ON AR1.action_code=AC1.action_code 
                 LEFT JOIN STATUS ST1 ON AR1.status_code=ST1.status_code 
+                WHERE deleted_at IS NULL 
                 ORDER BY CAST(AR1.area_id AS INTEGER)""", [])
             
         ### 異常気象: WEATHER
@@ -592,12 +644,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KA1.kasen_name AS kasen_name, 
                         SG1.gradient_code AS gradient_code, 
                         GR1.gradient_name AS gradient_name, 
-                        SG1.residential_area AS residential_area, 
-                        SG1.agricultural_area AS agricultural_area, 
-                        SG1.underground_area AS underground_area, 
+                        CAST(SG1.residential_area AS NUMERIC(14,2)) AS residential_area, 
+                        CAST(SG1.agricultural_area AS NUMERIC(14,2)) AS agricultural_area, 
+                        CAST(SG1.underground_area AS NUMERIC(14,2)) AS underground_area, 
                         SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                        SG1.crop_damage AS crop_damage, 
+                        CAST(SG1.crop_damage AS NUMERIC(14,2)) AS crop_damage, 
                         SG1.weather_id AS weather_id, 
                         WE1.weather_name AS weather_name, 
                         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
@@ -622,6 +674,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
                     LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
                     LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
+                    WHERE SG1.deleted_at IS NULL 
                     ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [])
                 
             elif ken_code == "0" and city_code != "0":
@@ -649,12 +702,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KA1.kasen_name AS kasen_name, 
                         SG1.gradient_code AS gradient_code, 
                         GR1.gradient_name AS gradient_name, 
-                        SG1.residential_area AS residential_area, 
-                        SG1.agricultural_area AS agricultural_area, 
-                        SG1.underground_area AS underground_area, 
+                        CAST(SG1.residential_area AS NUMERIC(14,2)) AS residential_area, 
+                        CAST(SG1.agricultural_area AS NUMERIC(14,2)) AS agricultural_area, 
+                        CAST(SG1.underground_area AS NUMERIC(14,2)) AS underground_area, 
                         SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                        SG1.crop_damage AS crop_damage, 
+                        CAST(SG1.crop_damage AS NUMERIC(14,2)) AS crop_damage, 
                         SG1.weather_id AS weather_id, 
                         WE1.weather_name AS weather_name, 
                         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
@@ -679,7 +732,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
                     LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
                     LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
-                    WHERE SG1.city_code=%s 
+                    WHERE SG1.city_code=%s AND SG1.deleted_at IS NULL 
                     ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [city_code, ])
             
             elif ken_code != "0" and city_code == "0":
@@ -707,12 +760,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KA1.kasen_name AS kasen_name, 
                         SG1.gradient_code AS gradient_code, 
                         GR1.gradient_name AS gradient_name, 
-                        SG1.residential_area AS residential_area, 
-                        SG1.agricultural_area AS agricultural_area, 
-                        SG1.underground_area AS underground_area, 
+                        CAST(SG1.residential_area AS NUMERIC(14,2)) AS residential_area, 
+                        CAST(SG1.agricultural_area AS NUMERIC(14,2)) AS agricultural_area, 
+                        CAST(SG1.underground_area AS NUMERIC(14,2)) AS underground_area, 
                         SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                        SG1.crop_damage AS crop_damage, 
+                        CAST(SG1.crop_damage AS NUMERIC(14,2)) AS crop_damage, 
                         SG1.weather_id AS weather_id, 
                         WE1.weather_name AS weather_name, 
                         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
@@ -737,7 +790,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
                     LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
                     LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
-                    WHERE SG1.ken_code=%s 
+                    WHERE SG1.ken_code=%s AND SG1.deleted_at IS NULL 
                     ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [ken_code, ])
             
             elif ken_code != "0" and city_code != "0":
@@ -765,12 +818,12 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                         KA1.kasen_name AS kasen_name, 
                         SG1.gradient_code AS gradient_code, 
                         GR1.gradient_name AS gradient_name, 
-                        SG1.residential_area AS residential_area, 
-                        SG1.agricultural_area AS agricultural_area, 
-                        SG1.underground_area AS underground_area, 
+                        CAST(SG1.residential_area AS NUMERIC(14,2)) AS residential_area, 
+                        CAST(SG1.agricultural_area AS NUMERIC(14,2)) AS agricultural_area, 
+                        CAST(SG1.underground_area AS NUMERIC(14,2)) AS underground_area, 
                         SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                         KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                        SG1.crop_damage AS crop_damage, 
+                        CAST(SG1.crop_damage AS NUMERIC(14,2)) AS crop_damage, 
                         SG1.weather_id AS weather_id, 
                         WE1.weather_name AS weather_name, 
                         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
@@ -795,9 +848,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     LEFT JOIN WEATHER WE1 ON SG1.weather_id=WE1.weather_id 
                     LEFT JOIN ACTION AC1 ON SG1.action_code=AC1.action_code 
                     LEFT JOIN STATUS ST1 ON SG1.status_code=ST1.status_code 
-                    WHERE SG1.ken_code=%s AND SG1.city_code=%s 
+                    WHERE SG1.ken_code=%s AND SG1.city_code=%s AND SG1.deleted_at is NULL 
                     ORDER BY CAST(SG1.suigai_id AS INTEGER)""", [ken_code, city_code, ])
-            
             else:
                 pass
             
@@ -848,6 +900,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                 LEFT JOIN FLOOD_SEDIMENT FS1 ON IP1.flood_sediment_code=FS1.flood_sediment_code 
                 LEFT JOIN INDUSTRY ID1 ON IP1.industry_code=ID1.industry_code 
                 LEFT JOIN USAGE US1 ON IP1.usage_code=US1.usage_code 
+                WHERE IP1.deleted_at IS NULL 
                 ORDER BY CAST(IP1.ippan_id AS INTEGER)""", [])
 
         ### 一覧表部分_按分データ: IPPAN_VIEW
@@ -915,6 +968,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     TO_CHAR(timezone('JST', committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS commited_at, 
                     TO_CHAR(timezone('JST', deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at  
                 FROM IPPAN_VIEW 
+                WHERE deleted_at IS NULL 
                 ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
 
         ### 集計データ: IPPAN_SUMMARY
@@ -927,87 +981,95 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     IS1.suigai_id AS suigai_id, 
                     SG1.suigai_name AS suigai_name, 
                     
-                    IS1.house_summary_lv00 AS house_summary_lv00, 
-                    IS1.house_summary_lv01_49 AS house_summary_lv01_49, 
-                    IS1.house_summary_lv50_99 AS house_summary_lv50_99, 
-                    IS1.house_summary_lv100 AS house_summary_lv100, 
-                    IS1.house_summary_half AS house_summary_half, 
-                    IS1.house_summary_full AS house_summary_full, 
+                    SG1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SG1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
                     
-                    IS1.household_summary_lv00 AS household_summary_lv00, 
-                    IS1.household_summary_lv01_49 AS household_summary_lv01_49, 
-                    IS1.household_summary_lv50_99 AS household_summary_lv50_99, 
-                    IS1.household_summary_lv100 AS household_summary_lv100, 
-                    IS1.household_summary_half AS household_summary_half, 
-                    IS1.household_summary_full AS household_summary_full, 
+                    CAST(IS1.house_summary_lv00 AS NUMERIC(14,2)) AS house_summary_lv00, 
+                    CAST(IS1.house_summary_lv01_49 AS NUMERIC(14,2)) AS house_summary_lv01_49, 
+                    CAST(IS1.house_summary_lv50_99 AS NUMERIC(14,2)) AS house_summary_lv50_99, 
+                    CAST(IS1.house_summary_lv100 AS NUMERIC(14,2)) AS house_summary_lv100, 
+                    CAST(IS1.house_summary_half AS NUMERIC(14,2)) AS house_summary_half, 
+                    CAST(IS1.house_summary_full AS NUMERIC(14,2)) AS house_summary_full, 
                     
-                    IS1.car_summary_lv00 AS car_summary_lv00, 
-                    IS1.car_summary_lv01_49 AS car_summary_lv01_49, 
-                    IS1.car_summary_lv50_99 AS car_summary_lv50_99, 
-                    IS1.car_summary_lv100 AS car_summary_lv100, 
-                    IS1.car_summary_half AS car_summary_half, 
-                    IS1.car_summary_full AS car_summary_full, 
+                    CAST(IS1.household_summary_lv00 AS NUMERIC(14,2)) AS household_summary_lv00, 
+                    CAST(IS1.household_summary_lv01_49 AS NUMERIC(14,2)) AS household_summary_lv01_49, 
+                    CAST(IS1.household_summary_lv50_99 AS NUMERIC(14,2)) AS household_summary_lv50_99, 
+                    CAST(IS1.household_summary_lv100 AS NUMERIC(14,2)) AS household_summary_lv100, 
+                    CAST(IS1.household_summary_half AS NUMERIC(14,2)) AS household_summary_half, 
+                    CAST(IS1.household_summary_full AS NUMERIC(14,2)) AS household_summary_full, 
                     
-                    IS1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
-                    IS1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
-                    IS1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
-                    IS1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
-                    IS1.house_alt_summary_half AS house_alt_summary_half, 
-                    IS1.house_alt_summary_full AS house_alt_summary_full, 
+                    CAST(IS1.car_summary_lv00 AS NUMERIC(14,2)) AS car_summary_lv00, 
+                    CAST(IS1.car_summary_lv01_49 AS NUMERIC(14,2)) AS car_summary_lv01_49, 
+                    CAST(IS1.car_summary_lv50_99 AS NUMERIC(14,2)) AS car_summary_lv50_99, 
+                    CAST(IS1.car_summary_lv100 AS NUMERIC(14,2)) AS car_summary_lv100, 
+                    CAST(IS1.car_summary_half AS NUMERIC(14,2)) AS car_summary_half, 
+                    CAST(IS1.car_summary_full AS NUMERIC(14,2)) AS car_summary_full, 
                     
-                    IS1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
-                    IS1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
-                    IS1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
-                    IS1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
-                    IS1.house_clean_summary_half AS house_clean_summary_half, 
-                    IS1.house_clean_summary_full AS house_clean_summary_full, 
+                    CAST(IS1.house_alt_summary_lv00 AS NUMERIC(14,2)) AS house_alt_summary_lv00, 
+                    CAST(IS1.house_alt_summary_lv01_49 AS NUMERIC(14,2)) AS house_alt_summary_lv01_49, 
+                    CAST(IS1.house_alt_summary_lv50_99 AS NUMERIC(14,2)) AS house_alt_summary_lv50_99, 
+                    CAST(IS1.house_alt_summary_lv100 AS NUMERIC(14,2)) AS house_alt_summary_lv100, 
+                    CAST(IS1.house_alt_summary_half AS NUMERIC(14,2)) AS house_alt_summary_half, 
+                    CAST(IS1.house_alt_summary_full AS NUMERIC(14,2)) AS house_alt_summary_full, 
                     
-                    IS1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
-                    IS1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
-                    IS1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
-                    IS1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
-                    IS1.office_dep_summary_full AS office_dep_summary_full, 
+                    CAST(IS1.house_clean_summary_lv00 AS NUMERIC(14,2)) AS house_clean_summary_lv00, 
+                    CAST(IS1.house_clean_summary_lv01_49 AS NUMERIC(14,2)) AS house_clean_summary_lv01_49, 
+                    CAST(IS1.house_clean_summary_lv50_99 AS NUMERIC(14,2)) AS house_clean_summary_lv50_99, 
+                    CAST(IS1.house_clean_summary_lv100 AS NUMERIC(14,2)) AS house_clean_summary_lv100, 
+                    CAST(IS1.house_clean_summary_half AS NUMERIC(14,2)) AS house_clean_summary_half, 
+                    CAST(IS1.house_clean_summary_full AS NUMERIC(14,2)) AS house_clean_summary_full, 
                     
-                    IS1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
-                    IS1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
-                    IS1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
-                    IS1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
-                    IS1.office_inv_summary_full AS office_inv_summary_full, 
+                    CAST(IS1.office_dep_summary_lv00 AS NUMERIC(14,2)) AS office_dep_summary_lv00, 
+                    CAST(IS1.office_dep_summary_lv01_49 AS NUMERIC(14,2)) AS office_dep_summary_lv01_49, 
+                    CAST(IS1.office_dep_summary_lv50_99 AS NUMERIC(14,2)) AS office_dep_summary_lv50_99, 
+                    CAST(IS1.office_dep_summary_lv100 AS NUMERIC(14,2)) AS office_dep_summary_lv100, 
+                    CAST(IS1.office_dep_summary_full AS NUMERIC(14,2)) AS office_dep_summary_full, 
                     
-                    IS1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
-                    IS1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49, 
-                    IS1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
-                    IS1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
-                    IS1.office_sus_summary_full AS office_sus_summary_full, 
+                    CAST(IS1.office_inv_summary_lv00 AS NUMERIC(14,2)) AS office_inv_summary_lv00, 
+                    CAST(IS1.office_inv_summary_lv01_49 AS NUMERIC(14,2)) AS office_inv_summary_lv01_49, 
+                    CAST(IS1.office_inv_summary_lv50_99 AS NUMERIC(14,2)) AS office_inv_summary_lv50_99, 
+                    CAST(IS1.office_inv_summary_lv100 AS NUMERIC(14,2)) AS office_inv_summary_lv100, 
+                    CAST(IS1.office_inv_summary_full AS NUMERIC(14,2)) AS office_inv_summary_full, 
                     
-                    IS1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
-                    IS1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
-                    IS1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
-                    IS1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
-                    IS1.office_stg_summary_full AS office_stg_summary_full, 
+                    CAST(IS1.office_sus_summary_lv00 AS NUMERIC(14,2)) AS office_sus_summary_lv00, 
+                    CAST(IS1.office_sus_summary_lv01_49 AS NUMERIC(14,2)) AS office_sus_summary_lv01_49, 
+                    CAST(IS1.office_sus_summary_lv50_99 AS NUMERIC(14,2)) AS office_sus_summary_lv50_99, 
+                    CAST(IS1.office_sus_summary_lv100 AS NUMERIC(14,2)) AS office_sus_summary_lv100, 
+                    CAST(IS1.office_sus_summary_full AS NUMERIC(14,2)) AS office_sus_summary_full, 
                     
-                    IS1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
-                    IS1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
-                    IS1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
-                    IS1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
-                    IS1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+                    CAST(IS1.office_stg_summary_lv00 AS NUMERIC(14,2)) AS office_stg_summary_lv00, 
+                    CAST(IS1.office_stg_summary_lv01_49 AS NUMERIC(14,2)) AS office_stg_summary_lv01_49, 
+                    CAST(IS1.office_stg_summary_lv50_99 AS NUMERIC(14,2)) AS office_stg_summary_lv50_99, 
+                    CAST(IS1.office_stg_summary_lv100 AS NUMERIC(14,2)) AS office_stg_summary_lv100, 
+                    CAST(IS1.office_stg_summary_full AS NUMERIC(14,2)) AS office_stg_summary_full, 
                     
-                    IS1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
-                    IS1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
-                    IS1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
-                    IS1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
-                    IS1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+                    CAST(IS1.farmer_fisher_dep_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv00, 
+                    CAST(IS1.farmer_fisher_dep_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv01_49, 
+                    CAST(IS1.farmer_fisher_dep_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv50_99, 
+                    CAST(IS1.farmer_fisher_dep_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv100, 
+                    CAST(IS1.farmer_fisher_dep_summary_full AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_full, 
                     
-                    IS1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
-                    IS1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
-                    IS1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
-                    IS1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
-                    IS1.office_alt_summary_half AS office_alt_summary_half, 
-                    IS1.office_alt_summary_full AS office_alt_summary_full 
+                    CAST(IS1.farmer_fisher_inv_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv00, 
+                    CAST(IS1.farmer_fisher_inv_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv01_49, 
+                    CAST(IS1.farmer_fisher_inv_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv50_99, 
+                    CAST(IS1.farmer_fisher_inv_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv100, 
+                    CAST(IS1.farmer_fisher_inv_summary_full AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_full, 
+                    
+                    CAST(IS1.office_alt_summary_lv00 AS NUMERIC(14,2)) AS office_alt_summary_lv00, 
+                    CAST(IS1.office_alt_summary_lv01_49 AS NUMERIC(14,2)) AS office_alt_summary_lv01_49, 
+                    CAST(IS1.office_alt_summary_lv50_99 AS NUMERIC(14,2)) AS office_alt_summary_lv50_99, 
+                    CAST(IS1.office_alt_summary_lv100 AS NUMERIC(14,2)) AS office_alt_summary_lv100, 
+                    CAST(IS1.office_alt_summary_half AS NUMERIC(14,2)) AS office_alt_summary_half, 
+                    CAST(IS1.office_alt_summary_full AS NUMERIC(14,2)) AS office_alt_summary_full 
                     
                 FROM IPPAN_SUMMARY IS1 
                 LEFT JOIN IPPAN IP1 ON IS1.ippan_id=IP1.ippan_id 
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id=SG1.suigai_id 
+                LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+                LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                WHERE IS1.deleted_at IS NULL 
                 ORDER BY CAST(IS1.IPPAN_ID AS INTEGER)""", [])
 
         ### 集計データ_都道府県別: IPPAN_GROUP_BY_KEN
@@ -1031,83 +1093,83 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     SUB1.id AS ken_code, 
                     KE1.ken_name AS ken_name, 
 
-                    SUB1.house_summary_lv00 AS house_summary_lv00, 
-                    SUB1.house_summary_lv01_49 AS house_summary_lv01_49, 
-                    SUB1.house_summary_lv50_99 AS house_summary_lv50_99, 
-                    SUB1.house_summary_lv100 AS house_summary_lv100, 
-                    SUB1.house_summary_half AS house_summary_half, 
-                    SUB1.house_summary_full AS house_summary_full, 
+                    CAST(SUB1.house_summary_lv00 AS NUMERIC(14,2)) AS house_summary_lv00, 
+                    CAST(SUB1.house_summary_lv01_49 AS NUMERIC(14,2)) AS house_summary_lv01_49, 
+                    CAST(SUB1.house_summary_lv50_99 AS NUMERIC(14,2)) AS house_summary_lv50_99, 
+                    CAST(SUB1.house_summary_lv100 AS NUMERIC(14,2)) AS house_summary_lv100, 
+                    CAST(SUB1.house_summary_half AS NUMERIC(14,2)) AS house_summary_half, 
+                    CAST(SUB1.house_summary_full AS NUMERIC(14,2)) AS house_summary_full, 
 
-                    SUB1.household_summary_lv00 AS household_summary_lv00, 
-                    SUB1.household_summary_lv01_49 AS household_summary_lv01_49, 
-                    SUB1.household_summary_lv50_99 AS household_summary_lv50_99, 
-                    SUB1.household_summary_lv100 AS household_summary_lv100, 
-                    SUB1.household_summary_half AS household_summary_half, 
-                    SUB1.household_summary_full AS household_summary_full, 
+                    CAST(SUB1.household_summary_lv00 AS NUMERIC(14,2)) AS household_summary_lv00, 
+                    CAST(SUB1.household_summary_lv01_49 AS NUMERIC(14,2)) AS household_summary_lv01_49, 
+                    CAST(SUB1.household_summary_lv50_99 AS NUMERIC(14,2)) AS household_summary_lv50_99, 
+                    CAST(SUB1.household_summary_lv100 AS NUMERIC(14,2)) AS household_summary_lv100, 
+                    CAST(SUB1.household_summary_half AS NUMERIC(14,2)) AS household_summary_half, 
+                    CAST(SUB1.household_summary_full AS NUMERIC(14,2)) AS household_summary_full, 
 
-                    SUB1.car_summary_lv00 AS car_summary_lv00, 
-                    SUB1.car_summary_lv01_49 AS car_summary_lv01_49, 
-                    SUB1.car_summary_lv50_99 AS car_summary_lv50_99, 
-                    SUB1.car_summary_lv100 AS car_summary_lv100, 
-                    SUB1.car_summary_half AS car_summary_half, 
-                    SUB1.car_summary_full AS car_summary_full, 
+                    CAST(SUB1.car_summary_lv00 AS NUMERIC(14,2)) AS car_summary_lv00, 
+                    CAST(SUB1.car_summary_lv01_49 AS NUMERIC(14,2)) AS car_summary_lv01_49, 
+                    CAST(SUB1.car_summary_lv50_99 AS NUMERIC(14,2)) AS car_summary_lv50_99, 
+                    CAST(SUB1.car_summary_lv100 AS NUMERIC(14,2)) AS car_summary_lv100, 
+                    CAST(SUB1.car_summary_half AS NUMERIC(14,2)) AS car_summary_half, 
+                    CAST(SUB1.car_summary_full AS NUMERIC(14,2)) AS car_summary_full, 
 
-                    SUB1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
-                    SUB1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
-                    SUB1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
-                    SUB1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
-                    SUB1.house_alt_summary_half AS house_alt_summary_half, 
-                    SUB1.house_alt_summary_full AS house_alt_summary_full, 
+                    CAST(SUB1.house_alt_summary_lv00 AS NUMERIC(14,2)) AS house_alt_summary_lv00, 
+                    CAST(SUB1.house_alt_summary_lv01_49 AS NUMERIC(14,2)) AS house_alt_summary_lv01_49, 
+                    CAST(SUB1.house_alt_summary_lv50_99 AS NUMERIC(14,2)) AS house_alt_summary_lv50_99, 
+                    CAST(SUB1.house_alt_summary_lv100 AS NUMERIC(14,2)) AS house_alt_summary_lv100, 
+                    CAST(SUB1.house_alt_summary_half AS NUMERIC(14,2)) AS house_alt_summary_half, 
+                    CAST(SUB1.house_alt_summary_full AS NUMERIC(14,2)) AS house_alt_summary_full, 
 
-                    SUB1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
-                    SUB1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
-                    SUB1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
-                    SUB1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
-                    SUB1.house_clean_summary_half AS house_clean_summary_half, 
-                    SUB1.house_clean_summary_full AS house_clean_summary_full, 
+                    CAST(SUB1.house_clean_summary_lv00 AS NUMERIC(14,2)) AS house_clean_summary_lv00, 
+                    CAST(SUB1.house_clean_summary_lv01_49 AS NUMERIC(14,2)) AS house_clean_summary_lv01_49, 
+                    CAST(SUB1.house_clean_summary_lv50_99 AS NUMERIC(14,2)) AS house_clean_summary_lv50_99, 
+                    CAST(SUB1.house_clean_summary_lv100 AS NUMERIC(14,2)) AS house_clean_summary_lv100, 
+                    CAST(SUB1.house_clean_summary_half AS NUMERIC(14,2)) AS house_clean_summary_half, 
+                    CAST(SUB1.house_clean_summary_full AS NUMERIC(14,2)) AS house_clean_summary_full, 
 
-                    SUB1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
-                    SUB1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
-                    SUB1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
-                    SUB1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
-                    SUB1.office_dep_summary_full AS office_dep_summary_full, 
+                    CAST(SUB1.office_dep_summary_lv00 AS NUMERIC(14,2)) AS office_dep_summary_lv00, 
+                    CAST(SUB1.office_dep_summary_lv01_49 AS NUMERIC(14,2)) AS office_dep_summary_lv01_49, 
+                    CAST(SUB1.office_dep_summary_lv50_99 AS NUMERIC(14,2)) AS office_dep_summary_lv50_99, 
+                    CAST(SUB1.office_dep_summary_lv100 AS NUMERIC(14,2)) AS office_dep_summary_lv100, 
+                    CAST(SUB1.office_dep_summary_full AS NUMERIC(14,2)) AS office_dep_summary_full, 
 
-                    SUB1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
-                    SUB1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
-                    SUB1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
-                    SUB1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
-                    SUB1.office_inv_summary_full AS office_inv_summary_full, 
+                    CAST(SUB1.office_inv_summary_lv00 AS NUMERIC(14,2)) AS office_inv_summary_lv00, 
+                    CAST(SUB1.office_inv_summary_lv01_49 AS NUMERIC(14,2)) AS office_inv_summary_lv01_49, 
+                    CAST(SUB1.office_inv_summary_lv50_99 AS NUMERIC(14,2)) AS office_inv_summary_lv50_99, 
+                    CAST(SUB1.office_inv_summary_lv100 AS NUMERIC(14,2)) AS office_inv_summary_lv100, 
+                    CAST(SUB1.office_inv_summary_full AS NUMERIC(14,2)) AS office_inv_summary_full, 
 
-                    SUB1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
-                    SUB1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49,  
-                    SUB1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
-                    SUB1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
-                    SUB1.office_sus_summary_full AS office_sus_summary_full, 
+                    CAST(SUB1.office_sus_summary_lv00 AS NUMERIC(14,2)) AS office_sus_summary_lv00, 
+                    CAST(SUB1.office_sus_summary_lv01_49 AS NUMERIC(14,2)) AS office_sus_summary_lv01_49,  
+                    CAST(SUB1.office_sus_summary_lv50_99 AS NUMERIC(14,2)) AS office_sus_summary_lv50_99, 
+                    CAST(SUB1.office_sus_summary_lv100 AS NUMERIC(14,2)) AS office_sus_summary_lv100, 
+                    CAST(SUB1.office_sus_summary_full AS NUMERIC(14,2)) AS office_sus_summary_full, 
 
-                    SUB1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
-                    SUB1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
-                    SUB1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
-                    SUB1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
-                    SUB1.office_stg_summary_full AS office_stg_summary_full, 
+                    CAST(SUB1.office_stg_summary_lv00 AS NUMERIC(14,2)) AS office_stg_summary_lv00, 
+                    CAST(SUB1.office_stg_summary_lv01_49 AS NUMERIC(14,2)) AS office_stg_summary_lv01_49, 
+                    CAST(SUB1.office_stg_summary_lv50_99 AS NUMERIC(14,2)) AS office_stg_summary_lv50_99, 
+                    CAST(SUB1.office_stg_summary_lv100 AS NUMERIC(14,2)) AS office_stg_summary_lv100, 
+                    CAST(SUB1.office_stg_summary_full AS NUMERIC(14,2)) AS office_stg_summary_full, 
 
-                    SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
-                    SUB1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
-                    SUB1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
-                    SUB1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
-                    SUB1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv00, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv01_49, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv50_99, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv100, 
+                    CAST(SUB1.farmer_fisher_dep_summary_full AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_full, 
 
-                    SUB1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
-                    SUB1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
-                    SUB1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
-                    SUB1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
-                    SUB1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv00, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv01_49, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv50_99, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv100, 
+                    CAST(SUB1.farmer_fisher_inv_summary_full AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_full, 
 
-                    SUB1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
-                    SUB1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
-                    SUB1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
-                    SUB1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
-                    SUB1.office_alt_summary_half AS office_alt_summary_half, 
-                    SUB1.office_alt_summary_full AS office_alt_summary_full 
+                    CAST(SUB1.office_alt_summary_lv00 AS NUMERIC(14,2)) AS office_alt_summary_lv00, 
+                    CAST(SUB1.office_alt_summary_lv01_49 AS NUMERIC(14,2)) AS office_alt_summary_lv01_49, 
+                    CAST(SUB1.office_alt_summary_lv50_99 AS NUMERIC(14,2)) AS office_alt_summary_lv50_99, 
+                    CAST(SUB1.office_alt_summary_lv100 AS NUMERIC(14,2)) AS office_alt_summary_lv100, 
+                    CAST(SUB1.office_alt_summary_half AS NUMERIC(14,2)) AS office_alt_summary_half, 
+                    CAST(SUB1.office_alt_summary_full AS NUMERIC(14,2)) AS office_alt_summary_full 
                 FROM (
                 SELECT 
                     SG1.ken_code AS id, 
@@ -1197,6 +1259,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     
                 FROM IPPAN_SUMMARY IS1 
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+                WHERE IS1.deleted_at IS NULL 
                 GROUP BY SG1.ken_code 
                 ORDER BY CAST(SG1.KEN_CODE AS INTEGER)
                 ) SUB1 
@@ -1216,83 +1279,83 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     SUB1.id AS suikei_code, 
                     SK1.suikei_name AS suikei_name, 
 
-                    SUB1.house_summary_lv00 AS house_summary_lv00, 
-                    SUB1.house_summary_lv01_49 AS house_summary_lv01_49, 
-                    SUB1.house_summary_lv50_99 AS house_summary_lv50_99, 
-                    SUB1.house_summary_lv100 AS house_summary_lv100, 
-                    SUB1.house_summary_half AS house_summary_half, 
-                    SUB1.house_summary_full AS house_summary_full, 
+                    CAST(SUB1.house_summary_lv00 AS NUMERIC(14,2)) AS house_summary_lv00, 
+                    CAST(SUB1.house_summary_lv01_49 AS NUMERIC(14,2)) AS house_summary_lv01_49, 
+                    CAST(SUB1.house_summary_lv50_99 AS NUMERIC(14,2)) AS house_summary_lv50_99, 
+                    CAST(SUB1.house_summary_lv100 AS NUMERIC(14,2)) AS house_summary_lv100, 
+                    CAST(SUB1.house_summary_half AS NUMERIC(14,2)) AS house_summary_half, 
+                    CAST(SUB1.house_summary_full AS NUMERIC(14,2)) AS house_summary_full, 
 
-                    SUB1.household_summary_lv00 AS household_summary_lv00, 
-                    SUB1.household_summary_lv01_49 AS household_summary_lv01_49, 
-                    SUB1.household_summary_lv50_99 AS household_summary_lv50_99, 
-                    SUB1.household_summary_lv100 AS household_summary_lv100, 
-                    SUB1.household_summary_half AS household_summary_half, 
-                    SUB1.household_summary_full AS household_summary_full, 
+                    CAST(SUB1.household_summary_lv00 AS NUMERIC(14,2)) AS household_summary_lv00, 
+                    CAST(SUB1.household_summary_lv01_49 AS NUMERIC(14,2)) AS household_summary_lv01_49, 
+                    CAST(SUB1.household_summary_lv50_99 AS NUMERIC(14,2)) AS household_summary_lv50_99, 
+                    CAST(SUB1.household_summary_lv100 AS NUMERIC(14,2)) AS household_summary_lv100, 
+                    CAST(SUB1.household_summary_half AS NUMERIC(14,2)) AS household_summary_half, 
+                    CAST(SUB1.household_summary_full AS NUMERIC(14,2)) AS household_summary_full, 
 
-                    SUB1.car_summary_lv00 AS car_summary_lv00, 
-                    SUB1.car_summary_lv01_49 AS car_summary_lv01_49, 
-                    SUB1.car_summary_lv50_99 AS car_summary_lv50_99, 
-                    SUB1.car_summary_lv100 AS car_summary_lv100, 
-                    SUB1.car_summary_half AS car_summary_half, 
-                    SUB1.car_summary_full AS car_summary_full, 
+                    CAST(SUB1.car_summary_lv00 AS NUMERIC(14,2)) AS car_summary_lv00, 
+                    CAST(SUB1.car_summary_lv01_49 AS NUMERIC(14,2)) AS car_summary_lv01_49, 
+                    CAST(SUB1.car_summary_lv50_99 AS NUMERIC(14,2)) AS car_summary_lv50_99, 
+                    CAST(SUB1.car_summary_lv100 AS NUMERIC(14,2)) AS car_summary_lv100, 
+                    CAST(SUB1.car_summary_half AS NUMERIC(14,2)) AS car_summary_half, 
+                    CAST(SUB1.car_summary_full AS NUMERIC(14,2)) AS car_summary_full, 
 
-                    SUB1.house_alt_summary_lv00 AS house_alt_summary_lv00, 
-                    SUB1.house_alt_summary_lv01_49 AS house_alt_summary_lv01_49, 
-                    SUB1.house_alt_summary_lv50_99 AS house_alt_summary_lv50_99, 
-                    SUB1.house_alt_summary_lv100 AS house_alt_summary_lv100, 
-                    SUB1.house_alt_summary_half AS house_alt_summary_half, 
-                    SUB1.house_alt_summary_full AS house_alt_summary_full, 
+                    CAST(SUB1.house_alt_summary_lv00 AS NUMERIC(14,2)) AS house_alt_summary_lv00, 
+                    CAST(SUB1.house_alt_summary_lv01_49 AS NUMERIC(14,2)) AS house_alt_summary_lv01_49, 
+                    CAST(SUB1.house_alt_summary_lv50_99 AS NUMERIC(14,2)) AS house_alt_summary_lv50_99, 
+                    CAST(SUB1.house_alt_summary_lv100 AS NUMERIC(14,2)) AS house_alt_summary_lv100, 
+                    CAST(SUB1.house_alt_summary_half AS NUMERIC(14,2)) AS house_alt_summary_half, 
+                    CAST(SUB1.house_alt_summary_full AS NUMERIC(14,2)) AS house_alt_summary_full, 
 
-                    SUB1.house_clean_summary_lv00 AS house_clean_summary_lv00, 
-                    SUB1.house_clean_summary_lv01_49 AS house_clean_summary_lv01_49, 
-                    SUB1.house_clean_summary_lv50_99 AS house_clean_summary_lv50_99, 
-                    SUB1.house_clean_summary_lv100 AS house_clean_summary_lv100, 
-                    SUB1.house_clean_summary_half AS house_clean_summary_half, 
-                    SUB1.house_clean_summary_full AS house_clean_summary_full, 
+                    CAST(SUB1.house_clean_summary_lv00 AS NUMERIC(14,2)) AS house_clean_summary_lv00, 
+                    CAST(SUB1.house_clean_summary_lv01_49 AS NUMERIC(14,2)) AS house_clean_summary_lv01_49, 
+                    CAST(SUB1.house_clean_summary_lv50_99 AS NUMERIC(14,2)) AS house_clean_summary_lv50_99, 
+                    CAST(SUB1.house_clean_summary_lv100 AS NUMERIC(14,2)) AS house_clean_summary_lv100, 
+                    CAST(SUB1.house_clean_summary_half AS NUMERIC(14,2)) AS house_clean_summary_half, 
+                    CAST(SUB1.house_clean_summary_full AS NUMERIC(14,2)) AS house_clean_summary_full, 
 
-                    SUB1.office_dep_summary_lv00 AS office_dep_summary_lv00, 
-                    SUB1.office_dep_summary_lv01_49 AS office_dep_summary_lv01_49, 
-                    SUB1.office_dep_summary_lv50_99 AS office_dep_summary_lv50_99, 
-                    SUB1.office_dep_summary_lv100 AS office_dep_summary_lv100, 
-                    SUB1.office_dep_summary_full AS office_dep_summary_full, 
+                    CAST(SUB1.office_dep_summary_lv00 AS NUMERIC(14,2)) AS office_dep_summary_lv00, 
+                    CAST(SUB1.office_dep_summary_lv01_49 AS NUMERIC(14,2)) AS office_dep_summary_lv01_49, 
+                    CAST(SUB1.office_dep_summary_lv50_99 AS NUMERIC(14,2)) AS office_dep_summary_lv50_99, 
+                    CAST(SUB1.office_dep_summary_lv100 AS NUMERIC(14,2)) AS office_dep_summary_lv100, 
+                    CAST(SUB1.office_dep_summary_full AS NUMERIC(14,2)) AS office_dep_summary_full, 
 
-                    SUB1.office_inv_summary_lv00 AS office_inv_summary_lv00, 
-                    SUB1.office_inv_summary_lv01_49 AS office_inv_summary_lv01_49, 
-                    SUB1.office_inv_summary_lv50_99 AS office_inv_summary_lv50_99, 
-                    SUB1.office_inv_summary_lv100 AS office_inv_summary_lv100, 
-                    SUB1.office_inv_summary_full AS office_inv_summary_full, 
+                    CAST(SUB1.office_inv_summary_lv00 AS NUMERIC(14,2)) AS office_inv_summary_lv00, 
+                    CAST(SUB1.office_inv_summary_lv01_49 AS NUMERIC(14,2)) AS office_inv_summary_lv01_49, 
+                    CAST(SUB1.office_inv_summary_lv50_99 AS NUMERIC(14,2)) AS office_inv_summary_lv50_99, 
+                    CAST(SUB1.office_inv_summary_lv100 AS NUMERIC(14,2)) AS office_inv_summary_lv100, 
+                    CAST(SUB1.office_inv_summary_full AS NUMERIC(14,2)) AS office_inv_summary_full, 
 
-                    SUB1.office_sus_summary_lv00 AS office_sus_summary_lv00, 
-                    SUB1.office_sus_summary_lv01_49 AS office_sus_summary_lv01_49,  
-                    SUB1.office_sus_summary_lv50_99 AS office_sus_summary_lv50_99, 
-                    SUB1.office_sus_summary_lv100 AS office_sus_summary_lv100, 
-                    SUB1.office_sus_summary_full AS office_sus_summary_full, 
+                    CAST(SUB1.office_sus_summary_lv00 AS NUMERIC(14,2)) AS office_sus_summary_lv00, 
+                    CAST(SUB1.office_sus_summary_lv01_49 AS NUMERIC(14,2)) AS office_sus_summary_lv01_49,  
+                    CAST(SUB1.office_sus_summary_lv50_99 AS NUMERIC(14,2)) AS office_sus_summary_lv50_99, 
+                    CAST(SUB1.office_sus_summary_lv100 AS NUMERIC(14,2)) AS office_sus_summary_lv100, 
+                    CAST(SUB1.office_sus_summary_full AS NUMERIC(14,2)) AS office_sus_summary_full, 
 
-                    SUB1.office_stg_summary_lv00 AS office_stg_summary_lv00, 
-                    SUB1.office_stg_summary_lv01_49 AS office_stg_summary_lv01_49, 
-                    SUB1.office_stg_summary_lv50_99 AS office_stg_summary_lv50_99, 
-                    SUB1.office_stg_summary_lv100 AS office_stg_summary_lv100, 
-                    SUB1.office_stg_summary_full AS office_stg_summary_full, 
+                    CAST(SUB1.office_stg_summary_lv00 AS NUMERIC(14,2)) AS office_stg_summary_lv00, 
+                    CAST(SUB1.office_stg_summary_lv01_49 AS NUMERIC(14,2)) AS office_stg_summary_lv01_49, 
+                    CAST(SUB1.office_stg_summary_lv50_99 AS NUMERIC(14,2)) AS office_stg_summary_lv50_99, 
+                    CAST(SUB1.office_stg_summary_lv100 AS NUMERIC(14,2)) AS office_stg_summary_lv100, 
+                    CAST(SUB1.office_stg_summary_full AS NUMERIC(14,2)) AS office_stg_summary_full, 
 
-                    SUB1.farmer_fisher_dep_summary_lv00 AS farmer_fisher_dep_summary_lv00, 
-                    SUB1.farmer_fisher_dep_summary_lv01_49 AS farmer_fisher_dep_summary_lv01_49, 
-                    SUB1.farmer_fisher_dep_summary_lv50_99 AS farmer_fisher_dep_summary_lv50_99, 
-                    SUB1.farmer_fisher_dep_summary_lv100 AS farmer_fisher_dep_summary_lv100, 
-                    SUB1.farmer_fisher_dep_summary_full AS farmer_fisher_dep_summary_full, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv00, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv01_49, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv50_99, 
+                    CAST(SUB1.farmer_fisher_dep_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_lv100, 
+                    CAST(SUB1.farmer_fisher_dep_summary_full AS NUMERIC(14,2)) AS farmer_fisher_dep_summary_full, 
 
-                    SUB1.farmer_fisher_inv_summary_lv00 AS farmer_fisher_inv_summary_lv00, 
-                    SUB1.farmer_fisher_inv_summary_lv01_49 AS farmer_fisher_inv_summary_lv01_49, 
-                    SUB1.farmer_fisher_inv_summary_lv50_99 AS farmer_fisher_inv_summary_lv50_99, 
-                    SUB1.farmer_fisher_inv_summary_lv100 AS farmer_fisher_inv_summary_lv100, 
-                    SUB1.farmer_fisher_inv_summary_full AS farmer_fisher_inv_summary_full, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv00 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv00, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv01_49 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv01_49, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv50_99 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv50_99, 
+                    CAST(SUB1.farmer_fisher_inv_summary_lv100 AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_lv100, 
+                    CAST(SUB1.farmer_fisher_inv_summary_full AS NUMERIC(14,2)) AS farmer_fisher_inv_summary_full, 
 
-                    SUB1.office_alt_summary_lv00 AS office_alt_summary_lv00, 
-                    SUB1.office_alt_summary_lv01_49 AS office_alt_summary_lv01_49, 
-                    SUB1.office_alt_summary_lv50_99 AS office_alt_summary_lv50_99, 
-                    SUB1.office_alt_summary_lv100 AS office_alt_summary_lv100, 
-                    SUB1.office_alt_summary_half AS office_alt_summary_half, 
-                    SUB1.office_alt_summary_full AS office_alt_summary_full 
+                    CAST(SUB1.office_alt_summary_lv00 AS NUMERIC(14,2)) AS office_alt_summary_lv00, 
+                    CAST(SUB1.office_alt_summary_lv01_49 AS NUMERIC(14,2)) AS office_alt_summary_lv01_49, 
+                    CAST(SUB1.office_alt_summary_lv50_99 AS NUMERIC(14,2)) AS office_alt_summary_lv50_99, 
+                    CAST(SUB1.office_alt_summary_lv100 AS NUMERIC(14,2)) AS office_alt_summary_lv100, 
+                    CAST(SUB1.office_alt_summary_half AS NUMERIC(14,2)) AS office_alt_summary_half, 
+                    CAST(SUB1.office_alt_summary_full AS NUMERIC(14,2)) AS office_alt_summary_full 
                 FROM (    
                 SELECT 
                     SG1.suikei_code AS id, 
@@ -1382,6 +1445,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     
                 FROM IPPAN_SUMMARY IS1 
                 LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+                WHERE IS1.deleted_at IS NULL 
                 GROUP BY SG1.suikei_code 
                 ORDER BY CAST(SG1.suikei_code AS INTEGER)
                 ) SUB1 
@@ -1395,7 +1459,9 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     action_code, 
                     action_name 
                 FROM ACTION 
-                ORDER BY CAST(ACTION_CODE AS INTEGER)""", [])
+                -- ORDER BY CAST(ACTION_CODE AS INTEGER)
+                ORDER BY ACTION_CODE 
+                """, [])
 
         ### 状態: STATUS
         elif category_code2 == "10010":
@@ -1404,7 +1470,9 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     status_code, 
                     status_name 
                 FROM STATUS 
-                ORDER BY CAST(STATUS_CODE AS INTEGER)""", [])
+                -- ORDER BY CAST(STATUS_CODE AS INTEGER)
+                ORDER BY STATUS_CODE
+                """, [])
 
         ### トリガーメッセージ: TRIGGER
         elif category_code2 == "10020":
@@ -1426,14 +1494,15 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     TO_CHAR(timezone('JST', TR1.published_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS published_at, 
                     TO_CHAR(timezone('JST', TR1.consumed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS consumed_at, 
                     TO_CHAR(timezone('JST', TR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    TR1.data_integrity_left AS data_integrity_left, 
-                    TR1.data_integrity_right AS data_integrity_right 
+                    TR1.integrity_ok AS integrity_ok, 
+                    TR1.integrity_ng AS integrity_ng 
                 FROM TRIGGER TR1 
                 LEFT JOIN SUIGAI SG1 ON TR1.suigai_id=SG1.suigai_id 
                 LEFT JOIN ACTION AC1 ON TR1.action_code=AC1.action_code 
                 LEFT JOIN STATUS ST1 ON TR1.status_code=ST1.status_code 
                 LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
                 LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+                WHERE TR1.deleted_at IS NULL 
                 ORDER BY CAST(TRIGGER_ID AS INTEGER)""", [])
 
         ### 
@@ -1451,30 +1520,6 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     * 
                 FROM FEEDBACK 
                 ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
-
-        ### レポジトリ: REPOSITORY
-        ### elif category_code2 == "10050":
-        ###     repository_list = REPOSITORY.objects.raw("""
-        ###         SELECT 
-        ###             RE1.repository_id AS repository_id, 
-        ###             RE1.ken_code AS ken_code, 
-        ###             KE1.ken_name AS ken_name, 
-        ###             RE1.city_code AS city_code, 
-        ###             CT1.city_name AS city_name, 
-        ###             RE1.action_code AS action_code, 
-        ###             AC1.action_name AS action_name, 
-        ###             RE1.status_code AS status_code, 
-        ###             ST1.status_name AS stasus_name, 
-        ###             RE1.input_file_path AS input_file_path, 
-        ###             RE1.input_file_name AS input_file_name, 
-        ###             TO_CHAR(timezone('JST', RE1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-        ###             TO_CHAR(timezone('JST', RE1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-        ###         FROM REPOSITORY RE1 
-        ###         LEFT JOIN KEN KE1 ON RE1.ken_code=KE1.ken_code 
-        ###         LEFT JOIN CITY CT1 ON RE1.city_code=CT1.city_code 
-        ###         LEFT JOIN ACTION AC1 ON RE1.action_code=AC1.action_code 
-        ###         LEFT JOIN STATUS ST1 ON RE1.status_code=ST1.status_code 
-        ###         ORDER BY CAST(REPOSITORY_ID AS INTEGER)""", [])
 
         else:
             pass
@@ -1532,7 +1577,6 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
             'trigger_list': trigger_list,                                      ### 10020: トリガーメッセージ 
             'approval_list': approval_list,                                    ### 10030: 承認メッセージ 
             'feedback_list': feedback_list,                                    ### 10040: フィードバックメッセージ 
-            ### 'repository_list': repository_list,                            ### 10050: EXCELファイルレポジトリ
         }
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
