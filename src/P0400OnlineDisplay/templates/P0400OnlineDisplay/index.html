@@ -548,8 +548,8 @@
                     <td>{{ city.city_name }}</td>
                     <td>{{ city.ken_code }}</td>
                     <td>{{ city.ken_name }}</td>
-                    <td>{{ city.city_population }}</td>
-                    <td>{{ city.city_area }}</td>
+                    <td>{{ city.city_population|floatformat:2 }}</td>
+                    <td>{{ city.city_area|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -829,7 +829,7 @@
                     <td>{{ house_asset.house_asset_code }}</td>
                     <td>{{ house_asset.ken_code }}</td>
                     <td>{{ house_asset.ken_name }}</td>
-                    <td>{{ house_asset.house_asset }}</td>
+                    <td>{{ house_asset.house_asset|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -864,12 +864,12 @@
                     <td>{{ house_rate.flood_sediment_name }}</td>
                     <td>{{ house_rate.gradient_code }}</td>
                     <td>{{ house_rate.gradient_name }}</td>
-                    <td>{{ house_rate.house_rate_lv00 }}</td>
-                    <td>{{ house_rate.house_rate_lv00_50 }}</td>
-                    <td>{{ house_rate.house_rate_lv50_100 }}</td>
-                    <td>{{ house_rate.house_rate_lv100_200 }}</td>
-                    <td>{{ house_rate.house_rate_lv200_300 }}</td>
-                    <td>{{ house_rate.house_rate_lv300 }}</td>
+                    <td>{{ house_rate.house_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ house_rate.house_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ house_rate.house_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ house_rate.house_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ house_rate.house_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ house_rate.house_rate_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -896,12 +896,12 @@
                 {% for house_alt in house_alt_list %}
                 <tr>
                     <td>{{ house_alt.house_alt_code }}</td>
-                    <td>{{ house_alt.house_alt_lv00 }}</td>
-                    <td>{{ house_alt.house_alt_lv00_50 }}</td>
-                    <td>{{ house_alt.house_alt_lv50_100 }}</td>
-                    <td>{{ house_alt.house_alt_lv100_200 }}</td>
-                    <td>{{ house_alt.house_alt_lv200_300 }}</td>
-                    <td>{{ house_alt.house_alt_lv300 }}</td>
+                    <td>{{ house_alt.house_alt_lv00|floatformat:2 }}</td>
+                    <td>{{ house_alt.house_alt_lv00_50|floatformat:2 }}</td>
+                    <td>{{ house_alt.house_alt_lv50_100|floatformat:2 }}</td>
+                    <td>{{ house_alt.house_alt_lv100_200|floatformat:2 }}</td>
+                    <td>{{ house_alt.house_alt_lv200_300|floatformat:2 }}</td>
+                    <td>{{ house_alt.house_alt_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -929,13 +929,13 @@
                 {% for house_clean in house_clean_list %}
                 <tr>
                     <td>{{ house_clean.house_clean_code }}</td>
-                    <td>{{ house_clean.house_clean_days_lv00 }}</td>
-                    <td>{{ house_clean.house_clean_days_lv00_50 }}</td>
-                    <td>{{ house_clean.house_clean_days_lv50_100 }}</td>
-                    <td>{{ house_clean.house_clean_days_lv100_200 }}</td>
-                    <td>{{ house_clean.house_clean_days_lv200_300 }}</td>
-                    <td>{{ house_clean.house_clean_days_lv300 }}</td>
-                    <td>{{ house_clean.house_clean_unit_cost }}</td>
+                    <td>{{ house_clean.house_clean_days_lv00|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_days_lv00_50|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_days_lv50_100|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_days_lv100_200|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_days_lv200_300|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_days_lv300|floatformat:2 }}</td>
+                    <td>{{ house_clean.house_clean_unit_cost|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -957,7 +957,7 @@
                 {% for household_asset in household_asset_list %}
                 <tr>
                     <td>{{ household_asset.household_asset_code }}</td>
-                    <td>{{ household_asset.household_asset }}</td>
+                    <td>{{ household_asset.household_asset|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -988,12 +988,12 @@
                     <td>{{ household_rate.household_rate_code }}</td>
                     <td>{{ household_rate.flood_sediment_code }}</td>
                     <td>{{ household_rate.flood_sediment_name }}</td>
-                    <td>{{ household_rate.household_rate_lv00 }}</td>
-                    <td>{{ household_rate.household_rate_lv00_50 }}</td>
-                    <td>{{ household_rate.household_rate_lv50_100 }}</td>
-                    <td>{{ household_rate.household_rate_lv100_200 }}</td>
-                    <td>{{ household_rate.household_rate_lv200_300 }}</td>
-                    <td>{{ household_rate.household_rate_lv300 }}</td>
+                    <td>{{ household_rate.household_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ household_rate.household_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ household_rate.household_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ household_rate.household_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ household_rate.household_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ household_rate.household_rate_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1015,7 +1015,7 @@
                 {% for car_asset in car_asset_list %}
                 <tr>
                     <td>{{ car_asset.car_asset_code }}</td>
-                    <td>{{ car_asset.car_asset }}</td>
+                    <td>{{ car_asset.car_asset|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1042,12 +1042,12 @@
                 {% for car_rate in car_rate_list %}
                 <tr>
                     <td>{{ car_rate.car_rate_code }}</td>
-                    <td>{{ car_rate.car_rate_lv00 }}</td>
-                    <td>{{ car_rate.car_rate_lv00_50 }}</td>
-                    <td>{{ car_rate.car_rate_lv50_100 }}</td>
-                    <td>{{ car_rate.car_rate_lv100_200 }}</td>
-                    <td>{{ car_rate.car_rate_lv200_300 }}</td>
-                    <td>{{ car_rate.car_rate_lv300 }}</td>
+                    <td>{{ car_rate.car_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ car_rate.car_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ car_rate.car_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ car_rate.car_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ car_rate.car_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ car_rate.car_rate_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1075,9 +1075,9 @@
                     <td>{{ office_asset.office_asset_code }}</td>
                     <td>{{ office_asset.industry_code }}</td>
                     <td>{{ office_asset.industry_name }}</td>
-                    <td>{{ office_asset.office_dep_asset }}</td>
-                    <td>{{ office_asset.office_inv_asset }}</td>
-                    <td>{{ office_asset.office_va_asset }}</td>
+                    <td>{{ office_asset.office_dep_asset|floatformat:2 }}</td>
+                    <td>{{ office_asset.office_inv_asset|floatformat:2 }}</td>
+                    <td>{{ office_asset.office_va_asset|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1114,18 +1114,18 @@
                     <td>{{ office_rate.office_rate_code }}</td>
                     <td>{{ office_rate.flood_sediment_code }}</td>
                     <td>{{ office_rate.flood_sediment_name }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv00 }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv00_50 }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv50_100 }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv100_200 }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv200_300 }}</td>
-                    <td>{{ office_rate.office_dep_rate_lv300 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv00 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv00_50 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv50_100 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv100_200 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv200_300 }}</td>
-                    <td>{{ office_rate.office_inv_rate_lv300 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_dep_rate_lv300|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ office_rate.office_inv_rate_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1152,12 +1152,12 @@
                 {% for office_suspend in office_suspend_list %}
                 <tr>
                     <td>{{ office_suspend.office_sus_code }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv00 }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv00_50 }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv50_100 }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv100_200 }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv200_300 }}</td>
-                    <td>{{ office_suspend.office_sus_days_lv300 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv00|floatformat:2 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv00_50|floatformat:2 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv50_100|floatformat:2 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv100_200|floatformat:2 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv200_300|floatformat:2 }}</td>
+                    <td>{{ office_suspend.office_sus_days_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1184,12 +1184,12 @@
                 {% for office_stagnate in office_stagnate_list %}
                 <tr>
                     <td>{{ office_stagnate.office_stg_code }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv00 }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv00_50 }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv50_100 }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv100_200 }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv200_300 }}</td>
-                    <td>{{ office_stagnate.office_stg_days_lv300 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv00|floatformat:2 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv00_50|floatformat:2 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv50_100|floatformat:2 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv100_200|floatformat:2 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv200_300|floatformat:2 }}</td>
+                    <td>{{ office_stagnate.office_stg_days_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1216,12 +1216,12 @@
                 {% for office_alt in office_alt_list %}
                 <tr>
                     <td>{{ office_alt.office_alt_code }}</td>
-                    <td>{{ office_alt.office_alt_lv00 }}</td>
-                    <td>{{ office_alt.office_alt_lv00_50 }}</td>
-                    <td>{{ office_alt.office_alt_lv50_100 }}</td>
-                    <td>{{ office_alt.office_alt_lv100_200 }}</td>
-                    <td>{{ office_alt.office_alt_lv200_300 }}</td>
-                    <td>{{ office_alt.office_alt_lv300 }}</td>
+                    <td>{{ office_alt.office_alt_lv00|floatformat:2 }}</td>
+                    <td>{{ office_alt.office_alt_lv00_50|floatformat:2 }}</td>
+                    <td>{{ office_alt.office_alt_lv50_100|floatformat:2 }}</td>
+                    <td>{{ office_alt.office_alt_lv100_200|floatformat:2 }}</td>
+                    <td>{{ office_alt.office_alt_lv200_300|floatformat:2 }}</td>
+                    <td>{{ office_alt.office_alt_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1244,8 +1244,8 @@
                 {% for farmer_fisher_asset in farmer_fisher_asset_list %}
                 <tr>
                     <td>{{ farmer_fisher_asset.farmer_fisher_asset_code }}</td>
-                    <td>{{ farmer_fisher_asset.farmer_fisher_dep_asset }}</td>
-                    <td>{{ farmer_fisher_asset.farmer_fisher_inv_asset }}</td>
+                    <td>{{ farmer_fisher_asset.farmer_fisher_dep_asset|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_asset.farmer_fisher_inv_asset|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1282,18 +1282,18 @@
                     <td>{{ farmer_fisher_rate.farmer_fisher_damage_code }}</td>
                     <td>{{ farmer_fisher_rate.flood_sediment_code }}</td>
                     <td>{{ farmer_fisher_rate.flood_sediment_name }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv100_200 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv200_300 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv300 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv00 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv00_50 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv50_100 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv100_200 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv200_300 }}</td>
-                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv300 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_dep_rate_lv300|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv00|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv00_50|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv50_100|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv100_200|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv200_300|floatformat:2 }}</td>
+                    <td>{{ farmer_fisher_rate.farmer_fisher_inv_rate_lv300|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1642,23 +1642,11 @@
                     <td>{{ suigai.gradient_name }}</td>
                     {% endif %}
                     
-                    {% if suigai.residential_area is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ suigai.residential_area }}</td>
-                    {% endif %}
+                    <td>{{ suigai.residential_area|floatformat:2 }}</td>
                     
-                    {% if suigai.agricultural_area is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ suigai.agricultural_area }}</td>
-                    {% endif %}
+                    <td>{{ suigai.agricultural_area|floatformat:2 }}</td>
                     
-                    {% if suigai.underground_area is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ suigai.underground_area }}</td>
-                    {% endif %}
+                    <td>{{ suigai.underground_area|floatformat:2 }}</td>
                     
                     {% if suigai.kasen_kaigan_code is None %}
                     <td></td>
@@ -1672,11 +1660,7 @@
                     <td>{{ suigai.kasen_kaigan_name }}</td>
                     {% endif %}
                     
-                    {% if suigai.crop_damage is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ suigai.crop_damage }}</td>
-                    {% endif %}
+                    <td>{{ suigai.crop_damage|floatformat:2 }}</td>
                     
                     {% if suigai.weather_id is None %}
                     <td></td>
@@ -1851,119 +1835,43 @@
                     <td>{{ ippan.flood_sediment_name }}</td>
                     {% endif %}
                     
-                    {% if ippan.building_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.building_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_half }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_half|floatformat:2 }}</td>
                     
-                    {% if ippan.building_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_full|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area|floatformat:2 }}</td>
                     
-                    {% if ippan.family is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family|floatformat:2 }}</td>
                     
-                    {% if ippan.office is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_full|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_full|floatformat:2 }}</td>
                     
                     {% if ippan.industry_code is None %}
                     <td></td>
@@ -2144,263 +2052,91 @@
                     <td>{{ ippan.flood_sediment_name }}</td>
                     {% endif %}
                     
-                    {% if ippan.building_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.building_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.building_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_half }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_half|floatformat:2 }}</td>
                     
-                    {% if ippan.building_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_full|floatformat:2 }}</td>
                     
-                    {% if ippan.building_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.building_total|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area|floatformat:2 }}</td>
                     
-                    {% if ippan.family is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family|floatformat:2 }}</td>
                     
-                    {% if ippan.office is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_lv00|floatformat:2 }}</td>
 
-                    {% if ippan.floor_area_lv01_49 is None %}                    
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_lv01_49|floatformat:2 }}</td>
 
-                    {% if ippan.floor_area_lv50_99 is None %}                    
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_half }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_half|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_full|floatformat:2 }}</td>
                     
-                    {% if ippan.floor_area_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.floor_area_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.floor_area_total|floatformat:2 }}</td>
 
-                    {% if ippan.family_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.family_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.family_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.family_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.family_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_half }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_half|floatformat:2 }}</td>
                     
-                    {% if ippan.family_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_full|floatformat:2 }}</td>
                     
-                    {% if ippan.family_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.family_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.family_total|floatformat:2 }}</td>
 
-                    {% if ippan.office_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.office_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.office_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.office_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.office_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_half }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_half|floatformat:2 }}</td>
                     
-                    {% if ippan.office_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_full|floatformat:2 }}</td>
                     
-                    {% if ippan.office_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.office_total|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_full|floatformat:2 }}</td>
                     
-                    {% if ippan.farmer_fisher_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.farmer_fisher_total|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv00 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv00|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv01_49 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv01_49|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv50_99 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv50_99|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_lv100 }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_lv100|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_full|floatformat:2 }}</td>
                     
-                    {% if ippan.employee_total is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.employee_total }}</td>
-                    {% endif %}
+                    <td>{{ ippan.employee_total|floatformat:2 }}</td>
                     
                     {% if ippan.industry_code is None %}
                     <td></td>
@@ -2603,401 +2339,72 @@
                     <!--<td>{# ippan.suigai_name #}</td>-->
                     {# endif #}
 
-                    {% if ippan.house_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.household_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.household_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.household_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.household_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.household_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.household_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.household_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.car_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.car_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.car_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.car_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.car_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.car_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.car_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.house_alt_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_alt_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_alt_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_alt_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_alt_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_alt_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_alt_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.house_clean_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_clean_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_clean_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_clean_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_clean_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.house_clean_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.house_clean_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.office_dep_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_dep_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_dep_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_dep_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_dep_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_dep_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_dep_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_dep_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_dep_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_dep_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.office_inv_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_inv_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_inv_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_inv_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_inv_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_inv_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_inv_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_inv_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_inv_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_inv_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.office_sus_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_sus_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_sus_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_sus_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_sus_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_sus_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_sus_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_sus_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_sus_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_sus_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.office_stg_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_stg_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_stg_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_stg_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_stg_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_stg_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_stg_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_stg_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_stg_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_stg_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.farmer_fisher_dep_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_dep_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_dep_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_dep_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_dep_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_dep_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.farmer_fisher_inv_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_inv_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_inv_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_inv_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.farmer_fisher_inv_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.farmer_fisher_inv_summary_full }}</td>
-                    {% endif %}
-
-                    {% if ippan.office_alt_summary_lv00 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_lv00 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_alt_summary_lv01_49 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_lv01_49 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_alt_summary_lv50_99 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_lv50_99 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_alt_summary_lv100 is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_lv100 }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_alt_summary_half is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_half }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.office_alt_summary_full is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.office_alt_summary_full }}</td>
-                    {% endif %}
+                    <td>{{ ippan.house_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_full|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_full|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -3106,83 +2513,83 @@
                     <td>{{ ippan.ken_code }}</td>
                     <td>{{ ippan.ken_name }}</td>
 
-                    <td>{{ ippan.house_summary_lv00 }}</td>
-                    <td>{{ ippan.house_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_summary_lv100 }}</td>
-                    <td>{{ ippan.house_summary_half }}</td>
-                    <td>{{ ippan.house_summary_full }}</td>
+                    <td>{{ ippan.house_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.household_summary_lv00 }}</td>
-                    <td>{{ ippan.household_summary_lv01_49 }}</td>
-                    <td>{{ ippan.household_summary_lv50_99 }}</td>
-                    <td>{{ ippan.household_summary_lv100 }}</td>
-                    <td>{{ ippan.household_summary_half }}</td>
-                    <td>{{ ippan.household_summary_full }}</td>
+                    <td>{{ ippan.household_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.car_summary_lv00 }}</td>
-                    <td>{{ ippan.car_summary_lv01_49 }}</td>
-                    <td>{{ ippan.car_summary_lv50_99 }}</td>
-                    <td>{{ ippan.car_summary_lv100 }}</td>
-                    <td>{{ ippan.car_summary_half }}</td>
-                    <td>{{ ippan.car_summary_full }}</td>
+                    <td>{{ ippan.car_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.house_alt_summary_lv00 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv100 }}</td>
-                    <td>{{ ippan.house_alt_summary_half }}</td>
-                    <td>{{ ippan.house_alt_summary_full }}</td>
+                    <td>{{ ippan.house_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.house_clean_summary_lv00 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv100 }}</td>
-                    <td>{{ ippan.house_clean_summary_half }}</td>
-                    <td>{{ ippan.house_clean_summary_full }}</td>
+                    <td>{{ ippan.house_clean_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_dep_summary_lv00 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv100 }}</td>
-                    <td>{{ ippan.office_dep_summary_full }}</td>
+                    <td>{{ ippan.office_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_inv_summary_lv00 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv100 }}</td>
-                    <td>{{ ippan.office_inv_summary_full }}</td>
+                    <td>{{ ippan.office_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_sus_summary_lv00 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv100 }}</td>
-                    <td>{{ ippan.office_sus_summary_full }}</td>
+                    <td>{{ ippan.office_sus_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_stg_summary_lv00 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv100 }}</td>
-                    <td>{{ ippan.office_stg_summary_full }}</td>
+                    <td>{{ ippan.office_stg_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv00 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv100 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_full }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv00 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv100 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_full }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_alt_summary_lv00 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv100 }}</td>
-                    <td>{{ ippan.office_alt_summary_half }}</td>
-                    <td>{{ ippan.office_alt_summary_full }}</td>
+                    <td>{{ ippan.office_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_full|floatformat:2 }}</td>
                 {% endfor %}
                 <tr>
                 </tr>
@@ -3292,83 +2699,83 @@
                     <td>{{ ippan.suikei_code }}</td>
                     <td>{{ ippan.suikei_name }}</td>
 
-                    <td>{{ ippan.house_summary_lv00 }}</td>
-                    <td>{{ ippan.house_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_summary_lv100 }}</td>
-                    <td>{{ ippan.house_summary_half }}</td>
-                    <td>{{ ippan.house_summary_full }}</td>
+                    <td>{{ ippan.house_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.household_summary_lv00 }}</td>
-                    <td>{{ ippan.household_summary_lv01_49 }}</td>
-                    <td>{{ ippan.household_summary_lv50_99 }}</td>
-                    <td>{{ ippan.household_summary_lv100 }}</td>
-                    <td>{{ ippan.household_summary_half }}</td>
-                    <td>{{ ippan.household_summary_full }}</td>
+                    <td>{{ ippan.household_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.household_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.car_summary_lv00 }}</td>
-                    <td>{{ ippan.car_summary_lv01_49 }}</td>
-                    <td>{{ ippan.car_summary_lv50_99 }}</td>
-                    <td>{{ ippan.car_summary_lv100 }}</td>
-                    <td>{{ ippan.car_summary_half }}</td>
-                    <td>{{ ippan.car_summary_full }}</td>
+                    <td>{{ ippan.car_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.car_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.house_alt_summary_lv00 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_alt_summary_lv100 }}</td>
-                    <td>{{ ippan.house_alt_summary_half }}</td>
-                    <td>{{ ippan.house_alt_summary_full }}</td>
+                    <td>{{ ippan.house_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_alt_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.house_clean_summary_lv00 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv01_49 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv50_99 }}</td>
-                    <td>{{ ippan.house_clean_summary_lv100 }}</td>
-                    <td>{{ ippan.house_clean_summary_half }}</td>
-                    <td>{{ ippan.house_clean_summary_full }}</td>
+                    <td>{{ ippan.house_clean_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.house_clean_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_dep_summary_lv00 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_dep_summary_lv100 }}</td>
-                    <td>{{ ippan.office_dep_summary_full }}</td>
+                    <td>{{ ippan.office_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_dep_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_inv_summary_lv00 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_inv_summary_lv100 }}</td>
-                    <td>{{ ippan.office_inv_summary_full }}</td>
+                    <td>{{ ippan.office_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_inv_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_sus_summary_lv00 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_sus_summary_lv100 }}</td>
-                    <td>{{ ippan.office_sus_summary_full }}</td>
+                    <td>{{ ippan.office_sus_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_sus_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_stg_summary_lv00 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_stg_summary_lv100 }}</td>
-                    <td>{{ ippan.office_stg_summary_full }}</td>
+                    <td>{{ ippan.office_stg_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_stg_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv00 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_lv100 }}</td>
-                    <td>{{ ippan.farmer_fisher_dep_summary_full }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_dep_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv00 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_lv100 }}</td>
-                    <td>{{ ippan.farmer_fisher_inv_summary_full }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.farmer_fisher_inv_summary_full|floatformat:2 }}</td>
 
-                    <td>{{ ippan.office_alt_summary_lv00 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv01_49 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv50_99 }}</td>
-                    <td>{{ ippan.office_alt_summary_lv100 }}</td>
-                    <td>{{ ippan.office_alt_summary_half }}</td>
-                    <td>{{ ippan.office_alt_summary_full }}</td>
+                    <td>{{ ippan.office_alt_summary_lv00|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv01_49|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv50_99|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_lv100|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_half|floatformat:2 }}</td>
+                    <td>{{ ippan.office_alt_summary_full|floatformat:2 }}</td>
                 {% endfor %}
                 <tr>
                 </tr>

@@ -219,11 +219,13 @@ def type_view(request, type_code):
 
 ###############################################################################
 ### 関数名：type_ken_view
-### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/', views.type_ken_view, name='type_ken_view')
+### ### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/', views.type_ken_view, name='type_ken_view')
+### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/history/<slug:history_code>/', views.type_ken_view, name='type_ken_view')
 ### template：P0100File/ken.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def type_ken_view(request, type_code, ken_code):
+### def type_ken_view(request, type_code, ken_code, history_code):
     try:
         #######################################################################
         ### 引数チェック処理(0000)
@@ -242,6 +244,27 @@ def type_ken_view(request, type_code, ken_code):
         #######################################################################
         print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2/3.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN WHERE ken_code=%s ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
+        ### suigai_list = SUIGAI.objects.raw("""
+        ###     SELECT 
+        ###         SG1.suigai_id AS suigai_id, 
+        ###         SG1.suigai_name AS suigai_name, 
+        ###         SG1.ken_code AS ken_code, 
+        ###         KE1.ken_name AS ken_name, 
+        ###         SG1.city_code AS city_code, 
+        ###         CT1.city_name AS city_name, 
+        ###         TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
+        ###         TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
+        ###         SG1.file_path AS file_path, 
+        ###         SG1.file_name AS file_name, 
+        ###         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+        ###         TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+        ###     FROM SUIGAI SG1 
+        ###     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
+        ###     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
+        ###     WHERE 
+        ###         SG1.ken_code=%s AND 
+        ###         SG1.deleted_at is NULL 
+        ###     ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
                 SG1.suigai_id AS suigai_id, 
@@ -260,8 +283,8 @@ def type_ken_view(request, type_code, ken_code):
             LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
             LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
             WHERE 
-                SG1.ken_code=%s AND SG1.deleted_at is NULL 
-            ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
+                SG1.ken_code=%s 
+            ORDER BY CAST(SG1.city_code AS INTEGER), CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
             
         area_list = AREA.objects.raw("""
             SELECT 
@@ -276,7 +299,8 @@ def type_ken_view(request, type_code, ken_code):
             FROM AREA AR1 
             LEFT JOIN KEN KE1 ON AR1.ken_code=KE1.ken_code 
             WHERE 
-                AR1.ken_code=%s AND AR1.deleted_at is NULL 
+                AR1.ken_code=%s AND 
+                AR1.deleted_at is NULL 
             ORDER BY CAST(AR1.area_id AS INTEGER) DESC""", [ken_code, ])
         
         ### kokyo_list = KOKYO.objects.raw("""

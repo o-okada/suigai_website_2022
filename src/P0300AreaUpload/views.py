@@ -150,7 +150,8 @@ def index_view(request):
         
         file_object = request.FILES['file']
         file_name, file_ext = os.path.splitext(request.FILES['file'].name)
-        file_path = 'static/repository/' + datetime_now_Ym + '/' + file_name + '_' + datetime_now_YmdHMS + '.pdf'
+        file_name = file_name + '_' + datetime_now_YmdHMS
+        file_path = 'static/repository/' + datetime_now_Ym + '/' + file_name + '.pdf'
         
         with open(file_path, 'wb+') as destination:
             for chunk in file_object.chunks():
@@ -179,12 +180,21 @@ def index_view(request):
         connection_cursor = connection.cursor()
         try:
             connection_cursor.execute("""BEGIN""", []);
+            
             ###################################################################
             ### DBアクセス処理(1010)
             ### 水害区域テーブルにデータを登録する。
             ### TO-DO TODO TO_DO
             ###################################################################
             print_log('[DEBUG] P0300AreaUpload.index_view()関数 STEP 7/8.', 'DEBUG')
+            connection_cursor.execute("""
+                DELETE FROM AREA 
+                WHERE 
+                    area_id=%s -- area_id
+                """, [
+                    int(area_id), ### area_id
+                ])
+            
             connection_cursor.execute("""
                 INSERT INTO AREA (
                     area_id, area_name, ken_code, committed_at, deleted_at, file_path, file_name, action_code, status_code
@@ -198,13 +208,7 @@ def index_view(request):
                     %s, -- file_name
                     %s, -- action_code
                     %s  -- status_code
-                ) ON CONFLICT (
-                    area_id
-                ) DO UPDATE SET 
-                    area_name=%s, -- area_name
-                    file_path=%s, -- file_path
-                    file_name=%s  -- file_name
-                """, [
+                )""", [
                     int(area_id), ### area_id
                     area_name, ### area_name
                     ken_code, ### ken_code
@@ -213,12 +217,9 @@ def index_view(request):
                     file_name, ### file_name
                     None, ### action_code
                     None, ### status_code
-                    area_name, ### area_name
-                    file_path, ### file_path
-                    file_name, ### file_name
                 ])
     
-            ### トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
+            ### トリガーテーブルにB01水害区域図アップロードトリガーを実行済、成功として登録する。
             connection_cursor.execute("""
                 INSERT INTO TRIGGER (
                     trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -258,7 +259,8 @@ def index_view(request):
                     file_path, ### upload_file_path 
                     file_name, ### upload_file_name 
                 ])
-            ### トリガーテーブルにWF10水害区域図貼付けトリガーを未実行＝次回実行対象として登録する。
+                
+            ### トリガーテーブルにB02水害区域図貼付けトリガーを未実行＝次回実行対象として登録する。
             connection_cursor.execute("""
                 INSERT INTO TRIGGER (
                     trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 

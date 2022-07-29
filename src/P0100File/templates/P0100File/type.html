@@ -9,13 +9,13 @@
     <meta name="viewport" content="">
     <meta name="description" content="">
     {% if type_code == "ippan" %}
-    <title>一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>一般資産調査員調査票 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
-    <title>水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>水害区域図 | 水害統計オンラインサイト</title>
     {% elif type_code == "kokyo" %}
-    <title>公共土木調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>公共土木調査票 | 水害統計オンラインサイト</title>
     {% elif type_code == "koeki" %}
-    <title>公益事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>公益事業調査票 | 水害統計オンラインサイト</title>
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -118,219 +118,193 @@
     </nav>
     <!-- END ナビバー -->
 
-    <!-- BEGIN 画面名 -->
-    <!--<div class="container text-center mb-3">-->
-    <!--    <h3>ファイル画面</h3>-->
-    <!--</div>-->
-    <!-- END 画面名 -->
-    
-    <!-- BEGIN コンテナ -->
-    <div class="container mb-3">
-        <!-- BEGIN 行 -->
-        <div class="row">
-            <!-- BEGIN 左列 -->
-            <!--<div class="col-sm-9">-->
-            <div class="col-12">
-                <!-- BEGIN 行 -->
-                <div class="row mb-3">
-                    <!-- BEGIN パンくずリスト -->
-                    <div class="col-6 text-start">
-                        {% if type_code == "ippan" %}
-                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>
-                        {% elif type_code == "area" %}
-                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 水害区域図 /</h5>
-                        {% elif type_code == "kokyo" %}
-                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公共土木調査票 /</h5>
-                        {% elif type_code == "koeki" %}
-                        <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公益事業調査票 /</h5>
-                        {% endif %}
-                    </div>
-                    <!-- END パンくずリスト -->
-                    
-                    <!-- BEGIN ドロップダウンメニュー -->
-                    <div class="col-6 text-end">
-                        <!-- BEGIN ダウンロードメニュー -->
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
-                            <div class="dropdown-menu">
-                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
-                                <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
-                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
-                                <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
-                            </div>
-                        </div>
-                        <!-- END ダウンロードメニュー -->
-                        
-                        <!-- BEGIN アップロードメニュー -->
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
-                                <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
-                                <a class="dropdown-item" href="">公共土木調査票</a>
-                                <a class="dropdown-item" href="">公益事業調査票</a>
-                            </div>
-                        </div>
-                        <!-- END アップロードメニュー -->
-                    </div>
-                    <!-- END ドロップダウンメニュー -->
-                </div>
-                <!-- END 行 -->
-                
-                <!-- BEGIN 行 -->
-                <div class="row">
-                    <!-- BEGIN 列 -->
-                    <div class="col">
-                        <!-- BEGIN カード -->
-                        <div class="card">
-                            <!-- BEGIN カードヘッダ -->
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col text-start">
-                                        o-okada
-                                    </div>
-                                    <div class="col">
-                                    </div>
-                                    <div class="col text-end">
-                                        <a href="#" onclick="location.reload();">表示更新</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END カードヘッダ -->
-                            
-                            <!-- BEGIN カード本体 -->
-                            {% if type_code == "ippan" %}
-                            <div class="card-body">
-                                <div class="table-responsive overflow-auto" style="">
-                                    <table class="table">
-                                        <tr>
-                                            <td colspan="8">
-                                                <a href="/P0100File/">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                                    </svg>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        {% for suigai in suigai_list %}
-                                        <tr>
-                                            <td class="text-start">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a href="/P0100File/type/ippan/ken/{{ suigai.0.ken_code }}/">{{ suigai.0.ken_name }}: {{ suigai.0.ken_code }}</a>
-                                            </td>
-                                            <td class="text-end">
-                                                {% if suigai.0.committed_at is None %}
-                                                {% else %}
-                                                コミット日時 {{ suigai.0.committed_at }}
-                                                {% endif %}
-                                            <td>
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                </div>
-                            </div>
-                            
-                            {% elif type_code == "area" %}
-                            <div class="card-body">
-                                <div class="table-responsive overflow-auto" style="">
-                                    <table class="table">
-                                        <tr>
-                                            <td colspan="8">
-                                                <a href="/P0100File/">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                                    </svg>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        {% for area in area_list %}
-                                        <tr>
-                                            <td class="text-start">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                                </svg>&nbsp;&nbsp;<a href="/P0100File/type/area/ken/{{ area.0.ken_code }}/">{{ area.0.ken_name }}: {{ area.0.ken_code }}</a>
-                                            </td>
-                                            <td class="text-end">
-                                                {% if area.0.committed_at is None %}
-                                                {% else %}
-                                                コミット日時 {{ area.0.committed_at }}
-                                                {% endif %}
-                                            <td>
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                </div>
-                            </div>
-                            {% elif type_code == "kokyo" %}
-                            {% elif type_code == "koeki" %}
-                            {% endif %}
-                            <!-- END カード本体 -->
-                        </div>
-                        <!-- END カード -->
-                    </div>
-                    <!-- END 列 -->
-                </div>
-                <!-- END 行 -->
-            </div>
-            <!-- END 左列 -->
-                    
-            <!-- BEGIN 右列 -->
-            <!--<div class="col-sm-3">-->
-                <!-- BEGIN バッジ -->
-            <!--    <button type="button" class="btn btn-danger mb-3">-->
-            <!--        失敗 <div class="badge bg-light text-dark">{{ feedback_count }}</div>-->
-            <!--    </button>-->
-            <!--    <button type="button" class="btn btn-warning mb-3">-->
-            <!--        警告 <div class="badge bg-light text-dark">1</div>-->
-            <!--    </button>-->
-            <!--    <button type="button" class="btn btn-success mb-3">-->
-            <!--        成功 <div class="badge bg-light text-dark">{{ approval_count }}</div>-->
-            <!--    </button>-->
-                <!-- END バッジ -->
-                <!-- BEGIN カード -->
-            <!--    <div class="card mb-3 border-0">-->
-            <!--        <div class="card-header border-0 bg-white">-->
-            <!--        失敗-->
-            <!--        </div>-->
-            <!--        <div class="card-body border-bottom bg-white">-->
-            <!--            {% for feedback in feedback_list %}-->
-            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
-            <!--            {% endfor %}-->
-            <!--        </div>-->
-            <!--    </div>-->
-                <!-- END カード -->
-                <!-- BEGIN カード -->
-            <!--    <div class="card mb-3 border-0">-->
-            <!--        <div class="card-header border-0 bg-white">-->
-            <!--        警告-->
-            <!--        </div>-->
-            <!--        <div class="card-body border-bottom bg-white">-->
-            <!--            {% for feedback in feedback_list %}-->
-            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
-            <!--            {% endfor %}-->
-            <!--        </div>-->
-            <!--    </div>-->
-                <!-- END カード -->
-                <!-- BEGIN カード -->
-            <!--    <div class="card mb-3 border-0">-->
-            <!--        <div class="card-header border-0 bg-white">-->
-            <!--        成功・承認待ち-->
-            <!--        </div>-->
-            <!--        <div class="card-body bg-white">-->
-            <!--            {% for feedback in feedback_list %}-->
-            <!--            <div>{{ feedback.feedback_id }} : {{ feedback.suigai_id }} : {{ feedback.action_code }} : {{ feedback.status_code }}</div>-->
-            <!--            {% endfor %}-->
-            <!--        </div>-->
-            <!--    </div>-->
-                <!-- END カード -->
-            <!--</div>-->
-            <!-- END 右列 -->
+    <!-- BEGIN 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN パンくずリスト -->
+        <div class="col-6 text-start">
+            {% if type_code == "ippan" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>
+            {% elif type_code == "area" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 水害区域図 /</h5>
+            {% elif type_code == "kokyo" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公共土木調査票 /</h5>
+            {% elif type_code == "koeki" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公益事業調査票 /</h5>
+            {% endif %}
         </div>
-        <!-- END 行 -->
+        <!-- END パンくずリスト -->
+        
+        <!-- BEGIN ドロップダウンメニュー -->
+        <div class="col-6 text-end">
+            <!-- BEGIN ダウンロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                <div class="dropdown-menu">
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+                </div>
+            </div>
+            <!-- END ダウンロードメニュー -->
+            
+            <!-- BEGIN アップロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
+                    <a class="dropdown-item" href="">公共土木調査票</a>
+                    <a class="dropdown-item" href="">公益事業調査票</a>
+                </div>
+            </div>
+            <!-- END アップロードメニュー -->
+        </div>
+        <!-- END ドロップダウンメニュー -->
     </div>
-    <!-- END コンテナ -->
+    <!-- END 行 -->
+    
+    {% if type_code == "ippan" %}
+    <!-- BEGIN IPPAN 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN IPPAN 列 -->
+        <div class="col">
+            <!-- BEGIN IPPAN カード -->
+            <div class="card">
+                <!-- BEGIN IPPAN カードヘッダ -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">
+                            o-okada
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col text-end">
+                            <a href="#" onclick="location.reload();">表示更新</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END IPPAN カードヘッダ -->
+                
+                <!-- BEGIN IPPAN カード本体 -->
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto" style="">
+                        <table class="table">
+                            <!-- BEGIN IPPAN 戻るリンク -->
+                            <tr>
+                                <td colspan="8">
+                                    <a href="/P0100File/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- END IPPAN 戻るリンク -->
+                            
+                            <!-- BEGIN IPPAN 都道府県一覧 -->
+                            {% for suigai in suigai_list %}
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/ippan/ken/{{ suigai.0.ken_code }}/">{{ suigai.0.ken_name }}: {{ suigai.0.ken_code }}</a>
+                                </td>
+                                <td class="text-end">
+                                    {% if suigai.0.committed_at is None %}
+                                    {% else %}
+                                    コミット日時 {{ suigai.0.committed_at }}
+                                    {% endif %}
+                                <td>
+                            </tr>
+                            {% endfor %}
+                            <!-- END IPPAN 都道府県一覧 -->
+                        </table>
+                    </div>
+                </div>
+                <!-- END IPPAN カード本体 -->
+            </div>
+            <!-- END IPPAN カード -->
+        </div>
+        <!-- END IPPAN 列 -->
+    </div>
+    <!-- END IPPAN 行 -->
+            
+    {% elif type_code == "area" %}
+    <!-- BEGIN 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN 列 -->
+        <div class="col">
+            <!-- BEGIN AREA カード -->
+            <div class="card">
+                <!-- BEGIN AREA カードヘッダ -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">
+                            o-okada
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col text-end">
+                            <a href="#" onclick="location.reload();">表示更新</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END AREA カードヘッダ -->
+                
+                <!-- BEGIN AREA カード本体 -->
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto" style="">
+                        <table class="table">
+                            <!-- BEGIN AREA 戻るリンク -->
+                            <tr>
+                                <td colspan="8">
+                                    <a href="/P0100File/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- END AREA 戻るリンク -->
+                            
+                            <!-- BEGIN AREA 都道府県一覧 -->
+                            {% for area in area_list %}
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/area/ken/{{ area.0.ken_code }}/">{{ area.0.ken_name }}: {{ area.0.ken_code }}</a>
+                                </td>
+                                <td class="text-end">
+                                    {% if area.0.committed_at is None %}
+                                    {% else %}
+                                    コミット日時 {{ area.0.committed_at }}
+                                    {% endif %}
+                                <td>
+                            </tr>
+                            {% endfor %}
+                            <!-- END AREA 都道府県一覧 -->
+                        </table>
+                    </div>
+                </div>
+                <!-- END AREA カード本体 -->
+            </div>
+            <!-- END AREA カード -->
+        </div>
+        <!-- END AREA 列 -->
+    </div>
+    <!-- END AREA 行 -->
+
+    {% elif type_code == "kokyo" %}
+    <!-- BEGIN KOKYO 行 -->
+    <!-- END KOKYO 行 -->
+    
+    {% elif type_code == "koeki" %}
+    <!-- BEGIN KOEKI 行 -->
+    <!-- END KOEKI 行 -->
+    {% endif %}
 
     <!-- BEGIN コンテナ -->
     <!--<div class="container mb-3">-->

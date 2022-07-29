@@ -15,6 +15,7 @@ urlpatterns = [
     path('P0300ExcelUpload/', include('P0300ExcelUpload.urls')),
     path('P0300AreaUpload/', include('P0300AreaUpload.urls')),
     path('P0300AreaWeather/', include('P0300AreaWeather.urls')),
+    path('P0300AreaEdit/', include('P0300AreaEdit.urls')),
 
     ### Online Applications
     path('P0400OnlineDisplay/', include('P0400OnlineDisplay.urls')),

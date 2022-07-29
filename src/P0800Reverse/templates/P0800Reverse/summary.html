@@ -263,7 +263,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>延床面積(逆計算)</strong>&nbsp;&nbsp;[ = 家屋被害額(集計DB) &divide; (都道府県ごとの家屋評価額(マスタDB) &times; 浸水または土砂、地盤勾配、浸水深ごとの家屋被害率(マスタDB)) ]
+                    <strong class="me-2">延床面積(逆計算)</strong>[ = 家屋被害額(集計DB) &divide; (都道府県ごとの家屋評価額(マスタDB) &times; 浸水または土砂、地盤勾配、浸水深ごとの家屋被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -297,8 +297,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.floor_area_lv00_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_lv00 }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_lv00_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_lv00|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_lv00_reverse_house_summary == None or ippan.floor_area_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -322,8 +322,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.floor_area_lv01_49_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_lv01_49 }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_lv01_49_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_lv01_49_reverse_house_summary == None or ippan.floor_area_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -347,8 +347,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.floor_area_lv50_99_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_lv50_99 }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_lv50_99_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_lv50_99_reverse_house_summary == None or ippan.floor_area_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -372,8 +372,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.floor_area_lv100_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_lv100 }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_lv100_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_lv100|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_lv100_reverse_house_summary == None or ippan.floor_area_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -397,8 +397,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.floor_area_half_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_half }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv200_300 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_half_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_half|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv200_300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_half|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_half_reverse_house_summary == None or ippan.floor_area_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -422,8 +422,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.floor_area_full_reverse_house_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_summary_full }} &divide; ({{ ippan.house_asset }} &times; {{ ippan.house_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.floor_area_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.floor_area_full_reverse_house_summary|floatformat:2 }}</strong>[ = {{ ippan.house_summary_full|floatformat:2 }} &divide; ({{ ippan.house_asset|floatformat:2 }} &times; {{ ippan.house_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.floor_area_full|floatformat:2 }}</strong></td>
                                     {% if ippan.floor_area_full_reverse_house_summary == None or ippan.floor_area_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -456,7 +456,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>被災世帯数(逆計算)</strong>&nbsp;&nbsp;[ = 家庭用品自動車以外被害額(集計DB) &divide; (家庭用品自動車以外所有額(マスタDB) &times; 浸水または土砂、浸水深ごとの家庭用品自動車以外被害率(マスタDB)) ]
+                    <strong class="me-2">被災世帯数(逆計算)</strong>[ = 家庭用品自動車以外被害額(集計DB) &divide; (家庭用品自動車以外所有額(マスタDB) &times; 浸水または土砂、浸水深ごとの家庭用品自動車以外被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -490,8 +490,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.family_lv00_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_lv00 }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv00_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_lv00|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv00_reverse_household_summary == None or ippan.family_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -515,8 +515,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.family_lv01_49_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_lv01_49 }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv01_49_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv01_49_reverse_household_summary == None or ippan.family_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -540,8 +540,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.family_lv50_99_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_lv50_99 }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv50_99_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv50_99_reverse_household_summary == None or ippan.family_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -565,8 +565,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.family_lv100_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_lv100 }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv100_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_lv100|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv100_reverse_household_summary == None or ippan.family_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -590,8 +590,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.family_half_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_half }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv200_300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_half_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_half|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv200_300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_half|floatformat:2 }}</strong></td>
                                     {% if ippan.family_half_reverse_household_summary == None or ippan.family_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -615,8 +615,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.family_full_reverse_household_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.household_summary_full }} &divide; ({{ ippan.household_asset }} &times; {{ ippan.household_rate_lv200_300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_full_reverse_household_summary|floatformat:2 }}</strong>[ = {{ ippan.household_summary_full|floatformat:2 }} &divide; ({{ ippan.household_asset|floatformat:2 }} &times; {{ ippan.household_rate_lv200_300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_full|floatformat:2 }}</strong></td>
                                     {% if ippan.family_full_reverse_household_summary == None or ippan.family_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -649,7 +649,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>被災世帯数(逆計算)</strong>&nbsp;&nbsp;[ = 家庭用品自動車被害額(集計DB) &divide; (家庭用品自動車所有額(マスタDB) &times; 浸水深ごとの家庭用品自動車被害率(マスタDB)) ]
+                    <strong class="me-2">被災世帯数(逆計算)</strong>[ = 家庭用品自動車被害額(集計DB) &divide; (家庭用品自動車所有額(マスタDB) &times; 浸水深ごとの家庭用品自動車被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -683,8 +683,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.family_lv00_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_lv00 }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv00_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_lv00|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv00_reverse_car_summary == None or ippan.family_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -708,8 +708,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.family_lv01_49_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_lv01_49 }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv01_49_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv01_49_reverse_car_summary == None or ippan.family_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -733,8 +733,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.family_lv50_99_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_lv50_99 }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv50_99_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv50_99_reverse_car_summary == None or ippan.family_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -758,8 +758,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.family_lv100_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_lv100 }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv100_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_lv100|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv100_reverse_car_summary == None or ippan.family_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -783,8 +783,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.family_half_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_half }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv200_300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_half_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_half|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv200_300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_half|floatformat:2 }}</strong></td>
                                     {% if ippan.family_half_reverse_car_summary == None or ippan.family_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -808,8 +808,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.family_full_reverse_car_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.car_summary_full }} &divide; ({{ ippan.car_asset }} &times; {{ ippan.car_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_full_reverse_car_summary|floatformat:2 }}</strong>[ = {{ ippan.car_summary_full|floatformat:2 }} &divide; ({{ ippan.car_asset|floatformat:2 }} &times; {{ ippan.car_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_full|floatformat:2 }}</strong></td>
                                     {% if ippan.family_full_reverse_car_summary == None or ippan.family_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -842,7 +842,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="accordion_three">
                 <div class="card-header">
-                    <strong>被災世帯数(逆計算)</strong>&nbsp;&nbsp;[ = 家庭応急対策費_代替活動費(集計DB) &divide; 当該浸水深の代替活動費(マスタDB) ]
+                    <strong class="me-2">被災世帯数(逆計算)</strong>[ = 家庭応急対策費_代替活動費(集計DB) &divide; 当該浸水深の代替活動費(マスタDB) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -876,8 +876,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.family_lv00_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_lv00 }} &divide; {{ ippan.house_alt_lv00 }} ]</td>
-                                    <td><strong>{{ ippan.family_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv00_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_lv00|floatformat:2 }} &divide; {{ ippan.house_alt_lv00|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv00_reverse_house_alt_summary == None or ippan.family_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -901,8 +901,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.family_lv01_49_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_lv01_49 }} &divide; {{ ippan.house_alt_lv00_50 }} ]</td>
-                                    <td><strong>{{ ippan.family_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv01_49_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_lv01_49|floatformat:2 }} &divide; {{ ippan.house_alt_lv00_50|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv01_49_reverse_house_alt_summary == None or ippan.family_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -926,8 +926,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.family_lv50_99_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_lv50_99 }} &divide; {{ ippan.house_alt_lv50_100 }} ]</td>
-                                    <td><strong>{{ ippan.family_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv50_99_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_lv50_99|floatformat:2 }} &divide; {{ ippan.house_alt_lv50_100|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv50_99_reverse_house_alt_summary == None or ippan.family_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -951,8 +951,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.family_lv100_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_lv100 }} &divide; {{ ippan.house_alt_lv100_200 }} ]</td>
-                                    <td><strong>{{ ippan.family_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv100_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_lv100|floatformat:2 }} &divide; {{ ippan.house_alt_lv100_200|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv100_reverse_house_alt_summary == None or ippan.family_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -976,8 +976,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.family_half_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_half }} &divide; {{ ippan.house_alt_lv200_300 }} ]</td>
-                                    <td><strong>{{ ippan.family_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_half_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_half|floatformat:2 }} &divide; {{ ippan.house_alt_lv200_300|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_half|floatformat:2 }}</strong></td>
                                     {% if ippan.family_half_reverse_house_alt_summary == None or ippan.family_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1001,8 +1001,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.family_full_reverse_house_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_alt_summary_full }} &divide; {{ ippan.house_alt_lv300 }} ]</td>
-                                    <td><strong>{{ ippan.family_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_full_reverse_house_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.house_alt_summary_full|floatformat:2 }} &divide; {{ ippan.house_alt_lv300|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.family_full|floatformat:2 }}</strong></td>
                                     {% if ippan.family_full_reverse_house_alt_summary == None or ippan.family_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1035,7 +1035,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>被災世帯数(逆計算)</strong>&nbsp;&nbsp;[ = 当該浸水深の家庭応急対策費_清掃費(集計DB) &divide; (清掃労働単価(マスタDB) &times; 当該浸水深の清掃日数(マスタDB)) ]
+                    <strong class="me-2">被災世帯数(逆計算)</strong>[ = 当該浸水深の家庭応急対策費_清掃費(集計DB) &divide; (清掃労働単価(マスタDB) &times; 当該浸水深の清掃日数(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1069,8 +1069,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.family_lv00_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_lv00 }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv00_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_lv00|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv00_reverse_house_clean_summary == None or ippan.family_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1094,8 +1094,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.family_lv01_49_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_lv01_49 }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv01_49_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv01_49_reverse_house_clean_summary == None or ippan.family_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1119,8 +1119,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.family_lv50_99_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_lv50_99 }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv50_99_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv50_99_reverse_house_clean_summary == None or ippan.family_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1144,8 +1144,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.family_lv100_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_lv100 }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.family_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_lv100_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_lv100|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.family_lv100_reverse_house_clean_summary == None or ippan.family_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1169,8 +1169,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.family_half_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_half }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv200_300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_half_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_half|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv200_300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_half|floatformat:2 }}</strong></td>
                                     {% if ippan.family_half_reverse_house_clean_summary == None or ippan.family_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1194,8 +1194,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.family_full_reverse_house_clean_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.house_clean_summary_full }} &divide; ({{ ippan.house_clean_unit_cost }} &times; {{ ippan.house_clean_days_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.family_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.family_full_reverse_house_clean_summary|floatformat:2 }}</strong>[ = {{ ippan.house_clean_summary_full|floatformat:2 }} &divide; ({{ ippan.house_clean_unit_cost|floatformat:2 }} &times; {{ ippan.house_clean_days_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.family_full|floatformat:2 }}</strong></td>
                                     {% if ippan.family_full_reverse_house_clean_summary == None or ippan.family_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1228,7 +1228,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>事業所従業者数(逆計算)</strong>&nbsp;&nbsp;[ = 事業所被害額_償却資産被害額(集計DB) &divide; (事業所の産業区分ごとの償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB)) ]
+                    <strong class="me-2">事業所従業者数(逆計算)</strong>[ = 事業所被害額_償却資産被害額(集計DB) &divide; (事業所の産業区分ごとの償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1262,8 +1262,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.employee_lv00_reverse_office_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_dep_summary_lv00 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv00_reverse_office_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.office_dep_summary_lv00|floatformat:2 }} &divide; ({{ ippan.office_dep_asset|floatformat:2 }} &times; {{ ippan.office_dep_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv00_reverse_office_dep_summary == None or ippan.employee_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1287,8 +1287,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.employee_lv01_49_reverse_office_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_dep_summary_lv01_49 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv01_49_reverse_office_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.office_dep_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.office_dep_asset|floatformat:2 }} &times; {{ ippan.office_dep_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv01_49_reverse_office_dep_summary == None or ippan.employee_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1312,8 +1312,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.employee_lv50_99_reverse_office_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_dep_summary_lv50_99 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv50_99_reverse_office_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.office_dep_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.office_dep_asset|floatformat:2 }} &times; {{ ippan.office_dep_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv50_99_reverse_office_dep_summary == None or ippan.employee_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1337,8 +1337,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.employee_lv100_reverse_office_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_dep_summary_lv100 }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv100_reverse_office_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.office_dep_summary_lv100|floatformat:2 }} &divide; ({{ ippan.office_dep_asset|floatformat:2 }} &times; {{ ippan.office_dep_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv100_reverse_office_dep_summary == None or ippan.employee_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1362,8 +1362,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.employee_full_reverse_office_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_dep_summary_full }} &divide; ({{ ippan.office_dep_asset }} &times; {{ ippan.office_dep_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_full_reverse_office_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.office_dep_summary_full|floatformat:2 }} &divide; ({{ ippan.office_dep_asset|floatformat:2 }} &times; {{ ippan.office_dep_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_full|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_full_reverse_office_dep_summary == None or ippan.employee_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1397,7 +1397,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>事業所従業者数(逆計算)</strong>&nbsp;&nbsp;[ = 事業所被害額_在庫資産額被害額(集計DB) &divide; (事業所の産業区分ごとの在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)) ]
+                    <strong class="me-2">事業所従業者数(逆計算)</strong>[ = 事業所被害額_在庫資産額被害額(集計DB) &divide; (事業所の産業区分ごとの在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1431,8 +1431,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.employee_lv00_reverse_office_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_inv_summary_lv00 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv00_reverse_office_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.office_inv_summary_lv00|floatformat:2 }} &divide; ({{ ippan.office_inv_asset|floatformat:2 }} &times; {{ ippan.office_inv_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv00_reverse_office_inv_summary == None or ippan.employee_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1456,8 +1456,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.employee_lv01_49_reverse_office_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_inv_summary_lv01_49 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv01_49_reverse_office_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.office_inv_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.office_inv_asset|floatformat:2 }} &times; {{ ippan.office_inv_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv01_49_reverse_office_inv_summary == None or ippan.employee_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1481,8 +1481,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.employee_lv50_99_reverse_office_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_inv_summary_lv50_99 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv50_99_reverse_office_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.office_inv_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.office_inv_asset|floatformat:2 }} &times; {{ ippan.office_inv_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv50_99_reverse_inv_summary == None or ippan.employee_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1506,8 +1506,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.employee_lv100_reverse_office_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_inv_summary_lv100 }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv100_reverse_office_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.office_inv_summary_lv100|floatformat:2 }} &divide; ({{ ippan.office_inv_asset|floatformat:2 }} &times; {{ ippan.office_inv_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv100_reverse_office_inv_summary == None or ippan.employee_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1531,8 +1531,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.employee_full_reverse_office_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_inv_summary_full }} &divide; ({{ ippan.office_inv_asset }} &times; {{ ippan.office_inv_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.employee_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_full_reverse_office_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.office_inv_summary_full|floatformat:2 }} &divide; ({{ ippan.office_inv_asset|floatformat:2 }} &times; {{ ippan.office_inv_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_full|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_full_reverse_office_inv_summary == None or ippan.employee_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1565,7 +1565,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>事業所従業者数(逆計算)</strong>&nbsp;&nbsp;[ = 事業所被害額_営業停止に伴う被害額(集計DB) &divide; (浸水深ごとの営業停止日数(マスタDB) &times; 事業所の産業区分ごとの付加価値額(マスタDB)) ]
+                    <strong class="me-2">事業所従業者数(逆計算)</strong>[ = 事業所被害額_営業停止に伴う被害額(集計DB) &divide; (浸水深ごとの営業停止日数(マスタDB) &times; 事業所の産業区分ごとの付加価値額(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1599,8 +1599,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.employee_lv00_reverse_office_sus_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_sus_summary_lv00 }} &divide; ({{ ippan.office_sus_days_lv00 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv00_reverse_office_sus_summary|floatformat:2 }}</strong>[ = {{ ippan.office_sus_summary_lv00|floatformat:2 }} &divide; ({{ ippan.office_sus_days_lv00|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv00_reverse_office_sus_summary == None or ippan.employee_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1624,8 +1624,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.employee_lv01_49_reverse_office_sus_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_sus_summary_lv01_49 }} &divide; ({{ ippan.office_sus_days_lv00_50 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv01_49_reverse_office_sus_summary|floatformat:2 }}</strong>[ = {{ ippan.office_sus_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.office_sus_days_lv00_50|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv01_49_reverse_office_sus_summary == None or ippan.employee_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1649,8 +1649,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.employee_lv50_99_reverse_office_sus_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_sus_summary_lv50_99 }} &divide; ({{ ippan.office_sus_days_lv50_100 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv50_99_reverse_office_sus_summary|floatformat:2 }}</strong>[ = {{ ippan.office_sus_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.office_sus_days_lv50_100|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv50_99_reverse_office_sus_summary == None or ippan.employee_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1674,8 +1674,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.employee_lv100_reverse_office_sus_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_sus_summary_lv100 }} &divide; ({{ ippan.office_sus_days_lv100_200 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv100_reverse_office_sus_summary|floatformat:2 }}</strong>[ = {{ ippan.office_sus_summary_lv100|floatformat:2 }} &divide; ({{ ippan.office_sus_days_lv100_200|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv100_reverse_office_sus_summary == None or ippan.employee_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1699,8 +1699,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.employee_full_reverse_office_sus_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_sus_summary_full }} &divide; ({{ ippan.office_sus_days_lv300 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_full_reverse_office_sus_summary|floatformat:2 }}</strong>[ = {{ ippan.office_sus_summary_full|floatformat:2 }} &divide; ({{ ippan.office_sus_days_lv300|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_full|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_full_reverse_office_sus_summary == None or ippan.employee_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1733,7 +1733,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>事業所従業者数(逆計算)</strong>&nbsp;&nbsp;[ = 事業所被害額_営業停滞に伴う被害額(集計DB) &divide; ((浸水深ごとの営業停滞日数(マスタDB) &divide; 2) &times; 事業所の産業区分ごとの付加価値額(マスタDB)) ]
+                    <strong class="me-2">事業所従業者数(逆計算)</strong>[ = 事業所被害額_営業停滞に伴う被害額(集計DB) &divide; ((浸水深ごとの営業停滞日数(マスタDB) &divide; 2) &times; 事業所の産業区分ごとの付加価値額(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1767,8 +1767,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.employee_lv00_reverse_office_stg_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_stg_summary_lv00 }} &divide; ({{ ippan.office_stg_days_lv00 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv00_reverse_office_stg_summary|floatformat:2 }}</strong>[ = {{ ippan.office_stg_summary_lv00|floatformat:2 }} &divide; ({{ ippan.office_stg_days_lv00|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv00_reverse_office_stg_summary == None or ippan.employee_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1792,8 +1792,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.employee_lv01_49_reverse_office_stg_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_stg_summary_lv01_49 }} &divide; ({{ ippan.office_stg_days_lv00_50 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv01_49_reverse_office_stg_summary|floatformat:2 }}</strong>[ = {{ ippan.office_stg_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.office_stg_days_lv00_50|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv01_49_reverse_office_stg_summary == None or ippan.employee_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1817,8 +1817,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.employee_lv50_99_reverse_office_stg_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_stg_summary_lv50_99 }} &divide; ({{ ippan.office_stg_days_lv50_100 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv50_99_reverse_office_stg_summary|floatformat:2 }}</strong>[ = {{ ippan.office_stg_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.office_stg_days_lv50_100|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv50_99_reverse_office_stg_summary == None or ippan.employee_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1842,8 +1842,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.employee_lv100_reverse_office_stg_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_stg_summary_lv100 }} &divide; ({{ ippan.office_stg_days_lv100_200 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_lv100_reverse_office_stg_summary|floatformat:2 }}</strong>[ = {{ ippan.office_stg_summary_lv100|floatformat:2 }} &divide; ({{ ippan.office_stg_days_lv100_200|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_lv100_reverse_office_stg_summary == None or ippan.employee_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1867,8 +1867,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.employee_full_reverse_office_stg_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_stg_summary_full }} &divide; ({{ ippan.office_stg_days_lv300 }} &times; {{ ippan.office_va_asset }}) ]</td>
-                                    <td><strong>{{ ippan.employee_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.employee_full_reverse_office_stg_summary|floatformat:2 }}</strong>[ = {{ ippan.office_stg_summary_full|floatformat:2 }} &divide; ({{ ippan.office_stg_days_lv300|floatformat:2 }} &times; {{ ippan.office_va_asset|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.employee_full|floatformat:2 }}</strong></td>
                                     {% if ippan.employee_full_reverse_office_stg_summary == None or ippan.employee_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1901,7 +1901,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>農漁家戸数(逆計算)</strong>&nbsp;&nbsp;[ = 農漁家被害額_償却資産被害額(集計DB) &divide; (農漁家の償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB)) ]
+                    <strong class="me-2">農漁家戸数(逆計算)</strong>[ = 農漁家被害額_償却資産被害額(集計DB) &divide; (農漁家の償却資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの償却資産被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -1935,8 +1935,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv00_reverse_farmer_fisher_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_dep_summary_lv00 }} &divide; ({{ ippan.farmer_fisher_dep_asset }} &times; {{ ippan.farmer_fisher_dep_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv00_reverse_farmer_fisher_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_dep_summary_lv00|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_dep_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_dep_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv00_reverse_farmer_fisher_dep_summary == None or ippan.farmer_fisher_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1960,8 +1960,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_dep_summary_lv01_49 }} &divide; ({{ ippan.farmer_fisher_dep_asset }} &times; {{ ippan.farmer_fisher_dep_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_dep_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_dep_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_dep_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_dep_summary == None or ippan.farmer_fisher_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -1985,8 +1985,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_dep_summary_lv50_99 }} &divide; ({{ ippan.farmer_fisher_dep_asset }} &times; {{ ippan.farmer_fisher_dep_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_dep_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_dep_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_dep_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_dep_summary == None or ippan.farmer_fisher_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2010,8 +2010,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv100_reverse_farmer_fisher_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_dep_summary_lv100 }} &divide; ({{ ippan.farmer_fisher_dep_asset }} &times; {{ ippan.farmer_fisher_dep_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv100_reverse_farmer_fisher_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_dep_summary_lv100|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_dep_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_dep_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv100_reverse_farmer_fisher_dep_summary == None or ippan.farmer_fisher_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2035,8 +2035,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.farmer_fisher_full_reverse_farmer_fisher_dep_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_dep_summary_full }} &divide; ({{ ippan.farmer_fisher_dep_asset }} &times; {{ ippan.farmer_fisher_dep_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_full_reverse_farmer_fisher_dep_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_dep_summary_full|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_dep_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_dep_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_full|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_full_reverse_farmer_fisher_dep_summary == None or ippan.farmer_fisher_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2069,7 +2069,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>農漁家戸数(逆計算)</strong>&nbsp;&nbsp;[ = 農漁家被害額_在庫資産被害額(集計DB) &divide; (農漁家の在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)) ]
+                    <strong class="me-2">農漁家戸数(逆計算)</strong>[ = 農漁家被害額_在庫資産被害額(集計DB) &divide; (農漁家の在庫資産額(マスタDB) &times; 浸水または土砂、浸水深ごとの在庫資産被害率(マスタDB)) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -2103,8 +2103,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv00_reverse_farmer_fisher_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_inv_summary_lv00 }} &divide; ({{ ippan.farmer_fisher_inv_asset }} &times; {{ ippan.farmer_fisher_inv_rate_lv00 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv00_reverse_farmer_fisher_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_inv_summary_lv00|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_inv_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_inv_rate_lv00|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv00_reverse_farmer_fisher_inv_summary == None or ippan.farmer_fisher_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2128,8 +2128,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_inv_summary_lv01_49 }} &divide; ({{ ippan.farmer_fisher_inv_asset }} &times; {{ ippan.farmer_fisher_inv_rate_lv00_50 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_inv_summary_lv01_49|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_inv_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_inv_rate_lv00_50|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv01_49_reverse_farmer_fisher_inv_summary == None or ippan.farmer_fisher_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2153,8 +2153,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_inv_summary_lv50_99 }} &divide; ({{ ippan.farmer_fisher_inv_asset }} &times; {{ ippan.farmer_fisher_inv_rate_lv50_100 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_inv_summary_lv50_99|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_inv_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_inv_rate_lv50_100|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv50_99_reverse_farmer_fisher_inv_summary == None or ippan.farmer_fisher_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2178,8 +2178,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>1m以上・半壊</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv100_reverse_farmer_fisher_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_inv_summary_lv100 }} &divide; ({{ ippan.farmer_fisher_inv_asset }} &times; {{ ippan.farmer_fisher_inv_rate_lv100_200 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_lv100_reverse_farmer_fisher_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_inv_summary_lv100|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_inv_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_inv_rate_lv100_200|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_lv100_reverse_farmer_fisher_inv_summary == None or ippan.farmer_fisher_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2203,8 +2203,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊・流失</td>
-                                    <td><strong>{{ ippan.farmer_fisher_full_reverse_farmer_fisher_inv_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.farmer_fisher_inv_summary_full }} &divide; ({{ ippan.farmer_fisher_inv_asset }} &times; {{ ippan.farmer_fisher_inv_rate_lv300 }}) ]</td>
-                                    <td><strong>{{ ippan.farmer_fisher_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.farmer_fisher_full_reverse_farmer_fisher_inv_summary|floatformat:2 }}</strong>[ = {{ ippan.farmer_fisher_inv_summary_full|floatformat:2 }} &divide; ({{ ippan.farmer_fisher_inv_asset|floatformat:2 }} &times; {{ ippan.farmer_fisher_inv_rate_lv300|floatformat:2 }}) ]</td>
+                                    <td><strong>{{ ippan.farmer_fisher_full|floatformat:2 }}</strong></td>
                                     {% if ippan.farmer_fisher_full_reverse_farmer_fisher_inv_summary == None or ippan.farmer_fisher_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2237,7 +2237,7 @@
         <div class="col-12 col-xl-12">
             <div class="card" id="card_three">
                 <div class="card-header">
-                    <strong>被災事業所数(逆計算)</strong>&nbsp;&nbsp;[ = 事業所応急対策費_代替活動費(集計DB) &divide; 浸水深の代替活動費(マスタDB) ]
+                    <strong class="me-2">被災事業所数(逆計算)</strong>[ = 事業所応急対策費_代替活動費(集計DB) &divide; 浸水深の代替活動費(マスタDB) ]
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -2271,8 +2271,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>床下</td>
-                                    <td><strong>{{ ippan.office_lv00_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_lv00 }} &divide; {{ ippan.office_alt_lv00 }} ]</td>
-                                    <td><strong>{{ ippan.office_lv00 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_lv00_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_lv00|floatformat:2 }} &divide; {{ ippan.office_alt_lv00|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_lv00|floatformat:2 }}</strong></td>
                                     {% if ippan.office_lv00_reverse_office_alt_summary == None or ippan.office_lv00 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2296,8 +2296,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>01から49cm</td>
-                                    <td><strong>{{ ippan.office_lv01_49_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_lv01_49 }} &divide; {{ ippan.office_alt_lv00_50 }} ]</td>
-                                    <td><strong>{{ ippan.office_lv01_49 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_lv01_49_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_lv01_49|floatformat:2 }} &divide; {{ ippan.office_alt_lv00_50|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_lv01_49|floatformat:2 }}</strong></td>
                                     {% if ippan.office_lv01_49_reverse_office_alt_summary == None or ippan.office_lv01_49 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2321,8 +2321,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>50から99cm</td>
-                                    <td><strong>{{ ippan.office_lv50_99_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_lv50_99 }} &divide; {{ ippan.office_alt_lv50_100 }} ]</td>
-                                    <td><strong>{{ ippan.office_lv50_99 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_lv50_99_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_lv50_99|floatformat:2 }} &divide; {{ ippan.office_alt_lv50_100|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_lv50_99|floatformat:2 }}</strong></td>
                                     {% if ippan.office_lv50_99_reverse_office_alt_summary == None or ippan.office_lv50_99 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2346,8 +2346,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>100cm以上</td>
-                                    <td><strong>{{ ippan.office_lv100_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_lv100 }} &divide; {{ ippan.office_alt_lv100_200 }} ]</td>
-                                    <td><strong>{{ ippan.office_lv100 }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_lv100_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_lv100|floatformat:2 }} &divide; {{ ippan.office_alt_lv100_200|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_lv100|floatformat:2 }}</strong></td>
                                     {% if ippan.office_lv100_reverse_office_alt_summary == None or ippan.office_lv100 == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2371,8 +2371,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>半壊</td>
-                                    <td><strong>{{ ippan.office_half_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_half }} &divide; {{ ippan.office_alt_lv200_300 }} ]</td>
-                                    <td><strong>{{ ippan.office_half }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_half_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_half|floatformat:2 }} &divide; {{ ippan.office_alt_lv200_300|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_half|floatformat:2 }}</strong></td>
                                     {% if ippan.office_half_reverse_office_alt_summary == None or ippan.office_half == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>
@@ -2396,8 +2396,8 @@
                                     <td>{{ ippan.underground_name }}:{{ ippan.underground_code }}</td>
                                     <td>{{ ippan.flood_sediment_name }}:{{ ippan.flood_sediment_code }}</td>
                                     <td>全壊</td>
-                                    <td><strong>{{ ippan.office_full_reverse_office_alt_summary }}</strong>&nbsp;&nbsp;[ = {{ ippan.office_alt_summary_full }} &divide; {{ ippan.office_alt_lv300 }} ]</td>
-                                    <td><strong>{{ ippan.office_full }}</strong></td>
+                                    <td><strong class="me-2">{{ ippan.office_full_reverse_office_alt_summary|floatformat:2 }}</strong>[ = {{ ippan.office_alt_summary_full|floatformat:2 }} &divide; {{ ippan.office_alt_lv300|floatformat:2 }} ]</td>
+                                    <td><strong>{{ ippan.office_full|floatformat:2 }}</strong></td>
                                     {% if ippan.office_full_reverse_office_alt_summary == None or ippan.office_full == None %}
                                         <td><label class="form-check-label" for="check_1">NA</label></td>
                                         <td><input class="form-check-input" type="checkbox" id="" name="check_1" value=""></td>

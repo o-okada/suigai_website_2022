@@ -120,29 +120,55 @@
     </nav>
     <!-- END ナビバー -->
 
-    <!-- BEGIN 画面名 -->
-    <!--<div class="container text-center mb-3">-->
-    <!--    <h3>自動集計・自動検証の状況</h3>-->
-    <!--</div>-->
-    <!-- END 画面名 -->
+    <!-- BEGIN 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN ドロップダウンメニュー -->
+        <div class="col text-end">
+            <!-- BEGIN ダウンロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                <div class="dropdown-menu">
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+                </div>
+            </div>
+            <!-- END ダウンロードメニュー -->
+            
+            <!-- BEGIN アップロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
+                    <a class="dropdown-item" href="">公共土木調査票</a>
+                    <a class="dropdown-item" href="">公益事業調査票</a>
+                </div>
+            </div>
+            <!-- END アップロードメニュー -->
+        </div>
+        <!-- END ドロップダウンメニュー -->
+    </div>
+    <!-- END 行 -->
 
     <!-- BEGIN 自動実行進捗状況 -->
-    <div class="row mb-3">
+    <div class="row mb-3 ms-1 me-1">
         <div class="col-12">
-            <!--<div class="table-responsive overflow-auto">-->
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A01<br>ダウンロード &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A02<br>アップロード &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A03<br>データ検証 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A04<br>差分検証 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A05<br>按分処理 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A06<br>データ検証 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A07<br>集計処理 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A08<br>データ検証 &gt;&gt;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A01<br>ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A02<br>アップロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A03<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A04<br>差分検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A05<br>按分処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A06<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A07<br>集計処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">A08<br>データ検証 &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:10%;">A99<br>マニュアル検証待ち</th>
                         </tr>
                     </thead>
@@ -406,7 +432,7 @@
     <!-- END 自動実行進捗状況 -->
 
     <!-- BEGIN 自動実行進捗状況 -->
-    <div class="row mb-3">
+    <div class="row mb-3 ms-1 me-1">
         <div class="col-12">
             <!--<div class="table-responsive overflow-auto">-->
             <div class="table-responsive">
@@ -414,10 +440,10 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B01<br>水害区域図 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B02<br>水害区域図貼付け &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B03<br>集計処理 &gt;&gt;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B04<br>データ検証 &gt;&gt;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">B01<br>水害区域図 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">B02<br>水害区域図貼付け &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">B03<br>集計処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:10%;">B04<br>データ検証 &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
                             <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
                             <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
