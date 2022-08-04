@@ -167,6 +167,14 @@ def index_view(request):
         connection_cursor = connection.cursor()
         try:
             connection_cursor.execute("""BEGIN""", [])
+
+            connection_cursor.execute("""
+                UPDATE TRIGGER SET 
+                    deleted_at=CURRENT_TIMESTAMP 
+                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('B02','B03','B04','B99'))
+                """, [
+                    city_code, 
+                ])
             
             if request.POST.get('area_id_hidden') is None and request.POST.get('weather_id_hidden') is None:
                 print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_1/6.', 'DEBUG')
@@ -200,12 +208,13 @@ def index_view(request):
                         weather_id=%s 
                     WHERE suigai_id=%s""", [area_id, weather_id, suigai_id, ])
 
-            ### トリガーテーブルにWF10水害区域図貼付けトリガーを実行済、成功として登録する。
+            ### トリガーテーブルにB02水害区域図貼付けトリガーを実行済、成功として登録する。
+            print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_5/6.', 'DEBUG')
             connection_cursor.execute("""
                 INSERT INTO TRIGGER (
                     trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
-                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, 
-                    city_code, download_file_path, download_file_name, upload_file_path, upload_file_name 
+                    published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
+                    download_file_path, download_file_name, upload_file_path, upload_file_name 
                 ) VALUES (
                     (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
                     %s, -- suigai_id 
@@ -234,13 +243,15 @@ def index_view(request):
                     '\n'.join(get_info_log()), ### integrity_ok 
                     '\n'.join(get_warn_log()), ### integrity_ng 
                     ken_code, ### ken_code 
-                    ciy_code, ### city_code 
+                    city_code, ### city_code 
                     None, ### download_file_path 
                     None, ### download_file_name 
                     None, ### upload_file_path 
                     None, ### upload_file_name 
                 ])
-            ### トリガーテーブルにWF11集計処理トリガーを未実行＝次回実行対象として登録する。
+
+            ### トリガーテーブルにB03集計処理トリガーを未実行＝次回実行対象として登録する。
+            print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_6/6.', 'DEBUG')
             connection_cursor.execute("""
                 INSERT INTO TRIGGER (
                     trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -281,6 +292,7 @@ def index_view(request):
                     None, ### upload_file_path 
                     None, ### upload_file_name 
                 ])
+            print_log('[DEBUG] P0300AreaWeather.index_view()関数 STEP 4_7/6.', 'DEBUG')
             ### transaction.commit()
             connection_cursor.execute("""COMMIT""", [])                    
         except:
@@ -322,18 +334,20 @@ def index_view(request):
                     KA1.kasen_name AS kasen_name, 
                     SG1.gradient_code AS gradient_code, 
                     GR1.gradient_name AS gradient_name, 
-                    SG1.residential_area AS residential_area, 
-                    SG1.agricultural_area AS agricultural_area, 
-                    SG1.underground_area AS underground_area, 
+                    CAST(SG1.residential_area AS NUMERIC(20,10)) AS residential_area, 
+                    CAST(SG1.agricultural_area AS NUMERIC(20,10)) AS agricultural_area, 
+                    CAST(SG1.underground_area AS NUMERIC(20,10)) AS underground_area, 
                     SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                     KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    SG1.crop_damage AS crop_damage, 
+                    CAST(SG1.crop_damage AS NUMERIC(20,10)) AS crop_damage, 
                     SG1.weather_id AS weather_id, 
                     WE1.weather_name AS weather_name, 
                     TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    SG1.file_path AS file_path, 
-                    SG1.file_name AS file_name, 
+                    SG1.upload_file_path AS upload_file_path, 
+                    SG1.upload_file_name AS upload_file_name, 
+                    SG1.summary_file_path AS summary_file_path, 
+                    SG1.summary_file_name AS summary_file_name, 
                     SG1.action_code AS action_code, 
                     AC1.action_name AS action_name, 
                     SG1.status_code AS status_code, 
@@ -366,8 +380,8 @@ def index_view(request):
                     KE1.ken_name AS ken_name, 
                     TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    AR1.file_path AS file_path, 
-                    AR1.file_name AS file_name, 
+                    AR1.upload_file_path AS upload_file_path, 
+                    AR1.upload_file_name AS upload_file_name, 
                     AR1.action_code AS action_code, 
                     AC1.action_name AS action_name, 
                     AR1.status_code AS status_code, 
@@ -466,18 +480,20 @@ def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
                     KA1.kasen_name AS kasen_name, 
                     SG1.gradient_code AS gradient_code, 
                     GR1.gradient_name AS gradient_name, 
-                    SG1.residential_area AS residential_area, 
-                    SG1.agricultural_area AS agricultural_area, 
-                    SG1.underground_area AS underground_area, 
+                    CAST(SG1.residential_area AS NUMERIC(20,10)) AS residential_area, 
+                    CAST(SG1.agricultural_area AS NUMERIC(20,10)) AS agricultural_area, 
+                    CAST(SG1.underground_area AS NUMERIC(20,10)) AS underground_area, 
                     SG1.kasen_kaigan_code AS kasen_kaigan_code, 
                     KK1.kasen_kaigan_name AS kasen_kaigan_name, 
-                    SG1.crop_damage AS crop_damage, 
+                    CAST(SG1.crop_damage AS NUMERIC(20,10)) AS crop_damage, 
                     SG1.weather_id AS weather_id, 
                     WE1.weather_name AS weather_name, 
                     TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    SG1.file_path AS file_path, 
-                    SG1.file_name AS file_name, 
+                    SG1.upload_file_path AS upload_file_path, 
+                    SG1.upload_file_name AS upload_file_name, 
+                    SG1.summary_file_path AS summary_file_path, 
+                    SG1.summary_file_name AS summary_file_name, 
                     SG1.action_code AS action_code, 
                     AC1.action_name AS action_name, 
                     SG1.status_code AS status_code, 
@@ -510,8 +526,8 @@ def type_ken_suigai_view(request, type_code, ken_code, suigai_id):
                     KE1.ken_name AS ken_name, 
                     TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    AR1.file_path AS file_path, 
-                    AR1.file_name AS file_name, 
+                    AR1.upload_file_path AS upload_file_path, 
+                    AR1.upload_file_name AS upload_file_name, 
                     AR1.action_code AS action_code, 
                     AC1.action_name AS action_name, 
                     AR1.status_code AS status_code, 

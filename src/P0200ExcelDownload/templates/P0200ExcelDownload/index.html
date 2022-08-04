@@ -51,16 +51,21 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <strong>ファイル</strong>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
-                        </ul>
+                    <!--<li class="nav-item dropdown">-->
+                    <!--    <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+                    <!--        <strong>ファイル</strong>-->
+                    <!--    </a>-->
+                    <!--    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>-->
+                    <!--    </ul>-->
+                    <!--</li>-->
+                    <!-- END ナビバー ファイルメニュー -->
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active cl-nav" style="border-bottom: 2px solid #0000EE;" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
                     <!-- END ナビバー ファイルメニュー -->
 
@@ -115,9 +120,39 @@
     <!-- END 画面名 -->
     
     <!-- BEGIN 検索とフィルタ -->
-    <div class="mb-3">
-        <label class="form-check-label ms-3 me-3">都道府県、市区町村、データの種類を選択してください。</label>
-        <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
+    <div class="row mb-3 ms-1 me-1">
+        <div class="col-6">
+            <label class="form-check-label ms-3 me-3">都道府県、市区町村、データの種類を選択してください。</label>
+            <button class="btn btn-secondary" type="button" id="button_all" name="button_all">全エリア・全拠点選択</button>
+        </div>
+        <!-- BEGIN ドロップダウンメニュー -->
+        <div class="col-6 text-end">
+            <!-- BEGIN ダウンロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
+                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+                </div>
+            </div>
+            <!-- END ダウンロードメニュー -->
+            
+            <!-- BEGIN アップロードメニュー -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
+                    <a class="dropdown-item" href="">公共土木調査票</a>
+                    <a class="dropdown-item" href="">公益事業調査票</a>
+                </div>
+            </div>
+            <!-- END アップロードメニュー -->
+        </div>
+        <!-- END ドロップダウンメニュー -->
     </div>
     <!-- END 検索とフィルタ -->
     
@@ -433,8 +468,18 @@
             {% else %}
             <option value="400">調査票_調査員用: suigai+ippan</option>
             {% endif %}
+            
+            {% if data_type == "401" %}
+            <option value="401" selected>調査票_市区町村担当者用: suigai+ippan</option>
+            {% else %}
             <option value="401">調査票_市区町村担当者用: suigai+ippan</option>
+            {% endif %}
+            
+            {% if data_type == "402" %}
+            <option value="402" selected>調査票_都道府県担当者用: suigai+ippan</option>
+            {% else %}
             <option value="402">調査票_都道府県担当者用: suigai+ippan</option>
+            {% endif %}
             
         </select>
     </div>
@@ -463,7 +508,7 @@
     <!-- BEGIN 隠しフォーム ※重要 -->
     <form method="POST" id="form_hidden" name="form_hidden">
         {% csrf_token %}
-        <input type="hidden" id="ken_code_hidden" name="ken_code_hidden">
+        <!--<input type="hidden" id="ken_code_hidden" name="ken_code_hidden">-->
         <input type="hidden" id="city_code_hidden" name="city_code_hidden">
     </form>
     <!-- END 隠しフォーム ※重要 -->
@@ -1160,7 +1205,7 @@
         }
         form_hidden.method = "POST";
         city_code_hidden.value = city_code_list;
-        ken_code_hidden.value = "01,";
+        //ken_code_hidden.value = "01,";
         
         if (form_select_category.value == 1) {
             window.location.href = "/P0200ExcelDownload/building/lock/1/";
@@ -1313,7 +1358,7 @@
         }
         form_hidden.method = "POST";
         city_code_hidden.value = city_code_list;
-        ken_code_hidden.value = "01,";
+        //ken_code_hidden.value = "01,";
         
         if (form_select_category.value == 1) {
             window.location.href = "/P0200ExcelDownload/building/lock/0/";

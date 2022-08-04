@@ -57,11 +57,11 @@ INSTALLED_APPS = [
     'P0300ExcelUpload.apps.P0300ExcelUploadConfig',
     'P0300AreaUpload.apps.P0300AreaUploadConfig',
     'P0300AreaWeather.apps.P0300AreaWeatherConfig',
-    'P0300AreaEdit.apps.P0300AreaEditConfig',
+    ### 'P0300AreaEdit.apps.P0300AreaEditConfig',
     
     ### Online Applications
     'P0400OnlineDisplay.apps.P0400OnlineDisplayConfig',
-    'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
+    ### 'P0500OnlineUpdate.apps.P0500OnlineUpdateConfig',
 
     ### Reverse Applications
     'P0800Reverse.apps.P0800ReverseConfig',

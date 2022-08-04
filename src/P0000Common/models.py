@@ -517,22 +517,24 @@ class FARMER_FISHER_RATE(models.Model):
 
 ###############################################################################
 ### 7000: 入力データ_水害区域（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
 ###############################################################################
 class AREA(models.Model):
     area_id = models.IntegerField(primary_key=True)                            ### 水害区域ID
     area_name = models.CharField(max_length=128)                               ### 水害区域名
-    ### input_file_path = models.CharField(max_length=128, null=True)          ### ファイルパス
-    ### input_file_name = models.CharField(max_length=128, null=True)          ### ファイル名
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
 
-    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/12 追加
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/12 追加
-
-    file_path = models.CharField(max_length=256, null=True)                    ### ファイルパス
-    file_name = models.CharField(max_length=256, null=True)                    ### ファイル名
+    ### file_path = models.CharField(max_length=256, null=True)                ### ファイルパス
+    ### file_name = models.CharField(max_length=256, null=True)                ### ファイル名
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/03 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/03 追加
 
     action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード ※2022/07/12 追加
     status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード ※2022/07/12 追加
+
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/12 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/12 追加
 
     class Meta:
         db_table = 'area'
@@ -542,6 +544,8 @@ class AREA(models.Model):
 
 ###############################################################################
 ### 7010: 入力データ_異常気象（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
 ###############################################################################
 class WEATHER(models.Model):
     weather_id = models.IntegerField(primary_key=True)                         ### 異常気象ID
@@ -563,12 +567,6 @@ class WEATHER(models.Model):
 ### 7020: 入力データ_ヘッダ部分（入力DB）
 ### トランザクション系テーブル（更新テーブル）
 ### 主に入力用（アップロードダウンロード）
-### 調査員調査票のヘッダ部分（都道府県、市区町村、水害区域番号、水害区域面積、農作物被害額、異常気象コードなど）と
-### 調査員調査票の一覧部分（町丁名、被害建物棟数など）の扱いについて、
-### 重複しても被害額の算出に影響しない項目（都道府県、市区町村、水害区域番号、異常気象コードなど）は、SUIGAI、IPPAN両方に持たせても良い。
-### 重複すると被害額の算出に影響する項目（水害区域面積、農作物被害額）は、SUIGAIのみに持たせる。
-### DBの正規化（整合性）の観点からは、IPPANの外部キーにSUIGAI_IDを持たせて、SUIGAIに持たせた都道府県、市区町村、水害区域番号、異常気象コードを優先させることが望ましい。
-### 水害（発生年月日）と水害区域番号との関係が１対１であるのか？異なる水害（発生年月日）で水害区域（番号）の使い回しがあるのか？疑問。
 ###############################################################################
 class SUIGAI(models.Model):
     suigai_id = models.IntegerField(primary_key=True)                          ### シートID
@@ -576,10 +574,6 @@ class SUIGAI(models.Model):
     
     ### 帳票のヘッダ部分 行7
     ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
-    ### 例えば、新たなヘッダ部分の情報が登録できるとしても、実際に被害建物棟数が判明するまでは、その情報を管理することができない。
-    ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
-    ### https://torazuka.hatenablog.com/entry/20110713/pk
-    ### https://oss-db.jp/dojo/dojo_info_04
     ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ### FOR GROUP BY
     city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ### FOR GROUP BY
     begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ### FOR GROUP BY
@@ -602,20 +596,16 @@ class SUIGAI(models.Model):
     crop_damage = models.FloatField(null=True)                                 ### 農作物被害額（単位千円）
     weather_id = models.IntegerField(null=True)                                ### 異常気象ID ### FOR GROUP BY
 
-    ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
-    ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
-    ### 別テーブル（水害テーブル）の主キーは単純な連番とする。
-    ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
-    ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
-    ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
-
-    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
-    file_path = models.CharField(max_length=256, null=True)                    ### ファイルパス ※2022/07/12 追加
-    file_name = models.CharField(max_length=256, null=True)                    ### ファイル名 ※2022/07/12 追加
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/01 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/01 追加
+    summary_file_path = models.CharField(max_length=256, null=True)            ### 集計結果ファイルパス ※2022/08/01 追加
+    summary_file_name = models.CharField(max_length=256, null=True)            ### 集計結果ファイル名 ※2022/08/01 追加
 
     action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード ※2022/07/12 追加
     status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード ※2022/07/12 追加
+
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
 
     class Meta:
         db_table = 'suigai'
@@ -638,18 +628,6 @@ class IPPAN(models.Model):
     
     ### 帳票のヘッダ部分 行7
     ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
-    ### 例えば、新たなヘッダ部分の情報が登録できるとしても、実際に被害建物棟数が判明するまでは、その情報を管理することができない。
-    ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
-    ### https://torazuka.hatenablog.com/entry/20110713/pk
-    ### https://oss-db.jp/dojo/dojo_info_04
-    ### 帳票のヘッダ部分 行10
-    ### 帳票のヘッダ部分 行14
-    ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
-    ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
-    ### 別テーブル（水害テーブル）の主キーは単純な連番とする。
-    ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
-    ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
-    ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
     suigai_id = models.IntegerField(null=True)                                 ### シートID
 
     ### 帳票の繰り返し部分 行20以降
@@ -732,20 +710,11 @@ class IPPAN_VIEW(models.Model):
     ippan_name = models.CharField(max_length=128, null=True)                   ### 町丁名、大字名
 
     ### 第2正規形の考え方からヘッダ部分を別テーブル（水害テーブル）に分割する。
-    ### 別テーブル（水害テーブル）に分割したことによりリレーションを表すSUIGAI_IDを追加する。
-    ### 別テーブル（水害テーブル）の主キーは単純な連番とする。
-    ### 都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名などに複合ユニークキーを設定する。
-    ### 同じ都道府県、市区町村、水害発生日、水害原因、水害区域番号、水系沿岸名、河川海岸名で複数の水害区域面積、農作物被害額、異常気象などが登録できないようにするためである。
-    ### 複数の水害区域面積、農作物被害額、異常気象を登録するためには、水害区域番号を別途追加するか、水害発生日を別途追加するようにさせるためである。
     suigai_id = models.IntegerField(null=True)                                 ### シートID
     suigai_name = models.CharField(max_length=128, null=True)                  ### シート名
     
     ### 帳票のヘッダ部分 行7
     ### 第2正規形の考え方からはヘッダ部分は別テーブルに分割する。
-    ### 例えば、新たなヘッダ部分の情報が登録できるとしても、実際に被害建物棟数が判明するまでは、その情報を管理することができない。
-    ### また、ヘッダ部分の終了日が変更になると、複数のレコードを更新しなければならないため不整合を生じる恐れがある。
-    ### https://torazuka.hatenablog.com/entry/20110713/pk
-    ### https://oss-db.jp/dojo/dojo_info_04
     ken_code = models.CharField(max_length=10)                                 ### 都道府県コード
     ken_name = models.CharField(max_length=128)                                ### 都道府県名 LEFT JOIN項目
     city_code = models.CharField(max_length=10)                                ### 市区町村コード
@@ -783,8 +752,16 @@ class IPPAN_VIEW(models.Model):
     weather_id = models.IntegerField(null=True)                                ### 異常気象ID ### FOR GROUP BY
     weather_name = models.CharField(max_length=128)                            ### 異常気象名 LEFT JOIN項目
 
-    file_path = models.CharField(max_length=256, null=True)                    ### ファイルパス ※2022/07/13 追加
-    file_name = models.CharField(max_length=256, null=True)                    ### ファイル名 ※2022/07/13 追加
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/02 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/02 追加
+    summary_file_path = models.CharField(max_length=256, null=True)            ### 集計結果ファイルパス ※2022/08/02 追加
+    summary_file_name = models.CharField(max_length=256, null=True)            ### 集計結果ファイル名 ※2022/08/02 追加
+
+    action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード ※2022/08/02 追加
+    status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード ※2022/08/02 追加
+
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
 
     ### 帳票の繰り返し部分 行20以降
     building_code = models.CharField(max_length=10, null=True)                 ### 建物区分コード
@@ -860,8 +837,11 @@ class IPPAN_VIEW(models.Model):
     usage_name = models.CharField(max_length=128)                              ### 地下空間の利用形態名 LEFT JOIN項目
     comment = models.CharField(max_length=512, null=True)                      ### 備考
 
-    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/07/11 追加
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/07/11 追加
+    ### file_path = models.CharField(max_length=256, null=True)                ### ファイルパス ※2022/07/13 追加
+    ### file_name = models.CharField(max_length=256, null=True)                ### ファイル名 ※2022/07/13 追加
+
+    ### committed_at = models.DateTimeField(null=True)                         ### コミット日時 ※2022/07/11 追加
+    ### deleted_at = models.DateTimeField(null=True)                           ### 削除日時 ※2022/07/11 追加
 
     class Meta:
         db_table = 'ippan_view'
@@ -1028,29 +1008,27 @@ class STATUS(models.Model):
 class TRIGGER(models.Model):
     trigger_id = models.IntegerField(primary_key=True)                         ### トリガーID
     suigai_id = models.IntegerField(null=True)                                 ### シートID
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード
+
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
     success_count = models.IntegerField(null=True)                             ### 成功数
     failure_count = models.IntegerField(null=True)                             ### 失敗数
-    
-    published_at = models.DateTimeField(null=True)                             ### 発行日時
-    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
+
+    download_file_path = models.CharField(max_length=256, null=True)           ### ダウンロードファイルパス ※2022/07/14 追加
+    download_file_name = models.CharField(max_length=256, null=True)           ### ダウンロードファイル名 ※2022/07/14 追加
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/07/14 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/07/14 追加
 
     integrity_ok = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
     integrity_ng = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
-    ### info_log = models.TextField(null=True)                                 ### データ整合性 Row, Col, left, right, verified result, 
-    ### error_log = models.TextField(null=True)                                ### データ整合性 Row, Col, left, right, verified result, 
     success_log = models.TextField(null=True)                                  ### データ整合性 Row, Col, left, right, verified result, 
     failure_log = models.TextField(null=True)                                  ### データ整合性 Row, Col, left, right, verified result, 
 
-    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード
-    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード
-
-    download_file_path = models.CharField(max_length=256, null=True)           ### ファイルパス ※2022/07/14 追加
-    download_file_name = models.CharField(max_length=256, null=True)           ### ファイル名 ※2022/07/14 追加
-    upload_file_path = models.CharField(max_length=256, null=True)             ### ファイルパス ※2022/07/14 追加
-    upload_file_name = models.CharField(max_length=256, null=True)             ### ファイル名 ※2022/07/14 追加
+    published_at = models.DateTimeField(null=True)                             ### 発行日時
+    consumed_at = models.DateTimeField(null=True)                              ### 消費日時
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
     
     class Meta:
         db_table = 'trigger'
@@ -1064,8 +1042,10 @@ class TRIGGER(models.Model):
 class APPROVAL(models.Model):
     approval_id = models.IntegerField(primary_key=True)                        ### 承認ID
     suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+
     published_at = models.DateTimeField(null=True)                             ### 発行日時
     consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
@@ -1082,8 +1062,10 @@ class APPROVAL(models.Model):
 class FEEDBACK(models.Model):
     feedback_id = models.IntegerField(primary_key=True)                        ### フィードバックID
     suigai_id = models.IntegerField(null=True)                                 ### 水害ID
+
     action_code = models.CharField(max_length=10, null=True)                   ### アクションコード
     status_code = models.CharField(max_length=10, null=True)                   ### 状態コード
+
     published_at = models.DateTimeField(null=True)                             ### 発行日時
     consumed_at = models.DateTimeField(null=True)                              ### 消費日時
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時
@@ -1093,24 +1075,6 @@ class FEEDBACK(models.Model):
         
     def __str__(self):
         return '<FEEDBACK: ' + self.feedback_id + '>'
-
-### ---: レポジトリ
-class REPOSITORY(models.Model):
-    repository_id = models.IntegerField(primary_key=True)                      ### レポジトリID
-    type_code = models.CharField(max_length=10, null=True)                     ### ファイル種別コード ※2022/07/12 追加
-    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/07/11 追加
-    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/07/11 追加
-    action_code = models.CharField(max_length=10, null=True)                   ### 最新のアクションコード
-    status_code = models.CharField(max_length=10, null=True)                   ### 最新の状態コード
-    input_file_path = models.CharField(max_length=256, null=True)              ### ファイルパス
-    input_file_name = models.CharField(max_length=256, null=True)              ### ファイル名
-    committed_at = models.DateTimeField(null=True)                             ### コミット日時
-    deleted_at = models.DateTimeField(null=True)                               ### 削除日時
-
-    class Meta:
-        db_table = 'repository'
-    def __str__(self):
-         return '<REPOSITORY: ' + self.repository_id + '>'
 
 ### ---: 復旧事業工種
 class RESTORATION(models.Model):

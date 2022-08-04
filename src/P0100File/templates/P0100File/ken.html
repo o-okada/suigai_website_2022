@@ -60,17 +60,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <strong>ファイル</strong>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
-                        </ul>
+                    <!--<li class="nav-item dropdown">-->
+                    <!--    <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+                    <!--        <strong>ファイル</strong>-->
+                    <!--    </a>-->
+                    <!--    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>-->
+                    <!--    </ul>-->
+                    <!--</li>-->
+                    <!-- END ナビバー ファイルメニュー -->
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active cl-nav" style="border-bottom: 2px solid #0000EE;" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
                     <!-- END ナビバー ファイルメニュー -->
 
@@ -150,9 +155,9 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
                 </div>
@@ -217,7 +222,7 @@
                             {% for suigai in suigai_list %}
                             <tr>
                                 <td>{{ suigai.city_name|truncatechars:20 }}: {{ suigai.city_code|truncatechars:20 }}</td>
-                                <td>アップロード <a class="cl-table" href="/{{ suigai.file_path }}">{{ suigai.file_name|truncatechars:30 }}</a></td>
+                                <td>アップロード <a class="cl-table" href="/{{ suigai.upload_file_path }}">{{ suigai.upload_file_name|truncatechars:30 }}</a></td>
                                 <td>シート {{ suigai.suigai_name|truncatechars:20 }}</td>
                                 <td>水害発生日 {{ suigai.begin_date|truncatechars:20 }}</td>
 
@@ -228,9 +233,15 @@
                                 {% endif %}
                                 
                                 {% if suigai.deleted_at is None %}
-                                <td><a class="cl-table" href="/P0300AreaWeather/type/ippan/ken/{{ suigai.ken_code }}/suigai/{{ suigai.suigai_id }}/">編集</a></td>
-                                <td><a class="cl-table" href="/P0900Action/suigai/{{ suigai.suigai_id }}/">自動</a></td>
-                                <td>&raquo; 集計結果 <a class="cl-table" href="/{{ suigai.file_path }}">{{ suigai.file_name|truncatechars:30 }}</a></td>
+                                    {% if suigai.summary_file_name is None %}
+                                    <td><a class="cl-table" href="/P0300AreaWeather/type/ippan/ken/{{ suigai.ken_code }}/suigai/{{ suigai.suigai_id }}/">編集</a></td>
+                                    <td><a class="cl-table" href="/P0900Action/suigai/{{ suigai.suigai_id }}/">自動</a></td>
+                                    <td>&raquo; 集計結果 </td>
+                                    {% else %}
+                                    <td><a class="cl-table" href="/P0300AreaWeather/type/ippan/ken/{{ suigai.ken_code }}/suigai/{{ suigai.suigai_id }}/">編集</a></td>
+                                    <td><a class="cl-table" href="/P0900Action/suigai/{{ suigai.suigai_id }}/">自動</a></td>
+                                    <td>&raquo; 集計結果 <a class="cl-table" href="/{{ suigai.summary_file_path }}">{{ suigai.summary_file_name|truncatechars:30 }}</a></td>
+                                    {% endif %}
                                 {% else %}
                                 <td></td>
                                 <td></td>
@@ -292,7 +303,7 @@
                             {% for area in area_list %}
                             <tr>
                                 <td>{{ area.ken_name|truncatechars:20 }}: {{ area.ken_code|truncatechars:20 }}</td>
-                                <td>アップロード <a class="cl-table" href="/{{ area.file_path }}">{{ area.file_name|truncatechars:30 }}</a></td>
+                                <td>アップロード <a class="cl-table" href="/{{ area.upload_file_path }}">{{ area.upload_file_name|truncatechars:30 }}</a></td>
                                 <td>{{ area.area_name|truncatechars:20 }}: {{ area.area_id|truncatechars:20 }}</td>
 
                                 {% if area.deleted_at is None %}

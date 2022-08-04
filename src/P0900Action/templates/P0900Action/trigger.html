@@ -52,17 +52,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <strong>ファイル</strong>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link active cl-nav" style="" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
                     <!-- END ナビバー ファイルメニュー -->
                     
@@ -199,9 +190,9 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
                 </div>
@@ -385,10 +376,18 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6 text-start border-end">
+                            {% if trigger.0.integrity_ok is None %}
+                            &nbsp;
+                            {% else %}
                             {{ trigger.0.integrity_ok | linebreaksbr }}
+                            {% endif %}
                         </div>
                         <div class="col-sm-6 text-start">
+                            {% if trigger.0.integrity_ng is None %}
+                            &nbsp;
+                            {% else %}
                             {{ trigger.0.integrity_ng | linebreaksbr }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -399,7 +398,6 @@
         <!-- END 列 -->
     </div>
     <!-- END 行 -->
-        
         
     <!--</div>-->
     <!-- END データ一貫性と整合性検証結果の詳細表示 -->

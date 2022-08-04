@@ -1,0 +1,6 @@
+psql -U postgres -h localhost
+
+CREATE DATABASE suigai_web;
+CREATE USER frics WITH PASSWORD 'frics';
+GRANT ALL PRIVILEGES ON DATABASE suigai_web to frics;
+

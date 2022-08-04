@@ -154,8 +154,10 @@ def type_view(request, type_code):
                     AC1.action_name_en AS action_name_en, 
                     SUB1.status_code AS status_code, 
                     ST1.status_name AS status_name, 
-                    SUB1.file_path AS file_path, 
-                    SUB1.file_name AS file_name, 
+                    SUB1.upload_file_path AS upload_file_path, 
+                    SUB1.upload_file_name AS upload_file_name, 
+                    SUB1.summary_file_path AS summary_file_path, 
+                    SUB1.summary_file_name AS summary_file_name, 
                     TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                 FROM KEN KE1 
@@ -164,7 +166,7 @@ def type_view(request, type_code):
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        print_log('[DEBUG] P0100File.type_view()関数 suigai_list = {}'.format(suigai_list), 'DEBUG')
+        ### print_log('[DEBUG] P0100File.type_view()関数 suigai_list = {}'.format(suigai_list), 'DEBUG')
 
         area_list = []
         for ken in ken_list:
@@ -179,8 +181,8 @@ def type_view(request, type_code):
                     AC1.action_name_en AS action_name_en, 
                     SUB1.status_code AS status_code, 
                     ST1.status_name AS status_name, 
-                    SUB1.file_path AS file_path, 
-                    SUB1.file_name AS file_name, 
+                    SUB1.upload_file_path AS upload_file_path, 
+                    SUB1.upload_file_name AS upload_file_name, 
                     TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
                 FROM KEN KE1 
@@ -189,7 +191,7 @@ def type_view(request, type_code):
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        print_log('[DEBUG] P0100File.type_view()関数 area_list = {}'.format(area_list), 'DEBUG')
+        ### print_log('[DEBUG] P0100File.type_view()関数 area_list = {}'.format(area_list), 'DEBUG')
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -231,7 +233,7 @@ def type_ken_view(request, type_code, ken_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        ### ssssssssssreset_log()
+        ### reset_log()
         print_log('[INFO] P0100File.type_ken_view()関数が開始しました。', 'INFO')
         print_log('[DEBUG] P0100File.type_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
         print_log('[DEBUG] P0100File.type_ken_view()関数 type_code = {}'.format(type_code), 'DEBUG')
@@ -244,27 +246,6 @@ def type_ken_view(request, type_code, ken_code):
         #######################################################################
         print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2/3.', 'DEBUG')
         ken_list = KEN.objects.raw("""SELECT * FROM KEN WHERE ken_code=%s ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
-        ### suigai_list = SUIGAI.objects.raw("""
-        ###     SELECT 
-        ###         SG1.suigai_id AS suigai_id, 
-        ###         SG1.suigai_name AS suigai_name, 
-        ###         SG1.ken_code AS ken_code, 
-        ###         KE1.ken_name AS ken_name, 
-        ###         SG1.city_code AS city_code, 
-        ###         CT1.city_name AS city_name, 
-        ###         TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
-        ###         TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
-        ###         SG1.file_path AS file_path, 
-        ###         SG1.file_name AS file_name, 
-        ###         TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-        ###         TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-        ###     FROM SUIGAI SG1 
-        ###     LEFT JOIN KEN KE1 ON SG1.ken_code=KE1.ken_code 
-        ###     LEFT JOIN CITY CT1 ON SG1.city_code=CT1.city_code 
-        ###     WHERE 
-        ###         SG1.ken_code=%s AND 
-        ###         SG1.deleted_at is NULL 
-        ###     ORDER BY CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
                 SG1.suigai_id AS suigai_id, 
@@ -275,8 +256,10 @@ def type_ken_view(request, type_code, ken_code):
                 CT1.city_name AS city_name, 
                 TO_CHAR(timezone('JST', SG1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
                 TO_CHAR(timezone('JST', SG1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
-                SG1.file_path AS file_path, 
-                SG1.file_name AS file_name, 
+                SG1.upload_file_path AS upload_file_path, 
+                SG1.upload_file_name AS upload_file_name, 
+                SG1.summary_file_path AS summary_file_path, 
+                SG1.summary_file_name AS summary_file_name, 
                 TO_CHAR(timezone('JST', SG1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                 TO_CHAR(timezone('JST', SG1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM SUIGAI SG1 
@@ -292,8 +275,8 @@ def type_ken_view(request, type_code, ken_code):
                 AR1.area_name AS area_name, 
                 AR1.ken_code AS ken_code, 
                 KE1.ken_name AS ken_name, 
-                AR1.file_path AS file_path, 
-                AR1.file_name AS file_name, 
+                AR1.upload_file_path AS upload_file_path, 
+                AR1.upload_file_name AS upload_file_name, 
                 TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                 TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
             FROM AREA AR1 

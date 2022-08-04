@@ -52,17 +52,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <strong>ファイル</strong>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link active cl-nav" style=";" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
                     <!-- END ナビバー ファイルメニュー -->
                     
@@ -128,9 +119,9 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">ダウンロード</a>-->
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">水害区域図</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
                     <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
                 </div>
@@ -157,7 +148,7 @@
     <div class="row mb-3 ms-1 me-1">
         <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered" style="table-layout:fixed;">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
@@ -379,7 +370,7 @@
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A08_failure_list %}
                                     <li class="text-truncate">
-                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_tablevvvv">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
                                             {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
                                         </a>
                                     </li>
@@ -403,7 +394,7 @@
 
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
-                            <th scope="row" class="text-center text-truncate">ファイル数<br>シート数</th>
+                            <th scope="row" class="text-center text-truncate">ファイル数</th>
                             <!-- A01: ダウンロード -->
                             <td class="text-center">{{ trigger_A01_success_count }} / {{ trigger_A01_failure_count }}</td>
                             <!-- A02: アップロード -->
@@ -436,7 +427,7 @@
         <div class="col-12">
             <!--<div class="table-responsive overflow-auto">-->
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered" style="table-layout:fixed;">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
@@ -594,7 +585,7 @@
 
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
-                            <th scope="row" class="text-center text-truncate">ファイル数<br>シート数</th>
+                            <th scope="row" class="text-center text-truncate">ファイル数</th>
                             <!-- B01: 水害区域図 -->
                             <td class="text-center">{{ trigger_B01_success_count }} / {{ trigger_B01_failure_count }}</td>
                             <!-- B02: 水害区域図貼付け -->

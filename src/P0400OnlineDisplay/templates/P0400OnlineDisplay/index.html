@@ -51,16 +51,21 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <strong>ファイル</strong>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>
-                            <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>
-                        </ul>
+                    <!--<li class="nav-item dropdown">-->
+                    <!--    <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+                    <!--        <strong>ファイル</strong>-->
+                    <!--    </a>-->
+                    <!--    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>-->
+                    <!--        <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>-->
+                    <!--    </ul>-->
+                    <!--</li>-->
+                    <!-- END ナビバー ファイルメニュー -->
+                    <!-- BEGIN ナビバー ファイルメニュー -->
+                    <li class="nav-item">
+                        <a class="nav-link active cl-nav" style="" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
                     <!-- END ナビバー ファイルメニュー -->
                     
@@ -107,12 +112,6 @@
         </div>
     </nav>
     <!-- END ナビバー -->
-    
-    <!-- BEGIN 画面名 -->
-    <!--<div class="container text-center mb-3">-->
-    <!--    <h3>定数、調査票、集計結果参照</h3>-->
-    <!--</div>-->
-    <!-- END 画面名 -->
     
     <!-- BEGIN 検索とフィルタ データ種別選択 -->
     <div class="container mb-3">
@@ -1499,8 +1498,10 @@
                     <th class="text-center">異常気象名</th>
                     <th class="text-center">コミット日時</th>
                     <th class="text-center">削除日時</th>
-                    <th class="text-center">ファイルパス</th>
-                    <th class="text-center">ファイル名</th>
+                    <th class="text-center">アップロードファイルパス</th>
+                    <th class="text-center">アップロードファイル名</th>
+                    <th class="text-center">集計結果ファイルパス</th>
+                    <th class="text-center">集計結果ファイル名</th>
                     <th class="text-center">アクションコード</th>
                     <th class="text-center">アクション名</th>
                     <th class="text-center">状態コード</th>
@@ -1686,16 +1687,28 @@
                     <td>{{ suigai.deleted_at }}</td>
                     {% endif %}
 
-                    {% if suigai.file_path is None %}
+                    {% if suigai.upload_file_path is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ suigai.file_path }}</td>
+                    <td>{{ suigai.upload_file_path }}</td>
                     {% endif %}
 
-                    {% if suigai.file_name is None %}
+                    {% if suigai.upload_file_name is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ suigai.file_name }}</td>
+                    <td>{{ suigai.upload_file_name }}</td>
+                    {% endif %}
+
+                    {% if suigai.summary_file_path is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.summary_file_path }}</td>
+                    {% endif %}
+
+                    {% if suigai.summary_file_name is None %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ suigai.summary_file_name }}</td>
                     {% endif %}
 
                     {% if suigai.action_code is None %}

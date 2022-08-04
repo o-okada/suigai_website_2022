@@ -148,19 +148,19 @@ def index_view(request):
         datetime_now_Ym = datetime.now(JST).strftime('%Y%m')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
         
-        file_object = request.FILES['file']
-        file_name, file_ext = os.path.splitext(request.FILES['file'].name)
-        file_name = file_name + '_' + datetime_now_YmdHMS
-        file_path = 'static/repository/' + datetime_now_Ym + '/' + file_name + '.pdf'
+        upload_file_object = request.FILES['file']
+        upload_file_name, upload_file_ext = os.path.splitext(request.FILES['file'].name)
+        upload_file_name = upload_file_name + '_' + datetime_now_YmdHMS
+        upload_file_path = 'static/repository/' + datetime_now_Ym + '/' + upload_file_name + '.pdf'
         
-        with open(file_path, 'wb+') as destination:
-            for chunk in file_object.chunks():
+        with open(upload_file_path, 'wb+') as destination:
+            for chunk in upload_file_object.chunks():
                 destination.write(chunk)
         
-        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_object = {}'.format(file_object), 'DEBUG')
-        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_name = {}'.format(file_name), 'DEBUG')
-        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_ext = {}'.format(file_ext), 'DEBUG')
-        print_log('[DEBUG] P0300AreaUpload.index_view()関数 file_path = {}'.format(file_path), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 upload_file_object = {}'.format(upload_file_object), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 upload_file_name = {}'.format(upload_file_name), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 upload_file_ext = {}'.format(upload_file_ext), 'DEBUG')
+        print_log('[DEBUG] P0300AreaUpload.index_view()関数 upload_file_path = {}'.format(upload_file_path), 'DEBUG')
 
         #######################################################################
         ### 水害区域図入出力処理(0040)
@@ -204,8 +204,8 @@ def index_view(request):
                     %s, -- ken_code
                     CURRENT_TIMESTAMP, -- committed_at
                     %s, -- deleted_at
-                    %s, -- file_path
-                    %s, -- file_name
+                    %s, -- upload_file_path
+                    %s, -- upload_file_name
                     %s, -- action_code
                     %s  -- status_code
                 )""", [
@@ -213,8 +213,8 @@ def index_view(request):
                     area_name, ### area_name
                     ken_code, ### ken_code
                     None, ### deleted_at
-                    file_path, ### file_path
-                    file_name, ### file_name
+                    upload_file_path, ### upload_file_path
+                    upload_file_name, ### upload_file_name
                     None, ### action_code
                     None, ### status_code
                 ])
@@ -256,8 +256,8 @@ def index_view(request):
                     None, ### city_code 
                     None, ### download_file_path 
                     None, ### download_file_name 
-                    file_path, ### upload_file_path 
-                    file_name, ### upload_file_name 
+                    upload_file_path, ### upload_file_path 
+                    upload_file_name, ### upload_file_name 
                 ])
                 
             ### トリガーテーブルにB02水害区域図貼付けトリガーを未実行＝次回実行対象として登録する。
@@ -298,8 +298,8 @@ def index_view(request):
                     None, ### city_code 
                     None, ### download_file_path 
                     None, ### download_file_name 
-                    file_path, ### upload_file_path 
-                    file_name, ### upload_file_name 
+                    upload_file_path, ### upload_file_path 
+                    upload_file_name, ### upload_file_name 
                 ])
             ### transaction.commit()
             connection_cursor.execute("""COMMIT""", []);

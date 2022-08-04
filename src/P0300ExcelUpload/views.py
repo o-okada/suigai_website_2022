@@ -8,6 +8,7 @@
 ###############################################################################
 ### 処理名：インポート処理
 ###############################################################################
+import os
 import sys
 from datetime import date, datetime, timedelta, timezone
 from django.contrib.auth.decorators import login_required
@@ -550,20 +551,38 @@ def index_view(request):
         datetime_now_Ym = datetime.now(JST).strftime('%Y%m')
         datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
         
-        input_file_object = request.FILES['file']
-        input_file_path = 'static/repository/' + datetime_now_Ym + '/ippan_chosa_input_' + datetime_now_YmdHMS + '.xlsx'
-        input_file_name = 'ippan_chosa_input_' + datetime_now_YmdHMS + '.xlsx'
+        ### upload_file_object = request.FILES['file']
+        ### upload_file_path = 'static/repository/' + datetime_now_Ym + '/ippan_chosa_upload_' + datetime_now_YmdHMS + '.xlsx'
+        ### upload_file_name = 'ippan_chosa_upload_' + datetime_now_YmdHMS + '.xlsx'
         
-        with open(input_file_path, 'wb+') as destination:
-            for chunk in input_file_object.chunks():
+        print('1_0')
+        upload_file_object = request.FILES['file']
+        print('1_1')
+        upload_file_name, upload_file_ext = os.path.splitext(request.FILES['file'].name)
+        print('1_2')
+        upload_file_name = upload_file_name + '_' + datetime_now_YmdHMS + '.xlsx'
+        print('1_3')
+        upload_file_path = 'static/repository/' + datetime_now_Ym + '/' + upload_file_name
+        
+        print('2_0')
+        with open(upload_file_path, 'wb+') as destination:
+            for chunk in upload_file_object.chunks():
                 destination.write(chunk)
 
-        output_file_path = 'static/repository/'+ datetime_now_Ym +'/ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
-        output_file_name = 'ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
+        ### output_file_path = 'static/repository/'+ datetime_now_Ym +'/ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
+        ### output_file_name = 'ippan_chosa_output_' + datetime_now_YmdHMS + '.xlsx'
+
+        print('3_0')
+        output_file_name, output_file_ext = os.path.splitext(request.FILES['file'].name)
+        print('3_1')
+        output_file_name = output_file_name + '_' + datetime_now_YmdHMS + '_output' + '.xlsx'
+        print('3_2')
+        output_file_path = 'static/repository/' + datetime_now_Ym + '/' + output_file_name
+        print('3_3')
         
-        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_object = {}'.format(input_file_object), 'DEBUG')
-        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_path = {}'.format(input_file_path), 'DEBUG')
-        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 input_file_name = {}'.format(input_file_name), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 upload_file_object = {}'.format(upload_file_object), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 upload_file_path = {}'.format(upload_file_path), 'DEBUG')
+        print_log('[DEBUG] P0300ExcelUpload.index_view()関数 upload_file_name = {}'.format(upload_file_name), 'DEBUG')
         print_log('[DEBUG] P0300ExcelUpload.index_view()関数 output_file_path = {}'.format(output_file_path), 'DEBUG')
         print_log('[DEBUG] P0300ExcelUpload.index_view()関数 output_file_name = {}'.format(output_file_name), 'DEBUG')
                 
@@ -581,7 +600,7 @@ def index_view(request):
         ### fill: 背景赤色の塗りつぶし
         #######################################################################
         print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 6/35.', 'DEBUG')
-        wb = openpyxl.load_workbook(input_file_path)
+        wb = openpyxl.load_workbook(upload_file_path)
         ws_ippan = []
         ws_result = []
         ws_title = []
@@ -3063,7 +3082,7 @@ def index_view(request):
                 connection_cursor.execute("""
                     UPDATE TRIGGER SET 
                         deleted_at=CURRENT_TIMESTAMP 
-                    WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code <> 'A01')
+                    WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A02','A03','A04','A05','A06','A07','A08','A99'))
                     """, [
                         split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
                     ])
@@ -3108,8 +3127,8 @@ def index_view(request):
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
                         None, ### download_file_name 
-                        input_file_path, ### upload_file_path 
-                        input_file_name, ### upload_file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
                     ])
                     
                 ###############################################################
@@ -3152,8 +3171,8 @@ def index_view(request):
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
                         None, ### download_file_name 
-                        input_file_path, ### upload_file_path 
-                        input_file_name, ### upload_file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
                     ])
                 ### transaction.commit()
                 connection_cursor.execute("""COMMIT""", []);
@@ -3234,7 +3253,7 @@ def index_view(request):
             connection_cursor.execute("""
                 UPDATE TRIGGER SET 
                     deleted_at=CURRENT_TIMESTAMP 
-                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code <> 'A01')
+                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A02','A03','A04','A05','A06','A07','A08','A99'))
                 """, [
                     split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
                 ])
@@ -3264,8 +3283,8 @@ def index_view(request):
                         suigai_id, suigai_name, ken_code, city_code, begin_date, end_date, 
                         cause_1_code, cause_2_code, cause_3_code, area_id, suikei_code, 
                         kasen_code, gradient_code, residential_area, agricultural_area, underground_area, 
-                        kasen_kaigan_code, crop_damage, weather_id, committed_at, deleted_at, file_path, 
-                        file_name, action_code, status_code 
+                        kasen_kaigan_code, crop_damage, weather_id, committed_at, deleted_at, upload_file_path, 
+                        upload_file_name, summary_file_path, summary_file_name, action_code, status_code 
                     ) VALUES (
                         %s, -- suigai_id 
                         %s, -- suigai_name 
@@ -3288,8 +3307,10 @@ def index_view(request):
                         %s, -- weather_id 
                         CURRENT_TIMESTAMP, -- committed_at 
                         %s, -- deleted_at 
-                        %s, -- file_path 
-                        %s, -- file_name 
+                        %s, -- upload_file_path 
+                        %s, -- upload_file_name 
+                        %s, -- summary_file_path 
+                        %s, -- summary_file_name 
                         %s, -- action_code 
                         %s  -- status_code 
                     )""", [
@@ -3313,8 +3334,10 @@ def index_view(request):
                         convert_empty_to_none(ws_ippan[i].cell(row=14, column=8).value), ### crop_damaga 
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=14, column=10).value)[-1]), ### weather_id 
                         None, ### deleted_at 
-                        input_file_path, ### file_path 
-                        input_file_name, ### file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
+                        None, ### summary_file_path 
+                        None, ### summary_file_name 
                         None,  ### action_code 
                         None,  ### status_code 
                     ])
@@ -3406,7 +3429,7 @@ def index_view(request):
                 ### ※入力チェックでエラーが発見されなかった場合、
                 ###############################################################
                 print_log('[DEBUG] P0300ExcelUpload.index_view()関数 STEP 34_5/35.', 'DEBUG')
-                ### トリガーテーブルにWF2アップロードトリガーを実行済、成功として登録する。
+                ### トリガーテーブルにA02アップロードトリガーを実行済、成功として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3443,11 +3466,11 @@ def index_view(request):
                         convert_empty_to_none(split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
                         None, ### download_file_name 
-                        input_file_path, ### upload_file_path 
-                        input_file_name, ### upload_file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
                     ])
 
-                ### トリガーテーブルにWF3データ検証トリガーを実行済、成功として登録する。
+                ### トリガーテーブルにA03データ検証トリガーを実行済、成功として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3484,11 +3507,11 @@ def index_view(request):
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
                         None, ### download_file_name 
-                        input_file_path, ### upload_file_path 
-                        input_file_name, ### upload_file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
                     ])
             
-                ### トリガーテーブルにWF4差分検証トリガーを未実行＝次回実行対象として登録する。
+                ### トリガーテーブルにA04差分検証トリガーを未実行＝次回実行対象として登録する。
                 connection_cursor.execute("""
                     INSERT INTO TRIGGER (
                         trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
@@ -3526,8 +3549,8 @@ def index_view(request):
                         convert_empty_to_none(split_name_code(ws_ippan[i].cell(row=7, column=3).value)[-1]), ### city_code 
                         None, ### download_file_path 
                         None, ### download_file_name 
-                        input_file_path, ### upload_file_path 
-                        input_file_name, ### upload_file_name 
+                        upload_file_path, ### upload_file_path 
+                        upload_file_name, ### upload_file_name 
                     ])
             ### transaction.commit()
             connection_cursor.execute("""COMMIT""", [])        

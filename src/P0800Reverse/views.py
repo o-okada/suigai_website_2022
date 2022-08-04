@@ -245,8 +245,10 @@ def input_ken_city_category_view(request, ken_code, city_code, category_code):
                     CASE WHEN (IV1.crop_damage) IS NULL THEN 0.0 ELSE CAST(IV1.crop_damage AS NUMERIC(20,10)) END AS crop_damage, 
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
-                    IV1.file_path AS file_path, 
-                    IV1.file_name AS file_name, 
+                    IV1.upload_file_path AS upload_file_path, 
+                    IV1.upload_file_name AS upload_file_name, 
+                    IV1.summary_file_path AS summary_file_path, 
+                    IV1.summary_file_name AS summary_file_name, 
                     
                     IV1.building_code AS building_code, 
                     IV1.building_name AS building_name, 
@@ -469,8 +471,10 @@ def summary_ken_city_category_view(request, ken_code, city_code, category_code):
                     IV1.weather_id AS weather_id, 
                     IV1.weather_name AS weather_name, 
                     
-                    IV1.file_path AS file_path, 
-                    IV1.file_name AS file_name, 
+                    IV1.upload_file_path AS upload_file_path, 
+                    IV1.upload_file_name AS upload_file_name, 
+                    IV1.summary_file_path AS summary_file_path, 
+                    IV1.summary_file_name AS summary_file_name, 
                     
                     IV1.building_code AS building_code, 
                     IV1.building_name AS building_name, 

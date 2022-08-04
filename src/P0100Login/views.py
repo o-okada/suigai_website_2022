@@ -77,7 +77,8 @@ def index_view(request):
                     login(request, user)
                     print_log('[INFO] P0100Login.index_view()関数が正常終了しました。', 'INFO')
                     ### return HttpResponseRedirect('/P0100File/R4/')
-                    return HttpResponseRedirect('/P0100File/type/ippan/')
+                    ### return HttpResponseRedirect('/P0100File/type/ippan/')
+                    return HttpResponseRedirect('/P0100File/')
                 else:
                     ### ユーザが非活性（無効）の場合、、、
                     template = loader.get_template('P0100Login/index.html')
