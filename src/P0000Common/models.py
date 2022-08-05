@@ -1087,7 +1087,11 @@ class RESTORATION(models.Model):
     def __str__(self):
         return '<RESTORATION: ' + self.restoration_code + ', ' + self.restoration_name + '>'
 
-### ---: 公共土木調査票
+###############################################################################
+### 7050: 入力データ_公共土木調査票（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
+###############################################################################
 class KOKYO(models.Model):
     kokyo_id = models.IntegerField(primary_key=True)
     kokyo_name = models.CharField(max_length=128, null=True)
@@ -1103,17 +1107,108 @@ class KOKYO(models.Model):
 
     def __str__(self):
         return '<KOKYO: ' + self.kokyo_id + ', ' + self.kokyo_name + '>'
+
+###############################################################################
+### 7050: 入力データ_公共土木地単調査票（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
+###############################################################################
+class CHITAN(models.Model):
+    chitan_id = models.IntegerField(primary_key=True)                          ### 行ID ※2022/08/05 追加
+    chitan_name = models.CharField(max_length=128, null=True)                  ### 代表被災地区名 ※2022/08/05 追加
+    
+    suikei_code = models.CharField(max_length=10, null=True)                   ### 水系コード ※2022/08/05 追加
+    kasen_code = models.CharField(max_length=10, null=True)                    ### 河川コード ※2022/08/05 追加
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/08/05 追加
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/08/05 追加
+    weather_id = models.IntegerField(null=True)                                ### 異常気象ID ※2022/08/05 追加
+    begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ※2022/08/05 追加
+    end_date = models.DateField(null=True)                                     ### 水害終了年月日 ※2022/08/05 追加
+    kasen_kaigan_code = models.CharField(max_length=10, null=True)             ### 河川海岸（工種）コード ※2022/08/05 追加
+    point = models.CharField(max_length=128, null=True)                        ### 災害復旧箇所 ※2022/08/05 追加
+    assessment = models.FloatField(null=True)                                  ### 災害復旧査定額（千円） ※2022/08/05 追加
+    comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+    
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加
+
+    class Meta:
+        db_table = 'chitan'
+
+    def __str__(self):
+        return '<CHITAN: ' + self.chitan_id + ', ' + self.chitan_name + '>'
+
+###############################################################################
+### 7060: 入力データ_公共土木補助調査票（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
+###############################################################################
+class HOJO(models.Model):
+    hojo_id = models.IntegerField(primary_key=True)                            ### 行ID ※2022/08/05 追加
+    hojo_name = models.CharField(max_length=128, null=True)                    ###  ※2022/08/05 追加
+    
+    suikei_code = models.CharField(max_length=10, null=True)                   ### 水系コード ※2022/08/05 追加
+    kasen_code = models.CharField(max_length=10, null=True)                    ### 河川コード ※2022/08/05 追加
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/08/05 追加
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/08/05 追加
+    weather_id = models.IntegerField(null=True)                                ### 異常気象ID ※2022/08/05 追加
+    begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ※2022/08/05 追加
+    kasen_kaigan_code = models.CharField(max_length=10, null=True)             ### 河川海岸（工種）コード ※2022/08/05 追加
+    koji_code = models.CharField(max_length=10, null=True)                     ### 工事番号 ※2022/08/05 追加
+    branch_code = models.CharField(max_length=10, null=True)                   ### 枝番 ※2022/08/05 追加
+    determined = models.FloatField(null=True)                                  ### 決定額（千円） ※2022/08/05 追加
+    comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+    
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加
+
+    class Meta:
+        db_table = 'hojo'
+
+    def __str__(self):
+        return '<HOJO: ' + self.hojo_id + ', ' + self.hojo_name + '>'
         
-### ---: 公益事業調査票
+###############################################################################
+### 7070: 入力データ_公益事業調査票（入力DB）
+### トランザクション系テーブル（更新テーブル）
+### 主に入力用（アップロードダウンロード）
+###############################################################################
 class KOEKI(models.Model):
-    koeki_id = models.IntegerField(primary_key=True)
-    koeki_name = models.CharField(max_length=128, null=True)
-    ken_code = models.CharField(max_length=10)
-    city_code = models.CharField(max_length=10)
-    weather_id = models.IntegerField()
-    koeki_year = models.IntegerField()
-    begin_date = models.DateField()
-    end_date = models.DateField()
+    koeki_id = models.IntegerField(primary_key=True)                           ### 行ID ※2022/08/05 追加
+    koeki_name = models.CharField(max_length=128, null=True)                   ### 町丁名、大字名 ※2022/08/05 追加
+    
+    ken_code = models.CharField(max_length=10, null=True)                      ### 都道府県コード ※2022/08/05 追加
+    city_code = models.CharField(max_length=10, null=True)                     ### 市区町村コード ※2022/08/05 追加
+    suikei_code = models.CharField(max_length=10, null=True)                   ### 水系コード ※2022/08/05 追加
+    kasen_code = models.CharField(max_length=10, null=True)                    ### 河川コード ※2022/08/05 追加
+    begin_date = models.DateField(null=True)                                   ### 水害発生年月日 ※2022/08/05 追加
+    end_date = models.DateField(null=True)                                     ### 水害終了年月日 ※2022/08/05 追加
+    kasen_kaigan_code = models.CharField(max_length=10, null=True)             ### 河川海岸（工種）コード ※2022/08/05 追加
+    weather_id = models.IntegerField(null=True)                                ### 異常気象ID ※2022/08/05 追加
+    cause_1_code = models.CharField(max_length=10, null=True)                  ### 水害原因_1_コード ※2022/08/05 追加
+    cause_2_code = models.CharField(max_length=10, null=True)                  ### 水害原因_2_コード ※2022/08/05 追加
+    cause_3_code = models.CharField(max_length=10, null=True)                  ### 水害原因_3_コード ※2022/08/05 追加
+    business_code = models.CharField(max_length=10, null=True)                 ### 事業コード ※2022/08/05 追加
+    institution_name = models.CharField(max_length=128, null=True)             ### 調査対象機関名称 ※2022/08/05 追加
+    
+    damage_property = models.FloatField(null=True)                             ### 被害金額_物的被害額（千円）
+    damage_sales = models.FloatField(null=True)                                ### 被害金額_営業停止に伴う売上減少額
+    damage_alt = models.FloatField(null=True)                                  ### 被害金額_代替活動費（外注費）
+    damage_other = models.FloatField(null=True)                                ### 被害金額_その他
+    damage_total = models.FloatField(null=True)                                ### 被害金額_営業停止損失額合計（千円）
+    
+    sus_day = models.IntegerField(null=True)                                   ### 営業停止期間等_停止期間_日
+    sus_hour = models.IntegerField(null=True)                                  ### 営業停止期間等_停止期間_時間
+    sus_amount = models.IntegerField(null=True)                                ### 営業停止期間等_停止数量
+    
+    ref_dep_name = models.CharField(max_length=128, null=True)                 ### 照会先_調査担当課名
+    ref_emp_name = models.CharField(max_length=128, null=True)                 ### 照会先_調査担当者名
+    ref_tel = models.CharField(max_length=128, null=True)                      ### 照会先_電話番号
+    
+    comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+    
+    committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
+    deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加
 
     class Meta:
         db_table = 'koeki'

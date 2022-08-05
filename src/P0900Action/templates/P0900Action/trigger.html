@@ -145,6 +145,13 @@
             <h5>B04 データ検証 成功</h5>
             {% elif trigger.0.action_code == "B99" %}
             <h5>B99 マニュアル検証待ち 成功</h5>
+
+            {% elif trigger.0.action_code == "N01" %}
+            <h5>N01 調査員用ダウンロード 成功</h5>
+            {% elif trigger.0.action_code == "O01" %}
+            <h5>O01 市区町村用ダウンロード 成功</h5>
+            {% elif trigger.0.action_code == "P01" %}
+            <h5>P01 都道府県用ダウンロード 成功</h5>
             {% else %}
             {% endif %}
         {% else %}
@@ -175,6 +182,13 @@
             <h5>B04 データ検証 失敗</h5>
             {% elif trigger.0.action_code == "B99" %}
             <h5>B99 マニュアル検証待ち 失敗</h5>
+            
+            {% elif trigger.0.action_code == "N01" %}
+            <h5>N01 調査員用ダウンロード 失敗</h5>
+            {% elif trigger.0.action_code == "O01" %}
+            <h5>O01 市区町村用ダウンロード 失敗</h5>
+            {% elif trigger.0.action_code == "P01" %}
+            <h5>P01 都道府県用ダウンロード 失敗</h5>
             {% else %}
             {% endif %}
         {% endif %}
