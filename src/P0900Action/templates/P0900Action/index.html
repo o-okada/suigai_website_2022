@@ -144,30 +144,29 @@
     </div>
     <!-- END 行 -->
 
-    <!-- BEGIN 自動実行進捗状況 -->
+    <!-- BEGIN A 自動実行進捗状況 -->
     <div class="row mb-3 ms-1 me-1">
         <div class="col-12">
             <div class="table-responsive">
                 <table class="table table-bordered" style="table-layout:fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A01<br>ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A02<br>アップロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A03<br>データ検証 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A04<br>差分検証 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A05<br>按分処理 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A06<br>データ検証 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A07<br>集計処理 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A08<br>データ検証 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">A99<br>マニュアル検証待ち</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">#</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A01<br>調査員用アップロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A02<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A03<br>差分検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A04<br>按分処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A05<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A06<br>集計処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A07<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:12%;">A99<br>マニュアル検証待ち</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- BEGIN 成功 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">成功</th>
-                            <!-- A01: ダウンロード -->
+                            <!-- A01: 調査員用アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A01_success_list %}
@@ -179,7 +178,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A02: アップロード -->
+                            <!-- A02: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A02_success_list %}
@@ -191,7 +190,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A03: データ検証 -->
+                            <!-- A03: 差分検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A03_success_list %}
@@ -203,7 +202,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A04: 差分検証 -->
+                            <!-- A04: 按分処理 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A04_success_list %}
@@ -215,7 +214,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A05: 按分処理 -->
+                            <!-- A05: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A05_success_list %}
@@ -227,7 +226,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A06: データ検証 -->
+                            <!-- A06: 集計処理 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A06_success_list %}
@@ -239,22 +238,10 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A07: 集計処理 -->
+                            <!-- A07: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A07_success_list %}
-                                    <li class="text-truncate">
-                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
-                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <!-- A08: データ検証 -->
-                            <td>
-                                <ul class="list-unstyled text-start">
-                                    {% for trigger in trigger_A08_success_list %}
                                     <li class="text-truncate">
                                         <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
                                             {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
@@ -281,7 +268,7 @@
                         <!-- BEGIN 失敗 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">失敗</th>
-                            <!-- A01: ダウンロード -->
+                            <!-- A01: 調査員用アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A01_failure_list %}
@@ -293,7 +280,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A02: アップロード -->
+                            <!-- A02: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A02_failure_list %}
@@ -305,7 +292,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A03: データ検証 -->
+                            <!-- A03: 差分検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A03_failure_list %}
@@ -317,7 +304,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A04: 差分検証 -->
+                            <!-- A04: 按分処理 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A04_failure_list %}
@@ -329,7 +316,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A05: 按分処理 -->
+                            <!-- A05: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A05_failure_list %}
@@ -341,7 +328,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A06: データ検証 -->
+                            <!-- A06: 集計処理 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A06_failure_list %}
@@ -353,22 +340,10 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- A07: 集計処理 -->
+                            <!-- A07: データ検証 -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A07_failure_list %}
-                                    <li class="text-truncate">
-                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
-                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <!-- A08: データ検証 -->
-                            <td>
-                                <ul class="list-unstyled text-start">
-                                    {% for trigger in trigger_A08_failure_list %}
                                     <li class="text-truncate">
                                         <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
                                             {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
@@ -395,22 +370,20 @@
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">ファイル数</th>
-                            <!-- A01: ダウンロード -->
+                            <!-- A01: 調査員用アップロード -->
                             <td class="text-center">{{ trigger_A01_success_count }} / {{ trigger_A01_failure_count }}</td>
-                            <!-- A02: アップロード -->
+                            <!-- A02: データ検証 -->
                             <td class="text-center">{{ trigger_A02_success_count }} / {{ trigger_A02_failure_count }}</td>
-                            <!-- A03: データ検証 -->
+                            <!-- A03: 差分検証 -->
                             <td class="text-center">{{ trigger_A03_success_count }} / {{ trigger_A03_failure_count }}</td>
-                            <!-- A04: 差分検証 -->
+                            <!-- A04: 按分処理 -->
                             <td class="text-center">{{ trigger_A04_success_count }} / {{ trigger_A04_failure_count }}</td>
-                            <!-- A05: 按分処理 -->
+                            <!-- A05: データ検証 -->
                             <td class="text-center">{{ trigger_A05_success_count }} / {{ trigger_A05_failure_count }}</td>
-                            <!-- A06: データ検証 -->
+                            <!-- A06: 集計処理 -->
                             <td class="text-center">{{ trigger_A06_success_count }} / {{ trigger_A06_failure_count }}</td>
-                            <!-- A07: 集計処理 -->
+                            <!-- A07: データ検証 -->
                             <td class="text-center">{{ trigger_A07_success_count }} / {{ trigger_A07_failure_count }}</td>
-                            <!-- A08: データ検証 -->
-                            <td class="text-center">{{ trigger_A08_success_count }} / {{ trigger_A08_failure_count }}</td>
                             <!-- A99: マニュアル検証待ち -->
                             <td class="text-center">{{ trigger_A99_waiting_count }} / {{ trigger_A99_waiting_count }}</td>
                         </tr>
@@ -420,9 +393,9 @@
             </div>
         </div>
     </div>
-    <!-- END 自動実行進捗状況 -->
+    <!-- END A 自動実行進捗状況 -->
 
-    <!-- BEGIN 自動実行進捗状況 -->
+    <!-- BEGIN B 自動実行進捗状況 -->
     <div class="row mb-3 ms-1 me-1">
         <div class="col-12">
             <!--<div class="table-responsive overflow-auto">-->
@@ -430,23 +403,22 @@
                 <table class="table table-bordered" style="table-layout:fixed;">
                     <thead>
                         <tr>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B01<br>水害区域図 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B02<br>水害区域図貼付け &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B03<br>集計処理 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B04<br>データ検証 &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:10%;">B99<br>マニュアル検証待ち</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">#</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">B01<br>水害区域図アップロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">B02<br>水害区域図貼付け &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">B03<br>集計処理 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">B04<br>データ検証 &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:12%;">B99<br>マニュアル検証待ち</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- BEGIN 成功 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">成功</th>
-                            <!-- B01: 水害区域図 -->
+                            <!-- B01: 水害区域図アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_B01_success_list %}
@@ -497,7 +469,6 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                             <!-- B99: マニュアル検証待ち -->
                             <td>
                                 <ul class="list-unstyled text-start">
@@ -516,7 +487,7 @@
                         <!-- BEGIN 失敗 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">失敗</th>
-                            <!-- B01: 水害区域図 -->
+                            <!-- B01: 水害区域図アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_B01_failure_list %}
@@ -567,7 +538,6 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                             <!-- B99: マニュアル検証待ち -->
                             <td>
                                 <!--<ul class="list-unstyled text-start">-->
@@ -586,7 +556,7 @@
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">ファイル数</th>
-                            <!-- B01: 水害区域図 -->
+                            <!-- B01: 水害区域図アップロード -->
                             <td class="text-center">{{ trigger_B01_success_count }} / {{ trigger_B01_failure_count }}</td>
                             <!-- B02: 水害区域図貼付け -->
                             <td class="text-center">{{ trigger_B02_success_count }} / {{ trigger_B02_failure_count }}</td>
@@ -594,7 +564,6 @@
                             <td class="text-center">{{ trigger_B03_success_count }} / {{ trigger_B03_failure_count }}</td>
                             <!-- B04: データ検証 -->
                             <td class="text-center">{{ trigger_B04_success_count }} / {{ trigger_B04_failure_count }}</td>
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -607,7 +576,144 @@
             </div>
         </div>
     </div>
-    <!-- END 自動実行進捗状況 -->
+    <!-- END B 自動実行進捗状況 -->
+
+    <!-- BEGIN N O P 自動実行進捗状況 -->
+    <div class="row mb-3 ms-1 me-1">
+        <div class="col-12">
+            <!--<div class="table-responsive overflow-auto">-->
+            <div class="table-responsive">
+                <table class="table table-bordered" style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">#</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">N01<br>調査員用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">O01<br>市区町村用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">P01<br>都道府県用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:12%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- BEGIN 成功 -->
+                        <tr>
+                            <th scope="row" class="text-center text-truncate">成功</th>
+                            <!-- N01: 調査員用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_N01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- O01: 市区町村用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_O01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- P01: 都道府県用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_P01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- END 成功 -->
+                        
+                        <!-- BEGIN 失敗 -->
+                        <tr>
+                            <th scope="row" class="text-center text-truncate">失敗</th>
+                            <!-- N01: 調査員用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_N01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- O01: 市区町村用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_O01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- P01: 都道府県用ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_P01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- END 失敗 -->
+
+                        <!-- BEGIN ファイル数 or シート数 -->
+                        <tr>
+                            <th scope="row" class="text-center text-truncate">ファイル数</th>
+                            <!-- N01: 水害区域図 -->
+                            <td class="text-center">{{ trigger_N01_success_count }} / {{ trigger_N01_failure_count }}</td>
+                            <!-- O01: 水害区域図貼付け -->
+                            <td class="text-center">{{ trigger_O01_success_count }} / {{ trigger_O01_failure_count }}</td>
+                            <!-- P01: 集計処理 -->
+                            <td class="text-center">{{ trigger_P01_success_count }} / {{ trigger_P01_failure_count }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- END ファイル数 or シート数 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- END N O P 自動実行進捗状況 -->
 
     <script type="text/javascript">
     </script>

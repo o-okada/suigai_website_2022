@@ -3082,7 +3082,7 @@ def index_view(request):
                 connection_cursor.execute("""
                     UPDATE TRIGGER SET 
                         deleted_at=CURRENT_TIMESTAMP 
-                    WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A02','A03','A04','A05','A06','A07','A08','A99'))
+                    WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A01','A02','A03','A04','A05','A06','A07','A99'))
                     """, [
                         split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
                     ])
@@ -3116,7 +3116,7 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        'A02', ### action_code 
+                        'A01', ### action_code 
                         'SUCCESS', ### status_code 
                         1,  ### success_count
                         0,  ### failure_count
@@ -3160,7 +3160,7 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        'A03', ### action_code 
+                        'A02', ### action_code 
                         'FAILURE', ### status_code 
                         0,  ### success_count
                         len(ws_ippan),  ### failure_count
@@ -3253,7 +3253,7 @@ def index_view(request):
             connection_cursor.execute("""
                 UPDATE TRIGGER SET 
                     deleted_at=CURRENT_TIMESTAMP 
-                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A02','A03','A04','A05','A06','A07','A08','A99'))
+                WHERE trigger_id IN (SELECT trigger_id FROM TRIGGER WHERE city_code=%s AND deleted_at IS NULL AND action_code IN ('A01','A02','A03','A04','A05','A06','A07','A99'))
                 """, [
                     split_name_code(ws_ippan[0].cell(row=7, column=3).value)[-1], 
                 ])
@@ -3455,7 +3455,7 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        'A02', ### action_code 
+                        'A01', ### action_code 
                         'SUCCESS', ### status_code 
                         1, ### success_count
                         0, ### failure_count
@@ -3496,7 +3496,7 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        'A03', ### action_code 
+                        'A02', ### action_code 
                         'SUCCESS', ### status_code 
                         1, ### success_count
                         0, ### failure_count
@@ -3537,7 +3537,7 @@ def index_view(request):
                         %s  -- upload_file_name 
                     )""", [
                         suigai_id, ### suigai_id 
-                        'A04', ### action_code 
+                        'A03', ### action_code 
                         'RUNNING', ### status_code 
                         None, ### success_count
                         None, ### failure_count

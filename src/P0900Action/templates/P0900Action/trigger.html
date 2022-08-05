@@ -119,21 +119,19 @@
         <div class="col text-center">
         {% if trigger.0.failure_count|floatformat:"0" == "0" %}
             {% if trigger.0.action_code == "A01" %}
-            <h5>A01 ダウンロード 成功</h5>
+            <h5>A01 アップロード 成功</h5>
             {% elif trigger.0.action_code == "A02" %}
-            <h5>A02 アップロード 成功</h5>
+            <h5>A02 データ検証 成功</h5>
             {% elif trigger.0.action_code == "A03" %}
-            <h5>A03 データ検証 成功</h5>
+            <h5>A03 差分検証 成功</h5>
             {% elif trigger.0.action_code == "A04" %}
-            <h5>A04 差分検証 成功</h5>
+            <h5>A04 按分処理 成功</h5>
             {% elif trigger.0.action_code == "A05" %}
-            <h5>A05 按分処理 成功</h5>
+            <h5>A05 データ検証 成功</h5>
             {% elif trigger.0.action_code == "A06" %}
-            <h5>A06 データ検証 成功</h5>
+            <h5>A06 集計処理 成功</h5>
             {% elif trigger.0.action_code == "A07" %}
-            <h5>A07 集計処理 成功</h5>
-            {% elif trigger.0.action_code == "A08" %}
-            <h5>A08 データ検証 成功</h5>
+            <h5>A07 データ検証 成功</h5>
             {% elif trigger.0.action_code == "A99" %}
             <h5>A99 マニュアル検証待ち 成功</h5>
             
@@ -151,21 +149,19 @@
             {% endif %}
         {% else %}
             {% if trigger.0.action_code == "A01" %}
-            <h5>A01 ダウンロード 失敗</h5>
+            <h5>A01 アップロード 失敗</h5>
             {% elif trigger.0.action_code == "A02" %}
-            <h5>A02 アップロード 失敗</h5>
+            <h5>A02 データ検証 失敗</h5>
             {% elif trigger.0.action_code == "A03" %}
-            <h5>A03 データ検証 失敗</h5>
+            <h5>A03 差分検証 失敗</h5>
             {% elif trigger.0.action_code == "A04" %}
-            <h5>A04 差分検証 失敗</h5>
+            <h5>A04 按分処理 失敗</h5>
             {% elif trigger.0.action_code == "A05" %}
-            <h5>A05 按分処理 失敗</h5>
+            <h5>A05 データ検証 失敗</h5>
             {% elif trigger.0.action_code == "A06" %}
-            <h5>A06 データ検証 失敗</h5>
+            <h5>A06 集計処理 失敗</h5>
             {% elif trigger.0.action_code == "A07" %}
-            <h5>A07 集計処理 失敗</h5>
-            {% elif trigger.0.action_code == "A08" %}
-            <h5>A08 データ検証 失敗</h5>
+            <h5>A07 データ検証 失敗</h5>
             {% elif trigger.0.action_code == "A99" %}
             <h5>A99 マニュアル検証待ち 失敗</h5>
             

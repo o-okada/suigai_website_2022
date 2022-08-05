@@ -139,7 +139,7 @@ class Command(BaseCommand):
             ###################################################################
             reset_log()
             print_log('[INFO] P0900Action.action_A99_manual_verification.handle()関数が開始しました。', 'INFO')
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 1/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 1/14.', 'DEBUG')
 
             ###################################################################
             ### DBアクセス処理(0010)
@@ -149,7 +149,7 @@ class Command(BaseCommand):
             ### トリガーメッセージにアクションが発行されていなければ、処理を終了する。
             ### ※ネストを浅くするために、処理対象外の場合、処理を終了させる。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 2/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 2/14.', 'DEBUG')
             trigger_list = TRIGGER.objects.raw("""
                 SELECT 
                     TR1.trigger_id AS trigger_id, 
@@ -201,7 +201,7 @@ class Command(BaseCommand):
             ### DBアクセス処理(0020)
             ### マスタデータを取得する。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 3/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 3/14.', 'DEBUG')
             ### 1000: 建物区分シート
             ### 1010: 都道府県シート
             ### 1020: 市区町村シート、連動プルダウン用、VLOOKUP用
@@ -252,7 +252,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0030)
             ### ダウンロード用ファイルパスをセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 4/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 4/14.', 'DEBUG')
             template_file_path = 'static/template_ippan_summary.xlsx'
             ### download_file_path = 'static/ippan_chosa_' + str(ken_name_request) + '_' + str(city_name_request) + '.xlsx'
             ### download_file_name = 'ippan_chosa_' + str(ken_name_request) + '_' + str(city_name_request) + '.xlsx'
@@ -269,7 +269,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0040)
             ### ワークシートを局所変数にセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 5/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 5/14.', 'DEBUG')
             wb = openpyxl.load_workbook(template_file_path, keep_vba=False)
             
             ws_building = wb["BUILDING"]
@@ -299,7 +299,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0050)
             ### 各EXCELシートで枠線を表示しないにセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 6/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 6/14.', 'DEBUG')
             ws_building.sheet_view.showGridLines = False
             ws_ken.sheet_view.showGridLines = False
             ws_city.sheet_view.showGridLines = False
@@ -327,7 +327,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0060)
             ### マスタ用のシートに値をセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 7/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 7/14.', 'DEBUG')
             ### 1000: 建物区分シート
             print("handle_7_1", flush=True)
             if building_list:
@@ -501,7 +501,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0070)
             ### VLOOKUP用のシートに値をセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 8/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 8/14.', 'DEBUG')
             ### 1020: 市区町村VLOOKUP
             print("handle_8_1", flush=True)
             if ken_list and cities_list:
@@ -524,7 +524,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0080)
             ### 入力データ用EXCELシートのキャプションに値をセットする。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 9/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 9/14.', 'DEBUG')
             ### ws_ippan.cell(row=6, column=1).value = 'NO.'
             ### ws_ippan.cell(row=6, column=2).value = 'ファイル名'
             ### ws_ippan.cell(row=6, column=3).value = ''
@@ -629,27 +629,27 @@ class Command(BaseCommand):
             ### ws_ippan.cell(row=6, column=98).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
             ### ws_ippan.cell(row=6, column=99).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
             ### ws_ippan.cell(row=6, column=100).value = '事業所被害額_営業停止に伴う被害額_全壊'
-            ### ws_ippan.cell(row=6, column=101).value = ''
-            ### ws_ippan.cell(row=6, column=102).value = ''
-            ### ws_ippan.cell(row=6, column=103).value = ''
-            ### ws_ippan.cell(row=6, column=104).value = ''
-            ### ws_ippan.cell(row=6, column=105).value = ''
-            ### ws_ippan.cell(row=6, column=106).value = ''
-            ### ws_ippan.cell(row=6, column=107).value = ''
-            ### ws_ippan.cell(row=6, column=108).value = ''
-            ### ws_ippan.cell(row=6, column=109).value = ''
-            ### ws_ippan.cell(row=6, column=110).value = ''
-            ### ws_ippan.cell(row=6, column=111).value = ''
-            ### ws_ippan.cell(row=6, column=112).value = ''
-            ### ws_ippan.cell(row=6, column=113).value = ''
-            ### ws_ippan.cell(row=6, column=114).value = ''
-            ### ws_ippan.cell(row=6, column=115).value = ''
-            ### ws_ippan.cell(row=6, column=116).value = ''
-            ### ws_ippan.cell(row=6, column=117).value = ''
-            ### ws_ippan.cell(row=6, column=118).value = ''
-            ### ws_ippan.cell(row=6, column=119).value = ''
-            ### ws_ippan.cell(row=6, column=120).value = ''
-            ### ws_ippan.cell(row=6, column=121).value = ''
+            ### ws_ippan.cell(row=6, column=101).value = '事業所被害額_営業停滞に伴う被害額_床下'
+            ## ws_ippan.cell(row=6, column=102).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+            ### ws_ippan.cell(row=6, column=103).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+            ### ws_ippan.cell(row=6, column=104).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+            ### ws_ippan.cell(row=6, column=105).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+            ### ws_ippan.cell(row=6, column=106).value = '農漁家被害額_償却資産被害額_床下'
+            ### ws_ippan.cell(row=6, column=107).value = '農漁家被害額_償却資産被害額_01から49cm'
+            ### ws_ippan.cell(row=6, column=108).value = '農漁家被害額_償却資産被害額_50から99cm'
+            ### ws_ippan.cell(row=6, column=109).value = '農漁家被害額_償却資産被害額_100cm以上'
+            ### ws_ippan.cell(row=6, column=110).value = '農漁家被害額_償却資産被害額_全壊'
+            ### ws_ippan.cell(row=6, column=111).value = '農漁家被害額_在庫資産被害額_床下'
+            ### ws_ippan.cell(row=6, column=112).value = '農漁家被害額_在庫資産被害額_01から49cm'
+            ### ws_ippan.cell(row=6, column=113).value = '農漁家被害額_在庫資産被害額_50から99cm'
+            ### ws_ippan.cell(row=6, column=114).value = '農漁家被害額_在庫資産被害額_100cm以上'
+            ### ws_ippan.cell(row=6, column=115).value = '農漁家被害額_在庫資産被害額_全壊'
+            ### ws_ippan.cell(row=6, column=116).value = '事業所応急対策費_代替活動費_床下'
+            ### ws_ippan.cell(row=6, column=117).value = '事業所応急対策費_代替活動費_01から49cm'
+            ### ws_ippan.cell(row=6, column=118).value = '事業所応急対策費_代替活動費_50から99cm'
+            ### ws_ippan.cell(row=6, column=119).value = '事業所応急対策費_代替活動費_100cm以上'
+            ### ws_ippan.cell(row=6, column=120).value = '事業所応急対策費_代替活動費_半壊'
+            ### ws_ippan.cell(row=6, column=121).value = '事業所応急対策費_代替活動費_全壊'
             
             ### ws_ippan.cell(row=7, column=1).value = ''
             ### ws_ippan.cell(row=7, column=2).value = ''
@@ -710,6 +710,68 @@ class Command(BaseCommand):
             ### ws_ippan.cell(row=7, column=57).value = ''
             ### ws_ippan.cell(row=7, column=58).value = ''
             ### ws_ippan.cell(row=7, column=59).value = ''
+            ### ws_ippan.cell(row=7, column=60).value = ''
+            ### ws_ippan.cell(row=7, column=61).value = ''
+            ### ws_ippan.cell(row=7, column=62).value = ''
+            ### ws_ippan.cell(row=7, column=63).value = ''
+            ### ws_ippan.cell(row=7, column=64).value = ''
+            ### ws_ippan.cell(row=7, column=65).value = ''
+            ### ws_ippan.cell(row=7, column=66).value = ''
+            ### ws_ippan.cell(row=7, column=67).value = ''
+            ### ws_ippan.cell(row=7, column=68).value = ''
+            ### ws_ippan.cell(row=7, column=69).value = ''
+            ### ws_ippan.cell(row=7, column=70).value = ''
+            ### ws_ippan.cell(row=7, column=71).value = ''
+            ### ws_ippan.cell(row=7, column=72).value = ''
+            ### ws_ippan.cell(row=7, column=73).value = ''
+            ### ws_ippan.cell(row=7, column=74).value = ''
+            ### ws_ippan.cell(row=7, column=75).value = ''
+            ### ws_ippan.cell(row=7, column=76).value = ''
+            ### ws_ippan.cell(row=7, column=77).value = ''
+            ### ws_ippan.cell(row=7, column=78).value = ''
+            ### ws_ippan.cell(row=7, column=79).value = ''
+            ### ws_ippan.cell(row=7, column=80).value = ''
+            ### ws_ippan.cell(row=7, column=81).value = ''
+            ### ws_ippan.cell(row=7, column=82).value = ''
+            ### ws_ippan.cell(row=7, column=83).value = ''
+            ### ws_ippan.cell(row=7, column=84).value = ''
+            ### ws_ippan.cell(row=7, column=85).value = ''
+            ### ws_ippan.cell(row=7, column=86).value = ''
+            ### ws_ippan.cell(row=7, column=87).value = ''
+            ### ws_ippan.cell(row=7, column=88).value = ''
+            ### ws_ippan.cell(row=7, column=89).value = ''
+            ### ws_ippan.cell(row=7, column=90).value = ''
+            ### ws_ippan.cell(row=7, column=91).value = ''
+            ### ws_ippan.cell(row=7, column=92).value = ''
+            ### ws_ippan.cell(row=7, column=93).value = ''
+            ### ws_ippan.cell(row=7, column=94).value = ''
+            ### ws_ippan.cell(row=7, column=95).value = ''
+            ### ws_ippan.cell(row=7, column=96).value = ''
+            ### ws_ippan.cell(row=7, column=97).value = ''
+            ### ws_ippan.cell(row=7, column=98).value = ''
+            ### ws_ippan.cell(row=7, column=99).value = ''
+            ### ws_ippan.cell(row=7, column=100).value = ''
+            ### ws_ippan.cell(row=7, column=101).value = ''
+            ### ws_ippan.cell(row=7, column=102).value = ''
+            ### ws_ippan.cell(row=7, column=103).value = ''
+            ### ws_ippan.cell(row=7, column=104).value = ''
+            ### ws_ippan.cell(row=7, column=105).value = ''
+            ### ws_ippan.cell(row=7, column=106).value = ''
+            ### ws_ippan.cell(row=7, column=107).value = ''
+            ### ws_ippan.cell(row=7, column=108).value = ''
+            ### ws_ippan.cell(row=7, column=109).value = ''
+            ### ws_ippan.cell(row=7, column=110).value = ''
+            ### ws_ippan.cell(row=7, column=111).value = ''
+            ### ws_ippan.cell(row=7, column=112).value = ''
+            ### ws_ippan.cell(row=7, column=113).value = ''
+            ### ws_ippan.cell(row=7, column=114).value = ''
+            ### ws_ippan.cell(row=7, column=115).value = ''
+            ### ws_ippan.cell(row=7, column=116).value = ''
+            ### ws_ippan.cell(row=7, column=117).value = ''
+            ### ws_ippan.cell(row=7, column=118).value = ''
+            ### ws_ippan.cell(row=7, column=119).value = ''
+            ### ws_ippan.cell(row=7, column=120).value = ''
+            ### ws_ippan.cell(row=7, column=121).value = ''
             
             ws_ippan.protection.enable()
             green_fill = PatternFill(fgColor='CCFFCC', patternType='solid')
@@ -718,7 +780,7 @@ class Command(BaseCommand):
             ### EXCEL入出力処理(0090)
             ### EXCELのセルに、値を埋め込む。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 10/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 10/14.', 'DEBUG')
             ippan_view_list = IPPAN_VIEW.objects.raw("""
                 SELECT 
                     IV1.ippan_id AS ippan_id,
@@ -912,9 +974,10 @@ class Command(BaseCommand):
                 ])
     
             ###################################################################
-            ### EXCEL入出力処理(0110)
+            ### EXCEL入出力処理(0100)
             ### EXCELのセルに、値を埋め込む。
             ###################################################################
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 11/14.', 'DEBUG')
             if ippan_view_list:
                 for i, ippan in enumerate(ippan_view_list):
                     if ippan.ippan_id is not None and len(str(ippan.ippan_id)) > 0:
@@ -1082,10 +1145,6 @@ class Command(BaseCommand):
                     if ippan.upload_file_path is not None and len(str(ippan.upload_file_path)) > 0:
                         ws_ippan.cell(row=8+i, column=55).value = str(ippan.upload_file_path)
 
-                    ###########################################################
-                    ### EXCEL入出力処理(0110)
-                    ### EXCELのセルに、値を埋め込む。
-                    ###########################################################
                     if ippan.house_summary_lv00 is not None and len(str(ippan.house_summary_lv00)) > 0:
                         ws_ippan.cell(row=8+i, column=56).value = str(ippan.house_summary_lv00)
 
@@ -1285,18 +1344,18 @@ class Command(BaseCommand):
                         ws_ippan.cell(row=8+i, column=121).value = str(ippan.office_alt_summary_full)
 
             ###################################################################
-            ### EXCEL入出力処理(0100)
+            ### EXCEL入出力処理(0110)
             ### ダウンロード用のEXCELファイルを保存する。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification()関数 STEP 11/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 12/14.', 'DEBUG')
             ### wb.save(download_file_path)
             wb.save(summary_file_path)
 
             ###################################################################
-            ### DBアクセス処理(0110)
+            ### DBアクセス処理(0120)
             ### トリガーデータを更新する。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 12/13.', 'DEBUG')
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 13/14.', 'DEBUG')
             connection_cursor = connection.cursor()
             try:
                 connection_cursor.execute("""BEGIN""", [])
@@ -1324,7 +1383,7 @@ class Command(BaseCommand):
                     WHERE
                         trigger_id=%s -- trigger_id
                     """, [
-                        'SUCCESS', ### status_count
+                        'WAITING', ### status_count
                         1, ### success_count
                         0, ### failure_count
                         '\n'.join(get_info_log()), ### integrity_ok
@@ -1338,19 +1397,30 @@ class Command(BaseCommand):
                 print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
                 ### connection_cursor.rollback()
                 connection_cursor.execute("""ROLLBACK""", [])
+                print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+                print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数でエラーが発生しました。', 'ERROR')
+                print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数が異常終了しました。', 'ERROR')
+                print_log('finally1', 'DEBUG') ### 内側のexceptの場合、実行される。
+                return 8
+                print_log('finally2', 'DEBUG') ### 内側のexceptの場合、実行されない。
             finally:
+                print_log('finally3', 'DEBUG') ### 内側のexceptの場合、実行される。
                 connection_cursor.close()
+                print_log('finally4', 'DEBUG') ### 内側のexceptの場合、実行される。
                 
             ###################################################################
-            ### 戻り値セット処理(0120)
+            ### 戻り値セット処理(0130)
             ### 戻り値を戻す。
             ###################################################################
-            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 13/13.', 'DEBUG')
+            print_log('finally5', 'DEBUG') ### 内側のexceptの場合、実行されない。
+            print_log('[DEBUG] P0900Action.action_A99_manual_verification.handle()関数 STEP 14/14.', 'DEBUG')
             print_log('[INFO] P0900Action.action_A99_manual_verification.handle()関数が正常終了しました。', 'INFO')
             return 0
         except:
+            print_log('finally6', 'DEBUG') ### 内側のexceptの場合、実行されない。
             print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
             print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数でエラーが発生しました。', 'ERROR')
             print_log('[ERROR] P0900Action.action_A99_manual_verification.handle()関数が異常終了しました。', 'ERROR')
             return 8
+
             

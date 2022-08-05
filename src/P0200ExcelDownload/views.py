@@ -4173,7 +4173,7 @@ def ippan_chosa_view(request, lock):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        'A01',  ### action_code 
+                        'N01',  ### action_code 
                         None, ### status_code 
                         None, ### success_count 
                         None, ### failure_count 
@@ -4391,7 +4391,7 @@ def ippan_city_view(request, lock):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        'C01',  ### action_code 
+                        'O01',  ### action_code 
                         None, ### status_code 
                         None, ### success_count 
                         None, ### failure_count 
@@ -4563,7 +4563,7 @@ def ippan_ken_view(request, lock):
                         %s  -- upload_file_name 
                     )""", [
                         None, ### suigai_id 
-                        'D01',  ### action_code 
+                        'P01',  ### action_code 
                         None, ### status_code 
                         None, ### success_count 
                         None, ### failure_count 
