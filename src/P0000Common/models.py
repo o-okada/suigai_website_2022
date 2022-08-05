@@ -1128,6 +1128,11 @@ class CHITAN(models.Model):
     point = models.CharField(max_length=128, null=True)                        ### 災害復旧箇所 ※2022/08/05 追加
     assessment = models.FloatField(null=True)                                  ### 災害復旧査定額（千円） ※2022/08/05 追加
     comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/01 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/01 追加
+    summary_file_path = models.CharField(max_length=256, null=True)            ### 集計結果ファイルパス ※2022/08/01 追加
+    summary_file_name = models.CharField(max_length=256, null=True)            ### 集計結果ファイル名 ※2022/08/01 追加
     
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加
@@ -1158,6 +1163,11 @@ class HOJO(models.Model):
     branch_code = models.CharField(max_length=10, null=True)                   ### 枝番 ※2022/08/05 追加
     determined = models.FloatField(null=True)                                  ### 決定額（千円） ※2022/08/05 追加
     comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/01 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/01 追加
+    summary_file_path = models.CharField(max_length=256, null=True)            ### 集計結果ファイルパス ※2022/08/01 追加
+    summary_file_name = models.CharField(max_length=256, null=True)            ### 集計結果ファイル名 ※2022/08/01 追加
     
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加
@@ -1206,6 +1216,11 @@ class KOEKI(models.Model):
     ref_tel = models.CharField(max_length=128, null=True)                      ### 照会先_電話番号
     
     comment = models.CharField(max_length=512, null=True)                      ### 備考 ※2022/08/05 追加
+
+    upload_file_path = models.CharField(max_length=256, null=True)             ### アップロードファイルパス ※2022/08/01 追加
+    upload_file_name = models.CharField(max_length=256, null=True)             ### アップロードファイル名 ※2022/08/01 追加
+    summary_file_path = models.CharField(max_length=256, null=True)            ### 集計結果ファイルパス ※2022/08/01 追加
+    summary_file_name = models.CharField(max_length=256, null=True)            ### 集計結果ファイル名 ※2022/08/01 追加
     
     committed_at = models.DateTimeField(null=True)                             ### コミット日時 ※2022/08/05 追加
     deleted_at = models.DateTimeField(null=True)                               ### 削除日時 ※2022/08/05 追加

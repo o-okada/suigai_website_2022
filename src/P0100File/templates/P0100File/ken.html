@@ -18,13 +18,13 @@
     <!--<title>都道府県 | 公益事業調査票 | 水害統計オンラインサイト</title>-->
     {# endif #}
     {% if type_code == "ippan" %}
-    <title>都道府県 | 一般資産調査票_調査員用 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 一般資産調査員調査票 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
     <title>都道府県 | 水害区域図 | 水害統計オンラインサイト</title>
     {% elif type_code == "chitan" %}
-    <title>都道府県 | 公共土木施設調査票_地方単独事業 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 公共土木施設地方単独事業調査票 | 水害統計オンラインサイト</title>
     {% elif type_code == "hojo" %}
-    <title>都道府県 | 公共土木施設調査票_補助事業 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 公共土木施設補助事業調査票 | 水害統計オンラインサイト</title>
     {% elif type_code == "koeki" %}
     <title>都道府県 | 公益事業等調査票 | 水害統計オンラインサイト</title>
     {% endif %}
@@ -144,13 +144,13 @@
             <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">公益事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>-->
             {# endif #}
             {% if type_code == "ippan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査票_調査員用</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "area" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "chitan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設調査票_地方単独事業</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設地方単独事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "hojo" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設調査票_補助事業</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設補助事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "koeki" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">公益事業等調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% endif %}
@@ -163,11 +163,11 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設調査票_地方単独事業</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設調査票_補助事業</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産市区町村調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産都道府県調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設地方単独事業調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設補助事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業等調査票</a>
                 </div>
             </div>
@@ -177,11 +177,11 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
-                    <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設調査票_地方単独事業</a>
-                    <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設調査票_補助事業</a>
-                    <a class="dropdown-item" href="/P0300Koeki/">公益事業調査票</a>
+                    <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設地方単独事業調査票</a>
+                    <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設補助事業調査票</a>
+                    <a class="dropdown-item" href="/P0300Koeki/">公益事業等調査票</a>
                 </div>
             </div>
             <!-- END アップロードメニュー -->
@@ -364,7 +364,7 @@
                             <!-- BEGIN CHITAN 戻るリンク -->
                             <tr>
                                 <td colspan="8">
-                                    <a href="/P0100File/type/kokyo/">
+                                    <a href="/P0100File/type/chitan/">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
                                           <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
                                         </svg>
@@ -415,7 +415,7 @@
                             <!-- BEGIN HOJO 戻るリンク -->
                             <tr>
                                 <td colspan="8">
-                                    <a href="/P0100File/type/kokyo/">
+                                    <a href="/P0100File/type/hojo/">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
                                           <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
                                         </svg>
