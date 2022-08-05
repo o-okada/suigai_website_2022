@@ -52,20 +52,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <!--<li class="nav-item dropdown">-->
-                    <!--    <a class="nav-link dropdown-toggle active cl-nav" style="border-bottom: 2px solid #0000EE;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-                    <!--        <strong>ファイル</strong>-->
-                    <!--    </a>-->
-                    <!--    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/">TOP</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>-->
-                    <!--    </ul>-->
-                    <!--</li>-->
-                    <!-- END ナビバー ファイルメニュー -->
-                    <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item">
                         <a class="nav-link active cl-nav" style="border-bottom: 2px solid #0000EE;" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
@@ -132,8 +118,9 @@
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公共土木調査票</a>-->
-                    <!--<a class="dropdown-item" href="/P0200ExcelDownload/">公益事業調査票</a>-->
+                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設調査票_地方単独事業</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/">公共土木施設調査票_補助事業</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/">公益事業等調査票</a>
                 </div>
             </div>
             <!-- END ダウンロードメニュー -->
@@ -142,10 +129,11 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査票_調査員用</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
-                    <a class="dropdown-item" href="">公共土木調査票</a>
-                    <a class="dropdown-item" href="">公益事業調査票</a>
+                    <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設調査票_地方単独事業</a>
+                    <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設調査票_補助事業</a>
+                    <a class="dropdown-item" href="/P0300Koeki/">公益事業等調査票</a>
                 </div>
             </div>
             <!-- END アップロードメニュー -->
@@ -183,7 +171,7 @@
                                 <td class="text-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
                                         <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                    </svg><a href="/P0100File/type/ippan/">一般資産調査員調査票</a>
+                                    </svg><a href="/P0100File/type/ippan/">一般資産調査票_調査員用</a>
                                 </td>
                                 <td class="text-end">
                                 <td>
@@ -201,7 +189,8 @@
                                 <td class="text-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
                                         <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                    </svg><a href="/P0100File/type/kokyo/">公共土木調査票</a>
+                                    <!--</svg><a href="/P0100File/type/kokyo/">公共土木施設調査票_地方単独事業</a>-->
+                                    </svg><a href="/P0100File/type/chitan/">公共土木施設調査票_地方単独事業</a>
                                 </td>
                                 <td class="text-end">
                                 <td>
@@ -210,7 +199,17 @@
                                 <td class="text-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
                                         <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
-                                    </svg><a href="/P0100File/type/koeki/">公益事業調査票</a>
+                                    <!--</svg><a href="/P0100File/type/kokyo/">公共土木施設調査票_補助事業</a>-->
+                                    </svg><a href="/P0100File/type/hojo/">公共土木施設調査票_補助事業</a>
+                                </td>
+                                <td class="text-end">
+                                <td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/koeki/">公益事業等調査票</a>
                                 </td>
                                 <td class="text-end">
                                 <td>
