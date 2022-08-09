@@ -16,14 +16,14 @@ def print_log(log_message, log_type):
     JST = timezone(timedelta(hours=9), 'JST')
     datetime_now_YmdHMS = datetime.now(JST).strftime('%Y/%m/%d %H:%M:%S')
 
-    print('[' + datetime_now_YmdHMS + '] ' + log_message)
+    print('[' + str(datetime_now_YmdHMS) + '] ' + str(log_message))
     
     if log_type == 'INFO':
-        logger.info('[' + datetime_now_YmdHMS + '] ' + log_message)
+        logger.info('[' + str(datetime_now_YmdHMS) + '] ' + str(log_message))
     elif log_type == 'WARN':
-        logger.warn('[' + datetime_now_YmdHMS + '] ' + log_message)
+        logger.warn('[' + str(datetime_now_YmdHMS) + '] ' + str(log_message))
     elif log_type == 'ERROR':
-        logger.error('[' + datetime_now_YmdHMS + '] ' + log_message)
+        logger.error('[' + str(datetime_now_YmdHMS) + '] ' + str(log_message))
     elif log_type == 'DEBUG':
         pass
     else:

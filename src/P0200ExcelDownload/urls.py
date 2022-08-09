@@ -39,14 +39,22 @@ urlpatterns = [
     path('weather/', views.weather_view, name='weather_view'), 
     path('suigai/', views.suigai_view, name='suigai_view'), 
     path('ippan/', views.ippan_view, name='ippan_view'), 
-    path('ippan_view/', views.ippan_view_view, name='ippan_view_view'), 
+    ### path('ippan_view/', views.ippan_view_view, name='ippan_view_view'), 
     path('ippan_summary/', views.ippan_summary_view, name='ippan_summary_view'), 
-    path('ippan_group_by_ken/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view'), 
-    path('ippan_group_by_suikei/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
+    ### path('ippan_group_by_ken/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view'), 
+    ### path('ippan_group_by_suikei/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
 
     path('ippan_chosa/', views.ippan_chosa_view, name='ippan_chosa_view'), 
     path('ippan_city/', views.ippan_city_view, name='ippan_city_view'), 
     path('ippan_ken/', views.ippan_ken_view, name='ippan_ken_view'), 
+    
+    path('chitan_file/', views.chitan_file_view, name='chitan_file_view'),
+    path('hojo_file/', views.hojo_file_view, name='hojo_file_view'),
+    path('koeki_file/', views.koeki_file_view, name='koeki_file_view'),
+
+    path('chitan/', views.chitan_view, name='chitan_view'),
+    path('hojo/', views.hojo_view, name='hojo_view'),
+    path('koeki/', views.koeki_view, name='koeki_view'),
     
     path('building/lock/<slug:lock>/', views.building_view, name='building_view'), 
     path('ken/lock/<slug:lock>/', views.ken_view, name='ken_view'), 
@@ -81,14 +89,22 @@ urlpatterns = [
     path('weather/lock/<slug:lock>/', views.weather_view, name='weather_view'), 
     path('suigai/lock/<slug:lock>/', views.suigai_view, name='suigai_view'), 
     path('ippan/lock/<slug:lock>/', views.ippan_view, name='ippan_view'), 
-    path('ippan_view/lock/<slug:lock>/', views.ippan_view_view, name='ippan_view_view'), 
+    ### path('ippan_view/lock/<slug:lock>/', views.ippan_view_view, name='ippan_view_view'), 
     path('ippan_summary/lock/<slug:lock>/', views.ippan_summary_view, name='ippan_summary_view'), 
-    path('ippan_group_by_ken/lock/<slug:lock>/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view'), 
-    path('ippan_group_by_suikei/lock/<slug:lock>/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
+    ### path('ippan_group_by_ken/lock/<slug:lock>/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view'), 
+    ### path('ippan_group_by_suikei/lock/<slug:lock>/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei'), 
 
     path('ippan_chosa/lock/<slug:lock>/', views.ippan_chosa_view, name='ippan_chosa_view'), 
     path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view'), 
     path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view'), 
+
+    path('chitan_file/lock/<slug:lock>/', views.chitan_file_view, name='chitan_file_view'),
+    path('hojo_file/lock/<slug:lock>/', views.hojo_file_view, name='hojo_file_view'),
+    path('koeki_file/lock/<slug:lock>/', views.koeki_file_view, name='koeki_file_view'),
+
+    path('chitan/lock/<slug:lock>/', views.chitan_view, name='chitan_view'),
+    path('hojo/lock/<slug:lock>/', views.hojo_view, name='hojo_view'),
+    path('koeki/lock/<slug:lock>/', views.koeki_view, name='koeki_view'),
     
     path('download/<slug:hash_code>/<slug:count>/', views.download_view, name='download_view'), 
 ]

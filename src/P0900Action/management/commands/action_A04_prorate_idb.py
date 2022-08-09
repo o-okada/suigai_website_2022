@@ -76,8 +76,6 @@ from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 from P0000Common.models import ACTION                  ### 10000: アクション
 from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
-from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
-from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
 from P0000Common.common import get_debug_log
 from P0000Common.common import get_error_log

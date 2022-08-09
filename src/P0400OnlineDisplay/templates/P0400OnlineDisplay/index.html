@@ -51,19 +51,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- BEGIN ナビバー ファイルメニュー -->
-                    <!--<li class="nav-item dropdown">-->
-                    <!--    <a class="nav-link dropdown-toggle active cl-nav" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-                    <!--        <strong>ファイル</strong>-->
-                    <!--    </a>-->
-                    <!--    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/ippan/">一般資産調査員調査票</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/area/">水害区域図</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/kokyo/">公共土木調査票</a></li>-->
-                    <!--        <li><a class="dropdown-item" href="/P0100File/type/koeki/">公益事業調査票</a></li>-->
-                    <!--    </ul>-->
-                    <!--</li>-->
-                    <!-- END ナビバー ファイルメニュー -->
-                    <!-- BEGIN ナビバー ファイルメニュー -->
                     <li class="nav-item">
                         <a class="nav-link active cl-nav" style="" href="/P0100File/"><strong>ファイル</strong></a>
                     </li>
@@ -369,11 +356,11 @@
                         <option value="203" id="option_203" name="option_203" hidden>一覧表部分: ippan</option>
                         {% endif %}
                         
-                        {% if category_code2 == "204" or category_code2 == "7040" %}
-                        <option value="204" id="option_204" name="option_204" selected hidden>一覧表部分_按分データ: ippan_view</option>
-                        {% else %}
-                        <option value="204" id="option_204" name="option_204" hidden>一覧表部分_按分データ: ippan_view</option>
-                        {% endif %}
+                        {# if category_code2 == "204" or category_code2 == "7040" #}
+                        <!--<option value="204" id="option_204" name="option_204" selected hidden>一覧表部分_按分データ: ippan_view</option>-->
+                        {# else #}
+                        <!--<option value="204" id="option_204" name="option_204" hidden>一覧表部分_按分データ: ippan_view</option>-->
+                        {# endif #}
                         
                         {% if category_code2 == "300" or category_code2 == "8000" %}
                         <option value="300" id="option_300" name="option_300" selected>集計データ: ippan_summary</option>
@@ -381,17 +368,17 @@
                         <option value="300" id="option_300" name="option_300">集計データ: ippan_summary</option>
                         {% endif %}
 
-                        {% if category_code2 == "301" or category_code2 == "8010" %}
-                        <option value="301" id="option_301" name="option_301" selected>都道府県別: ippan_group_by_ken</option>
-                        {% else %}
-                        <option value="301" id="option_301" name="option_301">都道府県別: ippan_group_by_ken</option>
-                        {% endif %}
+                        {# if category_code2 == "301" or category_code2 == "8010" #}
+                        <!--<option value="301" id="option_301" name="option_301" selected>都道府県別: ippan_group_by_ken</option>-->
+                        {# else #}
+                        <!--<option value="301" id="option_301" name="option_301">都道府県別: ippan_group_by_ken</option>-->
+                        {# endif #}
                         
-                        {% if category_code2 == "302" or category_code2 == "8020" %}
-                        <option value="302" id="option_302" name="option_302" selected>水系別: ippan_group_by_suikei</option>
-                        {% else %}
-                        <option value="302" id="option_302" name="option_302">水系別: ippan_group_by_suikei</option>
-                        {% endif %}
+                        {# if category_code2 == "302" or category_code2 == "8020" #}
+                        <!--<option value="302" id="option_302" name="option_302" selected>水系別: ippan_group_by_suikei</option>-->
+                        {# else #}
+                        <!--<option value="302" id="option_302" name="option_302">水系別: ippan_group_by_suikei</option>-->
+                        {# endif #}
                         
                         {% if category_code2 == "10000" %}
                         <option value="10000" id="option_10000" name="option_10000" selected>アクション: action</option>
@@ -422,12 +409,6 @@
                         {% else %}
                         <option value="10040" id="option_10040" name="option_10040">フィードバックメッセージ: feedback</option>
                         {% endif %}
-
-                        {# if category_code2 == "10050" #}
-                        <!--<option value="10050" id="option_10050" name="option_10050" selected>EXCELファイルレポジトリ: repository</option>-->
-                        {# else #}
-                        <!--<option value="10050" id="option_10050" name="option_10050">EXCELファイルレポジトリ: repository</option>-->
-                        {# endif #}
                     </select>
                     <button class="btn btn-secondary" type="button" id="button_category2" name="button_category2">データ種別選択</button>
                 </div>
@@ -1935,269 +1916,210 @@
     {% endif %}
     
     <!-- 按分データ_一覧表部分: 204 7040 -->
-    {% if category_code2 == "204" or category_code2 == "7040" %}
-    <div class="mb-3 table-responsive">
-        <table class="table table-bordered table-striped text-nowrap">
-            <thead>
-                <tr>
-                    <th class="text-center">シートID</th>
-                    <th class="text-center">シート名</th>
-                    <th class="text-center">行ID</th>
-                    <th class="text-center">町丁名、大字名</th>
-                    <th class="text-center">建物区分コード</th>
-                    <th class="text-center">建物区分名</th>
-                    <th class="text-center">地上地下区分コード</th>
-                    <th class="text-center">地上地下区分名</th>
-                    <th class="text-center">浸水土砂区分コード</th>
-                    <th class="text-center">浸水土砂区分名</th>
-                    <th class="text-center">被害建物棟数_床下</th>
-                    <th class="text-center">被害建物棟数_01から49cm</th>
-                    <th class="text-center">被害建物棟数_50から99cm</th>
-                    <th class="text-center">被害建物棟数_100cm以上</th>
-                    <th class="text-center">被害建物棟数_半壊</th>
-                    <th class="text-center">被害建物棟数_全壊</th>
-                    <th class="text-center">被害建物棟数_合計</th>
-                    <th class="text-center">延床面積</th>
-                    <th class="text-center">被災世帯数</th>
-                    <th class="text-center">被災事業所数</th>
-                    <th class="text-center">延床面積_床下</th>
-                    <th class="text-center">延床面積_01から49cm</th>
-                    <th class="text-center">延床面積_50から99cm</th>
-                    <th class="text-center">延床面積_100cm以上</th>
-                    <th class="text-center">延床面積_半壊</th>
-                    <th class="text-center">延床面積_全壊</th>
-                    <th class="text-center">延床面積_合計</th>
-                    <th class="text-center">被災世帯数_床下</th>
-                    <th class="text-center">被災世帯数_01から49cm</th>
-                    <th class="text-center">被災世帯数_50から99cm</th>
-                    <th class="text-center">被災世帯数_100cm以上</th>
-                    <th class="text-center">被災世帯数_半壊</th>
-                    <th class="text-center">被災世帯数_全壊</th>
-                    <th class="text-center">被災世帯数_合計</th>
-                    <th class="text-center">被災事業所数_床下</th>
-                    <th class="text-center">被災事業所数_01から49cm</th>
-                    <th class="text-center">被災事業所数_50から99cm</th>
-                    <th class="text-center">被災事業所数_100cm以上</th>
-                    <th class="text-center">被災事業所数_半壊</th>
-                    <th class="text-center">被災事業所数_全壊</th>
-                    <th class="text-center">被災事業所数_合計</th>
-                    <th class="text-center">農漁家戸数_床下</th>
-                    <th class="text-center">農漁家戸数_01から49cm</th>
-                    <th class="text-center">農漁家戸数_50から99cm</th>
-                    <th class="text-center">農漁家戸数_100cm以上</th>
-                    <th class="text-center">農漁家戸数_全壊</th>
-                    <th class="text-center">農漁家戸数_合計</th>
-                    <th class="text-center">被災従業者数_床下</th>
-                    <th class="text-center">被災従業者数_01から49cm</th>
-                    <th class="text-center">被災従業者数_50から99cm</th>
-                    <th class="text-center">被災従業者数_100cm以上</th>
-                    <th class="text-center">被災従業者数_全壊</th>
-                    <th class="text-center">被災従業者数_合計</th>
-                    <th class="text-center">産業分類コード</th>
-                    <th class="text-center">産業分類名</th>
-                    <th class="text-center">地下空間の利用形態コード</th>
-                    <th class="text-center">地下空間の利用形態名</th>
-                    <th class="text-center">備考</th>
-                    <th class="text-center">コミット日時</th>
-                    <th class="text-center">削除日時</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ippan in ippan_view_list %}
-                <tr>
-                    {% if ippan.suigai_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.suigai_id }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.suigai_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.suigai_name }}</td>
-                    {% endif %}
-
-                    {% if ippan.ippan_id is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_id }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.ippan_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.ippan_name }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.building_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_code }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.building_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.building_name }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.underground_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.underground_code }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.underground_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.underground_name }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.flood_sediment_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.flood_sediment_code }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.flood_sediment_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.flood_sediment_name }}</td>
-                    {% endif %}
-                    
-                    <td>{{ ippan.building_lv00|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_lv01_49|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_half|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.building_total|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area_lv00|floatformat:2 }}</td>
-
-                    <td>{{ ippan.floor_area_lv01_49|floatformat:2 }}</td>
-
-                    <td>{{ ippan.floor_area_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area_half|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.floor_area_total|floatformat:2 }}</td>
-
-                    <td>{{ ippan.family_lv00|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_lv01_49|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_half|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.family_total|floatformat:2 }}</td>
-
-                    <td>{{ ippan.office_lv00|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_lv01_49|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_half|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.office_total|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_lv00|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_lv01_49|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.farmer_fisher_total|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_lv00|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_lv01_49|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_lv50_99|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_lv100|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_full|floatformat:2 }}</td>
-                    
-                    <td>{{ ippan.employee_total|floatformat:2 }}</td>
-                    
-                    {% if ippan.industry_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.industry_code }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.industry_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.industry_name }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.usage_code is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.usage_code }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.usage_name is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.usage_name }}</td>
-                    {% endif %}
-                    
-                    {% if ippan.comment is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.comment }}</td>
-                    {% endif %}
-
-                    {% if ippan.committed_at is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.committed_at }}</td>
-                    {% endif %}
-
-                    {% if ippan.deleted_at is None %}
-                    <td></td>
-                    {% else %}
-                    <td>{{ ippan.deleted_at }}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
+    <!--{# if category_code2 == "204" or category_code2 == "7040" #}-->
+    <!--<div class="mb-3 table-responsive">-->
+    <!--    <table class="table table-bordered table-striped text-nowrap">-->
+    <!--        <thead>-->
+    <!--            <tr>-->
+    <!--                <th class="text-center">シートID</th>-->
+    <!--                <th class="text-center">シート名</th>-->
+    <!--                <th class="text-center">行ID</th>-->
+    <!--                <th class="text-center">町丁名、大字名</th>-->
+    <!--                <th class="text-center">建物区分コード</th>-->
+    <!--                <th class="text-center">建物区分名</th>-->
+    <!--                <th class="text-center">地上地下区分コード</th>-->
+    <!--                <th class="text-center">地上地下区分名</th>-->
+    <!--                <th class="text-center">浸水土砂区分コード</th>-->
+    <!--                <th class="text-center">浸水土砂区分名</th>-->
+    <!--                <th class="text-center">被害建物棟数_床下</th>-->
+    <!--                <th class="text-center">被害建物棟数_01から49cm</th>-->
+    <!--                <th class="text-center">被害建物棟数_50から99cm</th>-->
+    <!--                <th class="text-center">被害建物棟数_100cm以上</th>-->
+    <!--                <th class="text-center">被害建物棟数_半壊</th>-->
+    <!--                <th class="text-center">被害建物棟数_全壊</th>-->
+    <!--                <th class="text-center">被害建物棟数_合計</th>-->
+    <!--                <th class="text-center">延床面積</th>-->
+    <!--                <th class="text-center">被災世帯数</th>-->
+    <!--                <th class="text-center">被災事業所数</th>-->
+    <!--                <th class="text-center">延床面積_床下</th>-->
+    <!--                <th class="text-center">延床面積_01から49cm</th>-->
+    <!--                <th class="text-center">延床面積_50から99cm</th>-->
+    <!--                <th class="text-center">延床面積_100cm以上</th>-->
+    <!--                <th class="text-center">延床面積_半壊</th>-->
+    <!--                <th class="text-center">延床面積_全壊</th>-->
+    <!--                <th class="text-center">延床面積_合計</th>-->
+    <!--                <th class="text-center">被災世帯数_床下</th>-->
+    <!--                <th class="text-center">被災世帯数_01から49cm</th>-->
+    <!--                <th class="text-center">被災世帯数_50から99cm</th>-->
+    <!--                <th class="text-center">被災世帯数_100cm以上</th>-->
+    <!--                <th class="text-center">被災世帯数_半壊</th>-->
+    <!--                <th class="text-center">被災世帯数_全壊</th>-->
+    <!--                <th class="text-center">被災世帯数_合計</th>-->
+    <!--                <th class="text-center">被災事業所数_床下</th>-->
+    <!--                <th class="text-center">被災事業所数_01から49cm</th>-->
+    <!--                <th class="text-center">被災事業所数_50から99cm</th>-->
+    <!--                <th class="text-center">被災事業所数_100cm以上</th>-->
+    <!--                <th class="text-center">被災事業所数_半壊</th>-->
+    <!--                <th class="text-center">被災事業所数_全壊</th>-->
+    <!--                <th class="text-center">被災事業所数_合計</th>-->
+    <!--                <th class="text-center">農漁家戸数_床下</th>-->
+    <!--                <th class="text-center">農漁家戸数_01から49cm</th>-->
+    <!--                <th class="text-center">農漁家戸数_50から99cm</th>-->
+    <!--                <th class="text-center">農漁家戸数_100cm以上</th>-->
+    <!--                <th class="text-center">農漁家戸数_全壊</th>-->
+    <!--                <th class="text-center">農漁家戸数_合計</th>-->
+    <!--                <th class="text-center">被災従業者数_床下</th>-->
+    <!--                <th class="text-center">被災従業者数_01から49cm</th>-->
+    <!--                <th class="text-center">被災従業者数_50から99cm</th>-->
+    <!--                <th class="text-center">被災従業者数_100cm以上</th>-->
+    <!--                <th class="text-center">被災従業者数_全壊</th>-->
+    <!--                <th class="text-center">被災従業者数_合計</th>-->
+    <!--                <th class="text-center">産業分類コード</th>-->
+    <!--                <th class="text-center">産業分類名</th>-->
+    <!--                <th class="text-center">地下空間の利用形態コード</th>-->
+    <!--                <th class="text-center">地下空間の利用形態名</th>-->
+    <!--                <th class="text-center">備考</th>-->
+    <!--                <th class="text-center">コミット日時</th>-->
+    <!--                <th class="text-center">削除日時</th>-->
+    <!--            </tr>-->
+    <!--        </thead>-->
+    <!--        <tbody>-->
+    <!--            {# for ippan in ippan_view_list #}-->
+    <!--            <tr>-->
+    <!--                {# if ippan.suigai_id is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.suigai_id #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.suigai_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.suigai_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.ippan_id is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.ippan_id #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.ippan_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.ippan_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.building_code is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.building_code #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.building_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.building_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.underground_code is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.underground_code #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.underground_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.underground_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.flood_sediment_code is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.flood_sediment_code #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.flood_sediment_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.flood_sediment_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                <td>{# ippan.building_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_half|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.building_total|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_half|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.floor_area_total|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_half|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.family_total|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_half|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.office_total|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.farmer_fisher_total|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_lv00|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_lv01_49|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_lv50_99|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_lv100|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_full|floatformat:2 #}</td>-->
+    <!--                <td>{# ippan.employee_total|floatformat:2 #}</td>-->
+    <!--                {# if ippan.industry_code is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.industry_code #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.industry_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.industry_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.usage_code is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.usage_code #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.usage_name is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.usage_name #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.comment is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.comment #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.committed_at is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.committed_at #}</td>-->
+    <!--                {# endif #}-->
+    <!--                {# if ippan.deleted_at is None #}-->
+    <!--                <td></td>-->
+    <!--                {# else #}-->
+    <!--                <td>{# ippan.deleted_at #}</td>-->
+    <!--                {# endif #}-->
+    <!--            </tr>-->
+    <!--            {# endfor #}-->
+    <!--        </tbody>-->
+    <!--    </table>-->
+    <!--</div>-->
+    <!--{# endif #}-->
 
     <!-- 集計データ: 300 8000 -->
     {% if category_code2 == "300" or category_code2 == "8000" %}

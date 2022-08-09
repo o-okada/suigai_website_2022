@@ -8,25 +8,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    {# if type_code == "ippan" #}
-    <!--<title>都道府県 | 一般資産調査員調査票 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "area" #}
-    <!--<title>都道府県 | 水害区域図 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "kokyo" #}
-    <!--<title>都道府県 | 公共土木調査票 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "koeki" #}
-    <!--<title>都道府県 | 公益事業調査票 | 水害統計オンラインサイト</title>-->
-    {# endif #}
     {% if type_code == "ippan" %}
-    <title>都道府県 | 一般資産調査員調査票 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
-    <title>都道府県 | 水害区域図 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "chitan" %}
-    <title>都道府県 | 公共土木施設地方単独事業調査票 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 公共土木施設地方単独事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "hojo" %}
-    <title>都道府県 | 公共土木施設補助事業調査票 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 公共土木施設補助事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "koeki" %}
-    <title>都道府県 | 公益事業等調査票 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 公益事業等調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -132,32 +123,23 @@
     
     <!-- BEGIN 行 -->
     <div class="row mb-3 ms-1 me-1">
-        <!-- BEGIN パンくずリスト -->
+        <!-- BEGIN パンくずリスト 列 -->
         <div class="col-6 text-start">
-            {# if type_code == "ippan" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>-->
-            {# elif type_code == "area" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>-->
-            {# elif type_code == "kokyo" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>-->
-            {# elif type_code == "koeki" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">公益事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>-->
-            {# endif #}
             {% if type_code == "ippan" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "area" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "chitan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設地方単独事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/chitan/">公共土木施設地方単独事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "hojo" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">公共土木施設補助事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/hojo/">公共土木施設補助事業調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "koeki" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">公益事業等調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% endif %}
         </div>
-        <!-- END パンくずリスト -->
+        <!-- END パンくずリスト 列 -->
     
-        <!-- BEGIN ドロップダウンメニュー -->
+        <!-- BEGIN ドロップダウンメニュー 列 -->
         <div class="col-6 text-end">
             <!-- BEGIN ダウンロードメニュー -->
             <div class="btn-group">
@@ -186,10 +168,11 @@
             </div>
             <!-- END アップロードメニュー -->
         </div>
-        <!-- END ドロップダウンメニュー -->
+        <!-- END ドロップダウンメニュー 列 -->
     </div>
     <!-- END 行 -->
 
+    <!-- BEGIN IPPAN -->
     {% if type_code == "ippan" %}
     <!-- BEGIN IPPAN 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -270,7 +253,9 @@
         <!-- END IPPAN 列 -->
     </div>
     <!-- END IPPAN 行 -->
+    <!-- END IPPAN -->
 
+    <!-- BEGIN AREA -->
     {% elif type_code == "area" %}
     <!-- BEGIN AREA 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -334,7 +319,9 @@
         <!-- END AREA 列 -->
     </div>
     <!-- END AREA 行 -->
+    <!-- END AREA -->
             
+    <!-- BEGIN CHITAN -->
     {% elif type_code == "chitan" %}
     <!-- BEGIN CHITAN 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -373,8 +360,31 @@
                             </tr>
                             <!-- END CHITAN 戻るリンク -->
                             
-                            <!-- BEGIN CHITAN 公共土木調査票 -->
-                            <!-- END CHITAN 公共土木調査票 -->
+                            <!-- BEGIN CHITAN 公共土木施設地方単独事業調査票 -->
+                            {% for chitan_file in chitan_file_list %}
+                            <tr>
+                                <td>アップロード <a class="cl-table" href="/{{ chitan_file.upload_file_path }}">{{ chitan_file.upload_file_name|truncatechars:30 }}</a></td>
+
+                                {% if chitan_file.deleted_at is None %}
+                                <td>コミット日時 {{ chitan_file.committed_at|truncatechars:20 }}</td>
+                                {% else %}
+                                <td>削除日時 {{ chitan_file.deleted_at|truncatechars:20 }}</td>
+                                {% endif %}
+                                
+                                {% if chitan_file.deleted_at is None %}
+                                    {% if chitan_file.summary_file_name is None %}
+                                    <td>&raquo; 集計結果 </td>
+                                    {% else %}
+                                    <td>&raquo; 集計結果 <a class="cl-table" href="/{{ chitan_file.summary_file_path }}">{{ chitan_file.summary_file_name|truncatechars:30 }}</a></td>
+                                    {% endif %}
+                                {% else %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            <!-- END CHITAN 公共土木施設地方単独事業調査票 -->
                         </table>
                     </div>
                 </div>
@@ -385,7 +395,9 @@
         <!-- END CHITAN 列 -->
     </div>
     <!-- END CHITAN 行 -->
+    <!-- END CHITAN -->
 
+    <!-- BEGIN HOJO -->
     {% elif type_code == "hojo" %}
     <!-- BEGIN HOJO 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -424,8 +436,31 @@
                             </tr>
                             <!-- END HOJO 戻るリンク -->
                             
-                            <!-- BEGIN HOJO 公共土木調査票 -->
-                            <!-- END HOJO 公共土木調査票 -->
+                            <!-- BEGIN HOJO 公共土木施設補助事業調査票 -->
+                            {% for hojo_file in hojo_file_list %}
+                            <tr>
+                                <td>アップロード <a class="cl-table" href="/{{ hojo_file.upload_file_path }}">{{ hojo_file.upload_file_name|truncatechars:30 }}</a></td>
+
+                                {% if hojo_file.deleted_at is None %}
+                                <td>コミット日時 {{ hojo_file.committed_at|truncatechars:20 }}</td>
+                                {% else %}
+                                <td>削除日時 {{ hojo_file.deleted_at|truncatechars:20 }}</td>
+                                {% endif %}
+                                
+                                {% if hojo_file.deleted_at is None %}
+                                    {% if hojo_file.summary_file_name is None %}
+                                    <td>&raquo; 集計結果 </td>
+                                    {% else %}
+                                    <td>&raquo; 集計結果 <a class="cl-table" href="/{{ hojo_file.summary_file_path }}">{{ hojo_file.summary_file_name|truncatechars:30 }}</a></td>
+                                    {% endif %}
+                                {% else %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            <!-- END HOJO 公共土木施設補助事業調査票 -->
                         </table>
                     </div>
                 </div>
@@ -436,7 +471,9 @@
         <!-- END HOJO 列 -->
     </div>
     <!-- END HOJO 行 -->
+    <!-- END HOJO -->
             
+    <!-- BEGIN KOEKI -->
     {% elif type_code == "koeki" %}
     <!-- BEGIN KOEKI 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -475,8 +512,31 @@
                             </tr>
                             <!-- END KOEKI 戻るリンク -->
                             
-                            <!-- BEGIN KOEKI 公益事業調査票 -->
-                            <!-- END KOEKI 公益事業調査票 -->
+                            <!-- BEGIN KOEKI 公益事業等調査票 -->
+                            {% for koeki_file in koeki_file_list %}
+                            <tr>
+                                <td>アップロード <a class="cl-table" href="/{{ koeki_file.upload_file_path }}">{{ koeki_file.upload_file_name|truncatechars:30 }}</a></td>
+
+                                {% if koeki_file.deleted_at is None %}
+                                <td>コミット日時 {{ koeki_file.committed_at|truncatechars:20 }}</td>
+                                {% else %}
+                                <td>削除日時 {{ koeki_file.deleted_at|truncatechars:20 }}</td>
+                                {% endif %}
+                                
+                                {% if koeki_file.deleted_at is None %}
+                                    {% if koeki_file.summary_file_name is None %}
+                                    <td>&raquo; 集計結果 </td>
+                                    {% else %}
+                                    <td>&raquo; 集計結果 <a class="cl-table" href="/{{ koeki_file.summary_file_path }}">{{ koeki_file.summary_file_name|truncatechars:30 }}</a></td>
+                                    {% endif %}
+                                {% else %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            <!-- END KOEKI 公益事業等調査票 -->
                         </table>
                     </div>
                 </div>
@@ -488,6 +548,7 @@
     </div>
     <!-- END KOEKI 行 -->
     {% endif %}
+    <!-- END KOEKI -->
 
     <!-- BEGIN コンテナ -->
     <!--<div class="container mb-3">-->

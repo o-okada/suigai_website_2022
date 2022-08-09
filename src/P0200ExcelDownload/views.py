@@ -8,8 +8,14 @@
 ###############################################################################
 ### 処理名：インポート処理
 ###############################################################################
+import glob
+import hashlib
+import os
 import sys
+import time
+
 from datetime import date, datetime, timedelta, timezone
+
 from django.contrib.auth.decorators import login_required
 from django.db import connection
 from django.db import transaction
@@ -22,7 +28,6 @@ from django.template import loader
 from django.views import generic
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
-
 from django.shortcuts import redirect
 
 import openpyxl
@@ -30,11 +35,6 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.formatting.rule import FormulaRule
-
-import hashlib
-import os
-import time
-import glob
 
 from P0000Common.models import BUILDING                ### 1000: 建物区分
 from P0000Common.models import KEN                     ### 1010: 都道府県
@@ -73,11 +73,21 @@ from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害
 
 from P0000Common.models import AREA                    ### 7000: 入力データ_水害区域
 from P0000Common.models import WEATHER                 ### 7010: 入力データ_異常気象
-from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
-from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
-from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
+from P0000Common.models import SUIGAI                  ### 7020: 入力データ_一般資産調査票_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 入力データ_一般資産調査票_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一般資産調査票_一覧表部分
+from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設調査票_地方単独事業_ファイル部分
+from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設調査票_地方単独事業_一覧表部分
+from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設調査票_補助事業_ファイル部分
+from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設調査票_補助事業_一覧表部分
+from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票_ファイル部分
+from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票_一覧表部分
 
-from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_集計結果
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_一般資産調査票_集計結果
+
+from P0000Common.models import ACTION                  ### 10000: アクション
+from P0000Common.models import STATUS                  ### 10010: 状態
+from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 
 from P0000Common.common import get_debug_log
 from P0000Common.common import get_error_log
@@ -88,7 +98,6 @@ from P0000Common.common import reset_log
 
 ###############################################################################
 ### 関数名：index_view(request)
-### urlpattern：path('', views.index_view, name='index_view')
 ### urlpattern：path('data_type/<slug:data_type>', views.index_view, name='index_view')
 ### template：P0200ExcelDownload/index.html
 ###############################################################################
@@ -229,7 +238,7 @@ def index_view(request, data_type):
 ###############################################################################
 ### 関数名：building_view(request, lock)
 ### 1000：建物区分
-### urlpattern：path('building/', views.building_view, name='building_view')
+### urlpattern：path('building/lock/<slug:lock>/', views.building_view, name='building_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -292,7 +301,7 @@ def building_view(request, lock):
 ###############################################################################
 ### 関数名：ken_view(request, lock)
 ### 1010：都道府県
-### urlpattern：path('ken/', views.ken_view, name='ken_view')
+### urlpattern：path('ken/lock/<slug:lock>/', views.ken_view, name='ken_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -355,7 +364,7 @@ def ken_view(request, lock):
 ###############################################################################
 ### 関数名：city_view(request, lock)
 ### 1020：市区町村
-### urlpattern：path('city/', views.city_view, name='city_view')
+### urlpattern：path('city/lock/<slug:lock>/', views.city_view, name='city_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -436,7 +445,7 @@ def city_view(request, lock):
 ###############################################################################
 ### 関数名：kasen_kaigan_view(request, lock)
 ### 1030：水害発生地点工種（河川海岸区分）
-### urlpattern：path('kasen_kaigan/', views.kasen_kaigan_view, name='kasen_kaigan_view')
+### urlpattern：path('kasen_kaigan/lock/<slug:lock>/', views.kasen_kaigan_view, name='kasen_kaigan_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -499,7 +508,7 @@ def kasen_kaigan_view(request, lock):
 ###############################################################################
 ### 関数名：suikei_view(request, lock)
 ### 1040：水系（水系・沿岸）
-### urlpattern：path('suikei/', views.suikei_view, name='suikei_view')
+### urlpattern：path('suikei/lock/<slug:lock>/', views.suikei_view, name='suikei_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -574,7 +583,7 @@ def suikei_view(request, lock):
 ###############################################################################
 ### 関数名：suikei_type_view(request, lock)
 ### 1050：水系種別（水系・沿岸種別）
-### urlpattern：path('suikei_type/', views.suikei_type_view, name='suikei_type_view')
+### urlpattern：path('suikei_type/lock/<slug:lock>/', views.suikei_type_view, name='suikei_type_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -637,7 +646,7 @@ def suikei_type_view(request, lock):
 ###############################################################################
 ### 関数名：kasen_view(request, lock)
 ### 1060：河川（河川・海岸）
-### urlpattern：path('kasen/', views.kasen_view, name='kasen_view')
+### urlpattern：path('kasen/lock/<slug:lock>/', views.kasen_view, name='kasen_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -719,7 +728,7 @@ def kasen_view(request, lock):
 ###############################################################################
 ### 関数名：kasen_type_view(request, lock)
 ### 1070：河川種別（河川・海岸種別）
-### urlpattern：path('kasen_type/', views.kasen_type_view, name='kasen_type_view')
+### urlpattern：path('kasen_type/lock/<slug:lock>/', views.kasen_type_view, name='kasen_type_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -782,7 +791,7 @@ def kasen_type_view(request, lock):
 ###############################################################################
 ### 関数名：cause_view(request, lock)
 ### 1080：水害原因
-### urlpattern：path('cause/', views.cause_view, name='cause_view')
+### urlpattern：path('cause/lock/<slug:lock>/', views.cause_view, name='cause_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -845,7 +854,7 @@ def cause_view(request, lock):
 ###############################################################################
 ### 関数名：underground_view(request, lock)
 ### 1090：地上地下区分
-### urlpattern：path('underground/', views.underground_view, name='underground_view')
+### urlpattern：path('underground/lock/<slug:lock>/', views.underground_view, name='underground_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -908,7 +917,7 @@ def underground_view(request, lock):
 ###############################################################################
 ### 関数名：usage_view(request, lock)
 ### 1100：地下空間の利用形態
-### urlpattern：path('usage/', views.usage_view, name='usage_view')
+### urlpattern：path('usage/lock/<slug:lock>/', views.usage_view, name='usage_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -971,7 +980,7 @@ def usage_view(request, lock):
 ###############################################################################
 ### 関数名：flood_sediment_view(request, lock)
 ### 1110：浸水土砂区分
-### urlpattern：path('flood_sediment/', views.flood_sediment_view, name='flood_sediment_view')
+### urlpattern：path('flood_sediment/lock/<slug:lock>/', views.flood_sediment_view, name='flood_sediment_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1034,7 +1043,7 @@ def flood_sediment_view(request, lock):
 ###############################################################################
 ### 関数名：gradient_view(request, lock)
 ### 1120：地盤勾配区分
-### urlpattern：path('gradient/', views.gradient_view, name='gradient_view')
+### urlpattern：path('gradient/lock/<slug:lock>/', views.gradient_view, name='gradient_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1097,7 +1106,7 @@ def gradient_view(request, lock):
 ###############################################################################
 ### 関数名：industry_view(request, lock)
 ### 1130：産業分類
-### urlpattern：path('industry/', views.industry_view, name='industry_view')
+### urlpattern：path('industry/lock/<slug:lock>/', views.industry_view, name='industry_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1160,7 +1169,7 @@ def industry_view(request, lock):
 ###############################################################################
 ### 関数名：house_asset_view(request, lock)
 ### 2000：家屋評価額
-### urlpattern：path('house_asset/', views.house_asset_view, name='house_asset_view')
+### urlpattern：path('house_asset/lock/<slug:lock>/', views.house_asset_view, name='house_asset_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1235,7 +1244,7 @@ def house_asset_view(request, lock):
 ###############################################################################
 ### 関数名：house_rate_view(request, lock)
 ### 2010：家屋被害率
-### urlpattern：path('house_rate/', views.house_rate_view, name='house_rate_view'
+### urlpattern：path('house_rate/lock/<slug:lock>/', views.house_rate_view, name='house_rate_view'
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1331,7 +1340,7 @@ def house_rate_view(request, lock):
 ###############################################################################
 ### 関数名：house_alt_view(request, lock)
 ### 2020：家庭応急対策費_代替活動費
-### urlpattern：path('house_alt/', views.house_alt_view, name='house_alt_view')
+### urlpattern：path('house_alt/lock/<slug:lock>/', views.house_alt_view, name='house_alt_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1404,7 +1413,7 @@ def house_alt_view(request, lock):
 ###############################################################################
 ### 関数名：house_clean_view(request, lock)
 ### 2030：家庭応急対策費_清掃日数、清掃労働単価
-### urlpattern：path('house_clean/', views.house_clean_view, name='house_clean_view')
+### urlpattern：path('house_clean/lock/<slug:lock>/', views.house_clean_view, name='house_clean_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1479,7 +1488,7 @@ def house_clean_view(request, lock):
 ###############################################################################
 ### 関数名：household_asset_view(request, lock)
 ### 3000：家庭用品自動車以外所有額
-### urlpattern：path('household_asset/', views.household_asset_view, name='household_asset_view')
+### urlpattern：path('household_asset/lock/<slug:lock>/', views.household_asset_view, name='household_asset_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1542,7 +1551,7 @@ def household_asset_view(request, lock):
 ###############################################################################
 ### 関数名：household_rate_view(request, lock)
 ### 3010：家庭用品自動車以外被害率
-### urlpattern：path('household_rate/', views.household_rate_view, name='household_rate_view')
+### urlpattern：path('household_rate/lock/<slug:lock>/', views.household_rate_view, name='household_rate_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1632,7 +1641,7 @@ def household_rate_view(request, lock):
 ###############################################################################
 ### 関数名：car_asset_view(request, lock)
 ### 4000：家庭用品自動車所有額
-### urlpattern：path('car_asset/', views.car_asset_view, name='car_asset_view')
+### urlpattern：path('car_asset/lock/<slug:lock>/', views.car_asset_view, name='car_asset_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1695,7 +1704,7 @@ def car_asset_view(request, lock):
 ###############################################################################
 ### 関数名：car_rate_view(request, lock)
 ### 4010：家庭用品自動車被害率
-### urlpattern：path('car_rate/', views.car_rate_view, name='car_rate_view')
+### urlpattern：path('car_rate/lock/<slug:lock>/', views.car_rate_view, name='car_rate_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1768,7 +1777,7 @@ def car_rate_view(request, lock):
 ###############################################################################
 ### 関数名：office_asset_view(request, lock)
 ### 5000：事業所資産額
-### urlpattern：path('office_asset/', views.office_asset_view, name='office_asset_view')
+### urlpattern：path('office_asset/lock/<slug:lock>/', views.office_asset_view, name='office_asset_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1849,7 +1858,7 @@ def office_asset_view(request, lock):
 ###############################################################################
 ### 関数名：office_rate_view(request, lock)
 ### 5010：事業所被害率
-### urlpattern：path('office_rate/', views.office_rate_view, name='office_rate_view')
+### urlpattern：path('office_rate/lock/<slug:lock>/', views.office_rate_view, name='office_rate_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -1957,7 +1966,7 @@ def office_rate_view(request, lock):
 ###############################################################################
 ### 関数名：office_suspend_view(request, lock)
 ### 5020：事業所営業停止日数
-### urlpattern：path('office_suspend/', views.office_suspend_view, name='office_suspend_view')
+### urlpattern：path('office_suspend/lock/<slug:lock>/', views.office_suspend_view, name='office_suspend_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2030,7 +2039,7 @@ def office_suspend_view(request, lock):
 ###############################################################################
 ### 関数名：office_stagnate_view(request, lock)
 ### 5030：事業所営業停滞日数
-### urlpattern：path('office_stagnate/', views.office_stagnate_view, name='office_stagnate_view')
+### urlpattern：path('office_stagnate/lock/<slug:lock>/', views.office_stagnate_view, name='office_stagnate_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2103,7 +2112,7 @@ def office_stagnate_view(request, lock):
 ###############################################################################
 ### 関数名：office_alt_view(request, lock)
 ### 5040：事業所応急対策費_代替活動費
-### urlpattern：
+### urlpattern：path('office_alt/lock/<slug:lock>/', views.office_alt_view, name='office_alt_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2176,7 +2185,7 @@ def office_alt_view(request, lock):
 ###############################################################################
 ### 関数名：farmer_fisher_asset_view(request, lock)
 ### 6000：農漁家資産額
-### urlpattern：path('farmer_fisher_asset/', views.farmer_fisher_asset_view, name='farmer_fisher_asset_view')
+### urlpattern：path('farmer_fisher_asset/lock/<slug:lock>/', views.farmer_fisher_asset_view, name='farmer_fisher_asset_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2241,7 +2250,7 @@ def farmer_fisher_asset_view(request, lock):
 ###############################################################################
 ### 関数名：farmer_fisher_rate_view(request, lock)
 ### 6010：農漁家被害率
-### urlpattern：path('farmer_fisher_rate/', views.farmer_fisher_rate_view, name='farmer_fisher_rate_view')
+### urlpattern：path('farmer_fisher_rate/lock/<slug:lock>/', views.farmer_fisher_rate_view, name='farmer_fisher_rate_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2349,7 +2358,7 @@ def farmer_fisher_rate_view(request, lock):
 ###############################################################################
 ### 関数名：area_view(request, lock)
 ### 7000：入力データ_水害区域
-### urlpattern：path('area/', views.area_view, name='area_view')
+### urlpattern：path('area/lock/<slug:lock>/', views.area_view, name='area_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2412,7 +2421,7 @@ def area_view(request, lock):
 ###############################################################################
 ### 関数名：weather_view(request, lock)
 ### 7010：入力データ_異常気象
-### urlpattern：path('weather/', views.weather_view, name='weather_view')
+### urlpattern：path('weather/lock/<slug:lock>/', views.weather_view, name='weather_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2500,7 +2509,7 @@ def weather_view(request, lock):
 ###############################################################################
 ### 関数名：suigai_view(request, lock)
 ### 7020：入力データ_ヘッダ部分
-### urlpattern：path('suigai/', views.suigai_view, name='suigai_view')
+### urlpattern：path('suigai/lock/<slug:lock>/', views.suigai_view, name='suigai_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2737,7 +2746,7 @@ def suigai_view(request, lock):
 ###############################################################################
 ### 関数名：ippan_view(request, lock)
 ### 7030：入力データ_一覧表部分
-### urlpattern：path('ippan/', views.ippan_view, name='ippan_view')
+### urlpattern：path('ippan/lock/<slug:lock>/', views.ippan_view, name='ippan_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -2884,326 +2893,315 @@ def ippan_view(request, lock):
 ###############################################################################
 ### 関数名：ippan_view_view(request, lock)
 ### 7040：ビューデータ_一覧表部分
-### urlpattern：path('ippan_view/', views.ippan_view_view, name='ippan_view_view')
+### urlpattern：path('ippan_view/lock/<slug:lock>/', views.ippan_view_view, name='ippan_view_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def ippan_view_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        ### reset_log()
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が開始しました。', 'INFO')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 request = {}'.format(request.method), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 lock = {}'.format(lock), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 1/4.', 'DEBUG')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産ビューデータ一覧表部分データを取得する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 2/4.', 'DEBUG')
-        ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 3/4.', 'DEBUG')
-        template_file_path = 'static/template_ippan_view.xlsx'
-        download_file_path = 'static/download_ippan_view.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = 'ビューデータ_一覧表部分'
-        ws.cell(row=1, column=1).value = '行ID'
-        ws.cell(row=1, column=2).value = '町丁目、大字名'
-        ws.cell(row=1, column=3).value = '水害ID'
-        ws.cell(row=1, column=4).value = '水害名'
-        ws.cell(row=1, column=5).value = '都道府県コード'
-        ws.cell(row=1, column=6).value = '都道府県名'
-        ws.cell(row=1, column=7).value = '市区町村コード'
-        ws.cell(row=1, column=8).value = '市区町村名'
-        ws.cell(row=1, column=9).value = '水害原因コード1'
-        ws.cell(row=1, column=10).value = '水害原因名1'
-        ws.cell(row=1, column=11).value = '水害原因コード2'
-        ws.cell(row=1, column=12).value = '水害原因名2'
-        ws.cell(row=1, column=13).value = '水害原因コード3'
-        ws.cell(row=1, column=14).value = '水害原因名3'
-        ws.cell(row=1, column=15).value = '水害区域ID'
-        ws.cell(row=1, column=16).value = '水害区域名'
-        ws.cell(row=1, column=17).value = '水系コード'
-        ws.cell(row=1, column=18).value = '水系名'
-        ws.cell(row=1, column=19).value = '河川コード'
-        ws.cell(row=1, column=20).value = '河川名'
-        ws.cell(row=1, column=21).value = '地盤勾配区分コード'
-        ws.cell(row=1, column=22).value = '地盤勾配区分名'
-        ws.cell(row=1, column=23).value = '宅地面積'
-        ws.cell(row=1, column=24).value = '農地面積'
-        ws.cell(row=1, column=25).value = '地下面積'
-        ws.cell(row=1, column=26).value = '河川海岸（工種）コード'
-        ws.cell(row=1, column=27).value = '河川海岸（工種）名'
-        ws.cell(row=1, column=28).value = '農作物被害額'
-        ws.cell(row=1, column=29).value = '異常気象ID'
-        ws.cell(row=1, column=30).value = '異常気象名'
-        ws.cell(row=1, column=31).value = '建物区分コード'
-        ws.cell(row=1, column=32).value = '建物区分名'
-        ws.cell(row=1, column=33).value = '地上地下区分コード'
-        ws.cell(row=1, column=34).value = '地上地下区分名'
-        ws.cell(row=1, column=35).value = '浸水土砂区分コード'
-        ws.cell(row=1, column=36).value = '浸水土砂区分名'
-        ws.cell(row=1, column=37).value = '被害建物棟数_床下'
-        ws.cell(row=1, column=38).value = '被害建物棟数_01から49cm'
-        ws.cell(row=1, column=39).value = '被害建物棟数_50から99cm'
-        ws.cell(row=1, column=40).value = '被害建物棟数_100cm以上'
-        ws.cell(row=1, column=41).value = '被害建物棟数_半壊'
-        ws.cell(row=1, column=42).value = '被害建物棟数_全壊'
-        ws.cell(row=1, column=43).value = '被害建物棟数_合計'
-        ws.cell(row=1, column=44).value = '延床面積'
-        ws.cell(row=1, column=45).value = '被災世帯数'
-        ws.cell(row=1, column=46).value = '被災事業所数'
-        ws.cell(row=1, column=47).value = '延床面積_床下'
-        ws.cell(row=1, column=48).value = '延床面積_01から49cm'
-        ws.cell(row=1, column=49).value = '延床面積_50から99cm'
-        ws.cell(row=1, column=50).value = '延床面積_100cm以上'
-        ws.cell(row=1, column=51).value = '延床面積_半壊'
-        ws.cell(row=1, column=52).value = '延床面積_全壊'
-        ws.cell(row=1, column=53).value = '延床面積_合計'
-        ws.cell(row=1, column=54).value = '被災世帯数_床下'
-        ws.cell(row=1, column=55).value = '被災世帯数_01から49cm'
-        ws.cell(row=1, column=56).value = '被災世帯数_50から99cm'
-        ws.cell(row=1, column=57).value = '被災世帯数_100cm以上'
-        ws.cell(row=1, column=58).value = '被災世帯数_半壊'
-        ws.cell(row=1, column=59).value = '被災世帯数_全壊'
-        ws.cell(row=1, column=60).value = '被災世帯数_合計'
-        ws.cell(row=1, column=61).value = '被災事業所数_床下'
-        ws.cell(row=1, column=62).value = '被災事業所数_01から49cm'
-        ws.cell(row=1, column=63).value = '被災事業所数_50から99cm'
-        ws.cell(row=1, column=64).value = '被災事業所数_100cm以上'
-        ws.cell(row=1, column=65).value = '被災事業所数_半壊'
-        ws.cell(row=1, column=66).value = '被災事業所数_全壊'
-        ws.cell(row=1, column=67).value = '被災事業所数_合計'
-        ws.cell(row=1, column=68).value = '農漁家戸数_床下'
-        ws.cell(row=1, column=69).value = '農漁家戸数_01から49cm'
-        ws.cell(row=1, column=70).value = '農漁家戸数_50から99cm'
-        ws.cell(row=1, column=71).value = '農漁家戸数_100cm以上'
-        ws.cell(row=1, column=72).value = '農漁家戸数_全壊'
-        ws.cell(row=1, column=73).value = '農漁家戸数_合計'
-        ws.cell(row=1, column=74).value = '被災従業者数_床下'
-        ws.cell(row=1, column=75).value = '被災従業者数_01から49cm'
-        ws.cell(row=1, column=76).value = '被災従業者数_50から99cm'
-        ws.cell(row=1, column=77).value = '被災従業者数_100cm以上'
-        ws.cell(row=1, column=78).value = '被災従業者数_全壊'
-        ws.cell(row=1, column=79).value = '被災従業者数_合計'
-        ws.cell(row=1, column=80).value = '産業分類コード'
-        ws.cell(row=1, column=81).value = '産業分類名'
-        ws.cell(row=1, column=82).value = '地下空間の利用形態コード'
-        ws.cell(row=1, column=83).value = '地下空間の利用形態名'
-        ws.cell(row=1, column=84).value = '備考'
-        ws.cell(row=1, column=85).value = '削除日時'
-
-        ws.cell(row=2, column=1).value = 'ippan_id'
-        ws.cell(row=2, column=2).value = 'ippan_name'
-        ws.cell(row=2, column=3).value = 'suigai_id'
-        ws.cell(row=2, column=4).value = 'suigai_name'
-        ws.cell(row=2, column=5).value = 'ken_code'
-        ws.cell(row=2, column=6).value = 'ken_name'
-        ws.cell(row=2, column=7).value = 'city_code'
-        ws.cell(row=2, column=8).value = 'city_name'
-        ws.cell(row=2, column=9).value = 'cause_1_code'
-        ws.cell(row=2, column=10).value = 'cause_1_name'
-        ws.cell(row=2, column=11).value = 'cause_2_code'
-        ws.cell(row=2, column=12).value = 'cause_2_name'
-        ws.cell(row=2, column=13).value = 'cause_3_code'
-        ws.cell(row=2, column=14).value = 'cause_3_name'
-        ws.cell(row=2, column=15).value = 'area_id'
-        ws.cell(row=2, column=16).value = 'area_name'
-        ws.cell(row=2, column=17).value = 'suikei_code'
-        ws.cell(row=2, column=18).value = 'suikei_name'
-        ws.cell(row=2, column=19).value = 'kasen_code'
-        ws.cell(row=2, column=20).value = 'kasen_name'
-        ws.cell(row=2, column=21).value = 'gradient_code'
-        ws.cell(row=2, column=22).value = 'gradient_name'
-        ws.cell(row=2, column=23).value = 'residential_area'
-        ws.cell(row=2, column=24).value = 'agricultural_area'
-        ws.cell(row=2, column=25).value = 'underground_area'
-        ws.cell(row=2, column=26).value = 'kasen_kaigan_code'
-        ws.cell(row=2, column=27).value = 'kasen_kaigan_name'
-        ws.cell(row=2, column=28).value = 'crop_damage'
-        ws.cell(row=2, column=29).value = 'weather_id'
-        ws.cell(row=2, column=30).value = 'weather_name'
-        ws.cell(row=2, column=31).value = 'building_code'
-        ws.cell(row=2, column=32).value = 'building_name'
-        ws.cell(row=2, column=33).value = 'underground_code'
-        ws.cell(row=2, column=34).value = 'underground_name'
-        ws.cell(row=2, column=35).value = 'flood_sediment_code'
-        ws.cell(row=2, column=36).value = 'flood_sediment_name'
-        ws.cell(row=2, column=37).value = 'building_lv00'
-        ws.cell(row=2, column=38).value = 'building_lv01_49'
-        ws.cell(row=2, column=39).value = 'building_lv50_99'
-        ws.cell(row=2, column=40).value = 'building_lv100'
-        ws.cell(row=2, column=41).value = 'building_half'
-        ws.cell(row=2, column=42).value = 'building_full'
-        ws.cell(row=2, column=43).value = 'building_total'
-        ws.cell(row=2, column=44).value = 'floor_area'
-        ws.cell(row=2, column=45).value = 'family'
-        ws.cell(row=2, column=46).value = 'office'
-        ws.cell(row=2, column=47).value = 'floor_area_lv00'
-        ws.cell(row=2, column=48).value = 'floor_area_lv01_49'
-        ws.cell(row=2, column=49).value = 'floor_area_lv50_99'
-        ws.cell(row=2, column=50).value = 'floor_area_lv100'
-        ws.cell(row=2, column=51).value = 'floor_area_half'
-        ws.cell(row=2, column=52).value = 'floor_area_full'
-        ws.cell(row=2, column=53).value = 'floor_area_total'
-        ws.cell(row=2, column=54).value = 'family_lv00'
-        ws.cell(row=2, column=55).value = 'family_lv01_49'
-        ws.cell(row=2, column=56).value = 'family_lv50_99'
-        ws.cell(row=2, column=57).value = 'family_lv100'
-        ws.cell(row=2, column=58).value = 'family_half'
-        ws.cell(row=2, column=59).value = 'family_full'
-        ws.cell(row=2, column=60).value = 'family_total'
-        ws.cell(row=2, column=61).value = 'office_lv00'
-        ws.cell(row=2, column=62).value = 'office_lv01_49'
-        ws.cell(row=2, column=63).value = 'office_lv50_99'
-        ws.cell(row=2, column=64).value = 'office_lv100'
-        ws.cell(row=2, column=65).value = 'office_half'
-        ws.cell(row=2, column=66).value = 'office_full'
-        ws.cell(row=2, column=67).value = 'office_total'
-        ws.cell(row=2, column=68).value = 'farmer_fisher_lv00'
-        ws.cell(row=2, column=69).value = 'farmer_fisher_lv01_49'
-        ws.cell(row=2, column=70).value = 'farmer_fisher_lv50_99'
-        ws.cell(row=2, column=71).value = 'farmer_fisher_lv100'
-        ws.cell(row=2, column=72).value = 'farmer_fisher_full'
-        ws.cell(row=2, column=73).value = 'farmer_fisher_total'
-        ws.cell(row=2, column=74).value = 'employee_lv00'
-        ws.cell(row=2, column=75).value = 'employee_lv01_49'
-        ws.cell(row=2, column=76).value = 'employee_lv50_99'
-        ws.cell(row=2, column=77).value = 'employee_lv100'
-        ws.cell(row=2, column=78).value = 'employee_full'
-        ws.cell(row=2, column=79).value = 'employee_total'
-        ws.cell(row=2, column=80).value = 'industry_code'
-        ws.cell(row=2, column=81).value = 'industry_name'
-        ws.cell(row=2, column=82).value = 'usage_code'
-        ws.cell(row=2, column=83).value = 'usage_name'
-        ws.cell(row=2, column=84).value = 'comment'
-        ws.cell(row=2, column=85).value = 'deleted_at'
-        
-        if ippan_view_list:
-            for i, ippan_view in enumerate(ippan_view_list):
-                ws.cell(row=i+3, column=1).value = ippan_view.ippan_id
-                ws.cell(row=i+3, column=2).value = ippan_view.ippan_name
-                ws.cell(row=i+3, column=3).value = ippan_view.suigai_id
-                ws.cell(row=i+3, column=4).value = ippan_view.suigai_name
-                ws.cell(row=i+3, column=5).value = ippan_view.ken_code
-                ws.cell(row=i+3, column=6).value = ippan_view.ken_name
-                ws.cell(row=i+3, column=7).value = ippan_view.city_code
-                ws.cell(row=i+3, column=8).value = ippan_view.city_name
-                ws.cell(row=i+3, column=9).value = ippan_view.cause_1_code
-                ws.cell(row=i+3, column=10).value = ippan_view.cause_1_name
-                ws.cell(row=i+3, column=11).value = ippan_view.cause_2_code
-                ws.cell(row=i+3, column=12).value = ippan_view.cause_2_name
-                ws.cell(row=i+3, column=13).value = ippan_view.cause_3_code
-                ws.cell(row=i+3, column=14).value = ippan_view.cause_3_name
-                ws.cell(row=i+3, column=15).value = ippan_view.area_id
-                ws.cell(row=i+3, column=16).value = ippan_view.area_name
-                ws.cell(row=i+3, column=17).value = ippan_view.suikei_code
-                ws.cell(row=i+3, column=18).value = ippan_view.suikei_name
-                ws.cell(row=i+3, column=19).value = ippan_view.kasen_code
-                ws.cell(row=i+3, column=20).value = ippan_view.kasen_name
-                ws.cell(row=i+3, column=21).value = ippan_view.gradient_code
-                ws.cell(row=i+3, column=22).value = ippan_view.gradient_name
-                ws.cell(row=i+3, column=23).value = ippan_view.residential_area
-                ws.cell(row=i+3, column=24).value = ippan_view.agricultural_area
-                ws.cell(row=i+3, column=25).value = ippan_view.underground_area
-                ws.cell(row=i+3, column=26).value = ippan_view.kasen_kaigan_code
-                ws.cell(row=i+3, column=27).value = ippan_view.kasen_kaigan_name
-                ws.cell(row=i+3, column=28).value = ippan_view.crop_damage
-                ws.cell(row=i+3, column=29).value = ippan_view.weather_id
-                ws.cell(row=i+3, column=30).value = ippan_view.weather_name
-                ws.cell(row=i+3, column=31).value = ippan_view.building_code
-                ws.cell(row=i+3, column=32).value = ippan_view.building_name
-                ws.cell(row=i+3, column=33).value = ippan_view.underground_code
-                ws.cell(row=i+3, column=34).value = ippan_view.underground_name
-                ws.cell(row=i+3, column=35).value = ippan_view.flood_sediment_code
-                ws.cell(row=i+3, column=36).value = ippan_view.flood_sediment_name
-                ws.cell(row=i+3, column=37).value = ippan_view.building_lv00
-                ws.cell(row=i+3, column=38).value = ippan_view.building_lv01_49
-                ws.cell(row=i+3, column=39).value = ippan_view.building_lv50_99
-                ws.cell(row=i+3, column=40).value = ippan_view.building_lv100
-                ws.cell(row=i+3, column=41).value = ippan_view.building_half
-                ws.cell(row=i+3, column=42).value = ippan_view.building_full
-                ws.cell(row=i+3, column=43).value = ippan_view.building_total
-                ws.cell(row=i+3, column=44).value = ippan_view.floor_area
-                ws.cell(row=i+3, column=45).value = ippan_view.family
-                ws.cell(row=i+3, column=46).value = ippan_view.office
-                ws.cell(row=i+3, column=47).value = ippan_view.floor_area_lv00
-                ws.cell(row=i+3, column=48).value = ippan_view.floor_area_lv01_49
-                ws.cell(row=i+3, column=49).value = ippan_view.floor_area_lv50_99
-
-                ws.cell(row=i+3, column=50).value = ippan_view.floor_area_lv100
-                ws.cell(row=i+3, column=51).value = ippan_view.floor_area_half
-                ws.cell(row=i+3, column=52).value = ippan_view.floor_area_full
-                ws.cell(row=i+3, column=53).value = ippan_view.floor_area_total
-                ws.cell(row=i+3, column=54).value = ippan_view.family_lv00
-                ws.cell(row=i+3, column=55).value = ippan_view.family_lv01_49
-                ws.cell(row=i+3, column=56).value = ippan_view.family_lv50_99
-                ws.cell(row=i+3, column=57).value = ippan_view.family_lv100
-                ws.cell(row=i+3, column=58).value = ippan_view.family_half
-                ws.cell(row=i+3, column=59).value = ippan_view.family_full
-
-                ws.cell(row=i+3, column=60).value = ippan_view.family_total
-                ws.cell(row=i+3, column=61).value = ippan_view.office_lv00
-                ws.cell(row=i+3, column=62).value = ippan_view.office_lv01_49
-                ws.cell(row=i+3, column=63).value = ippan_view.office_lv50_99
-                ws.cell(row=i+3, column=64).value = ippan_view.office_lv100
-                ws.cell(row=i+3, column=65).value = ippan_view.office_half
-                ws.cell(row=i+3, column=66).value = ippan_view.office_full
-                ws.cell(row=i+3, column=67).value = ippan_view.office_total
-                ws.cell(row=i+3, column=68).value = ippan_view.farmer_fisher_lv00
-                ws.cell(row=i+3, column=69).value = ippan_view.farmer_fisher_lv01_49
-
-                ws.cell(row=i+3, column=70).value = ippan_view.farmer_fisher_lv50_99
-                ws.cell(row=i+3, column=71).value = ippan_view.farmer_fisher_lv100
-                ws.cell(row=i+3, column=72).value = ippan_view.farmer_fisher_full
-                ws.cell(row=i+3, column=73).value = ippan_view.farmer_fisher_total
-                ws.cell(row=i+3, column=74).value = ippan_view.employee_lv00
-                ws.cell(row=i+3, column=75).value = ippan_view.employee_lv01_49
-                ws.cell(row=i+3, column=76).value = ippan_view.employee_lv50_99
-                ws.cell(row=i+3, column=77).value = ippan_view.employee_lv100
-                ws.cell(row=i+3, column=78).value = ippan_view.employee_full
-                ws.cell(row=i+3, column=79).value = ippan_view.employee_total
-
-                ws.cell(row=i+3, column=80).value = ippan_view.industry_code
-                ws.cell(row=i+3, column=81).value = ippan_view.industry_name
-                ws.cell(row=i+3, column=82).value = ippan_view.usage_code
-                ws.cell(row=i+3, column=83).value = ippan_view.usage_name
-                ws.cell(row=i+3, column=84).value = ippan_view.comment
-                ws.cell(row=i+3, column=85).value = str(ippan_view.deleted_at)
-
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 4/4.', 'DEBUG')
-        print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="ippan_view.xlsx"'
-        return response
-        
-    except:
-        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### def ippan_view_view(request, lock):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         ### reset_log()
+###         print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が開始しました。', 'INFO')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 request = {}'.format(request.method), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 lock = {}'.format(lock), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 1/4.', 'DEBUG')
+###         #######################################################################
+###         ### DBアクセス処理(0010)
+###         ### DBにアクセスして、一般資産ビューデータ一覧表部分データを取得する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 2/4.', 'DEBUG')
+###         ippan_view_list = IPPAN_VIEW.objects.raw("""SELECT * FROM IPPAN_VIEW ORDER BY CAST(IPPAN_ID AS INTEGER)""", [])
+###         #######################################################################
+###         ### EXCEL入出力処理(0020)
+###         ### (1)テンプレート用のEXCELファイルを読み込む。
+###         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 3/4.', 'DEBUG')
+###         template_file_path = 'static/template_ippan_view.xlsx'
+###         download_file_path = 'static/download_ippan_view.xlsx'
+###         wb = openpyxl.load_workbook(template_file_path)
+###         ws = wb.active
+###         ws.title = 'ビューデータ_一覧表部分'
+###         ws.cell(row=1, column=1).value = '行ID'
+###         ws.cell(row=1, column=2).value = '町丁目、大字名'
+###         ws.cell(row=1, column=3).value = '水害ID'
+###         ws.cell(row=1, column=4).value = '水害名'
+###         ws.cell(row=1, column=5).value = '都道府県コード'
+###         ws.cell(row=1, column=6).value = '都道府県名'
+###         ws.cell(row=1, column=7).value = '市区町村コード'
+###         ws.cell(row=1, column=8).value = '市区町村名'
+###         ws.cell(row=1, column=9).value = '水害原因コード1'
+###         ws.cell(row=1, column=10).value = '水害原因名1'
+###         ws.cell(row=1, column=11).value = '水害原因コード2'
+###         ws.cell(row=1, column=12).value = '水害原因名2'
+###         ws.cell(row=1, column=13).value = '水害原因コード3'
+###         ws.cell(row=1, column=14).value = '水害原因名3'
+###         ws.cell(row=1, column=15).value = '水害区域ID'
+###         ws.cell(row=1, column=16).value = '水害区域名'
+###         ws.cell(row=1, column=17).value = '水系コード'
+###         ws.cell(row=1, column=18).value = '水系名'
+###         ws.cell(row=1, column=19).value = '河川コード'
+###         ws.cell(row=1, column=20).value = '河川名'
+###         ws.cell(row=1, column=21).value = '地盤勾配区分コード'
+###         ws.cell(row=1, column=22).value = '地盤勾配区分名'
+###         ws.cell(row=1, column=23).value = '宅地面積'
+###         ws.cell(row=1, column=24).value = '農地面積'
+###         ws.cell(row=1, column=25).value = '地下面積'
+###         ws.cell(row=1, column=26).value = '河川海岸（工種）コード'
+###         ws.cell(row=1, column=27).value = '河川海岸（工種）名'
+###         ws.cell(row=1, column=28).value = '農作物被害額'
+###         ws.cell(row=1, column=29).value = '異常気象ID'
+###         ws.cell(row=1, column=30).value = '異常気象名'
+###         ws.cell(row=1, column=31).value = '建物区分コード'
+###         ws.cell(row=1, column=32).value = '建物区分名'
+###         ws.cell(row=1, column=33).value = '地上地下区分コード'
+###         ws.cell(row=1, column=34).value = '地上地下区分名'
+###         ws.cell(row=1, column=35).value = '浸水土砂区分コード'
+###         ws.cell(row=1, column=36).value = '浸水土砂区分名'
+###         ws.cell(row=1, column=37).value = '被害建物棟数_床下'
+###         ws.cell(row=1, column=38).value = '被害建物棟数_01から49cm'
+###         ws.cell(row=1, column=39).value = '被害建物棟数_50から99cm'
+###         ws.cell(row=1, column=40).value = '被害建物棟数_100cm以上'
+###         ws.cell(row=1, column=41).value = '被害建物棟数_半壊'
+###         ws.cell(row=1, column=42).value = '被害建物棟数_全壊'
+###         ws.cell(row=1, column=43).value = '被害建物棟数_合計'
+###         ws.cell(row=1, column=44).value = '延床面積'
+###         ws.cell(row=1, column=45).value = '被災世帯数'
+###         ws.cell(row=1, column=46).value = '被災事業所数'
+###         ws.cell(row=1, column=47).value = '延床面積_床下'
+###         ws.cell(row=1, column=48).value = '延床面積_01から49cm'
+###         ws.cell(row=1, column=49).value = '延床面積_50から99cm'
+###         ws.cell(row=1, column=50).value = '延床面積_100cm以上'
+###         ws.cell(row=1, column=51).value = '延床面積_半壊'
+###         ws.cell(row=1, column=52).value = '延床面積_全壊'
+###         ws.cell(row=1, column=53).value = '延床面積_合計'
+###         ws.cell(row=1, column=54).value = '被災世帯数_床下'
+###         ws.cell(row=1, column=55).value = '被災世帯数_01から49cm'
+###         ws.cell(row=1, column=56).value = '被災世帯数_50から99cm'
+###         ws.cell(row=1, column=57).value = '被災世帯数_100cm以上'
+###         ws.cell(row=1, column=58).value = '被災世帯数_半壊'
+###         ws.cell(row=1, column=59).value = '被災世帯数_全壊'
+###         ws.cell(row=1, column=60).value = '被災世帯数_合計'
+###         ws.cell(row=1, column=61).value = '被災事業所数_床下'
+###         ws.cell(row=1, column=62).value = '被災事業所数_01から49cm'
+###         ws.cell(row=1, column=63).value = '被災事業所数_50から99cm'
+###         ws.cell(row=1, column=64).value = '被災事業所数_100cm以上'
+###         ws.cell(row=1, column=65).value = '被災事業所数_半壊'
+###         ws.cell(row=1, column=66).value = '被災事業所数_全壊'
+###         ws.cell(row=1, column=67).value = '被災事業所数_合計'
+###         ws.cell(row=1, column=68).value = '農漁家戸数_床下'
+###         ws.cell(row=1, column=69).value = '農漁家戸数_01から49cm'
+###         ws.cell(row=1, column=70).value = '農漁家戸数_50から99cm'
+###         ws.cell(row=1, column=71).value = '農漁家戸数_100cm以上'
+###         ws.cell(row=1, column=72).value = '農漁家戸数_全壊'
+###         ws.cell(row=1, column=73).value = '農漁家戸数_合計'
+###         ws.cell(row=1, column=74).value = '被災従業者数_床下'
+###         ws.cell(row=1, column=75).value = '被災従業者数_01から49cm'
+###         ws.cell(row=1, column=76).value = '被災従業者数_50から99cm'
+###         ws.cell(row=1, column=77).value = '被災従業者数_100cm以上'
+###         ws.cell(row=1, column=78).value = '被災従業者数_全壊'
+###         ws.cell(row=1, column=79).value = '被災従業者数_合計'
+###         ws.cell(row=1, column=80).value = '産業分類コード'
+###         ws.cell(row=1, column=81).value = '産業分類名'
+###         ws.cell(row=1, column=82).value = '地下空間の利用形態コード'
+###         ws.cell(row=1, column=83).value = '地下空間の利用形態名'
+###         ws.cell(row=1, column=84).value = '備考'
+###         ws.cell(row=1, column=85).value = '削除日時'
+###         ws.cell(row=2, column=1).value = 'ippan_id'
+###         ws.cell(row=2, column=2).value = 'ippan_name'
+###         ws.cell(row=2, column=3).value = 'suigai_id'
+###         ws.cell(row=2, column=4).value = 'suigai_name'
+###         ws.cell(row=2, column=5).value = 'ken_code'
+###         ws.cell(row=2, column=6).value = 'ken_name'
+###         ws.cell(row=2, column=7).value = 'city_code'
+###         ws.cell(row=2, column=8).value = 'city_name'
+###         ws.cell(row=2, column=9).value = 'cause_1_code'
+###         ws.cell(row=2, column=10).value = 'cause_1_name'
+###         ws.cell(row=2, column=11).value = 'cause_2_code'
+###         ws.cell(row=2, column=12).value = 'cause_2_name'
+###         ws.cell(row=2, column=13).value = 'cause_3_code'
+###         ws.cell(row=2, column=14).value = 'cause_3_name'
+###         ws.cell(row=2, column=15).value = 'area_id'
+###         ws.cell(row=2, column=16).value = 'area_name'
+###         ws.cell(row=2, column=17).value = 'suikei_code'
+###         ws.cell(row=2, column=18).value = 'suikei_name'
+###         ws.cell(row=2, column=19).value = 'kasen_code'
+###         ws.cell(row=2, column=20).value = 'kasen_name'
+###         ws.cell(row=2, column=21).value = 'gradient_code'
+###         ws.cell(row=2, column=22).value = 'gradient_name'
+###         ws.cell(row=2, column=23).value = 'residential_area'
+###         ws.cell(row=2, column=24).value = 'agricultural_area'
+###         ws.cell(row=2, column=25).value = 'underground_area'
+###         ws.cell(row=2, column=26).value = 'kasen_kaigan_code'
+###         ws.cell(row=2, column=27).value = 'kasen_kaigan_name'
+###         ws.cell(row=2, column=28).value = 'crop_damage'
+###         ws.cell(row=2, column=29).value = 'weather_id'
+###         ws.cell(row=2, column=30).value = 'weather_name'
+###         ws.cell(row=2, column=31).value = 'building_code'
+###         ws.cell(row=2, column=32).value = 'building_name'
+###         ws.cell(row=2, column=33).value = 'underground_code'
+###         ws.cell(row=2, column=34).value = 'underground_name'
+###         ws.cell(row=2, column=35).value = 'flood_sediment_code'
+###         ws.cell(row=2, column=36).value = 'flood_sediment_name'
+###         ws.cell(row=2, column=37).value = 'building_lv00'
+###         ws.cell(row=2, column=38).value = 'building_lv01_49'
+###         ws.cell(row=2, column=39).value = 'building_lv50_99'
+###         ws.cell(row=2, column=40).value = 'building_lv100'
+###         ws.cell(row=2, column=41).value = 'building_half'
+###         ws.cell(row=2, column=42).value = 'building_full'
+###         ws.cell(row=2, column=43).value = 'building_total'
+###         ws.cell(row=2, column=44).value = 'floor_area'
+###         ws.cell(row=2, column=45).value = 'family'
+###         ws.cell(row=2, column=46).value = 'office'
+###         ws.cell(row=2, column=47).value = 'floor_area_lv00'
+###         ws.cell(row=2, column=48).value = 'floor_area_lv01_49'
+###         ws.cell(row=2, column=49).value = 'floor_area_lv50_99'
+###         ws.cell(row=2, column=50).value = 'floor_area_lv100'
+###         ws.cell(row=2, column=51).value = 'floor_area_half'
+###         ws.cell(row=2, column=52).value = 'floor_area_full'
+###         ws.cell(row=2, column=53).value = 'floor_area_total'
+###         ws.cell(row=2, column=54).value = 'family_lv00'
+###         ws.cell(row=2, column=55).value = 'family_lv01_49'
+###         ws.cell(row=2, column=56).value = 'family_lv50_99'
+###         ws.cell(row=2, column=57).value = 'family_lv100'
+###         ws.cell(row=2, column=58).value = 'family_half'
+###         ws.cell(row=2, column=59).value = 'family_full'
+###         ws.cell(row=2, column=60).value = 'family_total'
+###         ws.cell(row=2, column=61).value = 'office_lv00'
+###         ws.cell(row=2, column=62).value = 'office_lv01_49'
+###         ws.cell(row=2, column=63).value = 'office_lv50_99'
+###         ws.cell(row=2, column=64).value = 'office_lv100'
+###         ws.cell(row=2, column=65).value = 'office_half'
+###         ws.cell(row=2, column=66).value = 'office_full'
+###         ws.cell(row=2, column=67).value = 'office_total'
+###         ws.cell(row=2, column=68).value = 'farmer_fisher_lv00'
+###         ws.cell(row=2, column=69).value = 'farmer_fisher_lv01_49'
+###         ws.cell(row=2, column=70).value = 'farmer_fisher_lv50_99'
+###         ws.cell(row=2, column=71).value = 'farmer_fisher_lv100'
+###         ws.cell(row=2, column=72).value = 'farmer_fisher_full'
+###         ws.cell(row=2, column=73).value = 'farmer_fisher_total'
+###         ws.cell(row=2, column=74).value = 'employee_lv00'
+###         ws.cell(row=2, column=75).value = 'employee_lv01_49'
+###         ws.cell(row=2, column=76).value = 'employee_lv50_99'
+###         ws.cell(row=2, column=77).value = 'employee_lv100'
+###         ws.cell(row=2, column=78).value = 'employee_full'
+###         ws.cell(row=2, column=79).value = 'employee_total'
+###         ws.cell(row=2, column=80).value = 'industry_code'
+###         ws.cell(row=2, column=81).value = 'industry_name'
+###         ws.cell(row=2, column=82).value = 'usage_code'
+###         ws.cell(row=2, column=83).value = 'usage_name'
+###         ws.cell(row=2, column=84).value = 'comment'
+###         ws.cell(row=2, column=85).value = 'deleted_at'
+###         if ippan_view_list:
+###             for i, ippan_view in enumerate(ippan_view_list):
+###                 ws.cell(row=i+3, column=1).value = ippan_view.ippan_id
+###                 ws.cell(row=i+3, column=2).value = ippan_view.ippan_name
+###                 ws.cell(row=i+3, column=3).value = ippan_view.suigai_id
+###                 ws.cell(row=i+3, column=4).value = ippan_view.suigai_name
+###                 ws.cell(row=i+3, column=5).value = ippan_view.ken_code
+###                 ws.cell(row=i+3, column=6).value = ippan_view.ken_name
+###                 ws.cell(row=i+3, column=7).value = ippan_view.city_code
+###                 ws.cell(row=i+3, column=8).value = ippan_view.city_name
+###                 ws.cell(row=i+3, column=9).value = ippan_view.cause_1_code
+###                 ws.cell(row=i+3, column=10).value = ippan_view.cause_1_name
+###                 ws.cell(row=i+3, column=11).value = ippan_view.cause_2_code
+###                 ws.cell(row=i+3, column=12).value = ippan_view.cause_2_name
+###                 ws.cell(row=i+3, column=13).value = ippan_view.cause_3_code
+###                 ws.cell(row=i+3, column=14).value = ippan_view.cause_3_name
+###                 ws.cell(row=i+3, column=15).value = ippan_view.area_id
+###                 ws.cell(row=i+3, column=16).value = ippan_view.area_name
+###                 ws.cell(row=i+3, column=17).value = ippan_view.suikei_code
+###                 ws.cell(row=i+3, column=18).value = ippan_view.suikei_name
+###                 ws.cell(row=i+3, column=19).value = ippan_view.kasen_code
+###                 ws.cell(row=i+3, column=20).value = ippan_view.kasen_name
+###                 ws.cell(row=i+3, column=21).value = ippan_view.gradient_code
+###                 ws.cell(row=i+3, column=22).value = ippan_view.gradient_name
+###                 ws.cell(row=i+3, column=23).value = ippan_view.residential_area
+###                 ws.cell(row=i+3, column=24).value = ippan_view.agricultural_area
+###                 ws.cell(row=i+3, column=25).value = ippan_view.underground_area
+###                 ws.cell(row=i+3, column=26).value = ippan_view.kasen_kaigan_code
+###                 ws.cell(row=i+3, column=27).value = ippan_view.kasen_kaigan_name
+###                 ws.cell(row=i+3, column=28).value = ippan_view.crop_damage
+###                 ws.cell(row=i+3, column=29).value = ippan_view.weather_id
+###                 ws.cell(row=i+3, column=30).value = ippan_view.weather_name
+###                 ws.cell(row=i+3, column=31).value = ippan_view.building_code
+###                 ws.cell(row=i+3, column=32).value = ippan_view.building_name
+###                 ws.cell(row=i+3, column=33).value = ippan_view.underground_code
+###                 ws.cell(row=i+3, column=34).value = ippan_view.underground_name
+###                 ws.cell(row=i+3, column=35).value = ippan_view.flood_sediment_code
+###                 ws.cell(row=i+3, column=36).value = ippan_view.flood_sediment_name
+###                 ws.cell(row=i+3, column=37).value = ippan_view.building_lv00
+###                 ws.cell(row=i+3, column=38).value = ippan_view.building_lv01_49
+###                 ws.cell(row=i+3, column=39).value = ippan_view.building_lv50_99
+###                 ws.cell(row=i+3, column=40).value = ippan_view.building_lv100
+###                 ws.cell(row=i+3, column=41).value = ippan_view.building_half
+###                 ws.cell(row=i+3, column=42).value = ippan_view.building_full
+###                 ws.cell(row=i+3, column=43).value = ippan_view.building_total
+###                 ws.cell(row=i+3, column=44).value = ippan_view.floor_area
+###                 ws.cell(row=i+3, column=45).value = ippan_view.family
+###                 ws.cell(row=i+3, column=46).value = ippan_view.office
+###                 ws.cell(row=i+3, column=47).value = ippan_view.floor_area_lv00
+###                 ws.cell(row=i+3, column=48).value = ippan_view.floor_area_lv01_49
+###                 ws.cell(row=i+3, column=49).value = ippan_view.floor_area_lv50_99
+###                 ws.cell(row=i+3, column=50).value = ippan_view.floor_area_lv100
+###                 ws.cell(row=i+3, column=51).value = ippan_view.floor_area_half
+###                 ws.cell(row=i+3, column=52).value = ippan_view.floor_area_full
+###                 ws.cell(row=i+3, column=53).value = ippan_view.floor_area_total
+###                 ws.cell(row=i+3, column=54).value = ippan_view.family_lv00
+###                 ws.cell(row=i+3, column=55).value = ippan_view.family_lv01_49
+###                 ws.cell(row=i+3, column=56).value = ippan_view.family_lv50_99
+###                 ws.cell(row=i+3, column=57).value = ippan_view.family_lv100
+###                 ws.cell(row=i+3, column=58).value = ippan_view.family_half
+###                 ws.cell(row=i+3, column=59).value = ippan_view.family_full
+###                 ws.cell(row=i+3, column=60).value = ippan_view.family_total
+###                 ws.cell(row=i+3, column=61).value = ippan_view.office_lv00
+###                 ws.cell(row=i+3, column=62).value = ippan_view.office_lv01_49
+###                 ws.cell(row=i+3, column=63).value = ippan_view.office_lv50_99
+###                 ws.cell(row=i+3, column=64).value = ippan_view.office_lv100
+###                 ws.cell(row=i+3, column=65).value = ippan_view.office_half
+###                 ws.cell(row=i+3, column=66).value = ippan_view.office_full
+###                 ws.cell(row=i+3, column=67).value = ippan_view.office_total
+###                 ws.cell(row=i+3, column=68).value = ippan_view.farmer_fisher_lv00
+###                 ws.cell(row=i+3, column=69).value = ippan_view.farmer_fisher_lv01_49
+###                 ws.cell(row=i+3, column=70).value = ippan_view.farmer_fisher_lv50_99
+###                 ws.cell(row=i+3, column=71).value = ippan_view.farmer_fisher_lv100
+###                 ws.cell(row=i+3, column=72).value = ippan_view.farmer_fisher_full
+###                 ws.cell(row=i+3, column=73).value = ippan_view.farmer_fisher_total
+###                 ws.cell(row=i+3, column=74).value = ippan_view.employee_lv00
+###                 ws.cell(row=i+3, column=75).value = ippan_view.employee_lv01_49
+###                 ws.cell(row=i+3, column=76).value = ippan_view.employee_lv50_99
+###                 ws.cell(row=i+3, column=77).value = ippan_view.employee_lv100
+###                 ws.cell(row=i+3, column=78).value = ippan_view.employee_full
+###                 ws.cell(row=i+3, column=79).value = ippan_view.employee_total
+###                 ws.cell(row=i+3, column=80).value = ippan_view.industry_code
+###                 ws.cell(row=i+3, column=81).value = ippan_view.industry_name
+###                 ws.cell(row=i+3, column=82).value = ippan_view.usage_code
+###                 ws.cell(row=i+3, column=83).value = ippan_view.usage_name
+###                 ws.cell(row=i+3, column=84).value = ippan_view.comment
+###                 ws.cell(row=i+3, column=85).value = str(ippan_view.deleted_at)
+###         wb.save(download_file_path)
+###         #######################################################################
+###         ### レスポンスセット処理(0030)
+###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_view_view()関数 STEP 4/4.', 'DEBUG')
+###         print_log('[INFO] P0200ExcelDownload.ippan_view_view()関数が正常終了しました。', 'INFO')
+###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+###         response['Content-Disposition'] = 'attachment; filename="ippan_view.xlsx"'
+###         return response
+###     except:
+###         print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_view_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ippan_summary_view(request, lock)
 ### 8000：集計データ_集計結果
-### urlpattern：path('ippan_summary/', views.ippan_summary_view, name='ippan_summary_view')
+### urlpattern：path('ippan_summary/lock/<slug:lock>/', views.ippan_summary_view, name='ippan_summary_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -3470,585 +3468,549 @@ def ippan_summary_view(request, lock):
 ###############################################################################
 ### 関数名：ippan_group_by_ken_view(request, lock)
 ### 8010：集計データ_集計結果_都道府県別
-### urlpattern：path('ippan_group_by_ken/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view')
+### urlpattern：path('ippan_group_by_ken/lock/<slug:lock>/', views.ippan_group_by_ken_view, name='ippan_group_by_ken_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def ippan_group_by_ken_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        ### reset_log()
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が開始しました。', 'INFO')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 lock = {}'.format(lock), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 1/4.', 'DEBUG')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、集計データ_集計結果_都道府県別データを取得する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'DEBUG')
-        ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
-            SELECT 
-                SG1.ken_code AS id, 
-                SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
-                SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
-                SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
-                SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
-                SUM(IS1.house_summary_half) AS house_summary_half, 
-                SUM(IS1.house_summary_full) AS house_summary_full, 
-
-                SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
-                SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
-                SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
-                SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
-                SUM(IS1.household_summary_half) AS household_summary_half, 
-                SUM(IS1.household_summary_full) AS household_summary_full, 
-
-                SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
-                SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
-                SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
-                SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
-                SUM(IS1.car_summary_half) AS car_summary_half, 
-                SUM(IS1.car_summary_full) AS car_summary_full, 
-
-                SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
-                SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
-                SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
-                SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
-                SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
-                SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
-
-                SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
-                SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
-                SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
-                SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
-                SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
-                SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
-
-                SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
-                SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
-                SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
-                SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
-                -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
-                SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
-
-                SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
-                SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
-                SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
-                SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
-                -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
-                SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
-
-                SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
-                SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
-                SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
-                SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
-                -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
-                SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
-
-                SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
-                SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
-                SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
-                SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
-                -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
-                SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
-
-                SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
-                SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
-                SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
-                SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
-                -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
-                SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
-
-                SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
-                SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
-                SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
-                SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
-                -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
-                SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
-
-                SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
-                SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
-                SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
-                SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
-                SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
-                SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
-                
-            FROM IPPAN_SUMMARY IS1 
-            LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
-            GROUP BY SG1.ken_code 
-            ORDER BY CAST(SG1.KEN_CODE AS INTEGER)
-        """, [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 3/4.', 'DEBUG')
-        template_file_path = 'static/template_ippan_group_by_ken.xlsx'
-        download_file_path = 'static/download_ippan_group_by_ken.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '一般資産集計データ_集計結果_都道府県別'
-        ws.cell(row=1, column=1).value = '都道府県コード'
-        ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
-        ### ws.cell(row=1, column=3).value = '水害ID'
-        ws.cell(row=1, column=2).value = '家屋被害額_床下'
-        ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
-        ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
-        ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
-        ws.cell(row=1, column=6).value = '家屋被害額_半壊'
-        ws.cell(row=1, column=7).value = '家屋被害額_全壊'
-        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
-        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
-        ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
-        ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
-        ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
-        ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
-        ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
-        ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
-        ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
-        ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
-        ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
-        ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
-        ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
-        ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
-        ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
-        ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
-        ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
-        ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
-        ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
-        ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
-        ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
-        ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
-        ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
-        ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
-        ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
-        ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
-        ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
-        ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
-        ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
-        ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
-        ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
-        ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
-        ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
-        ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
-        ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
-        ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
-        ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
-        ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
-        ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
-        ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
-        ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
-        ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
-        ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
-        ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
-        ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
-        ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
-        ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
-        ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
-        ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
-        ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
-        ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
-        ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
-        ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
-        ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
-        ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
-        ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
-        ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
-        ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
-        ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
-        ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
-        
-        if ippan_group_by_ken_list:
-            for i, ippan_group_by_ken in enumerate(ippan_group_by_ken_list):
-                ws.cell(row=i+2, column=1).value = ippan_group_by_ken.id
-                ### ws.cell(row=i+2, column=2).value = ippan_group_by_ken.ippan_id
-                ### ws.cell(row=i+2, column=3).value = ippan_group_by_ken.suigai_id
-                ws.cell(row=i+2, column=2).value = ippan_group_by_ken.house_summary_lv00
-                ws.cell(row=i+2, column=3).value = ippan_group_by_ken.house_summary_lv01_49
-                ws.cell(row=i+2, column=4).value = ippan_group_by_ken.house_summary_lv50_99
-                ws.cell(row=i+2, column=5).value = ippan_group_by_ken.house_summary_lv100
-                ws.cell(row=i+2, column=6).value = ippan_group_by_ken.house_summary_half
-                ws.cell(row=i+2, column=7).value = ippan_group_by_ken.house_summary_full
-                ws.cell(row=i+2, column=8).value = ippan_group_by_ken.household_summary_lv00
-                ws.cell(row=i+2, column=9).value = ippan_group_by_ken.household_summary_lv01_49
-                ws.cell(row=i+2, column=10).value = ippan_group_by_ken.household_summary_lv50_99
-                ws.cell(row=i+2, column=11).value = ippan_group_by_ken.household_summary_lv100
-                ws.cell(row=i+2, column=12).value = ippan_group_by_ken.household_summary_half
-                ws.cell(row=i+2, column=13).value = ippan_group_by_ken.household_summary_full
-                ws.cell(row=i+2, column=14).value = ippan_group_by_ken.car_summary_lv00
-                ws.cell(row=i+2, column=15).value = ippan_group_by_ken.car_summary_lv01_49
-                ws.cell(row=i+2, column=16).value = ippan_group_by_ken.car_summary_lv50_99
-                ws.cell(row=i+2, column=17).value = ippan_group_by_ken.car_summary_lv100
-                ws.cell(row=i+2, column=18).value = ippan_group_by_ken.car_summary_half
-                ws.cell(row=i+2, column=19).value = ippan_group_by_ken.car_summary_full
-                ws.cell(row=i+2, column=20).value = ippan_group_by_ken.house_alt_summary_lv00
-                ws.cell(row=i+2, column=21).value = ippan_group_by_ken.house_alt_summary_lv01_49
-                ws.cell(row=i+2, column=22).value = ippan_group_by_ken.house_alt_summary_lv50_99
-                ws.cell(row=i+2, column=23).value = ippan_group_by_ken.house_alt_summary_lv100
-                ws.cell(row=i+2, column=24).value = ippan_group_by_ken.house_alt_summary_half
-                ws.cell(row=i+2, column=25).value = ippan_group_by_ken.house_alt_summary_full
-                ws.cell(row=i+2, column=26).value = ippan_group_by_ken.house_clean_summary_lv00
-                ws.cell(row=i+2, column=27).value = ippan_group_by_ken.house_clean_summary_lv01_49
-                ws.cell(row=i+2, column=28).value = ippan_group_by_ken.house_clean_summary_lv50_99
-                ws.cell(row=i+2, column=29).value = ippan_group_by_ken.house_clean_summary_lv100
-                ws.cell(row=i+2, column=30).value = ippan_group_by_ken.house_clean_summary_half
-                ws.cell(row=i+2, column=31).value = ippan_group_by_ken.house_clean_summary_full
-                ws.cell(row=i+2, column=32).value = ippan_group_by_ken.office_dep_summary_lv00
-                ws.cell(row=i+2, column=33).value = ippan_group_by_ken.office_dep_summary_lv01_49
-                ws.cell(row=i+2, column=34).value = ippan_group_by_ken.office_dep_summary_lv50_99
-                ws.cell(row=i+2, column=35).value = ippan_group_by_ken.office_dep_summary_lv100
-                ws.cell(row=i+2, column=36).value = ippan_group_by_ken.office_dep_summary_full
-                ws.cell(row=i+2, column=37).value = ippan_group_by_ken.office_inv_summary_lv00
-                ws.cell(row=i+2, column=38).value = ippan_group_by_ken.office_inv_summary_lv01_49
-                ws.cell(row=i+2, column=39).value = ippan_group_by_ken.office_inv_summary_lv50_99
-                ws.cell(row=i+2, column=40).value = ippan_group_by_ken.office_inv_summary_lv100
-                ws.cell(row=i+2, column=41).value = ippan_group_by_ken.office_inv_summary_full
-                ws.cell(row=i+2, column=42).value = ippan_group_by_ken.office_sus_summary_lv00
-                ws.cell(row=i+2, column=43).value = ippan_group_by_ken.office_sus_summary_lv01_49
-                ws.cell(row=i+2, column=44).value = ippan_group_by_ken.office_sus_summary_lv50_99
-                ws.cell(row=i+2, column=45).value = ippan_group_by_ken.office_sus_summary_lv100
-                ws.cell(row=i+2, column=46).value = ippan_group_by_ken.office_sus_summary_full
-                ws.cell(row=i+2, column=47).value = ippan_group_by_ken.office_stg_summary_lv00
-                ws.cell(row=i+2, column=48).value = ippan_group_by_ken.office_stg_summary_lv01_49
-                ws.cell(row=i+2, column=49).value = ippan_group_by_ken.office_stg_summary_lv50_99
-                ws.cell(row=i+2, column=50).value = ippan_group_by_ken.office_stg_summary_lv100
-                ws.cell(row=i+2, column=51).value = ippan_group_by_ken.office_stg_summary_full
-                ws.cell(row=i+2, column=52).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv00
-                ws.cell(row=i+2, column=53).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv01_49
-                ws.cell(row=i+2, column=54).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv50_99
-                ws.cell(row=i+2, column=55).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv100
-                ws.cell(row=i+2, column=56).value = ippan_group_by_ken.farmer_fisher_dep_summary_full
-                ws.cell(row=i+2, column=57).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv00
-                ws.cell(row=i+2, column=58).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv01_49
-                ws.cell(row=i+2, column=59).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv50_99
-                ws.cell(row=i+2, column=60).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv100
-                ws.cell(row=i+2, column=61).value = ippan_group_by_ken.farmer_fisher_inv_summary_full
-                ws.cell(row=i+2, column=62).value = ippan_group_by_ken.office_alt_summary_lv00
-                ws.cell(row=i+2, column=63).value = ippan_group_by_ken.office_alt_summary_lv01_49
-                ws.cell(row=i+2, column=64).value = ippan_group_by_ken.office_alt_summary_lv50_99
-                ws.cell(row=i+2, column=65).value = ippan_group_by_ken.office_alt_summary_lv100
-                ws.cell(row=i+2, column=66).value = ippan_group_by_ken.office_alt_summary_half
-                ws.cell(row=i+2, column=67).value = ippan_group_by_ken.office_alt_summary_full
-            
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 4/4.', 'DEBUG')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="ippan_group_by_ken.xlsx"'
-        return response
-        
-    except:
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### def ippan_group_by_ken_view(request, lock):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         ### reset_log()
+###         print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が開始しました。', 'INFO')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 lock = {}'.format(lock), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 1/4.', 'DEBUG')
+###         #######################################################################
+###         ### DBアクセス処理(0010)
+###         ### DBにアクセスして、集計データ_集計結果_都道府県別データを取得する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 2/4.', 'DEBUG')
+###         ippan_group_by_ken_list = IPPAN_SUMMARY.objects.raw("""
+###             SELECT 
+###                 SG1.ken_code AS id, 
+###                 SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
+###                 SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
+###                 SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
+###                 SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
+###                 SUM(IS1.house_summary_half) AS house_summary_half, 
+###                 SUM(IS1.house_summary_full) AS house_summary_full, 
+###                 SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
+###                 SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
+###                 SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
+###                 SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
+###                 SUM(IS1.household_summary_half) AS household_summary_half, 
+###                 SUM(IS1.household_summary_full) AS household_summary_full, 
+###                 SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
+###                 SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
+###                 SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
+###                 SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
+###                 SUM(IS1.car_summary_half) AS car_summary_half, 
+###                 SUM(IS1.car_summary_full) AS car_summary_full, 
+###                 SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
+###                 SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
+###                 SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
+###                 SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
+###                 SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
+###                 SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
+###                 SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
+###                 SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
+###                 SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
+###                 SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
+###                 SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
+###                 SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
+###                 SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
+###                 SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
+###                 SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
+###                 SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
+###                 -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
+###                 SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
+###                 SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
+###                 SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
+###                 SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
+###                 SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
+###                 -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
+###                 SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
+###                 SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
+###                 SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
+###                 SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
+###                 SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
+###                 -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
+###                 SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
+###                 SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
+###                 SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
+###                 SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
+###                 SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
+###                 -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
+###                 SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
+###                 -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
+###                 SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
+###                 -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
+###                 SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
+###                 SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
+###                 SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
+###                 SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
+###                 SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
+###                 SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
+###                 SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
+###             FROM IPPAN_SUMMARY IS1 
+###             LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+###             GROUP BY SG1.ken_code 
+###             ORDER BY CAST(SG1.KEN_CODE AS INTEGER)
+###         """, [])
+###         #######################################################################
+###         ### EXCEL入出力処理(0020)
+###         ### (1)テンプレート用のEXCELファイルを読み込む。
+###         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 3/4.', 'DEBUG')
+###         template_file_path = 'static/template_ippan_group_by_ken.xlsx'
+###         download_file_path = 'static/download_ippan_group_by_ken.xlsx'
+###         wb = openpyxl.load_workbook(template_file_path)
+###         ws = wb.active
+###         ws.title = '一般資産集計データ_集計結果_都道府県別'
+###         ws.cell(row=1, column=1).value = '都道府県コード'
+###         ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
+###         ### ws.cell(row=1, column=3).value = '水害ID'
+###         ws.cell(row=1, column=2).value = '家屋被害額_床下'
+###         ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
+###         ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
+###         ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
+###         ws.cell(row=1, column=6).value = '家屋被害額_半壊'
+###         ws.cell(row=1, column=7).value = '家屋被害額_全壊'
+###         ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
+###         ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
+###         ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
+###         ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
+###         ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
+###         ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
+###         ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
+###         ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
+###         ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
+###         ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
+###         ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
+###         ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
+###         ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
+###         ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
+###         ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
+###         ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
+###         ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
+###         ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
+###         ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
+###         ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
+###         ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
+###         ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
+###         ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
+###         ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
+###         ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
+###         ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
+###         ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
+###         ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
+###         ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
+###         ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
+###         ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
+###         ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
+###         ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
+###         ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
+###         ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
+###         ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
+###         ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
+###         ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
+###         ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
+###         ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
+###         ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+###         ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+###         ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+###         ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+###         ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
+###         ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
+###         ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
+###         ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
+###         ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
+###         ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
+###         ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
+###         ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
+###         ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
+###         ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
+###         ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
+###         ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
+###         ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
+###         ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
+###         ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
+###         ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
+###         if ippan_group_by_ken_list:
+###             for i, ippan_group_by_ken in enumerate(ippan_group_by_ken_list):
+###                 ws.cell(row=i+2, column=1).value = ippan_group_by_ken.id
+###                 ### ws.cell(row=i+2, column=2).value = ippan_group_by_ken.ippan_id
+###                 ### ws.cell(row=i+2, column=3).value = ippan_group_by_ken.suigai_id
+###                 ws.cell(row=i+2, column=2).value = ippan_group_by_ken.house_summary_lv00
+###                 ws.cell(row=i+2, column=3).value = ippan_group_by_ken.house_summary_lv01_49
+###                 ws.cell(row=i+2, column=4).value = ippan_group_by_ken.house_summary_lv50_99
+###                 ws.cell(row=i+2, column=5).value = ippan_group_by_ken.house_summary_lv100
+###                 ws.cell(row=i+2, column=6).value = ippan_group_by_ken.house_summary_half
+###                 ws.cell(row=i+2, column=7).value = ippan_group_by_ken.house_summary_full
+###                 ws.cell(row=i+2, column=8).value = ippan_group_by_ken.household_summary_lv00
+###                 ws.cell(row=i+2, column=9).value = ippan_group_by_ken.household_summary_lv01_49
+###                 ws.cell(row=i+2, column=10).value = ippan_group_by_ken.household_summary_lv50_99
+###                 ws.cell(row=i+2, column=11).value = ippan_group_by_ken.household_summary_lv100
+###                 ws.cell(row=i+2, column=12).value = ippan_group_by_ken.household_summary_half
+###                 ws.cell(row=i+2, column=13).value = ippan_group_by_ken.household_summary_full
+###                 ws.cell(row=i+2, column=14).value = ippan_group_by_ken.car_summary_lv00
+###                 ws.cell(row=i+2, column=15).value = ippan_group_by_ken.car_summary_lv01_49
+###                 ws.cell(row=i+2, column=16).value = ippan_group_by_ken.car_summary_lv50_99
+###                 ws.cell(row=i+2, column=17).value = ippan_group_by_ken.car_summary_lv100
+###                 ws.cell(row=i+2, column=18).value = ippan_group_by_ken.car_summary_half
+###                 ws.cell(row=i+2, column=19).value = ippan_group_by_ken.car_summary_full
+###                 ws.cell(row=i+2, column=20).value = ippan_group_by_ken.house_alt_summary_lv00
+###                 ws.cell(row=i+2, column=21).value = ippan_group_by_ken.house_alt_summary_lv01_49
+###                 ws.cell(row=i+2, column=22).value = ippan_group_by_ken.house_alt_summary_lv50_99
+###                 ws.cell(row=i+2, column=23).value = ippan_group_by_ken.house_alt_summary_lv100
+###                 ws.cell(row=i+2, column=24).value = ippan_group_by_ken.house_alt_summary_half
+###                 ws.cell(row=i+2, column=25).value = ippan_group_by_ken.house_alt_summary_full
+###                 ws.cell(row=i+2, column=26).value = ippan_group_by_ken.house_clean_summary_lv00
+###                 ws.cell(row=i+2, column=27).value = ippan_group_by_ken.house_clean_summary_lv01_49
+###                 ws.cell(row=i+2, column=28).value = ippan_group_by_ken.house_clean_summary_lv50_99
+###                 ws.cell(row=i+2, column=29).value = ippan_group_by_ken.house_clean_summary_lv100
+###                 ws.cell(row=i+2, column=30).value = ippan_group_by_ken.house_clean_summary_half
+###                 ws.cell(row=i+2, column=31).value = ippan_group_by_ken.house_clean_summary_full
+###                 ws.cell(row=i+2, column=32).value = ippan_group_by_ken.office_dep_summary_lv00
+###                 ws.cell(row=i+2, column=33).value = ippan_group_by_ken.office_dep_summary_lv01_49
+###                 ws.cell(row=i+2, column=34).value = ippan_group_by_ken.office_dep_summary_lv50_99
+###                 ws.cell(row=i+2, column=35).value = ippan_group_by_ken.office_dep_summary_lv100
+###                 ws.cell(row=i+2, column=36).value = ippan_group_by_ken.office_dep_summary_full
+###                 ws.cell(row=i+2, column=37).value = ippan_group_by_ken.office_inv_summary_lv00
+###                 ws.cell(row=i+2, column=38).value = ippan_group_by_ken.office_inv_summary_lv01_49
+###                 ws.cell(row=i+2, column=39).value = ippan_group_by_ken.office_inv_summary_lv50_99
+###                 ws.cell(row=i+2, column=40).value = ippan_group_by_ken.office_inv_summary_lv100
+###                 ws.cell(row=i+2, column=41).value = ippan_group_by_ken.office_inv_summary_full
+###                 ws.cell(row=i+2, column=42).value = ippan_group_by_ken.office_sus_summary_lv00
+###                 ws.cell(row=i+2, column=43).value = ippan_group_by_ken.office_sus_summary_lv01_49
+###                 ws.cell(row=i+2, column=44).value = ippan_group_by_ken.office_sus_summary_lv50_99
+###                 ws.cell(row=i+2, column=45).value = ippan_group_by_ken.office_sus_summary_lv100
+###                 ws.cell(row=i+2, column=46).value = ippan_group_by_ken.office_sus_summary_full
+###                 ws.cell(row=i+2, column=47).value = ippan_group_by_ken.office_stg_summary_lv00
+###                 ws.cell(row=i+2, column=48).value = ippan_group_by_ken.office_stg_summary_lv01_49
+###                 ws.cell(row=i+2, column=49).value = ippan_group_by_ken.office_stg_summary_lv50_99
+###                 ws.cell(row=i+2, column=50).value = ippan_group_by_ken.office_stg_summary_lv100
+###                 ws.cell(row=i+2, column=51).value = ippan_group_by_ken.office_stg_summary_full
+###                 ws.cell(row=i+2, column=52).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv00
+###                 ws.cell(row=i+2, column=53).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv01_49
+###                 ws.cell(row=i+2, column=54).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv50_99
+###                 ws.cell(row=i+2, column=55).value = ippan_group_by_ken.farmer_fisher_dep_summary_lv100
+###                 ws.cell(row=i+2, column=56).value = ippan_group_by_ken.farmer_fisher_dep_summary_full
+###                 ws.cell(row=i+2, column=57).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv00
+###                 ws.cell(row=i+2, column=58).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv01_49
+###                 ws.cell(row=i+2, column=59).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv50_99
+###                 ws.cell(row=i+2, column=60).value = ippan_group_by_ken.farmer_fisher_inv_summary_lv100
+###                 ws.cell(row=i+2, column=61).value = ippan_group_by_ken.farmer_fisher_inv_summary_full
+###                 ws.cell(row=i+2, column=62).value = ippan_group_by_ken.office_alt_summary_lv00
+###                 ws.cell(row=i+2, column=63).value = ippan_group_by_ken.office_alt_summary_lv01_49
+###                 ws.cell(row=i+2, column=64).value = ippan_group_by_ken.office_alt_summary_lv50_99
+###                 ws.cell(row=i+2, column=65).value = ippan_group_by_ken.office_alt_summary_lv100
+###                 ws.cell(row=i+2, column=66).value = ippan_group_by_ken.office_alt_summary_half
+###                 ws.cell(row=i+2, column=67).value = ippan_group_by_ken.office_alt_summary_full
+###         wb.save(download_file_path)
+###         #######################################################################
+###         ### レスポンスセット処理(0030)
+###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_ken_view()関数 STEP 4/4.', 'DEBUG')
+###         print_log('[INFO] P0200ExcelDownload.ippan_group_by_ken_view()関数が正常終了しました。', 'INFO')
+###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+###         response['Content-Disposition'] = 'attachment; filename="ippan_group_by_ken.xlsx"'
+###         return response
+###     except:
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_ken_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ippan_group_by_suikei_view(request, lock)
 ### 8020：集計データ_集計結果_水系別
-### urlpattern：path('ippan_group_by_suikei/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei')
+### urlpattern：path('ippan_group_by_suikei/lock/<slug:lock>/', views.ippan_group_by_suikei_view, name='ippan_group_by_suikei')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
-def ippan_group_by_suikei_view(request, lock):
-    try:
-        #######################################################################
-        ### 引数チェック処理(0000)
-        ### ブラウザからのリクエストと引数をチェックする。
-        #######################################################################
-        ### reset_log()
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が開始しました。', 'INFO')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 request = {}'.format(request.method), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 lock = {}'.format(lock), 'DEBUG')
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 1/4.', 'DEBUG')
-        
-        #######################################################################
-        ### DBアクセス処理(0010)
-        ### DBにアクセスして、一般資産集計データ_集計結果_水系別データを取得する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 2/4.', 'DEBUG')
-        ippan_group_by_suikei_list = IPPAN_SUMMARY.objects.raw("""
-            SELECT 
-                SG1.suikei_code AS id, 
-                SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
-                SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
-                SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
-                SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
-                SUM(IS1.house_summary_half) AS house_summary_half, 
-                SUM(IS1.house_summary_full) AS house_summary_full, 
-
-                SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
-                SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
-                SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
-                SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
-                SUM(IS1.household_summary_half) AS household_summary_half, 
-                SUM(IS1.household_summary_full) AS household_summary_full, 
-
-                SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
-                SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
-                SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
-                SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
-                SUM(IS1.car_summary_half) AS car_summary_half, 
-                SUM(IS1.car_summary_full) AS car_summary_full, 
-
-                SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
-                SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
-                SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
-                SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
-                SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
-                SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
-
-                SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
-                SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
-                SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
-                SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
-                SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
-                SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
-
-                SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
-                SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
-                SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
-                SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
-                -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
-                SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
-
-                SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
-                SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
-                SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
-                SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
-                -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
-                SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
-
-                SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
-                SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
-                SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
-                SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
-                -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
-                SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
-
-                SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
-                SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
-                SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
-                SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
-                -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
-                SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
-
-                SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
-                SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
-                SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
-                SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
-                -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
-                SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
-
-                SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
-                SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
-                SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
-                SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
-                -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
-                SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
-
-                SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
-                SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
-                SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
-                SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
-                SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
-                SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
-                
-            FROM IPPAN_SUMMARY IS1 
-            LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
-            GROUP BY SG1.suikei_code 
-            ORDER BY CAST(SG1.SUIKEI_CODE AS INTEGER)
-        """, [])
-    
-        #######################################################################
-        ### EXCEL入出力処理(0020)
-        ### (1)テンプレート用のEXCELファイルを読み込む。
-        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 3/4.', 'DEBUG')
-        template_file_path = 'static/template_ippan_group_by_suikei.xlsx'
-        download_file_path = 'static/download_ippan_group_by_suikei.xlsx'
-        wb = openpyxl.load_workbook(template_file_path)
-        ws = wb.active
-        ws.title = '一般資産集計データ_集計結果_水系別'
-        ws.cell(row=1, column=1).value = '水系コード'
-        ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
-        ### ws.cell(row=1, column=3).value = '水害ID'
-        ws.cell(row=1, column=2).value = '家屋被害額_床下'
-        ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
-        ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
-        ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
-        ws.cell(row=1, column=6).value = '家屋被害額_半壊'
-        ws.cell(row=1, column=7).value = '家屋被害額_全壊'
-        ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
-        ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
-        ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
-        ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
-        ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
-        ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
-        ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
-        ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
-        ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
-        ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
-        ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
-        ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
-        ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
-        ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
-        ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
-        ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
-        ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
-        ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
-        ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
-        ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
-        ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
-        ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
-        ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
-        ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
-        ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
-        ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
-        ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
-        ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
-        ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
-        ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
-        ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
-        ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
-        ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
-        ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
-        ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
-        ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
-        ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
-        ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
-        ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
-        ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
-        ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
-        ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
-        ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
-        ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
-        ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
-        ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
-        ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
-        ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
-        ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
-        ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
-        ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
-        ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
-        ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
-        ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
-        ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
-        ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
-        ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
-        ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
-        ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
-        ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
-        
-        if ippan_group_by_suikei_list:
-            for i, ippan_group_by_suikei in enumerate(ippan_group_by_suikei_list):
-                ws.cell(row=i+2, column=1).value = ippan_group_by_suikei.id
-                ### ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.ippan_id
-                ### ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.suigai_id
-                ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.house_summary_lv00
-                ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.house_summary_lv01_49
-                ws.cell(row=i+2, column=4).value = ippan_group_by_suikei.house_summary_lv50_99
-                ws.cell(row=i+2, column=5).value = ippan_group_by_suikei.house_summary_lv100
-                ws.cell(row=i+2, column=6).value = ippan_group_by_suikei.house_summary_half
-                ws.cell(row=i+2, column=7).value = ippan_group_by_suikei.house_summary_full
-                ws.cell(row=i+2, column=8).value = ippan_group_by_suikei.household_summary_lv00
-                ws.cell(row=i+2, column=9).value = ippan_group_by_suikei.household_summary_lv01_49
-                ws.cell(row=i+2, column=10).value = ippan_group_by_suikei.household_summary_lv50_99
-                ws.cell(row=i+2, column=11).value = ippan_group_by_suikei.household_summary_lv100
-                ws.cell(row=i+2, column=12).value = ippan_group_by_suikei.household_summary_half
-                ws.cell(row=i+2, column=13).value = ippan_group_by_suikei.household_summary_full
-                ws.cell(row=i+2, column=14).value = ippan_group_by_suikei.car_summary_lv00
-                ws.cell(row=i+2, column=15).value = ippan_group_by_suikei.car_summary_lv01_49
-                ws.cell(row=i+2, column=16).value = ippan_group_by_suikei.car_summary_lv50_99
-                ws.cell(row=i+2, column=17).value = ippan_group_by_suikei.car_summary_lv100
-                ws.cell(row=i+2, column=18).value = ippan_group_by_suikei.car_summary_half
-                ws.cell(row=i+2, column=19).value = ippan_group_by_suikei.car_summary_full
-                ws.cell(row=i+2, column=20).value = ippan_group_by_suikei.house_alt_summary_lv00
-                ws.cell(row=i+2, column=21).value = ippan_group_by_suikei.house_alt_summary_lv01_49
-                ws.cell(row=i+2, column=22).value = ippan_group_by_suikei.house_alt_summary_lv50_99
-                ws.cell(row=i+2, column=23).value = ippan_group_by_suikei.house_alt_summary_lv100
-                ws.cell(row=i+2, column=24).value = ippan_group_by_suikei.house_alt_summary_half
-                ws.cell(row=i+2, column=25).value = ippan_group_by_suikei.house_alt_summary_full
-                ws.cell(row=i+2, column=26).value = ippan_group_by_suikei.house_clean_summary_lv00
-                ws.cell(row=i+2, column=27).value = ippan_group_by_suikei.house_clean_summary_lv01_49
-                ws.cell(row=i+2, column=28).value = ippan_group_by_suikei.house_clean_summary_lv50_99
-                ws.cell(row=i+2, column=29).value = ippan_group_by_suikei.house_clean_summary_lv100
-                ws.cell(row=i+2, column=30).value = ippan_group_by_suikei.house_clean_summary_half
-                ws.cell(row=i+2, column=31).value = ippan_group_by_suikei.house_clean_summary_full
-                ws.cell(row=i+2, column=32).value = ippan_group_by_suikei.office_dep_summary_lv00
-                ws.cell(row=i+2, column=33).value = ippan_group_by_suikei.office_dep_summary_lv01_49
-                ws.cell(row=i+2, column=34).value = ippan_group_by_suikei.office_dep_summary_lv50_99
-                ws.cell(row=i+2, column=35).value = ippan_group_by_suikei.office_dep_summary_lv100
-                ws.cell(row=i+2, column=36).value = ippan_group_by_suikei.office_dep_summary_full
-                ws.cell(row=i+2, column=37).value = ippan_group_by_suikei.office_inv_summary_lv00
-                ws.cell(row=i+2, column=38).value = ippan_group_by_suikei.office_inv_summary_lv01_49
-                ws.cell(row=i+2, column=39).value = ippan_group_by_suikei.office_inv_summary_lv50_99
-                ws.cell(row=i+2, column=40).value = ippan_group_by_suikei.office_inv_summary_lv100
-                ws.cell(row=i+2, column=41).value = ippan_group_by_suikei.office_inv_summary_full
-                ws.cell(row=i+2, column=42).value = ippan_group_by_suikei.office_sus_summary_lv00
-                ws.cell(row=i+2, column=43).value = ippan_group_by_suikei.office_sus_summary_lv01_49
-                ws.cell(row=i+2, column=44).value = ippan_group_by_suikei.office_sus_summary_lv50_99
-                ws.cell(row=i+2, column=45).value = ippan_group_by_suikei.office_sus_summary_lv100
-                ws.cell(row=i+2, column=46).value = ippan_group_by_suikei.office_sus_summary_full
-                ws.cell(row=i+2, column=47).value = ippan_group_by_suikei.office_stg_summary_lv00
-                ws.cell(row=i+2, column=48).value = ippan_group_by_suikei.office_stg_summary_lv01_49
-                ws.cell(row=i+2, column=49).value = ippan_group_by_suikei.office_stg_summary_lv50_99
-                ws.cell(row=i+2, column=50).value = ippan_group_by_suikei.office_stg_summary_lv100
-                ws.cell(row=i+2, column=51).value = ippan_group_by_suikei.office_stg_summary_full
-                ws.cell(row=i+2, column=52).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv00
-                ws.cell(row=i+2, column=53).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv01_49
-                ws.cell(row=i+2, column=54).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv50_99
-                ws.cell(row=i+2, column=55).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv100
-                ws.cell(row=i+2, column=56).value = ippan_group_by_suikei.farmer_fisher_dep_summary_full
-                ws.cell(row=i+2, column=57).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv00
-                ws.cell(row=i+2, column=58).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv01_49
-                ws.cell(row=i+2, column=59).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv50_99
-                ws.cell(row=i+2, column=60).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv100
-                ws.cell(row=i+2, column=61).value = ippan_group_by_suikei.farmer_fisher_inv_summary_full
-                ws.cell(row=i+2, column=62).value = ippan_group_by_suikei.office_alt_summary_lv00
-                ws.cell(row=i+2, column=63).value = ippan_group_by_suikei.office_alt_summary_lv01_49
-                ws.cell(row=i+2, column=64).value = ippan_group_by_suikei.office_alt_summary_lv50_99
-                ws.cell(row=i+2, column=65).value = ippan_group_by_suikei.office_alt_summary_lv100
-                ws.cell(row=i+2, column=66).value = ippan_group_by_suikei.office_alt_summary_half
-                ws.cell(row=i+2, column=67).value = ippan_group_by_suikei.office_alt_summary_full
-            
-        wb.save(download_file_path)
-        
-        #######################################################################
-        ### レスポンスセット処理(0030)
-        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
-        #######################################################################
-        print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 4/4.', 'DEBUG')
-        print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が正常終了しました。', 'INFO')
-        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="ippan_group_by_suikei.xlsx"'
-        return response
-        
-    except:
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+### def ippan_group_by_suikei_view(request, lock):
+###     try:
+###         #######################################################################
+###         ### 引数チェック処理(0000)
+###         ### ブラウザからのリクエストと引数をチェックする。
+###         #######################################################################
+###         ### reset_log()
+###         print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が開始しました。', 'INFO')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 request = {}'.format(request.method), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 lock = {}'.format(lock), 'DEBUG')
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 1/4.', 'DEBUG')
+###         #######################################################################
+###         ### DBアクセス処理(0010)
+###         ### DBにアクセスして、一般資産集計データ_集計結果_水系別データを取得する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 2/4.', 'DEBUG')
+###         ippan_group_by_suikei_list = IPPAN_SUMMARY.objects.raw("""
+###             SELECT 
+###                 SG1.suikei_code AS id, 
+###                 SUM(IS1.house_summary_lv00) AS house_summary_lv00, 
+###                 SUM(IS1.house_summary_lv01_49) AS house_summary_lv01_49, 
+###                 SUM(IS1.house_summary_lv50_99) AS house_summary_lv50_99, 
+###                 SUM(IS1.house_summary_lv100) AS house_summary_lv100, 
+###                 SUM(IS1.house_summary_half) AS house_summary_half, 
+###                 SUM(IS1.house_summary_full) AS house_summary_full, 
+###                 SUM(IS1.household_summary_lv00) AS household_summary_lv00, 
+###                 SUM(IS1.household_summary_lv01_49) AS household_summary_lv01_49, 
+###                 SUM(IS1.household_summary_lv50_99) AS household_summary_lv50_99, 
+###                 SUM(IS1.household_summary_lv100) AS household_summary_lv100, 
+###                 SUM(IS1.household_summary_half) AS household_summary_half, 
+###                 SUM(IS1.household_summary_full) AS household_summary_full, 
+###                 SUM(IS1.car_summary_lv00) AS car_summary_lv00, 
+###                 SUM(IS1.car_summary_lv01_49) AS car_summary_lv01_49, 
+###                 SUM(IS1.car_summary_lv50_99) AS car_summary_lv50_99, 
+###                 SUM(IS1.car_summary_lv100) AS car_summary_lv100, 
+###                 SUM(IS1.car_summary_half) AS car_summary_half, 
+###                 SUM(IS1.car_summary_full) AS car_summary_full, 
+###                 SUM(IS1.house_alt_summary_lv00) AS house_alt_summary_lv00, 
+###                 SUM(IS1.house_alt_summary_lv01_49) AS house_alt_summary_lv01_49, 
+###                 SUM(IS1.house_alt_summary_lv50_99) AS house_alt_summary_lv50_99, 
+###                 SUM(IS1.house_alt_summary_lv100) AS house_alt_summary_lv100, 
+###                 SUM(IS1.house_alt_summary_half) AS house_alt_summary_half, 
+###                 SUM(IS1.house_alt_summary_full) AS house_alt_summary_full, 
+###                 SUM(IS1.house_clean_summary_lv00) AS house_clean_summary_lv00, 
+###                 SUM(IS1.house_clean_summary_lv01_49) AS house_clean_summary_lv01_49, 
+###                 SUM(IS1.house_clean_summary_lv50_99) AS house_clean_summary_lv50_99, 
+###                 SUM(IS1.house_clean_summary_lv100) AS house_clean_summary_lv100, 
+###                 SUM(IS1.house_clean_summary_half) AS house_clean_summary_half, 
+###                 SUM(IS1.house_clean_summary_full) AS house_clean_summary_full, 
+###                 SUM(IS1.office_dep_summary_lv00) AS office_dep_summary_lv00, 
+###                 SUM(IS1.office_dep_summary_lv01_49) AS office_dep_summary_lv01_49, 
+###                 SUM(IS1.office_dep_summary_lv50_99) AS office_dep_summary_lv50_99, 
+###                 SUM(IS1.office_dep_summary_lv100) AS office_dep_summary_lv100, 
+###                 -- SUM(IS1.office_dep_summary_half) AS office_dep_summary_half, 
+###                 SUM(IS1.office_dep_summary_full) AS office_dep_summary_full, 
+###                 SUM(IS1.office_inv_summary_lv00) AS office_inv_summary_lv00, 
+###                 SUM(IS1.office_inv_summary_lv01_49) AS office_inv_summary_lv01_49, 
+###                 SUM(IS1.office_inv_summary_lv50_99) AS office_inv_summary_lv50_99, 
+###                 SUM(IS1.office_inv_summary_lv100) AS office_inv_summary_lv100, 
+###                 -- SUM(IS1.office_inv_summary_half) AS office_inv_summary_half, 
+###                 SUM(IS1.office_inv_summary_full) AS office_inv_summary_full, 
+###                 SUM(IS1.office_sus_summary_lv00) AS office_sus_summary_lv00, 
+###                 SUM(IS1.office_sus_summary_lv01_49) AS office_sus_summary_lv01_49, 
+###                 SUM(IS1.office_sus_summary_lv50_99) AS office_sus_summary_lv50_99, 
+###                 SUM(IS1.office_sus_summary_lv100) AS office_sus_summary_lv100, 
+###                 -- SUM(IS1.office_sus_summary_half) AS office_sus_summary_half, 
+###                 SUM(IS1.office_sus_summary_full) AS office_sus_summary_full, 
+###                 SUM(IS1.office_stg_summary_lv00) AS office_stg_summary_lv00, 
+###                 SUM(IS1.office_stg_summary_lv01_49) AS office_stg_summary_lv01_49, 
+###                 SUM(IS1.office_stg_summary_lv50_99) AS office_stg_summary_lv50_99, 
+###                 SUM(IS1.office_stg_summary_lv100) AS office_stg_summary_lv100, 
+###                 -- SUM(IS1.office_stg_summary_half) AS office_stg_summary_half, 
+###                 SUM(IS1.office_stg_summary_full) AS office_stg_summary_full, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv00) AS farmer_fisher_dep_summary_lv00, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv01_49) AS farmer_fisher_dep_summary_lv01_49, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv50_99) AS farmer_fisher_dep_summary_lv50_99, 
+###                 SUM(IS1.farmer_fisher_dep_summary_lv100) AS farmer_fisher_dep_summary_lv100, 
+###                 -- SUM(IS1.farmer_fisher_dep_summary_half) AS farmer_fisher_dep_summary_half, 
+###                 SUM(IS1.farmer_fisher_dep_summary_full) AS farmer_fisher_dep_summary_full, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv00) AS farmer_fisher_inv_summary_lv00, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv01_49) AS farmer_fisher_inv_summary_lv01_49, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv50_99) AS farmer_fisher_inv_summary_lv50_99, 
+###                 SUM(IS1.farmer_fisher_inv_summary_lv100) AS farmer_fisher_inv_summary_lv100, 
+###                 -- SUM(IS1.farmer_fisher_inv_summary_half) AS farmer_fisher_inv_summary_half, 
+###                 SUM(IS1.farmer_fisher_inv_summary_full) AS farmer_fisher_inv_summary_full, 
+###                 SUM(IS1.office_alt_summary_lv00) AS office_alt_summary_lv00, 
+###                 SUM(IS1.office_alt_summary_lv01_49) AS office_alt_summary_lv01_49, 
+###                 SUM(IS1.office_alt_summary_lv50_99) AS office_alt_summary_lv50_99, 
+###                 SUM(IS1.office_alt_summary_lv100) AS office_alt_summary_lv100, 
+###                 SUM(IS1.office_alt_summary_half) AS office_alt_summary_half, 
+###                 SUM(IS1.office_alt_summary_full) AS office_alt_summary_full 
+###             FROM IPPAN_SUMMARY IS1 
+###             LEFT JOIN SUIGAI SG1 ON IS1.suigai_id = SG1.suigai_id 
+###             GROUP BY SG1.suikei_code 
+###             ORDER BY CAST(SG1.SUIKEI_CODE AS INTEGER)
+###         """, [])
+###         #######################################################################
+###         ### EXCEL入出力処理(0020)
+###         ### (1)テンプレート用のEXCELファイルを読み込む。
+###         ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 3/4.', 'DEBUG')
+###         template_file_path = 'static/template_ippan_group_by_suikei.xlsx'
+###         download_file_path = 'static/download_ippan_group_by_suikei.xlsx'
+###         wb = openpyxl.load_workbook(template_file_path)
+###         ws = wb.active
+###         ws.title = '一般資産集計データ_集計結果_水系別'
+###         ws.cell(row=1, column=1).value = '水系コード'
+###         ### ws.cell(row=1, column=2).value = '一般資産調査票ID'
+###         ### ws.cell(row=1, column=3).value = '水害ID'
+###         ws.cell(row=1, column=2).value = '家屋被害額_床下'
+###         ws.cell(row=1, column=3).value = '家屋被害額_01から49cm'
+###         ws.cell(row=1, column=4).value = '家屋被害額_50から99cm'
+###         ws.cell(row=1, column=5).value = '家屋被害額_100cm以上'
+###         ws.cell(row=1, column=6).value = '家屋被害額_半壊'
+###         ws.cell(row=1, column=7).value = '家屋被害額_全壊'
+###         ws.cell(row=1, column=8).value = '家庭用品自動車以外被害額_床下'
+###         ws.cell(row=1, column=9).value = '家庭用品自動車以外被害額_01から49cm'
+###         ws.cell(row=1, column=10).value = '家庭用品自動車以外被害額_50から99cm'
+###         ws.cell(row=1, column=11).value = '家庭用品自動車以外被害額_100cm以上'
+###         ws.cell(row=1, column=12).value = '家庭用品自動車以外被害額_半壊'
+###         ws.cell(row=1, column=13).value = '家庭用品自動車以外被害額_全壊'
+###         ws.cell(row=1, column=14).value = '家庭用品自動車被害額_床下'
+###         ws.cell(row=1, column=15).value = '家庭用品自動車被害額_01から49cm'
+###         ws.cell(row=1, column=16).value = '家庭用品自動車被害額_50から99cm'
+###         ws.cell(row=1, column=17).value = '家庭用品自動車被害額_100cm以上'
+###         ws.cell(row=1, column=18).value = '家庭用品自動車被害額_半壊'
+###         ws.cell(row=1, column=19).value = '家庭用品自動車被害額_全壊'
+###         ws.cell(row=1, column=20).value = '家庭応急対策費_代替活動費_床下'
+###         ws.cell(row=1, column=21).value = '家庭応急対策費_代替活動費_01から49cm'
+###         ws.cell(row=1, column=22).value = '家庭応急対策費_代替活動費_50から99cm'
+###         ws.cell(row=1, column=23).value = '家庭応急対策費_代替活動費_100cm以上'
+###         ws.cell(row=1, column=24).value = '家庭応急対策費_代替活動費_半壊'
+###         ws.cell(row=1, column=25).value = '家庭応急対策費_代替活動費_全壊'
+###         ws.cell(row=1, column=26).value = '家庭応急対策費_清掃費_床下'
+###         ws.cell(row=1, column=27).value = '家庭応急対策費_清掃費_01から49cm'
+###         ws.cell(row=1, column=28).value = '家庭応急対策費_清掃費_50から99cm'
+###         ws.cell(row=1, column=29).value = '家庭応急対策費_清掃費_100cm以上'
+###         ws.cell(row=1, column=30).value = '家庭応急対策費_清掃費_半壊'
+###         ws.cell(row=1, column=31).value = '家庭応急対策費_清掃費_全壊'
+###         ws.cell(row=1, column=32).value = '事業所被害額_償却資産被害額_床下'
+###         ws.cell(row=1, column=33).value = '事業所被害額_償却資産被害額_01から49cm'
+###         ws.cell(row=1, column=34).value = '事業所被害額_償却資産被害額_50から99cm'
+###         ws.cell(row=1, column=35).value = '事業所被害額_償却資産被害額_100cm以上'
+###         ws.cell(row=1, column=36).value = '事業所被害額_償却資産被害額_全壊'
+###         ws.cell(row=1, column=37).value = '事業所被害額_在庫資産被害額_床下'
+###         ws.cell(row=1, column=38).value = '事業所被害額_在庫資産被害額_01から49cm'
+###         ws.cell(row=1, column=39).value = '事業所被害額_在庫資産被害額_50から99cm'
+###         ws.cell(row=1, column=40).value = '事業所被害額_在庫資産被害額_100cm以上'
+###         ws.cell(row=1, column=41).value = '事業所被害額_在庫資産被害額_全壊'
+###         ws.cell(row=1, column=42).value = '事業所被害額_営業停止に伴う被害額_床下'
+###         ws.cell(row=1, column=43).value = '事業所被害額_営業停止に伴う被害額_01から49cm'
+###         ws.cell(row=1, column=44).value = '事業所被害額_営業停止に伴う被害額_50から99cm'
+###         ws.cell(row=1, column=45).value = '事業所被害額_営業停止に伴う被害額_100cm以上'
+###         ws.cell(row=1, column=46).value = '事業所被害額_営業停止に伴う被害額_全壊'
+###         ws.cell(row=1, column=47).value = '事業所被害額_営業停滞に伴う被害額_床下'
+###         ws.cell(row=1, column=48).value = '事業所被害額_営業停滞に伴う被害額_01から49cm'
+###         ws.cell(row=1, column=49).value = '事業所被害額_営業停滞に伴う被害額_50から99cm'
+###         ws.cell(row=1, column=50).value = '事業所被害額_営業停滞に伴う被害額_100cm以上'
+###         ws.cell(row=1, column=51).value = '事業所被害額_営業停滞に伴う被害額_全壊'
+###         ws.cell(row=1, column=52).value = '農漁家被害額_償却資産被害額_床下'
+###         ws.cell(row=1, column=53).value = '農漁家被害額_償却資産被害額_01から49cm'
+###         ws.cell(row=1, column=54).value = '農漁家被害額_償却資産被害額_50から99cm'
+###         ws.cell(row=1, column=55).value = '農漁家被害額_償却資産被害額_100cm以上'
+###         ws.cell(row=1, column=56).value = '農漁家被害額_償却資産被害額_全壊'
+###         ws.cell(row=1, column=57).value = '農漁家被害額_在庫資産被害額_床下'
+###         ws.cell(row=1, column=58).value = '農漁家被害額_在庫資産被害額_01から49cm'
+###         ws.cell(row=1, column=59).value = '農漁家被害額_在庫資産被害額_50から99cm'
+###         ws.cell(row=1, column=60).value = '農漁家被害額_在庫資産被害額_100cm以上'
+###         ws.cell(row=1, column=61).value = '農漁家被害額_在庫資産被害額_全壊'
+###         ws.cell(row=1, column=62).value = '事業所応急対策費_代替活動費_床下'
+###         ws.cell(row=1, column=63).value = '事業所応急対策費_代替活動費_01から49cm'
+###         ws.cell(row=1, column=64).value = '事業所応急対策費_代替活動費_50から99cm'
+###         ws.cell(row=1, column=65).value = '事業所応急対策費_代替活動費_100cm以上'
+###         ws.cell(row=1, column=66).value = '事業所応急対策費_代替活動費_半壊'
+###         ws.cell(row=1, column=67).value = '事業所応急対策費_代替活動費_全壊'
+###         if ippan_group_by_suikei_list:
+###             for i, ippan_group_by_suikei in enumerate(ippan_group_by_suikei_list):
+###                 ws.cell(row=i+2, column=1).value = ippan_group_by_suikei.id
+###                 ### ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.ippan_id
+###                 ### ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.suigai_id
+###                 ws.cell(row=i+2, column=2).value = ippan_group_by_suikei.house_summary_lv00
+###                 ws.cell(row=i+2, column=3).value = ippan_group_by_suikei.house_summary_lv01_49
+###                 ws.cell(row=i+2, column=4).value = ippan_group_by_suikei.house_summary_lv50_99
+###                 ws.cell(row=i+2, column=5).value = ippan_group_by_suikei.house_summary_lv100
+###                 ws.cell(row=i+2, column=6).value = ippan_group_by_suikei.house_summary_half
+###                 ws.cell(row=i+2, column=7).value = ippan_group_by_suikei.house_summary_full
+###                 ws.cell(row=i+2, column=8).value = ippan_group_by_suikei.household_summary_lv00
+###                 ws.cell(row=i+2, column=9).value = ippan_group_by_suikei.household_summary_lv01_49
+###                 ws.cell(row=i+2, column=10).value = ippan_group_by_suikei.household_summary_lv50_99
+###                 ws.cell(row=i+2, column=11).value = ippan_group_by_suikei.household_summary_lv100
+###                 ws.cell(row=i+2, column=12).value = ippan_group_by_suikei.household_summary_half
+###                 ws.cell(row=i+2, column=13).value = ippan_group_by_suikei.household_summary_full
+###                 ws.cell(row=i+2, column=14).value = ippan_group_by_suikei.car_summary_lv00
+###                 ws.cell(row=i+2, column=15).value = ippan_group_by_suikei.car_summary_lv01_49
+###                 ws.cell(row=i+2, column=16).value = ippan_group_by_suikei.car_summary_lv50_99
+###                 ws.cell(row=i+2, column=17).value = ippan_group_by_suikei.car_summary_lv100
+###                 ws.cell(row=i+2, column=18).value = ippan_group_by_suikei.car_summary_half
+###                 ws.cell(row=i+2, column=19).value = ippan_group_by_suikei.car_summary_full
+###                 ws.cell(row=i+2, column=20).value = ippan_group_by_suikei.house_alt_summary_lv00
+###                 ws.cell(row=i+2, column=21).value = ippan_group_by_suikei.house_alt_summary_lv01_49
+###                 ws.cell(row=i+2, column=22).value = ippan_group_by_suikei.house_alt_summary_lv50_99
+###                 ws.cell(row=i+2, column=23).value = ippan_group_by_suikei.house_alt_summary_lv100
+###                 ws.cell(row=i+2, column=24).value = ippan_group_by_suikei.house_alt_summary_half
+###                 ws.cell(row=i+2, column=25).value = ippan_group_by_suikei.house_alt_summary_full
+###                 ws.cell(row=i+2, column=26).value = ippan_group_by_suikei.house_clean_summary_lv00
+###                 ws.cell(row=i+2, column=27).value = ippan_group_by_suikei.house_clean_summary_lv01_49
+###                 ws.cell(row=i+2, column=28).value = ippan_group_by_suikei.house_clean_summary_lv50_99
+###                 ws.cell(row=i+2, column=29).value = ippan_group_by_suikei.house_clean_summary_lv100
+###                 ws.cell(row=i+2, column=30).value = ippan_group_by_suikei.house_clean_summary_half
+###                 ws.cell(row=i+2, column=31).value = ippan_group_by_suikei.house_clean_summary_full
+###                 ws.cell(row=i+2, column=32).value = ippan_group_by_suikei.office_dep_summary_lv00
+###                 ws.cell(row=i+2, column=33).value = ippan_group_by_suikei.office_dep_summary_lv01_49
+###                 ws.cell(row=i+2, column=34).value = ippan_group_by_suikei.office_dep_summary_lv50_99
+###                 ws.cell(row=i+2, column=35).value = ippan_group_by_suikei.office_dep_summary_lv100
+###                 ws.cell(row=i+2, column=36).value = ippan_group_by_suikei.office_dep_summary_full
+###                 ws.cell(row=i+2, column=37).value = ippan_group_by_suikei.office_inv_summary_lv00
+###                 ws.cell(row=i+2, column=38).value = ippan_group_by_suikei.office_inv_summary_lv01_49
+###                 ws.cell(row=i+2, column=39).value = ippan_group_by_suikei.office_inv_summary_lv50_99
+###                 ws.cell(row=i+2, column=40).value = ippan_group_by_suikei.office_inv_summary_lv100
+###                 ws.cell(row=i+2, column=41).value = ippan_group_by_suikei.office_inv_summary_full
+###                 ws.cell(row=i+2, column=42).value = ippan_group_by_suikei.office_sus_summary_lv00
+###                 ws.cell(row=i+2, column=43).value = ippan_group_by_suikei.office_sus_summary_lv01_49
+###                 ws.cell(row=i+2, column=44).value = ippan_group_by_suikei.office_sus_summary_lv50_99
+###                 ws.cell(row=i+2, column=45).value = ippan_group_by_suikei.office_sus_summary_lv100
+###                 ws.cell(row=i+2, column=46).value = ippan_group_by_suikei.office_sus_summary_full
+###                 ws.cell(row=i+2, column=47).value = ippan_group_by_suikei.office_stg_summary_lv00
+###                 ws.cell(row=i+2, column=48).value = ippan_group_by_suikei.office_stg_summary_lv01_49
+###                 ws.cell(row=i+2, column=49).value = ippan_group_by_suikei.office_stg_summary_lv50_99
+###                 ws.cell(row=i+2, column=50).value = ippan_group_by_suikei.office_stg_summary_lv100
+###                 ws.cell(row=i+2, column=51).value = ippan_group_by_suikei.office_stg_summary_full
+###                 ws.cell(row=i+2, column=52).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv00
+###                 ws.cell(row=i+2, column=53).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv01_49
+###                 ws.cell(row=i+2, column=54).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv50_99
+###                 ws.cell(row=i+2, column=55).value = ippan_group_by_suikei.farmer_fisher_dep_summary_lv100
+###                 ws.cell(row=i+2, column=56).value = ippan_group_by_suikei.farmer_fisher_dep_summary_full
+###                 ws.cell(row=i+2, column=57).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv00
+###                 ws.cell(row=i+2, column=58).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv01_49
+###                 ws.cell(row=i+2, column=59).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv50_99
+###                 ws.cell(row=i+2, column=60).value = ippan_group_by_suikei.farmer_fisher_inv_summary_lv100
+###                 ws.cell(row=i+2, column=61).value = ippan_group_by_suikei.farmer_fisher_inv_summary_full
+###                 ws.cell(row=i+2, column=62).value = ippan_group_by_suikei.office_alt_summary_lv00
+###                 ws.cell(row=i+2, column=63).value = ippan_group_by_suikei.office_alt_summary_lv01_49
+###                 ws.cell(row=i+2, column=64).value = ippan_group_by_suikei.office_alt_summary_lv50_99
+###                 ws.cell(row=i+2, column=65).value = ippan_group_by_suikei.office_alt_summary_lv100
+###                 ws.cell(row=i+2, column=66).value = ippan_group_by_suikei.office_alt_summary_half
+###                 ws.cell(row=i+2, column=67).value = ippan_group_by_suikei.office_alt_summary_full
+###         wb.save(download_file_path)
+###         #######################################################################
+###         ### レスポンスセット処理(0030)
+###         ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+###         #######################################################################
+###         print_log('[DEBUG] P0200ExcelDownload.ippan_group_by_suikei_view()関数 STEP 4/4.', 'DEBUG')
+###         print_log('[INFO] P0200ExcelDownload.ippan_group_by_suikei_view()関数が正常終了しました。', 'INFO')
+###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+###         response['Content-Disposition'] = 'attachment; filename="ippan_group_by_suikei.xlsx"'
+###         return response
+###     except:
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数でエラーが発生しました。', 'ERROR')
+###         print_log('[ERROR] P0200ExcelDownload.ippan_group_by_suikei_view()関数が異常終了しました。', 'ERROR')
+###         return render(request, 'error.html')
 
 ###############################################################################
 ### 関数名：ippan_chosa_view(request, lock)
 ### 一般資産調査票（調査員用）
 ### ※複数EXCELファイル、複数EXCELシート対応版
-### urlpattern：path('ippan_chosa/', views.ippan_chosa_view, name='ippan_chosa_view')
-### template：P0900Action/download.html
+### urlpattern：path('ippan_chosa/lock/<slug:lock>/', views.ippan_chosa_view, name='ippan_chosa_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_chosa_view(request, lock):
@@ -4264,7 +4226,7 @@ def download_view(request, hash_code, count):
 ###############################################################################
 ### 関数名：ippan_city_view(request, lock)
 ### 一般資産調査票（市区町村担当者用）
-### urlpattern：path('ippan_city/', views.ippan_city_view, name='ippan_city_view')
+### urlpattern：path('ippan_city/lock/<slug:lock>/', views.ippan_city_view, name='ippan_city_view')
 ### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
@@ -4437,8 +4399,8 @@ def ippan_city_view(request, lock):
 ### 関数名：ippan_ken_view(request, lock)
 ### 一般資産調査票（都道府県担当者用）
 ### ※複数EXCELファイル、複数EXCELシート対応版
-### urlpattern：path('ippan_ken/', views.ippan_ken_view, name='ippan_ken_view')
-### template：P900Action/download.html
+### urlpattern：path('ippan_ken/lock/<slug:lock>/', views.ippan_ken_view, name='ippan_ken_view')
+### template：
 ###############################################################################
 ### @login_required(None, login_url='/P0100Login/')
 def ippan_ken_view(request, lock):
@@ -4603,4 +4565,799 @@ def ippan_ken_view(request, lock):
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0200ExcelDownload.ippan_ken_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：chitan_file_view(request, lock)
+### 7050：入力データ_公共土木施設調査票_地方単独事業
+### urlpattern：path('chitan_file/lock/<slug:lock>/', views.chitan_file_view, name='chitan_file_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def chitan_file_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        ### reset_log()
+        print_log('[INFO] P0200ExcelDownload.chitan_file_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 STEP 1/4.', 'DEBUG')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、入力データ_公共土木施設地方単独事業調査票データを取得する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 STEP 2/4.', 'DEBUG')
+        chitan_file_list = CHITAN_FILE.objects.raw("""
+            SELECT 
+                CF1.chitan_file_id AS chitan_file_id, 
+                CF1.chitan_file_name AS chitan_file_name, 
+                CF1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                CF1.upload_file_path AS upload_file_path, 
+                CF1.upload_file_name AS upload_file_name, 
+                CF1.summary_file_path AS summary_file_path, 
+                CF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', CF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', CF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM CHITAN_FILE CF1 
+            LEFT JOIN KEN KE1 ON CF1.ken_code = KE1.ken_code 
+            ORDER BY CAST(CF1.chitan_file_id AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 STEP 3/4.', 'DEBUG')
+        template_file_path = 'static/template_chitan_file.xlsx'
+        download_file_path = 'static/download_chitan_file.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '公共土木施設地方単独事業調査票'
+        ws.cell(row=1, column=1).value = 'ファイルID'
+        ws.cell(row=1, column=2).value = 'ファイル名'
+        ws.cell(row=1, column=3).value = '都道府県コード'
+        ws.cell(row=1, column=4).value = '都道府県名'
+        ws.cell(row=1, column=5).value = 'アップロードファイルパス'
+        ws.cell(row=1, column=6).value = 'アップロードファイル名'
+        ws.cell(row=1, column=7).value = '集計結果ファイルパス'
+        ws.cell(row=1, column=8).value = '集計結果ファイル名'
+        ws.cell(row=1, column=9).value = 'コミット日時'
+        ws.cell(row=1, column=10).value = '削除日時'
+        
+        if chitan_file_list:
+            for i, chitan_file in enumerate(chitan_file_list):
+                ws.cell(row=i+2, column=1).value = chitan_file.chitan_file_id
+                ws.cell(row=i+2, column=2).value = chitan_file.chitan_file_name
+                ws.cell(row=i+2, column=3).value = chitan_file.ken_code
+                ws.cell(row=i+2, column=4).value = chitan_file.ken_name
+                ws.cell(row=i+2, column=5).value = chitan_file.upload_file_path
+                ws.cell(row=i+2, column=6).value = chitan_file.upload_file_name
+                ws.cell(row=i+2, column=7).value = chitan_file.summary_file_path
+                ws.cell(row=i+2, column=8).value = chitan_file.summary_file_name
+                ws.cell(row=i+2, column=9).value = chitan_file.committed_at
+                ws.cell(row=i+2, column=10).value = chitan_file.deleted_at
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_file_view()関数 STEP 4/4.', 'DEBUG')
+        print_log('[INFO] P0200ExcelDownload.chitan_file_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="chitan_file.xlsx"'
+        return response
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.chitan_file_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.chitan_file_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.chitan_file_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：hojo_file_view(request, lock)
+### 7070：入力データ_公共土木施設調査票_補助事業
+### urlpattern：path('hojo_file/lock/<slug:lock>/', views.hojo_file_view, name='hojo_file_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def hojo_file_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        ### reset_log()
+        print_log('[INFO] P0200ExcelDownload.hojo_file_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 STEP 1/4.', 'DEBUG')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、入力データ_公共土木施設補助事業調査票データを取得する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 STEP 2/4.', 'DEBUG')
+        hojo_file_list = HOJO_FILE.objects.raw("""
+            SELECT 
+                HF1.hojo_file_id AS hojo_file_id, 
+                HF1.hojo_file_name AS hojo_file_name, 
+                HF1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                HF1.upload_file_path AS upload_file_path, 
+                HF1.upload_file_name AS upload_file_name, 
+                HF1.summary_file_path AS summary_file_path, 
+                HF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', HF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', HF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM HOJO_FILE HF1 
+            LEFT JOIN KEN KE1 ON HF1.ken_code = KE1.ken_code 
+            ORDER BY CAST(HF1.hojo_file_id AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 STEP 3/4.', 'DEBUG')
+        template_file_path = 'static/template_hojo_file.xlsx'
+        download_file_path = 'static/download_hojo_file.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '公共土木施設補助事業調査票'
+        ws.cell(row=1, column=1).value = 'ファイルID'
+        ws.cell(row=1, column=2).value = 'ファイル名'
+        ws.cell(row=1, column=3).value = '都道府県コード'
+        ws.cell(row=1, column=4).value = '都道府県名'
+        ws.cell(row=1, column=5).value = 'アップロードファイルパス'
+        ws.cell(row=1, column=6).value = 'アップロードファイル名'
+        ws.cell(row=1, column=7).value = '集計結果ファイルパス'
+        ws.cell(row=1, column=8).value = '集計結果ファイル名'
+        ws.cell(row=1, column=9).value = 'コミット日時'
+        ws.cell(row=1, column=10).value = '削除日時'
+        
+        if hojo_file_list:
+            for i, hojo_file in enumerate(hojo_file_list):
+                ws.cell(row=i+2, column=1).value = hojo_file.hojo_file_id
+                ws.cell(row=i+2, column=2).value = hojo_file.hojo_file_name
+                ws.cell(row=i+2, column=3).value = hojo_file.ken_code
+                ws.cell(row=i+2, column=4).value = hojo_file.ken_name
+                ws.cell(row=i+2, column=5).value = hojo_file.upload_file_path
+                ws.cell(row=i+2, column=6).value = hojo_file.upload_file_name
+                ws.cell(row=i+2, column=7).value = hojo_file.summary_file_path
+                ws.cell(row=i+2, column=8).value = hojo_file.summary_file_name
+                ws.cell(row=i+2, column=9).value = hojo_file.committed_at
+                ws.cell(row=i+2, column=10).value = hojo_file.deleted_at
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_file_view()関数 STEP 4/4.', 'DEBUG')
+        print_log('[INFO] P0200ExcelDownload.hojo_file_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="hojo_file.xlsx"'
+        return response
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.hojo_file_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.hojo_file_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.hojo_file_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：koeki_file_view(request, lock)
+### 7090：入力データ_公益事業等調査票
+### urlpattern：path('koeki_file/lock/<slug:lock>/', views.koeki_file_view, name='koeki_file_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def koeki_file_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### ブラウザからのリクエストと引数をチェックする。
+        #######################################################################
+        ### reset_log()
+        print_log('[INFO] P0200ExcelDownload.koeki_file_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 STEP 1/4.', 'DEBUG')
+        
+        #######################################################################
+        ### DBアクセス処理(0010)
+        ### DBにアクセスして、入力データ_公益事業等調査票データを取得する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 STEP 2/4.', 'DEBUG')
+        koeki_file_list = KOEKI_FILE.objects.raw("""
+            SELECT 
+                KF1.koeki_file_id AS koeki_file_id, 
+                KF1.koeki_file_name AS koeki_file_name, 
+                KF1.ken_code AS ken_code, 
+                KE1.ken_name AS ken_name, 
+                KF1.upload_file_path AS upload_file_path, 
+                KF1.upload_file_name AS upload_file_name, 
+                KF1.summary_file_path AS summary_file_path, 
+                KF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', KF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', KF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM KOEKI_FILE KF1 
+            LEFT JOIN KEN KE1 ON KF1.ken_code = KE1.ken_code 
+            ORDER BY CAST(KF1.koeki_file_id AS INTEGER)""", [])
+    
+        #######################################################################
+        ### EXCEL入出力処理(0020)
+        ### (1)テンプレート用のEXCELファイルを読み込む。
+        ### (2)セルにデータをセットして、ダウンロード用のEXCELファイルを保存する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 STEP 3/4.', 'DEBUG')
+        template_file_path = 'static/template_koeki_file.xlsx'
+        download_file_path = 'static/download_koeki_file.xlsx'
+        wb = openpyxl.load_workbook(template_file_path)
+        ws = wb.active
+        ws.title = '公益事業等調査票'
+        ws.cell(row=1, column=1).value = 'ファイルID'
+        ws.cell(row=1, column=2).value = 'ファイル名'
+        ws.cell(row=1, column=3).value = '都道府県コード'
+        ws.cell(row=1, column=4).value = '都道府県名'
+        ws.cell(row=1, column=5).value = 'アップロードファイルパス'
+        ws.cell(row=1, column=6).value = 'アップロードファイル名'
+        ws.cell(row=1, column=7).value = '集計結果ファイルパス'
+        ws.cell(row=1, column=8).value = '集計結果ファイル名'
+        ws.cell(row=1, column=9).value = 'コミット日時'
+        ws.cell(row=1, column=10).value = '削除日時'
+        
+        if koeki_file_list:
+            for i, koeki_file in enumerate(koeki_file_list):
+                ws.cell(row=i+2, column=1).value = koeki_file.koeki_file_id
+                ws.cell(row=i+2, column=2).value = koeki_file.koeki_file_name
+                ws.cell(row=i+2, column=3).value = koeki_file.ken_code
+                ws.cell(row=i+2, column=4).value = koeki_file.ken_name
+                ws.cell(row=i+2, column=5).value = koeki_file.upload_file_path
+                ws.cell(row=i+2, column=6).value = koeki_file.upload_file_name
+                ws.cell(row=i+2, column=7).value = koeki_file.summary_file_path
+                ws.cell(row=i+2, column=8).value = koeki_file.summary_file_name
+                ws.cell(row=i+2, column=9).value = koeki_file.committed_at
+                ws.cell(row=i+2, column=10).value = koeki_file.deleted_at
+            
+        wb.save(download_file_path)
+        
+        #######################################################################
+        ### レスポンスセット処理(0030)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_file_view()関数 STEP 4/4.', 'DEBUG')
+        print_log('[INFO] P0200ExcelDownload.koeki_file_view()関数が正常終了しました。', 'INFO')
+        response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="koeki_file.xlsx"'
+        return response
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.koeki_file_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_file_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_file_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：chitan_view(request, lock)
+### 7060：入力データ_公共土木施設調査票_地方単独事業
+### ※複数EXCELファイル対応版
+### urlpattern：path('chitan/lock/<slug:lock>/', views.chitan_view, name='chitan_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def chitan_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### (2)GETメソッドの場合、関数を抜ける。
+        ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
+        #######################################################################
+        reset_log()
+        print_log('[INFO] P0200ExcelDownload.chitan_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 city_code_hidden= {}'.format(request.POST.get('city_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 1/6.', 'DEBUG')
+
+        if request.method == 'GET':
+            print_log('[ERROR] P0200ExcelDownload.chitan_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        if request.POST.get('city_code_hidden') is None:
+            print_log('[ERROR] P0200ExcelDownload.chitan_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        city_code_request = [x.strip() for x in request.POST.get('city_code_hidden').split(',')][:-1]
+
+        if city_code_request is None:
+            print_log('[WARN] P0200ExcelDownload.chitan_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        if len(city_code_request) == 0:
+            print_log('[WARN] P0200ExcelDownload.chitan_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        #######################################################################
+        ### DBアクセス処理(0010)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 2/6.', 'DEBUG')
+        ken_code_request = []
+        ken_name_request = []
+        ### city_code_request = []
+        city_name_request = []
+        for city_code in city_code_request:
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                WHERE 
+                    CT1.city_code=%s LIMIT 1""", [city_code, ])
+            
+            ken_code_request.append([city.ken_code for city in city_list][0])
+            ken_name_request.append([city.ken_name for city in city_list][0])
+            ### city_code_request.append([city.city_code for city in city_list][0])
+            city_name_request.append([city.city_name for city in city_list][0])
+            
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 ken_code_request = {}'.format(ken_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 ken_name_request = {}'.format(ken_name_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 city_code_request = {}'.format(city_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 city_name_request = {}'.format(city_name_request), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0020)
+        ### ハッシュコードを生成する。
+        ### ※リクエスト固有のディレクトリ名を生成するため等に使用する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 3/6.', 'DEBUG')
+        JST = timezone(timedelta(hours=9), 'JST')
+        datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
+        hash_code = hashlib.md5((str(datetime_now_YmdHMS)).encode()).hexdigest()[0:10]
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 hash_code = {}'.format(hash_code), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0030)
+        ### ダウンロードファイルパス、ダウンロードファイル名に値をセットする。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 4/6.', 'DEBUG')
+        download_file_path = []
+        download_file_name = []
+        for i, ken_code in enumerate(ken_code_request):
+            download_file_path.append('static/' + str(hash_code) + '/chitan_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            download_file_name.append('chitan_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            
+        new_dir_path = 'static/' + str(hash_code)
+        os.makedirs(new_dir_path, exist_ok=True)
+        
+        #######################################################################
+        ### DBアクセス処理(0040)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 5/6.', 'DEBUG')
+        connection_cursor = connection.cursor()
+        try:
+            connection_cursor.execute("""BEGIN""", [])
+            
+            for i, ken_code in enumerate(ken_code_request):
+                connection_cursor.execute("""
+                    INSERT INTO TRIGGER (
+                        trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                        published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
+                        download_file_path, download_file_name, upload_file_path, upload_file_name 
+                    ) VALUES (
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                        %s, -- suigai_id 
+                        %s, -- action_code 
+                        %s, -- status_code 
+                        %s, -- success_count 
+                        %s, -- failure_count 
+                        CURRENT_TIMESTAMP, -- published_at 
+                        %s, -- consumed_at 
+                        %s, -- deleted_at 
+                        %s, -- integrity_ok 
+                        %s, -- integrity_ng 
+                        %s, -- ken_code 
+                        %s, -- city_code 
+                        %s, -- download_file_path 
+                        %s, -- download_file_name 
+                        %s, -- upload_file_path 
+                        %s  -- upload_file_name 
+                    )""", [
+                        None, ### suigai_id 
+                        'Q01',  ### action_code 
+                        None, ### status_code 
+                        None, ### success_count 
+                        None, ### failure_count 
+                        None, ### consumed_at
+                        None, ### deleted_at 
+                        None, ### integrity_ok 
+                        None, ### integrity_ng 
+                        ken_code_request[i],  ### ken_code 
+                        None, ### city_code 
+                        download_file_path[i], ### download_file_path 
+                        download_file_name[i], ### download_file_name 
+                        None, ### upload_file_path 
+                        None, ### upload_file_name
+                    ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])        
+        except:
+            print_log('[ERROR] P0200ExcelDownload.chitan_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
+        finally:
+            connection_cursor.close()
+
+        #######################################################################
+        ### レスポンスセット処理(0050)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### See https://groups.google.com/g/django-users/c/SLw6SrIC8wI
+        ### What you can do is prevent the browser from ever staying on a
+        ### POST-generated page: the standard best practice is a technique called 
+        ### "Post/Redirect/Get": see http://en.wikipedia.org/wiki/Post/Redirect/Get
+        ### for a high-level description.
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.chitan_view()関数 STEP 6/6.', 'DEBUG')
+        return redirect('/P0200ExcelDownload/download/' + str(hash_code) + '/' + str(len(ken_code_request)) + '/')
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.chitan_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.chitan_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.chitan_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：hojo_view(request, lock)
+### 7080：入力データ_公共土木施設調査票_補助事業
+### ※複数EXCELファイル対応版
+### urlpattern：path('hojo/lock/<slug:lock>/', views.hojo_view, name='hojo_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def hojo_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### (2)GETメソッドの場合、関数を抜ける。
+        ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
+        #######################################################################
+        reset_log()
+        print_log('[INFO] P0200ExcelDownload.hojo_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 city_code_hidden= {}'.format(request.POST.get('city_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 1/6.', 'DEBUG')
+
+        if request.method == 'GET':
+            print_log('[ERROR] P0200ExcelDownload.hojo_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        if request.POST.get('city_code_hidden') is None:
+            print_log('[ERROR] P0200ExcelDownload.hojo_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        city_code_request = [x.strip() for x in request.POST.get('city_code_hidden').split(',')][:-1]
+
+        if city_code_request is None:
+            print_log('[WARN] P0200ExcelDownload.hojo_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        if len(city_code_request) == 0:
+            print_log('[WARN] P0200ExcelDownload.hojo_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        #######################################################################
+        ### DBアクセス処理(0010)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 2/6.', 'DEBUG')
+        ken_code_request = []
+        ken_name_request = []
+        ### city_code_request = []
+        city_name_request = []
+        for city_code in city_code_request:
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                WHERE 
+                    CT1.city_code=%s LIMIT 1""", [city_code, ])
+            
+            ken_code_request.append([city.ken_code for city in city_list][0])
+            ken_name_request.append([city.ken_name for city in city_list][0])
+            ### city_code_request.append([city.city_code for city in city_list][0])
+            city_name_request.append([city.city_name for city in city_list][0])
+            
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 ken_code_request = {}'.format(ken_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 ken_name_request = {}'.format(ken_name_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 city_code_request = {}'.format(city_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 city_name_request = {}'.format(city_name_request), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0020)
+        ### ハッシュコードを生成する。
+        ### ※リクエスト固有のディレクトリ名を生成するため等に使用する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 3/6.', 'DEBUG')
+        JST = timezone(timedelta(hours=9), 'JST')
+        datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
+        hash_code = hashlib.md5((str(datetime_now_YmdHMS)).encode()).hexdigest()[0:10]
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 hash_code = {}'.format(hash_code), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0030)
+        ### ダウンロードファイルパス、ダウンロードファイル名に値をセットする。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 4/6.', 'DEBUG')
+        download_file_path = []
+        download_file_name = []
+        for i, ken_code in enumerate(ken_code_request):
+            download_file_path.append('static/' + str(hash_code) + '/hojo_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            download_file_name.append('hojo_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            
+        new_dir_path = 'static/' + str(hash_code)
+        os.makedirs(new_dir_path, exist_ok=True)
+        
+        #######################################################################
+        ### DBアクセス処理(0040)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 5/6.', 'DEBUG')
+        connection_cursor = connection.cursor()
+        try:
+            connection_cursor.execute("""BEGIN""", [])
+            
+            for i, ken_code in enumerate(ken_code_request):
+                connection_cursor.execute("""
+                    INSERT INTO TRIGGER (
+                        trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                        published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
+                        download_file_path, download_file_name, upload_file_path, upload_file_name 
+                    ) VALUES (
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                        %s, -- suigai_id 
+                        %s, -- action_code 
+                        %s, -- status_code 
+                        %s, -- success_count 
+                        %s, -- failure_count 
+                        CURRENT_TIMESTAMP, -- published_at 
+                        %s, -- consumed_at 
+                        %s, -- deleted_at 
+                        %s, -- integrity_ok 
+                        %s, -- integrity_ng 
+                        %s, -- ken_code 
+                        %s, -- city_code 
+                        %s, -- download_file_path 
+                        %s, -- download_file_name 
+                        %s, -- upload_file_path 
+                        %s  -- upload_file_name 
+                    )""", [
+                        None, ### suigai_id 
+                        'R01',  ### action_code 
+                        None, ### status_code 
+                        None, ### success_count 
+                        None, ### failure_count 
+                        None, ### consumed_at
+                        None, ### deleted_at 
+                        None, ### integrity_ok 
+                        None, ### integrity_ng 
+                        ken_code_request[i],  ### ken_code 
+                        None, ### city_code 
+                        download_file_path[i], ### download_file_path 
+                        download_file_name[i], ### download_file_name 
+                        None, ### upload_file_path 
+                        None, ### upload_file_name
+                    ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])        
+        except:
+            print_log('[ERROR] P0200ExcelDownload.hojo_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
+        finally:
+            connection_cursor.close()
+
+        #######################################################################
+        ### レスポンスセット処理(0050)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### See https://groups.google.com/g/django-users/c/SLw6SrIC8wI
+        ### What you can do is prevent the browser from ever staying on a
+        ### POST-generated page: the standard best practice is a technique called 
+        ### "Post/Redirect/Get": see http://en.wikipedia.org/wiki/Post/Redirect/Get
+        ### for a high-level description.
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.hojo_view()関数 STEP 6/6.', 'DEBUG')
+        return redirect('/P0200ExcelDownload/download/' + str(hash_code) + '/' + str(len(ken_code_request)) + '/')
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.hojo_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.hojo_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.hojo_view()関数が異常終了しました。', 'ERROR')
+        return render(request, 'error.html')
+
+###############################################################################
+### 関数名：koeki_view(request, lock)
+### 7100：入力データ_公益事業等調査票
+### ※複数EXCELファイル対応版
+### urlpattern：path('koeki/lock/<slug:lock>/', views.koeki_view, name='koeki_view')
+### template：
+###############################################################################
+### @login_required(None, login_url='/P0100Login/')
+def koeki_view(request, lock):
+    try:
+        #######################################################################
+        ### 引数チェック処理(0000)
+        ### (1)ブラウザからのリクエストと引数をチェックする。
+        ### (2)GETメソッドの場合、関数を抜ける。
+        ### (3)POSTリクエストの市区町村数が0件の場合、関数を抜ける。
+        #######################################################################
+        reset_log()
+        print_log('[INFO] P0200ExcelDownload.koeki_view()関数が開始しました。', 'INFO')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 request = {}'.format(request.method), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 lock = {}'.format(lock), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 city_code_hidden= {}'.format(request.POST.get('city_code_hidden')), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 1/6.', 'DEBUG')
+
+        if request.method == 'GET':
+            print_log('[ERROR] P0200ExcelDownload.koeki_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        if request.POST.get('city_code_hidden') is None:
+            print_log('[ERROR] P0200ExcelDownload.koeki_view()関数でエラーが発生しました。', 'ERROR')
+            return render(request, 'error.html')
+
+        city_code_request = [x.strip() for x in request.POST.get('city_code_hidden').split(',')][:-1]
+
+        if city_code_request is None:
+            print_log('[WARN] P0200ExcelDownload.koeki_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        if len(city_code_request) == 0:
+            print_log('[WARN] P0200ExcelDownload.koeki_view()関数で警告が発生しました。', 'WARN')
+            return render(request, 'warning.html')
+
+        #######################################################################
+        ### DBアクセス処理(0010)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 2/6.', 'DEBUG')
+        ken_code_request = []
+        ken_name_request = []
+        ### city_code_request = []
+        city_name_request = []
+        for city_code in city_code_request:
+            city_list = CITY.objects.raw("""
+                SELECT 
+                    CT1.city_code AS city_code, 
+                    CT1.city_name AS city_name, 
+                    CT1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name 
+                FROM CITY CT1 
+                LEFT JOIN KEN KE1 ON CT1.ken_code=KE1.ken_code 
+                WHERE 
+                    CT1.city_code=%s LIMIT 1""", [city_code, ])
+            
+            ken_code_request.append([city.ken_code for city in city_list][0])
+            ken_name_request.append([city.ken_name for city in city_list][0])
+            ### city_code_request.append([city.city_code for city in city_list][0])
+            city_name_request.append([city.city_name for city in city_list][0])
+            
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 ken_code_request = {}'.format(ken_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 ken_name_request = {}'.format(ken_name_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 city_code_request = {}'.format(city_code_request), 'DEBUG')
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 city_name_request = {}'.format(city_name_request), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0020)
+        ### ハッシュコードを生成する。
+        ### ※リクエスト固有のディレクトリ名を生成するため等に使用する。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 3/6.', 'DEBUG')
+        JST = timezone(timedelta(hours=9), 'JST')
+        datetime_now_YmdHMS = datetime.now(JST).strftime('%Y%m%d%H%M%S')
+        hash_code = hashlib.md5((str(datetime_now_YmdHMS)).encode()).hexdigest()[0:10]
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 hash_code = {}'.format(hash_code), 'DEBUG')
+
+        #######################################################################
+        ### 局所変数セット処理(0030)
+        ### ダウンロードファイルパス、ダウンロードファイル名に値をセットする。
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 4/6.', 'DEBUG')
+        download_file_path = []
+        download_file_name = []
+        for i, ken_code in enumerate(ken_code_request):
+            download_file_path.append('static/' + str(hash_code) + '/koeki_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            download_file_name.append('koeki_' + str(ken_code_request[i]) + '_' + str(ken_name_request[i]) + '.xlsx')
+            
+        new_dir_path = 'static/' + str(hash_code)
+        os.makedirs(new_dir_path, exist_ok=True)
+        
+        #######################################################################
+        ### DBアクセス処理(0040)
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 5/6.', 'DEBUG')
+        connection_cursor = connection.cursor()
+        try:
+            connection_cursor.execute("""BEGIN""", [])
+            
+            for i, ken_code in enumerate(ken_code_request):
+                connection_cursor.execute("""
+                    INSERT INTO TRIGGER (
+                        trigger_id, suigai_id, action_code, status_code, success_count, failure_count, 
+                        published_at, consumed_at, deleted_at, integrity_ok, integrity_ng, ken_code, city_code, 
+                        download_file_path, download_file_name, upload_file_path, upload_file_name 
+                    ) VALUES (
+                        (SELECT CASE WHEN (MAX(trigger_id+1)) IS NULL THEN CAST(0 AS INTEGER) ELSE CAST(MAX(trigger_id+1) AS INTEGER) END AS trigger_id FROM TRIGGER), -- trigger_id 
+                        %s, -- suigai_id 
+                        %s, -- action_code 
+                        %s, -- status_code 
+                        %s, -- success_count 
+                        %s, -- failure_count 
+                        CURRENT_TIMESTAMP, -- published_at 
+                        %s, -- consumed_at 
+                        %s, -- deleted_at 
+                        %s, -- integrity_ok 
+                        %s, -- integrity_ng 
+                        %s, -- ken_code 
+                        %s, -- city_code 
+                        %s, -- download_file_path 
+                        %s, -- download_file_name 
+                        %s, -- upload_file_path 
+                        %s  -- upload_file_name 
+                    )""", [
+                        None, ### suigai_id 
+                        'S01',  ### action_code 
+                        None, ### status_code 
+                        None, ### success_count 
+                        None, ### failure_count 
+                        None, ### consumed_at
+                        None, ### deleted_at 
+                        None, ### integrity_ok 
+                        None, ### integrity_ng 
+                        ken_code_request[i],  ### ken_code 
+                        None, ### city_code 
+                        download_file_path[i], ### download_file_path 
+                        download_file_name[i], ### download_file_name 
+                        None, ### upload_file_path 
+                        None, ### upload_file_name
+                    ])
+            ### transaction.commit()
+            connection_cursor.execute("""COMMIT""", [])        
+        except:
+            print_log('[ERROR] P0200ExcelDownload.koeki_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+            ### connection_cursor.rollback()
+            connection_cursor.execute("""ROLLBACK""", [])
+        finally:
+            connection_cursor.close()
+
+        #######################################################################
+        ### レスポンスセット処理(0050)
+        ### テンプレートとコンテキストを設定して、レスポンスをブラウザに戻す。
+        ### See https://groups.google.com/g/django-users/c/SLw6SrIC8wI
+        ### What you can do is prevent the browser from ever staying on a
+        ### POST-generated page: the standard best practice is a technique called 
+        ### "Post/Redirect/Get": see http://en.wikipedia.org/wiki/Post/Redirect/Get
+        ### for a high-level description.
+        #######################################################################
+        print_log('[DEBUG] P0200ExcelDownload.koeki_view()関数 STEP 6/6.', 'DEBUG')
+        return redirect('/P0200ExcelDownload/download/' + str(hash_code) + '/' + str(len(ken_code_request)) + '/')
+        
+    except:
+        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数でエラーが発生しました。', 'ERROR')
+        print_log('[ERROR] P0200ExcelDownload.koeki_view()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')

@@ -70,8 +70,6 @@ from P0000Common.models import IPPAN_SUMMARY           ### 8000: 一般資産集
 from P0000Common.models import ACTION                  ### 10000: アクション
 from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
-from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
-from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
 from P0000Common.common import get_debug_log
 from P0000Common.common import get_error_log
@@ -224,8 +222,6 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         action_list = []                               ### 10000: アクション
         status_list = []                               ### 10010: 状態
         trigger_list = []                              ### 10020: トリガーメッセージ
-        approval_list = []                             ### 10030: 承認メッセージ
-        feedback_list = []                             ### 10040: フィードバックメッセージ
         
         #######################################################################
         ### DBアクセス処理(0030)
@@ -1586,8 +1582,6 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
             'action_list': action_list,                                        ### 10000: アクション 
             'status_list': status_list,                                        ### 10010: 状態 
             'trigger_list': trigger_list,                                      ### 10020: トリガーメッセージ 
-            'approval_list': approval_list,                                    ### 10030: 承認メッセージ 
-            'feedback_list': feedback_list,                                    ### 10040: フィードバックメッセージ 
         }
         print_log('[INFO] P0400OnlineDisplay.category1_category2_ken_city_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

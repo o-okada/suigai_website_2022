@@ -590,9 +590,9 @@
                             <th scope="col" class="text-center text-truncate" style="width:11%;">N01<br>調査員用ダウンロード &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">O01<br>市区町村用ダウンロード &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">P01<br>都道府県用ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">Q01<br>地方単独事業ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">R01<br>補助事業ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">S01<br>公益事業等ダウンロード &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
                             <th scope="col" class="text-center text-truncate" style="width:12%;"></th>
                         </tr>
@@ -637,9 +637,42 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_Q01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- R01: 補助事業ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_R01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- S01: 公益事業等ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_S01_success_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.consumed_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -684,9 +717,42 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_Q01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- R01: 補助事業ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_R01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <!-- S01: 公益事業等ダウンロード -->
+                            <td>
+                                <ul class="list-unstyled text-start">
+                                    {% for trigger in trigger_S01_failure_list %}
+                                    <li class="text-truncate">
+                                        <a href="/P0900Action/trigger/{{ trigger.trigger_id }}" class="cl_table">
+                                            {{ trigger.ken_name }} {{ trigger.city_name }} {{ trigger.suigai_name }} 日時 {{ trigger.published_at }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -695,15 +761,18 @@
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">ファイル数</th>
-                            <!-- N01: 水害区域図 -->
+                            <!-- N01: 調査員用ダウンロード -->
                             <td class="text-center">{{ trigger_N01_success_count }} / {{ trigger_N01_failure_count }}</td>
-                            <!-- O01: 水害区域図貼付け -->
+                            <!-- O01: 市区町村用ダウンロード -->
                             <td class="text-center">{{ trigger_O01_success_count }} / {{ trigger_O01_failure_count }}</td>
-                            <!-- P01: 集計処理 -->
+                            <!-- P01: 都道府県用ダウンロード -->
                             <td class="text-center">{{ trigger_P01_success_count }} / {{ trigger_P01_failure_count }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <td class="text-center">{{ trigger_Q01_success_count }} / {{ trigger_Q01_failure_count }}</td>
+                            <!-- R01: 補助事業ダウンロード -->
+                            <td class="text-center">{{ trigger_R01_success_count }} / {{ trigger_R01_failure_count }}</td>
+                            <!-- S01: 公益事業等ダウンロード -->
+                            <td class="text-center">{{ trigger_S01_success_count }} / {{ trigger_S01_failure_count }}</td>
                             <td></td>
                             <td></td>
                         </tr>

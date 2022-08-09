@@ -12,6 +12,7 @@
 ### 処理名：インポート処理
 ###############################################################################
 import sys
+
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
@@ -67,17 +68,18 @@ from P0000Common.models import WEATHER                 ### 7010: 入力データ
 from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
 from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
 from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
-from P0000Common.models import CHITAN                  ### 7050: 入力データ_公共土木施設地方単独事業調査票
-from P0000Common.models import HOJO                    ### 7060: 入力データ_公共土木施設補助事業調査票
-from P0000Common.models import KOEKI                   ### 7070: 入力データ_公益事業等調査票
+from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設地方単独事業調査票
+from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設地方単独事業調査票
+from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設補助事業調査票
+from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設補助事業調査票
+from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票
+from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_一覧表部分
 
 from P0000Common.models import ACTION                  ### 10000: アクション
 from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
-from P0000Common.models import APPROVAL                ### 10030: 承認メッセージ
-from P0000Common.models import FEEDBACK                ### 10040: フィードバックメッセージ
 
 from P0000Common.common import get_debug_log
 from P0000Common.common import get_error_log
@@ -98,7 +100,7 @@ def index_view(request):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        ### reset_log()
+        reset_log()
         print_log('[INFO] P0100File.index_view()関数が開始しました。', 'INFO')
         print_log('[DEBUG] P0100File.index_view()関数 request = {}'.format(request.method), 'DEBUG')
         print_log('[DEBUG] P0100File.index_view()関数 STEP 1/2.', 'DEBUG')
@@ -110,15 +112,26 @@ def index_view(request):
         print_log('[DEBUG] P0100File.index_view()関数 STEP 2/2.', 'DEBUG')
         template = loader.get_template('P0100File/index.html')
         context = {
+            'info_log': get_info_log(), 
+            'debug_log': get_debug_log(), 
+            'warn_log': get_warn_log(), 
+            'error_log': get_error_log(), 
         }
         print_log('[INFO] P0100File.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
-    
     except:
         print_log('[ERROR] P0100File.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+        template = loader.get_template('P0100File/error.html')
+        context = {
+            'info_log': get_info_log(), 
+            'debug_log': get_debug_log(), 
+            'warn_log': get_warn_log(), 
+            'error_log': get_error_log(), 
+        }
+        ### return render(request, 'error.html')
+        return HttpResponse(template.render(context, request))
 
 ###############################################################################
 ### 関数名：type_view
@@ -143,10 +156,9 @@ def type_view(request, type_code):
         ### DBにアクセスして、データを取得する。
         #######################################################################
         print_log('[DEBUG] P0100File.type_view()関数 STEP 2/3.', 'DEBUG')
-        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
-        ### feedback_list = FEEDBACK.objects.raw("""SELECT * FROM FEEDBACK ORDER BY CAST(FEEDBACK_ID AS INTEGER)""", [])
-        ### approval_list = APPROVAL.objects.raw("""SELECT * FROM APPROVAL ORDER BY CAST(APPROVAL_ID AS INTEGER)""", [])
+        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(ken_code AS INTEGER)""", [])
         
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2_1/3.', 'DEBUG')
         suigai_list = []
         for ken in ken_list:
             suigai_list.append(SUIGAI.objects.raw("""
@@ -172,8 +184,7 @@ def type_view(request, type_code):
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
             
-        ### print_log('[DEBUG] P0100File.type_view()関数 suigai_list = {}'.format(suigai_list), 'DEBUG')
-
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2_2/3.', 'DEBUG')
         area_list = []
         for ken in ken_list:
             area_list.append(AREA.objects.raw("""
@@ -196,8 +207,63 @@ def type_view(request, type_code):
                 LEFT JOIN ACTION AC1 ON SUB1.action_code=AC1.action_code 
                 LEFT JOIN STATUS ST1 ON SUB1.status_code=ST1.status_code 
                 WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
-            
-        ### print_log('[DEBUG] P0100File.type_view()関数 area_list = {}'.format(area_list), 'DEBUG')
+
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2_3/3.', 'DEBUG')
+        chitan_file_list = []
+        for ken in ken_list:
+            chitan_file_list.append(CHITAN_FILE.objects.raw("""
+                SELECT 
+                    KE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SUB1.chitan_file_id AS chitan_file_id, 
+                    SUB1.chitan_file_name AS chitan_file_name, 
+                    SUB1.upload_file_path AS upload_file_path, 
+                    SUB1.upload_file_name AS upload_file_name, 
+                    SUB1.summary_file_path AS summary_file_path, 
+                    SUB1.summary_file_name AS summary_file_name, 
+                    TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM KEN KE1 
+                LEFT JOIN (SELECT * FROM CHITAN_FILE WHERE ken_code=%s AND deleted_at IS NULL ORDER BY chitan_file_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code 
+                WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
+
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2_4/3.', 'DEBUG')
+        hojo_file_list = []
+        for ken in ken_list:
+            hojo_file_list.append(HOJO_FILE.objects.raw("""
+                SELECT 
+                    KE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SUB1.hojo_file_id AS hojo_file_id, 
+                    SUB1.hojo_file_name AS hojo_file_name, 
+                    SUB1.upload_file_path AS upload_file_path, 
+                    SUB1.upload_file_name AS upload_file_name, 
+                    SUB1.summary_file_path AS summary_file_path, 
+                    SUB1.summary_file_name AS summary_file_name, 
+                    TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM KEN KE1 
+                LEFT JOIN (SELECT * FROM HOJO_FILE WHERE ken_code=%s AND deleted_at IS NULL ORDER BY hojo_file_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code 
+                WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
+
+        print_log('[DEBUG] P0100File.type_view()関数 STEP 2_5/3.', 'DEBUG')
+        koeki_file_list = []
+        for ken in ken_list:
+            koeki_file_list.append(KOEKI_FILE.objects.raw("""
+                SELECT 
+                    KE1.ken_code AS ken_code, 
+                    KE1.ken_name AS ken_name, 
+                    SUB1.koeki_file_id AS koeki_file_id, 
+                    SUB1.koeki_file_name AS koeki_file_name, 
+                    SUB1.upload_file_path AS upload_file_path, 
+                    SUB1.upload_file_name AS upload_file_name, 
+                    SUB1.summary_file_path AS summary_file_path, 
+                    SUB1.summary_file_name AS summary_file_name, 
+                    TO_CHAR(timezone('JST', SUB1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                    TO_CHAR(timezone('JST', SUB1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+                FROM KEN KE1 
+                LEFT JOIN (SELECT * FROM KOEKI_FILE WHERE ken_code=%s AND deleted_at IS NULL ORDER BY koeki_file_id DESC) SUB1 ON KE1.ken_code=SUB1.ken_code 
+                WHERE KE1.ken_code=%s""", [ken.ken_code, ken.ken_code, ]))
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -207,14 +273,13 @@ def type_view(request, type_code):
         template = loader.get_template('P0100File/type.html')
         context = {
             'type_code': type_code, 
-            ### 'feedback_count': 0, 
-            ### 'approval_count': 0, 
             
             'ken_list': ken_list, 
-            ### 'feedback_list': feedback_list, 
-            ### 'approval_list': approval_list, 
             'suigai_list': suigai_list, 
             'area_list': area_list, 
+            'chitan_file_list': chitan_file_list, 
+            'hojo_file_list': hojo_file_list, 
+            'koeki_file_list': koeki_file_list, 
         }
         print_log('[INFO] P0100File.type_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
@@ -257,6 +322,7 @@ def type_ken_view(request, type_code, ken_code):
                 ken_code=%s 
             ORDER BY CAST(ken_code AS INTEGER)""", [ken_code, ])
         
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2_1/3.', 'DEBUG')
         suigai_list = SUIGAI.objects.raw("""
             SELECT 
                 SG1.suigai_id AS suigai_id, 
@@ -280,6 +346,7 @@ def type_ken_view(request, type_code, ken_code):
                 SG1.ken_code=%s 
             ORDER BY CAST(SG1.city_code AS INTEGER), CAST(SG1.suigai_id AS INTEGER) DESC""", [ken_code, ])
             
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2_2/3.', 'DEBUG')
         area_list = AREA.objects.raw("""
             SELECT 
                 AR1.area_id AS area_id, 
@@ -296,71 +363,62 @@ def type_ken_view(request, type_code, ken_code):
                 AR1.ken_code=%s 
             ORDER BY CAST(AR1.area_id AS INTEGER) DESC""", [ken_code, ])
         
-        chitan_list = CHITAN.objects.raw("""
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2_3/3.', 'DEBUG')
+        chitan_file_list = CHITAN_FILE.objects.raw("""
             SELECT 
-                CH1.chitan_id AS chitan_id, 
-                CH1.chitan_name AS chitan_name, 
-                CH1.ken_code AS ken_code, 
+                CF1.chitan_file_id AS chitan_file_id, 
+                CF1.chitan_file_name AS chitan_file_name, 
+                CF1.ken_code AS ken_code, 
                 KE1.ken_name AS ken_name, 
-                CH1.city_code AS city_code, 
-                CT1.city_name AS city_name, 
-                TO_CHAR(timezone('JST', CH1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
-                TO_CHAR(timezone('JST', CH1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
-                CH1.upload_file_path AS upload_file_path, 
-                CH1.upload_file_name AS upload_file_name, 
-                CH1.summary_file_path AS summary_file_path, 
-                CH1.summary_file_name AS summary_file_name, 
-                TO_CHAR(timezone('JST', CH1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-                TO_CHAR(timezone('JST', CH1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-            FROM CHITAN CH1 
-            LEFT JOIN KEN KE1 ON CH1.ken_code=KE1.ken_code 
-            LEFT JOIN CITY CT1 ON CH1.city_code=CT1.city_code 
+                CF1.upload_file_path AS upload_file_path, 
+                CF1.upload_file_name AS upload_file_name, 
+                CF1.summary_file_path AS summary_file_path, 
+                CF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', CF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', CF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM CHITAN_FILE CF1 
+            LEFT JOIN KEN KE1 ON CF1.ken_code=KE1.ken_code 
             WHERE 
-                CH1.ken_code=%s 
-            ORDER BY CAST(CH1.city_code AS INTEGER), CAST(CH1.chitan_id AS INTEGER) DESC""", [ken_code, ])
+                CF1.ken_code=%s 
+            ORDER BY CAST(CF1.chitan_file_id AS INTEGER) DESC""", [ken_code, ])
 
-        hojo_list = HOJO.objects.raw("""
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2_4/3.', 'DEBUG')
+        hojo_file_list = HOJO_FILE.objects.raw("""
             SELECT 
-                HJ1.hojo_id AS hojo_id, 
-                HJ1.hojo_name AS hojo_name, 
-                HJ1.ken_code AS ken_code, 
+                HF1.hojo_file_id AS hojo_file_id, 
+                HF1.hojo_file_name AS hojo_file_name, 
+                HF1.ken_code AS ken_code, 
                 KE1.ken_name AS ken_name, 
-                HJ1.city_code AS city_code, 
-                HJ1.city_name AS city_name, 
-                TO_CHAR(timezone('JST', HJ1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
-                HJ1.upload_file_path AS upload_file_path, 
-                HJ1.upload_file_name AS upload_file_name, 
-                HJ1.summary_file_path AS summary_file_path, 
-                HJ1.summary_file_name AS summary_file_name, 
-                TO_CHAR(timezone('JST', HJ1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-                TO_CHAR(timezone('JST', HJ1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-            FROM HOJO HJ1 
-            LEFT JOIN KEN KE1 ON HJ1.ken_code=KE1.ken_code 
-            LEFT JOIN CITY CT1 ON HJ1.city_code=CT1.city_code 
+                HF1.upload_file_path AS upload_file_path, 
+                HF1.upload_file_name AS upload_file_name, 
+                HF1.summary_file_path AS summary_file_path, 
+                HF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', HF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', HF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM HOJO_FILE HF1 
+            LEFT JOIN KEN KE1 ON HF1.ken_code=KE1.ken_code 
             WHERE 
-                HJ1.ken_code=%s 
-            ORDER BY CAST(HJ1.city_code AS INTEGER), CAST(HJ1.chitan_id AS INTEGER) DESC""", [ken_code, ])
+                HF1.ken_code=%s 
+            ORDER BY CAST(HF1.hojo_file_id AS INTEGER) DESC""", [ken_code, ])
 
-        koeki_list = KOEKI.objects.raw("""
+        print_log('[DEBUG] P0100File.type_ken_view()関数 STEP 2_5/3.', 'DEBUG')
+        koeki_file_list = KOEKI_FILE.objects.raw("""
             SELECT 
-                KK1.koeki_id AS koeki_id, 
-                KK1.koeki_name AS koeki_name, 
-                KK1.ken_code AS ken_code, 
+                KF1.koeki_file_id AS koeki_file_id, 
+                KF1.koeki_file_name AS koeki_file_name, 
+                KF1.ken_code AS ken_code, 
                 KE1.ken_name AS ken_name, 
-                KK1.city_code AS city_code, 
-                CT1.city_name AS city_name, 
-                TO_CHAR(timezone('JST', KK1.begin_date::timestamptz), 'yyyy/mm/dd') AS begin_date, 
-                TO_CHAR(timezone('JST', KK1.end_date::timestamptz), 'yyyy/mm/dd') AS end_date, 
-                KK1.upload_file_path AS upload_file_path, 
-                KK1.upload_file_name AS upload_file_name, 
-                KK1.summary_file_path AS summary_file_path, 
-                KK1.summary_file_name AS summary_file_name, 
-                TO_CHAR(timezone('JST', KK1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
-                TO_CHAR(timezone('JST', KK1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
-            FROM KOEKI KK1 
+                KF1.upload_file_path AS upload_file_path, 
+                KF1.upload_file_name AS upload_file_name, 
+                KF1.summary_file_path AS summary_file_path, 
+                KF1.summary_file_name AS summary_file_name, 
+                TO_CHAR(timezone('JST', KF1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
+                TO_CHAR(timezone('JST', KF1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at 
+            FROM KOEKI_FILE KF1 
+            LEFT JOIN KEN KE1 ON KF1.ken_code=KE1.ken_code 
             WHERE 
-                KK1.ken_code=%s 
-            ORDER BY CAST(KK1.city_code AS INTEGER), CAST(KK1.koeki_id AS INTEGER) DESC""", [ken_code, ])
+                KF1.ken_code=%s 
+            ORDER BY CAST(KF1.koeki_file_id AS INTEGER) DESC""", [ken_code, ])
 
         #######################################################################
         ### レスポンスセット処理(0020)
@@ -375,9 +433,9 @@ def type_ken_view(request, type_code, ken_code):
             'ken_list': ken_list, 
             'suigai_list': suigai_list, 
             'area_list': area_list, 
-            'chitan_list': chitan_list, 
-            'hojo_list': hojo_list, 
-            'koeki_list': koeki_list, 
+            'chitan_file_list': chitan_file_list, 
+            'hojo_file_list': hojo_file_list, 
+            'koeki_file_list': koeki_file_list, 
         }
         print_log('[INFO] P0100File.type_ken_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))

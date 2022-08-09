@@ -8,25 +8,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    {# if type_code == "ippan" #}
-    <!--<title>一般資産調査員調査票 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "area" #}
-    <!--<title>水害区域図 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "kokyo" #}
-    <!--<title>公共土木調査票 | 水害統計オンラインサイト</title>-->
-    {# elif type_code == "koeki" #}
-    <!--<title>公益事業調査票 | 水害統計オンラインサイト</title>-->
-    {# endif #}
     {% if type_code == "ippan" %}
-    <title>一般資産調査員調査票 | 水害統計オンラインサイト</title>
+    <title>一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
-    <title>水害区域図 | 水害統計オンラインサイト</title>
+    <title>水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "chitan" %}
-    <title>公共土木施設地方単独事業調査票 | 水害統計オンラインサイト</title>
+    <title>公共土木施設地方単独事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "hojo" %}
-    <title>公共土木施設補助事業調査票 | 水害統計オンラインサイト</title>
+    <title>公共土木施設補助事業調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "koeki" %}
-    <title>公益事業等調査票 | 水害統計オンラインサイト</title>
+    <title>公益事業等調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -122,17 +113,8 @@
 
     <!-- BEGIN 行 -->
     <div class="row mb-3 ms-1 me-1">
-        <!-- BEGIN パンくずリスト -->
+        <!-- BEGIN パンくずリスト 列 -->
         <div class="col-6 text-start">
-            {# if type_code == "ippan" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>-->
-            {# elif type_code == "area" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / 水害区域図 /</h5>-->
-            {# elif type_code == "kokyo" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公共土木調査票 /</h5>-->
-            {# elif type_code == "koeki" #}
-            <!--<h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公益事業調査票 /</h5>-->
-            {# endif #}
             {% if type_code == "ippan" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>
             {% elif type_code == "area" %}
@@ -145,9 +127,9 @@
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 公益事業等調査票 /</h5>
             {% endif %}
         </div>
-        <!-- END パンくずリスト -->
+        <!-- END パンくずリスト 列 -->
         
-        <!-- BEGIN ドロップダウンメニュー -->
+        <!-- BEGIN ドロップダウンメニュー 列 -->
         <div class="col-6 text-end">
             <!-- BEGIN ダウンロードメニュー -->
             <div class="btn-group">
@@ -176,10 +158,11 @@
             </div>
             <!-- END アップロードメニュー -->
         </div>
-        <!-- END ドロップダウンメニュー -->
+        <!-- END ドロップダウンメニュー 列 -->
     </div>
     <!-- END 行 -->
     
+    <!-- BEGIN IPPAN -->
     {% if type_code == "ippan" %}
     <!-- BEGIN IPPAN 行 -->
     <div class="row mb-3 ms-1 me-1">
@@ -245,11 +228,13 @@
         <!-- END IPPAN 列 -->
     </div>
     <!-- END IPPAN 行 -->
+    <!-- END IPPAN -->
             
+    <!-- BEGIN AREA -->
     {% elif type_code == "area" %}
-    <!-- BEGIN 行 -->
+    <!-- BEGIN AREA 行 -->
     <div class="row mb-3 ms-1 me-1">
-        <!-- BEGIN 列 -->
+        <!-- BEGIN AREA 列 -->
         <div class="col">
             <!-- BEGIN AREA カード -->
             <div class="card">
@@ -311,19 +296,212 @@
         <!-- END AREA 列 -->
     </div>
     <!-- END AREA 行 -->
+    <!-- END AREA -->
 
+    <!-- BEGIN CHITAN -->
     {% elif type_code == "chitan" %}
     <!-- BEGIN CHITAN 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN CHITAN 列 -->
+        <div class="col">
+            <!-- BEGIN CHITAN カード -->
+            <div class="card">
+                <!-- BEGIN CHITAN カードヘッダ -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">
+                            o-okada
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col text-end">
+                            <a href="#" onclick="location.reload();">表示更新</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHITAN カードヘッダ -->
+                
+                <!-- BEGIN CHITAN カード本体 -->
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto" style="">
+                        <table class="table">
+                            <!-- BEGIN CHITAN 戻るリンク -->
+                            <tr>
+                                <td colspan="8">
+                                    <a href="/P0100File/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- END CHITAN 戻るリンク -->
+                            
+                            <!-- BEGIN CHITAN 都道府県一覧 -->
+                            {% for chitan_file in chitan_file_list %}
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/chitan/ken/{{ chitan_file.0.ken_code }}/">{{ chitan_file.0.ken_name }}: {{ chitan_file.0.ken_code }}</a>
+                                </td>
+                                <td class="text-end">
+                                    {% if chitan_file.0.committed_at is None %}
+                                    {% else %}
+                                    コミット日時 {{ chitan_file.0.committed_at }}
+                                    {% endif %}
+                                <td>
+                            </tr>
+                            {% endfor %}
+                            <!-- END CHITAN 都道府県一覧 -->
+                        </table>
+                    </div>
+                </div>
+                <!-- END CHITAN カード本体 -->
+            </div>
+            <!-- END CHITAN カード -->
+        </div>
+        <!-- END CHITAN 列 -->
+    </div>
     <!-- END CHITAN 行 -->
+    <!-- END CHITAN -->
     
+    <!-- BEGIN HOJO -->
     {% elif type_code == "hojo" %}
     <!-- BEGIN HOJO 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN HOJO 列 -->
+        <div class="col">
+            <!-- BEGIN HOJO カード -->
+            <div class="card">
+                <!-- BEGIN HOJO カードヘッダ -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">
+                            o-okada
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col text-end">
+                            <a href="#" onclick="location.reload();">表示更新</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END HOJO カードヘッダ -->
+                
+                <!-- BEGIN HOJO カード本体 -->
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto" style="">
+                        <table class="table">
+                            <!-- BEGIN HOJO 戻るリンク -->
+                            <tr>
+                                <td colspan="8">
+                                    <a href="/P0100File/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- END HOJO 戻るリンク -->
+                            
+                            <!-- BEGIN HOJO 都道府県一覧 -->
+                            {% for hojo_file in hojo_file_list %}
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/hojo/ken/{{ hojo_file.0.ken_code }}/">{{ hojo_file.0.ken_name }}: {{ hojo_file.0.ken_code }}</a>
+                                </td>
+                                <td class="text-end">
+                                    {% if hojo_file.0.committed_at is None %}
+                                    {% else %}
+                                    コミット日時 {{ hojo_file.0.committed_at }}
+                                    {% endif %}
+                                <td>
+                            </tr>
+                            {% endfor %}
+                            <!-- END HOJO 都道府県一覧 -->
+                        </table>
+                    </div>
+                </div>
+                <!-- END HOJO カード本体 -->
+            </div>
+            <!-- END HOJO カード -->
+        </div>
+        <!-- END HOJO 列 -->
+    </div>
     <!-- END HOJO 行 -->
+    <!-- END HOJO -->
     
+    <!-- BEGIN KOEKI -->
     {% elif type_code == "koeki" %}
     <!-- BEGIN KOEKI 行 -->
+    <div class="row mb-3 ms-1 me-1">
+        <!-- BEGIN KOEKI 列 -->
+        <div class="col">
+            <!-- BEGIN KOEKI カード -->
+            <div class="card">
+                <!-- BEGIN KOEKI カードヘッダ -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">
+                            o-okada
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col text-end">
+                            <a href="#" onclick="location.reload();">表示更新</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END KOEKI カードヘッダ -->
+                
+                <!-- BEGIN KOEKI カード本体 -->
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto" style="">
+                        <table class="table">
+                            <!-- BEGIN KOEKI 戻るリンク -->
+                            <tr>
+                                <td colspan="8">
+                                    <a href="/P0100File/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- END KOEKI 戻るリンク -->
+                            
+                            <!-- BEGIN KOEKI 都道府県一覧 -->
+                            {% for koeki_file in koeki_file_list %}
+                            <tr>
+                                <td class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000EE" class="bi bi-folder-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+                                    </svg><a href="/P0100File/type/koeki/ken/{{ koeki_file.0.ken_code }}/">{{ koeki_file.0.ken_name }}: {{ koeki_file.0.ken_code }}</a>
+                                </td>
+                                <td class="text-end">
+                                    {% if koeki_file.0.committed_at is None %}
+                                    {% else %}
+                                    コミット日時 {{ koeki_file.0.committed_at }}
+                                    {% endif %}
+                                <td>
+                            </tr>
+                            {% endfor %}
+                            <!-- END KOEKI 都道府県一覧 -->
+                        </table>
+                    </div>
+                </div>
+                <!-- END KOEKI カード本体 -->
+            </div>
+            <!-- END KOEKI カード -->
+        </div>
+        <!-- END KOEKI 列 -->
+    </div>
     <!-- END KOEKI 行 -->
     {% endif %}
+    <!-- END KOEKI -->
 
     <!-- BEGIN コンテナ -->
     <!--<div class="container mb-3">-->
