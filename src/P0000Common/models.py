@@ -222,6 +222,20 @@ class INDUSTRY(models.Model):
         return '<INDUSTRY: ' + self.industry_code + '>'
 
 ###############################################################################
+### 1140: 公益事業分類（マスタDB）
+### 入力用コード、集計用コード
+###############################################################################
+class KOEKI_INDUSTRY(models.Model):
+    koeki_industry_code = models.CharField(max_length=10, primary_key=True)    ### 公益事業分類コード
+    koeki_industry_name = models.CharField(max_length=128)                     ### 公益事業分類名
+
+    class Meta:
+        db_table = 'koeki_industry'
+
+    def __str__(self):
+        return '<KOEKI_INDUSTRY: ' + self.koeki_industry_code + '>'
+
+###############################################################################
 ### 2000: 家屋評価額（マスタDB）
 ### 集計用資産額、集計用被害率
 ###############################################################################
@@ -1070,6 +1084,7 @@ class KOEKI_FILE(models.Model):
     ### cause_2_code = models.CharField(max_length=10, null=True)              ### 水害原因_2_コード ※2022/08/05 追加
     ### cause_3_code = models.CharField(max_length=10, null=True)              ### 水害原因_3_コード ※2022/08/05 追加
     ### business_code = models.CharField(max_length=10, null=True)             ### 事業コード ※2022/08/05 追加
+    ### koeki_industry_code = models.CharField(max_length=10, null=True)       ### 公益事業分類コード ※2022/08/09 追加
     ### institution_name = models.CharField(max_length=128, null=True)         ### 調査対象機関名称 ※2022/08/05 追加
     
     ### damage_property = models.FloatField(null=True)                         ### 被害金額_物的被害額（千円）
@@ -1125,6 +1140,7 @@ class KOEKI(models.Model):
     cause_2_code = models.CharField(max_length=10, null=True)                  ### 水害原因_2_コード ※2022/08/05 追加
     cause_3_code = models.CharField(max_length=10, null=True)                  ### 水害原因_3_コード ※2022/08/05 追加
     business_code = models.CharField(max_length=10, null=True)                 ### 事業コード ※2022/08/05 追加
+    koeki_industry_code = models.CharField(max_length=10, null=True)           ### 公益事業分類コード ※2022/08/09 追加
     institution_name = models.CharField(max_length=128, null=True)             ### 調査対象機関名称 ※2022/08/05 追加
     
     damage_property = models.FloatField(null=True)                             ### 被害金額_物的被害額（千円）

@@ -46,6 +46,7 @@ from P0000Common.models import USAGE                   ### 1100: 地下空間の
 from P0000Common.models import FLOOD_SEDIMENT          ### 1110: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 1120: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 1130: 産業分類
+from P0000Common.models import KOEKI_INDUSTRY          ### 1140: 公益事業分類
 
 from P0000Common.models import HOUSE_ASSET             ### 2000: 家屋評価額
 from P0000Common.models import HOUSE_RATE              ### 2010: 家屋被害率
@@ -72,6 +73,12 @@ from P0000Common.models import WEATHER                 ### 7010: 入力データ
 from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
 from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
 from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
+from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設調査票_地方単独事業_ファイル部分
+from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設調査票_地方単独事業_一覧表部分
+from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設調査票_補助事業_ファイル部分
+from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設調査票_補助事業_一覧表部分
+from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票_ファイル部分
+from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票_一覧表部分
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 
@@ -264,7 +271,7 @@ class Command(BaseCommand):
             ###################################################################
             print_log('[DEBUG] P0900Action.action_R01_download_hojo.handle()関数 STEP 7/13.', 'DEBUG')
             ### 1010: 都道府県シート
-            print("handle_7_2", flush=True)
+            print("handle_7_1", flush=True)
             if ken_list:
                 for i, ken in enumerate(ken_list):
                     ws_ken.cell(row=i+1, column=1).value = ken.ken_code
@@ -272,7 +279,7 @@ class Command(BaseCommand):
                     ### ws_city_vlook.cell(row=j+1, column=1).value = str(ken.ken_name) + ":" + str(ken.ken_code)
 
             ### 1020: 市区町村シート
-            print("handle_7_3", flush=True)
+            print("handle_7_2", flush=True)
             cities_list = []
             if ken_list:
                 for i, ken in enumerate(ken_list):
@@ -283,7 +290,7 @@ class Command(BaseCommand):
                         WHERE ken_code=%s 
                         ORDER BY CAST(city_code AS INTEGER)""", [ken.ken_code, ]))
     
-            print("handle_7_4", flush=True)
+            print("handle_7_3", flush=True)
             if cities_list:
                 for i, cities in enumerate(cities_list):
                     if cities:
@@ -295,14 +302,14 @@ class Command(BaseCommand):
                             ws_city.cell(row=j+1, column=i*5+5).value = city.city_area
 
             ### 1030: 水害発生地点工種（河川海岸区分）
-            print("handle_7_5", flush=True)
+            print("handle_7_4", flush=True)
             if kasen_kaigan_list:
                 for i, kasen_kaigan in enumerate(kasen_kaigan_list):
                     ws_kasen_kaigan.cell(row=i+1, column=1).value = kasen_kaigan.kasen_kaigan_code
                     ws_kasen_kaigan.cell(row=i+1, column=2).value = str(kasen_kaigan.kasen_kaigan_name) + ":" + str(kasen_kaigan.kasen_kaigan_code)
 
             ### 1040: 水系（水系・沿岸）
-            print("handle_7_6", flush=True)
+            print("handle_7_5", flush=True)
             if suikei_list:
                 for i, suikei in enumerate(suikei_list):
                     ws_suikei.cell(row=i+1, column=1).value = suikei.suikei_code
@@ -310,14 +317,14 @@ class Command(BaseCommand):
                     ws_suikei.cell(row=i+1, column=3).value = suikei.suikei_type_code
 
             ### 1050: 水系種別（水系・沿岸種別）
-            print("handle_7_7", flush=True)
+            print("handle_7_6", flush=True)
             if suikei_type_list:
                 for i, suikei_type in enumerate(suikei_type_list):
                     ws_suikei_type.cell(row=i+1, column=1).value = suikei_type.suikei_type_code
                     ws_suikei_type.cell(row=i+1, column=2).value = str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code)
 
             ### 1060: 河川（河川・海岸）、連動プルダウン用
-            print("handle_7_8", flush=True)
+            print("handle_7_7", flush=True)
             kasens_list = []
             if suikei_list:
                 for i, suikei in enumerate(suikei_list):
@@ -328,7 +335,7 @@ class Command(BaseCommand):
                         WHERE suikei_code=%s 
                         ORDER BY CAST(kasen_code AS INTEGER)""", [suikei.suikei_code, ]))
     
-            print("handle_7_9", flush=True)
+            print("handle_7_8", flush=True)
             if kasens_list:
                 for i, kasens in enumerate(kasens_list):
                     if kasens:
@@ -339,14 +346,14 @@ class Command(BaseCommand):
                             ws_kasen.cell(row=j+1, column=i*5+4).value = kasen.suikei_code
 
             ### 1070: 河川種別（河川・海岸種別）
-            print("handle_7_10", flush=True)
+            print("handle_7_9", flush=True)
             if kasen_type_list:
                 for i, kasen_type in enumerate(kasen_type_list):
                     ws_kasen_type.cell(row=i+1, column=1).value = kasen_type.kasen_type_code
                     ws_kasen_type.cell(row=i+1, column=2).value = str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code)
             
             ### 7010: 入力データ_異常気象
-            print("handle_7_18", flush=True)
+            print("handle_7_10", flush=True)
             if weather_list:
                 for i, weather in enumerate(weather_list):
                     ws_weather.cell(row=i+1, column=1).value = weather.weather_id
@@ -380,42 +387,43 @@ class Command(BaseCommand):
             ### 入力データ用EXCELシートのキャプションに値をセットする。
             ###################################################################
             print_log('[DEBUG] P0900Action.action_R01_download_hojo.handle()関数 STEP 9/13.', 'DEBUG')
-            ### ws_ippan.cell(row=6, column=1).value = 'NO.'
-            ### ws_ippan.cell(row=6, column=2).value = '水系・沿岸名[全角]'
-            ### ws_ippan.cell(row=6, column=3).value = '水系種別[全角]'
-            ### ws_ippan.cell(row=6, column=4).value = '河川・海岸名[全角]'
-            ### ws_ippan.cell(row=6, column=5).value = '河川種別[全角]'
-            ### ws_ippan.cell(row=6, column=6).value = '都道府県名[全角]'
-            ### ws_ippan.cell(row=6, column=7).value = '工事番号'
-            ### ws_ippan.cell(row=6, column=8).value = ''
-            ### ws_ippan.cell(row=6, column=9).value = '工事区分'
-            ### ws_ippan.cell(row=6, column=10).value = '市区町村コード'
-            ### ws_ippan.cell(row=6, column=11).value = '工種区分'
-            ### ws_ippan.cell(row=6, column=12).value = ''
-            ### ws_ippan.cell(row=6, column=13).value = '異常気象コード'
-            ### ws_ippan.cell(row=6, column=14).value = '水害発生'
-            ### ws_ippan.cell(row=6, column=15).value = ''
-            ### ws_ippan.cell(row=6, column=16).value = '決定額(千円)'
-            ### ws_ippan.cell(row=6, column=17).value = '備考'
-            ### ws_ippan.cell(row=7, column=1).value = ''
-            ### ws_ippan.cell(row=7, column=2).value = ''
-            ### ws_ippan.cell(row=7, column=3).value = ''
-            ### ws_ippan.cell(row=7, column=4).value = ''
-            ### ws_ippan.cell(row=7, column=5).value = ''
-            ### ws_ippan.cell(row=7, column=6).value = ''
-            ### ws_ippan.cell(row=7, column=7).value = '工事番号'
-            ### ws_ippan.cell(row=7, column=8).value = '枝番'
-            ### ws_ippan.cell(row=7, column=9).value = ''
-            ### ws_ippan.cell(row=7, column=10).value = ''
-            ### ws_ippan.cell(row=7, column=11).value = ''
-            ### ws_ippan.cell(row=7, column=12).value = ''
-            ### ws_ippan.cell(row=7, column=13).value = ''
-            ### ws_ippan.cell(row=7, column=14).value = '月'
-            ### ws_ippan.cell(row=7, column=15).value = '日'
-            ### ws_ippan.cell(row=7, column=16).value = ''
-            ### ws_ippan.cell(row=7, column=17).value = ''
+            ### ws_hojo.cell(row=6, column=1).value = 'NO.'
+            ### ws_hojo.cell(row=6, column=2).value = '水系・沿岸名[全角]'
+            ### ws_hojo.cell(row=6, column=3).value = '水系種別[全角]'
+            ### ws_hojo.cell(row=6, column=4).value = '河川・海岸名[全角]'
+            ### ws_hojo.cell(row=6, column=5).value = '河川種別[全角]'
+            ### ws_hojo.cell(row=6, column=6).value = '都道府県名[全角]'
+            ### ws_hojo.cell(row=6, column=7).value = '工事番号'
+            ### ws_hojo.cell(row=6, column=8).value = ''
+            ### ws_hojo.cell(row=6, column=9).value = '工事区分'
+            ### ws_hojo.cell(row=6, column=10).value = '市区町村コード'
+            ### ws_hojo.cell(row=6, column=11).value = '工種区分'
+            ### ws_hojo.cell(row=6, column=12).value = ''
+            ### ws_hojo.cell(row=6, column=13).value = '異常気象コード'
+            ### ws_hojo.cell(row=6, column=14).value = '水害発生'
+            ### ws_hojo.cell(row=6, column=15).value = ''
+            ### ws_hojo.cell(row=6, column=16).value = '決定額(千円)'
+            ### ws_hojo.cell(row=6, column=17).value = '備考'
             
-            ws_ippan.protection.enable()
+            ### ws_hojo.cell(row=7, column=1).value = ''
+            ### ws_hojo.cell(row=7, column=2).value = ''
+            ### ws_hojo.cell(row=7, column=3).value = ''
+            ### ws_hojo.cell(row=7, column=4).value = ''
+            ### ws_hojo.cell(row=7, column=5).value = ''
+            ### ws_hojo.cell(row=7, column=6).value = ''
+            ### ws_hojo.cell(row=7, column=7).value = '工事番号'
+            ### ws_hojo.cell(row=7, column=8).value = '枝番'
+            ### ws_hojo.cell(row=7, column=9).value = ''
+            ### ws_hojo.cell(row=7, column=10).value = ''
+            ### ws_hojo.cell(row=7, column=11).value = ''
+            ### ws_hojo.cell(row=7, column=12).value = ''
+            ### ws_hojo.cell(row=7, column=13).value = ''
+            ### ws_hojo.cell(row=7, column=14).value = '月'
+            ### ws_hojo.cell(row=7, column=15).value = '日'
+            ### ws_hojo.cell(row=7, column=16).value = ''
+            ### ws_hojo.cell(row=7, column=17).value = ''
+            
+            ### ws_hojo.protection.enable()
             green_fill = PatternFill(fgColor='CCFFCC', patternType='solid')
 
             ###################################################################

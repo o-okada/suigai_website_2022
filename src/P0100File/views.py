@@ -42,6 +42,7 @@ from P0000Common.models import USAGE                   ### 1100: 地下空間の
 from P0000Common.models import FLOOD_SEDIMENT          ### 1110: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 1120: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 1130: 産業分類
+from P0000Common.models import KOEKI_INDUSTRY          ### 1140: 公益事業分類
 
 from P0000Common.models import HOUSE_ASSET             ### 2000: 家屋評価額
 from P0000Common.models import HOUSE_RATE              ### 2010: 家屋被害率
@@ -68,12 +69,12 @@ from P0000Common.models import WEATHER                 ### 7010: 入力データ
 from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
 from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
 from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
-from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設地方単独事業調査票
-from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設地方単独事業調査票
-from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設補助事業調査票
-from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設補助事業調査票
-from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票
-from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票
+from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設調査票_地方単独事業_ファイル部分
+from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設調査票_地方単独事業_一覧表部分
+from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設調査票_補助事業_ファイル部分
+from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設調査票_補助事業_一覧表部分
+from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票_ファイル部分
+from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票_一覧表部分
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_一覧表部分
 

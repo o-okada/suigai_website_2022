@@ -13,14 +13,15 @@ urlpatterns = [
 
     ### Excel Applications
     path('P0200ExcelDownload/', include('P0200ExcelDownload.urls')),
-    path('P0300ExcelUpload/', include('P0300ExcelUpload.urls')),
     path('P0300AreaUpload/', include('P0300AreaUpload.urls')),
     path('P0300AreaWeather/', include('P0300AreaWeather.urls')),
-    ### path('P0300AreaEdit/', include('P0300AreaEdit.urls')),
+    path('P0300ChitanUpload/', include('P0300ChitanUpload.urls')),
+    path('P0300HojoUpload/', include('P0300HojoUpload.urls')),
+    path('P0300IppanUpload/', include('P0300IppanUpload.urls')),
+    path('P0300KoekiUpload/', include('P0300KoekiUpload.urls')),
 
     ### Online Applications
     path('P0400OnlineDisplay/', include('P0400OnlineDisplay.urls')),
-    ### path('P0500OnlineUpdate/', include('P0500OnlineUpdate.urls')),
 
     ### Reverse Applications
     path('P0800Reverse/', include('P0800Reverse.urls')),

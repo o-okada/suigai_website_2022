@@ -46,6 +46,7 @@ from P0000Common.models import USAGE                   ### 1100: 地下空間の
 from P0000Common.models import FLOOD_SEDIMENT          ### 1110: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 1120: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 1130: 産業分類
+from P0000Common.models import KOEKI_INDUSTRY          ### 1140: 公益事業分類
 
 from P0000Common.models import HOUSE_ASSET             ### 2000: 家屋評価額
 from P0000Common.models import HOUSE_RATE              ### 2010: 家屋被害率
@@ -72,6 +73,12 @@ from P0000Common.models import WEATHER                 ### 7010: 入力データ
 from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
 from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
 from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
+from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設調査票_地方単独事業_ファイル部分
+from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設調査票_地方単独事業_一覧表部分
+from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設調査票_補助事業_ファイル部分
+from P0000Common.models import HOJO                    ### 7080: 入力データ_公共土木施設調査票_補助事業_一覧表部分
+from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票_ファイル部分
+from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票_一覧表部分
 
 from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ
 
@@ -209,6 +216,8 @@ class Command(BaseCommand):
             cause_list = CAUSE.objects.raw("""SELECT * FROM CAUSE ORDER BY CAST(CAUSE_CODE AS INTEGER)""", [])
             weather_list = WEATHER.objects.raw("""SELECT * FROM WEATHER ORDER BY CAST(WEATHER_ID AS INTEGER)""", [])
             
+            koeki_industry_list = KOEKI_INDUSTRY.objects.raw("""SELECT * FROM KOEKI_INDUSTRY ORDER BY CAST(KOEKI_INDUSTRY_CODE AS INTEGER)""", [])
+            
             ###################################################################
             ### EXCEL入出力処理(0030)
             ### ダウンロード用ファイルパスをセットする。
@@ -236,6 +245,8 @@ class Command(BaseCommand):
             ws_kasen_type = wb["KASEN_TYPE"]
             ws_cause = wb["CAUSE"]
             ws_weather = wb["WEATHER"]
+
+            ws_koeki_industry = wb["KOEKI_INDUSTRY"]
             
             ws_city_vlook = wb["CITY_VLOOK"]
             ws_kasen_vlook = wb["KASEN_VLOOK"]
@@ -256,6 +267,8 @@ class Command(BaseCommand):
             ws_kasen_type.sheet_view.showGridLines = False
             ws_cause.sheet_view.showGridLines = False
             ws_weather.sheet_view.showGridLines = False
+
+            ws_koeki_industry.sheet_view.showGridLines = False
             
             ws_city_vlook.sheet_view.showGridLines = False
             ws_kasen_vlook.sheet_view.showGridLines = False
@@ -268,7 +281,7 @@ class Command(BaseCommand):
             ###################################################################
             print_log('[DEBUG] P0900Action.action_S01_download_koeki.handle()関数 STEP 7/13.', 'DEBUG')
             ### 1010: 都道府県シート
-            print("handle_7_2", flush=True)
+            print("handle_7_1", flush=True)
             if ken_list:
                 for i, ken in enumerate(ken_list):
                     ws_ken.cell(row=i+1, column=1).value = ken.ken_code
@@ -276,7 +289,7 @@ class Command(BaseCommand):
                     ### ws_city_vlook.cell(row=j+1, column=1).value = str(ken.ken_name) + ":" + str(ken.ken_code)
 
             ### 1020: 市区町村シート
-            print("handle_7_3", flush=True)
+            print("handle_7_2", flush=True)
             cities_list = []
             if ken_list:
                 for i, ken in enumerate(ken_list):
@@ -287,7 +300,7 @@ class Command(BaseCommand):
                         WHERE ken_code=%s 
                         ORDER BY CAST(city_code AS INTEGER)""", [ken.ken_code, ]))
     
-            print("handle_7_4", flush=True)
+            print("handle_7_3", flush=True)
             if cities_list:
                 for i, cities in enumerate(cities_list):
                     if cities:
@@ -299,14 +312,14 @@ class Command(BaseCommand):
                             ws_city.cell(row=j+1, column=i*5+5).value = city.city_area
 
             ### 1030: 水害発生地点工種（河川海岸区分）
-            print("handle_7_5", flush=True)
+            print("handle_7_4", flush=True)
             if kasen_kaigan_list:
                 for i, kasen_kaigan in enumerate(kasen_kaigan_list):
                     ws_kasen_kaigan.cell(row=i+1, column=1).value = kasen_kaigan.kasen_kaigan_code
                     ws_kasen_kaigan.cell(row=i+1, column=2).value = str(kasen_kaigan.kasen_kaigan_name) + ":" + str(kasen_kaigan.kasen_kaigan_code)
 
             ### 1040: 水系（水系・沿岸）
-            print("handle_7_6", flush=True)
+            print("handle_7_5", flush=True)
             if suikei_list:
                 for i, suikei in enumerate(suikei_list):
                     ws_suikei.cell(row=i+1, column=1).value = suikei.suikei_code
@@ -314,14 +327,14 @@ class Command(BaseCommand):
                     ws_suikei.cell(row=i+1, column=3).value = suikei.suikei_type_code
 
             ### 1050: 水系種別（水系・沿岸種別）
-            print("handle_7_7", flush=True)
+            print("handle_7_6", flush=True)
             if suikei_type_list:
                 for i, suikei_type in enumerate(suikei_type_list):
                     ws_suikei_type.cell(row=i+1, column=1).value = suikei_type.suikei_type_code
                     ws_suikei_type.cell(row=i+1, column=2).value = str(suikei_type.suikei_type_name) + ":" + str(suikei_type.suikei_type_code)
 
             ### 1060: 河川（河川・海岸）、連動プルダウン用
-            print("handle_7_8", flush=True)
+            print("handle_7_7", flush=True)
             kasens_list = []
             if suikei_list:
                 for i, suikei in enumerate(suikei_list):
@@ -332,7 +345,7 @@ class Command(BaseCommand):
                         WHERE suikei_code=%s 
                         ORDER BY CAST(kasen_code AS INTEGER)""", [suikei.suikei_code, ]))
     
-            print("handle_7_9", flush=True)
+            print("handle_7_8", flush=True)
             if kasens_list:
                 for i, kasens in enumerate(kasens_list):
                     if kasens:
@@ -343,25 +356,32 @@ class Command(BaseCommand):
                             ws_kasen.cell(row=j+1, column=i*5+4).value = kasen.suikei_code
 
             ### 1070: 河川種別（河川・海岸種別）
-            print("handle_7_10", flush=True)
+            print("handle_7_9", flush=True)
             if kasen_type_list:
                 for i, kasen_type in enumerate(kasen_type_list):
                     ws_kasen_type.cell(row=i+1, column=1).value = kasen_type.kasen_type_code
                     ws_kasen_type.cell(row=i+1, column=2).value = str(kasen_type.kasen_type_name) + ":" + str(kasen_type.kasen_type_code)
             
             ### 1080: 水害原因
-            print("handle_7_11", flush=True)
+            print("handle_7_10", flush=True)
             if cause_list:
                 for i, cause in enumerate(cause_list):
                     ws_cause.cell(row=i+1, column=1).value = cause.cause_code
                     ws_cause.cell(row=i+1, column=2).value = str(cause.cause_name) + ":" + str(cause.cause_code)
 
             ### 7010: 入力データ_異常気象
-            print("handle_7_18", flush=True)
+            print("handle_7_11", flush=True)
             if weather_list:
                 for i, weather in enumerate(weather_list):
                     ws_weather.cell(row=i+1, column=1).value = weather.weather_id
                     ws_weather.cell(row=i+1, column=2).value = str(weather.weather_name) + ":" + str(weather.weather_id)
+
+            ### 1140: 公益事業分類
+            print("handle_7_12", flush=True)
+            if koeki_industry_list:
+                for i, koeki_industry in enumerate(koeki_industry_list):
+                    ws_koeki_industry.cell(row=i+1, column=1).value = koeki_industry.koeki_industry_code
+                    ws_koeki_industry.cell(row=i+1, column=2).value = str(koeki_industry.koeki_industry_name) + ":" + str(koeki_industry.koeki_industry_code)
 
             ###################################################################
             ### EXCEL入出力処理(0070)
@@ -391,109 +411,109 @@ class Command(BaseCommand):
             ### 入力データ用EXCELシートのキャプションに値をセットする。
             ###################################################################
             print_log('[DEBUG] P0900Action.action_S01_download_koeki.handle()関数 STEP 9/13.', 'DEBUG')
-            ### ws_ippan.cell(row=6, column=1).value = 'NO.'
-            ### ws_ippan.cell(row=6, column=2).value = '水害発生年月日'
-            ### ws_ippan.cell(row=6, column=3).value = ''
-            ### ws_ippan.cell(row=6, column=4).value = ''
-            ### ws_ippan.cell(row=6, column=5).value = ''
-            ### ws_ippan.cell(row=6, column=6).value = '被害箇所'
-            ### ws_ippan.cell(row=6, column=7).value = ''
-            ### ws_ippan.cell(row=6, column=8).value = ''
-            ### ws_ippan.cell(row=6, column=9).value = ''
-            ### ws_ippan.cell(row=6, column=10).value = ''
-            ### ws_ippan.cell(row=6, column=11).value = '河川・海岸名・地区名'
-            ### ws_ippan.cell(row=6, column=12).value = ''
-            ### ws_ippan.cell(row=6, column=13).value = ''
-            ### ws_ippan.cell(row=6, column=14).value = ''
-            ### ws_ippan.cell(row=6, column=15).value = '工種区分'
-            ### ws_ippan.cell(row=6, column=16).value = '水害原因コード'
-            ### ws_ippan.cell(row=6, column=17).value = ''
-            ### ws_ippan.cell(row=6, column=18).value = ''
-            ### ws_ippan.cell(row=6, column=19).value = '異常気象コード'
-            ### ws_ippan.cell(row=6, column=20).value = '事業コード'
-            ### ws_ippan.cell(row=6, column=21).value = '調査対象機関名称[全角]'
-            ### ws_ippan.cell(row=6, column=22).value = '被害金額'
-            ### ws_ippan.cell(row=6, column=23).value = ''
-            ### ws_ippan.cell(row=6, column=24).value = ''
-            ### ws_ippan.cell(row=6, column=25).value = ''
-            ### ws_ippan.cell(row=6, column=26).value = ''
-            ### ws_ippan.cell(row=6, column=27).value = '営業停止期間等'
-            ### ws_ippan.cell(row=6, column=28).value = ''
-            ### ws_ippan.cell(row=6, column=29).value = ''
-            ### ws_ippan.cell(row=6, column=30).value = '照会先'
-            ### ws_ippan.cell(row=6, column=31).value = ''
-            ### ws_ippan.cell(row=6, column=32).value = ''
-            ### ws_ippan.cell(row=6, column=33).value = '備考'
+            ### ws_koeki.cell(row=6, column=1).value = 'NO.'
+            ### ws_koeki.cell(row=6, column=2).value = '水害発生年月日'
+            ### ws_koeki.cell(row=6, column=3).value = ''
+            ### ws_koeki.cell(row=6, column=4).value = ''
+            ### ws_koeki.cell(row=6, column=5).value = ''
+            ### ws_koeki.cell(row=6, column=6).value = '被害箇所'
+            ### ws_koeki.cell(row=6, column=7).value = ''
+            ### ws_koeki.cell(row=6, column=8).value = ''
+            ### ws_koeki.cell(row=6, column=9).value = ''
+            ### ws_koeki.cell(row=6, column=10).value = ''
+            ### ws_koeki.cell(row=6, column=11).value = '河川・海岸名・地区名'
+            ### ws_koeki.cell(row=6, column=12).value = ''
+            ### ws_koeki.cell(row=6, column=13).value = ''
+            ### ws_koeki.cell(row=6, column=14).value = ''
+            ### ws_koeki.cell(row=6, column=15).value = '工種区分'
+            ### ws_koeki.cell(row=6, column=16).value = '水害原因コード'
+            ### ws_koeki.cell(row=6, column=17).value = ''
+            ### ws_koeki.cell(row=6, column=18).value = ''
+            ### ws_koeki.cell(row=6, column=19).value = '異常気象コード'
+            ### ws_koeki.cell(row=6, column=20).value = '事業コード'
+            ### ws_koeki.cell(row=6, column=21).value = '調査対象機関名称[全角]'
+            ### ws_koeki.cell(row=6, column=22).value = '被害金額'
+            ### ws_koeki.cell(row=6, column=23).value = ''
+            ### ws_koeki.cell(row=6, column=24).value = ''
+            ### ws_koeki.cell(row=6, column=25).value = ''
+            ### ws_koeki.cell(row=6, column=26).value = ''
+            ### ws_koeki.cell(row=6, column=27).value = '営業停止期間等'
+            ### ws_koeki.cell(row=6, column=28).value = ''
+            ### ws_koeki.cell(row=6, column=29).value = ''
+            ### ws_koeki.cell(row=6, column=30).value = '照会先'
+            ### ws_koeki.cell(row=6, column=31).value = ''
+            ### ws_koeki.cell(row=6, column=32).value = ''
+            ### ws_koeki.cell(row=6, column=33).value = '備考'
             
-            ### ws_ippan.cell(row=7, column=1).value = ''
-            ### ws_ippan.cell(row=7, column=2).value = ''
-            ### ws_ippan.cell(row=7, column=3).value = ''
-            ### ws_ippan.cell(row=7, column=4).value = ''
-            ### ws_ippan.cell(row=7, column=5).value = ''
-            ### ws_ippan.cell(row=7, column=6).value = '都道府県[全角]'
-            ### ws_ippan.cell(row=7, column=7).value = '都道府県コード'
-            ### ws_ippan.cell(row=7, column=8).value = '市区町村名[全角]'
-            ### ws_ippan.cell(row=7, column=9).value = '市区町村コード'
-            ### ws_ippan.cell(row=7, column=10).value = '町丁名・大字名[全角]'
-            ### ws_ippan.cell(row=7, column=11).value = '水系・沿岸名[全角]'
-            ### ws_ippan.cell(row=7, column=12).value = '水系種別[全角]'
-            ### ws_ippan.cell(row=7, column=13).value = '河川・海岸名[全角]'
-            ### ws_ippan.cell(row=7, column=14).value = '河川種別[全角]'
-            ### ws_ippan.cell(row=7, column=15).value = ''
-            ### ws_ippan.cell(row=7, column=16).value = ''
-            ### ws_ippan.cell(row=7, column=17).value = ''
-            ### ws_ippan.cell(row=7, column=18).value = ''
-            ### ws_ippan.cell(row=7, column=19).value = ''
-            ### ws_ippan.cell(row=7, column=20).value = ''
-            ### ws_ippan.cell(row=7, column=21).value = ''
-            ### ws_ippan.cell(row=7, column=22).value = '物的被害額(千円)'
-            ### ws_ippan.cell(row=7, column=23).value = '営業停止損失額(千円)'
-            ### ws_ippan.cell(row=7, column=24).value = ''
-            ### ws_ippan.cell(row=7, column=25).value = ''
-            ### ws_ippan.cell(row=7, column=26).value = '営業停止損失額合計(千円)'
-            ### ws_ippan.cell(row=7, column=27).value = '停止期間'
-            ### ws_ippan.cell(row=7, column=28).value = ''
-            ### ws_ippan.cell(row=7, column=29).value = '停止数量'
-            ### ws_ippan.cell(row=7, column=30).value = '調査担当課名[全角]'
-            ### ws_ippan.cell(row=7, column=31).value = '調査担当者名[全角]'
-            ### ws_ippan.cell(row=7, column=32).value = '電話番号'
-            ### ws_ippan.cell(row=7, column=33).value = '備考'
+            ### ws_koeki.cell(row=7, column=1).value = ''
+            ### ws_koeki.cell(row=7, column=2).value = ''
+            ### ws_koeki.cell(row=7, column=3).value = ''
+            ### ws_koeki.cell(row=7, column=4).value = ''
+            ### ws_koeki.cell(row=7, column=5).value = ''
+            ### ws_koeki.cell(row=7, column=6).value = '都道府県[全角]'
+            ### ws_koeki.cell(row=7, column=7).value = '都道府県コード'
+            ### ws_koeki.cell(row=7, column=8).value = '市区町村名[全角]'
+            ### ws_koeki.cell(row=7, column=9).value = '市区町村コード'
+            ### ws_koeki.cell(row=7, column=10).value = '町丁名・大字名[全角]'
+            ### ws_koeki.cell(row=7, column=11).value = '水系・沿岸名[全角]'
+            ### ws_koeki.cell(row=7, column=12).value = '水系種別[全角]'
+            ### ws_koeki.cell(row=7, column=13).value = '河川・海岸名[全角]'
+            ### ws_koeki.cell(row=7, column=14).value = '河川種別[全角]'
+            ### ws_koeki.cell(row=7, column=15).value = ''
+            ### ws_koeki.cell(row=7, column=16).value = ''
+            ### ws_koeki.cell(row=7, column=17).value = ''
+            ### ws_koekivv.cell(row=7, column=18).value = ''
+            ### ws_koeki.cell(row=7, column=19).value = ''
+            ### ws_koeki.cell(row=7, column=20).value = ''
+            ### ws_koeki.cell(row=7, column=21).value = ''
+            ### ws_koeki.cell(row=7, column=22).value = '物的被害額(千円)'
+            ### ws_koeki.cell(row=7, column=23).value = '営業停止損失額(千円)'
+            ### ws_koeki.cell(row=7, column=24).value = ''
+            ### ws_koeki.cell(row=7, column=25).value = ''
+            ### ws_koeki.cell(row=7, column=26).value = '営業停止損失額合計(千円)'
+            ### ws_koeki.cell(row=7, column=27).value = '停止期間'
+            ### ws_koeki.cell(row=7, column=28).value = ''
+            ### ws_koeki.cell(row=7, column=29).value = '停止数量'
+            ### ws_koeki.cell(row=7, column=30).value = '調査担当課名[全角]'
+            ### ws_koeki.cell(row=7, column=31).value = '調査担当者名[全角]'
+            ### ws_koeki.cell(row=7, column=32).value = '電話番号'
+            ### ws_koeki.cell(row=7, column=33).value = '備考'
 
-            ### ws_ippan.cell(row=8, column=1).value = ''
-            ### ws_ippan.cell(row=8, column=2).value = '月'
-            ### ws_ippan.cell(row=8, column=3).value = '日'
-            ### ws_ippan.cell(row=8, column=4).value = '月'
-            ### ws_ippan.cell(row=8, column=5).value = '日'
-            ### ws_ippan.cell(row=8, column=6).value = ''
-            ### ws_ippan.cell(row=8, column=7).value = ''
-            ### ws_ippan.cell(row=8, column=8).value = ''
-            ### ws_ippan.cell(row=8, column=9).value = ''
-            ### ws_ippan.cell(row=8, column=10).value = ''
-            ### ws_ippan.cell(row=8, column=11).value = ''
-            ### ws_ippan.cell(row=8, column=12).value = ''
-            ### ws_ippan.cell(row=8, column=13).value = ''
-            ### ws_ippan.cell(row=8, column=14).value = ''
-            ### ws_ippan.cell(row=8, column=15).value = ''
-            ### ws_ippan.cell(row=8, column=16).value = '1'
-            ### ws_ippan.cell(row=8, column=17).value = '2'
-            ### ws_ippan.cell(row=8, column=18).value = '3'
-            ### ws_ippan.cell(row=8, column=19).value = ''
-            ### ws_ippan.cell(row=8, column=20).value = ''
-            ### ws_ippan.cell(row=8, column=21).value = ''
-            ### ws_ippan.cell(row=8, column=22).value = ''
-            ### ws_ippan.cell(row=8, column=23).value = '営業停止に伴う売上減少額'
-            ### ws_ippan.cell(row=8, column=24).value = '代替活動費（外注費）'
-            ### ws_ippan.cell(row=8, column=25).value = 'その他'
-            ### ws_ippan.cell(row=8, column=26).value = ''
-            ### ws_ippan.cell(row=8, column=27).value = '日'
-            ### ws_ippan.cell(row=8, column=28).value = '時間'
-            ### ws_ippan.cell(row=8, column=29).value = ''
-            ### ws_ippan.cell(row=8, column=30).value = ''
-            ### ws_ippan.cell(row=8, column=31).value = ''
-            ### ws_ippan.cell(row=8, column=32).value = ''
-            ### ws_ippan.cell(row=8, column=33).value = ''
+            ### ws_koeki.cell(row=8, column=1).value = ''
+            ### ws_koeki.cell(row=8, column=2).value = '月'
+            ### ws_koeki.cell(row=8, column=3).value = '日'
+            ### ws_koeki.cell(row=8, column=4).value = '月'
+            ### ws_koeki.cell(row=8, column=5).value = '日'
+            ### ws_koeki.cell(row=8, column=6).value = ''
+            ### ws_koeki.cell(row=8, column=7).value = ''
+            ### ws_koeki.cell(row=8, column=8).value = ''
+            ### ws_koeki.cell(row=8, column=9).value = ''
+            ### ws_koeki.cell(row=8, column=10).value = ''
+            ### ws_koeki.cell(row=8, column=11).value = ''
+            ### ws_koeki.cell(row=8, column=12).value = ''
+            ### ws_koeki.cell(row=8, column=13).value = ''
+            ### ws_koeki.cell(row=8, column=14).value = ''
+            ### ws_koeki.cell(row=8, column=15).value = ''
+            ### ws_koeki.cell(row=8, column=16).value = '1'
+            ### ws_koeki.cell(row=8, column=17).value = '2'
+            ### ws_koeki.cell(row=8, column=18).value = '3'
+            ### ws_koeki.cell(row=8, column=19).value = ''
+            ### ws_koeki.cell(row=8, column=20).value = ''
+            ### ws_koeki.cell(row=8, column=21).value = ''
+            ### ws_koeki.cell(row=8, column=22).value = ''
+            ### ws_koeki.cell(row=8, column=23).value = '営業停止に伴う売上減少額'
+            ### ws_koeki.cell(row=8, column=24).value = '代替活動費（外注費）'
+            ### ws_koeki.cell(row=8, column=25).value = 'その他'
+            ### ws_koeki.cell(row=8, column=26).value = ''
+            ### ws_koeki.cell(row=8, column=27).value = '日'
+            ### ws_koeki.cell(row=8, column=28).value = '時間'
+            ### ws_koeki.cell(row=8, column=29).value = ''
+            ### ws_koeki.cell(row=8, column=30).value = ''
+            ### ws_koeki.cell(row=8, column=31).value = ''
+            ### ws_koeki.cell(row=8, column=32).value = ''
+            ### ws_koeki.cell(row=8, column=33).value = ''
             
-            ws_ippan.protection.enable()
+            ### ws_koeki.protection.enable()
             green_fill = PatternFill(fgColor='CCFFCC', patternType='solid')
 
             ###################################################################
@@ -501,6 +521,7 @@ class Command(BaseCommand):
             ### EXCELのセルに、値を埋め込む。
             ###################################################################
             print_log('[DEBUG] P0900Action.action_S01_download_koeki.handle()関数 STEP 10/13.', 'DEBUG')
+            print("handle_10_1", flush=True)
             koeki_list = KOEKI.objects.raw("""
                 SELECT 
                     KO1.koeki_id AS koeki_id,
@@ -516,10 +537,16 @@ class Command(BaseCommand):
                     CT1.city_name AS city_name, 
                     KO1.suikei_code AS suikei_code, 
                     SK1.suikei_name AS suikei_name, 
+                    SK1.suikei_type_code AS suikei_type_code, 
+                    ST1.suikei_type_name AS suikei_type_name, 
                     KO1.kasen_code AS kasen_code, 
                     KA1.kasen_name AS kasen_name, 
-                    KO1.begin_date AS begin_date, 
-                    KO1.end_date AS end_date, 
+                    KA1.kasen_type_code AS kasen_type_code, 
+                    KT1.kasen_type_name AS kasen_type_name, 
+                    TO_CHAR(timezone('JST', KO1.begin_date::timestamptz), 'mm') AS begin_month, 
+                    TO_CHAR(timezone('JST', KO1.begin_date::timestamptz), 'dd') AS begin_day, 
+                    TO_CHAR(timezone('JST', KO1.end_date::timestamptz), 'mm') AS end_month, 
+                    TO_CHAR(timezone('JST', KO1.end_date::timestamptz), 'dd') AS end_day, 
                     KO1.kasen_kaigan_code AS kasen_kaigan_code, 
                     KK1.kasen_kaigan_name AS kasen_kaigan_name, 
                     KO1.weather_id AS weather_id, 
@@ -530,16 +557,17 @@ class Command(BaseCommand):
                     CA2.cause_name AS cause_2_name, 
                     KO1.cause_3_code AS cause_3_code, 
                     CA1.cause_name AS cause_3_name, 
-                    KO1.business_code AS business_code, 
+                    KO1.koeki_industry_code AS koeki_industry_code, 
+                    KI1.koeki_industry_name AS koeki_industry_name, 
                     KO1.institution_name AS institution_name, 
-                    KO1.damage_property AS damage_property, 
-                    KO1.damage_sales AS damage_sales,
-                    KO1.damage_alt AS damage_alt, 
-                    KO1.damage_other AS damage_other, 
-                    KO1.damage_total AS damage_total, 
-                    KO1.sus_day AS sus_day, 
-                    KO1.sus_hour AS sus_hour, 
-                    KO1.sus_amount AS sus_amount, 
+                    CAST(KO1.damage_property AS NUMERIC(20,10)) AS damage_property, 
+                    CAST(KO1.damage_sales AS NUMERIC(20,10)) AS damage_sales,
+                    CAST(KO1.damage_alt AS NUMERIC(20,10)) AS damage_alt, 
+                    CAST(KO1.damage_other AS NUMERIC(20,10)) AS damage_other, 
+                    CAST(KO1.damage_total AS NUMERIC(20,10)) AS damage_total, 
+                    CAST(KO1.sus_day AS NUMERIC(20,10)) AS sus_day, 
+                    CAST(KO1.sus_hour AS NUMERIC(20,10)) AS sus_hour, 
+                    CAST(KO1.sus_amount AS NUMERIC(20,10)) AS sus_amount, 
                     KO1.ref_dep_name AS ref_dep_name, 
                     KO1.ref_emp_name AS ref_emp_name, 
                     KO1.ref_tel AS ref_tel, 
@@ -555,12 +583,16 @@ class Command(BaseCommand):
                 LEFT JOIN CAUSE CA1 ON KO1.cause_1_code=CA1.cause_code 
                 LEFT JOIN CAUSE CA2 ON KO1.cause_2_code=CA2.cause_code 
                 LEFT JOIN CAUSE CA3 ON KO1.cause_3_code=CA3.cause_code 
+                LEFT JOIN SUIKEI_TYPE ST1 ON SK1.suikei_type_code=ST1.suikei_type_code 
+                LEFT JOIN KASEN_TYPE KT1 ON KA1.kasen_type_code=KT1.kasen_type_code 
+                LEFT JOIN KOEKI_INDUSTRY KI1 ON KO1.koeki_industry_code=KI1.koeki_industry_code 
                 WHERE 
                     KO1.ken_code=%s AND KO1.deleted_at IS NULL 
                 ORDER BY CAST(KO1.city_code AS INTEGER), CAST(KF1.koeki_file_id AS INTEGER), CAST(KO1.koeki_id AS INTEGER)""", [
                     trigger_list[0].ken_code, 
                 ])
     
+            print("handle_10_2", flush=True)
             if koeki_list:
                 for i, koeki in enumerate(koeki_list):
                     if koeki.koeki_id is not None and len(str(koeki.koeki_id)) > 0:
@@ -597,7 +629,7 @@ class Command(BaseCommand):
                     if koeki.suikei_name is not None and koeki.suikey_code is not None and len(str(koeki.suikei_name)) > 0 and len(str(koeki.suikei_code)) > 0:
                         ws_koeki.cell(row=9+i, column=11).value = str(koeki.suikei_name) + ":" + str(koeki.suikei_code)
 
-                    if koeki.suikei_type_name is not None and koeki.suikei_type_code is not None and len(str(koeki.suikei_type_name)) > 0 and len(str(koeki.suikei_type_code)) > 0
+                    if koeki.suikei_type_name is not None and koeki.suikei_type_code is not None and len(str(koeki.suikei_type_name)) > 0 and len(str(koeki.suikei_type_code)) > 0:
                         ws_koeki.cell(row=9+i, column=12).value = str(koeki.suikei_type_name) + ":" + str(koeki.suikei_type_code)
                     
                     if koeki.kasen_name is not None and koeki.kasen_code is not None and len(str(koeki.kasen_name)) > 0 and len(str(koeki.kasen_code)) > 0:
@@ -621,8 +653,8 @@ class Command(BaseCommand):
                     if koeki.weather_name is not None and koeki.weather_id is not None and len(str(koeki.weather_name)) > 0 and len(str(koeki.weather_id)) > 0:
                         ws_koeki.cell(row=9+i, column=19).value = str(koeki.weather_name) + ":" + str(koeki.weather_id)
 
-                    if koeki.business_name is not None and koeki.business_code is not None and len(str(koeki.business_name)) > 0 and len(str(koeki.business_code)) > 0:
-                        ws_koeki.cell(row=9+i, column=20).value = str(koeki.business_name) + ":" + str(koeki.business_code)
+                    if koeki.koeki_industry_name is not None and koeki.koeki_industry_code is not None and len(str(koeki.koeki_industry_name)) > 0 and len(str(koeki.koeki_industry_code)) > 0:
+                        ws_koeki.cell(row=9+i, column=20).value = str(koeki.koeki_industry_name) + ":" + str(koeki.koeki_industry_code)
 
                     if koeki.institution_name is not None and len(str(koeki.institution_name)) > 0:
                         ws_koeki.cell(row=9+i, column=21).value = str(koeki.institution_name)

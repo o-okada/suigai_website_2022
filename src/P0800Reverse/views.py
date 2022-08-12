@@ -39,6 +39,7 @@ from P0000Common.models import USAGE                   ### 1100: 地下空間の
 from P0000Common.models import FLOOD_SEDIMENT          ### 1110: 浸水土砂区分
 from P0000Common.models import GRADIENT                ### 1120: 地盤勾配区分
 from P0000Common.models import INDUSTRY                ### 1130: 産業分類
+from P0000Common.models import KOEKI_INDUSTRY          ### 1140: 公益事業分類
 
 from P0000Common.models import HOUSE_ASSET             ### 2000: 家屋評価額
 from P0000Common.models import HOUSE_RATE              ### 2010: 家屋被害率
