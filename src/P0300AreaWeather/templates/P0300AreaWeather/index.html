@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>水害区域図、異常気象コード編集画面 | 水害統計オンラインサイト</title>
+    <title>水害区域番号異常気象コード編集画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <style>
@@ -115,13 +115,15 @@
         <!-- BEGIN パンくずリスト -->
         <div class="col-9">
             {% if type_code == "ippan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / <a class="cl-bread" href="/P0100File/type/ippan/ken/{{ suigai_list.0.ken_code }}/">{{ suigai_list.0.ken_name }}: {{ suigai_list.0.ken_code }}</a> / {{ suigai_list.0.upload_file_name }}</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査票</a> / <a class="cl-bread" href="/P0100File/type/ippan/ken/{{ suigai_list.0.ken_code }}/">{{ suigai_list.0.ken_name }}: {{ suigai_list.0.ken_code }}</a> / {{ suigai_list.0.upload_file_name }}</h5>
             {% elif type_code == "area" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/area/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
-            {% elif type_code == "kokyo" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/kokyo/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/kokyo/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% elif type_code == "chitan" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/chitan/"></a> / <a class="cl-bread" href="/P0100File/type/chitan/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            {% elif type_code == "hojo" %}
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/hojo/"></a> / <a class="cl-bread" href="/P0100File/type/hojo/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
             {% elif type_code == "koeki" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/">水害区域図</a> / <a class="cl-bread" href="/P0100File/type/koeki/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/koeki/"></a> / <a class="cl-bread" href="/P0100File/type/koeki/ken/02/">青森県: 02</a> / ファイル名.xlsx</h5>
             {% endif %}
         </div>
         <!-- END パンくずリスト -->
@@ -133,8 +135,8 @@
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/403/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/404/">公共土木施設補助事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/405/">公益事業等調査票</a>
@@ -146,7 +148,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査票</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
                     <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設補助事業調査票</a>

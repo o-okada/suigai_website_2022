@@ -1340,16 +1340,16 @@
                     <td>{{ area.deleted_at }}</td>
                     {% endif %}
                     
-                    {% if area.file_path is None %}
+                    {% if area.upload_file_path is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ area.file_path }}</td>
+                    <td>{{ area.upload_file_path }}</td>
                     {% endif %}
                     
-                    {% if area.file_name is None %}
+                    {% if area.upload_file_name is None %}
                     <td></td>
                     {% else %}
-                    <td>{{ area.file_name }}</td>
+                    <td>{{ area.upload_file_name }}</td>
                     {% endif %}
                     
                     {% if area.action_code is None %}

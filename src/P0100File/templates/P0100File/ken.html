@@ -9,7 +9,7 @@
     <meta name="viewport" content="">
     <meta name="description" content="">
     {% if type_code == "ippan" %}
-    <title>都道府県 | 一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>都道府県 | 一般資産調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
     <title>都道府県 | 水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "chitan" %}
@@ -126,7 +126,7 @@
         <!-- BEGIN パンくずリスト 列 -->
         <div class="col-6 text-start">
             {% if type_code == "ippan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査員調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/ippan/">一般資産調査票</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "area" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / <a class="cl-bread" href="/P0100File/type/area/">水害区域図</a> / {{ ken_list.0.ken_name }}: {{ ken_list.0.ken_code }} /</h5>
             {% elif type_code == "chitan" %}
@@ -145,9 +145,9 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産市区町村調査票</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産都道府県調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/403/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/404/">公共土木施設補助事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/405/">公益事業等調査票</a>
@@ -159,7 +159,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査票</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
                     <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設補助事業調査票</a>
@@ -211,7 +211,7 @@
                             </tr>
                             <!-- END IPPAN 戻るリンク -->
                             
-                            <!-- BEGIN IPPAN シート一覧 -->
+                            <!-- BEGIN IPPAN 一般資産調査票一覧 -->
                             {% for suigai in suigai_list %}
                             <tr>
                                 <td>{{ suigai.city_name|truncatechars:20 }}: {{ suigai.city_code|truncatechars:20 }}</td>
@@ -242,7 +242,7 @@
                                 {% endif %}
                             </tr>
                             {% endfor %}
-                            <!-- END IPPAN シート一覧 -->
+                            <!-- END IPPAN 一般資産調査票一覧 -->
                         </table>
                     </div>
                 </div>
@@ -360,7 +360,7 @@
                             </tr>
                             <!-- END CHITAN 戻るリンク -->
                             
-                            <!-- BEGIN CHITAN 公共土木施設地方単独事業調査票 -->
+                            <!-- BEGIN CHITAN 公共土木施設地方単独事業調査票一覧 -->
                             {% for chitan_file in chitan_file_list %}
                             <tr>
                                 <td>アップロード <a class="cl-table" href="/{{ chitan_file.upload_file_path }}">{{ chitan_file.upload_file_name|truncatechars:30 }}</a></td>
@@ -384,7 +384,7 @@
                                 {% endif %}
                             </tr>
                             {% endfor %}
-                            <!-- END CHITAN 公共土木施設地方単独事業調査票 -->
+                            <!-- END CHITAN 公共土木施設地方単独事業調査票一覧 -->
                         </table>
                     </div>
                 </div>
@@ -436,7 +436,7 @@
                             </tr>
                             <!-- END HOJO 戻るリンク -->
                             
-                            <!-- BEGIN HOJO 公共土木施設補助事業調査票 -->
+                            <!-- BEGIN HOJO 公共土木施設補助事業調査票一覧 -->
                             {% for hojo_file in hojo_file_list %}
                             <tr>
                                 <td>アップロード <a class="cl-table" href="/{{ hojo_file.upload_file_path }}">{{ hojo_file.upload_file_name|truncatechars:30 }}</a></td>
@@ -460,7 +460,7 @@
                                 {% endif %}
                             </tr>
                             {% endfor %}
-                            <!-- END HOJO 公共土木施設補助事業調査票 -->
+                            <!-- END HOJO 公共土木施設補助事業調査票一覧 -->
                         </table>
                     </div>
                 </div>
@@ -512,7 +512,7 @@
                             </tr>
                             <!-- END KOEKI 戻るリンク -->
                             
-                            <!-- BEGIN KOEKI 公益事業等調査票 -->
+                            <!-- BEGIN KOEKI 公益事業等調査票一覧 -->
                             {% for koeki_file in koeki_file_list %}
                             <tr>
                                 <td>アップロード <a class="cl-table" href="/{{ koeki_file.upload_file_path }}">{{ koeki_file.upload_file_name|truncatechars:30 }}</a></td>
@@ -536,7 +536,7 @@
                                 {% endif %}
                             </tr>
                             {% endfor %}
-                            <!-- END KOEKI 公益事業等調査票 -->
+                            <!-- END KOEKI 公益事業等調査票一覧 -->
                         </table>
                     </div>
                 </div>

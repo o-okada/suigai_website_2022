@@ -300,11 +300,9 @@ def index_view(request):
                     upload_file_path, ### upload_file_path 
                     upload_file_name, ### upload_file_name 
                 ])
-            ### transaction.commit()
             connection_cursor.execute("""COMMIT""", []);
         except:
             print_log('[ERROR] P0300AreaUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-            ### connection_cursor.rollback()
             connection_cursor.execute("""ROLLBACK""", [])
         finally:
             connection_cursor.close()

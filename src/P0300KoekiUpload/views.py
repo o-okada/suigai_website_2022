@@ -1434,68 +1434,64 @@ def index_view(request):
                             range_OK.append([ws_koeki[0].title, j, 19, 267])
 
                 ### セル[9:20]: 事業コードについて範囲が正しいことをチェックする。
-                if ws_koeki[i].cell(row=j, column=20).value is None:
+                if ws_koeki[0].cell(row=j, column=20).value is None:
                     pass
                 else:
-                    if isinstance(ws_koeki[i].cell(row=j, column=20).value, int) == True or \
-                        isinstance(ws_koeki[i].cell(row=j, column=20).value, float) == True:
-                        if float(ws_koeki[i].cell(row=j, column=20).value) < 0:
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=20, fill=fill, com_id=268)
-                            range_NG.append([ws_koeki[i].title, j, 20, 268])
+                    if isinstance(ws_koeki[0].cell(row=j, column=20).value, int) == True or \
+                        isinstance(ws_koeki[0].cell(row=j, column=20).value, float) == True:
+                        if float(ws_koeki[0].cell(row=j, column=20).value) < 0:
+                            add_comment(ws_koeki=ws_koeki[0], ws_result=ws_result[0], row=j, column=20, fill=fill, com_id=268)
+                            range_NG.append([ws_koeki[0].title, j, 20, 268])
                         else:
-                            range_OK.append([ws_koeki[i].title, j, 20, 268])
+                            range_OK.append([ws_koeki[0].title, j, 20, 268])
 
                 ### セル[9:21]: 調査対象機関名称について範囲が正しいことをチェックする。
-                if ws_koeki[i].cell(row=j, column=21).value is None:
+                if ws_koeki[0].cell(row=j, column=21).value is None:
                     pass
                 else:
-                    if isinstance(ws_koeki[i].cell(row=j, column=21).value, int) == True or \
-                        isinstance(ws_koeki[i].cell(row=j, column=21).value, float) == True:
-                        if float(ws_koeki[i].cell(row=j, column=21).value) < 0:
-                            range_NG_grid.append([ws_koeki[i].title, j, 21, MESSAGE[269][0], MESSAGE[269][1], MESSAGE[269][2], MESSAGE[269][3], MESSAGE[269][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, msg=MESSAGE[269][3]+MESSAGE[269][4])
+                    if isinstance(ws_koeki[0].cell(row=j, column=21).value, int) == True or \
+                        isinstance(ws_koeki[0].cell(row=j, column=21).value, float) == True:
+                        if float(ws_koeki[0].cell(row=j, column=21).value) < 0:
+                            add_comment(ws_koeki=ws_koeki[0], ws_result=ws_result[0], row=j, column=21, fill=fill, com_id=269)
+                            range_NG.append([ws_koeki[0].title, j, 21, 269])
                         else:
-                            range_OK_grid.append([ws_koeki[i].title, j, 21, MESSAGE[269][0], MESSAGE[269][1], MESSAGE[269][2], MESSAGE[269][3], MESSAGE[269][4]])
+                            range_OK.append([ws_koeki[0].title, j, 21, 269])
 
                 ### セル[9:22]: 被害金額_物的被害額(千円)について範囲が正しいことをチェックする。
-                if ws_koeki[i].cell(row=j, column=22).value is None:
+                if ws_koeki[0].cell(row=j, column=22).value is None:
                     pass
                 else:
-                    if isinstance(ws_koeki[i].cell(row=j, column=22).value, int) == True or \
-                        isinstance(ws_koeki[i].cell(row=j, column=22).value, float) == True:
-                        if float(ws_koeki[i].cell(row=j, column=22).value) < 0:
-                            range_NG_grid.append([ws_koeki[i].title, j, 22, MESSAGE[270][0], MESSAGE[270][1], MESSAGE[270][2], MESSAGE[270][3], MESSAGE[270][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, msg=MESSAGE[270][3]+MESSAGE[270][4])
+                    if isinstance(ws_koeki[0].cell(row=j, column=22).value, int) == True or \
+                        isinstance(ws_koeki[0].cell(row=j, column=22).value, float) == True:
+                        if float(ws_koeki[0].cell(row=j, column=22).value) < 0:
+                            add_comment(ws_koeki=ws_koeki[0], ws_result=ws_result[0], row=j, column=22, fill=fill, com_id=270)
+                            range_NG.append([ws_koeki[0].title, j, 22, 270])
                         else:
-                            range_OK_grid.append([ws_koeki[i].title, j, 22, MESSAGE[270][0], MESSAGE[270][1], MESSAGE[270][2], MESSAGE[270][3], MESSAGE[270][4]])
+                            range_OK.append([ws_koeki[0].title, j, 22, 270])
 
                 ### セル[9:23]: 被害金額_営業停止に伴う売上減少額について範囲が正しいことをチェックする。
-                if ws_koeki[i].cell(row=j, column=23).value is None:
+                if ws_koeki[0].cell(row=j, column=23).value is None:
                     pass
                 else:
-                    if isinstance(ws_koeki[i].cell(row=j, column=23).value, int) == True or \
-                        isinstance(ws_koeki[i].cell(row=j, column=23).value, float) == True:
-                        if float(ws_koeki[i].cell(row=j, column=23).value) < 0:
-                            range_NG_grid.append([ws_koeki[i].title, j, 23, MESSAGE[271][0], MESSAGE[271][1], MESSAGE[271][2], MESSAGE[271][3], MESSAGE[271][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, msg=MESSAGE[271][3]+MESSAGE[271][4])
+                    if isinstance(ws_koeki[0].cell(row=j, column=23).value, int) == True or \
+                        isinstance(ws_koeki[0].cell(row=j, column=23).value, float) == True:
+                        if float(ws_koeki[0].cell(row=j, column=23).value) < 0:
+                            add_comment(ws_koeki=ws_koeki[0], ws_result=ws_result[0], row=j, column=23, fill=fill, com_id=271)
+                            range_NG.append([ws_koeki[0].title, j, 23, 271])
                         else:
-                            range_OK_grid.append([ws_koeki[i].title, j, 23, MESSAGE[271][0], MESSAGE[271][1], MESSAGE[271][2], MESSAGE[271][3], MESSAGE[271][4]])
+                            range_OK.append([ws_koeki[0].title, j, 23, 271])
 
                 ### セル[9:24]: 被害金額_代替活動費(外注費)について範囲が正しいことをチェックする。
-                if ws_koeki[i].cell(row=j, column=24).value is None:
+                if ws_koeki[0].cell(row=j, column=24).value is None:
                     pass
                 else:
-                    if isinstance(ws_koeki[i].cell(row=j, column=24).value, int) == True or \
-                        isinstance(ws_koeki[i].cell(row=j, column=24).value, float) == True:
-                        if float(ws_koeki[i].cell(row=j, column=24).value) < 0:
-                            range_NG_grid.append([ws_koeki[i].title, j, 24, MESSAGE[272][0], MESSAGE[272][1], MESSAGE[272][2], MESSAGE[272][3], MESSAGE[272][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, msg=MESSAGE[272][3]+MESSAGE[272][4])
+                    if isinstance(ws_koeki[0].cell(row=j, column=24).value, int) == True or \
+                        isinstance(ws_koeki[0].cell(row=j, column=24).value, float) == True:
+                        if float(ws_koeki[0].cell(row=j, column=24).value) < 0:
+                            add_comment(ws_koeki=ws_koeki[0], ws_result=ws_result[0], row=j, column=24, fill=fill, com_id=272)
+                            range_NG.append([ws_koeki[0].title, j, 24, 272])
                         else:
-                            range_OK_grid.append([ws_koeki[i].title, j, 24, MESSAGE[272][0], MESSAGE[272][1], MESSAGE[272][2], MESSAGE[272][3], MESSAGE[272][4]])
+                            range_OK.append([ws_koeki[0].title, j, 24, 272])
 
                 ### セル[9:25]: 被害金額_その他について範囲が正しいことをチェックする。
                 ### セル[9:26]: 被害金額_営業停止損失額合計(千円)について範囲が正しいことをチェックする。
@@ -1510,1118 +1506,92 @@ def index_view(request):
         #######################################################################
         #######################################################################
         ### EXCELセルデータ相関チェック処理（4000）
-        ### (1)セルB7からセルI7について他項目との相関関係が正しいことをチェックする。
+        ### (1)セル[9:2]からセル[9:33]について他項目との相関関係が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
+        ### (3)KOEKIワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 22/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 7行目
-            ### セルB7: 都道府県が何かの値のときに、相関する市区町村名は正しく選択されているか。
-            ### セルC7: 市区町村が何かの値のときに、相関する他項目は正しく選択されているか。
-    
-            ### セルD7: 水害発生月日 vs セルE7: 水害終了月日
-            if ws_koeki[i].cell(row=7, column=4).value is None or \
-                ws_koeki[i].cell(row=7, column=5).value is None:
-                pass
-            else:
-                if isdate(ws_koeki[i].cell(row=7, column=4).value) == False or \
-                    isdate(ws_koeki[i].cell(row=7, column=5).value) == False:
-                    pass
-                else:
-                    ### 水害発生月日 > 水害終了月日である。
-                    if datetime.strptime(ws_koeki[i].cell(row=7, column=4).value, '%Y/%m/%d') > datetime.strptime(ws_koeki[i].cell(row=7, column=5).value, '%Y/%m/%d'): 
-                        correlate_NG_list.append([ws_koeki[i].title, 7, 4, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
-                        correlate_NG_list.append([ws_koeki[i].title, 7, 5, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
-                        add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=4, fill=fill)
-                        add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=5, fill=fill)
-                        add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=4, msg=MESSAGE[300][3]+MESSAGE[300][4])
-                        add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=5, msg=MESSAGE[300][3]+MESSAGE[300][4])
-                    else:
-                        correlate_OK_list.append([ws_koeki[i].title, 7, 4, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
-                        correlate_OK_list.append([ws_koeki[i].title, 7, 5, MESSAGE[300][0], MESSAGE[300][1], MESSAGE[300][2], MESSAGE[300][3], MESSAGE[300][4]])
-    
-            ### セルE7: 水害終了月日が何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルD7: 水害発生月日 vs セルE7: 水害終了月日
-    
-            ### セルF7: 水害原因1 vs セルF14: 工種
-            if ws_koeki[i].cell(row=7, column=6).value is None or \
-                ws_koeki[i].cell(row=14, column=6).value is None:
-                pass
-            else:
-                if split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1].isdecimal() == False or \
-                    split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
-                    pass
-                else:
-                    ### 水害原因が「10:破堤」「20:有堤部溢水」「30:無堤部溢水」「40:内水」の場合、相関する工種は、「1:河川」である。
-                    if split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1] in [10, 20, 30, 40]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[301][0], MESSAGE[301][1], MESSAGE[301][2], MESSAGE[301][3], MESSAGE[301][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[301][3]+MESSAGE[301][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[301][3]+MESSAGE[301][4])
-                            
-                    ### 水害原因が「50:窪地内水」「80:地すべり」「90:急傾斜地崩壊」の場合、相関する工種は、「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1] in [50, 80, 90]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[302][0], MESSAGE[302][1], MESSAGE[302][2], MESSAGE[302][3], MESSAGE[302][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[302][3]+MESSAGE[302][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[302][3]+MESSAGE[302][4])
-                            
-                    ### 水害原因が「93:波浪」の場合、相関する工種は、「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1] in [93]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[303][0], MESSAGE[303][1], MESSAGE[303][2], MESSAGE[303][3], MESSAGE[303][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[303][3]+MESSAGE[303][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[303][3]+MESSAGE[303][4])
-                            
-                    ### 水害原因が「60:洗堀・流出」「91:高潮」「92:津波」の場合、相関する工種は、「1:河川」「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1] in [60, 91, 92]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[304][0], MESSAGE[304][1], MESSAGE[304][2], MESSAGE[304][3], MESSAGE[304][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[304][3]+MESSAGE[304][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[304][3]+MESSAGE[304][4])
-                            
-                    ### 水害原因が「70:土石流」の場合、相関する工種は、「1:河川」「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=6).value)[-1] in [70]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[305][0], MESSAGE[305][1], MESSAGE[305][2], MESSAGE[305][3], MESSAGE[305][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[305][3]+MESSAGE[305][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[305][3]+MESSAGE[305][4])
-                            
-                    else:
-                        pass
-    
-            ### セルG7: 水害原因2 vs セルF14: 工種
-            if ws_koeki[i].cell(row=7, column=7).value is None or \
-                ws_koeki[i].cell(row=14, column=6).value is None:
-                pass
-            else:
-                if split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1].isdecimal() == False or \
-                    split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
-                    pass
-                else:
-                    ### 水害原因が「10:破堤」「20:有堤部溢水」「30:無堤部溢水」「40:内水」の場合、相関する工種は、「1:河川」である。
-                    if split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1] in [10, 20, 30, 40]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[306][0], MESSAGE[306][1], MESSAGE[306][2], MESSAGE[306][3], MESSAGE[306][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[306][3]+MESSAGE[306][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[306][3]+MESSAGE[306][4])
-                            
-                    ### 水害原因が「50:窪地内水」「80:地すべり」「90:急傾斜地崩壊」の場合、相関する工種は、「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1] in [50, 80, 90]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[307][0], MESSAGE[307][1], MESSAGE[307][2], MESSAGE[307][3], MESSAGE[307][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[307][3]+MESSAGE[307][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[307][3]+MESSAGE[307][4])
-                            
-                    ### 水害原因が「93:波浪」の場合、相関する工種は、「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1] in [93]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[308][0], MESSAGE[308][1], MESSAGE[308][2], MESSAGE[308][3], MESSAGE[308][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[308][3]+MESSAGE[308][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[308][3]+MESSAGE[308][4])
-                            
-                    ### 水害原因が「60:洗堀・流出」「91:高潮」「92:津波」の場合、相関する工種は、「1:河川」「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1] in [60, 91, 92]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[309][0], MESSAGE[309][1], MESSAGE[309][2], MESSAGE[309][3], MESSAGE[309][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[309][3]+MESSAGE[309][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[309][3]+MESSAGE[309][4])
-                            
-                    ### 水害原因が「70:土石流」の場合、相関する工種は、「1:河川」「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=7).value)[-1] in [70]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[310][0], MESSAGE[310][1], MESSAGE[310][2], MESSAGE[310][3], MESSAGE[310][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[310][3]+MESSAGE[310][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[310][3]+MESSAGE[310][4])
-                            
-                    else:
-                        pass
-    
-            ### セルH7: 水害原因3 vs セルF14: 工種
-            if ws_koeki[i].cell(row=7, column=8).value is None or \
-                ws_koeki[i].cell(row=14, column=6).value is None:
-                pass
-            else:
-                if split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1].isdecimal() == False or \
-                    split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
-                    pass
-                else:
-                    ### 水害原因が「10:破堤」「20:有堤部溢水」「30:無堤部溢水」「40:内水」の場合、相関する工種は、「1:河川」である。
-                    if split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1] in [10, 20, 30, 40]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[311][0], MESSAGE[311][1], MESSAGE[311][2], MESSAGE[311][3], MESSAGE[311][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[311][3]+MESSAGE[311][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[311][3]+MESSAGE[311][4])
-                            
-                    ### 水害原因が「50:窪地内水」「80:地すべり」「90:急傾斜地崩壊」の場合、相関する工種は、「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1] in [50, 80, 90]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[312][0], MESSAGE[312][1], MESSAGE[312][2], MESSAGE[312][3], MESSAGE[312][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[312][3]+MESSAGE[312][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[312][3]+MESSAGE[312][4])
-                            
-                    ### 水害原因が「93:波浪」の場合、相関する工種は、「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1] in [93]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[313][0], MESSAGE[313][1], MESSAGE[313][2], MESSAGE[313][3], MESSAGE[313][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[313][3]+MESSAGE[313][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[313][3]+MESSAGE[313][4])
-                            
-                    ### 水害原因が「60:洗堀・流出」「91:高潮」「92:津波」の場合、相関する工種は、「1:河川」「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1] in [60, 91, 92]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 2:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[314][0], MESSAGE[314][1], MESSAGE[314][2], MESSAGE[314][3], MESSAGE[314][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[314][3]+MESSAGE[314][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[314][3]+MESSAGE[314][4])
-                            
-                    ### 水害原因が「70:土石流」の場合、相関する工種は、「1:河川」「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=7, column=8).value)[-1] in [70]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 1 or \
-                            split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] == 3:
-                            correlate_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[315][0], MESSAGE[315][1], MESSAGE[315][2], MESSAGE[315][3], MESSAGE[315][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[315][0], MESSAGE[315][1], MESSAGE[315][2], MESSAGE[315][3], MESSAGE[315][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[315][0], MESSAGE[315][1], MESSAGE[315][2], MESSAGE[315][3], MESSAGE[315][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[315][0], MESSAGE[315][1], MESSAGE[315][2], MESSAGE[315][3], MESSAGE[315][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[315][3]+MESSAGE[315][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[315][3]+MESSAGE[315][4])
-                            
-                    else:
-                        pass
-    
-            ### セルI7: 水害区域番号が何かの値のときに、相関する他項目は正しく選択されているか。
-    
-        #######################################################################
-        ### EXCELセルデータ相関チェック処理（4010）
-        ### (1)セルB10からセルF10について他項目との相関関係が正しいことをチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 23/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 10行目
-            ### セルB10: 水系・沿岸名が何かの値のときに、相関する水系種別は正しく選択されているか。
-            ### if ws_koeki[i].cell(row=10, column=2).value is None:
-            ###     result_correlate_list.append([ws_koeki[i].title, 10, 2, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-
-            ### セルB10: 水系・沿岸名が何かの値のときに、相関する工種は正しく選択されているか。
-            ### if ws_koeki[i].cell(row=10, column=2).value is None or \
-            ###     ws_koeki[i].cell(row=14, column=6).value is None:
-            ###     pass
-            ### else:
-            ###     if split_name_code(ws_koeki[i].cell(row=10, column=2).value)[-1].isdecimal() == False or \
-            ###         split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
-            ###         pass
-            ###     else:
-            ###         ### 水系・沿岸名が「水系」のときに、相関する工種は、「1:河川」である。
-            ###         if split_name_code(ws_koeki[i].cell(row=10, column=2).value)[-1] == :
-            ###             if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [1]:
-            ###                 correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###             else:
-            ###                 correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###                 add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-            ###                 add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[][3]+MESSAGE[][4])
-            ###         ### 水系・沿岸名が「沿岸」のときに、相関する工種は、「2:海岸」である。
-            ###         elif split_name_code(ws_koeki[i].cell(row=10, column=2).value)[-1] == :
-            ###             if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [2]:
-            ###                 correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###             else:
-            ###                 correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###                 add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-            ###                 add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[][3]+MESSAGE[][4])
-            ###         ### 水系・沿岸名が「河川海岸以外」のときに、相関する工種は、「3:河川海岸以外」である。
-            ###         elif split_name_code(ws_koeki[i].cell(row=10, column=2).value)[-1] == :
-            ###             if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [3]:
-            ###                 correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###             else:
-            ###                 correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
-            ###                 add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-            ###                 add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[][3]+MESSAGE[][4])
-            ###         else:
-            ###             pass
-            
-            ### セルC10: 水系種別 vs セルE10: 河川種別
-            if ws_koeki[i].cell(row=10, column=3).value is None or \
-                ws_koeki[i].cell(row=10, column=5).value is None:
-                pass
-            else:
-                if split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1].isdecimal() == False or \
-                    split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1].isdecimal() == False:
-                    pass
-                else:
-                    ### 水系種別が「1:一級」のときに、相関する河川種別は、「1:直轄」「2:指定」「4:準用」「5:普通」である。
-                    if split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 1:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [1, 2, 4, 5]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[320][0], MESSAGE[320][1], MESSAGE[320][2], MESSAGE[320][3], MESSAGE[320][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[320][0], MESSAGE[320][1], MESSAGE[320][2], MESSAGE[320][3], MESSAGE[320][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[320][0], MESSAGE[320][1], MESSAGE[320][2], MESSAGE[320][3], MESSAGE[320][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[320][0], MESSAGE[320][1], MESSAGE[320][2], MESSAGE[320][3], MESSAGE[320][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[320][3]+MESSAGE[320][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[320][3]+MESSAGE[320][4])
-
-                    ### 水系種別が「2:二級」のときに、相関する河川種別は、「3:二級」「4:準用」「5:普通」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 2:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [3, 4, 5]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[321][0], MESSAGE[321][1], MESSAGE[321][2], MESSAGE[321][3], MESSAGE[321][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[321][0], MESSAGE[321][1], MESSAGE[321][2], MESSAGE[321][3], MESSAGE[321][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[321][0], MESSAGE[321][1], MESSAGE[321][2], MESSAGE[321][3], MESSAGE[321][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[321][0], MESSAGE[321][1], MESSAGE[321][2], MESSAGE[321][3], MESSAGE[321][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[321][3]+MESSAGE[321][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[321][3]+MESSAGE[321][4])
-
-                    ### 水系種別が「3:準用」のときに、相関する河川種別は、「4:準用」「5:普通」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 3:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [4, 5]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[322][0], MESSAGE[322][1], MESSAGE[322][2], MESSAGE[322][3], MESSAGE[322][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[322][0], MESSAGE[322][1], MESSAGE[322][2], MESSAGE[322][3], MESSAGE[322][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[322][0], MESSAGE[322][1], MESSAGE[322][2], MESSAGE[322][3], MESSAGE[322][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[322][0], MESSAGE[322][1], MESSAGE[322][2], MESSAGE[322][3], MESSAGE[322][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[322][3]+MESSAGE[322][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[322][3]+MESSAGE[322][4])
-
-                    ### 水系種別が「4:普通」のときに、相関する河川種別は、「5:普通」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 4:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [5]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[323][0], MESSAGE[323][1], MESSAGE[323][2], MESSAGE[323][3], MESSAGE[323][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[323][0], MESSAGE[323][1], MESSAGE[323][2], MESSAGE[323][3], MESSAGE[323][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[323][0], MESSAGE[323][1], MESSAGE[323][2], MESSAGE[323][3], MESSAGE[323][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[323][0], MESSAGE[323][1], MESSAGE[323][2], MESSAGE[323][3], MESSAGE[323][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[323][3]+MESSAGE[323][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[323][3]+MESSAGE[323][4])
-
-                    ### 水系種別が「5:沿岸」のときに、相関する河川種別は、「6:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 5:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [6]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[324][0], MESSAGE[324][1], MESSAGE[324][2], MESSAGE[324][3], MESSAGE[324][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[324][0], MESSAGE[324][1], MESSAGE[324][2], MESSAGE[324][3], MESSAGE[324][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[324][0], MESSAGE[324][1], MESSAGE[324][2], MESSAGE[324][3], MESSAGE[324][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[324][0], MESSAGE[324][1], MESSAGE[324][2], MESSAGE[324][3], MESSAGE[324][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[324][3]+MESSAGE[324][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[324][3]+MESSAGE[324][4])
-
-                    ### 水系種別が「6:河川海岸以外」のときに、相関する河川種別は、「7:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] == 6:
-                        if split_name_code(ws_koeki[i].cell(row=10, column=5).value)[-1] in [7]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[325][0], MESSAGE[325][1], MESSAGE[325][2], MESSAGE[325][3], MESSAGE[325][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[325][0], MESSAGE[325][1], MESSAGE[325][2], MESSAGE[325][3], MESSAGE[325][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[325][0], MESSAGE[325][1], MESSAGE[325][2], MESSAGE[325][3], MESSAGE[325][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[325][0], MESSAGE[325][1], MESSAGE[325][2], MESSAGE[325][3], MESSAGE[325][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[325][3]+MESSAGE[325][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[325][3]+MESSAGE[325][4])
-                            
-                    else:
-                        pass
-
-            ### セルC10: 水系種別 vs セルF14: 工種
-            if ws_koeki[i].cell(row=10, column=3).value is None or \
-                ws_koeki[i].cell(row=14, column=6).value is None:
-                pass
-            else:
-                if split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1].isdecimal() == False or \
-                    split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1].isdecimal() == False:
-                    pass
-                else:
-                    ### 水系種別が「1:一級」「2:二級」「3:準用」「4:普通」のときに、相関する工種は、「1:河川」である。
-                    if split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] in [1, 2, 3, 4]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [1]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[326][0], MESSAGE[326][1], MESSAGE[326][2], MESSAGE[326][3], MESSAGE[326][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[326][0], MESSAGE[326][1], MESSAGE[326][2], MESSAGE[326][3], MESSAGE[326][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[326][0], MESSAGE[326][1], MESSAGE[326][2], MESSAGE[326][3], MESSAGE[326][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[326][0], MESSAGE[326][1], MESSAGE[326][2], MESSAGE[326][3], MESSAGE[326][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[326][3]+MESSAGE[326][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[326][3]+MESSAGE[326][4])
-                
-                    ### 水系種別が「5:沿岸」のときに、相関する工種は、「2:海岸」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] in [5]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [2]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[327][0], MESSAGE[327][1], MESSAGE[327][2], MESSAGE[327][3], MESSAGE[327][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[327][0], MESSAGE[327][1], MESSAGE[327][2], MESSAGE[327][3], MESSAGE[327][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[327][0], MESSAGE[327][1], MESSAGE[327][2], MESSAGE[327][3], MESSAGE[327][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[327][0], MESSAGE[327][1], MESSAGE[327][2], MESSAGE[327][3], MESSAGE[327][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[327][3]+MESSAGE[327][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[327][3]+MESSAGE[327][4])
-                            
-                    ### 水系種別が「6:河川海岸以外」のときに、相関する工種は、「3:河川海岸以外」である。
-                    elif split_name_code(ws_koeki[i].cell(row=10, column=3).value)[-1] in [6]:
-                        if split_name_code(ws_koeki[i].cell(row=14, column=6).value)[-1] in [6]:
-                            correlate_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[328][0], MESSAGE[328][1], MESSAGE[328][2], MESSAGE[328][3], MESSAGE[328][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[328][0], MESSAGE[328][1], MESSAGE[328][2], MESSAGE[328][3], MESSAGE[328][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[328][0], MESSAGE[328][1], MESSAGE[328][2], MESSAGE[328][3], MESSAGE[328][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[328][0], MESSAGE[328][1], MESSAGE[328][2], MESSAGE[328][3], MESSAGE[328][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[328][3]+MESSAGE[328][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, msg=MESSAGE[328][3]+MESSAGE[328][4])
-
-            ### セルD10: 河川・海岸名が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルE10: 河川種別が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルF10: 地盤勾配区分が何かの値のときに、相関する他項目は正しく選択されているか。
-    
-        #######################################################################
-        ### EXCELセルデータ相関チェック処理（4020）
-        ### (1)セルB14からセルJ14について他項目との相関関係が正しいことをチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 24/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 14行目
-            ### セルC14: 水害区域面積の農地 vs セルH14: 農作物被害額
-            ### セルC14: 水害区域面積の農地がNoneのとき、農作物被害額はNoneが正しい。
-            if ws_koeki[i].cell(row=14, column=3).value is None:
-                if ws_koeki[i].cell(row=14, column=8).value is None:
-                    correlate_OK_list.append([ws_koeki[i].title, 14, 3, MESSAGE[340][0], MESSAGE[340][1], MESSAGE[340][2], MESSAGE[340][3], MESSAGE[340][4]])
-                    correlate_OK_list.append([ws_koeki[i].title, 14, 8, MESSAGE[340][0], MESSAGE[340][1], MESSAGE[340][2], MESSAGE[340][3], MESSAGE[340][4]])
-                else:
-                    correlate_NG_list.append([ws_koeki[i].title, 14, 3, MESSAGE[340][0], MESSAGE[340][1], MESSAGE[340][2], MESSAGE[340][3], MESSAGE[340][4]])
-                    correlate_NG_list.append([ws_koeki[i].title, 14, 8, MESSAGE[340][0], MESSAGE[340][1], MESSAGE[340][2], MESSAGE[340][3], MESSAGE[340][4]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, fill=fill)
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=8, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, msg=MESSAGE[340][3]+MESSAGE[340][4])
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=8, msg=MESSAGE[340][3]+MESSAGE[340][4])
-            else:
-                if ws_koeki[i].cell(row=14, column=8).value is None:
-                    correlate_NG_list.append([ws_koeki[i].title, 14, 3, MESSAGE[341][0], MESSAGE[341][1], MESSAGE[341][2], MESSAGE[341][3], MESSAGE[341][4]])
-                    correlate_NG_list.append([ws_koeki[i].title, 14, 8, MESSAGE[341][0], MESSAGE[341][1], MESSAGE[341][2], MESSAGE[341][3], MESSAGE[341][4]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, fill=fill)
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=8, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, msg=MESSAGE[341][3]+MESSAGE[341][4])
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=8, msg=MESSAGE[341][3]+MESSAGE[341][4])
-                else:
-                    correlate_OK_list.append([ws_koeki[i].title, 14, 3, MESSAGE[341][0], MESSAGE[341][1], MESSAGE[341][2], MESSAGE[341][3], MESSAGE[341][4]])
-                    correlate_OK_list.append([ws_koeki[i].title, 14, 8, MESSAGE[341][0], MESSAGE[341][1], MESSAGE[341][2], MESSAGE[341][3], MESSAGE[341][4]])
-
-            ### セルB14: 水害区域面積の宅地が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルC14: 水害区域面積の農地が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルD14: 水害区域面積の地下が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### 水害区域面積の宅地、農地、地下のいずれかに入力されているか。
-            if ws_koeki[i].cell(row=14, column=2).value is None and \
-                ws_koeki[i].cell(row=14, column=3).value is None and \
-                ws_koeki[i].cell(row=14, column=4).value is None:
-                correlate_NG_list.append([ws_koeki[i].title, 14, 2, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-                correlate_NG_list.append([ws_koeki[i].title, 14, 3, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-                correlate_NG_list.append([ws_koeki[i].title, 14, 4, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-                add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=2, fill=fill)
-                add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, fill=fill)
-                add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=4, fill=fill)
-                add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=2, msg=MESSAGE[342][3]+MESSAGE[342][4])
-                add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=3, msg=MESSAGE[342][3]+MESSAGE[342][4])
-                add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=4, msg=MESSAGE[342][3]+MESSAGE[342][4])
-            else:
-                correlate_OK_list.append([ws_koeki[i].title, 14, 2, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-                correlate_OK_list.append([ws_koeki[i].title, 14, 3, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-                correlate_OK_list.append([ws_koeki[i].title, 14, 4, MESSAGE[342][0], MESSAGE[342][1], MESSAGE[342][2], MESSAGE[342][3], MESSAGE[342][4]])
-            
-            ### セルF14: 工種が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルH14: 農作物被害額が何かの値のときに、相関する他項目は正しく選択されているか。
-            ### セルJ14: 異常気象が何かの値のときに、相関する他項目は正しく選択されているか。
-    
-        #######################################################################
-        ### EXCELセルデータ相関チェック処理（4030）
-        ### (1)セルB20からセルAA20について他項目との相関関係が正しいことをチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。相関チェック処理を記述する。
         #######################################################################
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 25/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            if max_row[i] >= 20:
-                for j in range(20, max_row[i] + 1):
-                    ### セルB20: 町丁名・大字名が何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルC20: 名称が何かの値のときに、相関する他項目は正しく選択されているか。
-                        
-                    ### セルD20: 地上・地下被害の区分 vs セルB14: 水害区域面積の宅地、またはセルC14: 水害区域面積の農地
-                    if ws_koeki[i].cell(row=j, column=4).value is None:
-                        pass
-                    else:
-                        if split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1].isdecimal() == False:
-                            pass
-                        else:
-                            ### 地上・地下被害の区分が「地上のみ:1」のときに、相関する水害区域面積の宅地または水害区域面積の農地が入力されているか。
-                            if split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [1]:
-                                if ws_koeki[i].cell(row=14, column=2).value is None and \
-                                    ws_koeki[i].cell(row=14, column=3).value is None:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[360][0], MESSAGE[360][1], MESSAGE[360][2], MESSAGE[360][3], MESSAGE[360][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[360][3]+MESSAGE[360][4])
-                                else:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[360][0], MESSAGE[360][1], MESSAGE[360][2], MESSAGE[360][3], MESSAGE[360][4]])
-
-                            ### 地上・地下被害の区分が「地上部分:2」のときに、相関する水害区域面積の宅地または水害区域面積の農地が入力されているか。
-                            elif split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [2]:
-                                if ws_koeki[i].cell(row=14, column=2).value is None and \
-                                    ws_koeki[i].cell(row=14, column=3).value is None:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[361][0], MESSAGE[361][1], MESSAGE[361][2], MESSAGE[361][3], MESSAGE[361][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[361][3]+MESSAGE[361][4])
-                                else:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[361][0], MESSAGE[361][1], MESSAGE[361][2], MESSAGE[361][3], MESSAGE[361][4]])
-
-                            ### 地上・地下被害の区分が「地下部分:3」のときに、相関する水害区域面積の地下が入力されているか。
-                            elif split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [3]:
-                                if ws_koeki[i].cell(row=14, column=4).value is None:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[362][0], MESSAGE[362][1], MESSAGE[362][2], MESSAGE[362][3], MESSAGE[362][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[362][3]+MESSAGE[362][4])
-                                else:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[362][0], MESSAGE[362][1], MESSAGE[362][2], MESSAGE[362][3], MESSAGE[362][4]])
-
-                            ### 地上・地下被害の区分が「地下のみ:4」のときに、相関する水害区域面積の地下が入力されているか。
-                            elif split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [4]:
-                                if ws_koeki[i].cell(row=14, column=4).value is None:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[363][0], MESSAGE[363][1], MESSAGE[363][2], MESSAGE[363][3], MESSAGE[363][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[363][3]+MESSAGE[363][4])
-                                else:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[363][0], MESSAGE[363][1], MESSAGE[363][2], MESSAGE[363][3], MESSAGE[363][4]])
-                            
-                            else:
-                                pass
-
-                    ### セルD20: 地上・地下被害の区分 vs セルZ20: 地下空間の利用形態
-                    if ws_koeki[i].cell(row=j, column=4).value is None:
-                        pass
-                    else:
-                        if split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1].isdecimal() == False:
-                            pass
-                        else:
-                            ### 地上・地下被害の区分が「1:」「2:」の場合、相関する地下空間の利用形態は、何らかの値が入力される。
-                            if split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [1, 2]:
-                                if ws_koeki[i].cell(row=j, column=27).value is None:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 27, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
-                                else:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 27, MESSAGE[364][0], MESSAGE[364][1], MESSAGE[364][2], MESSAGE[364][3], MESSAGE[364][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=27, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[364][3]+MESSAGE[364][4])
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=27, msg=MESSAGE[364][3]+MESSAGE[364][4])
-
-                            elif split_name_code(ws_koeki[i].cell(row=j, column=4).value)[-1] in [3, 4]:
-                                if ws_koeki[i].cell(row=j, column=27).value is None:
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 4, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
-                                    correlate_NG_list.append([ws_koeki[i].title, j, 27, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=27, fill=fill)
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[365][3]+MESSAGE[365][4])
-                                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=27, msg=MESSAGE[365][3]+MESSAGE[365][4])
-                                else:
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 4, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
-                                    correlate_OK_list.append([ws_koeki[i].title, j, 27, MESSAGE[365][0], MESSAGE[365][1], MESSAGE[365][2], MESSAGE[365][3], MESSAGE[365][4]])
-                        
-                    ### セルE20: 浸水土砂被害の区分が何かの値のときに、相関する他項目は正しく選択されているか。
-                        
-                    ### セルF20: 被害建物棟数, 床下浸水 vs セルL20: 延床面積
-                    ### セルG20: 被害建物棟数, 1cm〜49cm vs セルL20: 延床面積
-                    ### セルH20: 被害建物棟数, 50cm〜99cm vs セルL20: 延床面積
-                    ### セルI20: 被害建物棟数, 1m以上 vs セルL20: 延床面積
-                    ### セルJ20: 被害建物棟数, 半壊 vs セルL20: 延床面積
-                    ### セルK20: 被害建物棟数, 全壊・流失 vs セルL20: 延床面積
-                    if ws_koeki[i].cell(row=j, column=6).value is None and \
-                        ws_koeki[i].cell(row=j, column=7).value is None and \
-                        ws_koeki[i].cell(row=j, column=8).value is None and \
-                        ws_koeki[i].cell(row=j, column=9).value is None and \
-                        ws_koeki[i].cell(row=j, column=10).value is None and \
-                        ws_koeki[i].cell(row=j, column=11).value is None:
-                        if ws_koeki[i].cell(row=j, column=12).value is None:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 6, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 7, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 8, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 9, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 10, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 11, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 12, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 6, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 7, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 8, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 9, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 10, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 11, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 12, MESSAGE[366][0], MESSAGE[366][1], MESSAGE[366][2], MESSAGE[366][3], MESSAGE[366][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=9, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=10, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=11, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=12, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=6, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=7, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=8, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=9, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=10, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=11, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=12, msg=MESSAGE[366][3]+MESSAGE[366][4])
-                    else:
-                        if ws_koeki[i].cell(row=j, column=12).value is None:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 6, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 7, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 8, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 9, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 10, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 11, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 12, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=6, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=7, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=8, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=9, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=10, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=11, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=12, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=6, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=7, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=8, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=9, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=10, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=11, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=12, msg=MESSAGE[367][3]+MESSAGE[367][4])
-                        else:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 6, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 7, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 8, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 9, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 10, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 11, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 12, MESSAGE[367][0], MESSAGE[367][1], MESSAGE[367][2], MESSAGE[367][3], MESSAGE[367][4]])
-                        
-                    ### セルL20: 被害建物の延床面積が何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルM20: 被災世帯数が何かの値のときに、相関する他項目は正しく選択されているか。
-                        
-                    ### セルN20: 被災事業所数 vs セルY20: 事業所の産業区分
-                    if ws_koeki[i].cell(row=j, column=14).value is None:
-                        if ws_koeki[i].cell(row=j, column=25).value is None:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 14, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 25, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 14, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 25, MESSAGE[368][0], MESSAGE[368][1], MESSAGE[368][2], MESSAGE[368][3], MESSAGE[368][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, msg=MESSAGE[368][3]+MESSAGE[368][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, msg=MESSAGE[368][3]+MESSAGE[368][4])
-                    else:
-                        if ws_koeki[i].cell(row=j, column=25).value is None:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 14, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 25, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, msg=MESSAGE[369][3]+MESSAGE[369][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, msg=MESSAGE[369][3]+MESSAGE[369][4])
-                        else:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 14, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 25, MESSAGE[369][0], MESSAGE[369][1], MESSAGE[369][2], MESSAGE[369][3], MESSAGE[369][4]])
-
-                    ### セルN20: 被災事業所数 vs セルT20: 事業所従業者数, 床下浸水
-                    ### セルN20: 被災事業所数 vs セルU20: 事業所従業者数, 1cm〜49cm
-                    ### セルN20: 被災事業所数 vs セルV20: 事業所従業者数, 50cm〜99cm
-                    ### セルN20: 被災事業所数 vs セルW20: 事業所従業者数, 1m以上・半壊
-                    ### セルN20: 被災事業所数 vs セルX20: 事業所従業者数, 全壊・流失
-                    if ws_koeki[i].cell(row=j, column=14).value is None:
-                        if ws_koeki[i].cell(row=j, column=20).value is None and \
-                            ws_koeki[i].cell(row=j, column=21).value is None and \
-                            ws_koeki[i].cell(row=j, column=22).value is None and \
-                            ws_koeki[i].cell(row=j, column=23).value is None and \
-                            ws_koeki[i].cell(row=j, column=24).value is None:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 14, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 20, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 21, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 22, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 23, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 24, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                        else:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 14, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 20, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 21, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 22, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 23, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 24, MESSAGE[370][0], MESSAGE[370][1], MESSAGE[370][2], MESSAGE[370][3], MESSAGE[370][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=20, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=20, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, msg=MESSAGE[370][3]+MESSAGE[370][4])
-                    else:
-                        if ws_koeki[i].cell(row=j, column=20).value is None and \
-                            ws_koeki[i].cell(row=j, column=21).value is None and \
-                            ws_koeki[i].cell(row=j, column=22).value is None and \
-                            ws_koeki[i].cell(row=j, column=23).value is None and \
-                            ws_koeki[i].cell(row=j, column=24).value is None:
-                            correlate_NG_list.append([ws_koeki[i].title, j, 14, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 20, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 21, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 22, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 23, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_NG_list.append([ws_koeki[i].title, j, 24, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=20, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, fill=fill)
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=14, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=20, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=21, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=22, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=23, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=24, msg=MESSAGE[371][3]+MESSAGE[371][4])
-                        else:
-                            correlate_OK_list.append([ws_koeki[i].title, j, 14, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 20, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 21, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 22, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 23, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                            correlate_OK_list.append([ws_koeki[i].title, j, 24, MESSAGE[371][0], MESSAGE[371][1], MESSAGE[371][2], MESSAGE[371][3], MESSAGE[371][4]])
-                        
-                    ### セルO20: 農家・漁家戸数, 床下浸水が何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルP20: 農家・漁家戸数, 1cm〜49cmが何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルQ20: 農家・漁家戸数, 50cm〜99cmが何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルR20: 農家・漁家戸数, 1m以上・半壊が何かの値のときに、相関する他項目は正しく選択されているか。
-                    ### セルS20: 農家・漁家戸数, 全壊・流失が何かの値のときに、相関する他項目は正しく選択されているか。
-                        
-                    ### セルT20: 事業所従業者数, 床下浸水が何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルN20: 被災事業所数 vs セルT20: 事業所従業者数
-                    ### セルU20: 事業所従業者数, 1cm〜49cmが何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルN20: 被災事業所数 vs セルT20: 事業所従業者数
-                    ### セルV20: 事業所従業者数, 50cm〜99cmが何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルN20: 被災事業所数 vs セルT20: 事業所従業者数
-                    ### セルW20: 事業所従業者数, 1m以上・半壊が何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルN20: 被災事業所数 vs セルT20: 事業所従業者数
-                    ### セルX20: 事業所従業者数, 全壊・流失が何かの値のときに、相関する他項目は正しく選択されているか。 参照 セルN20: 被災事業所数 vs セルT20: 事業所従業者数
-                        
-                    ### セルY20: 事業所の産業区分が何かの値のときに、相関する他項目は正しく選択されているか。 参照  
-                    ### セルZ20: 地下空間の利用形態が何かの値のときに、相関する他項目は正しく選択されているか。 参照 
-                    ### セルAA20: 備考が何かの値のときに、相関する他項目は正しく選択されているか。
+        if max_row[0] >= 9:
+            for j in range(9, max_row[0] + 1):
+                ### セル[9:2]: 水害発生月が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:3]: 水害発生日が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:4]: 水害発生月が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:5]: 水害発生日が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:6]: 被害箇所_都道府県名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:7]: 被害箇所_都道府県コードが何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:8]: 被害箇所_市区町村名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:9]: 被害箇所_市区町村コードが何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:10]: 被害箇所_町丁名・大字名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:11]: 河川・海岸名・地区名_水系・沿岸名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:12]: 河川・海岸名・地区名_水系種別が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:13]: 河川・海岸名・地区名_河川・海岸名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:14]: 河川・海岸名・地区名_河川種別が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:15]: 工種区分が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:16]: 水害原因コード1が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:17]: 水害原因コード2が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:18]: 水害原因コード3が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:19]: 異常気象コードが何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:20]: 事業コードが何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:21]: 調査対象機関名称が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:22]: 被害金額_物的被害額(千円)が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:23]: 被害金額_営業停止に伴う売上減少額が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:24]: 被害金額_代替活動費(外注費)が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:25]: 被害金額_その他が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:26]: 被害金額_営業停止損失額合計(千円)が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:27]: 営業停止期間等_営業停止期間日が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:28]: 営業停止期間等_営業停止期間時間が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:29]: 営業停止期間等_停止数量が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:30]: 照会先_調査担当課名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:31]: 照会先_調査担当者名が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:32]: 照会先_電話番号が何かの値のときに、相関する他項目は正しく選択されているか。
+                ### セル[9:33]: 備考が何かの値のときに、相関する他項目は正しく選択されているか。
+                pass
     
         #######################################################################
         #######################################################################
         ### EXCELセルデータ突合チェック処理（5000）
-        ### (1)セルB7からセルI7についてデータベースに登録されている値と突合せチェックする。
+        ### (1)セル[9:2]からセル[9:33]についてデータベースに登録されている値と突合せチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
+        ### (3)KOEKIワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 26/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 7行目
-            ### セルB7: 都道府県についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=2).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=2).value not in list(ken_code_list) and \
-                    ws_koeki[i].cell(row=7, column=2).value not in list(ken_name_list) and \
-                    ws_koeki[i].cell(row=7, column=2).value not in list(ken_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 2, MESSAGE[400][0], MESSAGE[400][1], MESSAGE[400][2], MESSAGE[400][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=2, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=2, msg=MESSAGE[400][3]+MESSAGE[400][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 2, MESSAGE[400][0], MESSAGE[400][1], MESSAGE[400][2], MESSAGE[400][3]])
-                
-            ### セルC7: 市区町村についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=3).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=3).value not in list(city_code_list) and \
-                    ws_koeki[i].cell(row=7, column=3).value not in list(city_name_list) and \
-                    ws_koeki[i].cell(row=7, column=3).value not in list(city_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 3, MESSAGE[401][0], MESSAGE[401][1], MESSAGE[401][2], MESSAGE[401][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=3, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=3, msg=MESSAGE[401][3]+MESSAGE[401][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 3, MESSAGE[401][0], MESSAGE[401][1], MESSAGE[401][2], MESSAGE[401][3]])
-                
-            ### セルD7: 水害発生月日についてデータベースに登録されている値と突合せチェックする。
-            ### セルE7: 水害終了月日についてデータベースに登録されている値と突合せチェックする。
-                
-            ### セルF7: 水害原因1についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=6).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=6).value not in list(cause_code_list) and \
-                    ws_koeki[i].cell(row=7, column=6).value not in list(cause_name_list) and \
-                    ws_koeki[i].cell(row=7, column=6).value not in list(cause_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 6, MESSAGE[404][0], MESSAGE[404][1], MESSAGE[404][2], MESSAGE[404][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=6, msg=MESSAGE[404][3]+MESSAGE[404][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 6, MESSAGE[404][0], MESSAGE[404][1], MESSAGE[404][2], MESSAGE[404][3]])
-                
-            ### セルG7: 水害原因2についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=7).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=7).value not in list(cause_code_list) and \
-                    ws_koeki[i].cell(row=7, column=7).value not in list(cause_name_list) and \
-                    ws_koeki[i].cell(row=7, column=7).value not in list(cause_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 7, MESSAGE[405][0], MESSAGE[405][1], MESSAGE[405][2], MESSAGE[405][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=7, msg=MESSAGE[405][3]+MESSAGE[405][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 7, MESSAGE[405][0], MESSAGE[405][1], MESSAGE[405][2], MESSAGE[405][3]])
-                
-            ### セルH7: 水害原因3についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=8).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=8).value not in list(cause_code_list) and \
-                    ws_koeki[i].cell(row=7, column=8).value not in list(cause_name_list) and \
-                    ws_koeki[i].cell(row=7, column=8).value not in list(cause_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 8, MESSAGE[406][0], MESSAGE[406][1], MESSAGE[406][2], MESSAGE[406][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=8, msg=MESSAGE[406][3]+MESSAGE[406][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 8, MESSAGE[406][0], MESSAGE[406][1], MESSAGE[406][2], MESSAGE[406][3]])
-                
-            ### セルI7: 水害区域番号についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=7, column=9).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=7, column=9).value not in list(area_id_list) and \
-                    ws_koeki[i].cell(row=7, column=9).value not in list(area_name_list) and \
-                    ws_koeki[i].cell(row=7, column=9).value not in list(area_name_id_list):
-                    compare_NG_list.append([ws_koeki[i].title, 7, 9, MESSAGE[407][0], MESSAGE[407][1], MESSAGE[407][2], MESSAGE[407][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=9, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=7, column=9, msg=MESSAGE[407][3]+MESSAGE[407][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 7, 9, MESSAGE[407][0], MESSAGE[407][1], MESSAGE[407][2], MESSAGE[407][3]])
-    
-        #######################################################################
-        ### EXCELセルデータ突合チェック処理（5010）
-        ### (1)セルB10からセルF10についてデータベースに登録されている値と突合せチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 27/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 10行目
-            ### セルB10: 水系・沿岸名についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=10, column=2).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=10, column=2).value not in list(suikei_code_list) and \
-                    ws_koeki[i].cell(row=10, column=2).value not in list(suikei_name_list) and \
-                    ws_koeki[i].cell(row=10, column=2).value not in list(suikei_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 10, 2, MESSAGE[408][0], MESSAGE[408][1], MESSAGE[408][2], MESSAGE[408][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=2, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=2, msg=MESSAGE[408][3]+MESSAGE[408][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 10, 2, MESSAGE[408][0], MESSAGE[408][1], MESSAGE[408][2], MESSAGE[408][3]])
-                
-            ### セルC10: 水系種別についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=10, column=3).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=10, column=3).value not in list(suikei_type_code_list) and \
-                    ws_koeki[i].cell(row=10, column=3).value not in list(suikei_type_name_list) and \
-                    ws_koeki[i].cell(row=10, column=3).value not in list(suikei_type_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 10, 3, MESSAGE[409][0], MESSAGE[409][1], MESSAGE[409][2], MESSAGE[409][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=3, msg=MESSAGE[409][3]+MESSAGE[409][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 10, 3, MESSAGE[409][0], MESSAGE[409][1], MESSAGE[409][2], MESSAGE[409][3]])
-                
-            ### セルD10: 河川・海岸名についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=10, column=4).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=10, column=4).value not in list(kasen_code_list) and \
-                    ws_koeki[i].cell(row=10, column=4).value not in list(kasen_name_list) and \
-                    ws_koeki[i].cell(row=10, column=4).value not in list(kasen_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 10, 4, MESSAGE[410][0], MESSAGE[410][1], MESSAGE[410][2], MESSAGE[410][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=4, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=4, msg=MESSAGE[410][3]+MESSAGE[410][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 10, 4, MESSAGE[410][0], MESSAGE[410][1], MESSAGE[410][2], MESSAGE[410][3]])
-                
-            ### セルE10: 河川種別についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=10, column=5).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=10, column=5).value not in list(kasen_type_code_list) and \
-                    ws_koeki[i].cell(row=10, column=5).value not in list(kasen_type_name_list) and \
-                    ws_koeki[i].cell(row=10, column=5).value not in list(kasen_type_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 10, 5, MESSAGE[411][0], MESSAGE[411][1], MESSAGE[411][2], MESSAGE[411][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=5, msg=MESSAGE[412][3]+MESSAGE[412][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 10, 5, MESSAGE[411][0], MESSAGE[411][1], MESSAGE[411][2], MESSAGE[411][3]])
-                
-            ### セルF10: 地盤勾配区分についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=10, column=6).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=10, column=6).value not in list(gradient_code_list) and \
-                    ws_koeki[i].cell(row=10, column=6).value not in list(gradient_name_list) and \
-                    ws_koeki[i].cell(row=10, column=6).value not in list(gradient_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 10, 6, MESSAGE[412][0], MESSAGE[412][1], MESSAGE[412][2], MESSAGE[412][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=6, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=10, column=6, msg=MESSAGE[412][3]+MESSAGE[412][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 10, 6, MESSAGE[412][0], MESSAGE[412][1], MESSAGE[412][2], MESSAGE[412][3]])
-    
-        #######################################################################
-        ### EXCELセルデータ突合チェック処理（5020）
-        ### (1)セルB14からセルJ14についてデータベースに登録されている値と突合せチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
-        #######################################################################
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 28/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            ### 14行目
-            ### セルB14: 水害区域面積の宅地についてデータベースに登録されている値と突合せチェックする。
-            ### セルC14: 水害区域面積の農地についてデータベースに登録されている値と突合せチェックする。
-            ### セルD14: 水害区域面積の地下についてデータベースに登録されている値と突合せチェックする。
-                
-            ### セルF14: 工種についてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=14, column=6).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=14, column=6).value not in list(kasen_kaigan_code_list) and \
-                    ws_koeki[i].cell(row=14, column=6).value not in list(kasen_kaigan_name_list) and \
-                    ws_koeki[i].cell(row=14, column=6).value not in list(kasen_kaigan_name_code_list):
-                    compare_NG_list.append([ws_koeki[i].title, 14, 6, MESSAGE[416][0], MESSAGE[416][1], MESSAGE[416][2], MESSAGE[416][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=6, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=2, msg=MESSAGE[416][3]+MESSAGE[416][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 14, 6, MESSAGE[416][0], MESSAGE[416][1], MESSAGE[416][2], MESSAGE[416][3]])
-                
-            ### セルH14: 農作物被害額についてデータベースに登録されている値と突合せチェックする。
-                
-            ### セルJ14: 異常気象コードについてデータベースに登録されている値と突合せチェックする。
-            if ws_koeki[i].cell(row=14, column=10).value is None:
-                pass
-            else:
-                if ws_koeki[i].cell(row=14, column=10).value not in list(weather_id_list) and \
-                    ws_koeki[i].cell(row=14, column=10).value not in list(weather_name_list) and \
-                    ws_koeki[i].cell(row=14, column=10).value not in list(weather_name_id_list):
-                    compare_NG_list.append([ws_koeki[i].title, 14, 10, MESSAGE[418][0], MESSAGE[418][1], MESSAGE[418][2], MESSAGE[418][3]])
-                    add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=10, fill=fill)
-                    add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=14, column=10, msg=MESSAGE[418][3]+MESSAGE[418][4])
-                else:
-                    compare_OK_list.append([ws_koeki[i].title, 14, 10, MESSAGE[418][0], MESSAGE[418][1], MESSAGE[418][2], MESSAGE[418][3]])
-    
-        #######################################################################
-        ### EXCELセルデータ突合チェック処理（5030）
-        ### (1)セルB20からセルAA20についてデータベースに登録されている値と突合せチェックする。
-        ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
-        ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 29/35.', 'DEBUG')
-        for i, _ in enumerate(ws_koeki):
-            if max_row[i] >= 20:
-                for j in range(20, max_row[i] + 1):
-                    ### セルB20: 町丁名・大字名についてデータベースに登録されている値と突合せチェックする。
-                    
-                    ### セルC20: 名称についてデータベースに登録されている値と突合せチェックする。
-                    if ws_koeki[i].cell(row=j, column=4).value is None:
-                        pass
-                    else:
-                        if ws_koeki[i].cell(row=j, column=3).value not in list(building_code_list) and \
-                            ws_koeki[i].cell(row=j, column=3).value not in list(building_name_list) and \
-                            ws_koeki[i].cell(row=j, column=3).value not in list(building_name_code_list):
-                            compare_NG_grid.append([ws_koeki[i].title, j, 3, MESSAGE[451][0], MESSAGE[451][1], MESSAGE[451][2], MESSAGE[451][3]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=3, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=3, msg=MESSAGE[451][3]+MESSAGE[451][4])
-                        else:
-                            compare_OK_grid.append([ws_koeki[i].title, j, 3, MESSAGE[451][0], MESSAGE[451][1], MESSAGE[451][2], MESSAGE[451][3]])
-                        
-                    ### セルD20: 地上・地下被害の区分についてデータベースに登録されている値と突合せチェックする。
-                    if ws_koeki[i].cell(row=j, column=4).value is None:
-                        pass
-                    else:
-                        if ws_koeki[i].cell(row=j, column=4).value not in list(underground_code_list) and \
-                            ws_koeki[i].cell(row=j, column=4).value not in list(underground_name_list) and \
-                            ws_koeki[i].cell(row=j, column=4).value not in list(underground_name_code_list):
-                            compare_NG_grid.append([ws_koeki[i].title, j, 4, MESSAGE[452][0], MESSAGE[452][1], MESSAGE[452][2], MESSAGE[452][3]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=4, msg=MESSAGE[452][3]+MESSAGE[452][4])
-                        else:
-                            compare_OK_grid.append([ws_koeki[i].title, j, 4, MESSAGE[452][0], MESSAGE[452][1], MESSAGE[452][2], MESSAGE[452][3]])
-                        
-                    ### セルE20: 浸水土砂被害の区分についてデータベースに登録されている値と突合せチェックする。
-                    if ws_koeki[i].cell(row=j, column=5).value is None:
-                        pass
-                    else:
-                        if ws_koeki[i].cell(row=j, column=5).value not in list(flood_sediment_code_list) and \
-                            ws_koeki[i].cell(row=j, column=5).value not in list(flood_sediment_name_list) and \
-                            ws_koeki[i].cell(row=j, column=5).value not in list(flood_sediment_name_code_list):
-                            compare_NG_grid.append([ws_koeki[i].title, j, 5, MESSAGE[453][0], MESSAGE[453][1], MESSAGE[453][2], MESSAGE[453][3]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=5, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=5, msg=MESSAGE[453][3]+MESSAGE[453][4])
-                        else:
-                            compare_OK_grid.append([ws_koeki[i].title, j, 5, MESSAGE[453][0], MESSAGE[453][1], MESSAGE[453][2], MESSAGE[453][3]])
-                        
-                    ### セルF20: 被害建物棟数, 床下浸水についてデータベースに登録されている値と突合せチェックする。
-                    ### セルG20: 被害建物棟数, 1cm〜49cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルH20: 被害建物棟数, 50cm〜99cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルI20: 被害建物棟数, 1m以上についてデータベースに登録されている値と突合せチェックする。
-                    ### セルJ20: 被害建物棟数, 半壊についてデータベースに登録されている値と突合せチェックする。
-                    ### セルK20: 被害建物棟数, 全壊・流失についてデータベースに登録されている値と突合せチェックする。
-                    ### セルL20: 被害建物の延床面積についてデータベースに登録されている値と突合せチェックする。
-                    ### セルM20: 被災世帯数についてデータベースに登録されている値と突合せチェックする。
-                    ### セルN20: 被災事業所数についてデータベースに登録されている値と突合せチェックする。
-                    ### セルO20: 農家・漁家戸数, 床下浸水についてデータベースに登録されている値と突合せチェックする。
-                    ### セルP20: 農家・漁家戸数, 1cm〜49cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルQ20: 農家・漁家戸数, 50cm〜99cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルR20: 農家・漁家戸数, 1m以上・半壊についてデータベースに登録されている値と突合せチェックする。
-                    ### セルS20: 農家・漁家戸数, 全壊・流失についてデータベースに登録されている値と突合せチェックする。
-                    ### セルT20: 事業所従業者数, 床下浸水についてデータベースに登録されている値と突合せチェックする。
-                    ### セルU20: 事業所従業者数, 1cm〜49cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルV20: 事業所従業者数, 50cm〜99cmについてデータベースに登録されている値と突合せチェックする。
-                    ### セルW20: 事業所従業者数, 1m以上・半壊についてデータベースに登録されている値と突合せチェックする。
-                    ### セルX20: 事業所従業者数, 全壊・流失についてデータベースに登録されている値と突合せチェックする。
-                        
-                    ### セルY20: 事業所の産業区分についてデータベースに登録されている値と突合せチェックする。
-                    if ws_koeki[i].cell(row=j, column=25).value is None:
-                        pass
-                    else:
-                        if ws_koeki[i].cell(row=j, column=25).value not in list(industry_code_list) and \
-                            ws_koeki[i].cell(row=j, column=25).value not in list(industry_name_list) and \
-                            ws_koeki[i].cell(row=j, column=25).value not in list(industry_name_code_list):
-                            compare_NG_grid.append([ws_koeki[i].title, j, 25, MESSAGE[473][0], MESSAGE[473][1], MESSAGE[473][2], MESSAGE[473][3]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=25, msg=MESSAGE[473][3]+MESSAGE[473][4])
-                        else:
-                            compare_OK_grid.append([ws_koeki[i].title, j, 25, MESSAGE[473][0], MESSAGE[473][1], MESSAGE[473][2], MESSAGE[473][3]])
-                        
-                    ### セルZ20: 地下空間の利用形態についてデータベースに登録されている値と突合せチェックする。
-                    if ws_koeki[i].cell(row=j, column=26).value is None:
-                        pass
-                    else:
-                        if ws_koeki[i].cell(row=j, column=26).value not in list(usage_code_list) and \
-                            ws_koeki[i].cell(row=j, column=26).value not in list(usage_name_list) and \
-                            ws_koeki[i].cell(row=j, column=26).value not in list(usage_name_code_list):
-                            compare_NG_grid.append([ws_koeki[i].title, j, 26, MESSAGE[474][0], MESSAGE[474][1], MESSAGE[474][2], MESSAGE[474][3]])
-                            add_fill(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=26, fill=fill)
-                            add_comment(ws_koeki=ws_koeki[i], ws_result=ws_result[i], row=j, column=26, msg=MESSAGE[474][3]+MESSAGE[474][4])
-                        else:
-                            compare_OK_grid.append([ws_koeki[i].title, j, 26, MESSAGE[474][0], MESSAGE[474][1], MESSAGE[474][2], MESSAGE[474][3]])
-                        
-                    ### セルAA20: 備考についてデータベースに登録されている値と突合せチェックする。
+        if max_row[0] >= 9:
+            for j in range(9, max_row[0] + 1):
+                pass
+                ### セル[9:2]: 水害発生月についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:3]: 水害発生日についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:4]: 水害発生月についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:5]: 水害発生日についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:6]: 被害箇所_都道府県名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:7]: 被害箇所_都道府県コードについてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:8]: 被害箇所_市区町村名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:9]: 被害箇所_市区町村コードについてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:10]: 被害箇所_町丁名・大字名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:11]: 河川・海岸名・地区名_水系・沿岸名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:12]: 河川・海岸名・地区名_水系種別についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:13]: 河川・海岸名・地区名_河川・海岸名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:14]: 河川・海岸名・地区名_河川種別についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:15]: 工種区分についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:16]: 水害原因コード1についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:17]: 水害原因コード2についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:18]: 水害原因コード3についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:19]: 異常気象コードについてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:20]: 事業コードについてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:21]: 調査対象機関名称についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:22]: 被害金額_物的被害額(千円)についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:23]: 被害金額_営業停止に伴う売上減少額についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:24]: 被害金額_代替活動費(外注費)についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:25]: 被害金額_その他についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:26]: 被害金額_営業停止損失額合計(千円)についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:27]: 営業停止期間等_営業停止期間日についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:28]: 営業停止期間等_営業停止期間時間についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:29]: 営業停止期間等_停止数量についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:30]: 照会先_調査担当課名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:31]: 照会先_調査担当者名についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:32]: 照会先_電話番号についてデータベースに登録されている値と突合せチェックする。
+                ### セル[9:33]: 備考についてデータベースに登録されている値と突合せチェックする。
 
         #######################################################################
         ### ファイル入出力処理(6000)
@@ -2634,73 +1604,129 @@ def index_view(request):
         ### ログ出力処理(7000)
         #######################################################################
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 31/35.', 'DEBUG')
-        if len(require_NG_list) > 0 or \
-            len(require_NG_grid) > 0 or \
-            len(format_NG_list) > 0 or \
-            len(format_NG_grid) > 0 or \
-            len(range_NG_list) > 0 or \
-            len(range_NG_grid) > 0 or \
-            len(correlate_NG_list) > 0 or \
-            len(correlate_NG_grid) > 0 or \
-            len(compare_NG_list) > 0 or \
-            len(compare_NG_grid) > 0:
+        if len(require_NG) > 0 or \
+            len(format_NG) > 0 or \
+            len(range_NG) > 0 or \
+            len(correlate_NG) > 0 or \
+            len(compare_NG) > 0:
             print_log('[DEBUG] P0300KoekiUpload.index_view()関数 False', 'DEBUG')
         else:
             print_log('[DEBUG] P0300KoekiUpload.index_view()関数 True', 'DEBUG')
             
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 max_row = {}'.format(max_row), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(require_NG_list) = {}'.format(len(require_NG_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(format_NG_list) = {}'.format(len(format_NG_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(range_NG_list) = {}'.format(len(range_NG_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(correlate_NG_list) = {}'.format(len(correlate_NG_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(compare_NG_list) = {}'.format(len(compare_NG_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(require_OK_list) = {}'.format(len(require_OK_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(format_OK_list) = {}'.format(len(format_OK_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(range_OK_list) = {}'.format(len(range_OK_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(correlate_OK_list) = {}'.format(len(correlate_OK_list)), 'DEBUG')
-        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(compare_OK_list) = {}'.format(len(compare_OK_list)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(require_NG) = {}'.format(len(require_NG)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(format_NG) = {}'.format(len(format_NG)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(range_NG) = {}'.format(len(range_NG)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(correlate_NG) = {}'.format(len(correlate_NG)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(compare_NG) = {}'.format(len(compare_NG)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(require_OK) = {}'.format(len(require_OK)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(format_OK) = {}'.format(len(format_OK)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(range_OK) = {}'.format(len(range_OK)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(correlate_OK) = {}'.format(len(correlate_OK)), 'DEBUG')
+        print_log('[DEBUG] P0300KoekiUpload.index_view()関数 len(compare_OK) = {}'.format(len(compare_OK)), 'DEBUG')
         
         success_str = ''
-        if len(require_OK_list) > 0:
-            for i in range(len(require_OK_list)):
-                success_str = success_str+str(require_OK_list[i][0])+','+str(require_OK_list[i][1])+','+str(require_OK_list[i][2])+','+str(require_OK_list[i][3])+','+str(require_OK_list[i][4])+','+str(require_OK_list[i][5])+'\n'        
+        if len(require_OK) > 0:
+            for i in range(len(require_OK)):
+                ### success_str = success_str+str(require_OK_list[i][0])+','+str(require_OK_list[i][1])+','+str(require_OK_list[i][2])+','+str(require_OK_list[i][3])+','+str(require_OK_list[i][4])+','+str(require_OK_list[i][5])+'\n'        
+                success_str = success_str + \
+                    str(require_OK[i][0]) + ',' + \
+                    str(require_OK[i][1]) + ',' + \
+                    str(require_OK[i][2]) + ',' + \
+                    str(MESSAGE[require_OK[i][3]][0]) + ',' + \
+                    str(MESSAGE[require_OK[i][3]][1]) + ',' + \
+                    str(MESSAGE[require_OK[i][3]][2]) + '\n'        
         
-        if len(format_OK_list) > 0:
-            for i in range(len(format_OK_list)):
-                success_str = success_str+str(format_OK_list[i][0])+','+str(format_OK_list[i][1])+','+str(format_OK_list[i][2])+','+str(format_OK_list[i][3])+','+str(format_OK_list[i][4])+','+str(format_OK_list[i][5])+'\n'        
+        if len(format_OK) > 0:
+            for i in range(len(format_OK)):
+                success_str = success_str + \
+                    str(format_OK[i][0]) + ',' + \
+                    str(format_OK[i][1]) + ',' + \
+                    str(format_OK[i][2]) + ',' + \
+                    str(MESSAGE[format_OK[i][3]][0]) + ',' + \
+                    str(MESSAGE[format_OK[i][3]][1]) + ',' + \
+                    str(MESSAGE[format_OK[i][3]][2]) + '\n'        
 
-        if len(range_OK_list) > 0:
-            for i in range(len(range_OK_list)):
-                success_str = success_str+str(range_OK_list[i][0])+','+str(range_OK_list[i][1])+','+str(range_OK_list[i][2])+','+str(range_OK_list[i][3])+','+str(range_OK_list[i][4])+','+str(range_OK_list[i][5])+'\n'        
+        if len(range_OK) > 0:
+            for i in range(len(range_OK)):
+                success_str = success_str + \
+                    str(range_OK[i][0]) + ',' + \
+                    str(range_OK[i][1]) + ',' + \
+                    str(range_OK[i][2]) + ',' + \
+                    str(MESSAGE[range_OK[i][3]][0]) + ',' + \
+                    str(MESSAGE[range_OK[i][3]][1]) + ',' + \
+                    str(MESSAGE[range_OK[i][3]][2]) + '\n'        
 
-        if len(correlate_OK_list) > 0:
-            for i in range(len(correlate_OK_list)):
-                success_str = success_str+str(correlate_OK_list[i][0])+','+str(correlate_OK_list[i][1])+','+str(correlate_OK_list[i][2])+','+str(correlate_OK_list[i][3])+','+str(correlate_OK_list[i][4])+','+str(correlate_OK_list[i][5])+'\n'        
+        if len(correlate_OK) > 0:
+            for i in range(len(correlate_OK)):
+                success_str = success_str + \
+                    str(correlate_OK[i][0]) + ',' + \
+                    str(correlate_OK[i][1]) + ',' + \
+                    str(correlate_OK[i][2]) + ',' + \
+                    str(MESSAGE[correlate_OK[i][3]][0]) + ',' + \
+                    str(MESSAGE[correlate_OK[i][3]][1]) + ',' + \
+                    str(MESSAGE[correlate_OK[i][3]][2]) + '\n'        
 
-        if len(compare_OK_list) > 0:
-            for i in range(len(compare_OK_list)):
-                success_str = success_str+str(compare_OK_list[i][0])+','+str(compare_OK_list[i][1])+','+str(compare_OK_list[i][2])+','+str(compare_OK_list[i][3])+','+str(compare_OK_list[i][4])+','+str(compare_OK_list[i][5])+'\n'        
+        if len(compare_OK) > 0:
+            for i in range(len(compare_OK)):
+                success_str = success_str + \
+                    str(compare_OK[i][0]) + ',' + \
+                    str(compare_OK[i][1]) + ',' + \
+                    str(compare_OK[i][2]) + ',' + \
+                    str(MESSAGE[compare_OK[i][3]][0]) + ',' + \
+                    str(MESSAGE[compare_OK[i][3]][1]) + ',' + \
+                    str(MESSAGE[compare_OK[i][3]][2]) + '\n'        
 
         failure_str = ''
-        if len(require_NG_list) > 0:
-            for i in range(len(require_NG_list)):
-                failure_str = failure_str+str(require_NG_list[i][0])+','+str(require_NG_list[i][1])+','+str(require_NG_list[i][2])+','+str(require_NG_list[i][3])+','+str(require_NG_list[i][4])+','+str(require_NG_list[i][5])+'\n'        
+        if len(require_NG) > 0:
+            for i in range(len(require_NG)):
+                failure_str = failure_str + \
+                    str(require_NG[i][0]) + ',' + \
+                    str(require_NG[i][1]) + ',' + \
+                    str(require_NG[i][2]) + ',' + \
+                    str(MESSAGE[require_NG[i][3]][0]) + ',' + \
+                    str(MESSAGE[require_NG[i][3]][1]) + ',' + \
+                    str(MESSAGE[require_NG[i][3]][2]) + '\n'        
         
-        if len(format_NG_list) > 0:
-            for i in range(len(format_NG_list)):
-                failure_str = failure_str+str(format_NG_list[i][0])+','+str(format_NG_list[i][1])+','+str(format_NG_list[i][2])+','+str(format_NG_list[i][3])+','+str(format_NG_list[i][4])+','+str(format_NG_list[i][5])+'\n'        
+        if len(format_NG) > 0:
+            for i in range(len(format_NG)):
+                failure_str = failure_str + \
+                    str(format_NG[i][0]) + ',' + \
+                    str(format_NG[i][1]) + ',' + \
+                    str(format_NG[i][2]) + ',' + \
+                    str(MESSAGE[format_NG[i][3]][0]) + ',' + \
+                    str(MESSAGE[format_NG[i][3]][1]) + ',' + \
+                    str(MESSAGE[format_NG[i][3]][2]) + '\n'        
 
-        if len(range_NG_list) > 0:
-            for i in range(len(range_NG_list)):
-                failure_str = failure_str+str(range_NG_list[i][0])+','+str(range_NG_list[i][1])+','+str(range_NG_list[i][2])+','+str(range_NG_list[i][3])+','+str(range_NG_list[i][4])+','+str(range_NG_list[i][5])+'\n'        
+        if len(range_NG) > 0:
+            for i in range(len(range_NG)):
+                failure_str = failure_str + \
+                    str(range_NG[i][0]) + ',' + \
+                    str(range_NG[i][1]) + ',' + \
+                    str(range_NG[i][2]) + ',' + \
+                    str(MESSAGE[range_NG[i][3]][0]) + ',' + \
+                    str(MESSAGE[range_NG[i][3]][1]) + ',' + \
+                    str(MESSAGE[range_NG[i][3]][2]) + '\n'        
 
-        if len(correlate_NG_list) > 0:
-            for i in range(len(correlate_NG_list)):
-                failure_str = failure_str+str(correlate_NG_list[i][0])+','+str(correlate_NG_list[i][1])+','+str(correlate_NG_list[i][2])+','+str(correlate_NG_list[i][3])+','+str(correlate_NG_list[i][4])+','+str(correlate_NG_list[i][5])+'\n'        
+        if len(correlate_NG) > 0:
+            for i in range(len(correlate_NG)):
+                failure_str = failure_str + \
+                    str(correlate_NG[i][0]) + ',' + \
+                    str(correlate_NG[i][1]) + ',' + \
+                    str(correlate_NG[i][2]) + ',' + \
+                    str(MESSAGE[correlate_NG[i][3]][0]) + ',' + \
+                    str(MESSAGE[correlate_NG[i][3]][1]) + ',' + \
+                    str(MESSAGE[correlate_NG[i][3]][2]) + '\n'        
 
-        if len(compare_NG_list) > 0:
-            for i in range(len(compare_NG_list)):
-                failure_str = failure_str+str(compare_NG_list[i][0])+','+str(compare_NG_list[i][1])+','+str(compare_NG_list[i][2])+','+str(compare_NG_list[i][3])+','+str(compare_NG_list[i][4])+','+str(compare_NG_list[i][5])+'\n'        
+        if len(compare_NG) > 0:
+            for i in range(len(compare_NG)):
+                failure_str = failure_str + \
+                    str(compare_NG[i][0]) + ',' + \
+                    str(compare_NG[i][1]) + ',' + \
+                    str(compare_NG[i][2]) + ',' + \
+                    str(MESSAGE[compare_NG[i][3]][0]) + ',' + \
+                    str(MESSAGE[compare_NG[i][3]][1]) + ',' + \
+                    str(MESSAGE[compare_NG[i][3]][2]) + '\n'        
             
         #######################################################################
         ### レスポンスセット処理(8000)
@@ -2709,16 +1735,11 @@ def index_view(request):
         ### ※ネストを浅くするために、処理対象外の場合、終了させる。
         #######################################################################
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 32/35.', 'DEBUG')
-        if len(require_NG_list) > 0 or \
-            len(require_NG_grid) > 0 or \
-            len(format_NG_list) > 0 or \
-            len(format_NG_grid) > 0 or \
-            len(range_NG_list) > 0 or \
-            len(range_NG_grid) > 0 or \
-            len(correlate_NG_list) > 0 or \
-            len(correlate_NG_grid) > 0 or \
-            len(compare_NG_list) > 0 or \
-            len(compare_NG_grid) > 0:
+        if len(require_NG) > 0 or \
+            len(format_NG) > 0 or \
+            len(range_NG) > 0 or \
+            len(correlate_NG) > 0 or \
+            len(compare_NG) > 0:
 
             connection_cursor = connection.cursor()
             try:
@@ -2726,7 +1747,7 @@ def index_view(request):
                 ###############################################################
                 ### 市区町村をアップロード処理の単位とする。
                 ### 当該市区町村の全データを入れ替える。
-                ### 既存の市区町村のSUIGAI、IPPAN、IPPAN_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
+                ### 既存の市区町村のKOEKI_FILE、KOEKI、KOEKI_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
                 ### ※入力チェックでエラーが発見された場合、
                 ###############################################################
                 connection_cursor.execute("""
@@ -2867,16 +1888,11 @@ def index_view(request):
             ### src/P0300KoekiUpload/templates/P0300KoekiUpload/fail.htmlを使用する。
             template = loader.get_template('P0300KoekiUpload/fail.html')
             context = {
-                'require_NG_list': require_NG_list,
-                'require_NG_grid': require_NG_grid,
-                'format_NG_list': format_NG_list,
-                'format_NG_grid': format_NG_grid,
-                'range_NG_list': range_NG_list,
-                'range_NG_grid': range_NG_grid,
-                'correlate_NG_list': correlate_NG_list,
-                'correlate_NG_grid': correlate_NG_grid,
-                'compare_NG_list': compare_NG_list,
-                'compare_NG_grid': compare_NG_grid,
+                'require_NG': require_NG,
+                'format_NG': format_NG,
+                'range_NG': range_NG,
+                'correlate_NG': correlate_NG,
+                'compare_NG': compare_NG,
                 'output_file_path': output_file_path,
             }
             print_log('[INFO] P0300KoekiUpload.index_view()関数が正常終了しました。', 'INFO')
@@ -2897,7 +1913,7 @@ def index_view(request):
             ###################################################################
             ### 市区町村をアップロード処理の単位とする。
             ### 当該市区町村の全データを入れ替える。
-            ### 既存の市区町村のSUIGAI、IPPAN、IPPAN_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
+            ### 既存の市区町村のKOEKI_FILE、KOEKI、KOEKI_SUMMARYのデータは、削除日時をセットして、削除済の扱いとする。
             ### ※入力チェックでエラーが発見されなかった場合、
             ###################################################################
             connection_cursor.execute("""
@@ -3233,11 +2249,9 @@ def index_view(request):
                         upload_file_path, ### upload_file_path 
                         upload_file_name, ### upload_file_name 
                     ])
-            ### transaction.commit()
             connection_cursor.execute("""COMMIT""", [])        
         except:
             print_log('[ERROR] P0300KoekiUpload.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-            ### connection_cursor.rollback()
             connection_cursor.execute("""ROLLBACK""", [])
         finally:
             connection_cursor.close()
@@ -3249,7 +2263,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300KoekiUpload.index_view()関数 STEP 35/35.', 'DEBUG')
         ### src/P0300KoekiUpload/templates/P0300KoekiUpload/success.htmlを使用する。
-        ### 上記はテンプレートファイルの場所がわからなくなることがあるためのメモである。
         template = loader.get_template('P0300KoekiUpload/success.html')
         context = {}
         print_log('[INFO] P0300KoekiUpload.index_view()関数が正常終了しました。', 'INFO')
@@ -3260,36 +2273,3 @@ def index_view(request):
         print_log('[ERROR] P0300KoekiUpload.index_view()関数でエラーが発生しました。', 'ERROR')
         print_log('[ERROR] P0300KoekiUpload.index_viwe()関数が異常終了しました。', 'ERROR')
         return render(request, 'error.html')
-
-###############################################################################
-### 関数名：ippan_chosa_result_view
-### urlpattern：path('ippan_chosa_result/<int:excel_id>/', views.ippan_chosa_result_view, name='ippan_chosa_result_view')
-### template：
-###############################################################################
-### @login_required(None, login_url='/P0100Login/')
-### def ippan_chosa_result_view(request, excel_id):
-###     try:
-###         #######################################################################
-###         ### 引数チェック処理(0000)
-###         ### ブラウザからのリクエストと引数をチェックする。
-###         #######################################################################
-###         reset_log()
-###         print_log('[INFO] P0300KoekiUpload.ippan_chosa_result_view()関数が開始しました。', 'INFO')
-###         print_log('[DEBUG] P0300KoekiUpload.ippan_chosa_result_view()関数 request = {}'.format(request.method), 'DEBUG')
-###         print_log('[DEBUG] P0300KoekiUpload.ippan_chosa_result_view()関数 STEP 1/1.', 'DEBUG')
-###         result_file_path = 'static/ippan_chosa_result2.xlsx'
-###         wb = openpyxl.load_workbook(result_file_path)
-###         #######################################################################
-###         ### レスポンスセット処理(0010)
-###         ### コンテキストを設定して、レスポンスをブラウザに戻す。
-###         #######################################################################
-###         print_log('[INFO] P0300KoekiUpload.ippan_chosa_result_view()関数が正常終了しました。', 'INFO')
-###         response = HttpResponse(content=save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
-###         response['Content-Disposition'] = 'attachment; filename="ippan_chosa_result2.xlsx"'
-###         return response
-###     except:
-###         print_log('[ERROR] P0300KoekiUpload.ippan_chosa_result_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
-###         print_log('[ERROR] P0300KoekiUpload.ippan_chosa_result_view()関数でエラーが発生しました。', 'ERROR')
-###         print_log('[ERROR] P0300KoekiUpload.ippan_chosa_result_view()関数が異常終了しました。', 'ERROR')
-###         return render(request, 'error.html')
-    

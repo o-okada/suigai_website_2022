@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="">
     <meta name="description" content="">
-    <title>自動集計・自動検証の状況 | 水害統計オンラインサイト</title>
+    <title>自動集計・自動検証画面 | 水害統計オンラインサイト</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -120,8 +120,8 @@
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村担当者用</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県担当者用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/403/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/404/">公共土木施設補助事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/405/">公益事業等調査票</a>
@@ -133,7 +133,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300ExcelUpload/">一般資産調査票</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
                     <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設補助事業調査票</a>
@@ -154,7 +154,7 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">A01<br>調査員用アップロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">A01<br>一般資産調査票アップロード &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">A02<br>データ検証 &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">A03<br>差分検証 &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">A04<br>按分処理 &raquo;</th>
@@ -168,7 +168,7 @@
                         <!-- BEGIN 成功 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">成功</th>
-                            <!-- A01: 調査員用アップロード -->
+                            <!-- A01: 一般資産調査票アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A01_success_list %}
@@ -270,7 +270,7 @@
                         <!-- BEGIN 失敗 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">失敗</th>
-                            <!-- A01: 調査員用アップロード -->
+                            <!-- A01: 一般資産調査票アップロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_A01_failure_list %}
@@ -372,7 +372,7 @@
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">ファイル数</th>
-                            <!-- A01: 調査員用アップロード -->
+                            <!-- A01: 一般資産調査票アップロード -->
                             <td class="text-center">{{ trigger_A01_success_count }} / {{ trigger_A01_failure_count }}</td>
                             <!-- A02: データ検証 -->
                             <td class="text-center">{{ trigger_A02_success_count }} / {{ trigger_A02_failure_count }}</td>
@@ -589,12 +589,12 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center text-truncate" style="width:11%;">#</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">N01<br>調査員用ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">O01<br>市区町村用ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">P01<br>都道府県用ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">Q01<br>地方単独事業ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">R01<br>補助事業ダウンロード &raquo;</th>
-                            <th scope="col" class="text-center text-truncate" style="width:11%;">S01<br>公益事業等ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">N01<br>一般資産調査票_調査員用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">O01<br>一般資産調査票_市区町村用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">P01<br>一般資産調査票_都道府県用ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">Q01<br>公共土木施設地方単独事業調査票ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">R01<br>公共土木施設補助事業調査票ダウンロード &raquo;</th>
+                            <th scope="col" class="text-center text-truncate" style="width:11%;">S01<br>公益事業等調査票ダウンロード &raquo;</th>
                             <th scope="col" class="text-center text-truncate" style="width:11%;"></th>
                             <th scope="col" class="text-center text-truncate" style="width:12%;"></th>
                         </tr>
@@ -603,7 +603,7 @@
                         <!-- BEGIN 成功 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">成功</th>
-                            <!-- N01: 調査員用ダウンロード -->
+                            <!-- N01: 一般資産調査票_調査員用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_N01_success_list %}
@@ -615,7 +615,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- O01: 市区町村用ダウンロード -->
+                            <!-- O01: 一般資産調査票_市区町村用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_O01_success_list %}
@@ -627,7 +627,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- P01: 都道府県用ダウンロード -->
+                            <!-- P01: 一般資産調査票_都道府県用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_P01_success_list %}
@@ -639,7 +639,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <!-- Q01: 公共土木施設地方単独事業調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_Q01_success_list %}
@@ -651,7 +651,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- R01: 補助事業ダウンロード -->
+                            <!-- R01: 公共土木施設補助事業調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_R01_success_list %}
@@ -663,7 +663,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- S01: 公益事業等ダウンロード -->
+                            <!-- S01: 公益事業等調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_S01_success_list %}
@@ -683,7 +683,7 @@
                         <!-- BEGIN 失敗 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">失敗</th>
-                            <!-- N01: 調査員用ダウンロード -->
+                            <!-- N01: 一般資産調査票_調査員用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_N01_failure_list %}
@@ -695,7 +695,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- O01: 市区町村用ダウンロード -->
+                            <!-- O01: 一般資産調査票_市区町村用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_O01_failure_list %}
@@ -707,7 +707,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- P01: 都道府県用ダウンロード -->
+                            <!-- P01: 一般資産調査票_都道府県用ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_P01_failure_list %}
@@ -719,7 +719,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <!-- Q01: 公共土木施設地方単独事業調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_Q01_failure_list %}
@@ -731,7 +731,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- R01: 補助事業ダウンロード -->
+                            <!-- R01: 公共土木施設補助事業調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_R01_failure_list %}
@@ -743,7 +743,7 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <!-- S01: 公益事業等ダウンロード -->
+                            <!-- S01: 公益事業等調査票ダウンロード -->
                             <td>
                                 <ul class="list-unstyled text-start">
                                     {% for trigger in trigger_S01_failure_list %}
@@ -763,17 +763,17 @@
                         <!-- BEGIN ファイル数 or シート数 -->
                         <tr>
                             <th scope="row" class="text-center text-truncate">ファイル数</th>
-                            <!-- N01: 調査員用ダウンロード -->
+                            <!-- N01: 一般資産調査票_調査員用ダウンロード -->
                             <td class="text-center">{{ trigger_N01_success_count }} / {{ trigger_N01_failure_count }}</td>
-                            <!-- O01: 市区町村用ダウンロード -->
+                            <!-- O01: 一般資産調査票_市区町村用ダウンロード -->
                             <td class="text-center">{{ trigger_O01_success_count }} / {{ trigger_O01_failure_count }}</td>
-                            <!-- P01: 都道府県用ダウンロード -->
+                            <!-- P01: 一般資産調査票_都道府県用ダウンロード -->
                             <td class="text-center">{{ trigger_P01_success_count }} / {{ trigger_P01_failure_count }}</td>
-                            <!-- Q01: 地方単独事業ダウンロード -->
+                            <!-- Q01: 公共土木施設地方単独事業調査票ダウンロード -->
                             <td class="text-center">{{ trigger_Q01_success_count }} / {{ trigger_Q01_failure_count }}</td>
-                            <!-- R01: 補助事業ダウンロード -->
+                            <!-- R01: 公共土木施設補助事業調査票ダウンロード -->
                             <td class="text-center">{{ trigger_R01_success_count }} / {{ trigger_R01_failure_count }}</td>
-                            <!-- S01: 公益事業等ダウンロード -->
+                            <!-- S01: 公益事業等調査票ダウンロード -->
                             <td class="text-center">{{ trigger_S01_success_count }} / {{ trigger_S01_failure_count }}</td>
                             <td></td>
                             <td></td>

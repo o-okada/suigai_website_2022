@@ -3,9 +3,6 @@
 ###############################################################################
 ### ファイル名：P0100File/views.py
 ### ファイル管理
-### 関数：index_view
-### 関数：type_view
-### 関数：type_ken_view
 ###############################################################################
 
 ###############################################################################
@@ -66,9 +63,9 @@ from P0000Common.models import FARMER_FISHER_RATE      ### 6010: 農漁家被害
 
 from P0000Common.models import AREA                    ### 7000: 入力データ_水害区域
 from P0000Common.models import WEATHER                 ### 7010: 入力データ_異常気象
-from P0000Common.models import SUIGAI                  ### 7020: 入力データ_ヘッダ部分
-from P0000Common.models import IPPAN                   ### 7030: 入力データ_一覧表部分
-from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一覧表部分
+from P0000Common.models import SUIGAI                  ### 7020: 入力データ_一般資産調査票_調査員用_ヘッダ部分
+from P0000Common.models import IPPAN                   ### 7030: 入力データ_一般資産調査票_調査員用_一覧表部分
+from P0000Common.models import IPPAN_VIEW              ### 7040: ビューデータ_一般資産調査票_調査員用_一覧表部分
 from P0000Common.models import CHITAN_FILE             ### 7050: 入力データ_公共土木施設調査票_地方単独事業_ファイル部分
 from P0000Common.models import CHITAN                  ### 7060: 入力データ_公共土木施設調査票_地方単独事業_一覧表部分
 from P0000Common.models import HOJO_FILE               ### 7070: 入力データ_公共土木施設調査票_補助事業_ファイル部分
@@ -76,12 +73,13 @@ from P0000Common.models import HOJO                    ### 7080: 入力データ
 from P0000Common.models import KOEKI_FILE              ### 7090: 入力データ_公益事業等調査票_ファイル部分
 from P0000Common.models import KOEKI                   ### 7100: 入力データ_公益事業等調査票_一覧表部分
 
-from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_一覧表部分
+from P0000Common.models import IPPAN_SUMMARY           ### 8000: 集計データ_一般資産調査票_調査員用_一覧表部分
 
 from P0000Common.models import ACTION                  ### 10000: アクション
 from P0000Common.models import STATUS                  ### 10010: 状態
 from P0000Common.models import TRIGGER                 ### 10020: トリガーメッセージ
 
+from P0000Common.common import get_all_log
 from P0000Common.common import get_debug_log
 from P0000Common.common import get_error_log
 from P0000Common.common import get_info_log
@@ -93,6 +91,7 @@ from P0000Common.common import reset_log
 ### 関数名：index_view
 ### urlpattern：path('', views.index_view, name='index_view')
 ### template：P0100File/type.html
+### template：P0100File/error.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def index_view(request):
@@ -113,6 +112,7 @@ def index_view(request):
         print_log('[DEBUG] P0100File.index_view()関数 STEP 2/2.', 'DEBUG')
         template = loader.get_template('P0100File/index.html')
         context = {
+            'all_log': get_all_log(), 
             'info_log': get_info_log(), 
             'debug_log': get_debug_log(), 
             'warn_log': get_warn_log(), 
@@ -120,17 +120,19 @@ def index_view(request):
         }
         print_log('[INFO] P0100File.index_view()関数が正常終了しました。', 'INFO')
         return HttpResponse(template.render(context, request))
+    
     except:
         print_log('[ERROR] P0100File.index_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.index_view()関数でエラーが発生しました。', 'ERROR')
-        print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
         template = loader.get_template('P0100File/error.html')
         context = {
+            'all_log': get_all_log(), 
             'info_log': get_info_log(), 
             'debug_log': get_debug_log(), 
             'warn_log': get_warn_log(), 
             'error_log': get_error_log(), 
         }
+        print_log('[ERROR] P0100File.index_view()関数が異常終了しました。', 'ERROR')
         ### return render(request, 'error.html')
         return HttpResponse(template.render(context, request))
 
@@ -146,7 +148,7 @@ def type_view(request, type_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        ### reset_log()
+        reset_log()
         print_log('[INFO] P0100File.type_view()関数が開始しました。', 'INFO')
         print_log('[DEBUG] P0100File.type_view()関数 request = {}'.format(request.method), 'DEBUG')
         print_log('[DEBUG] P0100File.type_view()関数 type_code = {}'.format(type_code), 'DEBUG')
@@ -288,13 +290,23 @@ def type_view(request, type_code):
     except:
         print_log('[ERROR] P0100File.type_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.type_view()関数でエラーが発生しました。', 'ERROR')
+        template = loader.get_template('P0100File/error.html')
+        context = {
+            'all_log': get_all_log(), 
+            'info_log': get_info_log(), 
+            'debug_log': get_debug_log(), 
+            'warn_log': get_warn_log(), 
+            'error_log': get_error_log(), 
+        }
         print_log('[ERROR] P0100File.type_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+        ### return render(request, 'error.html')
+        return HttpResponse(template.render(context, request))
 
 ###############################################################################
 ### 関数名：type_ken_view
 ### urlpattern：path('type/<slug:type_code>/ken/<slug:ken_code>/', views.type_ken_view, name='type_ken_view')
 ### template：P0100File/ken.html
+### template：P0100File/error.html
 ###############################################################################
 @login_required(None, login_url='/P0100Login/')
 def type_ken_view(request, type_code, ken_code):
@@ -303,7 +315,7 @@ def type_ken_view(request, type_code, ken_code):
         ### 引数チェック処理(0000)
         ### ブラウザからのリクエストと引数をチェックする。
         #######################################################################
-        ### reset_log()
+        reset_log()
         print_log('[INFO] P0100File.type_ken_view()関数が開始しました。', 'INFO')
         print_log('[DEBUG] P0100File.type_ken_view()関数 request = {}'.format(request.method), 'DEBUG')
         print_log('[DEBUG] P0100File.type_ken_view()関数 type_code = {}'.format(type_code), 'DEBUG')
@@ -444,5 +456,14 @@ def type_ken_view(request, type_code, ken_code):
     except:
         print_log('[ERROR] P0100File.type_ken_view()関数 {}'.format(sys.exc_info()[0]), 'ERROR')
         print_log('[ERROR] P0100File.type_ken_view()関数でエラーが発生しました。', 'ERROR')
+        template = loader.get_template('P0100File/error.html')
+        context = {
+            'all_log': get_all_log(), 
+            'info_log': get_info_log(), 
+            'debug_log': get_debug_log(), 
+            'warn_log': get_warn_log(), 
+            'error_log': get_error_log(), 
+        }
         print_log('[ERROR] P0100File.type_ken_view()関数が異常終了しました。', 'ERROR')
-        return render(request, 'error.html')
+        ### return render(request, 'error.html')
+        return HttpResponse(template.render(context, request))

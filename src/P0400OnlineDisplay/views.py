@@ -150,7 +150,7 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
         ken_list = []
         city_list = []
         
-        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(KEN_CODE AS INTEGER)""", [])
+        ken_list = KEN.objects.raw("""SELECT * FROM KEN ORDER BY CAST(ken_code AS INTEGER)""", [])
         
         if ken_code == "0":
             city_list = CITY.objects.raw("""
@@ -590,8 +590,8 @@ def category1_category2_ken_city_view(request, category_code1, category_code2, k
                     KE1.ken_name AS ken_name, 
                     TO_CHAR(timezone('JST', AR1.committed_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS committed_at, 
                     TO_CHAR(timezone('JST', AR1.deleted_at::timestamptz), 'yyyy/mm/dd HH24:MI') AS deleted_at, 
-                    AR1.file_path AS file_path, 
-                    AR1.file_name AS file_name, 
+                    AR1.upload_file_path AS upload_file_path, 
+                    AR1.upload_file_name AS upload_file_name, 
                     AR1.action_code AS action_code, 
                     AC1.action_name AS action_name, 
                     AR1.status_code AS status_code, 

@@ -9,7 +9,7 @@
     <meta name="viewport" content="">
     <meta name="description" content="">
     {% if type_code == "ippan" %}
-    <title>一般資産調査員調査票 | ファイル画面 | 水害統計オンラインサイト</title>
+    <title>一般資産調査票 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "area" %}
     <title>水害区域図 | ファイル画面 | 水害統計オンラインサイト</title>
     {% elif type_code == "chitan" %}
@@ -116,7 +116,7 @@
         <!-- BEGIN パンくずリスト 列 -->
         <div class="col-6 text-start">
             {% if type_code == "ippan" %}
-            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査員調査票 /</h5>
+            <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 一般資産調査票 /</h5>
             {% elif type_code == "area" %}
             <h5><a class="cl-bread" href="/P0100File/">TOP</a> / 水害区域図 /</h5>
             {% elif type_code == "chitan" %}
@@ -135,9 +135,9 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ダウンロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査員調査票</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産市区町村調査票</a>
-                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産都道府県調査票</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/400/">一般資産調査票_調査員用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/401/">一般資産調査票_市区町村用</a>
+                    <a class="dropdown-item" href="/P0200ExcelDownload/data_type/402/">一般資産調査票_都道府県用</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/403/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/404/">公共土木施設補助事業調査票</a>
                     <a class="dropdown-item" href="/P0200ExcelDownload/data_type/405/">公益事業等調査票</a>
@@ -149,7 +149,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">アップロード</button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査員調査票</a>
+                    <a class="dropdown-item" href="/P0300IppanUpload/">一般資産調査票</a>
                     <a class="dropdown-item" href="/P0300AreaUpload/">水害区域図</a>
                     <a class="dropdown-item" href="/P0300ChitanUpload/">公共土木施設地方単独事業調査票</a>
                     <a class="dropdown-item" href="/P0300HojoUpload/">公共土木施設補助事業調査票</a>

@@ -450,30 +450,6 @@ def convert_empty_to_none(arg):
 
 ###############################################################################
 ### 関数名：add_comment
-### コメントをセルにセットする。
-###############################################################################
-### def add_comment(ws_ippan, ws_result, row, column, msg):
-###     if ws_ippan.cell(row=row, column=column).comment is None:
-###         ws_ippan.cell(row=row, column=column).comment = Comment(msg, '')
-###     else:
-###         ws_ippan.cell(row=row, column=column).comment = Comment(str(ws_ippan.cell(row=row, column=column).comment.text) + msg, '')
-###     if ws_result.cell(row=row, column=column).comment is None:
-###         ws_result.cell(row=row, column=column).comment = Comment(msg, '')
-###     else:
-###         ws_result.cell(row=row, column=column).comment = Comment(str(ws_result.cell(row=row, column=column).comment.text) + msg, '')
-###     return True    
-
-###############################################################################
-### 関数名：add_fill
-### 背景をセルにセットする。
-###############################################################################
-### def add_fill(ws_ippan, ws_result, row, column, fill):
-###     ws_ippan.cell(row=row, column=column).fill = fill
-###     ws_result.cell(row=row, column=column).fill = fill
-###     return True
-
-###############################################################################
-### 関数名：add_comment
 ### 背景をセルにセットする。
 ### コメントをセルにセットする。
 ###############################################################################
@@ -519,26 +495,34 @@ def index_view(request):
         ### チェック結果を格納するために局所変数をセットする。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 2/35.', 'DEBUG')
+        ### 必須チェックの結果を格納する
         require_OK_list = []
-        require_OK_grid = []
-        format_OK_list = []
-        format_OK_grid = []
-        range_OK_list = []
-        range_OK_grid = []
-        correlate_OK_list = []
-        correlate_OK_grid = []
-        compare_OK_list = []
-        compare_OK_grid = []
-
         require_NG_list = []
+        require_OK_grid = []
         require_NG_grid = []
+
+        ### 形式チェックの結果を格納する
+        format_OK_list = []
         format_NG_list = []
+        format_OK_grid = []
         format_NG_grid = []
+
+        ### 範囲チェックの結果を格納する
+        range_OK_list = []
         range_NG_list = []
+        range_OK_grid = []
         range_NG_grid = []
+
+        ### 相関チェックの結果を格納する
+        correlate_OK_list = []
         correlate_NG_list = []
+        correlate_OK_grid = []
         correlate_NG_grid = []
+
+        ### 突合せチェックの結果を格納する
+        compare_OK_list = []
         compare_NG_list = []
+        compare_OK_grid = []
         compare_NG_grid = []
     
         #######################################################################
@@ -757,7 +741,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 10/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 7行目
             ### セル[7:2]: 都道府県に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=7, column=2).value is None:
                 add_comment(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=2, fill=fill, com_id=0)
@@ -792,11 +775,11 @@ def index_view(request):
             ### セル[7:8]: 水害原因3に値がセットされていることをチェックする。
                 
             ### セル[7:9]: 水害区域番号に値がセットされていることをチェックする。
-            if ws_ippan[i].cell(row=7, column=9).value is None:
-                add_comment(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill, com_id=7)
-                require_NG_list.append([ws_ippan[i].title, 7, 9, 7])
-            else:
-                require_OK_list.append([ws_ippan[i].title, 7, 9, 7])
+            ### if ws_ippan[i].cell(row=7, column=9).value is None:
+            ###     add_comment(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill, com_id=7)
+            ###     require_NG_list.append([ws_ippan[i].title, 7, 9, 7])
+            ### else:
+            ###     require_OK_list.append([ws_ippan[i].title, 7, 9, 7])
     
         #######################################################################
         ### EXCELセルデータ必須チェック処理（1010）
@@ -806,7 +789,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 11/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 10行目
             ### セル[10:2]: 水系・沿岸名に値がセットされていることをチェックする。
             if ws_ippan[i].cell(row=10, column=2).value is None:
                 add_comment(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=10, column=2, fill=fill, com_id=8)
@@ -844,18 +826,20 @@ def index_view(request):
     
         #######################################################################
         ### EXCELセルデータ必須チェック処理（1020）
-        ### (1)セルB14からセルJ14について、必須項目に値がセットされていることをチェックする。
+        ### (1)セル[14:2]からセル[14:10]について、必須項目に値がセットされていることをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 12/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
-            ### 14行目
             ### セル[14:2]: 水害区域面積の宅地に値がセットされていることをチェックする。
             ### セル[14:3]: 水害区域面積の農地に値がセットされていることをチェックする。
             ### セル[14:4]: 水害区域面積の地下に値がセットされていることをチェックする。
+            ### セル[14:5]: 
             ### セル[14:6]: 工種に値がセットされていることをチェックする。
+            ### セル[14:7]: 
             ### セル[14:8]: 農作物被害額に値がセットされていることをチェックする。
+            ### セル[14:9]: 
             ### セル[14:10]: 異常気象コードに値がセットされていることをチェックする。
     
         #######################################################################
@@ -927,14 +911,12 @@ def index_view(request):
         ### (1)セル[7:2]からセル[7:9]について形式が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         ### 形式チェックでは、値がセットされている場合のみチェックを行う。
         ### 必須チェックは別途必須チェックで行うためである。
         #######################################################################
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 14/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 7行目
             ### セル[7:2]: 都道府県について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=7, column=2).value is None:
                 pass
@@ -1011,20 +993,18 @@ def index_view(request):
             else:
                 if split_name_code(ws_ippan[i].cell(row=7, column=9).value)[-1].isdecimal() == False:
                     add_comment(ws_ippan=ws_ippan[i], ws_result=ws_result[i], row=7, column=9, fill=fill, com_id=107)
-                    format_NG_list.append([ws_ippan[i].title, 7, 9, MESSAGE[107][0], 107])
+                    format_NG_list.append([ws_ippan[i].title, 7, 9, 107])
                 else:
-                    format_OK_list.append([ws_ippan[i].title, 7, 9, MESSAGE[107][0], 107])
+                    format_OK_list.append([ws_ippan[i].title, 7, 9, 107])
     
         #######################################################################
         ### EXCELセルデータ形式チェック処理（2010）
         ### (1)セル[10:2]からセル[10:6]について形式が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 15/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 10行目
             ### セル[10:2]: 水系・沿岸名について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=10, column=2).value is None:
                 pass
@@ -1080,11 +1060,9 @@ def index_view(request):
         ### (1)セル[14:2]からセル[14:10]について形式が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 16/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 14行目
             ### セル[14:2]: 水害区域面積の宅地について形式が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=2).value is None:
                 pass
@@ -1154,7 +1132,6 @@ def index_view(request):
         ### (1)セル[20:2]からセル[20:27]について形式が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: is_zenkoku関数はダミーである。処理を記述すること。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 17/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
@@ -1442,7 +1419,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 18/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
-            ### 7行目
             ### セル[7:2]: 都道府県について範囲が正しいことをチェックする。
             ### セル[7:3]: 市区町村について範囲が正しいことをチェックする。
             ### セル[7:4]: 水害発生月日について範囲が正しいことをチェックする。
@@ -1460,7 +1436,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 19/35.', 'DEBUG')
         ### for i, _ in enumerate(ws_ippan):
-            ### 10行目
             ### セル[10:2]: 水系・沿岸名について範囲が正しいことをチェックする。
             ### セル[10:3]: 水系種別について範囲が正しいことをチェックする。
             ### セル[10:4]: 河川・海岸名について範囲が正しいことをチェックする。
@@ -1475,7 +1450,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 20/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 14行目
             ### セル[14:2]: 水害区域面積の宅地について範囲が正しいことをチェックする。
             if ws_ippan[i].cell(row=14, column=2).value is None:
                 pass
@@ -1778,14 +1752,13 @@ def index_view(request):
         #######################################################################
         #######################################################################
         ### EXCELセルデータ相関チェック処理（4000）
-        ### (1)セルB7からセルI7について他項目との相関関係が正しいことをチェックする。
+        ### (1)セル[7:2]からセル[7:9]について他項目との相関関係が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 22/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 7行目
             ### セル[7:2]: 都道府県が何かの値のときに、相関する市区町村名は正しく選択されているか。
             ### セル[7:3]: 市区町村が何かの値のときに、相関する他項目は正しく選択されているか。
     
@@ -2027,7 +2000,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 23/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 10行目
             ### セル[10:2]: 水系・沿岸名が何かの値のときに、相関する水系種別は正しく選択されているか。
             ### if ws_ippan[i].cell(row=10, column=2).value is None:
             ###     result_correlate_list.append([ws_ippan[i].title, 10, 2, MESSAGE[][0], MESSAGE[][1], MESSAGE[][2], MESSAGE[][3], MESSAGE[][4]])
@@ -2197,7 +2169,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 24/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 14行目
             ### セル[14:3]: 水害区域面積の農地 vs セル[14:8]: 農作物被害額
             ### セル[14:3]: 水害区域面積の農地がNoneのとき、農作物被害額はNoneが正しい。
             if ws_ippan[i].cell(row=14, column=3).value is None:
@@ -2246,7 +2217,6 @@ def index_view(request):
         ### (1)セル[20:2]からセル[20:27]について他項目との相関関係が正しいことをチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。相関チェック処理を記述する。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 25/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
@@ -2487,14 +2457,13 @@ def index_view(request):
         #######################################################################
         #######################################################################
         ### EXCELセルデータ突合チェック処理（5000）
-        ### (1)セル[7:2]からセルI7[7:9]についてデータベースに登録されている値と突合せチェックする。
+        ### (1)セル[7:2]からセル[7:9]についてデータベースに登録されている値と突合せチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
         #######################################################################
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 26/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 7行目
             ### セル[7:2]: 都道府県についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=7, column=2).value is None:
                 pass
@@ -2579,7 +2548,6 @@ def index_view(request):
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 27/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 10行目
             ### セル[10:2]: 水系・沿岸名についてデータベースに登録されている値と突合せチェックする。
             if ws_ippan[i].cell(row=10, column=2).value is None:
                 pass
@@ -2645,11 +2613,9 @@ def index_view(request):
         ### (1)セル[14:2]からセル[14:10]についてデータベースに登録されている値と突合せチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 28/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):
-            ### 14行目
             ### セル[14:2]: 水害区域面積の宅地についてデータベースに登録されている値と突合せチェックする。
             ### セル[14:3]: 水害区域面積の農地についてデータベースに登録されている値と突合せチェックする。
             ### セル[14:4]: 水害区域面積の地下についてデータベースに登録されている値と突合せチェックする。
@@ -2685,7 +2651,6 @@ def index_view(request):
         ### (1)セル[20:2]からセル[20:27]についてデータベースに登録されている値と突合せチェックする。
         ### (2)チェック結果リストにセルの行、列とメッセージを追加する。
         ### (3)IPPANワークシートとRESULTワークシートのセルに背景赤色の塗りつぶしをセットする。
-        ### TO-DO: if == ''はダミーの処理である。突合せチェック処理を記述する。
         #######################################################################
         print_log('[DEBUG] P0300IppanUpload.index_view()関数 STEP 29/35.', 'DEBUG')
         for i, _ in enumerate(ws_ippan):

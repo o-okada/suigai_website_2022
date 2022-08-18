@@ -3,6 +3,7 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 
 logger = logging.getLogger('suigai_website')
+all_log = []
 info_log = []
 warn_log = []
 error_log = []
@@ -38,6 +39,7 @@ def print_log(log_message, log_type):
     ### elif log_type == 'DEBUG':
     ###     debug_log.append('[' + datetime_now_YmdHMS + '] ' + log_message)
 
+    all_log.append(log_message)
     if log_type == 'INFO':
         info_log.append(log_message)
     elif log_type == 'WARN':
@@ -52,15 +54,24 @@ def print_log(log_message, log_type):
 ### 関数概要：ログをリセットする。
 ###############################################################################
 def reset_log():
+    global all_log
     global info_log
     global warn_log
     global error_log
     global debug_log
     
+    all_log = []
     info_log = []
     warn_log = []
     error_log = []
     debug_log = []
+
+###############################################################################
+### 関数名：get_all_log()
+### 関数概要：ログを出力する。
+###############################################################################
+def get_all_log():
+    return all_log
 
 ###############################################################################
 ### 関数名：get_info_log()
